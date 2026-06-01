@@ -1358,15 +1358,9 @@ export default function LeadsView() {
                           ["comercial",          "Comercial"],
                           ["linea",              "Línea"],
                           ["etapa",              "Etapa"],
-                          ["tipoOportunidad",    "Tipo Oportunidad"],
-                          ["equipoVentas",       "Equipo Ventas"],
                           ["preventa",           "Preventa"],
-                          ["etapaPreventa",      "Etapa Preventa"],
                           ["fechaCreacion",      "Fecha Creación"],
                           ["ingresosEsperados",  "Ingresos Esp."],
-                          ["consultoriaCOP",     "Consultoría"],
-                          ["datosCOP",           "Datos"],
-                          ["tiCOP",              "TI"],
                           ["cierreEsperado",     "Cierre Esp."],
                           ["ganado",             "Estado"],
                           ["activo",             "Activo"],
@@ -1387,7 +1381,7 @@ export default function LeadsView() {
                   <tbody className="divide-y divide-slate-50">
                     {filtered.length === 0 ? (
                       <tr>
-                        <td colSpan={18} className="px-4 py-12 text-center text-slate-400 text-sm">
+                        <td colSpan={12} className="px-4 py-12 text-center text-slate-400 text-sm">
                           Sin leads con los filtros aplicados
                         </td>
                       </tr>
@@ -1425,15 +1419,9 @@ export default function LeadsView() {
                           <td className="px-3 py-2.5">
                             <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${ETAPA_STYLE[lead.etapa] ?? "bg-slate-100 text-slate-600"}`}>{lead.etapa || "—"}</span>
                           </td>
-                          <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{lead.tipoOportunidad || "—"}</td>
-                          <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{lead.equipoVentas || "—"}</td>
                           <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{lead.preventa || "—"}</td>
-                          <td className="px-3 py-2.5 text-slate-500 whitespace-nowrap">{lead.etapaPreventa || "—"}</td>
                           <td className="px-3 py-2.5 text-slate-500 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
                           <td className="px-3 py-2.5 text-right font-medium text-slate-700 whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
-                          <td className="px-3 py-2.5 text-right text-slate-600 whitespace-nowrap">{lead.consultoriaCOP ? COP(lead.consultoriaCOP) : "—"}</td>
-                          <td className="px-3 py-2.5 text-right text-slate-600 whitespace-nowrap">{lead.datosCOP ? COP(lead.datosCOP) : "—"}</td>
-                          <td className="px-3 py-2.5 text-right text-slate-600 whitespace-nowrap">{lead.tiCOP ? COP(lead.tiCOP) : "—"}</td>
                           <td className="px-3 py-2.5 text-slate-500 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
                           <td className="px-3 py-2.5">
                             <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-slate-100 text-slate-600"}`}>{lead.ganado}</span>
