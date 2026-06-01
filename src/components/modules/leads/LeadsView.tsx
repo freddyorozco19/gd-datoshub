@@ -7,7 +7,7 @@ import {
   TrendingUp, Users, Clock, DollarSign, AlertCircle,
   CalendarCheck2, ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight, Eye, X, History,
-  ExternalLink, Sparkles,
+  ExternalLink, Sparkles, SlidersHorizontal, Calendar,
 } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import Topbar from "@/components/layout/Topbar";
@@ -668,6 +668,29 @@ export default function LeadsView() {
     };
   }, [leads]);
 
+  const activeFilterCount = useMemo(() => {
+    let c = 0;
+    if (filters.comercial       !== "ALL") c++;
+    if (filters.linea           !== "ALL") c++;
+    if (filters.tipoOportunidad !== "ALL") c++;
+    if (filters.equipoVentas    !== "ALL") c++;
+    if (filters.preventa        !== "ALL") c++;
+    if (filters.activo          !== "ALL") c++;
+    if (filters.dateFrom)                  c++;
+    if (filters.dateTo)                    c++;
+    if (search.trim())                     c++;
+    return c;
+  }, [filters, search]);
+
+  function clearFilters() {
+    setFilters({
+      comercial: "ALL", linea: "ALL", tipoOportunidad: "ALL",
+      equipoVentas: "ALL", preventa: "ALL", activo: "ALL",
+      dateFrom: "", dateTo: "",
+    });
+    setSearch("");
+  }
+
   function toggleSort(key: SortKey) {
     setSort((s) => s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" });
   }
@@ -732,49 +755,103 @@ export default function LeadsView() {
         </div>
 
         {/* ── barra de filtros ── */}
-        <div className="flex flex-wrap items-end gap-3 bg-white rounded-xl border border-slate-200 px-4 py-3">
-          <Select label="Comercial"     field="comercial"        options={opts.comercial} />
-          <Select label="Línea"         field="linea"            options={opts.linea} />
-          <Select label="Oportunidad"   field="tipoOportunidad"  options={opts.tipoOportunidad} />
-          <Select label="Equipo Ventas" field="equipoVentas"     options={opts.equipoVentas} />
-          <Select label="Preventa"      field="preventa"         options={opts.preventa} />
-          <Select label="Activo"        field="activo"           options={opts.activo} />
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
 
-          {/* 2. rango de fechas */}
-          <div className="flex flex-col gap-1 min-w-0">
-            <label className="text-xs font-medium text-slate-500">Desde</label>
-            <input type="date" value={filters.dateFrom}
-              onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value }))}
-              className="text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700" />
-          </div>
-          <div className="flex flex-col gap-1 min-w-0">
-            <label className="text-xs font-medium text-slate-500">Hasta</label>
-            <input type="date" value={filters.dateTo}
-              onChange={(e) => setFilters((f) => ({ ...f, dateTo: e.target.value }))}
-              className="text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700" />
+          {/* cabecera de filtros */}
+          <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200">
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal size={14} className="text-slate-400" />
+              <span className="text-xs font-semibold text-slate-600">Filtros</span>
+              {activeFilterCount > 0 && (
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 leading-none">
+                  {activeFilterCount}
+                </span>
+              )}
+            </div>
+            {activeFilterCount > 0 && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-rose-500 transition-colors"
+              >
+                <X size={11} /> Limpiar todo
+              </button>
+            )}
           </div>
 
-          <div className="flex items-end gap-2 ml-auto">
+          {/* fila 1: dropdowns en grid de 6 columnas */}
+          <div className="px-4 py-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 border-b border-slate-100">
+            <Select label="Comercial"     field="comercial"        options={opts.comercial} />
+            <Select label="Línea"         field="linea"            options={opts.linea} />
+            <Select label="Oportunidad"   field="tipoOportunidad"  options={opts.tipoOportunidad} />
+            <Select label="Equipo Ventas" field="equipoVentas"     options={opts.equipoVentas} />
+            <Select label="Preventa"      field="preventa"         options={opts.preventa} />
+            <Select label="Activo"        field="activo"           options={opts.activo} />
+          </div>
+
+          {/* fila 2: rango de fechas · búsqueda · acciones */}
+          <div className="px-4 py-3 flex flex-wrap items-end gap-3">
+
+            {/* rango de fechas agrupado */}
+            <div className="flex items-end gap-2">
+              <Calendar size={14} className="text-slate-400 mb-2 shrink-0" />
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-slate-500">Desde</label>
+                <input
+                  type="date"
+                  value={filters.dateFrom}
+                  onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value }))}
+                  className="text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700 w-36"
+                />
+              </div>
+              <span className="text-slate-300 mb-2 text-sm leading-none">→</span>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-slate-500">Hasta</label>
+                <input
+                  type="date"
+                  value={filters.dateTo}
+                  onChange={(e) => setFilters((f) => ({ ...f, dateTo: e.target.value }))}
+                  className="text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700 w-36"
+                />
+              </div>
+            </div>
+
+            <div className="flex-1" />
+
+            {/* búsqueda */}
             <div className="flex flex-col gap-1">
               <label className="text-xs font-medium text-slate-500">Buscar</label>
               <div className="relative">
                 <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Nombre, cliente…"
-                  className="pl-8 pr-3 py-1.5 text-xs border border-slate-300 rounded-lg w-44 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Nombre, cliente…"
+                  className="pl-8 pr-3 py-1.5 text-xs border border-slate-300 rounded-lg w-44 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
             </div>
 
-            <button onClick={loadLeads} disabled={loading} title="Sincronizar ODOO"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-colors">
-              <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
-              {loading ? "Cargando…" : "Sincronizar"}
-            </button>
-
-            <button onClick={exportCSV} disabled={!filtered.length} title="Exportar CSV"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs hover:bg-blue-700 disabled:opacity-40 transition-colors">
-              <Download size={13} />
-              Exportar
-            </button>
+            {/* botones de acción */}
+            <div className="flex items-end gap-2">
+              <button
+                onClick={loadLeads}
+                disabled={loading}
+                title="Sincronizar ODOO"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-colors"
+              >
+                <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+                {loading ? "Cargando…" : "Sincronizar"}
+              </button>
+              <button
+                onClick={exportCSV}
+                disabled={!filtered.length}
+                title="Exportar CSV"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs hover:bg-blue-700 disabled:opacity-40 transition-colors"
+              >
+                <Download size={13} />
+                Exportar
+              </button>
+            </div>
           </div>
         </div>
 
