@@ -9,8 +9,9 @@ import {
   ChevronsLeft, ChevronsRight, Eye, X, History,
   ExternalLink, Sparkles, SlidersHorizontal, Calendar,
   BarChart2, Trophy, Activity, Layers,
+  Paperclip, FileText, FileImage, File,
 } from "lucide-react";
-import type { Lead } from "@/lib/odoo/types";
+import type { Lead, OdooAttachment } from "@/lib/odoo/types";
 import Topbar from "@/components/layout/Topbar";
 
 const ODOO_BASE = "https://grow-data.odoo.com";
@@ -24,6 +25,24 @@ const unique = (arr: string[]) =>
   ["ALL", ...Array.from(new Set(arr.filter(Boolean))).sort()];
 
 const fmtDate = (s: string) => (s ? s.substring(0, 10) : "—");
+
+const fmtFileSize = (bytes: number): string => {
+  if (bytes >= 1_000_000) return `${(bytes / 1_000_000).toFixed(1)} MB`;
+  if (bytes >= 1_000)     return `${(bytes / 1_000).toFixed(0)} KB`;
+  return `${bytes} B`;
+};
+
+function fileTypeIcon(mimetype: string): { icon: typeof File; colors: string } {
+  if (mimetype === "application/pdf")
+    return { icon: FileText,  colors: "bg-rose-50 text-rose-500" };
+  if (mimetype.startsWith("image/"))
+    return { icon: FileImage, colors: "bg-violet-50 text-violet-500" };
+  if (mimetype.includes("spreadsheet") || mimetype.includes("excel") || mimetype === "text/csv")
+    return { icon: FileText,  colors: "bg-emerald-50 text-emerald-600" };
+  if (mimetype.includes("word") || mimetype.includes("document") || mimetype.includes("msword"))
+    return { icon: FileText,  colors: "bg-blue-50 text-blue-600" };
+  return { icon: File, colors: "bg-slate-100 text-slate-500" };
+}
 
 const WON_STYLE: Record<string, string> = {
   Ganado:        "bg-emerald-100 text-emerald-700",
@@ -411,11 +430,25 @@ function DayLeadsModal({ leads, date, onClose }: DayLeadsModalProps) {
 interface LeadDetailModalProps { lead: Lead; onClose: () => void; }
 
 function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
+  const [attachments,        setAttachments]        = useState<OdooAttachment[] | null>(null);
+  const [loadingAttachments, setLoadingAttachments] = useState(false);
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  // Carga adjuntos al abrir el modal si el lead tiene alguno
+  useEffect(() => {
+    if (!lead.adjuntos) return;
+    setLoadingAttachments(true);
+    fetch(`/api/odoo/leads/${lead.id}/attachments`)
+      .then((r) => r.json())
+      .then((d) => setAttachments(d.attachments ?? []))
+      .catch(() => setAttachments([]))
+      .finally(() => setLoadingAttachments(false));
+  }, [lead.id, lead.adjuntos]);
 
   const odooUrl = `${ODOO_BASE}/web#model=crm.lead&id=${lead.id}&view_type=form`;
 
@@ -522,6 +555,56 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
               <Field label="Última Modificación"   value={lead.ultimaModificacion  || null} />
             </div>
           </section>
+
+          {/* ── Adjuntos ── */}
+          {lead.adjuntos > 0 && (
+            <section>
+              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-slate-100 flex items-center gap-1.5">
+                <Paperclip size={10} />
+                Adjuntos · {lead.adjuntos}
+              </h3>
+
+              {loadingAttachments ? (
+                <div className="space-y-2">
+                  {Array.from({ length: lead.adjuntos }).map((_, i) => (
+                    <div key={i} className="h-12 bg-slate-100 rounded-lg animate-pulse" />
+                  ))}
+                </div>
+              ) : attachments && attachments.length > 0 ? (
+                <div className="space-y-2">
+                  {attachments.map((att) => {
+                    const { icon: Icon, colors } = fileTypeIcon(att.mimetype);
+                    return (
+                      <a
+                        key={att.id}
+                        href={`/api/odoo/attachment/${att.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-100 hover:border-blue-200 hover:bg-blue-50/40 transition-colors group"
+                      >
+                        <div className={`p-2 rounded-lg shrink-0 ${colors}`}>
+                          <Icon size={14} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-slate-700 truncate group-hover:text-blue-700 transition-colors">
+                            {att.name}
+                          </p>
+                          {att.file_size > 0 && (
+                            <p className="text-[10px] text-slate-400 mt-0.5">{fmtFileSize(att.file_size)}</p>
+                          )}
+                        </div>
+                        <ExternalLink size={12} className="text-slate-300 group-hover:text-blue-400 shrink-0 transition-colors" />
+                      </a>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-xs text-slate-400 text-center py-3">
+                  No se pudieron cargar los adjuntos
+                </p>
+              )}
+            </section>
+          )}
 
         </div>
       </div>
@@ -1407,7 +1490,14 @@ export default function LeadsView() {
                               )}
                               <div className="min-w-0">
                                 <p className="font-medium text-slate-800 max-w-[200px] truncate" title={lead.nombre}>{lead.nombre}</p>
-                                {lead.correo && <p className="text-slate-400 truncate max-w-[200px]">{lead.correo}</p>}
+                                <div className="flex items-center gap-2 mt-0.5">
+                                  {lead.correo && <p className="text-slate-400 truncate max-w-[170px] text-[10px]">{lead.correo}</p>}
+                                  {lead.adjuntos > 0 && (
+                                    <span className="flex items-center gap-0.5 text-[9px] text-slate-400 shrink-0">
+                                      <Paperclip size={9} />{lead.adjuntos}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </td>

@@ -8,7 +8,7 @@
  * No usa session cookies, pasa las credenciales en cada llamada (igual que odoorpc).
  */
 
-import type { OdooLead, Lead } from "./types";
+import type { OdooLead, OdooAttachment, Lead } from "./types";
 
 const ODOO_URL      = process.env.ODOO_URL!;
 const ODOO_DB       = process.env.ODOO_DB!;
@@ -113,13 +113,14 @@ function normalize(raw: OdooLead): Lead {
     fechaCierre: toGMTMinus5(raw.date_closed),
     ultimaModificacion: toGMTMinus5(raw.write_date),
     tipoCliente: str(raw.x_studio_tipo_de_producto),
-    tipoVenta: str(raw.x_studio_proyecto),
+    tipoVenta:   str(raw.x_studio_proyecto),
     ganado:
       raw.won_status === "won"
         ? "Ganado"
         : raw.won_status === "lost"
         ? "Perdido"
         : "En progreso",
+    adjuntos: 0, // se sobreescribe en fetchLeads
   };
 }
 
@@ -139,5 +140,43 @@ export async function fetchLeads(): Promise<Lead[]> {
     context: { active_test: false },
   });
 
-  return raws.map(normalize);
+  // Cuenta adjuntos por lead (una sola llamada, solo el campo res_id)
+  const attRecs = await executeKw<{ res_id: number }[]>(
+    uid, "ir.attachment", "search_read",
+    [[["res_model", "=", "crm.lead"], ["res_id", "in", ids]]],
+    { fields: ["res_id"], limit: 0 }
+  );
+  const attachCounts: Record<number, number> = {};
+  attRecs.forEach(({ res_id }) => {
+    attachCounts[res_id] = (attachCounts[res_id] || 0) + 1;
+  });
+
+  const leads = raws.map(normalize);
+  leads.forEach((l) => { l.adjuntos = attachCounts[l.id] || 0; });
+  return leads;
+}
+
+/* ── Lista de adjuntos de un lead ──────────────────────────────────── */
+export async function fetchLeadAttachments(leadId: number): Promise<OdooAttachment[]> {
+  const uid = await login();
+  return executeKw<OdooAttachment[]>(
+    uid, "ir.attachment", "search_read",
+    [[["res_model", "=", "crm.lead"], ["res_id", "=", leadId]]],
+    { fields: ["id", "name", "mimetype", "file_size"], order: "create_date desc", limit: 0 }
+  );
+}
+
+/* ── Contenido binario de un adjunto (base64 → Buffer) ────────────── */
+export async function fetchAttachmentData(
+  id: number
+): Promise<{ name: string; mimetype: string; datas: string }> {
+  const uid = await login();
+  const rows = await executeKw<{ name: string; mimetype: string; datas: string | false }[]>(
+    uid, "ir.attachment", "read",
+    [[id], ["name", "mimetype", "datas"]]
+  );
+  if (!rows.length) throw new Error("Adjunto no encontrado");
+  const r = rows[0];
+  if (!r.datas) throw new Error("El adjunto no tiene datos de archivo");
+  return { name: r.name, mimetype: r.mimetype || "application/octet-stream", datas: r.datas };
 }

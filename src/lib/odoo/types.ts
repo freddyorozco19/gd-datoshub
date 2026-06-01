@@ -1,3 +1,10 @@
+export interface OdooAttachment {
+  id:        number;
+  name:      string;
+  mimetype:  string;
+  file_size: number;
+}
+
 // Respuesta cruda de ODOO (many2one = [id, nombre] | false)
 export interface OdooLead {
   id: number;
@@ -58,6 +65,7 @@ export interface Lead {
   fechaCierre: string;
   ultimaModificacion: string;   // write_date ajustado GMT-5
   tipoCliente: string;
-  tipoVenta: string;
-  ganado: string;
+  tipoVenta:   string;
+  ganado:      string;
+  adjuntos:    number;
 }
