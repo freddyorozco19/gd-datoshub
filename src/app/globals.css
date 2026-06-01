@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ── Century Gothic como fuente principal ──────────────────────────────
+   @theme (sin inline) sobreescribe --font-sans en el sistema de Tailwind v4,
+   lo que reemplaza la font-family en el preflight (html, body, *).
+   El bloque html/body lo refuerza directamente para máxima compatibilidad.
+─────────────────────────────────────────────────────────────────────── */
+@theme {
+  --font-sans: 'Century Gothic', CenturyGothic, 'Century Gothic Pro',
+               AppleGothic, 'Trebuchet MS', Futura, sans-serif;
+  --color-background: #f8fafc;
+  --color-foreground: #0f172a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body, input, button, select, textarea {
+  font-family: 'Century Gothic', CenturyGothic, 'Century Gothic Pro',
+               AppleGothic, 'Trebuchet MS', Futura, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
 }
