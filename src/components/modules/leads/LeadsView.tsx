@@ -8,6 +8,7 @@ import {
   CalendarCheck2, ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight, Eye, X, History,
   ExternalLink, Sparkles, SlidersHorizontal, Calendar,
+  BarChart2, Trophy, Activity,
 } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import Topbar from "@/components/layout/Topbar";
@@ -93,6 +94,180 @@ function TableSkeleton() {
             <div className="h-3 w-16 rounded bg-slate-100 ml-auto" />
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── widget: tendencia mensual ──────────────────────────────────────── */
+function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
+  const months = useMemo(() => {
+    return Array.from({ length: 6 }, (_, i) => {
+      const d = new Date();
+      d.setHours(d.getHours() - 5);
+      d.setDate(1);
+      d.setMonth(d.getMonth() - (5 - i));
+      const key   = d.toISOString().substring(0, 7);
+      const label = d.toLocaleDateString("es-CO", { month: "short", year: "2-digit" });
+      const ml    = leads.filter((l) => l.fechaCreacion.startsWith(key));
+      return {
+        key, label,
+        count:    ml.length,
+        ganados:  ml.filter((l) => l.ganado === "Ganado").length,
+        ingresos: ml.reduce((s, l) => s + (l.ingresosEsperados || 0), 0),
+      };
+    });
+  }, [leads]);
+
+  const maxCount = Math.max(...months.map((m) => m.count), 1);
+  const BAR_H = 56;
+
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 px-5 py-4">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="p-1.5 rounded-lg bg-indigo-50 shrink-0">
+          <BarChart2 size={15} className="text-indigo-500" />
+        </div>
+        <span className="text-sm font-semibold text-slate-700">Tendencia mensual</span>
+        <span className="text-xs text-slate-400">· últimos 6 meses</span>
+        <div className="ml-auto flex items-center gap-4">
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-sm bg-indigo-100" />
+            <span className="text-[10px] text-slate-400">Total leads</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500" />
+            <span className="text-[10px] text-slate-400">Ganados</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-end gap-3">
+        {months.map(({ key, label, count, ganados }) => {
+          const totalPx = Math.max(3, Math.round((count / maxCount) * BAR_H));
+          const ganPx   = count > 0 ? Math.round((ganados / count) * totalPx) : 0;
+          return (
+            <div key={key} className="flex-1 flex flex-col items-center gap-1.5 group">
+              <span className="text-[10px] font-bold text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity leading-none">
+                {count}
+              </span>
+              <div className="w-full flex items-end" style={{ height: BAR_H }}>
+                <div
+                  className="relative w-full rounded-t-sm overflow-hidden bg-indigo-100"
+                  style={{ height: totalPx }}
+                >
+                  <div
+                    className="absolute bottom-0 left-0 right-0 bg-indigo-500 transition-all duration-700"
+                    style={{ height: ganPx }}
+                  />
+                </div>
+              </div>
+              <span className="text-[10px] text-slate-400 capitalize leading-none">{label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ── mapa de calor ───────────────────────────────────────────────────── */
+function LeadHeatmap({ leads }: { leads: Lead[] }) {
+  const { weeks, monthLabels } = useMemo(() => {
+    const WEEKS = 26;
+    const countByDay: Record<string, number> = {};
+    leads.forEach((l) => {
+      const day = l.fechaCreacion.substring(0, 10);
+      countByDay[day] = (countByDay[day] || 0) + 1;
+    });
+    const maxCount = Math.max(...Object.values(countByDay), 1);
+
+    const today = new Date();
+    today.setHours(today.getHours() - 5);
+    const dow = today.getDay();
+    const daysToMonday = dow === 0 ? 6 : dow - 1;
+    const anchor = new Date(today);
+    anchor.setDate(today.getDate() - daysToMonday - (WEEKS - 1) * 7);
+
+    const weeksArr: { date: string; count: number; level: number }[][] = [];
+    const mlabels: { weekIdx: number; label: string }[] = [];
+    let lastMonth = -1;
+
+    for (let w = 0; w < WEEKS; w++) {
+      const week: { date: string; count: number; level: number }[] = [];
+      for (let d = 0; d < 7; d++) {
+        const dt = new Date(anchor);
+        dt.setDate(anchor.getDate() + w * 7 + d);
+        const dateStr = dt.toISOString().substring(0, 10);
+        const count   = countByDay[dateStr] || 0;
+        const level   = count === 0 ? 0 : Math.min(4, Math.ceil((count / maxCount) * 4));
+        if (d === 0 && dt.getMonth() !== lastMonth) {
+          mlabels.push({ weekIdx: w, label: dt.toLocaleDateString("es-CO", { month: "short" }) });
+          lastMonth = dt.getMonth();
+        }
+        week.push({ date: dateStr, count, level });
+      }
+      weeksArr.push(week);
+    }
+    return { weeks: weeksArr, monthLabels: mlabels };
+  }, [leads]);
+
+  const COLORS = ["bg-slate-100", "bg-emerald-100", "bg-emerald-300", "bg-emerald-500", "bg-emerald-700"];
+  const DAY_LABELS = ["L", "", "X", "", "V", "", "D"];
+
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 px-5 py-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-emerald-50 shrink-0">
+            <Activity size={15} className="text-emerald-600" />
+          </div>
+          <span className="text-sm font-semibold text-slate-700">Actividad de leads</span>
+          <span className="text-xs text-slate-400">· último semestre</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-400">Menos</span>
+          {COLORS.map((c, i) => <div key={i} className={`w-2.5 h-2.5 rounded-sm ${c}`} />)}
+          <span className="text-[10px] text-slate-400">Más</span>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <div style={{ display: "inline-flex", flexDirection: "column", gap: 4 }}>
+          {/* etiquetas de mes */}
+          <div style={{ display: "flex", gap: 3, paddingLeft: 20 }}>
+            {weeks.map((_, wi) => {
+              const ml = monthLabels.find((m) => m.weekIdx === wi);
+              return (
+                <div key={wi} style={{ width: 10, fontSize: 8, color: "#94a3b8", lineHeight: 1, whiteSpace: "nowrap" }}>
+                  {ml ? ml.label : ""}
+                </div>
+              );
+            })}
+          </div>
+          {/* cuadrícula */}
+          <div style={{ display: "flex", gap: 3 }}>
+            {/* etiquetas de día */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 3, width: 16 }}>
+              {DAY_LABELS.map((l, i) => (
+                <div key={i} style={{ width: 10, height: 10, fontSize: 8, color: "#94a3b8", display: "flex", alignItems: "center" }}>{l}</div>
+              ))}
+            </div>
+            {/* columnas de semana */}
+            {weeks.map((week, wi) => (
+              <div key={wi} style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                {week.map(({ date, count, level }) => (
+                  <div
+                    key={date}
+                    title={`${date}: ${count} lead${count !== 1 ? "s" : ""}`}
+                    className={`rounded-sm cursor-default transition-opacity hover:opacity-70 ${COLORS[level]}`}
+                    style={{ width: 10, height: 10 }}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -439,6 +614,85 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
   );
 }
 
+/* ── widget: ranking de comerciales ────────────────────────────────── */
+function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
+  const [sortBy, setSortBy] = useState<"leads" | "ganados" | "ingresos">("leads");
+
+  const ranking = useMemo(() => {
+    const map: Record<string, { leads: number; ganados: number; ingresos: number }> = {};
+    leads.forEach((l) => {
+      const k = l.comercial || "Sin asignar";
+      if (!map[k]) map[k] = { leads: 0, ganados: 0, ingresos: 0 };
+      map[k].leads++;
+      if (l.ganado === "Ganado") map[k].ganados++;
+      map[k].ingresos += l.ingresosEsperados || 0;
+    });
+    return Object.entries(map)
+      .map(([name, stats]) => ({ name, ...stats }))
+      .sort((a, b) => b[sortBy] - a[sortBy])
+      .slice(0, 7);
+  }, [leads, sortBy]);
+
+  const maxVal = Math.max(...ranking.map((r) => r[sortBy]), 1);
+  const MEDAL  = ["🥇", "🥈", "🥉"];
+
+  function fmt(r: typeof ranking[0]) {
+    if (sortBy === "ingresos")
+      return r.ingresos >= 1_000_000
+        ? `$${(r.ingresos / 1_000_000).toFixed(1)}M`
+        : `$${(r.ingresos / 1_000).toFixed(0)}K`;
+    return String(r[sortBy]);
+  }
+
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="p-1.5 rounded-lg bg-amber-50 shrink-0">
+          <Trophy size={15} className="text-amber-600" />
+        </div>
+        <span className="text-sm font-semibold text-slate-700 flex-1">Ranking</span>
+      </div>
+
+      {/* tabs de ordenamiento */}
+      <div className="flex gap-0.5 mb-3 bg-slate-100 rounded-lg p-0.5">
+        {(["leads", "ganados", "ingresos"] as const).map((key) => (
+          <button
+            key={key}
+            onClick={() => setSortBy(key)}
+            className={`flex-1 text-[10px] font-semibold py-1 rounded-md transition-colors capitalize ${
+              sortBy === key ? "bg-white text-amber-700 shadow-sm" : "text-slate-400 hover:text-slate-600"
+            }`}
+          >
+            {key}
+          </button>
+        ))}
+      </div>
+
+      <div className="space-y-2.5">
+        {ranking.map((r, i) => (
+          <div key={r.name}>
+            <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="w-4 text-center shrink-0 text-[11px]">
+                  {i < 3 ? MEDAL[i] : <span className="text-slate-300 font-bold text-[10px]">{i + 1}</span>}
+                </span>
+                <span className="text-xs text-slate-700 truncate leading-none" title={r.name}>{r.name}</span>
+              </div>
+              <span className="text-[10px] font-bold text-slate-600 shrink-0 ml-2">{fmt(r)}</span>
+            </div>
+            <div className="h-1 bg-slate-100 rounded-full overflow-hidden ml-5">
+              <div
+                className="h-full bg-amber-400 rounded-full transition-all duration-500"
+                style={{ width: `${Math.round((r[sortBy] / maxVal) * 100)}%` }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ── widget: Leads por día ───────────────────────────────────────────── */
 function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
   function todayGMT5() {
@@ -518,6 +772,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
       </div>
 
       <RecentLeadsWidget leads={leads} />
+      <ComercialRankingWidget leads={leads} />
 
       <p className="text-xs text-slate-400 text-center leading-relaxed px-1">Por fecha de creación · todos los registros</p>
 
@@ -754,6 +1009,9 @@ export default function LeadsView() {
           ))}
         </div>
 
+        {/* ── 6. tendencia mensual ── */}
+        {leads.length > 0 && <MonthlyTrendWidget leads={leads} />}
+
         {/* ── barra de filtros ── */}
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
 
@@ -854,6 +1112,9 @@ export default function LeadsView() {
             </div>
           </div>
         </div>
+
+        {/* ── 8. mapa de calor ── */}
+        {leads.length > 0 && <LeadHeatmap leads={leads} />}
 
         {/* ── error ── */}
         {error && (
