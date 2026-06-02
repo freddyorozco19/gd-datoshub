@@ -4,9 +4,13 @@ import { useMemo, useRef, useState } from "react";
 import {
   ShieldCheck, Upload, FileSpreadsheet, X, Search,
   DollarSign, Trophy, TrendingDown, Clock, Layers, AlertCircle,
+  Table2, Activity, Cpu, Play, Maximize2, Filter,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
-import { VERTICALES, type Vertical, type OportunidadComercial, type ParseResult } from "@/lib/cmmi/types";
+import {
+  VERTICALES, type Vertical, type OportunidadComercial, type ParseResult,
+  type SpcResponse, type RfTrainResponse, type CuracionMeta,
+} from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
@@ -105,9 +109,266 @@ function UploadZone({ onFile, loading, error }: {
   );
 }
 
+/* ── Helpers de modelos ────────────────────────────────────────────── */
+function fmtCell(v: unknown): string {
+  if (v === null || v === undefined || v === "") return "—";
+  if (typeof v === "number") {
+    if (Number.isInteger(v)) return v.toLocaleString("es-CO");
+    return Math.abs(v) < 1 ? v.toFixed(4) : v.toFixed(3);
+  }
+  return String(v);
+}
+
+/** Imagen PNG (base64) con título y zoom a pantalla completa */
+function ModelImage({ b64, title }: { b64: string | null; title: string }) {
+  const [zoom, setZoom] = useState(false);
+  if (!b64) return null;
+  const src = `data:image/png;base64,${b64}`;
+  return (
+    <>
+      <figure className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <figcaption className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100">
+          <span className="text-xs font-semibold text-slate-600">{title}</span>
+          <button onClick={() => setZoom(true)} className="text-slate-400 hover:text-slate-600" title="Ampliar">
+            <Maximize2 size={14} />
+          </button>
+        </figcaption>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={title} className="w-full cursor-zoom-in" onClick={() => setZoom(true)} />
+      </figure>
+      {zoom && (
+        <div onClick={() => setZoom(false)} className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-6 cursor-zoom-out">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={src} alt={title} className="max-h-full max-w-full rounded-lg shadow-2xl" />
+          <button className="absolute top-5 right-5 text-white/80 hover:text-white"><X size={24} /></button>
+        </div>
+      )}
+    </>
+  );
+}
+
+/** Tabla genérica de registros (CSV → JSON) */
+function RecordTable({ rows, max = 60 }: { rows: Record<string, unknown>[] | null; max?: number }) {
+  if (!rows || rows.length === 0) {
+    return <p className="text-sm text-slate-400 py-6 text-center">Sin filas para mostrar.</p>;
+  }
+  const cols = Object.keys(rows[0]);
+  const shown = rows.slice(0, max);
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="overflow-auto max-h-[55vh]">
+        <table className="w-full text-xs">
+          <thead className="sticky top-0 z-10">
+            <tr className="bg-slate-50 border-b border-slate-200">
+              {cols.map((c) => (
+                <th key={c} className="px-3 py-2 text-left font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{c}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {shown.map((r, i) => (
+              <tr key={i} className="hover:bg-slate-50">
+                {cols.map((c) => (
+                  <td key={c} className="px-3 py-1.5 text-slate-600 whitespace-nowrap tabular-nums">{fmtCell(r[c])}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {rows.length > max && (
+        <p className="px-3 py-2 text-[11px] text-slate-400 border-t border-slate-100">
+          Mostrando {max} de {rows.length.toLocaleString("es-CO")} filas.
+        </p>
+      )}
+    </div>
+  );
+}
+
+/** Tarjetas con métricas escalares de un objeto stats */
+function StatCards({ stats }: { stats: Record<string, unknown> | null }) {
+  if (!stats) return null;
+  const entries = Object.entries(stats).filter(([, v]) => typeof v === "number" || typeof v === "string");
+  if (entries.length === 0) return null;
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+      {entries.map(([k, v]) => (
+        <div key={k} className="bg-white rounded-xl border border-slate-200 p-3">
+          <p className="text-base font-bold text-slate-800 leading-tight truncate" title={fmtCell(v)}>{fmtCell(v)}</p>
+          <p className="text-xs text-slate-500 mt-0.5">{k}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Resumen de la curación de datos */
+function CuracionBar({ meta }: { meta: CuracionMeta }) {
+  return (
+    <div className="flex items-center gap-2 flex-wrap text-xs">
+      <Filter size={14} className="text-slate-400" />
+      <span className="px-2 py-1 rounded-md bg-slate-100 text-slate-600">Iniciales <b>{meta.registros_iniciales.toLocaleString("es-CO")}</b></span>
+      <span className="px-2 py-1 rounded-md bg-amber-50 text-amber-700">Pendientes −{meta.eliminados_pendientes}</span>
+      <span className="px-2 py-1 rounded-md bg-rose-50 text-rose-700">Sin campos −{meta.eliminados_sin_campos}</span>
+      <span className="px-2 py-1 rounded-md bg-emerald-50 text-emerald-700">Incluidos <b>{meta.registros_incluidos.toLocaleString("es-CO")}</b></span>
+    </div>
+  );
+}
+
+/** Encabezado de panel de modelo con botón Ejecutar */
+function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun }: {
+  icon: typeof Activity; title: string; desc: string; loading: boolean; done: boolean; onRun: () => void;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 flex-wrap bg-white rounded-xl border border-slate-200 px-4 py-3.5">
+      <div className="flex items-start gap-3">
+        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 shrink-0">
+          <Icon size={18} />
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-slate-800">{title}</p>
+          <p className="text-xs text-slate-500 max-w-md">{desc}</p>
+        </div>
+      </div>
+      <button
+        onClick={onRun}
+        disabled={loading}
+        className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+      >
+        {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
+        {loading ? "Ejecutando…" : done ? "Volver a ejecutar" : "Ejecutar modelo"}
+      </button>
+    </div>
+  );
+}
+
+/** PPB — SPC Carta de Control P */
+function SpcRunner({ file }: { file: File }) {
+  const [res, setRes] = useState<SpcResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function run() {
+    setError(null); setLoading(true); setRes(null);
+    try {
+      const fd = new FormData();
+      fd.append("file", file, file.name);
+      const r = await fetch("/api/cmmi/comercial/spc", { method: "POST", body: fd });
+      const json = await r.json();
+      if (!r.ok) throw new Error(json.error || `Error ${r.status}`);
+      setRes(json as SpcResponse);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Falló la ejecución del modelo SPC.");
+    } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="space-y-4">
+      <RunnerHeader
+        icon={Activity}
+        title="SPC · Carta de Control P (PPB)"
+        desc="Línea base de desempeño del Win Rate competitivo por trimestre, con límites de control variables y reglas de Nelson."
+        loading={loading} done={!!res} onRun={run}
+      />
+      {error && (
+        <div className="flex items-start gap-2 rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
+          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+        </div>
+      )}
+      {res && (
+        <div className="space-y-4">
+          <CuracionBar meta={res.curacion} />
+          <StatCards stats={res.stats.resumen} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <ModelImage b64={res.images.carta_p}      title="Carta de Control P" />
+            <ModelImage b64={res.images.nelson}        title="Señales de Nelson" />
+            <ModelImage b64={res.images.estadisticos}  title="Estadísticos descriptivos" />
+          </div>
+          <div className="space-y-2">
+            <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <Table2 size={15} /> Señales detectadas
+              <span className="text-xs font-normal text-slate-400">({res.table_counts.signals})</span>
+            </h4>
+            <RecordTable rows={res.tables.signals} />
+          </div>
+          <div className="space-y-2">
+            <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <Table2 size={15} /> Línea base (subgrupos)
+              <span className="text-xs font-normal text-slate-400">({res.table_counts.baseline})</span>
+            </h4>
+            <RecordTable rows={res.tables.baseline} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** PPM — Random Forest v2 (entrenamiento + evaluación) */
+function RfRunner({ file }: { file: File }) {
+  const [res, setRes] = useState<RfTrainResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function run() {
+    setError(null); setLoading(true); setRes(null);
+    try {
+      const fd = new FormData();
+      fd.append("file", file, file.name);
+      const r = await fetch("/api/cmmi/comercial/rf/train", { method: "POST", body: fd });
+      const json = await r.json();
+      if (!r.ok) throw new Error(json.error || `Error ${r.status}`);
+      setRes(json as RfTrainResponse);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Falló el entrenamiento del modelo Random Forest.");
+    } finally { setLoading(false); }
+  }
+
+  return (
+    <div className="space-y-4">
+      <RunnerHeader
+        icon={Cpu}
+        title="Random Forest v2 (PPM)"
+        desc="Modelo de desempeño que estima la probabilidad de ganar una oportunidad. Entrena con validación cruzada 5-fold y persiste el modelo."
+        loading={loading} done={!!res} onRun={run}
+      />
+      {loading && (
+        <p className="text-xs text-slate-400">El entrenamiento puede tardar ~1–2 minutos…</p>
+      )}
+      {error && (
+        <div className="flex items-start gap-2 rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
+          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+        </div>
+      )}
+      {res && (
+        <div className="space-y-4">
+          <CuracionBar meta={res.curacion} />
+          <StatCards stats={res.stats.metrics} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <ModelImage b64={res.images.dashboard}    title="Dashboard del modelo" />
+            <ModelImage b64={res.images.comercial}     title="Análisis por comercial" />
+            <ModelImage b64={res.images.interactions}  title="Interacciones" />
+          </div>
+          <div className="space-y-2">
+            <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <Table2 size={15} /> Predicciones
+              <span className="text-xs font-normal text-slate-400">({res.table_counts.predictions})</span>
+            </h4>
+            <RecordTable rows={res.tables.predictions} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type ComercialTab = "datos" | "spc" | "rf";
+
 /* ── Vista COMERCIAL ───────────────────────────────────────────────── */
 function ComercialPanel() {
   const [data, setData] = useState<ParseResult | null>(null);
+  const [rawFile, setRawFile] = useState<File | null>(null);
+  const [tab, setTab] = useState<ComercialTab>("datos");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -122,6 +383,7 @@ function ComercialPanel() {
       const result = parseComercialWorkbook(buf, file.name);
       if (!result.rowCount) throw new Error("No se encontraron oportunidades válidas en el archivo.");
       setData(result);
+      setRawFile(file);
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo leer el archivo.");
     } finally {
@@ -165,6 +427,12 @@ function ComercialPanel() {
     return <UploadZone onFile={handleFile} loading={loading} error={error} />;
   }
 
+  const tabs: { id: ComercialTab; label: string; icon: typeof Table2 }[] = [
+    { id: "datos", label: "Datos",            icon: Table2 },
+    { id: "spc",   label: "SPC · Carta P (PPB)", icon: Activity },
+    { id: "rf",    label: "Random Forest (PPM)", icon: Cpu },
+  ];
+
   return (
     <div className="space-y-5">
       {/* Encabezado de archivo */}
@@ -175,13 +443,38 @@ function ComercialPanel() {
           <span className="text-slate-400">· {data.rowCount.toLocaleString("es-CO")} oportunidades</span>
         </div>
         <button
-          onClick={() => { setData(null); setError(null); setSearch(""); setFLinea(""); setFSegmento(""); setFEstado(""); }}
+          onClick={() => { setData(null); setRawFile(null); setTab("datos"); setError(null); setSearch(""); setFLinea(""); setFSegmento(""); setFEstado(""); }}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors"
         >
           <X size={13} /> Cargar otro archivo
         </button>
       </div>
 
+      {/* Tabs internos */}
+      <div className="flex items-center gap-1.5 flex-wrap border-b border-slate-200">
+        {tabs.map(({ id, label, icon: Icon }) => {
+          const isActive = id === tab;
+          return (
+            <button
+              key={id}
+              onClick={() => setTab(id)}
+              className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+                isActive
+                  ? "border-blue-600 text-blue-700"
+                  : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+              }`}
+            >
+              <Icon size={15} /> {label}
+            </button>
+          );
+        })}
+      </div>
+
+      {tab === "spc" && rawFile && <SpcRunner file={rawFile} />}
+      {tab === "rf"  && rawFile && <RfRunner  file={rawFile} />}
+
+      {tab === "datos" && (
+      <>
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
         <Kpi icon={Layers}      label="Oportunidades" value={kpis.total.toLocaleString("es-CO")} tint="bg-blue-50 text-blue-600" />
@@ -255,6 +548,8 @@ function ComercialPanel() {
           </table>
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 }

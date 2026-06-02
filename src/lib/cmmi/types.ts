@@ -62,3 +62,31 @@ export interface ParseResult {
   parsedAt:  string;   // ISO
   rowCount:  number;
 }
+
+/* ── Respuestas del microservicio de modelos (FastAPI) ─────────────── */
+export interface CuracionMeta {
+  registros_iniciales:    number;
+  eliminados_pendientes:  number;
+  eliminados_sin_campos:  number;
+  registros_incluidos:    number;
+}
+
+/** Respuesta SPC — Carta de Control P (PPB) */
+export interface SpcResponse {
+  ok: boolean;
+  images: { carta_p: string | null; nelson: string | null; estadisticos: string | null };
+  tables: { baseline: Record<string, unknown>[] | null; signals: Record<string, unknown>[] | null };
+  table_counts: { baseline: number; signals: number };
+  stats: { resumen: Record<string, number | string | number[] | string[]> | null };
+  curacion: CuracionMeta;
+}
+
+/** Respuesta Random Forest entrenamiento (PPM) */
+export interface RfTrainResponse {
+  ok: boolean;
+  images: { dashboard: string | null; comercial: string | null; interactions: string | null };
+  tables: { predictions: Record<string, unknown>[] | null };
+  table_counts: { predictions: number };
+  stats: { metrics: Record<string, number> | null };
+  curacion: CuracionMeta;
+}

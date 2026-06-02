@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# CMMI · datos crudos de modelos (Excel reales + artefactos originales)
+/CMMI/
+
+# CMMI microservicio · artefactos de runtime
+services/cmmi-api/store/
+services/**/__pycache__/
+*.pyc
