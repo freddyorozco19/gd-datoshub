@@ -4,10 +4,11 @@ import { usePathname } from "next/navigation";
 import Topbar from "@/components/layout/Topbar";
 import StatsCard from "@/components/ui/StatsCard";
 import LeadsView from "@/components/modules/leads/LeadsView";
+import CMMIView from "@/components/modules/cmmi/CMMIView";
 import {
   Users, CalendarDays, Plug2, FolderOpen, ShieldCheck, TrendingUp,
   Plus, RefreshCw, Search, Clock, CheckCircle2, XCircle, Minus,
-  ExternalLink, ShieldCheck as Shield,
+  ExternalLink,
 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -51,14 +52,6 @@ const mockRepos = [
   { id: "2", name: "Pipeline ETL Betplay", type: "pipeline", description: "Transformación y carga de datos Betplay → BigQuery", tags: ["etl", "bigquery", "betplay"], owner: "Equipo Datos" },
   { id: "3", name: "Modelo Predicción Resultados", type: "modelo", description: "ML model scikit-learn para predicción de partidos", tags: ["ml", "sklearn", "predicción"], owner: "Freddy Orozco" },
   { id: "4", name: "Reporte Ejecutivo May 2026", type: "reporte", description: "Informe mensual de resultados comerciales", tags: ["comercial", "mensual"], owner: "GrowData" },
-];
-
-const mockProcesses = [
-  { id: "1", area: "Gestión de proyectos", level: 2, process_name: "Planificación de Proyectos (PP)", status: "completado", owner: "Freddy Orozco" },
-  { id: "2", area: "Gestión de proyectos", level: 2, process_name: "Monitoreo y Control (PMC)", status: "en_progreso", owner: "Freddy Orozco" },
-  { id: "3", area: "Gestión de procesos", level: 3, process_name: "Desarrollo de Requerimientos (RD)", status: "pendiente", owner: "Por asignar" },
-  { id: "4", area: "Soporte", level: 2, process_name: "Gestión de la Configuración (CM)", status: "auditado", owner: "Equipo QA" },
-  { id: "5", area: "Soporte", level: 2, process_name: "Aseguramiento de Calidad (PPQA)", status: "en_progreso", owner: "Equipo QA" },
 ];
 
 const leadsByStage = [
@@ -284,47 +277,7 @@ function RepositoriosView() {
   );
 }
 
-function CMMIView() {
-  const STATUS_COLORS: Record<string, string> = { pendiente: "bg-slate-100 text-slate-600", en_progreso: "bg-amber-100 text-amber-700", completado: "bg-emerald-100 text-emerald-700", auditado: "bg-blue-100 text-blue-700" };
-  const LEVEL_COLORS: Record<number, string> = { 1: "bg-slate-200 text-slate-700", 2: "bg-amber-200 text-amber-800", 3: "bg-blue-200 text-blue-800", 4: "bg-violet-200 text-violet-800", 5: "bg-emerald-200 text-emerald-800" };
-  const stats = [{ label: "Completados", value: 1, color: "text-emerald-600" }, { label: "En progreso", value: 2, color: "text-amber-600" }, { label: "Pendientes", value: 1, color: "text-slate-500" }, { label: "Auditados", value: 1, color: "text-blue-600" }];
-  return (
-    <div className="flex flex-col h-full overflow-auto">
-      <Topbar title="CMMI" subtitle="Certificaciones, proveedores, trazabilidad y procesos" />
-      <main className="flex-1 p-6 space-y-5">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {stats.map((s) => <div key={s.label} className="bg-white rounded-xl border border-slate-200 p-4 text-center"><p className={`text-2xl font-bold ${s.color}`}>{s.value}</p><p className="text-xs text-slate-500 mt-0.5">{s.label}</p></div>)}
-        </div>
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-slate-700">Procesos CMMI</h2>
-          <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition-colors"><Plus size={14} /> Agregar proceso</button>
-        </div>
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                {["Proceso", "Área", "Nivel", "Responsable", "Estado"].map((h, i) => (
-                  <th key={h} className={`px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide ${i === 2 ? "text-center" : "text-left"}`}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {mockProcesses.map((p) => (
-                <tr key={p.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-4 py-3.5"><div className="flex items-center gap-2"><Shield size={14} className="text-slate-400 shrink-0" /><span className="font-medium text-slate-800">{p.process_name}</span></div></td>
-                  <td className="px-4 py-3.5 text-slate-500">{p.area}</td>
-                  <td className="px-4 py-3.5 text-center"><span className={`text-xs font-bold px-2 py-0.5 rounded ${LEVEL_COLORS[p.level as keyof typeof LEVEL_COLORS]}`}>ML{p.level}</span></td>
-                  <td className="px-4 py-3.5 text-slate-500 text-xs">{p.owner}</td>
-                  <td className="px-4 py-3.5"><span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_COLORS[p.status]}`}>{p.status.replace("_", " ")}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </main>
-    </div>
-  );
-}
+// CMMIView se importa desde @/components/modules/cmmi/CMMIView (módulo real por verticales)
 
 /* ─── ROUTER PRINCIPAL ───────────────────────────────────────────── */
 
