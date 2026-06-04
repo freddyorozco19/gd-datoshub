@@ -5,6 +5,7 @@ import Topbar from "@/components/layout/Topbar";
 import StatsCard from "@/components/ui/StatsCard";
 import LeadsView from "@/components/modules/leads/LeadsView";
 import CMMIView from "@/components/modules/cmmi/CMMIView";
+import UsuariosView from "@/components/modules/usuarios/UsuariosView";
 import {
   Users, CalendarDays, Plug2, FolderOpen, ShieldCheck, TrendingUp,
   Plus, RefreshCw, Search, Clock, CheckCircle2, XCircle, Minus,
@@ -289,6 +290,7 @@ const VIEWS: Record<string, React.FC> = {
   "/reportes": ReportesView,
   "/repositorios": RepositoriosView,
   "/cmmi": CMMIView,
+  "/usuarios": UsuariosView,
 };
 
 export default function PortalPage() {

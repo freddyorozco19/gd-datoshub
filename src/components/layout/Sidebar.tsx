@@ -10,29 +10,40 @@ import {
   BarChart3,
   FolderOpen,
   ShieldCheck,
+  UserCog,
   LogOut,
   Database,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 const navItems = [
-  { label: "Dashboard",    href: "/dashboard",     icon: LayoutDashboard },
-  { label: "Leads",        href: "/leads",          icon: Users },
-  { label: "Reuniones",    href: "/reuniones",      icon: CalendarDays },
-  { label: "Integraciones",href: "/integraciones",  icon: Plug2 },
-  { label: "Reportes",     href: "/reportes",       icon: BarChart3 },
-  { label: "Repositorios", href: "/repositorios",   icon: FolderOpen },
-  { label: "CMMI",         href: "/cmmi",           icon: ShieldCheck },
+  { label: "Dashboard",    href: "/dashboard",     icon: LayoutDashboard, adminOnly: false },
+  { label: "Leads",        href: "/leads",          icon: Users,          adminOnly: false },
+  { label: "Reuniones",    href: "/reuniones",      icon: CalendarDays,   adminOnly: false },
+  { label: "Integraciones",href: "/integraciones",  icon: Plug2,          adminOnly: false },
+  { label: "Reportes",     href: "/reportes",       icon: BarChart3,      adminOnly: false },
+  { label: "Repositorios", href: "/repositorios",   icon: FolderOpen,     adminOnly: false },
+  { label: "CMMI",         href: "/cmmi",           icon: ShieldCheck,    adminOnly: false },
+  { label: "Usuarios",     href: "/usuarios",       icon: UserCog,        adminOnly: true  },
 ];
 
 export default function Sidebar() {
   const pathname  = usePathname();
   const router    = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      const role = (user?.app_metadata as { role?: string } | undefined)?.role;
+      setIsAdmin(role === "admin");
+    });
+  }, []);
 
   async function handleLogout() {
     const supabase = createClient();
@@ -72,7 +83,7 @@ export default function Sidebar() {
 
       {/* ── Navegación ── */}
       <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto">
-        {navItems.map(({ label, href, icon: Icon }) => {
+        {navItems.filter((item) => !item.adminOnly || isAdmin).map(({ label, href, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(href + "/");
           return (
             <Link

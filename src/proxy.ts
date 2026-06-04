@@ -45,6 +45,16 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Sección de administración: solo para admins (rol en app_metadata).
+  if (user && pathname.startsWith("/usuarios")) {
+    const role = (user.app_metadata as { role?: string } | undefined)?.role;
+    if (role !== "admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
+  }
+
   return supabaseResponse;
 }
 
