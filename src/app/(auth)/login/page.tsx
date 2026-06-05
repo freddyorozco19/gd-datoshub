@@ -26,6 +26,15 @@ export default function LoginPage() {
       return;
     }
 
+    // Registro de trazabilidad (best-effort, no bloquea el acceso).
+    try {
+      await fetch("/api/auth/log-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+    } catch { /* ignora errores de logging */ }
+
     router.push("/dashboard");
     router.refresh();
   }
