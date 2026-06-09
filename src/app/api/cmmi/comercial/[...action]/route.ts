@@ -1,8 +1,17 @@
 import type { NextRequest } from "next/server";
 
 const CMMI_API_URL = process.env.CMMI_API_URL ?? "http://127.0.0.1:8008";
+// Vercel define VERCEL=1 en runtime. Si no hay un microservicio configurado
+// explícitamente (CMMI_API_URL), la ejecución de modelos es solo local.
+const IS_HOSTED = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 
 const ALLOWED = new Set(["spc", "rf/train", "rf/predict"]);
+
+const LOCAL_ONLY_MSG =
+  "La ejecución de modelos CMMI (SPC y Random Forest) se realiza con un microservicio " +
+  "Python (pandas · scikit-learn · matplotlib) que solo está disponible en entorno local. " +
+  "En esta versión desplegada la función está deshabilitada. Para ejecutarla, corre la app " +
+  "y el servicio de modelos en tu máquina (uvicorn en el puerto 8008).";
 
 export async function POST(
   req: NextRequest,
@@ -13,6 +22,11 @@ export async function POST(
 
   if (!ALLOWED.has(path)) {
     return Response.json({ error: `Acción no válida: ${path}` }, { status: 404 });
+  }
+
+  // En producción (Vercel) sin microservicio: aviso claro, no error de red.
+  if (IS_HOSTED) {
+    return Response.json({ error: LOCAL_ONLY_MSG, localOnly: true }, { status: 503 });
   }
 
   let form: FormData;

@@ -242,20 +242,37 @@ function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun }: {
   );
 }
 
+/** Aviso informativo (no error) cuando la función es solo local en producción. */
+function LocalOnlyNotice({ message }: { message: string }) {
+  return (
+    <div className="flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
+      <AlertCircle size={16} className="shrink-0 mt-0.5" />
+      <div>
+        <p className="font-medium">Función disponible solo en entorno local</p>
+        <p className="mt-0.5 text-amber-700">{message}</p>
+      </div>
+    </div>
+  );
+}
+
 /** PPB — SPC Carta de Control P */
 function SpcRunner({ file }: { file: File }) {
   const [res, setRes] = useState<SpcResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   async function run() {
-    setError(null); setLoading(true); setRes(null);
+    setError(null); setNotice(null); setLoading(true); setRes(null);
     try {
       const fd = new FormData();
       fd.append("file", file, file.name);
       const r = await fetch("/api/cmmi/comercial/spc", { method: "POST", body: fd });
       const json = await r.json();
-      if (!r.ok) throw new Error(json.error || `Error ${r.status}`);
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error as string); return; }
+        throw new Error(json.error || `Error ${r.status}`);
+      }
       setRes(json as SpcResponse);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Falló la ejecución del modelo SPC.");
@@ -270,6 +287,7 @@ function SpcRunner({ file }: { file: File }) {
         desc="Línea base de desempeño del Win Rate competitivo por trimestre, con límites de control variables y reglas de Nelson."
         loading={loading} done={!!res} onRun={run}
       />
+      {notice && <LocalOnlyNotice message={notice} />}
       {error && (
         <div className="flex items-start gap-2 rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
           <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
@@ -309,15 +327,19 @@ function RfRunner({ file }: { file: File }) {
   const [res, setRes] = useState<RfTrainResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   async function run() {
-    setError(null); setLoading(true); setRes(null);
+    setError(null); setNotice(null); setLoading(true); setRes(null);
     try {
       const fd = new FormData();
       fd.append("file", file, file.name);
       const r = await fetch("/api/cmmi/comercial/rf/train", { method: "POST", body: fd });
       const json = await r.json();
-      if (!r.ok) throw new Error(json.error || `Error ${r.status}`);
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error as string); return; }
+        throw new Error(json.error || `Error ${r.status}`);
+      }
       setRes(json as RfTrainResponse);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Falló el entrenamiento del modelo Random Forest.");
@@ -335,6 +357,7 @@ function RfRunner({ file }: { file: File }) {
       {loading && (
         <p className="text-xs text-slate-400">El entrenamiento puede tardar ~1–2 minutos…</p>
       )}
+      {notice && <LocalOnlyNotice message={notice} />}
       {error && (
         <div className="flex items-start gap-2 rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
           <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
