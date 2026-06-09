@@ -306,9 +306,9 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
 }
 
 /* ── modal: tabla de leads del día ──────────────────────────────────── */
-interface DayLeadsModalProps { leads: Lead[]; date: string; onClose: () => void; }
+interface DayLeadsModalProps { leads: Lead[]; date: string; heading?: string; onClose: () => void; }
 
-function DayLeadsModal({ leads, date, onClose }: DayLeadsModalProps) {
+function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
   const dateLabel = new Date(date + "T12:00:00").toLocaleDateString("es-CO", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
@@ -348,10 +348,16 @@ function DayLeadsModal({ leads, date, onClose }: DayLeadsModalProps) {
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <div>
-            <h2 className="font-semibold text-slate-800 capitalize">{dateLabel}</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="font-semibold text-slate-800 capitalize">{dateLabel}</h2>
+              {heading && (
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">{heading}</span>
+              )}
+            </div>
             <p className="text-xs text-slate-400 mt-0.5">
               {mFiltered.length}{mFiltered.length !== leads.length && ` de ${leads.length}`}{" "}
               {leads.length === 1 ? "lead registrado" : "leads registrados"}
+              {heading && " en esta línea"}
             </p>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">
@@ -944,7 +950,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
   }
 
   const [selectedDate, setSelectedDate] = useState<string>(todayGMT5);
-  const [showModal, setShowModal] = useState(false);
+  const [modal, setModal] = useState<{ leads: Lead[]; heading?: string } | null>(null);
   const isToday = selectedDate === todayGMT5();
 
   function shiftDay(delta: number) {
@@ -968,7 +974,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
         <div className="flex items-center gap-2 mb-3">
           <div className="p-1.5 rounded-lg bg-blue-50 shrink-0"><CalendarCheck2 size={15} className="text-blue-600" /></div>
           <span className="text-sm font-semibold text-slate-700 flex-1">Leads por día</span>
-          <button onClick={() => setShowModal(true)} disabled={dayLeads.length === 0} title="Ver tabla de leads"
+          <button onClick={() => setModal({ leads: dayLeads })} disabled={dayLeads.length === 0} title="Ver tabla de leads"
             className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-blue-600 disabled:opacity-30 transition-colors">
             <Eye size={15} />
           </button>
@@ -999,15 +1005,20 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
               const palette = LINE_PALETTE[i % LINE_PALETTE.length];
               const pct = Math.round((count / max) * 100);
               return (
-                <div key={linea}>
+                <button
+                  key={linea}
+                  onClick={() => setModal({ leads: dayLeads.filter((l) => (l.linea || "Sin línea") === linea), heading: linea })}
+                  title={`Ver los ${count} lead(s) de ${linea}`}
+                  className="w-full text-left group cursor-pointer focus:outline-none"
+                >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-slate-600 truncate max-w-[130px]" title={linea}>{linea}</span>
+                    <span className="text-xs text-slate-600 group-hover:text-blue-600 truncate max-w-[130px] transition-colors" title={linea}>{linea}</span>
                     <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full shrink-0 ${palette.badge}`}>{count}</span>
                   </div>
-                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden ring-blue-300 group-hover:ring-2 transition-all">
                     <div className={`h-full ${palette.bar} rounded-full transition-all duration-500`} style={{ width: `${pct}%` }} />
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
@@ -1019,7 +1030,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
 
       <p className="text-xs text-slate-400 text-center leading-relaxed px-1">Por fecha de creación · todos los registros</p>
 
-      {showModal && <DayLeadsModal leads={dayLeads} date={selectedDate} onClose={() => setShowModal(false)} />}
+      {modal && <DayLeadsModal leads={modal.leads} date={selectedDate} heading={modal.heading} onClose={() => setModal(null)} />}
     </div>
   );
 }
