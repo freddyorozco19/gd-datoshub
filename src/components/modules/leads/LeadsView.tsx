@@ -316,6 +316,7 @@ function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
   const [mLinea,     setMLinea]     = useState("ALL");
   const [mComercial, setMComercial] = useState("ALL");
   const [mEstado,    setMEstado]    = useState("ALL");
+  const [detailLead, setDetailLead] = useState<Lead | null>(null);
 
   const mOpts = useMemo(() => ({
     linea:     unique(leads.map((l) => l.linea)),
@@ -334,10 +335,10 @@ function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
   const anyActive = mLinea !== "ALL" || mComercial !== "ALL" || mEstado !== "ALL";
 
   useEffect(() => {
-    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape" && !detailLead) onClose(); }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, detailLead]);
 
   const modal = (
     <div
@@ -401,9 +402,10 @@ function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {mFiltered.map((lead) => (
-                  <tr key={lead.id} className="hover:bg-blue-50/40 transition-colors">
+                  <tr key={lead.id} onClick={() => setDetailLead(lead)}
+                    className="hover:bg-blue-50/40 transition-colors cursor-pointer group">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-slate-800 max-w-[180px] truncate" title={lead.nombre}>{lead.nombre}</p>
+                      <p className="font-medium text-slate-800 max-w-[180px] truncate group-hover:text-blue-600 transition-colors" title={lead.nombre}>{lead.nombre}</p>
                       {lead.correo && <p className="text-slate-400 truncate max-w-[180px] text-[10px]">{lead.correo}</p>}
                     </td>
                     <td className="px-4 py-3 text-slate-600 max-w-[140px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
@@ -427,6 +429,9 @@ function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
           )}
         </div>
       </div>
+
+      {/* detalle del lead — mismo popup que "Últimas asignadas" */}
+      {detailLead && <LeadDetailModal lead={detailLead} onClose={() => setDetailLead(null)} />}
     </div>
   );
   return createPortal(modal, document.body);
