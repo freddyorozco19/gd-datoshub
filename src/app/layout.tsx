@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "sw
 export const metadata: Metadata = {
   title: "GD-DatosHub | GrowData",
   description: "Hub central de datos y sistemas de información de GrowData",
+  icons: { icon: "/growdata-icon.webp" },
 };
 
 export default function RootLayout({
