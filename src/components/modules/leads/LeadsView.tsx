@@ -190,18 +190,20 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
           ))}
         </div>
 
-        <div className="ml-auto flex items-center gap-5">
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500/30" />
-            <span className="text-[10px] text-slate-500">Total</span>
-            <span className="text-[10px] font-bold text-slate-300">{totalLeads}</span>
+        {(range !== 0 && range <= 12) && (
+          <div className="ml-auto flex items-center gap-5">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500/30" />
+              <span className="text-[10px] text-slate-500">Total</span>
+              <span className="text-[10px] font-bold text-slate-300">{totalLeads}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500" />
+              <span className="text-[10px] text-slate-500">Ganados</span>
+              <span className="text-[10px] font-bold text-emerald-400">{totalGanados}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500" />
-            <span className="text-[10px] text-slate-500">Ganados</span>
-            <span className="text-[10px] font-bold text-emerald-400">{totalGanados}</span>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="overflow-x-auto pb-1">
@@ -209,13 +211,17 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
           {months.map(({ key, label, count, ganados }) => {
             const totalPx = Math.max(3, Math.round((count / maxCount) * BAR_H));
             const ganPx   = count > 0 ? Math.round((ganados / count) * totalPx) : 0;
+            const pct     = count > 0 ? Math.round((ganados / count) * 100) : 0;
             return (
-              <div key={key} className="flex-1 min-w-[22px] flex flex-col items-center gap-1 group">
-                <div className="flex flex-col items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-[10px] font-bold text-indigo-300 leading-none">{count}</span>
-                  {ganados > 0 && (
-                    <span className="text-[9px] text-emerald-400 leading-none mt-0.5">{ganados}✓</span>
-                  )}
+              <div key={key} className="relative flex-1 min-w-[22px] flex flex-col items-center gap-1 group">
+                {/* tooltip */}
+                <div className="absolute bottom-[calc(100%-8px)] left-1/2 -translate-x-1/2 z-20 pointer-events-none
+                                opacity-0 group-hover:opacity-100 transition-opacity
+                                bg-[#1a1a30] border border-white/[0.10] rounded-lg px-2.5 py-2 shadow-xl
+                                whitespace-nowrap flex flex-col gap-0.5 text-[11px]">
+                  <span className="font-semibold text-slate-200 capitalize">{label}</span>
+                  <span className="text-slate-400">{count} lead{count !== 1 ? "s" : ""}</span>
+                  <span className="text-emerald-400">{ganados} ganado{ganados !== 1 ? "s" : ""} · {pct}%</span>
                 </div>
                 <div className="w-full flex items-end" style={{ height: BAR_H }}>
                   <div
