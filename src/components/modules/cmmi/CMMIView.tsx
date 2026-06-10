@@ -28,22 +28,18 @@ const fmtDate = (s: string): string => (s ? s.substring(0, 10) : "—");
 
 function estadoBadge(g: string): string {
   const k = g.toUpperCase();
-  if (k.startsWith("GANAD"))    return "bg-emerald-100 text-emerald-700";
-  if (k.startsWith("PERDID"))   return "bg-rose-100 text-rose-700";
-  if (k.startsWith("DECLINAD")) return "bg-slate-100 text-slate-500";
-  return "bg-amber-100 text-amber-700"; // Pendiente / otros
+  if (k.startsWith("GANAD"))    return "bg-emerald-500/10 text-emerald-400";
+  if (k.startsWith("PERDID"))   return "bg-rose-500/10 text-rose-400";
+  if (k.startsWith("DECLINAD")) return "bg-white/[0.05] text-slate-400";
+  return "bg-amber-500/10 text-amber-400";
 }
 
-const LINEA_BADGE: Record<string, string> = {
-  "CONSULTORÍA": "bg-violet-100 text-violet-700",
-  "TI":          "bg-sky-100 text-sky-700",
-};
 function lineaBadge(l: string): string {
   const k = l.toUpperCase();
-  if (k.startsWith("CONSULTOR")) return LINEA_BADGE["CONSULTORÍA"];
-  if (k === "TI")                return LINEA_BADGE["TI"];
-  if (k.startsWith("DATOS"))     return "bg-emerald-100 text-emerald-700";
-  return "bg-slate-100 text-slate-600";
+  if (k.startsWith("CONSULTOR")) return "bg-violet-500/10 text-violet-400";
+  if (k === "TI")                return "bg-sky-500/10 text-sky-400";
+  if (k.startsWith("DATOS"))     return "bg-emerald-500/10 text-emerald-400";
+  return "bg-white/[0.05] text-slate-400";
 }
 
 /* ── KPI card ──────────────────────────────────────────────────────── */
@@ -51,12 +47,12 @@ function Kpi({ icon: Icon, label, value, tint }: {
   icon: typeof DollarSign; label: string; value: string; tint: string;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-3">
+    <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4 flex items-center gap-3">
       <div className={`flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${tint}`}>
         <Icon size={18} />
       </div>
       <div className="min-w-0">
-        <p className="text-lg font-bold text-slate-800 leading-tight truncate">{value}</p>
+        <p className="text-lg font-bold text-slate-200 leading-tight truncate" title={value}>{value}</p>
         <p className="text-xs text-slate-500">{label}</p>
       </div>
     </div>
@@ -82,16 +78,18 @@ function UploadZone({ onFile, loading, error }: {
         }}
         onClick={() => inputRef.current?.click()}
         className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-14 cursor-pointer transition-colors ${
-          drag ? "border-blue-400 bg-blue-50" : "border-slate-300 bg-white hover:border-blue-300 hover:bg-slate-50"
+          drag
+            ? "border-blue-500/60 bg-blue-500/5"
+            : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
         }`}
       >
-        <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600">
+        <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400">
           {loading ? <Clock size={26} className="animate-spin" /> : <Upload size={26} />}
         </div>
-        <p className="text-sm font-semibold text-slate-700">
+        <p className="text-sm font-semibold text-slate-300">
           {loading ? "Procesando archivo…" : "Arrastra el Excel de Comercial aquí"}
         </p>
-        <p className="text-xs text-slate-400">o haz clic para seleccionar · .xlsx / .xls</p>
+        <p className="text-xs text-slate-500">o haz clic para seleccionar · .xlsx / .xls</p>
         <input
           ref={inputRef}
           type="file"
@@ -101,7 +99,7 @@ function UploadZone({ onFile, loading, error }: {
         />
       </div>
       {error && (
-        <div className="mt-4 flex items-start gap-2 rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
+        <div className="mt-4 flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
           <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
         </div>
       )}
@@ -126,10 +124,10 @@ function ModelImage({ b64, title }: { b64: string | null; title: string }) {
   const src = `data:image/png;base64,${b64}`;
   return (
     <>
-      <figure className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <figcaption className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100">
-          <span className="text-xs font-semibold text-slate-600">{title}</span>
-          <button onClick={() => setZoom(true)} className="text-slate-400 hover:text-slate-600" title="Ampliar">
+      <figure className="bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
+        <figcaption className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.05]">
+          <span className="text-xs font-semibold text-slate-400">{title}</span>
+          <button onClick={() => setZoom(true)} className="text-slate-600 hover:text-slate-300 transition-colors" title="Ampliar">
             <Maximize2 size={14} />
           </button>
         </figcaption>
@@ -137,39 +135,39 @@ function ModelImage({ b64, title }: { b64: string | null; title: string }) {
         <img src={src} alt={title} className="w-full cursor-zoom-in" onClick={() => setZoom(true)} />
       </figure>
       {zoom && (
-        <div onClick={() => setZoom(false)} className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-6 cursor-zoom-out">
+        <div onClick={() => setZoom(false)} className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-6 cursor-zoom-out">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={src} alt={title} className="max-h-full max-w-full rounded-lg shadow-2xl" />
-          <button className="absolute top-5 right-5 text-white/80 hover:text-white"><X size={24} /></button>
+          <button className="absolute top-5 right-5 text-white/60 hover:text-white"><X size={24} /></button>
         </div>
       )}
     </>
   );
 }
 
-/** Tabla genérica de registros (CSV → JSON) */
+/** Tabla genérica de registros */
 function RecordTable({ rows, max = 60 }: { rows: Record<string, unknown>[] | null; max?: number }) {
   if (!rows || rows.length === 0) {
-    return <p className="text-sm text-slate-400 py-6 text-center">Sin filas para mostrar.</p>;
+    return <p className="text-sm text-slate-500 py-6 text-center">Sin filas para mostrar.</p>;
   }
   const cols = Object.keys(rows[0]);
   const shown = rows.slice(0, max);
   return (
-    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <div className="bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
       <div className="overflow-auto max-h-[55vh]">
         <table className="w-full text-xs">
           <thead className="sticky top-0 z-10">
-            <tr className="bg-slate-50 border-b border-slate-200">
+            <tr className="bg-[#0e0e1c] border-b border-white/[0.07]">
               {cols.map((c) => (
                 <th key={c} className="px-3 py-2 text-left font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{c}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-white/[0.04]">
             {shown.map((r, i) => (
-              <tr key={i} className="hover:bg-slate-50">
+              <tr key={i} className="hover:bg-white/[0.03] transition-colors">
                 {cols.map((c) => (
-                  <td key={c} className="px-3 py-1.5 text-slate-600 whitespace-nowrap tabular-nums">{fmtCell(r[c])}</td>
+                  <td key={c} className="px-3 py-1.5 text-slate-400 whitespace-nowrap tabular-nums">{fmtCell(r[c])}</td>
                 ))}
               </tr>
             ))}
@@ -177,7 +175,7 @@ function RecordTable({ rows, max = 60 }: { rows: Record<string, unknown>[] | nul
         </table>
       </div>
       {rows.length > max && (
-        <p className="px-3 py-2 text-[11px] text-slate-400 border-t border-slate-100">
+        <p className="px-3 py-2 text-[11px] text-slate-600 border-t border-white/[0.05]">
           Mostrando {max} de {rows.length.toLocaleString("es-CO")} filas.
         </p>
       )}
@@ -185,7 +183,7 @@ function RecordTable({ rows, max = 60 }: { rows: Record<string, unknown>[] | nul
   );
 }
 
-/** Tarjetas con métricas escalares de un objeto stats */
+/** Tarjetas con métricas escalares */
 function StatCards({ stats }: { stats: Record<string, unknown> | null }) {
   if (!stats) return null;
   const entries = Object.entries(stats).filter(([, v]) => typeof v === "number" || typeof v === "string");
@@ -193,8 +191,8 @@ function StatCards({ stats }: { stats: Record<string, unknown> | null }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
       {entries.map(([k, v]) => (
-        <div key={k} className="bg-white rounded-xl border border-slate-200 p-3">
-          <p className="text-base font-bold text-slate-800 leading-tight truncate" title={fmtCell(v)}>{fmtCell(v)}</p>
+        <div key={k} className="bg-[#111120] rounded-xl border border-white/[0.07] p-3">
+          <p className="text-base font-bold text-slate-200 leading-tight truncate" title={fmtCell(v)}>{fmtCell(v)}</p>
           <p className="text-xs text-slate-500 mt-0.5">{k}</p>
         </div>
       ))}
@@ -206,11 +204,11 @@ function StatCards({ stats }: { stats: Record<string, unknown> | null }) {
 function CuracionBar({ meta }: { meta: CuracionMeta }) {
   return (
     <div className="flex items-center gap-2 flex-wrap text-xs">
-      <Filter size={14} className="text-slate-400" />
-      <span className="px-2 py-1 rounded-md bg-slate-100 text-slate-600">Iniciales <b>{meta.registros_iniciales.toLocaleString("es-CO")}</b></span>
-      <span className="px-2 py-1 rounded-md bg-amber-50 text-amber-700">Pendientes −{meta.eliminados_pendientes}</span>
-      <span className="px-2 py-1 rounded-md bg-rose-50 text-rose-700">Sin campos −{meta.eliminados_sin_campos}</span>
-      <span className="px-2 py-1 rounded-md bg-emerald-50 text-emerald-700">Incluidos <b>{meta.registros_incluidos.toLocaleString("es-CO")}</b></span>
+      <Filter size={14} className="text-slate-500" />
+      <span className="px-2 py-1 rounded-md bg-white/[0.05] text-slate-400">Iniciales <b>{meta.registros_iniciales.toLocaleString("es-CO")}</b></span>
+      <span className="px-2 py-1 rounded-md bg-amber-500/10 text-amber-400">Pendientes −{meta.eliminados_pendientes}</span>
+      <span className="px-2 py-1 rounded-md bg-rose-500/10 text-rose-400">Sin campos −{meta.eliminados_sin_campos}</span>
+      <span className="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-400">Incluidos <b>{meta.registros_incluidos.toLocaleString("es-CO")}</b></span>
     </div>
   );
 }
@@ -220,20 +218,20 @@ function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun }: {
   icon: typeof Activity; title: string; desc: string; loading: boolean; done: boolean; onRun: () => void;
 }) {
   return (
-    <div className="flex items-start justify-between gap-4 flex-wrap bg-white rounded-xl border border-slate-200 px-4 py-3.5">
+    <div className="flex items-start justify-between gap-4 flex-wrap bg-[#111120] rounded-xl border border-white/[0.07] px-4 py-3.5">
       <div className="flex items-start gap-3">
-        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 shrink-0">
+        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-500/10 text-indigo-400 shrink-0">
           <Icon size={18} />
         </div>
         <div>
-          <p className="text-sm font-semibold text-slate-800">{title}</p>
+          <p className="text-sm font-semibold text-slate-200">{title}</p>
           <p className="text-xs text-slate-500 max-w-md">{desc}</p>
         </div>
       </div>
       <button
         onClick={onRun}
         disabled={loading}
-        className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
       >
         {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
         {loading ? "Ejecutando…" : done ? "Volver a ejecutar" : "Ejecutar modelo"}
@@ -242,20 +240,20 @@ function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun }: {
   );
 }
 
-/** Aviso informativo (no error) cuando la función es solo local en producción. */
+/** Aviso informativo cuando la función es solo local */
 function LocalOnlyNotice({ message }: { message: string }) {
   return (
-    <div className="flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
+    <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
       <AlertCircle size={16} className="shrink-0 mt-0.5" />
       <div>
         <p className="font-medium">Función disponible solo en entorno local</p>
-        <p className="mt-0.5 text-amber-700">{message}</p>
+        <p className="mt-0.5 text-amber-400/80">{message}</p>
       </div>
     </div>
   );
 }
 
-/** PPB — SPC Carta de Control P */
+/** SPC Carta de Control P */
 function SpcRunner({ file }: { file: File }) {
   const [res, setRes] = useState<SpcResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -289,7 +287,7 @@ function SpcRunner({ file }: { file: File }) {
       />
       {notice && <LocalOnlyNotice message={notice} />}
       {error && (
-        <div className="flex items-start gap-2 rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
+        <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
           <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
         </div>
       )}
@@ -303,16 +301,16 @@ function SpcRunner({ file }: { file: File }) {
             <ModelImage b64={res.images.estadisticos}  title="Estadísticos descriptivos" />
           </div>
           <div className="space-y-2">
-            <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+            <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-300">
               <Table2 size={15} /> Señales detectadas
-              <span className="text-xs font-normal text-slate-400">({res.table_counts.signals})</span>
+              <span className="text-xs font-normal text-slate-500">({res.table_counts.signals})</span>
             </h4>
             <RecordTable rows={res.tables.signals} />
           </div>
           <div className="space-y-2">
-            <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+            <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-300">
               <Table2 size={15} /> Línea base (subgrupos)
-              <span className="text-xs font-normal text-slate-400">({res.table_counts.baseline})</span>
+              <span className="text-xs font-normal text-slate-500">({res.table_counts.baseline})</span>
             </h4>
             <RecordTable rows={res.tables.baseline} />
           </div>
@@ -322,7 +320,7 @@ function SpcRunner({ file }: { file: File }) {
   );
 }
 
-/** PPM — Random Forest v2 (entrenamiento + evaluación) */
+/** Random Forest v2 */
 function RfRunner({ file }: { file: File }) {
   const [res, setRes] = useState<RfTrainResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -355,11 +353,11 @@ function RfRunner({ file }: { file: File }) {
         loading={loading} done={!!res} onRun={run}
       />
       {loading && (
-        <p className="text-xs text-slate-400">El entrenamiento puede tardar ~1–2 minutos…</p>
+        <p className="text-xs text-slate-500">El entrenamiento puede tardar ~1–2 minutos…</p>
       )}
       {notice && <LocalOnlyNotice message={notice} />}
       {error && (
-        <div className="flex items-start gap-2 rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
+        <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
           <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
         </div>
       )}
@@ -373,9 +371,9 @@ function RfRunner({ file }: { file: File }) {
             <ModelImage b64={res.images.interactions}  title="Interacciones" />
           </div>
           <div className="space-y-2">
-            <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+            <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-300">
               <Table2 size={15} /> Predicciones
-              <span className="text-xs font-normal text-slate-400">({res.table_counts.predictions})</span>
+              <span className="text-xs font-normal text-slate-500">({res.table_counts.predictions})</span>
             </h4>
             <RecordTable rows={res.tables.predictions} />
           </div>
@@ -451,30 +449,30 @@ function ComercialPanel() {
   }
 
   const tabs: { id: ComercialTab; label: string; icon: typeof Table2 }[] = [
-    { id: "datos", label: "Datos",            icon: Table2 },
+    { id: "datos", label: "Datos",               icon: Table2   },
     { id: "spc",   label: "SPC · Carta P (PPB)", icon: Activity },
-    { id: "rf",    label: "Random Forest (PPM)", icon: Cpu },
+    { id: "rf",    label: "Random Forest (PPM)", icon: Cpu      },
   ];
 
   return (
     <div className="space-y-5">
       {/* Encabezado de archivo */}
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-2.5 text-sm text-slate-600">
-          <FileSpreadsheet size={18} className="text-emerald-600" />
-          <span className="font-medium text-slate-800">{data.fileName}</span>
-          <span className="text-slate-400">· {data.rowCount.toLocaleString("es-CO")} oportunidades</span>
+        <div className="flex items-center gap-2.5 text-sm text-slate-400">
+          <FileSpreadsheet size={18} className="text-emerald-400" />
+          <span className="font-medium text-slate-200">{data.fileName}</span>
+          <span className="text-slate-500">· {data.rowCount.toLocaleString("es-CO")} oportunidades</span>
         </div>
         <button
           onClick={() => { setData(null); setRawFile(null); setTab("datos"); setError(null); setSearch(""); setFLinea(""); setFSegmento(""); setFEstado(""); }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] transition-colors"
         >
           <X size={13} /> Cargar otro archivo
         </button>
       </div>
 
       {/* Tabs internos */}
-      <div className="flex items-center gap-1.5 flex-wrap border-b border-slate-200">
+      <div className="flex items-center gap-1.5 flex-wrap border-b border-white/[0.07]">
         {tabs.map(({ id, label, icon: Icon }) => {
           const isActive = id === tab;
           return (
@@ -483,8 +481,8 @@ function ComercialPanel() {
               onClick={() => setTab(id)}
               className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
                 isActive
-                  ? "border-blue-600 text-blue-700"
-                  : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                  ? "border-blue-500 text-blue-400"
+                  : "border-transparent text-slate-500 hover:text-slate-300 hover:border-white/20"
               }`}
             >
               <Icon size={15} /> {label}
@@ -500,72 +498,72 @@ function ComercialPanel() {
       <>
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
-        <Kpi icon={Layers}      label="Oportunidades" value={kpis.total.toLocaleString("es-CO")} tint="bg-blue-50 text-blue-600" />
-        <Kpi icon={Trophy}      label="Ganadas"       value={kpis.ganadas.toLocaleString("es-CO")} tint="bg-emerald-50 text-emerald-600" />
-        <Kpi icon={TrendingDown}label="Perdidas"      value={kpis.perdidas.toLocaleString("es-CO")} tint="bg-rose-50 text-rose-600" />
-        <Kpi icon={Clock}       label="Pendientes"    value={kpis.pendientes.toLocaleString("es-CO")} tint="bg-amber-50 text-amber-600" />
-        <Kpi icon={DollarSign}  label="Ingreso esp."  value={fmtCompact(kpis.ingreso)} tint="bg-violet-50 text-violet-600" />
-        <Kpi icon={DollarSign}  label="Ticket prom."  value={fmtCompact(kpis.ticket)} tint="bg-cyan-50 text-cyan-600" />
+        <Kpi icon={Layers}       label="Oportunidades" value={kpis.total.toLocaleString("es-CO")}     tint="bg-blue-500/10 text-blue-400"    />
+        <Kpi icon={Trophy}       label="Ganadas"       value={kpis.ganadas.toLocaleString("es-CO")}   tint="bg-emerald-500/10 text-emerald-400" />
+        <Kpi icon={TrendingDown} label="Perdidas"      value={kpis.perdidas.toLocaleString("es-CO")}  tint="bg-rose-500/10 text-rose-400"    />
+        <Kpi icon={Clock}        label="Pendientes"    value={kpis.pendientes.toLocaleString("es-CO")}tint="bg-amber-500/10 text-amber-400"  />
+        <Kpi icon={DollarSign}   label="Ingreso esp."  value={fmtCompact(kpis.ingreso)}               tint="bg-violet-500/10 text-violet-400" />
+        <Kpi icon={DollarSign}   label="Ticket prom."  value={fmtCompact(kpis.ticket)}                tint="bg-cyan-500/10 text-cyan-400"    />
       </div>
 
       {/* Filtros */}
-      <div className="flex items-center gap-2.5 flex-wrap bg-white rounded-xl border border-slate-200 px-4 py-3">
+      <div className="flex items-center gap-2.5 flex-wrap bg-[#111120] rounded-xl border border-white/[0.07] px-4 py-3">
         <div className="relative">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
             value={search} onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar oportunidad, cliente, comercial…"
-            className="pl-9 pr-4 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-72"
+            className="pl-9 pr-4 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors w-72"
           />
         </div>
-        <select value={fLinea} onChange={(e) => setFLinea(e.target.value)} className="px-3 py-2 rounded-lg border border-slate-300 text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select value={fLinea} onChange={(e) => setFLinea(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors">
           <option value="">Todas las líneas</option>
           {opciones.lineas.map((l) => <option key={l} value={l}>{l}</option>)}
         </select>
-        <select value={fSegmento} onChange={(e) => setFSegmento(e.target.value)} className="px-3 py-2 rounded-lg border border-slate-300 text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select value={fSegmento} onChange={(e) => setFSegmento(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors">
           <option value="">Todos los segmentos</option>
           {opciones.segmentos.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
-        <select value={fEstado} onChange={(e) => setFEstado(e.target.value)} className="px-3 py-2 rounded-lg border border-slate-300 text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select value={fEstado} onChange={(e) => setFEstado(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors">
           <option value="">Todos los estados</option>
           {opciones.estados.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
         {hasFilters && (
           <button onClick={() => { setSearch(""); setFLinea(""); setFSegmento(""); setFEstado(""); }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors">
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:bg-white/[0.05] transition-colors">
             <X size={13} /> Limpiar
           </button>
         )}
-        <span className="ml-auto text-xs text-slate-400">{filtered.length.toLocaleString("es-CO")} resultados</span>
+        <span className="ml-auto text-xs text-slate-500">{filtered.length.toLocaleString("es-CO")} resultados</span>
       </div>
 
       {/* Tabla */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
         <div className="overflow-x-auto max-h-[60vh]">
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-slate-50 border-b border-slate-200">
+              <tr className="bg-[#0e0e1c] border-b border-white/[0.07]">
                 {["Oportunidad", "Cliente", "Comercial", "Línea", "Segmento", "Ingreso esp.", "Estado", "Etapa actual", "Creado"].map((h, i) => (
                   <th key={h} className={`px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap ${i === 5 ? "text-right" : "text-left"}`}>{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-white/[0.04]">
               {filtered.map((r) => (
-                <tr key={r.rowId} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-4 py-3 font-medium text-slate-800 max-w-[260px] truncate" title={r.oportunidad}>{r.oportunidad || "—"}</td>
-                  <td className="px-4 py-3 text-slate-600 max-w-[220px] truncate" title={r.cliente}>{r.cliente || "—"}</td>
+                <tr key={r.rowId} className="hover:bg-white/[0.03] transition-colors">
+                  <td className="px-4 py-3 font-medium text-slate-200 max-w-[260px] truncate" title={r.oportunidad}>{r.oportunidad || "—"}</td>
+                  <td className="px-4 py-3 text-slate-400 max-w-[220px] truncate" title={r.cliente}>{r.cliente || "—"}</td>
                   <td className="px-4 py-3 text-slate-500 whitespace-nowrap text-xs">{r.comercial || "—"}</td>
                   <td className="px-4 py-3">{r.linea ? <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${lineaBadge(r.linea)}`}>{r.linea}</span> : "—"}</td>
                   <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{r.segmento || "—"}</td>
-                  <td className="px-4 py-3 text-right text-slate-700 whitespace-nowrap tabular-nums">{fmtCOP(r.ingresoEsperado)}</td>
+                  <td className="px-4 py-3 text-right text-slate-300 whitespace-nowrap tabular-nums">{fmtCOP(r.ingresoEsperado)}</td>
                   <td className="px-4 py-3"><span className={`text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${estadoBadge(r.ganado)}`}>{r.ganado || "—"}</span></td>
                   <td className="px-4 py-3 text-slate-500 text-xs max-w-[180px] truncate" title={r.etapaActual}>{r.etapaActual || "—"}</td>
-                  <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">{fmtDate(r.creado)}</td>
+                  <td className="px-4 py-3 text-slate-600 text-xs whitespace-nowrap">{fmtDate(r.creado)}</td>
                 </tr>
               ))}
               {filtered.length === 0 && (
-                <tr><td colSpan={9} className="px-4 py-12 text-center text-sm text-slate-400">No hay oportunidades que coincidan con los filtros.</td></tr>
+                <tr><td colSpan={9} className="px-4 py-12 text-center text-sm text-slate-500">No hay oportunidades que coincidan con los filtros.</td></tr>
               )}
             </tbody>
           </table>
@@ -581,11 +579,11 @@ function ComercialPanel() {
 function PendingPanel({ label }: { label: string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 mt-16 text-center">
-      <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-100 text-slate-400">
+      <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white/[0.05] text-slate-500">
         <ShieldCheck size={26} />
       </div>
-      <p className="text-sm font-semibold text-slate-600">Vertical {label}</p>
-      <p className="text-xs text-slate-400 max-w-xs">
+      <p className="text-sm font-semibold text-slate-400">Vertical {label}</p>
+      <p className="text-xs text-slate-500 max-w-xs">
         Próximamente. Cada vertical se gestiona con su propio Excel; empezamos por Comercial.
       </p>
     </div>
@@ -611,13 +609,13 @@ export default function CMMIView() {
                 onClick={() => setVertical(v.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                    ? "bg-blue-600 text-white"
+                    : "bg-white/[0.04] text-slate-400 border border-white/[0.07] hover:bg-white/[0.08] hover:text-slate-200"
                 }`}
               >
                 {v.label}
                 {!v.enabled && (
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${isActive ? "bg-blue-500 text-blue-50" : "bg-slate-100 text-slate-400"}`}>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${isActive ? "bg-blue-500 text-blue-100" : "bg-white/[0.06] text-slate-500"}`}>
                     pronto
                   </span>
                 )}
