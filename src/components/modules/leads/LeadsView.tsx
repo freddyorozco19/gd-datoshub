@@ -34,29 +34,29 @@ const fmtFileSize = (bytes: number): string => {
 
 function fileTypeIcon(mimetype: string): { icon: typeof File; colors: string } {
   if (mimetype === "application/pdf")
-    return { icon: FileText,  colors: "bg-rose-50 text-rose-500" };
+    return { icon: FileText,  colors: "bg-rose-500/10 text-rose-500" };
   if (mimetype.startsWith("image/"))
-    return { icon: FileImage, colors: "bg-violet-50 text-violet-500" };
+    return { icon: FileImage, colors: "bg-violet-500/10 text-violet-500" };
   if (mimetype.includes("spreadsheet") || mimetype.includes("excel") || mimetype === "text/csv")
-    return { icon: FileText,  colors: "bg-emerald-50 text-emerald-600" };
+    return { icon: FileText,  colors: "bg-emerald-500/10 text-emerald-400" };
   if (mimetype.includes("word") || mimetype.includes("document") || mimetype.includes("msword"))
-    return { icon: FileText,  colors: "bg-blue-50 text-blue-600" };
-  return { icon: File, colors: "bg-slate-100 text-slate-500" };
+    return { icon: FileText,  colors: "bg-blue-500/10 text-blue-400" };
+  return { icon: File, colors: "bg-white/[0.06] text-slate-500" };
 }
 
 const WON_STYLE: Record<string, string> = {
-  Ganado:        "bg-emerald-100 text-emerald-700",
-  Perdido:       "bg-rose-100 text-rose-700",
-  "En progreso": "bg-blue-100 text-blue-700",
+  Ganado:        "bg-emerald-500/10 text-emerald-400",
+  Perdido:       "bg-rose-500/10 text-rose-400",
+  "En progreso": "bg-blue-500/10 text-blue-400",
 };
 
 const ETAPA_STYLE: Record<string, string> = {
-  "Nuevo":               "bg-slate-100 text-slate-600",
-  "En proceso":          "bg-sky-100 text-sky-700",
-  "Propuesta enviada":   "bg-violet-100 text-violet-700",
-  "Negociación":         "bg-amber-100 text-amber-700",
-  "Ganado":              "bg-emerald-100 text-emerald-700",
-  "Perdido":             "bg-rose-100 text-rose-700",
+  "Nuevo":               "bg-white/[0.06] text-slate-400",
+  "En proceso":          "bg-sky-500/10 text-sky-400",
+  "Propuesta enviada":   "bg-violet-500/10 text-violet-400",
+  "Negociación":         "bg-amber-500/10 text-amber-400",
+  "Ganado":              "bg-emerald-500/10 text-emerald-400",
+  "Perdido":             "bg-rose-500/10 text-rose-400",
 };
 
 const ETAPA_ORDER = [
@@ -80,14 +80,14 @@ const lineaLabel = (l: string): string => {
 
 /* ── paleta de colores para líneas ──────────────────────────────────── */
 const LINE_PALETTE = [
-  { bar: "bg-blue-500",    badge: "bg-blue-100 text-blue-700" },
-  { bar: "bg-violet-500",  badge: "bg-violet-100 text-violet-700" },
-  { bar: "bg-emerald-500", badge: "bg-emerald-100 text-emerald-700" },
-  { bar: "bg-amber-500",   badge: "bg-amber-100 text-amber-700" },
-  { bar: "bg-rose-500",    badge: "bg-rose-100 text-rose-700" },
-  { bar: "bg-cyan-500",    badge: "bg-cyan-100 text-cyan-700" },
-  { bar: "bg-orange-500",  badge: "bg-orange-100 text-orange-700" },
-  { bar: "bg-indigo-500",  badge: "bg-indigo-100 text-indigo-700" },
+  { bar: "bg-blue-500",    badge: "bg-blue-500/10 text-blue-400" },
+  { bar: "bg-violet-500",  badge: "bg-violet-500/10 text-violet-400" },
+  { bar: "bg-emerald-500", badge: "bg-emerald-500/10 text-emerald-400" },
+  { bar: "bg-amber-500",   badge: "bg-amber-500/10 text-amber-400" },
+  { bar: "bg-rose-500",    badge: "bg-rose-500/10 text-rose-400" },
+  { bar: "bg-cyan-500",    badge: "bg-cyan-500/10 text-cyan-400" },
+  { bar: "bg-orange-500",  badge: "bg-orange-500/10 text-orange-400" },
+  { bar: "bg-indigo-500",  badge: "bg-indigo-500/10 text-indigo-400" },
 ];
 
 /* ── sparkline mini-chart ─────────────────────────────────────────────── */
@@ -111,19 +111,19 @@ function Sparkline({ data, color = "bg-blue-400" }: { data: number[]; color?: st
 /* ── skeleton de tabla ────────────────────────────────────────────────── */
 function TableSkeleton() {
   return (
-    <div className="flex-1 min-w-0 bg-white rounded-xl border border-slate-200 overflow-hidden">
-      <div className="px-4 py-2.5 border-b border-slate-100 bg-slate-50">
-        <div className="h-3 w-44 bg-slate-200 rounded animate-pulse" />
+    <div className="flex-1 min-w-0 bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
+      <div className="px-4 py-2.5 border-b border-white/[0.05] bg-[#0e0e1c]">
+        <div className="h-3 w-44 bg-white/[0.08] rounded animate-pulse" />
       </div>
-      <div className="divide-y divide-slate-50">
+      <div className="divide-y divide-white/[0.04]">
         {Array.from({ length: 10 }).map((_, i) => (
           <div key={i} className="flex items-center gap-4 px-3 py-3 animate-pulse">
-            <div className="h-3 rounded bg-slate-200" style={{ width: `${100 + (i % 4) * 35}px` }} />
-            <div className="h-3 w-24 rounded bg-slate-100" />
-            <div className="h-3 w-20 rounded bg-slate-100" />
-            <div className="h-3 w-16 rounded bg-slate-100" />
-            <div className="h-3 w-12 rounded bg-slate-100" />
-            <div className="h-3 w-16 rounded bg-slate-100 ml-auto" />
+            <div className="h-3 rounded bg-white/[0.08]" style={{ width: `${100 + (i % 4) * 35}px` }} />
+            <div className="h-3 w-24 rounded bg-white/[0.06]" />
+            <div className="h-3 w-20 rounded bg-white/[0.06]" />
+            <div className="h-3 w-16 rounded bg-white/[0.06]" />
+            <div className="h-3 w-12 rounded bg-white/[0.06]" />
+            <div className="h-3 w-16 rounded bg-white/[0.06] ml-auto" />
           </div>
         ))}
       </div>
@@ -155,12 +155,12 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
   const BAR_H = 56;
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 px-5 py-4">
+    <div className="bg-[#111120] rounded-xl border border-white/[0.07] px-5 py-4">
       <div className="flex items-center gap-2 mb-4">
-        <div className="p-1.5 rounded-lg bg-indigo-50 shrink-0">
-          <BarChart2 size={15} className="text-indigo-500" />
+        <div className="p-1.5 rounded-lg bg-indigo-500/10 shrink-0">
+          <BarChart2 size={15} className="text-indigo-400" />
         </div>
-        <span className="text-sm font-semibold text-slate-700">Tendencia mensual</span>
+        <span className="text-sm font-semibold text-slate-200">Tendencia mensual</span>
         <span className="text-xs text-slate-400">· últimos 6 meses</span>
         <div className="ml-auto flex items-center gap-4">
           <div className="flex items-center gap-1.5">
@@ -180,7 +180,7 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
           const ganPx   = count > 0 ? Math.round((ganados / count) * totalPx) : 0;
           return (
             <div key={key} className="flex-1 flex flex-col items-center gap-1.5 group">
-              <span className="text-[10px] font-bold text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity leading-none">
+              <span className="text-[10px] font-bold text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity leading-none">
                 {count}
               </span>
               <div className="w-full flex items-end" style={{ height: BAR_H }}>
@@ -244,17 +244,17 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
     return { weeks: weeksArr, monthLabels: mlabels };
   }, [leads]);
 
-  const COLORS = ["bg-slate-100", "bg-emerald-100", "bg-emerald-300", "bg-emerald-500", "bg-emerald-700"];
+  const COLORS = ["bg-white/[0.06]", "bg-emerald-900/60", "bg-emerald-700/60", "bg-emerald-500", "bg-emerald-400"];
   const DAY_LABELS = ["L", "", "X", "", "V", "", "D"];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 px-5 py-4">
+    <div className="bg-[#111120] rounded-xl border border-white/[0.07] px-5 py-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-emerald-50 shrink-0">
-            <Activity size={15} className="text-emerald-600" />
+          <div className="p-1.5 rounded-lg bg-emerald-500/10 shrink-0">
+            <Activity size={15} className="text-emerald-400" />
           </div>
-          <span className="text-sm font-semibold text-slate-700">Actividad de leads</span>
+          <span className="text-sm font-semibold text-slate-200">Actividad de leads</span>
           <span className="text-xs text-slate-400">· último semestre</span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -346,13 +346,13 @@ function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
       style={{ backgroundColor: "rgba(15,23,42,0.55)" }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+      <div className="bg-[#111120] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-semibold text-slate-800 capitalize">{dateLabel}</h2>
+              <h2 className="font-semibold text-slate-100 capitalize">{dateLabel}</h2>
               {heading && (
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">{heading}</span>
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400">{heading}</span>
               )}
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -361,12 +361,12 @@ function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
               {heading && " en esta línea"}
             </p>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">
+          <button onClick={onClose} className="p-2 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-300 transition-colors">
             <X size={18} />
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-6 py-3 border-b border-slate-100 bg-slate-50">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-6 py-3 border-b border-white/[0.05] bg-[#0e0e1c]">
           {([
             { label: "Línea",     val: mLinea,     set: setMLinea,     opts: mOpts.linea },
             { label: "Comercial", val: mComercial, set: setMComercial, opts: mOpts.comercial },
@@ -375,14 +375,14 @@ function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
             <div key={label} className="flex items-center gap-2">
               <span className="text-xs font-medium text-slate-500 whitespace-nowrap">{label}:</span>
               <select value={val} onChange={(e) => set(e.target.value)}
-                className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 text-slate-700">
+                className="text-xs border border-white/[0.08] rounded-lg px-2 py-1.5 bg-white/[0.04] focus:outline-none focus:ring-2 focus:ring-blue-400 text-slate-300">
                 {opts.map((o) => <option key={o} value={o}>{o === "ALL" ? "Todos" : o}</option>)}
               </select>
             </div>
           ))}
           {anyActive && (
             <button onClick={() => { setMLinea("ALL"); setMComercial("ALL"); setMEstado("ALL"); }}
-              className="text-xs text-blue-600 hover:underline ml-auto">
+              className="text-xs text-blue-400 hover:underline ml-auto">
               Limpiar filtros
             </button>
           )}
@@ -393,34 +393,34 @@ function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
             <div className="flex items-center justify-center py-16 text-slate-400 text-sm">Sin leads con los filtros seleccionados</div>
           ) : (
             <table className="w-full text-xs">
-              <thead className="sticky top-0 bg-slate-50 border-b border-slate-200">
+              <thead className="sticky top-0 bg-[#0e0e1c] border-b border-white/[0.07]">
                 <tr>
                   {["Nombre","Cliente","Comercial","Línea","Etapa","Tipo Oportunidad","Preventa","Ingresos Esp.","Estado"].map((h) => (
                     <th key={h} className="text-left px-4 py-3 font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-white/[0.04]">
                 {mFiltered.map((lead) => (
                   <tr key={lead.id} onClick={() => setDetailLead(lead)}
-                    className="hover:bg-blue-50/40 transition-colors cursor-pointer group">
+                    className="hover:bg-blue-500/10/40 transition-colors cursor-pointer group">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-slate-800 max-w-[180px] truncate group-hover:text-blue-600 transition-colors" title={lead.nombre}>{lead.nombre}</p>
+                      <p className="font-medium text-slate-100 max-w-[180px] truncate group-hover:text-blue-400 transition-colors" title={lead.nombre}>{lead.nombre}</p>
                       {lead.correo && <p className="text-slate-400 truncate max-w-[180px] text-[10px]">{lead.correo}</p>}
                     </td>
                     <td className="px-4 py-3 text-slate-600 max-w-[140px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.comercial || "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-700 font-medium">{lead.linea}</span> : "—"}
+                      {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium">{lead.linea}</span> : "—"}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`px-2 py-0.5 rounded-full font-medium ${ETAPA_STYLE[lead.etapa] ?? "bg-slate-100 text-slate-600"}`}>{lead.etapa || "—"}</span>
+                      <span className={`px-2 py-0.5 rounded-full font-medium ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa || "—"}</span>
                     </td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.tipoOportunidad || "—"}</td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.preventa || "—"}</td>
-                    <td className="px-4 py-3 text-right font-medium text-slate-700 whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-200 whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`px-2 py-0.5 rounded-full font-medium ${WON_STYLE[lead.ganado] ?? "bg-slate-100 text-slate-600"}`}>{lead.ganado}</span>
+                      <span className={`px-2 py-0.5 rounded-full font-medium ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
                     </td>
                   </tr>
                 ))}
@@ -466,7 +466,7 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
   const Field = ({ label, value }: { label: string; value: ReactNode }) => (
     <div>
       <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">{label}</p>
-      <div className="text-xs text-slate-700">{value || <span className="text-slate-300">—</span>}</div>
+      <div className="text-xs text-slate-300">{value || <span className="text-slate-300">—</span>}</div>
     </div>
   );
 
@@ -476,18 +476,18 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
       style={{ backgroundColor: "rgba(15,23,42,0.6)" }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-[#111120] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
 
         {/* header */}
-        <div className="flex items-start justify-between px-6 py-5 border-b border-slate-200">
+        <div className="flex items-start justify-between px-6 py-5 border-b border-white/[0.07]">
           <div className="flex-1 min-w-0 pr-4">
             <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">ID {lead.id}</p>
-            <h2 className="font-semibold text-slate-800 text-base leading-snug" title={lead.nombre}>{lead.nombre}</h2>
+            <h2 className="font-semibold text-slate-100 text-base leading-snug" title={lead.nombre}>{lead.nombre}</h2>
             <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-              {lead.linea && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-700">{lead.linea}</span>}
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${WON_STYLE[lead.ganado] ?? "bg-slate-100 text-slate-600"}`}>{lead.ganado}</span>
-              {lead.etapa && <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${ETAPA_STYLE[lead.etapa] ?? "bg-slate-100 text-slate-600"}`}>{lead.etapa}</span>}
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${lead.activo ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
+              {lead.linea && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">{lead.linea}</span>}
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
+              {lead.etapa && <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa}</span>}
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-500"}`}>
                 {lead.activo ? "Activo" : "Inactivo"}
               </span>
             </div>
@@ -499,11 +499,11 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
               target="_blank"
               rel="noopener noreferrer"
               title="Ver en ODOO CRM"
-              className="p-2 rounded-lg text-slate-400 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+              className="p-2 rounded-lg text-slate-400 hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
             >
               <ExternalLink size={16} />
             </a>
-            <button onClick={onClose} className="p-2 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">
+            <button onClick={onClose} className="p-2 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-300 transition-colors">
               <X size={18} />
             </button>
           </div>
@@ -513,7 +513,7 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
         <div className="overflow-y-auto flex-1 px-6 py-5 space-y-6">
 
           <section>
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-slate-100">Cliente & Contacto</h3>
+            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Cliente & Contacto</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Cliente"          value={lead.cliente} />
               <Field label="Comercial"        value={lead.comercial} />
@@ -525,7 +525,7 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
           </section>
 
           <section>
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-slate-100">Oportunidad</h3>
+            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Oportunidad</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Tipo de Oportunidad" value={lead.tipoOportunidad} />
               <Field label="Línea"               value={lead.linea} />
@@ -537,7 +537,7 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
           </section>
 
           <section>
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-slate-100">Financiero</h3>
+            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Financiero</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Ingresos Esperados" value={lead.ingresosEsperados ? COP(lead.ingresosEsperados) : null} />
               <Field label="Consultoría COP"    value={lead.consultoriaCOP    ? COP(lead.consultoriaCOP)    : null} />
@@ -548,16 +548,16 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
 
           {(lead.alcance || lead.objeto) && (
             <section>
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-slate-100">Alcance & Objeto</h3>
+              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Alcance & Objeto</h3>
               <div className="space-y-3">
-                {lead.alcance && <div><p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Alcance</p><p className="text-xs text-slate-700 leading-relaxed">{lead.alcance}</p></div>}
-                {lead.objeto  && <div><p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Objeto</p><p className="text-xs text-slate-700 leading-relaxed">{lead.objeto}</p></div>}
+                {lead.alcance && <div><p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Alcance</p><p className="text-xs text-slate-200 leading-relaxed">{lead.alcance}</p></div>}
+                {lead.objeto  && <div><p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Objeto</p><p className="text-xs text-slate-200 leading-relaxed">{lead.objeto}</p></div>}
               </div>
             </section>
           )}
 
           <section>
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-slate-100">Fechas</h3>
+            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Fechas</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Fecha Creación"        value={lead.fechaCreacion       ? lead.fechaCreacion.substring(0, 10)  : null} />
               <Field label="Cierre Esperado"       value={lead.cierreEsperado      || null} />
@@ -570,7 +570,7 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
           {/* ── Adjuntos ── */}
           {lead.adjuntos > 0 && (
             <section>
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-slate-100 flex items-center gap-1.5">
+              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
                 <Paperclip size={10} />
                 Adjuntos · {lead.adjuntos}
               </h3>
@@ -578,7 +578,7 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
               {loadingAttachments ? (
                 <div className="space-y-2">
                   {Array.from({ length: lead.adjuntos }).map((_, i) => (
-                    <div key={i} className="h-12 bg-slate-100 rounded-lg animate-pulse" />
+                    <div key={i} className="h-12 bg-white/[0.06] rounded-lg animate-pulse" />
                   ))}
                 </div>
               ) : attachments && attachments.length > 0 ? (
@@ -591,13 +591,13 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
                         href={`/api/odoo/attachment/${att.id}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-100 hover:border-blue-200 hover:bg-blue-50/40 transition-colors group"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-white/[0.05] hover:border-blue-500/30 hover:bg-blue-500/10/40 transition-colors group"
                       >
                         <div className={`p-2 rounded-lg shrink-0 ${colors}`}>
                           <Icon size={14} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-slate-700 truncate group-hover:text-blue-700 transition-colors">
+                          <p className="text-xs font-medium text-slate-200 truncate group-hover:text-blue-400 transition-colors">
                             {att.name}
                           </p>
                           {att.file_size > 0 && (
@@ -667,10 +667,10 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
   );
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-4">
+    <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
       <div className="flex items-center gap-2 mb-3">
-        <div className="p-1.5 rounded-lg bg-violet-50 shrink-0"><History size={15} className="text-violet-600" /></div>
-        <span className="text-sm font-semibold text-slate-700 flex-1">Últimas asignadas</span>
+        <div className="p-1.5 rounded-lg bg-violet-500/10 shrink-0"><History size={15} className="text-violet-400" /></div>
+        <span className="text-sm font-semibold text-slate-200 flex-1">Últimas asignadas</span>
       </div>
 
       {availableLineas.length > 0 && (
@@ -681,7 +681,7 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
             return (
               <button key={linea} type="button" title={linea} onClick={() => toggleLinea(linea)}
                 className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full transition-colors truncate max-w-[96px] ${
-                  active ? `${palette.badge} ring-1 ring-current` : "bg-slate-100 text-slate-400 hover:bg-slate-200"
+                  active ? `${palette.badge} ring-1 ring-current` : "bg-white/[0.06] text-slate-400 hover:bg-white/[0.08]"
                 }`}>
                 {lineaLabel(linea)}
               </button>
@@ -700,10 +700,10 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
             const hora  = lead.fechaCreacion && lead.fechaCreacion.length >= 16 ? lead.fechaCreacion.substring(11, 16) : "";
             return (
               <button key={lead.id} type="button" onClick={() => setSelectedLead(lead)}
-                className="w-full flex gap-2 items-start text-left rounded-lg px-2 py-2 hover:bg-violet-50 hover:border-violet-200 border border-transparent transition-colors group">
+                className="w-full flex gap-2 items-start text-left rounded-lg px-2 py-2 hover:bg-violet-500/10 hover:border-violet-500/30 border border-transparent transition-colors group">
                 <span className="text-[10px] font-bold text-slate-300 mt-0.5 w-3.5 shrink-0 text-right group-hover:text-violet-400 transition-colors">{i + 1}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-slate-800 truncate leading-snug group-hover:text-violet-700 transition-colors" title={lead.nombre}>{lead.nombre}</p>
+                  <p className="text-xs font-medium text-slate-100 truncate leading-snug group-hover:text-violet-400 transition-colors" title={lead.nombre}>{lead.nombre}</p>
                   {lead.cliente && <p className="text-[10px] text-slate-400 truncate leading-tight mt-0.5">{lead.cliente}</p>}
                   <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                     {lead.linea && <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full leading-tight ${palette.badge}`}>{lead.linea}</span>}
@@ -752,22 +752,22 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-4">
+    <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
       <div className="flex items-center gap-2 mb-3">
-        <div className="p-1.5 rounded-lg bg-amber-50 shrink-0">
-          <Trophy size={15} className="text-amber-600" />
+        <div className="p-1.5 rounded-lg bg-amber-500/10 shrink-0">
+          <Trophy size={15} className="text-amber-400" />
         </div>
-        <span className="text-sm font-semibold text-slate-700 flex-1">Ranking</span>
+        <span className="text-sm font-semibold text-slate-200 flex-1">Ranking</span>
       </div>
 
       {/* tabs de ordenamiento */}
-      <div className="flex gap-0.5 mb-3 bg-slate-100 rounded-lg p-0.5">
+      <div className="flex gap-0.5 mb-3 bg-white/[0.06] rounded-lg p-0.5">
         {(["leads", "ganados", "ingresos"] as const).map((key) => (
           <button
             key={key}
             onClick={() => setSortBy(key)}
             className={`flex-1 text-[10px] font-semibold py-1 rounded-md transition-colors capitalize ${
-              sortBy === key ? "bg-white text-amber-700 shadow-sm" : "text-slate-400 hover:text-slate-600"
+              sortBy === key ? "bg-white/[0.10] text-amber-400 shadow-sm" : "text-slate-400 hover:text-slate-300"
             }`}
           >
             {key}
@@ -783,11 +783,11 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
                 <span className="w-4 text-center shrink-0 text-[11px]">
                   {i < 3 ? MEDAL[i] : <span className="text-slate-300 font-bold text-[10px]">{i + 1}</span>}
                 </span>
-                <span className="text-xs text-slate-700 truncate leading-none" title={r.name}>{r.name}</span>
+                <span className="text-xs text-slate-200 truncate leading-none" title={r.name}>{r.name}</span>
               </div>
               <span className="text-[10px] font-bold text-slate-600 shrink-0 ml-2">{fmt(r)}</span>
             </div>
-            <div className="h-1 bg-slate-100 rounded-full overflow-hidden ml-5">
+            <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden ml-5">
               <div
                 className="h-full bg-amber-400 rounded-full transition-all duration-500"
                 style={{ width: `${Math.round((r[sortBy] / maxVal) * 100)}%` }}
@@ -839,24 +839,24 @@ function SalesFunnelWidget({ leads, activeEtapa, onEtapaClick }: FunnelProps) {
   const max = Math.max(...funnelData.map((e) => e.count), 1);
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 px-5 py-4">
+    <div className="bg-[#111120] rounded-xl border border-white/[0.07] px-5 py-4">
       {/* header */}
       <div className="flex items-center gap-3 mb-5 flex-wrap">
         <div className="flex items-center gap-2 shrink-0">
-          <div className="p-1.5 rounded-lg bg-violet-50">
-            <Layers size={15} className="text-violet-600" />
+          <div className="p-1.5 rounded-lg bg-violet-500/10">
+            <Layers size={15} className="text-violet-400" />
           </div>
-          <span className="text-sm font-semibold text-slate-700">Pipeline de ventas</span>
+          <span className="text-sm font-semibold text-slate-200">Pipeline de ventas</span>
         </div>
-        <div className="w-px h-4 bg-slate-200 shrink-0" />
+        <div className="w-px h-4 bg-white/[0.08] shrink-0" />
         {/* pills de línea */}
         <div className="flex flex-wrap gap-1">
           <button
             onClick={() => setLineaFilter("ALL")}
             className={`text-[10px] font-semibold px-2 py-0.5 rounded-full transition-colors ${
               lineaFilter === "ALL"
-                ? "bg-violet-100 text-violet-700 ring-1 ring-current"
-                : "bg-slate-100 text-slate-400 hover:bg-slate-200"
+                ? "bg-violet-500/10 text-violet-400 ring-1 ring-current"
+                : "bg-white/[0.06] text-slate-400 hover:bg-white/[0.08]"
             }`}
           >
             Todas
@@ -868,8 +868,8 @@ function SalesFunnelWidget({ leads, activeEtapa, onEtapaClick }: FunnelProps) {
               onClick={() => setLineaFilter(lineaFilter === linea ? "ALL" : linea)}
               className={`text-[10px] font-semibold px-2 py-0.5 rounded-full transition-colors truncate max-w-[110px] ${
                 lineaFilter === linea
-                  ? "bg-violet-100 text-violet-700 ring-1 ring-current"
-                  : "bg-slate-100 text-slate-400 hover:bg-slate-200"
+                  ? "bg-violet-500/10 text-violet-400 ring-1 ring-current"
+                  : "bg-white/[0.06] text-slate-400 hover:bg-white/[0.08]"
               }`}
             >
               {lineaLabel(linea)}
@@ -903,10 +903,10 @@ function SalesFunnelWidget({ leads, activeEtapa, onEtapaClick }: FunnelProps) {
 
             return (
               <div key={etapa}>
-                {showSeparator && <div className="border-t border-dashed border-slate-200 my-3" />}
+                {showSeparator && <div className="border-t border-dashed border-white/[0.07] my-3" />}
                 {convRate !== null && (
                   <div className="flex items-center gap-2 mb-1 pl-[148px]">
-                    <div className="w-px h-2.5 bg-slate-200" />
+                    <div className="w-px h-2.5 bg-white/[0.08]" />
                     <span className="text-[9px] text-slate-400">{convRate}% pasan a la siguiente etapa</span>
                   </div>
                 )}
@@ -925,7 +925,7 @@ function SalesFunnelWidget({ leads, activeEtapa, onEtapaClick }: FunnelProps) {
                     {etapa}
                   </span>
                   {/* barra */}
-                  <div className="flex-1 h-7 bg-slate-50 rounded-lg overflow-hidden">
+                  <div className="flex-1 h-7 bg-white/[0.04] rounded-lg overflow-hidden">
                     <div
                       className={`h-full rounded-lg flex items-center justify-end pr-2.5 transition-all duration-500 group-hover:opacity-80 ${barColor}`}
                       style={{ width: `${pct}%` }}
@@ -936,7 +936,7 @@ function SalesFunnelWidget({ leads, activeEtapa, onEtapaClick }: FunnelProps) {
                     </div>
                   </div>
                   {/* número */}
-                  <span className="text-xs font-bold text-slate-700 w-7 text-right shrink-0">{count}</span>
+                  <span className="text-xs font-bold text-slate-200 w-7 text-right shrink-0">{count}</span>
                 </button>
               </div>
             );
@@ -975,31 +975,31 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
 
   return (
     <div className="w-56 shrink-0 flex flex-col gap-2">
-      <div className="bg-white rounded-xl border border-slate-200 p-4">
+      <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
         <div className="flex items-center gap-2 mb-3">
-          <div className="p-1.5 rounded-lg bg-blue-50 shrink-0"><CalendarCheck2 size={15} className="text-blue-600" /></div>
-          <span className="text-sm font-semibold text-slate-700 flex-1">Leads por día</span>
+          <div className="p-1.5 rounded-lg bg-blue-500/10 shrink-0"><CalendarCheck2 size={15} className="text-blue-400" /></div>
+          <span className="text-sm font-semibold text-slate-200 flex-1">Leads por día</span>
           <button onClick={() => setModal({ leads: dayLeads })} disabled={dayLeads.length === 0} title="Ver tabla de leads"
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-blue-600 disabled:opacity-30 transition-colors">
+            className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-blue-400 disabled:opacity-30 transition-colors">
             <Eye size={15} />
           </button>
         </div>
 
         <div className="flex items-center gap-1 mb-1">
-          <button onClick={() => shiftDay(-1)} className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors shrink-0"><ChevronLeft size={14} /></button>
+          <button onClick={() => shiftDay(-1)} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 transition-colors shrink-0"><ChevronLeft size={14} /></button>
           <input type="date" value={selectedDate} max={todayGMT5()}
             onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
-            className="flex-1 min-w-0 text-xs border border-slate-200 rounded-lg px-2 py-1.5 text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
+            className="flex-1 min-w-0 text-xs border border-white/[0.07] rounded-lg px-2 py-1.5 text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#111120]" />
           <button onClick={() => shiftDay(1)} disabled={isToday}
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 disabled:opacity-30 transition-colors shrink-0"><ChevronRight size={14} /></button>
+            className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 disabled:opacity-30 transition-colors shrink-0"><ChevronRight size={14} /></button>
         </div>
 
         <p className="text-xs text-slate-400 capitalize mb-3">{fmtLabel}</p>
 
         <div className="flex items-end gap-1.5 mb-4">
-          <span className="text-4xl font-bold text-slate-800 leading-none">{dayLeads.length}</span>
+          <span className="text-4xl font-bold text-slate-100 leading-none">{dayLeads.length}</span>
           <span className="text-xs text-slate-400 mb-1">leads</span>
-          {isToday && <span className="ml-auto text-xs font-medium px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-600">hoy</span>}
+          {isToday && <span className="ml-auto text-xs font-medium px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-400">hoy</span>}
         </div>
 
         {sorted.length === 0 ? (
@@ -1017,10 +1017,10 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
                   className="w-full text-left group cursor-pointer focus:outline-none"
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-slate-600 group-hover:text-blue-600 truncate max-w-[130px] transition-colors" title={linea}>{linea}</span>
+                    <span className="text-xs text-slate-600 group-hover:text-blue-400 truncate max-w-[130px] transition-colors" title={linea}>{linea}</span>
                     <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full shrink-0 ${palette.badge}`}>{count}</span>
                   </div>
-                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden ring-blue-300 group-hover:ring-2 transition-all">
+                  <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden ring-blue-300 group-hover:ring-2 transition-all">
                     <div className={`h-full ${palette.bar} rounded-full transition-all duration-500`} style={{ width: `${pct}%` }} />
                   </div>
                 </button>
@@ -1234,7 +1234,7 @@ export default function LeadsView() {
       <label className="text-xs font-medium text-slate-500">{label}</label>
       <select value={filters[field] as string}
         onChange={(e) => setFilters((f) => ({ ...f, [field]: e.target.value }))}
-        className="text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700">
+        className="text-xs border border-white/[0.08] rounded-lg px-2 py-1.5 bg-[#111120] focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-200">
         {options.map((o) => (
           <option key={o} value={o}>{o === "ALL" ? "Todos" : o === "true" ? "Activo" : o === "false" ? "Inactivo" : o}</option>
         ))}
@@ -1253,17 +1253,17 @@ export default function LeadsView() {
         {/* ── 4. métricas con sparklines ── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { label: "Last Update",        value: metrics.lastUpdate || "—",                         icon: Clock,      color: "text-slate-600 bg-slate-100",  spark: null },
-            { label: "Leads",              value: filtered.length.toLocaleString("es-CO"),            icon: Users,      color: "text-blue-600 bg-blue-50",     spark: { data: sparklines.leads,    color: "bg-blue-400" } },
-            { label: "Ganados",            value: metrics.ganados.toLocaleString("es-CO"),            icon: TrendingUp, color: "text-emerald-600 bg-emerald-50",spark: { data: sparklines.ganados,  color: "bg-emerald-400" } },
-            { label: "Ingresos Esperados", value: COP(metrics.totalIngresos),                        icon: DollarSign, color: "text-violet-600 bg-violet-50",  spark: { data: sparklines.ingresos, color: "bg-violet-400" } },
+            { label: "Last Update",        value: metrics.lastUpdate || "—",                         icon: Clock,      color: "text-slate-400 bg-white/[0.06]",  spark: null },
+            { label: "Leads",              value: filtered.length.toLocaleString("es-CO"),            icon: Users,      color: "text-blue-400 bg-blue-500/10",     spark: { data: sparklines.leads,    color: "bg-blue-400" } },
+            { label: "Ganados",            value: metrics.ganados.toLocaleString("es-CO"),            icon: TrendingUp, color: "text-emerald-400 bg-emerald-500/10",spark: { data: sparklines.ganados,  color: "bg-emerald-400" } },
+            { label: "Ingresos Esperados", value: COP(metrics.totalIngresos),                        icon: DollarSign, color: "text-violet-400 bg-violet-500/10",  spark: { data: sparklines.ingresos, color: "bg-violet-400" } },
           ].map(({ label, value, icon: Icon, color, spark }) => (
-            <div key={label} className="bg-white rounded-xl border border-slate-200 px-4 py-3">
+            <div key={label} className="bg-[#111120] rounded-xl border border-white/[0.07] px-4 py-3">
               <div className="flex items-center gap-3">
                 <div className={`p-2 rounded-lg ${color} shrink-0`}><Icon size={18} /></div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-slate-500">{label}</p>
-                  <p className="text-sm font-bold text-slate-800 truncate">{value}</p>
+                  <p className="text-sm font-bold text-slate-100 truncate">{value}</p>
                 </div>
               </div>
               {spark && <Sparkline data={spark.data} color={spark.color} />}
@@ -1275,15 +1275,15 @@ export default function LeadsView() {
         {leads.length > 0 && <MonthlyTrendWidget leads={leads} />}
 
         {/* ── barra de filtros ── */}
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
 
           {/* cabecera de filtros */}
-          <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200">
+          <div className="flex items-center justify-between px-4 py-2.5 bg-[#0e0e1c] border-b border-white/[0.07]">
             <div className="flex items-center gap-2">
               <SlidersHorizontal size={14} className="text-slate-400" />
               <span className="text-xs font-semibold text-slate-600">Filtros</span>
               {activeFilterCount > 0 && (
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 leading-none">
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 leading-none">
                   {activeFilterCount}
                 </span>
               )}
@@ -1299,7 +1299,7 @@ export default function LeadsView() {
           </div>
 
           {/* fila 1: dropdowns en grid de 6 columnas */}
-          <div className="px-4 py-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 border-b border-slate-100">
+          <div className="px-4 py-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 border-b border-white/[0.05]">
             <Select label="Comercial"     field="comercial"        options={opts.comercial} />
             <Select label="Línea"         field="linea"            options={opts.linea} />
             <Select label="Oportunidad"   field="tipoOportunidad"  options={opts.tipoOportunidad} />
@@ -1320,7 +1320,7 @@ export default function LeadsView() {
                   type="date"
                   value={filters.dateFrom}
                   onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value }))}
-                  className="text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700 w-36"
+                  className="text-xs border border-white/[0.08] rounded-lg px-2 py-1.5 bg-[#111120] focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-200 w-36"
                 />
               </div>
               <span className="text-slate-300 mb-2 text-sm leading-none">→</span>
@@ -1330,7 +1330,7 @@ export default function LeadsView() {
                   type="date"
                   value={filters.dateTo}
                   onChange={(e) => setFilters((f) => ({ ...f, dateTo: e.target.value }))}
-                  className="text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700 w-36"
+                  className="text-xs border border-white/[0.08] rounded-lg px-2 py-1.5 bg-[#111120] focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-200 w-36"
                 />
               </div>
             </div>
@@ -1346,7 +1346,7 @@ export default function LeadsView() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Nombre, cliente…"
-                  className="pl-8 pr-3 py-1.5 text-xs border border-slate-300 rounded-lg w-44 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="pl-8 pr-3 py-1.5 text-xs border border-white/[0.08] rounded-lg w-44 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -1357,7 +1357,7 @@ export default function LeadsView() {
                 onClick={loadLeads}
                 disabled={loading}
                 title="Sincronizar ODOO"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] text-xs text-slate-600 hover:bg-[#0e0e1c] disabled:opacity-50 transition-colors"
               >
                 <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
                 {loading ? "Cargando…" : "Sincronizar"}
@@ -1389,7 +1389,7 @@ export default function LeadsView() {
 
         {/* ── error ── */}
         {error && (
-          <div className="flex items-start gap-3 bg-rose-50 border border-rose-200 rounded-xl px-4 py-3 text-sm text-rose-700">
+          <div className="flex items-start gap-3 bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-3 text-sm text-rose-400">
             <AlertCircle size={18} className="shrink-0 mt-0.5" />
             <div>
               <p className="font-semibold">Error al conectar con ODOO</p>
@@ -1404,11 +1404,11 @@ export default function LeadsView() {
             <TableSkeleton />
             <div className="w-56 shrink-0 space-y-2">
               {[80, 120].map((h) => (
-                <div key={h} className="bg-white rounded-xl border border-slate-200 p-4 animate-pulse" style={{ height: h }}>
-                  <div className="h-3 w-28 bg-slate-200 rounded mb-3" />
+                <div key={h} className="bg-[#111120] rounded-xl border border-white/[0.07] p-4 animate-pulse" style={{ height: h }}>
+                  <div className="h-3 w-28 bg-white/[0.08] rounded mb-3" />
                   <div className="space-y-2">
-                    <div className="h-2 bg-slate-100 rounded w-full" />
-                    <div className="h-2 bg-slate-100 rounded w-3/4" />
+                    <div className="h-2 bg-white/[0.06] rounded w-full" />
+                    <div className="h-2 bg-white/[0.06] rounded w-3/4" />
                   </div>
                 </div>
               ))}
@@ -1426,9 +1426,9 @@ export default function LeadsView() {
           <div className="flex items-start gap-4">
 
             {/* ── tabla ── */}
-            <div className="flex-1 min-w-0 bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="flex-1 min-w-0 bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
               {/* info bar */}
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 bg-slate-50">
+              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.05] bg-[#0e0e1c]">
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-slate-500">
                     {filtered.length} de {leads.length} leads
@@ -1436,7 +1436,7 @@ export default function LeadsView() {
                   </span>
                   {/* 7. badge nuevos leads */}
                   {newCount > 0 && (
-                    <span className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+                    <span className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">
                       <Sparkles size={10} />
                       {newCount} nuevo{newCount > 1 ? "s" : ""}
                     </span>
@@ -1449,7 +1449,7 @@ export default function LeadsView() {
               <div className="overflow-x-auto">
                 <table className="w-full text-xs min-w-[1200px]">
                   <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200">
+                    <tr className="bg-[#0e0e1c] border-b border-white/[0.07]">
                       {(
                         [
                           ["nombre",             "Nombre"],
@@ -1469,15 +1469,15 @@ export default function LeadsView() {
                         <th
                           key={key}
                           onClick={() => toggleSort(key)}
-                          className={`text-left px-3 py-2.5 font-semibold text-slate-500 uppercase tracking-wide cursor-pointer hover:text-slate-700 select-none whitespace-nowrap
-                            ${idx === 0 ? "sticky left-0 z-20 bg-slate-50 shadow-[1px_0_0_0_#e2e8f0]" : ""}`}
+                          className={`text-left px-3 py-2.5 font-semibold text-slate-500 uppercase tracking-wide cursor-pointer hover:text-slate-200 select-none whitespace-nowrap
+                            ${idx === 0 ? "sticky left-0 z-20 bg-[#0e0e1c] shadow-[1px_0_0_0_rgba(255,255,255,0.07)]" : ""}`}
                         >
                           <span className="flex items-center gap-1">{label}<SortIcon col={key} /></span>
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-50">
+                  <tbody className="divide-y divide-white/[0.04]">
                     {filtered.length === 0 ? (
                       <tr>
                         <td colSpan={12} className="px-4 py-12 text-center text-slate-400 text-sm">
@@ -1491,11 +1491,11 @@ export default function LeadsView() {
                         <tr
                           key={lead.id}
                           onClick={() => setSelectedLead(lead)}
-                          className={`transition-colors cursor-pointer group ${isNew ? "bg-emerald-50/40 hover:bg-emerald-100/50" : "hover:bg-blue-50/50"}`}
+                          className={`transition-colors cursor-pointer group ${isNew ? "bg-emerald-500/10/40 hover:bg-emerald-100/50" : "hover:bg-blue-500/10/50"}`}
                         >
                           {/* 3. columna Nombre sticky */}
                           <td className={`px-3 py-2.5 sticky left-0 z-10 shadow-[1px_0_0_0_#e2e8f0] ${
-                            isNew ? "bg-emerald-50/40 group-hover:bg-emerald-100/50" : "bg-white group-hover:bg-blue-50/50"
+                            isNew ? "bg-emerald-500/10/40 group-hover:bg-emerald-100/50" : "bg-[#111120] group-hover:bg-blue-500/10/50"
                           }`}>
                             <div className="flex items-start gap-1.5">
                               {/* 7. badge NEW */}
@@ -1505,7 +1505,7 @@ export default function LeadsView() {
                                 </span>
                               )}
                               <div className="min-w-0">
-                                <p className="font-medium text-slate-800 max-w-[200px] truncate" title={lead.nombre}>{lead.nombre}</p>
+                                <p className="font-medium text-slate-100 max-w-[200px] truncate" title={lead.nombre}>{lead.nombre}</p>
                                 <div className="flex items-center gap-2 mt-0.5">
                                   {lead.correo && <p className="text-slate-400 truncate max-w-[170px] text-[10px]">{lead.correo}</p>}
                                   {lead.adjuntos > 0 && (
@@ -1520,20 +1520,20 @@ export default function LeadsView() {
                           <td className="px-3 py-2.5 text-slate-600 max-w-[160px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
                           <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{lead.comercial || "—"}</td>
                           <td className="px-3 py-2.5 whitespace-nowrap">
-                            {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-700 font-medium">{lead.linea}</span> : "—"}
+                            {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium">{lead.linea}</span> : "—"}
                           </td>
                           <td className="px-3 py-2.5">
-                            <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${ETAPA_STYLE[lead.etapa] ?? "bg-slate-100 text-slate-600"}`}>{lead.etapa || "—"}</span>
+                            <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa || "—"}</span>
                           </td>
                           <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{lead.preventa || "—"}</td>
                           <td className="px-3 py-2.5 text-slate-500 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
-                          <td className="px-3 py-2.5 text-right font-medium text-slate-700 whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
+                          <td className="px-3 py-2.5 text-right font-medium text-slate-200 whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
                           <td className="px-3 py-2.5 text-slate-500 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
                           <td className="px-3 py-2.5">
-                            <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-slate-100 text-slate-600"}`}>{lead.ganado}</span>
+                            <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
                           </td>
                           <td className="px-3 py-2.5 text-center">
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${lead.activo ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-500"}`}>
                               {lead.activo ? "Sí" : "No"}
                             </span>
                           </td>
@@ -1547,13 +1547,13 @@ export default function LeadsView() {
 
               {/* paginación */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between px-4 py-3 border-t border-slate-100 bg-slate-50">
+                <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.05] bg-[#0e0e1c]">
                   <span className="text-xs text-slate-500">
                     {((currentPage - 1) * PAGE_SIZE) + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)} de {filtered.length} registros
                   </span>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => goTo(1)} disabled={currentPage === 1} className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-200 disabled:opacity-30 transition-colors"><ChevronsLeft size={14} /></button>
-                    <button onClick={() => goTo(currentPage - 1)} disabled={currentPage === 1} className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-200 disabled:opacity-30 transition-colors"><ChevronLeft size={14} /></button>
+                    <button onClick={() => goTo(1)} disabled={currentPage === 1} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.08] disabled:opacity-30 transition-colors"><ChevronsLeft size={14} /></button>
+                    <button onClick={() => goTo(currentPage - 1)} disabled={currentPage === 1} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.08] disabled:opacity-30 transition-colors"><ChevronLeft size={14} /></button>
                     {Array.from({ length: totalPages }, (_, i) => i + 1)
                       .filter((p) => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
                       .reduce<(number | "…")[]>((acc, p, i, arr) => {
@@ -1565,13 +1565,13 @@ export default function LeadsView() {
                           <span key={`e-${i}`} className="px-1 text-xs text-slate-400">…</span>
                         ) : (
                           <button key={item} onClick={() => goTo(item as number)}
-                            className={`min-w-[28px] h-7 rounded-lg text-xs font-medium transition-colors ${currentPage === item ? "bg-blue-600 text-white" : "text-slate-500 hover:bg-slate-200"}`}>
+                            className={`min-w-[28px] h-7 rounded-lg text-xs font-medium transition-colors ${currentPage === item ? "bg-blue-600 text-white" : "text-slate-500 hover:bg-white/[0.08]"}`}>
                             {item}
                           </button>
                         )
                       )}
-                    <button onClick={() => goTo(currentPage + 1)} disabled={currentPage === totalPages} className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-200 disabled:opacity-30 transition-colors"><ChevronRight size={14} /></button>
-                    <button onClick={() => goTo(totalPages)} disabled={currentPage === totalPages} className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-200 disabled:opacity-30 transition-colors"><ChevronsRight size={14} /></button>
+                    <button onClick={() => goTo(currentPage + 1)} disabled={currentPage === totalPages} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.08] disabled:opacity-30 transition-colors"><ChevronRight size={14} /></button>
+                    <button onClick={() => goTo(totalPages)} disabled={currentPage === totalPages} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.08] disabled:opacity-30 transition-colors"><ChevronsRight size={14} /></button>
                   </div>
                 </div>
               )}
