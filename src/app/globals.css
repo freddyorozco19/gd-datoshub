@@ -8,8 +8,8 @@
 @theme {
   --font-sans: 'Century Gothic', CenturyGothic, 'Century Gothic Pro',
                AppleGothic, 'Trebuchet MS', Futura, sans-serif;
-  --color-background: #f8fafc;
-  --color-foreground: #0f172a;
+  --color-background: #07070f;
+  --color-foreground: #e2e8f0;
 }
 
 html, body, input, button, select, textarea {
@@ -18,8 +18,8 @@ html, body, input, button, select, textarea {
 }
 
 body {
-  background: #f8fafc;
-  color: #0f172a;
+  background: #07070f;
+  color: #e2e8f0;
 }
 
 * {

@@ -12,12 +12,12 @@ interface StatsCardProps {
 }
 
 const colorMap = {
-  blue: "bg-blue-50 text-blue-600",
-  green: "bg-emerald-50 text-emerald-600",
-  amber: "bg-amber-50 text-amber-600",
-  rose: "bg-rose-50 text-rose-600",
-  violet: "bg-violet-50 text-violet-600",
-  cyan: "bg-cyan-50 text-cyan-600",
+  blue:   "bg-blue-500/10 text-blue-400",
+  green:  "bg-emerald-500/10 text-emerald-400",
+  amber:  "bg-amber-500/10 text-amber-400",
+  rose:   "bg-rose-500/10 text-rose-400",
+  violet: "bg-violet-500/10 text-violet-400",
+  cyan:   "bg-cyan-500/10 text-cyan-400",
 };
 
 export default function StatsCard({
@@ -28,24 +28,20 @@ export default function StatsCard({
   color = "blue",
 }: StatsCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-5 flex items-start gap-4">
+    <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-5 flex items-start gap-4">
       <div className={`p-2.5 rounded-lg ${colorMap[color]}`}>
         <Icon size={20} />
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-xs text-slate-500 truncate">{label}</p>
-        <p className="text-2xl font-bold text-slate-800 mt-0.5">{value}</p>
+        <p className="text-2xl font-bold text-slate-100 mt-0.5">{value}</p>
         {trend && (
           <p className="text-xs mt-1">
-            <span
-              className={
-                trend.value >= 0 ? "text-emerald-600" : "text-rose-600"
-              }
-            >
+            <span className={trend.value >= 0 ? "text-emerald-400" : "text-rose-400"}>
               {trend.value >= 0 ? "+" : ""}
               {trend.value}%
             </span>{" "}
-            <span className="text-slate-400">{trend.label}</span>
+            <span className="text-slate-500">{trend.label}</span>
           </p>
         )}
       </div>
