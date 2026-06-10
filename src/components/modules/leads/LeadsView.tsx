@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useMemo, useCallback, type ReactNode } fro
 import { createPortal } from "react-dom";
 import {
   RefreshCw, Search, Download, ChevronUp, ChevronDown,
-  TrendingUp, Users, Clock, DollarSign, AlertCircle,
+  Users, AlertCircle,
   CalendarCheck2, ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight, Eye, X, History,
   ExternalLink, Sparkles, SlidersHorizontal, Calendar,
@@ -90,24 +90,6 @@ const LINE_PALETTE = [
   { bar: "bg-indigo-500",  badge: "bg-indigo-500/10 text-indigo-400" },
 ];
 
-/* ── sparkline mini-chart ─────────────────────────────────────────────── */
-function Sparkline({ data, color = "bg-blue-400" }: { data: number[]; color?: string }) {
-  const max = Math.max(...data, 1);
-  const hasData = data.some((v) => v > 0);
-  if (!hasData) return null;
-  return (
-    <div className="flex items-end gap-px h-7 mt-2 opacity-70">
-      {data.map((v, i) => (
-        <div
-          key={i}
-          className={`flex-1 rounded-sm ${color}`}
-          style={{ height: `${Math.max(4, Math.round((v / max) * 100))}%` }}
-        />
-      ))}
-    </div>
-  );
-}
-
 /* ── skeleton de tabla ────────────────────────────────────────────────── */
 function TableSkeleton() {
   return (
@@ -132,72 +114,125 @@ function TableSkeleton() {
 }
 
 /* ── widget: tendencia mensual ──────────────────────────────────────── */
+const TREND_RANGES = [
+  { label: "3M",  value: 3  },
+  { label: "6M",  value: 6  },
+  { label: "12M", value: 12 },
+  { label: "24M", value: 24 },
+  { label: "Todo",value: 0  },
+] as const;
+
 function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
+  const [range, setRange] = useState<number>(6);
+
   const months = useMemo(() => {
-    return Array.from({ length: 6 }, (_, i) => {
-      const d = new Date();
-      d.setHours(d.getHours() - 5);
-      d.setDate(1);
-      d.setMonth(d.getMonth() - (5 - i));
+    const nowGMT5 = new Date();
+    nowGMT5.setHours(nowGMT5.getHours() - 5);
+    nowGMT5.setDate(1);
+
+    let count: number;
+    if (range === 0) {
+      if (leads.length === 0) { count = 6; }
+      else {
+        const earliest = leads.reduce((min, l) => l.fechaCreacion < min ? l.fechaCreacion : min, leads[0].fechaCreacion);
+        const start = new Date(earliest.substring(0, 7) + "-01T12:00:00");
+        const diff  = (nowGMT5.getFullYear() - start.getFullYear()) * 12 + (nowGMT5.getMonth() - start.getMonth()) + 1;
+        count = Math.max(diff, 1);
+      }
+    } else {
+      count = range;
+    }
+
+    return Array.from({ length: count }, (_, i) => {
+      const d = new Date(nowGMT5);
+      d.setMonth(d.getMonth() - (count - 1 - i));
       const key   = d.toISOString().substring(0, 7);
-      const label = d.toLocaleDateString("es-CO", { month: "short", year: "2-digit" });
-      const ml    = leads.filter((l) => l.fechaCreacion.startsWith(key));
+      const label = d.toLocaleDateString("es-CO", {
+        month: "short",
+        ...(count > 12 ? { year: "2-digit" } : {}),
+      });
+      const ml = leads.filter((l) => l.fechaCreacion.startsWith(key));
       return {
         key, label,
-        count:    ml.length,
-        ganados:  ml.filter((l) => l.ganado === "Ganado").length,
-        ingresos: ml.reduce((s, l) => s + (l.ingresosEsperados || 0), 0),
+        count:   ml.length,
+        ganados: ml.filter((l) => l.ganado === "Ganado").length,
       };
     });
-  }, [leads]);
+  }, [leads, range]);
 
-  const maxCount = Math.max(...months.map((m) => m.count), 1);
-  const BAR_H = 56;
+  const maxCount    = Math.max(...months.map((m) => m.count), 1);
+  const totalLeads  = months.reduce((s, m) => s + m.count, 0);
+  const totalGanados= months.reduce((s, m) => s + m.ganados, 0);
+  const BAR_H       = 72;
 
   return (
     <div className="bg-[#111120] rounded-xl border border-white/[0.07] px-5 py-4">
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-4 flex-wrap">
         <div className="p-1.5 rounded-lg bg-indigo-500/10 shrink-0">
           <BarChart2 size={15} className="text-indigo-400" />
         </div>
         <span className="text-sm font-semibold text-slate-200">Tendencia mensual</span>
-        <span className="text-xs text-slate-400">· últimos 6 meses</span>
-        <div className="ml-auto flex items-center gap-4">
+
+        {/* selector de rango */}
+        <div className="flex items-center gap-0.5 bg-white/[0.04] rounded-lg p-0.5 ml-1">
+          {TREND_RANGES.map(({ label, value }) => (
+            <button
+              key={label}
+              onClick={() => setRange(value)}
+              className={`px-2.5 py-1 text-[10px] font-semibold rounded-md transition-colors ${
+                range === value
+                  ? "bg-indigo-500/20 text-indigo-300"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div className="ml-auto flex items-center gap-5">
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-indigo-100" />
-            <span className="text-[10px] text-slate-400">Total leads</span>
+            <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500/30" />
+            <span className="text-[10px] text-slate-500">Total</span>
+            <span className="text-[10px] font-bold text-slate-300">{totalLeads}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500" />
-            <span className="text-[10px] text-slate-400">Ganados</span>
+            <span className="text-[10px] text-slate-500">Ganados</span>
+            <span className="text-[10px] font-bold text-emerald-400">{totalGanados}</span>
           </div>
         </div>
       </div>
 
-      <div className="flex items-end gap-3">
-        {months.map(({ key, label, count, ganados }) => {
-          const totalPx = Math.max(3, Math.round((count / maxCount) * BAR_H));
-          const ganPx   = count > 0 ? Math.round((ganados / count) * totalPx) : 0;
-          return (
-            <div key={key} className="flex-1 flex flex-col items-center gap-1.5 group">
-              <span className="text-[10px] font-bold text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity leading-none">
-                {count}
-              </span>
-              <div className="w-full flex items-end" style={{ height: BAR_H }}>
-                <div
-                  className="relative w-full rounded-t-sm overflow-hidden bg-indigo-100"
-                  style={{ height: totalPx }}
-                >
-                  <div
-                    className="absolute bottom-0 left-0 right-0 bg-indigo-500 transition-all duration-700"
-                    style={{ height: ganPx }}
-                  />
+      <div className="overflow-x-auto pb-1">
+        <div className="flex items-end gap-1.5" style={{ minWidth: months.length > 16 ? months.length * 28 : undefined }}>
+          {months.map(({ key, label, count, ganados }) => {
+            const totalPx = Math.max(3, Math.round((count / maxCount) * BAR_H));
+            const ganPx   = count > 0 ? Math.round((ganados / count) * totalPx) : 0;
+            return (
+              <div key={key} className="flex-1 min-w-[22px] flex flex-col items-center gap-1 group">
+                <div className="flex flex-col items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="text-[10px] font-bold text-indigo-300 leading-none">{count}</span>
+                  {ganados > 0 && (
+                    <span className="text-[9px] text-emerald-400 leading-none mt-0.5">{ganados}✓</span>
+                  )}
                 </div>
+                <div className="w-full flex items-end" style={{ height: BAR_H }}>
+                  <div
+                    className="relative w-full rounded-t overflow-hidden bg-indigo-500/20 transition-all duration-300"
+                    style={{ height: totalPx }}
+                  >
+                    <div
+                      className="absolute bottom-0 left-0 right-0 bg-indigo-500 transition-all duration-700"
+                      style={{ height: ganPx }}
+                    />
+                  </div>
+                </div>
+                <span className="text-[10px] text-slate-500 capitalize leading-none whitespace-nowrap">{label}</span>
               </div>
-              <span className="text-[10px] text-slate-400 capitalize leading-none">{label}</span>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -1163,27 +1198,6 @@ export default function LeadsView() {
   }, [filtered, currentPage]);
   const goTo = useCallback((p: number) => setCurrentPage(Math.max(1, Math.min(p, totalPages))), [totalPages]);
 
-  /* métricas */
-  const metrics = useMemo(() => {
-    const totalIngresos = filtered.reduce((s, l) => s + (l.ingresosEsperados || 0), 0);
-    const lastUpdate    = filtered.reduce((m, l) => (l.ultimaModificacion > m ? l.ultimaModificacion : m), "");
-    const ganados       = filtered.filter((l) => l.ganado === "Ganado").length;
-    return { totalIngresos, lastUpdate: fmtDate(lastUpdate), ganados };
-  }, [filtered]);
-
-  // 4. sparklines — últimos 14 días (sobre todos los leads, no filtrados)
-  const sparklines = useMemo(() => {
-    const days = Array.from({ length: 14 }, (_, i) => {
-      const d = new Date(); d.setHours(d.getHours() - 5); d.setDate(d.getDate() - (13 - i));
-      return d.toISOString().substring(0, 10);
-    });
-    return {
-      leads:   days.map((day) => leads.filter((l) => l.fechaCreacion.startsWith(day)).length),
-      ganados: days.map((day) => leads.filter((l) => l.fechaCreacion.startsWith(day) && l.ganado === "Ganado").length),
-      ingresos:days.map((day) => leads.filter((l) => l.fechaCreacion.startsWith(day)).reduce((s, l) => s + l.ingresosEsperados, 0)),
-    };
-  }, [leads]);
-
   const activeFilterCount = useMemo(() => {
     let c = 0;
     if (filters.comercial       !== "ALL") c++;
@@ -1250,28 +1264,7 @@ export default function LeadsView() {
 
       <div className="flex-1 overflow-auto p-5 space-y-4">
 
-        {/* ── 4. métricas con sparklines ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: "Last Update",        value: metrics.lastUpdate || "—",                         icon: Clock,      color: "text-slate-400 bg-white/[0.06]",  spark: null },
-            { label: "Leads",              value: filtered.length.toLocaleString("es-CO"),            icon: Users,      color: "text-blue-400 bg-blue-500/10",     spark: { data: sparklines.leads,    color: "bg-blue-400" } },
-            { label: "Ganados",            value: metrics.ganados.toLocaleString("es-CO"),            icon: TrendingUp, color: "text-emerald-400 bg-emerald-500/10",spark: { data: sparklines.ganados,  color: "bg-emerald-400" } },
-            { label: "Ingresos Esperados", value: COP(metrics.totalIngresos),                        icon: DollarSign, color: "text-violet-400 bg-violet-500/10",  spark: { data: sparklines.ingresos, color: "bg-violet-400" } },
-          ].map(({ label, value, icon: Icon, color, spark }) => (
-            <div key={label} className="bg-[#111120] rounded-xl border border-white/[0.07] px-4 py-3">
-              <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${color} shrink-0`}><Icon size={18} /></div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-slate-500">{label}</p>
-                  <p className="text-sm font-bold text-slate-100 truncate">{value}</p>
-                </div>
-              </div>
-              {spark && <Sparkline data={spark.data} color={spark.color} />}
-            </div>
-          ))}
-        </div>
-
-        {/* ── 6. tendencia mensual ── */}
+        {/* ── tendencia mensual ── */}
         {leads.length > 0 && <MonthlyTrendWidget leads={leads} />}
 
         {/* ── barra de filtros ── */}
