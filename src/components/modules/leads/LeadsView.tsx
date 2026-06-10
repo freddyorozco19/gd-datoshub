@@ -123,7 +123,8 @@ const TREND_RANGES = [
 ] as const;
 
 function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
-  const [range, setRange] = useState<number>(6);
+  const [range,   setRange]   = useState<number>(6);
+  const [hovered, setHovered] = useState<{ label: string; count: number; ganados: number } | null>(null);
 
   const months = useMemo(() => {
     const nowGMT5 = new Date();
@@ -164,9 +165,19 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
   const totalLeads  = months.reduce((s, m) => s + m.count, 0);
   const totalGanados= months.reduce((s, m) => s + m.ganados, 0);
   const BAR_H       = 72;
+  const showLegend  = range !== 0 && range <= 12 && hovered === null;
+
+  // cuántos labels mostrar en el eje X según el total de meses
+  function showLabel(i: number, total: number): boolean {
+    if (total <= 12) return true;
+    if (total <= 24) return i % 3 === 0 || i === total - 1;
+    if (total <= 48) return i % 6 === 0 || i === total - 1;
+    return i % 12 === 0 || i === total - 1;
+  }
 
   return (
     <div className="bg-[#111120] rounded-xl border border-white/[0.07] px-5 py-4">
+      {/* header */}
       <div className="flex items-center gap-2 mb-4 flex-wrap">
         <div className="p-1.5 rounded-lg bg-indigo-500/10 shrink-0">
           <BarChart2 size={15} className="text-indigo-400" />
@@ -180,9 +191,7 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
               key={label}
               onClick={() => setRange(value)}
               className={`px-2.5 py-1 text-[10px] font-semibold rounded-md transition-colors ${
-                range === value
-                  ? "bg-indigo-500/20 text-indigo-300"
-                  : "text-slate-500 hover:text-slate-300"
+                range === value ? "bg-indigo-500/20 text-indigo-300" : "text-slate-500 hover:text-slate-300"
               }`}
             >
               {label}
@@ -190,39 +199,56 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
           ))}
         </div>
 
-        {(range !== 0 && range <= 12) && (
-          <div className="ml-auto flex items-center gap-5">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500/30" />
-              <span className="text-[10px] text-slate-500">Total</span>
-              <span className="text-[10px] font-bold text-slate-300">{totalLeads}</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500" />
-              <span className="text-[10px] text-slate-500">Ganados</span>
-              <span className="text-[10px] font-bold text-emerald-400">{totalGanados}</span>
-            </div>
-          </div>
-        )}
+        {/* panel derecho: tooltip de hover O leyenda */}
+        <div className="ml-auto flex items-center gap-4 min-h-[22px]">
+          {hovered ? (
+            <>
+              <span className="text-xs font-semibold text-slate-200 capitalize">{hovered.label}</span>
+              <span className="text-[11px] text-slate-400">
+                <span className="text-slate-200 font-bold">{hovered.count}</span> leads
+              </span>
+              <span className="text-[11px] text-emerald-400">
+                <span className="font-bold">{hovered.ganados}</span> ganados
+                {hovered.count > 0 && (
+                  <span className="text-slate-500 ml-1">
+                    · {Math.round((hovered.ganados / hovered.count) * 100)}%
+                  </span>
+                )}
+              </span>
+            </>
+          ) : showLegend ? (
+            <>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500/30" />
+                <span className="text-[10px] text-slate-500">Total</span>
+                <span className="text-[10px] font-bold text-slate-300">{totalLeads}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500" />
+                <span className="text-[10px] text-slate-500">Ganados</span>
+                <span className="text-[10px] font-bold text-emerald-400">{totalGanados}</span>
+              </div>
+            </>
+          ) : null}
+        </div>
       </div>
 
+      {/* barras */}
       <div className="overflow-x-auto pb-1">
-        <div className="flex items-end gap-1.5" style={{ minWidth: months.length > 16 ? months.length * 28 : undefined }}>
-          {months.map(({ key, label, count, ganados }) => {
+        <div
+          className="flex items-end gap-1"
+          style={{ minWidth: months.length > 16 ? months.length * 26 : undefined }}
+        >
+          {months.map(({ key, label, count, ganados }, i) => {
             const totalPx = Math.max(3, Math.round((count / maxCount) * BAR_H));
             const ganPx   = count > 0 ? Math.round((ganados / count) * totalPx) : 0;
-            const pct     = count > 0 ? Math.round((ganados / count) * 100) : 0;
             return (
-              <div key={key} className="relative flex-1 min-w-[22px] flex flex-col items-center gap-1 group">
-                {/* tooltip */}
-                <div className="absolute bottom-[calc(100%-8px)] left-1/2 -translate-x-1/2 z-20 pointer-events-none
-                                opacity-0 group-hover:opacity-100 transition-opacity
-                                bg-[#1a1a30] border border-white/[0.10] rounded-lg px-2.5 py-2 shadow-xl
-                                whitespace-nowrap flex flex-col gap-0.5 text-[11px]">
-                  <span className="font-semibold text-slate-200 capitalize">{label}</span>
-                  <span className="text-slate-400">{count} lead{count !== 1 ? "s" : ""}</span>
-                  <span className="text-emerald-400">{ganados} ganado{ganados !== 1 ? "s" : ""} · {pct}%</span>
-                </div>
+              <div
+                key={key}
+                className="flex-1 min-w-[20px] flex flex-col items-center gap-1 cursor-default"
+                onMouseEnter={() => setHovered({ label, count, ganados })}
+                onMouseLeave={() => setHovered(null)}
+              >
                 <div className="w-full flex items-end" style={{ height: BAR_H }}>
                   <div
                     className="relative w-full rounded-t overflow-hidden bg-indigo-500/20 transition-all duration-300"
@@ -234,7 +260,9 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
                     />
                   </div>
                 </div>
-                <span className="text-[10px] text-slate-500 capitalize leading-none whitespace-nowrap">{label}</span>
+                <span className="text-[10px] text-slate-500 capitalize leading-none whitespace-nowrap">
+                  {showLabel(i, months.length) ? label : ""}
+                </span>
               </div>
             );
           })}
