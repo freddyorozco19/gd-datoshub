@@ -272,7 +272,7 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
 /* ── mapa de calor ───────────────────────────────────────────────────── */
 function LeadHeatmap({ leads }: { leads: Lead[] }) {
   const { weeks, monthLabels } = useMemo(() => {
-    const WEEKS = 26;
+    const WEEKS = 13;
     const countByDay: Record<string, number> = {};
     leads.forEach((l) => {
       const day = l.fechaCreacion.substring(0, 10);
@@ -336,7 +336,7 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
             <Activity size={15} className="text-emerald-400" />
           </div>
           <span className="text-sm font-semibold text-slate-200">Actividad de leads</span>
-          <span className="text-xs text-slate-400">· último semestre</span>
+          <span className="text-xs text-slate-400">· últimos 3 meses</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="text-[10px] text-slate-400">Menos</span>
