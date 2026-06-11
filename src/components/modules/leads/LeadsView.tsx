@@ -278,7 +278,6 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
       const day = l.fechaCreacion.substring(0, 10);
       countByDay[day] = (countByDay[day] || 0) + 1;
     });
-    const maxCount = Math.max(...Object.values(countByDay), 1);
 
     const today = new Date();
     today.setHours(today.getHours() - 5);
@@ -287,26 +286,42 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
     const anchor = new Date(today);
     anchor.setDate(today.getDate() - daysToMonday - (WEEKS - 1) * 7);
 
-    const weeksArr: { date: string; count: number; level: number }[][] = [];
+    // 1ª pasada: contar por día solo dentro de la ventana visible
+    const grid: { date: string; count: number }[][] = [];
     const mlabels: { weekIdx: number; label: string }[] = [];
     let lastMonth = -1;
+    let maxCount  = 0;
 
     for (let w = 0; w < WEEKS; w++) {
-      const week: { date: string; count: number; level: number }[] = [];
+      const week: { date: string; count: number }[] = [];
       for (let d = 0; d < 7; d++) {
         const dt = new Date(anchor);
         dt.setDate(anchor.getDate() + w * 7 + d);
         const dateStr = dt.toISOString().substring(0, 10);
         const count   = countByDay[dateStr] || 0;
-        const level   = count === 0 ? 0 : Math.min(4, Math.ceil((count / maxCount) * 4));
+        if (count > maxCount) maxCount = count;
         if (d === 0 && dt.getMonth() !== lastMonth) {
           mlabels.push({ weekIdx: w, label: dt.toLocaleDateString("es-CO", { month: "short" }) });
           lastMonth = dt.getMonth();
         }
-        week.push({ date: dateStr, count, level });
+        week.push({ date: dateStr, count });
       }
-      weeksArr.push(week);
+      grid.push(week);
     }
+
+    // 2ª pasada: intensidad por cuartiles respecto al máximo visible
+    const levelFor = (count: number): number => {
+      if (count === 0) return 0;
+      const r = count / maxCount;
+      if (r <= 0.25) return 1;
+      if (r <= 0.5)  return 2;
+      if (r <= 0.75) return 3;
+      return 4;
+    };
+    const weeksArr = grid.map((week) =>
+      week.map(({ date, count }) => ({ date, count, level: levelFor(count) }))
+    );
+
     return { weeks: weeksArr, monthLabels: mlabels };
   }, [leads]);
 
