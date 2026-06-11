@@ -164,14 +164,6 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
   const BAR_H       = 72;
   const showLegend  = range !== 0 && range <= 12 && hovered === null;
 
-  // cuántos labels mostrar en el eje X según el total de meses
-  function showLabel(i: number, total: number): boolean {
-    if (total <= 12) return true;
-    if (total <= 24) return i % 3 === 0 || i === total - 1;
-    if (total <= 48) return i % 6 === 0 || i === total - 1;
-    return i % 12 === 0 || i === total - 1;
-  }
-
   return (
     <div className="bg-[#111120] rounded-xl border border-white/[0.07] px-5 py-4">
       {/* header */}
@@ -252,7 +244,7 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
                   </div>
                 )}
                 <div
-                  className="flex-1 min-w-[20px] flex flex-col items-center gap-1 cursor-default"
+                  className="flex-1 min-w-[20px] flex flex-col items-center cursor-default"
                   onMouseEnter={() => setHovered({ label, count, ganados })}
                   onMouseLeave={() => setHovered(null)}
                 >
@@ -267,9 +259,6 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
                       />
                     </div>
                   </div>
-                  <span className="text-[10px] text-slate-500 capitalize leading-none whitespace-nowrap">
-                    {showLabel(i, months.length) ? label : ""}
-                  </span>
                 </div>
               </Fragment>
             );
