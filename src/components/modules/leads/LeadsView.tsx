@@ -314,9 +314,9 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
   const DAY_LABELS = ["L", "", "X", "", "V", "", "D"];
 
   return (
-    <div className="bg-[#111120] rounded-xl border border-white/[0.07] px-5 py-4">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
+    <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
+      <div className="flex items-center justify-between gap-x-3 gap-y-1.5 flex-wrap mb-3">
+        <div className="flex items-center gap-2 min-w-0">
           <div className="p-1.5 rounded-lg bg-emerald-500/10 shrink-0">
             <Activity size={15} className="text-emerald-400" />
           </div>
@@ -1041,6 +1041,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
 
   return (
     <div className="w-56 shrink-0 flex flex-col gap-2">
+      <LeadHeatmap leads={leads} />
       <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
         <div className="flex items-center gap-2 mb-3">
           <div className="p-1.5 rounded-lg bg-blue-500/10 shrink-0"><CalendarCheck2 size={15} className="text-blue-400" /></div>
@@ -1398,9 +1399,6 @@ export default function LeadsView() {
             </div>
           </div>
         </div>
-
-        {/* ── 8. mapa de calor ── */}
-        {leads.length > 0 && <LeadHeatmap leads={leads} />}
 
         {/* ── funnel de ventas ── */}
         {leads.length > 0 && (
