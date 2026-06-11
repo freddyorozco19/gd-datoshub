@@ -345,14 +345,14 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <div style={{ display: "inline-flex", flexDirection: "column", gap: 4 }}>
+      <div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           {/* etiquetas de mes */}
-          <div style={{ display: "flex", gap: 3, paddingLeft: 20 }}>
+          <div style={{ display: "flex", gap: 3, paddingLeft: 19 }}>
             {weeks.map((_, wi) => {
               const ml = monthLabels.find((m) => m.weekIdx === wi);
               return (
-                <div key={wi} style={{ width: 10, fontSize: 8, color: "#94a3b8", lineHeight: 1, whiteSpace: "nowrap" }}>
+                <div key={wi} style={{ flex: 1, minWidth: 0, fontSize: 8, color: "#94a3b8", lineHeight: 1, whiteSpace: "nowrap" }}>
                   {ml ? ml.label : ""}
                 </div>
               );
@@ -361,20 +361,20 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
           {/* cuadrícula */}
           <div style={{ display: "flex", gap: 3 }}>
             {/* etiquetas de día */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 3, width: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 3, width: 16, flexShrink: 0 }}>
               {DAY_LABELS.map((l, i) => (
-                <div key={i} style={{ width: 10, height: 10, fontSize: 8, color: "#94a3b8", display: "flex", alignItems: "center" }}>{l}</div>
+                <div key={i} style={{ flex: 1, fontSize: 8, color: "#94a3b8", display: "flex", alignItems: "center" }}>{l}</div>
               ))}
             </div>
             {/* columnas de semana */}
             {weeks.map((week, wi) => (
-              <div key={wi} style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              <div key={wi} style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, minWidth: 0 }}>
                 {week.map(({ date, count, level }) => (
                   <div
                     key={date}
                     title={`${date}: ${count} lead${count !== 1 ? "s" : ""}`}
                     className={`rounded-sm cursor-default transition-opacity hover:opacity-70 ${COLORS[level]}`}
-                    style={{ width: 10, height: 10 }}
+                    style={{ width: "100%", aspectRatio: "1 / 1" }}
                   />
                 ))}
               </div>
