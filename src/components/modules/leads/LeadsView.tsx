@@ -387,12 +387,15 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
 }
 
 /* ── modal: tabla de leads del día ──────────────────────────────────── */
-interface DayLeadsModalProps { leads: Lead[]; date: string; heading?: string; onClose: () => void; }
+interface DayLeadsModalProps { leads: Lead[]; date?: string; title?: string; heading?: string; onClose: () => void; }
 
-function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
-  const dateLabel = new Date(date + "T12:00:00").toLocaleDateString("es-CO", {
-    weekday: "long", day: "numeric", month: "long", year: "numeric",
-  });
+function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalProps) {
+  const dateLabel = date
+    ? new Date(date + "T12:00:00").toLocaleDateString("es-CO", {
+        weekday: "long", day: "numeric", month: "long", year: "numeric",
+      })
+    : "";
+  const headerTitle = title ?? dateLabel;
 
   const [mLinea,     setMLinea]     = useState("ALL");
   const [mComercial, setMComercial] = useState("ALL");
@@ -431,7 +434,7 @@ function DayLeadsModal({ leads, date, heading, onClose }: DayLeadsModalProps) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-semibold text-slate-100 capitalize">{dateLabel}</h2>
+              <h2 className="font-semibold text-slate-100 capitalize">{headerTitle}</h2>
               {heading && (
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400">{heading}</span>
               )}
@@ -805,6 +808,14 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
 /* ── widget: ranking de comerciales ────────────────────────────────── */
 function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   const [sortBy, setSortBy] = useState<"leads" | "ganados" | "ingresos">("leads");
+  const [selectedComercial, setSelectedComercial] = useState<string | null>(null);
+
+  const comercialLeads = useMemo(
+    () => selectedComercial
+      ? leads.filter((l) => (l.comercial || "Sin asignar") === selectedComercial)
+      : [],
+    [leads, selectedComercial]
+  );
 
   const ranking = useMemo(() => {
     const map: Record<string, { leads: number; ganados: number; ingresos: number }> = {};
@@ -822,7 +833,6 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   }, [leads, sortBy]);
 
   const maxVal = Math.max(...ranking.map((r) => r[sortBy]), 1);
-  const MEDAL  = ["🥇", "🥈", "🥉"];
 
   function fmt(r: typeof ranking[0]) {
     if (sortBy === "ingresos")
@@ -858,13 +868,17 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
 
       <div className="space-y-2.5">
         {ranking.map((r, i) => (
-          <div key={r.name}>
+          <button
+            key={r.name}
+            type="button"
+            onClick={() => setSelectedComercial(r.name)}
+            title={`Ver leads de ${r.name}`}
+            className="w-full text-left rounded-lg px-1.5 py-1 -mx-1.5 hover:bg-amber-500/10 transition-colors group focus:outline-none"
+          >
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-1.5 min-w-0">
-                <span className="w-4 text-center shrink-0 text-[11px]">
-                  {i < 3 ? MEDAL[i] : <span className="text-slate-300 font-bold text-[10px]">{i + 1}</span>}
-                </span>
-                <span className="text-xs text-slate-200 truncate leading-none" title={r.name}>{r.name}</span>
+                <span className="w-4 text-center shrink-0 text-[10px] font-bold text-slate-300">{i + 1}</span>
+                <span className="text-xs text-slate-200 truncate leading-none group-hover:text-amber-400 transition-colors" title={r.name}>{r.name}</span>
               </div>
               <span className="text-[10px] font-bold text-slate-600 shrink-0 ml-2">{fmt(r)}</span>
             </div>
@@ -874,9 +888,17 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
                 style={{ width: `${Math.round((r[sortBy] / maxVal) * 100)}%` }}
               />
             </div>
-          </div>
+          </button>
         ))}
       </div>
+
+      {selectedComercial && (
+        <DayLeadsModal
+          leads={comercialLeads}
+          title={selectedComercial}
+          onClose={() => setSelectedComercial(null)}
+        />
+      )}
     </div>
   );
 }
