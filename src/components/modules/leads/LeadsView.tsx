@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo, useCallback, type ReactNode } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback, Fragment, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import {
   RefreshCw, Search, Download, ChevronUp, ChevronDown,
@@ -148,10 +148,7 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
       const d = new Date(nowGMT5);
       d.setMonth(d.getMonth() - (count - 1 - i));
       const key   = d.toISOString().substring(0, 7);
-      const label = d.toLocaleDateString("es-CO", {
-        month: "short",
-        ...(count > 12 ? { year: "2-digit" } : {}),
-      });
+      const label = d.toLocaleDateString("es-CO", { month: "short" });
       const ml = leads.filter((l) => l.fechaCreacion.startsWith(key));
       return {
         key, label,
@@ -242,28 +239,39 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
           {months.map(({ key, label, count, ganados }, i) => {
             const totalPx = Math.max(3, Math.round((count / maxCount) * BAR_H));
             const ganPx   = count > 0 ? Math.round((ganados / count) * totalPx) : 0;
+            const year     = key.substring(0, 4);
+            const prevYear = i > 0 ? months[i - 1].key.substring(0, 4) : year;
+            const yearBreak = year !== prevYear;
             return (
-              <div
-                key={key}
-                className="flex-1 min-w-[20px] flex flex-col items-center gap-1 cursor-default"
-                onMouseEnter={() => setHovered({ label, count, ganados })}
-                onMouseLeave={() => setHovered(null)}
-              >
-                <div className="w-full flex items-end" style={{ height: BAR_H }}>
-                  <div
-                    className="relative w-full rounded-t overflow-hidden bg-indigo-500/20 transition-all duration-300"
-                    style={{ height: totalPx }}
-                  >
-                    <div
-                      className="absolute bottom-0 left-0 right-0 bg-indigo-500 transition-all duration-700"
-                      style={{ height: ganPx }}
-                    />
+              <Fragment key={key}>
+                {/* delimitador de año: línea punteada entre diciembre y enero */}
+                {yearBreak && (
+                  <div className="shrink-0 flex flex-col items-center gap-1 self-stretch">
+                    <div className="border-l border-dashed border-white/[0.14]" style={{ height: BAR_H }} />
+                    <span className="text-[9px] font-semibold text-slate-400 leading-none whitespace-nowrap">{year}</span>
                   </div>
+                )}
+                <div
+                  className="flex-1 min-w-[20px] flex flex-col items-center gap-1 cursor-default"
+                  onMouseEnter={() => setHovered({ label, count, ganados })}
+                  onMouseLeave={() => setHovered(null)}
+                >
+                  <div className="w-full flex items-end" style={{ height: BAR_H }}>
+                    <div
+                      className="relative w-full rounded-t overflow-hidden bg-indigo-500/20 transition-all duration-300"
+                      style={{ height: totalPx }}
+                    >
+                      <div
+                        className="absolute bottom-0 left-0 right-0 bg-indigo-500 transition-all duration-700"
+                        style={{ height: ganPx }}
+                      />
+                    </div>
+                  </div>
+                  <span className="text-[10px] text-slate-500 capitalize leading-none whitespace-nowrap">
+                    {showLabel(i, months.length) ? label : ""}
+                  </span>
                 </div>
-                <span className="text-[10px] text-slate-500 capitalize leading-none whitespace-nowrap">
-                  {showLabel(i, months.length) ? label : ""}
-                </span>
-              </div>
+              </Fragment>
             );
           })}
         </div>

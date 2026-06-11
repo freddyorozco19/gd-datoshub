@@ -72,3 +72,29 @@ body {
 .sidebar-scroll::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.22);
 }
+
+/* ── Scrollbar global coherente con el tema oscuro de la app ─────────────
+   Aplica a todas las áreas con overflow (tabla, gráficos, modales) para que
+   las barras no se vean con el estilo claro por defecto del navegador.
+─────────────────────────────────────────────────────────────────────── */
+* {
+  scrollbar-width: thin;                                  /* Firefox */
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent; /* thumb / track */
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.10);
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.20);
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
