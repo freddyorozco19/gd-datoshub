@@ -330,15 +330,14 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
 
   return (
     <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
-      <div className="flex items-center justify-between gap-x-3 gap-y-1.5 flex-wrap mb-3">
-        <div className="flex items-center gap-2 min-w-0">
+      <div className="mb-3">
+        <div className="flex items-center justify-center gap-2 mb-2">
           <div className="p-1.5 rounded-lg bg-emerald-500/10 shrink-0">
             <Activity size={15} className="text-emerald-400" />
           </div>
-          <span className="text-sm font-semibold text-slate-200">Actividad de leads</span>
-          <span className="text-xs text-slate-400">· últimos 3 meses</span>
+          <span className="text-sm font-semibold text-slate-200 uppercase tracking-wide">Actividad de leads</span>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center justify-center gap-1.5">
           <span className="text-[10px] text-slate-400">Menos</span>
           {COLORS.map((c, i) => <div key={i} className={`w-2.5 h-2.5 rounded-sm ${c}`} />)}
           <span className="text-[10px] text-slate-400">Más</span>
