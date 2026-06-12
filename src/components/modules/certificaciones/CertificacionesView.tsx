@@ -25,7 +25,8 @@ interface ProviderConfig {
   name: string
   color: string           // color del acento
   bgGradient: string      // gradiente de la card
-  logo: string            // emoji o texto corto
+  logo: string            // emoji o texto corto (fallback)
+  logoImg?: string        // URL de logo de imagen (opcional, tiene prioridad)
   exams: ExamConfig[]
 }
 
@@ -36,6 +37,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#0078d4',
     bgGradient: 'from-blue-950 to-slate-900',
     logo: '⊞',
+    logoImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPZEN2r056LDjjb6IT5qShwFPl4uJy1-BAgP0hGMmiqQ&s=10',
     exams: [
       { id: 'az-900', code: 'AZ-900', name: 'Azure Fundamentals',         dataFile: '/data/exam_63.json', questions: 472, level: 'Fundamental',  examTopicsPath: 'microsoft/az-900' },
       { id: 'az-104', code: 'AZ-104', name: 'Azure Administrator',        level: 'Associate'   },
@@ -49,6 +51,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#FF9900',
     bgGradient: 'from-orange-950 to-slate-900',
     logo: '☁',
+    logoImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/960px-Amazon_Web_Services_Logo.svg.png',
     exams: [
       { id: 'clf-c02', code: 'CLF-C02', name: 'Cloud Practitioner',    level: 'Fundamental' },
       { id: 'saa-c03', code: 'SAA-C03', name: 'Solutions Architect',   level: 'Associate'   },
@@ -61,6 +64,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#4285F4',
     bgGradient: 'from-indigo-950 to-slate-900',
     logo: '◈',
+    logoImg: 'https://e7.pngegg.com/pngimages/569/340/png-clipart-google-cloud-platform-cloud-computing-cloud-storage-google-storage-cloud-security-text-logo.png',
     exams: [
       { id: 'ace',  code: 'ACE',  name: 'Associate Cloud Engineer', level: 'Associate'   },
       { id: 'pca',  code: 'PCA',  name: 'Professional Cloud Arch.', level: 'Professional'},
@@ -85,6 +89,18 @@ const PROVIDERS: ProviderConfig[] = [
     logo: '◭',
     exams: [
       { id: 'dmf', code: 'DMF', name: 'Data Management Fundamentals', dataFile: '/data/exam_dmf.json', questions: 295, level: 'Fundamental', examTopicsPath: 'cdmp/dmf' },
+    ],
+  },
+  {
+    id: 'fortinet',
+    name: 'Fortinet',
+    color: '#EE3124',
+    bgGradient: 'from-red-950 to-slate-900',
+    logo: '🛡️',
+    exams: [
+      { id: 'fcf',  code: 'FCF',   name: 'Certified Fundamentals in Cybersecurity', level: 'Fundamental'  },
+      { id: 'nse4', code: 'NSE 4', name: 'Network Security Professional',           level: 'Associate'    },
+      { id: 'nse7', code: 'NSE 7', name: 'Network Security Architect',              level: 'Professional' },
     ],
   },
 ]
@@ -277,7 +293,18 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
       className={`relative w-full text-left bg-gradient-to-br ${p.bgGradient} border border-white/10 rounded-2xl p-6 hover:border-white/25 hover:scale-[1.02] transition-all duration-200 group`}
     >
       <div className="flex items-start justify-between mb-4">
-        <span className="text-4xl" style={{ color: p.color }}>{p.logo}</span>
+        {p.logoImg ? (
+          <span className="inline-flex items-center justify-center h-12 px-2.5 rounded-lg bg-white/95 shadow-sm">
+            <img
+              src={p.logoImg}
+              alt={`Logo ${p.name}`}
+              className="max-h-8 w-auto object-contain"
+              onError={e => { e.currentTarget.style.display = 'none' }}
+            />
+          </span>
+        ) : (
+          <span className="text-4xl" style={{ color: p.color }}>{p.logo}</span>
+        )}
         <ChevronRight size={16} className="text-slate-600 group-hover:text-slate-400 transition-colors mt-1" />
       </div>
       <h3 className="text-lg font-bold text-white mb-1">{p.name}</h3>
@@ -1477,7 +1504,13 @@ export default function CertificacionesView() {
         {view === 'exams' && selectedProvider && (
           <>
             <div className="flex items-center gap-3">
-              <span className="text-3xl" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
+              {selectedProvider.logoImg ? (
+                <span className="inline-flex items-center justify-center h-10 px-2 rounded-lg bg-white/95 shadow-sm">
+                  <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="max-h-6 w-auto object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
+                </span>
+              ) : (
+                <span className="text-3xl" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
+              )}
               <div>
                 <h2 className="text-lg font-bold text-white">{selectedProvider.name}</h2>
                 <p className="text-xs text-slate-500">{selectedProvider.exams.length} exámenes · {selectedProvider.exams.filter(e => e.dataFile).length} disponibles</p>
@@ -1495,7 +1528,13 @@ export default function CertificacionesView() {
         {view === 'viewer' && selectedProvider && selectedExam && (
           <>
             <div className="flex items-center gap-3 pb-2 border-b border-border">
-              <span className="text-2xl" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
+              {selectedProvider.logoImg ? (
+                <span className="inline-flex items-center justify-center h-9 px-1.5 rounded-lg bg-white/95 shadow-sm">
+                  <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="max-h-5 w-auto object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
+                </span>
+              ) : (
+                <span className="text-2xl" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
+              )}
               <div>
                 <h2 className="text-base font-bold text-white">{selectedExam.code} — {selectedExam.name}</h2>
                 <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${LEVEL_COLOR[selectedExam.level]}`}>
