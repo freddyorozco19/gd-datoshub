@@ -145,8 +145,8 @@ export default function Sidebar() {
         } ${overlaying ? "shadow-2xl shadow-black/60" : ""}`}
       >
       {/* ── Brand / workspace ── */}
-      <div className="flex items-center gap-2 px-3 py-3.5">
-        <div className="flex items-center gap-2.5 flex-1 min-w-0">
+      <div className={`flex items-center gap-2 px-3 py-3.5 ${collapsed ? "justify-center" : ""}`}>
+        <div className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "" : "flex-1"}`}>
           <div className="flex items-center justify-center w-8 h-8 shrink-0">
             <Image
               src="/growdata-icon.webp"
