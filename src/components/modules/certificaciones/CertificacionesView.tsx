@@ -305,16 +305,16 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
       <div className="relative flex h-full flex-col">
         {/* ── top: logo + flecha ── */}
         <div className="flex items-start justify-between">
-          <span className="flex h-12 items-center">
+          <span className="inline-flex h-12 items-center rounded-xl bg-white/10 px-3 ring-1 ring-inset ring-white/15 backdrop-blur-md">
             {p.logoImg ? (
               <img
                 src={p.logoImg}
                 alt={`Logo ${p.name}`}
-                className="h-10 w-auto max-w-[150px] object-contain"
+                className="h-7 w-auto max-w-[140px] object-contain"
                 onError={e => { e.currentTarget.style.display = 'none' }}
               />
             ) : (
-              <span className="text-4xl" style={{ color: p.color }}>{p.logo}</span>
+              <span className="text-3xl leading-none" style={{ color: p.color }}>{p.logo}</span>
             )}
           </span>
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-400 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white group-hover:translate-x-0.5">
@@ -1540,11 +1540,13 @@ export default function CertificacionesView() {
         {view === 'exams' && selectedProvider && (
           <>
             <div className="flex items-center gap-3">
-              {selectedProvider.logoImg ? (
-                <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="h-9 w-auto object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
-              ) : (
-                <span className="text-3xl" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
-              )}
+              <span className="inline-flex h-11 items-center rounded-xl bg-white/10 px-2.5 ring-1 ring-inset ring-white/15 backdrop-blur-md">
+                {selectedProvider.logoImg ? (
+                  <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="h-6 w-auto max-w-[130px] object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
+                ) : (
+                  <span className="text-2xl leading-none" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
+                )}
+              </span>
               <div>
                 <h2 className="text-lg font-bold text-white">{selectedProvider.name}</h2>
                 <p className="text-xs text-slate-500">{selectedProvider.exams.length} exámenes · {selectedProvider.exams.filter(e => e.dataFile).length} disponibles</p>
@@ -1562,11 +1564,13 @@ export default function CertificacionesView() {
         {view === 'viewer' && selectedProvider && selectedExam && (
           <>
             <div className="flex items-center gap-3 pb-2 border-b border-border">
-              {selectedProvider.logoImg ? (
-                <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="h-7 w-auto object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
-              ) : (
-                <span className="text-2xl" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
-              )}
+              <span className="inline-flex h-9 items-center rounded-lg bg-white/10 px-2 ring-1 ring-inset ring-white/15 backdrop-blur-md">
+                {selectedProvider.logoImg ? (
+                  <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="h-5 w-auto max-w-[110px] object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
+                ) : (
+                  <span className="text-xl leading-none" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
+                )}
+              </span>
               <div>
                 <h2 className="text-base font-bold text-white">{selectedExam.code} — {selectedExam.name}</h2>
                 <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${LEVEL_COLOR[selectedExam.level]}`}>
