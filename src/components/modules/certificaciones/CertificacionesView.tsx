@@ -294,14 +294,12 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
     >
       <div className="flex items-start justify-between mb-4">
         {p.logoImg ? (
-          <span className="inline-flex items-center justify-center h-12 px-2.5 rounded-lg bg-white/95 shadow-sm">
-            <img
-              src={p.logoImg}
-              alt={`Logo ${p.name}`}
-              className="max-h-8 w-auto object-contain"
-              onError={e => { e.currentTarget.style.display = 'none' }}
-            />
-          </span>
+          <img
+            src={p.logoImg}
+            alt={`Logo ${p.name}`}
+            className="h-11 w-auto object-contain"
+            onError={e => { e.currentTarget.style.display = 'none' }}
+          />
         ) : (
           <span className="text-4xl" style={{ color: p.color }}>{p.logo}</span>
         )}
@@ -1505,9 +1503,7 @@ export default function CertificacionesView() {
           <>
             <div className="flex items-center gap-3">
               {selectedProvider.logoImg ? (
-                <span className="inline-flex items-center justify-center h-10 px-2 rounded-lg bg-white/95 shadow-sm">
-                  <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="max-h-6 w-auto object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
-                </span>
+                <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="h-9 w-auto object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
               ) : (
                 <span className="text-3xl" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
               )}
@@ -1529,9 +1525,7 @@ export default function CertificacionesView() {
           <>
             <div className="flex items-center gap-3 pb-2 border-b border-border">
               {selectedProvider.logoImg ? (
-                <span className="inline-flex items-center justify-center h-9 px-1.5 rounded-lg bg-white/95 shadow-sm">
-                  <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="max-h-5 w-auto object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
-                </span>
+                <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="h-7 w-auto object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
               ) : (
                 <span className="text-2xl" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
               )}
