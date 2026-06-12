@@ -15,11 +15,11 @@ import {
   BookOpen,
   LogOut,
   ChevronDown,
-  Search,
+  PanelLeft,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 /* ── Estructura de navegación por secciones ──────────────────────────── */
@@ -65,16 +65,40 @@ const SECTIONS: NavSection[] = [
   },
 ];
 
+type SidebarMode = "expanded" | "collapsed" | "hover";
+const MODE_ORDER: SidebarMode[] = ["expanded", "collapsed", "hover"];
+const MODE_LABEL: Record<SidebarMode, string> = {
+  expanded:  "Expandido",
+  collapsed: "Colapsado",
+  hover:     "Hover",
+};
+
 export default function Sidebar() {
   const pathname = usePathname();
   const router   = useRouter();
 
-  const [collapsed, setCollapsed] = useState(false);
-  const [isAdmin, setIsAdmin]     = useState(false);
-  const [email, setEmail]         = useState<string>("");
-  const [query, setQuery]         = useState("");
+  const [mode, setMode]       = useState<SidebarMode>("expanded");
+  const [hovered, setHovered] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [email, setEmail]     = useState<string>("");
   const [closedSections, setClosedSections] = useState<Record<string, boolean>>({});
-  const searchRef = useRef<HTMLInputElement>(null);
+
+  // En modo hover el sidebar se expande solo al pasar el cursor
+  const collapsed = mode === "collapsed" || (mode === "hover" && !hovered);
+  // El espacio reservado en el layout (footprint): hover y collapsed ocupan 68px
+  const footprintW = mode === "expanded" ? 240 : 68;
+  const overlaying = mode === "hover" && hovered;
+
+  function cycleMode() {
+    setMode((m) => MODE_ORDER[(MODE_ORDER.indexOf(m) + 1) % MODE_ORDER.length]);
+  }
+
+  // Persistencia de la preferencia de modo
+  useEffect(() => {
+    const saved = localStorage.getItem("sidebarMode") as SidebarMode | null;
+    if (saved && MODE_ORDER.includes(saved)) setMode(saved);
+  }, []);
+  useEffect(() => { localStorage.setItem("sidebarMode", mode); }, [mode]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -84,19 +108,6 @@ export default function Sidebar() {
       setEmail(user?.email ?? "");
     });
   }, []);
-
-  // Atajo ⌘K / Ctrl+K → enfocar buscador
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        if (collapsed) setCollapsed(false);
-        searchRef.current?.focus();
-      }
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [collapsed]);
 
   async function handleLogout() {
     const supabase = createClient();
@@ -108,31 +119,31 @@ export default function Sidebar() {
     setClosedSections((p) => ({ ...p, [id]: !p[id] }));
   }
 
-  const q = query.trim().toLowerCase();
-  const searching = q.length > 0;
-
-  // Secciones filtradas por rol + búsqueda
+  // Secciones filtradas por rol
   const sections = useMemo(() => {
     return SECTIONS
       .map((sec) => ({
         ...sec,
-        items: sec.items.filter(
-          (it) => (!it.adminOnly || isAdmin) && (!searching || it.label.toLowerCase().includes(q))
-        ),
+        items: sec.items.filter((it) => !it.adminOnly || isAdmin),
       }))
       .filter((sec) => sec.items.length > 0);
-  }, [isAdmin, searching, q]);
+  }, [isAdmin]);
 
   const initials = email
     ? email.split("@")[0].split(/[.\-_]/).slice(0, 2).map((s) => s[0]?.toUpperCase() ?? "").join("")
     : "·";
 
+  const ModeIcon = mode === "expanded" ? PanelLeftClose : mode === "collapsed" ? PanelLeftOpen : PanelLeft;
+
   return (
-    <aside
-      className={`sidebar-font flex flex-col h-screen bg-[#0a0b0f] text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out shrink-0 ${
-        collapsed ? "w-[68px]" : "w-60"
-      }`}
-    >
+    <div className="relative shrink-0 h-screen transition-all duration-300 ease-in-out" style={{ width: footprintW }}>
+      <aside
+        onMouseEnter={() => mode === "hover" && setHovered(true)}
+        onMouseLeave={() => mode === "hover" && setHovered(false)}
+        className={`sidebar-font absolute inset-y-0 left-0 z-30 flex flex-col h-screen bg-[#0a0b0f] text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
+          collapsed ? "w-[68px]" : "w-60"
+        } ${overlaying ? "shadow-2xl shadow-black/60" : ""}`}
+      >
       {/* ── Brand / workspace ── */}
       <div className="flex items-center gap-2 px-3 py-3.5">
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
@@ -154,42 +165,18 @@ export default function Sidebar() {
           )}
         </div>
         <button
-          onClick={() => setCollapsed((p) => !p)}
-          title={collapsed ? "Expandir" : "Colapsar"}
+          onClick={cycleMode}
+          title={`Vista: ${MODE_LABEL[mode]} · clic para cambiar`}
           className="shrink-0 p-1.5 rounded-lg text-slate-500 hover:bg-white/[0.06] hover:text-slate-200 transition-colors"
         >
-          {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
+          <ModeIcon size={16} />
         </button>
       </div>
-
-      {/* ── Buscador ── */}
-      {!collapsed && (
-        <div className="px-3 pb-2">
-          <div className="flex items-center gap-2 rounded-lg bg-white/[0.04] border border-white/[0.06] px-2.5 py-2 focus-within:border-blue-500/50 focus-within:bg-white/[0.06] transition-colors">
-            <Search size={14} className="text-slate-500 shrink-0" />
-            <input
-              ref={searchRef}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Buscar…"
-              className="flex-1 min-w-0 bg-transparent text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none"
-            />
-            {query ? (
-              <button onClick={() => setQuery("")} className="text-[10px] text-slate-500 hover:text-slate-300 shrink-0">esc</button>
-            ) : (
-              <span className="flex items-center gap-0.5 shrink-0">
-                <kbd className="text-[9px] font-medium text-slate-500 bg-white/[0.06] rounded px-1 py-0.5 leading-none">⌘</kbd>
-                <kbd className="text-[9px] font-medium text-slate-500 bg-white/[0.06] rounded px-1 py-0.5 leading-none">K</kbd>
-              </span>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* ── Navegación ── */}
       <nav className="sidebar-scroll flex-1 px-2 py-1.5 space-y-3 overflow-y-auto">
         {sections.map((sec) => {
-          const closed = !searching && !!closedSections[sec.id];
+          const closed = !!closedSections[sec.id];
           return (
             <div key={sec.id} className="space-y-0.5">
               {sec.header && !collapsed && (
@@ -232,10 +219,6 @@ export default function Sidebar() {
             </div>
           );
         })}
-
-        {searching && sections.length === 0 && (
-          <p className="px-3 py-4 text-xs text-slate-500 text-center">Sin coincidencias</p>
-        )}
       </nav>
 
       {/* ── Footer: usuario + logout ── */}
@@ -268,6 +251,7 @@ export default function Sidebar() {
           {!collapsed && <span className="truncate">Cerrar sesión</span>}
         </button>
       </div>
-    </aside>
+      </aside>
+    </div>
   );
 }
