@@ -158,19 +158,9 @@ export default function Sidebar() {
             />
           </div>
           {!collapsed && (
-            <div className="flex items-center gap-1 min-w-0">
-              <span className="text-sm font-semibold tracking-tight text-white truncate">GD-DatosHub</span>
-              <ChevronDown size={14} className="text-slate-500 shrink-0" />
-            </div>
+            <span className="text-sm font-semibold tracking-tight text-white truncate">GD-DatosHub</span>
           )}
         </div>
-        <button
-          onClick={cycleMode}
-          title={`Vista: ${MODE_LABEL[mode]} · clic para cambiar`}
-          className="shrink-0 p-1.5 rounded-lg text-slate-500 hover:bg-white/[0.06] hover:text-slate-200 transition-colors"
-        >
-          <ModeIcon size={16} />
-        </button>
       </div>
 
       {/* ── Navegación ── */}
@@ -221,8 +211,18 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* ── Footer: usuario + logout ── */}
+      {/* ── Footer: modo + usuario + logout ── */}
       <div className="px-2 py-2.5 border-t border-white/[0.06] space-y-1.5">
+        <button
+          onClick={cycleMode}
+          title={`Vista: ${MODE_LABEL[mode]} · clic para cambiar`}
+          className={`flex w-full items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-400 hover:bg-white/[0.05] hover:text-slate-200 transition-colors ${
+            collapsed ? "justify-center" : ""
+          }`}
+        >
+          <ModeIcon size={18} className="shrink-0" />
+          {!collapsed && <span className="truncate">Vista · {MODE_LABEL[mode]}</span>}
+        </button>
         {!collapsed ? (
           <div className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg">
             <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 text-[11px] font-bold text-white shrink-0">
