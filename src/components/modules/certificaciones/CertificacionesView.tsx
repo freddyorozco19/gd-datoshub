@@ -291,29 +291,66 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
   return (
     <button
       onClick={onClick}
-      className={`relative w-full text-left bg-gradient-to-br ${p.bgGradient} border border-white/10 rounded-2xl p-6 hover:border-white/25 hover:scale-[1.02] transition-all duration-200 group`}
+      className={`group relative w-full text-left overflow-hidden rounded-2xl border border-white/10 p-6 transition-all duration-300
+        bg-gradient-to-br ${p.bgGradient}
+        hover:border-white/25 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50`}
     >
-      <div className="flex items-start justify-between mb-4">
-        {p.logoImg ? (
-          <img
-            src={p.logoImg}
-            alt={`Logo ${p.name}`}
-            className="h-11 w-auto object-contain"
-            onError={e => { e.currentTarget.style.display = 'none' }}
-          />
-        ) : (
-          <span className="text-4xl" style={{ color: p.color }}>{p.logo}</span>
-        )}
-        <ChevronRight size={16} className="text-slate-600 group-hover:text-slate-400 transition-colors mt-1" />
-      </div>
-      <h3 className="text-lg font-bold text-white mb-1">{p.name}</h3>
-      <p className="text-xs text-slate-500">{p.exams.length} exámenes</p>
-      {available > 0 && (
-        <div className="mt-3 inline-flex items-center gap-1.5 bg-emerald-900/40 border border-emerald-800/50 rounded-full px-2.5 py-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[11px] text-emerald-400 font-medium">{available} disponible{available > 1 ? 's' : ''}</span>
+      {/* resplandor de marca */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -top-20 -right-12 h-56 w-56 rounded-full blur-3xl opacity-20 group-hover:opacity-35 transition-opacity duration-500"
+        style={{ background: p.color }}
+      />
+
+      <div className="relative flex h-full flex-col">
+        {/* ── top: logo + flecha ── */}
+        <div className="flex items-start justify-between">
+          <span className="flex h-12 items-center">
+            {p.logoImg ? (
+              <img
+                src={p.logoImg}
+                alt={`Logo ${p.name}`}
+                className="h-10 w-auto max-w-[150px] object-contain"
+                onError={e => { e.currentTarget.style.display = 'none' }}
+              />
+            ) : (
+              <span className="text-4xl" style={{ color: p.color }}>{p.logo}</span>
+            )}
+          </span>
+          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-400 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white group-hover:translate-x-0.5">
+            <ChevronRight size={15} />
+          </span>
         </div>
-      )}
+
+        {/* ── título + meta ── */}
+        <div className="mt-5">
+          <h3 className="text-lg font-bold text-white">{p.name}</h3>
+          <p className="mt-0.5 text-xs text-slate-400">
+            {p.exams.length} exámenes
+            {available > 0 && (
+              <span className="text-emerald-400"> · {available} disponible{available > 1 ? 's' : ''}</span>
+            )}
+          </p>
+        </div>
+
+        {/* ── chips de exámenes ── */}
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {p.exams.map(e => (
+            <span
+              key={e.id}
+              title={`${e.name}${e.dataFile ? ' · disponible' : ' · próximamente'}`}
+              className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 font-mono text-[10px] font-semibold transition-colors ${
+                e.dataFile
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                  : 'border-white/10 bg-white/[0.03] text-slate-500'
+              }`}
+            >
+              {e.dataFile && <span className="h-1 w-1 rounded-full bg-emerald-400" />}
+              {e.code}
+            </span>
+          ))}
+        </div>
+      </div>
     </button>
   )
 }
