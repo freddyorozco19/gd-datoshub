@@ -97,6 +97,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#EE3124',
     bgGradient: 'from-red-950 to-slate-900',
     logo: '🛡️',
+    logoImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Fortinet_logo.svg/3840px-Fortinet_logo.svg.png',
     exams: [
       { id: 'fcf',  code: 'FCF',   name: 'Certified Fundamentals in Cybersecurity', level: 'Fundamental'  },
       { id: 'nse4', code: 'NSE 4', name: 'Network Security Professional',           level: 'Associate'    },
