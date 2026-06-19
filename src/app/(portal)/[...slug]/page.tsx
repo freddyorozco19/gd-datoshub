@@ -1,12 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 import Topbar from "@/components/layout/Topbar";
 import StatsCard from "@/components/ui/StatsCard";
-import LeadsView from "@/components/modules/leads/LeadsView";
-import CMMIView from "@/components/modules/cmmi/CMMIView";
-import UsuariosView from "@/components/modules/usuarios/UsuariosView";
-import CertificacionesView from "@/components/modules/certificaciones/CertificacionesView";
 import {
   Users, CalendarDays, Plug2, FolderOpen, ShieldCheck, TrendingUp,
   Plus, RefreshCw, Search, Clock, CheckCircle2, XCircle, Minus,
@@ -16,6 +13,24 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   LineChart, Line, CartesianGrid,
 } from "recharts";
+
+/* ─── Fallback de carga para vistas con code-splitting ───────────────── */
+function ViewLoading() {
+  return (
+    <div className="flex h-full items-center justify-center bg-[#07070F]">
+      <div className="flex items-center gap-3 text-slate-500">
+        <RefreshCw size={18} className="animate-spin" />
+        <span className="text-sm">Cargando…</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Vistas pesadas cargadas bajo demanda (chunks separados) ─────────── */
+const LeadsView          = dynamic(() => import("@/components/modules/leads/LeadsView"),                   { loading: ViewLoading });
+const CMMIView           = dynamic(() => import("@/components/modules/cmmi/CMMIView"),                     { loading: ViewLoading });
+const UsuariosView       = dynamic(() => import("@/components/modules/usuarios/UsuariosView"),             { loading: ViewLoading });
+const CertificacionesView = dynamic(() => import("@/components/modules/certificaciones/CertificacionesView"), { loading: ViewLoading });
 
 /* ─── DATOS MOCK ─────────────────────────────────────────────────── */
 
@@ -331,7 +346,7 @@ function RepositoriosView() {
 
 /* ─── ROUTER PRINCIPAL ───────────────────────────────────────────── */
 
-const VIEWS: Record<string, React.FC> = {
+const VIEWS: Record<string, React.ComponentType> = {
   "/dashboard":       DashboardView,
   "/leads":           LeadsView,
   "/reuniones":       ReunionesView,

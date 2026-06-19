@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -18,6 +18,7 @@ import {
   PanelLeft,
   PanelLeftClose,
   PanelLeftOpen,
+  Loader2,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -33,6 +34,18 @@ interface NavSection {
   id: string;
   header: string | null;
   items: NavItem[];
+}
+
+/* Spinner que reacciona al estado de navegación del Link contenedor */
+function NavSpinner() {
+  const { pending } = useLinkStatus();
+  if (!pending) return null;
+  return (
+    <Loader2
+      size={13}
+      className="absolute right-1.5 top-1/2 -translate-y-1/2 animate-spin text-blue-300"
+    />
+  );
 }
 
 const SECTIONS: NavSection[] = [
@@ -200,6 +213,7 @@ export default function Sidebar() {
                   >
                     <Icon size={18} className={`shrink-0 ${active ? "text-white" : "text-slate-500 group-hover:text-slate-300"}`} />
                     {!collapsed && <span className="truncate">{label}</span>}
+                    <NavSpinner />
                     {active && (
                       <span className="absolute right-[-7px] top-1/2 -translate-y-1/2 h-4 w-[3px] rounded-full bg-blue-300 shadow-[0_0_8px_1px_rgba(147,197,253,0.9)]" />
                     )}
