@@ -140,9 +140,9 @@ export default function Sidebar() {
       <aside
         onMouseEnter={() => mode === "hover" && setHovered(true)}
         onMouseLeave={() => mode === "hover" && setHovered(false)}
-        className={`sidebar-font absolute inset-y-0 left-0 z-30 flex flex-col h-screen bg-[#0a0b0f] text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
+        className={`sidebar-font flex flex-col h-screen bg-[#0a0b0f] text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
           collapsed ? "w-[68px]" : "w-60"
-        } ${overlaying ? "shadow-2xl shadow-black/60" : ""}`}
+        } ${mode === "hover" ? `absolute inset-y-0 left-0 z-40 ${overlaying ? "shadow-2xl shadow-black/60" : ""}` : "h-screen"}`}
       >
       {/* ── Brand / workspace ── */}
       <div className={`flex items-center gap-2 px-3 py-3.5 ${collapsed ? "justify-center" : ""}`}>
