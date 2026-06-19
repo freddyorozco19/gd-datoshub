@@ -1499,7 +1499,7 @@ export default function CertificacionesView() {
 
   return (
     <div className="h-full overflow-auto bg-[#07070F]">
-      <div className="px-8 py-6 w-full space-y-6 max-w-screen-xl mx-auto">
+      <div className="px-5 py-5 w-full space-y-4">
 
         {/* Page header */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -1528,12 +1528,9 @@ export default function CertificacionesView() {
 
         {/* ── Nivel 1: Proveedores ── */}
         {view === 'providers' && (
-          <>
-            <p className="text-sm text-slate-500">Selecciona un proveedor para ver los exámenes disponibles.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {PROVIDERS.map(p => <ProviderCard key={p.id} p={p} onClick={() => selectProvider(p)} />)}
-            </div>
-          </>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {PROVIDERS.map(p => <ProviderCard key={p.id} p={p} onClick={() => selectProvider(p)} />)}
+          </div>
         )}
 
         {/* ── Nivel 2: Exámenes ── */}
