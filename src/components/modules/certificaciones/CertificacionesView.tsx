@@ -1804,31 +1804,29 @@ export default function CertificacionesView() {
 
   return (
     <div className="flex flex-col h-full overflow-auto bg-[#07070F]">
-      <Topbar title="Certificaciones" />
+      <Topbar
+        title="Certificaciones"
+        tabs={([
+          { id: 'catalogo' as MainTab,  label: 'Catálogo',  icon: LayoutGrid },
+          { id: 'registros' as MainTab, label: 'Registros', icon: ListChecks },
+        ]).map(({ id, label, icon: Icon }) => {
+          const active = id === mainTab
+          return (
+            <button
+              key={id}
+              onClick={() => setMainTab(id)}
+              className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b transition-colors ${
+                active
+                  ? 'border-blue-500 text-blue-400'
+                  : 'border-transparent text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              <Icon size={13} /> {label}
+            </button>
+          )
+        })}
+      />
       <div className="px-5 py-5 w-full space-y-4">
-
-        {/* Sub-navegación */}
-        <div className="flex items-center gap-1.5 border-b border-white/[0.07]">
-          {([
-            { id: 'catalogo' as MainTab,  label: 'Catálogo',  icon: LayoutGrid },
-            { id: 'registros' as MainTab, label: 'Registros', icon: ListChecks },
-          ]).map(({ id, label, icon: Icon }) => {
-            const active = id === mainTab
-            return (
-              <button
-                key={id}
-                onClick={() => setMainTab(id)}
-                className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
-                  active
-                    ? 'border-blue-500 text-blue-400'
-                    : 'border-transparent text-slate-500 hover:text-slate-300 hover:border-white/20'
-                }`}
-              >
-                <Icon size={15} /> {label}
-              </button>
-            )
-          })}
-        </div>
 
         {mainTab === 'registros' && <RegistrosPanel />}
 
