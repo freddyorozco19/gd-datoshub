@@ -18,25 +18,39 @@ export default function SetPasswordPage() {
   useEffect(() => {
     const supabase = createClient();
 
-    // El SDK procesa el access_token/refresh_token del hash de la URL al inicializarse
-    // (detectSessionInUrl). onAuthStateChange cubre el caso en que esa detección termine
-    // después del primer getSession(); getSession() cubre el caso en que ya haya terminado.
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setHasSession(!!session);
-      setChecking(false);
-      if (session && typeof window !== "undefined" && window.location.hash) {
-        window.history.replaceState(null, "", window.location.pathname);
+    async function init() {
+      // @supabase/ssr fuerza flowType: "pkce" en el cliente del navegador, así que
+      // detectSessionInUrl SOLO sabe leer ?code=. Los links generados por el Admin API
+      // (invite/magiclink, sin un client-side code_challenge previo) usan flujo implícito
+      // y vienen con #access_token=...&refresh_token=... en el hash — hay que leerlos a mano.
+      const hash = typeof window !== "undefined" ? window.location.hash.slice(1) : "";
+      const params = new URLSearchParams(hash);
+      const accessToken = params.get("access_token");
+      const refreshToken = params.get("refresh_token");
+
+      if (params.get("error")) {
+        setChecking(false);
+        return;
       }
-    });
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) { setHasSession(true); setChecking(false); }
-    });
+      if (accessToken && refreshToken) {
+        const { data, error } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+        window.history.replaceState(null, "", window.location.pathname);
+        setHasSession(!!data.session && !error);
+        setChecking(false);
+        return;
+      }
 
-    // Si tras unos segundos no hay sesión (link inválido/expirado), deja de mostrar el loader.
-    const timeout = setTimeout(() => setChecking(false), 4000);
+      // Fallback: ya había una sesión activa (o el SDK la detectó por otra vía).
+      const { data } = await supabase.auth.getSession();
+      setHasSession(!!data.session);
+      setChecking(false);
+    }
 
-    return () => { sub.subscription.unsubscribe(); clearTimeout(timeout); };
+    init();
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
