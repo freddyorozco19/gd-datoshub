@@ -156,3 +156,27 @@ export async function PATCH(req: NextRequest) {
     role: u.app_metadata?.role === "admin" ? "admin" : "user",
   });
 }
+
+/** DELETE — elimina un usuario (solo admin). */
+export async function DELETE(req: NextRequest) {
+  const admin = await requireAdmin();
+  if (!admin) {
+    return Response.json({ error: "Acceso restringido a administradores." }, { status: 403 });
+  }
+
+  const id = new URL(req.url).searchParams.get("id");
+  if (!id) {
+    return Response.json({ error: "Parámetro 'id' requerido." }, { status: 400 });
+  }
+
+  // Evita que el admin se elimine a sí mismo y se bloquee fuera.
+  if (id === admin.id) {
+    return Response.json({ error: "No puedes eliminar tu propia cuenta." }, { status: 409 });
+  }
+
+  const res = await adminFetch(`/users/${id}`, { method: "DELETE" });
+  if (!res.ok) {
+    return Response.json({ error: "No se pudo eliminar el usuario." }, { status: 502 });
+  }
+  return Response.json({ id, deleted: true });
+}

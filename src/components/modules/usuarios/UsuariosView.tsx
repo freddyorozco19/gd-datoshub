@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   Users, Shield, User as UserIcon, Loader2, AlertCircle, RefreshCw, Clock,
-  History, Globe, Monitor, CheckCircle2, XCircle, UserPlus, X, Mail,
+  History, Globe, Monitor, CheckCircle2, XCircle, UserPlus, X, Mail, Trash2,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 
@@ -187,12 +187,78 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
   );
 }
 
+function DeleteUserModal({
+  user, onClose, onDeleted,
+}: { user: UserRow; onClose: () => void; onDeleted: (id: string) => void }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function confirmDelete() {
+    setLoading(true); setError(null);
+    try {
+      const res = await fetch(`/api/admin/users?id=${encodeURIComponent(user.id)}`, { method: "DELETE" });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
+      onDeleted(user.id);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo eliminar el usuario.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-[#0e0e1c] shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
+              <Trash2 size={15} className="text-rose-400" />
+            </div>
+            <h3 className="text-sm font-semibold text-white">Eliminar usuario</h3>
+          </div>
+          <button onClick={onClose} className="text-slate-600 hover:text-slate-300 transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="px-6 py-5 space-y-4">
+          <p className="text-sm text-slate-400">
+            ¿Seguro que quieres eliminar a <span className="text-slate-200 font-medium">{user.email}</span>? Esta acción no se puede deshacer.
+          </p>
+
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2.5 text-xs text-rose-400">
+              <AlertCircle size={14} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+
+          <div className="flex items-center justify-end gap-3 pt-1">
+            <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-slate-200 transition-colors">
+              Cancelar
+            </button>
+            <button
+              onClick={confirmDelete}
+              disabled={loading}
+              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-sm text-white font-medium disabled:opacity-60 transition-colors"
+            >
+              {loading ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function UsuariosPanel() {
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [showInvite, setShowInvite] = useState(false);
+  const [deletingUser, setDeletingUser] = useState<UserRow | null>(null);
 
   async function load() {
     setLoading(true); setError(null);
@@ -269,6 +335,14 @@ function UsuariosPanel() {
         />
       )}
 
+      {deletingUser && (
+        <DeleteUserModal
+          user={deletingUser}
+          onClose={() => setDeletingUser(null)}
+          onDeleted={(id) => { setUsers((prev) => prev.filter((u) => u.id !== id)); setDeletingUser(null); }}
+        />
+      )}
+
       {error && (
         <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
           <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
@@ -327,6 +401,14 @@ function UsuariosPanel() {
                         <option value="admin">Administrador</option>
                       </select>
                       {savingId === u.id && <Loader2 size={14} className="animate-spin text-slate-500" />}
+                      <button
+                        onClick={() => setDeletingUser(u)}
+                        disabled={u.isSelf}
+                        title={u.isSelf ? "No puedes eliminar tu propia cuenta" : "Eliminar usuario"}
+                        className="p-1.5 rounded-lg text-slate-500 border border-white/[0.07] hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <Trash2 size={13} />
+                      </button>
                     </div>
                   </td>
                 </tr>
