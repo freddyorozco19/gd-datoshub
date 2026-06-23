@@ -6,6 +6,7 @@ import {
   ImageIcon, Filter, RefreshCw, ChevronRight, ArrowLeft, Lock,
   Eye, EyeOff, RotateCcw, ExternalLink,
   Play, Clock, Trophy, X, GraduationCap, AlertTriangle,
+  ListChecks, Pencil, Loader2, LayoutGrid,
 } from 'lucide-react'
 import Topbar from '@/components/layout/Topbar'
 
@@ -1483,6 +1484,279 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
   )
 }
 
+// ─── Registros (catálogo plano, editable) ────────────────────────────────────
+
+type Estado = 'disponible' | 'proximamente' | 'descontinuado'
+
+interface ExamMeta {
+  exam_id: string
+  url: string | null
+  estado: Estado
+}
+
+interface FlatExam {
+  examId: string       // p.providerId-exam.id, único global
+  code: string
+  name: string
+  level: string
+  providerName: string
+  providerColor: string
+  defaultEstado: Estado
+}
+
+const ESTADO_LABEL: Record<Estado, string> = {
+  disponible:    'Disponible',
+  proximamente:  'Próximamente',
+  descontinuado: 'Descontinuado',
+}
+const ESTADO_COLOR: Record<Estado, string> = {
+  disponible:    'text-emerald-400 bg-emerald-900/30 border-emerald-800',
+  proximamente:  'text-amber-400   bg-amber-900/30   border-amber-800',
+  descontinuado: 'text-slate-400   bg-slate-800/50    border-slate-700',
+}
+
+function flattenExams(): FlatExam[] {
+  return PROVIDERS.flatMap(p =>
+    p.exams.map(e => ({
+      examId: `${p.id}__${e.id}`,
+      code: e.code,
+      name: e.name,
+      level: e.level,
+      providerName: p.alias ? `${p.name} (${p.alias})` : p.name,
+      providerColor: p.color,
+      defaultEstado: (e.dataFile ? 'disponible' : 'proximamente') as Estado,
+    }))
+  )
+}
+
+function EditExamModal({
+  exam, onClose, onSaved,
+}: {
+  exam: FlatExam & { meta?: ExamMeta }
+  onClose: () => void
+  onSaved: (meta: ExamMeta) => void
+}) {
+  const [url, setUrl] = useState(exam.meta?.url ?? '')
+  const [estado, setEstado] = useState<Estado>(exam.meta?.estado ?? exam.defaultEstado)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function save() {
+    setSaving(true); setError(null)
+    try {
+      const res = await fetch('/api/admin/certification-meta', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ exam_id: exam.examId, url: url.trim() || null, estado }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || `Error ${res.status}`)
+      onSaved(json.meta as ExamMeta)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'No se pudo guardar.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-[#0e0e1c] shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
+          <div>
+            <h3 className="text-sm font-semibold text-white">{exam.code}</h3>
+            <p className="text-[11px] text-slate-500 mt-0.5">{exam.name}</p>
+          </div>
+          <button onClick={onClose} className="text-slate-600 hover:text-slate-300 transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="px-6 py-5 space-y-4">
+          <div>
+            <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">URL</label>
+            <input
+              type="url"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              placeholder="https://learn.microsoft.com/..."
+              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors"
+            />
+          </div>
+          <div>
+            <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Estado</label>
+            <select
+              value={estado}
+              onChange={e => setEstado(e.target.value as Estado)}
+              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors"
+            >
+              <option value="disponible">Disponible</option>
+              <option value="proximamente">Próximamente</option>
+              <option value="descontinuado">Descontinuado</option>
+            </select>
+          </div>
+
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2.5 text-xs text-rose-400">
+              <AlertTriangle size={14} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+
+          <div className="flex items-center justify-end gap-3 pt-1">
+            <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-slate-200 transition-colors">
+              Cancelar
+            </button>
+            <button
+              onClick={save}
+              disabled={saving}
+              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium disabled:opacity-60 transition-colors"
+            >
+              {saving ? <Loader2 size={14} className="animate-spin" /> : <Pencil size={14} />}
+              Guardar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function RegistrosPanel() {
+  const allExams = useMemo(() => flattenExams(), [])
+  const [metaMap, setMetaMap] = useState<Record<string, ExamMeta>>({})
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [needsSetup, setNeedsSetup] = useState(false)
+  const [search, setSearch] = useState('')
+  const [editing, setEditing] = useState<FlatExam | null>(null)
+
+  async function load() {
+    setLoading(true); setError(null); setNeedsSetup(false)
+    try {
+      const res = await fetch('/api/admin/certification-meta')
+      const json = await res.json()
+      if (!res.ok) {
+        if (json.needsSetup) { setNeedsSetup(true); return }
+        throw new Error(json.error || `Error ${res.status}`)
+      }
+      const map: Record<string, ExamMeta> = {}
+      for (const m of (json.meta ?? []) as ExamMeta[]) map[m.exam_id] = m
+      setMetaMap(map)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'No se pudo cargar el registro.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { load() }, [])
+
+  const filtered = allExams.filter(e => {
+    const q = search.toLowerCase().trim()
+    if (!q) return true
+    return [e.code, e.name, e.providerName].join(' ').toLowerCase().includes(q)
+  })
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3 flex-wrap">
+        <div className="relative flex-1 min-w-48">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <input
+            type="text" value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Buscar código, nombre o proveedor..."
+            className="w-full bg-surface border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/60 transition-colors"
+          />
+        </div>
+        <span className="text-xs text-slate-500">{filtered.length} de {allExams.length} registros</span>
+      </div>
+
+      {needsSetup && (
+        <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
+          <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+          La tabla de registros aún no está creada en Supabase. Pide al administrador que ejecute el SQL de configuración inicial.
+        </div>
+      )}
+
+      {error && (
+        <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+          <AlertTriangle size={16} className="shrink-0 mt-0.5" /> {error}
+        </div>
+      )}
+
+      <div className="bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
+        <div className="overflow-x-auto max-h-[65vh]">
+          <table className="w-full text-sm">
+            <thead className="sticky top-0 z-10">
+              <tr className="bg-[#0e0e1c] border-b border-white/[0.07]">
+                {['Código', 'Nombre', 'Proveedor', 'Nivel', 'Estado', 'URL', 'Acción'].map(h => (
+                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/[0.04]">
+              {loading && (
+                <tr><td colSpan={7} className="px-4 py-12 text-center text-slate-500">
+                  <Loader2 size={20} className="animate-spin inline" /> <span className="ml-2 align-middle">Cargando registros…</span>
+                </td></tr>
+              )}
+              {!loading && filtered.map(e => {
+                const meta = metaMap[e.examId]
+                const estado = meta?.estado ?? e.defaultEstado
+                const url = meta?.url ?? null
+                return (
+                  <tr key={e.examId} className="hover:bg-white/[0.03] transition-colors">
+                    <td className="px-4 py-3 font-mono font-bold text-xs" style={{ color: e.providerColor }}>{e.code}</td>
+                    <td className="px-4 py-3 text-slate-300 max-w-[260px] truncate" title={e.name}>{e.name}</td>
+                    <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">{e.providerName}</td>
+                    <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{e.level}</td>
+                    <td className="px-4 py-3">
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${ESTADO_COLOR[estado]}`}>
+                        {ESTADO_LABEL[estado]}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-xs max-w-[200px]">
+                      {url ? (
+                        <a href={url} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-blue-400 hover:text-blue-300 truncate transition-colors">
+                          <ExternalLink size={11} className="shrink-0" /> <span className="truncate">{url}</span>
+                        </a>
+                      ) : <span className="text-slate-600">—</span>}
+                    </td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => setEditing(e)}
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] hover:text-white transition-colors"
+                      >
+                        <Pencil size={12} /> Editar
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+              {!loading && filtered.length === 0 && !needsSetup && (
+                <tr><td colSpan={7} className="px-4 py-12 text-center text-sm text-slate-500">Sin resultados.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {editing && (
+        <EditExamModal
+          exam={{ ...editing, meta: metaMap[editing.examId] }}
+          onClose={() => setEditing(null)}
+          onSaved={(meta) => {
+            setMetaMap(prev => ({ ...prev, [meta.exam_id]: meta }))
+            setEditing(null)
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
 // ─── Breadcrumb ───────────────────────────────────────────────────────────────
 
 function Breadcrumb({ provider, exam, onGoRoot, onGoProvider }: {
@@ -1515,8 +1789,10 @@ function Breadcrumb({ provider, exam, onGoRoot, onGoProvider }: {
 // ─── Main view ────────────────────────────────────────────────────────────────
 
 type View = 'providers' | 'exams' | 'viewer'
+type MainTab = 'catalogo' | 'registros'
 
 export default function CertificacionesView() {
+  const [mainTab, setMainTab] = useState<MainTab>('catalogo')
   const [view, setView] = useState<View>('providers')
   const [selectedProvider, setSelectedProvider] = useState<ProviderConfig | null>(null)
   const [selectedExam, setSelectedExam] = useState<ExamConfig | null>(null)
@@ -1531,6 +1807,33 @@ export default function CertificacionesView() {
       <Topbar title="Certificaciones" />
       <div className="px-5 py-5 w-full space-y-4">
 
+        {/* Sub-navegación */}
+        <div className="flex items-center gap-1.5 border-b border-white/[0.07]">
+          {([
+            { id: 'catalogo' as MainTab,  label: 'Catálogo',  icon: LayoutGrid },
+            { id: 'registros' as MainTab, label: 'Registros', icon: ListChecks },
+          ]).map(({ id, label, icon: Icon }) => {
+            const active = id === mainTab
+            return (
+              <button
+                key={id}
+                onClick={() => setMainTab(id)}
+                className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+                  active
+                    ? 'border-blue-500 text-blue-400'
+                    : 'border-transparent text-slate-500 hover:text-slate-300 hover:border-white/20'
+                }`}
+              >
+                <Icon size={15} /> {label}
+              </button>
+            )
+          })}
+        </div>
+
+        {mainTab === 'registros' && <RegistrosPanel />}
+
+        {mainTab === 'catalogo' && (
+        <>
         {/* Page header */}
         {view !== 'providers' && (
         <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -1607,6 +1910,8 @@ export default function CertificacionesView() {
             </div>
             <ExamViewer exam={selectedExam} provider={selectedProvider} />
           </>
+        )}
+        </>
         )}
 
       </div>
