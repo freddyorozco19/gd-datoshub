@@ -28,6 +28,7 @@ interface ProviderConfig {
   bgGradient: string      // gradiente de la card
   logo: string            // emoji o texto corto (fallback)
   logoImg?: string        // URL de logo de imagen (opcional, tiene prioridad)
+  alias?: string          // ej: "Azure" para Microsoft
   exams: ExamConfig[]
 }
 
@@ -39,6 +40,7 @@ const PROVIDERS: ProviderConfig[] = [
     bgGradient: 'from-blue-950 to-slate-900',
     logo: '⊞',
     logoImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPZEN2r056LDjjb6IT5qShwFPl4uJy1-BAgP0hGMmiqQ&s=10',
+    alias: 'Azure',
     exams: [
       { id: 'ai-100', code: 'AI-100', name: 'Designing/Implementing Azure AI Solution', level: 'Associate'   },
       { id: 'ai-102', code: 'AI-102', name: 'Azure AI Engineer',                        level: 'Associate'   },
@@ -1570,10 +1572,10 @@ export default function CertificacionesView() {
                   <span className="text-2xl leading-none" style={{ color: selectedProvider.color }}>{selectedProvider.logo}</span>
                 )}
               </span>
-              <div>
-                <h2 className="text-lg font-bold text-white">{selectedProvider.name}</h2>
-                <p className="text-xs text-slate-500">{selectedProvider.exams.length} exámenes · {selectedProvider.exams.filter(e => e.dataFile).length} disponibles</p>
-              </div>
+              <h2 className="text-lg font-bold text-white">
+                {selectedProvider.name}
+                {selectedProvider.alias && <span className="text-slate-500 font-normal"> ({selectedProvider.alias})</span>}
+              </h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5">
               {[...selectedProvider.exams]
