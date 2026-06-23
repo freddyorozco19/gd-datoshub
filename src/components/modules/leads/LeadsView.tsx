@@ -778,7 +778,6 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
       ) : (
         <div className="space-y-1.5">
           {recent.map((lead, i) => {
-            const palette = lineaColor[lead.linea] ?? LINE_PALETTE[0];
             const fecha = lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "";
             const hora  = lead.fechaCreacion && lead.fechaCreacion.length >= 16 ? lead.fechaCreacion.substring(11, 16) : "";
             return (
@@ -789,7 +788,6 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
                   <p className="text-xs font-medium text-slate-100 truncate leading-snug group-hover:text-violet-400 transition-colors" title={lead.nombre}>{lead.nombre}</p>
                   {lead.cliente && <p className="text-[10px] text-slate-400 truncate leading-tight mt-0.5">{lead.cliente}</p>}
                   <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                    {lead.linea && <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full leading-tight ${palette.badge}`}>{lead.linea}</span>}
                     {fecha && <span className="text-[9px] text-slate-400 leading-tight whitespace-nowrap">{fecha}{hora && <> · {hora}</>}</span>}
                   </div>
                 </div>
