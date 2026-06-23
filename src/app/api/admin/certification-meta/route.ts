@@ -48,14 +48,14 @@ export async function PATCH(req: NextRequest) {
     return Response.json({ error: "Debes iniciar sesión." }, { status: 401 });
   }
 
-  let body: { exam_id?: string; url?: string | null; estado?: string };
+  let body: { exam_id?: string; url?: string | null; estado?: string; expiracion?: string | null };
   try {
     body = await req.json();
   } catch {
     return Response.json({ error: "Cuerpo JSON inválido." }, { status: 400 });
   }
 
-  const { exam_id, url = null, estado } = body;
+  const { exam_id, url = null, estado, expiracion = null } = body;
   if (!exam_id || !estado || !ESTADOS.has(estado)) {
     return Response.json({ error: "Parámetros inválidos (exam_id y estado requeridos)." }, { status: 400 });
   }
@@ -63,7 +63,7 @@ export async function PATCH(req: NextRequest) {
   const res = await restFetch("/certification_exam_meta", {
     method: "POST",
     headers: { Prefer: "resolution=merge-duplicates,return=representation" },
-    body: JSON.stringify({ exam_id, url, estado, updated_at: new Date().toISOString() }),
+    body: JSON.stringify({ exam_id, url, estado, expiracion, updated_at: new Date().toISOString() }),
   });
 
   if (!res.ok) {

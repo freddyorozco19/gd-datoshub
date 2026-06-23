@@ -1492,6 +1492,7 @@ interface ExamMeta {
   exam_id: string
   url: string | null
   estado: Estado
+  expiracion: string | null
 }
 
 interface FlatExam {
@@ -1538,6 +1539,7 @@ function EditExamModal({
 }) {
   const [url, setUrl] = useState(exam.meta?.url ?? '')
   const [estado, setEstado] = useState<Estado>(exam.meta?.estado ?? exam.defaultEstado)
+  const [expiracion, setExpiracion] = useState(exam.meta?.expiracion ?? '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -1547,7 +1549,7 @@ function EditExamModal({
       const res = await fetch('/api/admin/certification-meta', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ exam_id: exam.examId, url: url.trim() || null, estado }),
+        body: JSON.stringify({ exam_id: exam.examId, url: url.trim() || null, estado, expiracion: expiracion || null }),
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || `Error ${res.status}`)
@@ -1594,6 +1596,15 @@ function EditExamModal({
               <option value="proximamente">Próximamente</option>
               <option value="descontinuado">Descontinuado</option>
             </select>
+          </div>
+          <div>
+            <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Expiración</label>
+            <input
+              type="date"
+              value={expiracion}
+              onChange={e => setExpiracion(e.target.value)}
+              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors [color-scheme:dark]"
+            />
           </div>
 
           {error && (
@@ -1690,14 +1701,14 @@ function RegistrosPanel() {
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#0e0e1c] border-b border-white/[0.07]">
-                {['Código', 'Nombre', 'Proveedor', 'Nivel', 'Estado', 'URL', 'Acción'].map(h => (
+                {['Código', 'Nombre', 'Proveedor', 'Nivel', 'Estado', 'Expiración', 'URL', 'Acción'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.04]">
               {loading && (
-                <tr><td colSpan={7} className="px-4 py-12 text-center text-slate-500">
+                <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-500">
                   <Loader2 size={20} className="animate-spin inline" /> <span className="ml-2 align-middle">Cargando registros…</span>
                 </td></tr>
               )}
@@ -1705,6 +1716,9 @@ function RegistrosPanel() {
                 const meta = metaMap[e.examId]
                 const estado = meta?.estado ?? e.defaultEstado
                 const url = meta?.url ?? null
+                const expiracion = meta?.expiracion ?? null
+                const isExpired = !!expiracion && new Date(expiracion) < new Date()
+                const isSoon = !!expiracion && !isExpired && (new Date(expiracion).getTime() - Date.now()) < 1000 * 60 * 60 * 24 * 60
                 return (
                   <tr key={e.examId} className="hover:bg-white/[0.03] transition-colors">
                     <td className="px-4 py-3 font-mono font-bold text-xs" style={{ color: e.providerColor }}>{e.code}</td>
@@ -1715,6 +1729,14 @@ function RegistrosPanel() {
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${ESTADO_COLOR[estado]}`}>
                         {ESTADO_LABEL[estado]}
                       </span>
+                    </td>
+                    <td className="px-4 py-3 text-xs whitespace-nowrap">
+                      {expiracion ? (
+                        <span className={isExpired ? 'text-rose-400 font-medium' : isSoon ? 'text-amber-400 font-medium' : 'text-slate-400'}>
+                          {new Date(expiracion).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })}
+                          {isExpired && ' · vencida'}
+                        </span>
+                      ) : <span className="text-slate-600">—</span>}
                     </td>
                     <td className="px-4 py-3 text-xs max-w-[200px]">
                       {url ? (
@@ -1736,7 +1758,7 @@ function RegistrosPanel() {
                 )
               })}
               {!loading && filtered.length === 0 && !needsSetup && (
-                <tr><td colSpan={7} className="px-4 py-12 text-center text-sm text-slate-500">Sin resultados.</td></tr>
+                <tr><td colSpan={8} className="px-4 py-12 text-center text-sm text-slate-500">Sin resultados.</td></tr>
               )}
             </tbody>
           </table>
