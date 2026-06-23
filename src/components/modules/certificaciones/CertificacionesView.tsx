@@ -7,6 +7,7 @@ import {
   Eye, EyeOff, RotateCcw, ExternalLink,
   Play, Clock, Trophy, X, GraduationCap, AlertTriangle,
 } from 'lucide-react'
+import Topbar from '@/components/layout/Topbar'
 
 // ─── Config de proveedores y exámenes ────────────────────────────────────────
 
@@ -39,10 +40,30 @@ const PROVIDERS: ProviderConfig[] = [
     logo: '⊞',
     logoImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPZEN2r056LDjjb6IT5qShwFPl4uJy1-BAgP0hGMmiqQ&s=10',
     exams: [
+      { id: 'ai-100', code: 'AI-100', name: 'Designing/Implementing Azure AI Solution', level: 'Associate'   },
+      { id: 'ai-102', code: 'AI-102', name: 'Azure AI Engineer',                        level: 'Associate'   },
+      { id: 'ai-900', code: 'AI-900', name: 'Azure AI Fundamentals',                    level: 'Fundamental' },
+      { id: 'az-100', code: 'AZ-100', name: 'Azure Infrastructure and Deployment',      level: 'Associate'   },
+      { id: 'az-103', code: 'AZ-103', name: 'Azure Administrator',                      level: 'Associate'   },
+      { id: 'az-104', code: 'AZ-104', name: 'Azure Administrator',                      level: 'Associate'   },
+      { id: 'az-120', code: 'AZ-120', name: 'Azure for SAP Workloads',                  level: 'Associate'   },
+      { id: 'az-140', code: 'AZ-140', name: 'Azure Virtual Desktop',                    level: 'Associate'   },
+      { id: 'az-203', code: 'AZ-203', name: 'Developing Solutions for Azure',           level: 'Associate'   },
+      { id: 'az-204', code: 'AZ-204', name: 'Azure Developer',                          level: 'Associate'   },
+      { id: 'az-220', code: 'AZ-220', name: 'Azure IoT Developer',                      level: 'Associate'   },
+      { id: 'az-300', code: 'AZ-300', name: 'Azure Architect Technologies',             level: 'Associate'   },
+      { id: 'az-301', code: 'AZ-301', name: 'Azure Architect Design',                   level: 'Associate'   },
+      { id: 'az-303', code: 'AZ-303', name: 'Azure Architect Technologies',             level: 'Associate'   },
+      { id: 'az-304', code: 'AZ-304', name: 'Azure Architect Design',                   level: 'Associate'   },
+      { id: 'az-305', code: 'AZ-305', name: 'Azure Solutions Architect',                level: 'Expert'      },
+      { id: 'az-400', code: 'AZ-400', name: 'DevOps Engineer',                          level: 'Expert'      },
+      { id: 'az-500', code: 'AZ-500', name: 'Azure Security Engineer',                  level: 'Associate'   },
+      { id: 'az-600', code: 'AZ-600', name: 'Azure Stack Hub Operator',                 level: 'Associate'   },
+      { id: 'az-700', code: 'AZ-700', name: 'Azure Network Engineer',                   level: 'Associate'   },
+      { id: 'az-720', code: 'AZ-720', name: 'Troubleshooting Azure Connectivity',       level: 'Associate'   },
+      { id: 'az-800', code: 'AZ-800', name: 'Windows Server Hybrid Core Infra.',        level: 'Associate'   },
+      { id: 'az-801', code: 'AZ-801', name: 'Windows Server Hybrid Adv. Services',      level: 'Associate'   },
       { id: 'az-900', code: 'AZ-900', name: 'Azure Fundamentals',         dataFile: '/data/exam_63.json', questions: 472, level: 'Fundamental',  examTopicsPath: 'microsoft/az-900' },
-      { id: 'az-104', code: 'AZ-104', name: 'Azure Administrator',        level: 'Associate'   },
-      { id: 'az-204', code: 'AZ-204', name: 'Azure Developer',            level: 'Associate'   },
-      { id: 'az-305', code: 'AZ-305', name: 'Azure Solutions Architect',  level: 'Expert'      },
     ],
   },
   {
@@ -362,30 +383,28 @@ function ExamCard({ exam, provider, onClick }: { exam: ExamConfig; provider: Pro
   return (
     <button
       onClick={available ? onClick : undefined}
-      className={`relative w-full text-left bg-surface border rounded-xl p-5 transition-all duration-200 ${
+      className={`relative w-full text-left bg-surface border rounded-lg p-3 transition-all duration-200 ${
         available
           ? 'border-border hover:border-white/25 hover:bg-white/5 cursor-pointer group'
           : 'border-border/50 opacity-50 cursor-not-allowed'
       }`}
     >
-      <div className="flex items-start justify-between mb-3">
-        <div>
-          <span className="text-xs font-mono font-bold" style={{ color: provider.color }}>{exam.code}</span>
-          <span className={`ml-2 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${LEVEL_COLOR[exam.level]}`}>
-            {exam.level}
-          </span>
-        </div>
+      <div className="flex items-start justify-between mb-1.5">
+        <span className="text-[11px] font-mono font-bold" style={{ color: provider.color }}>{exam.code}</span>
         {available
-          ? <ChevronRight size={15} className="text-slate-600 group-hover:text-slate-300 transition-colors" />
-          : <Lock size={13} className="text-slate-700" />
+          ? <ChevronRight size={13} className="text-slate-600 group-hover:text-slate-300 transition-colors" />
+          : <Lock size={11} className="text-slate-700" />
         }
       </div>
-      <h4 className="text-sm font-semibold text-slate-200 mb-2">{exam.name}</h4>
+      <h4 className="text-xs font-semibold text-slate-200 mb-1.5 leading-snug line-clamp-2">{exam.name}</h4>
+      <span className={`inline-block text-[9px] font-semibold px-1.5 py-0.5 rounded-full border ${LEVEL_COLOR[exam.level]}`}>
+        {exam.level}
+      </span>
       {available && exam.questions && (
-        <p className="text-xs text-slate-500">{exam.questions} preguntas</p>
+        <p className="text-[10px] text-slate-500 mt-1.5">{exam.questions} preguntas</p>
       )}
       {!available && (
-        <p className="text-xs text-slate-600 italic">Próximamente</p>
+        <p className="text-[10px] text-slate-600 italic mt-1.5">Próximamente</p>
       )}
     </button>
   )
@@ -1498,22 +1517,21 @@ export default function CertificacionesView() {
   const selectExam     = (e: ExamConfig)      => { setSelectedExam(e);    setView('viewer') }
 
   return (
-    <div className="h-full overflow-auto bg-[#07070F]">
+    <div className="flex flex-col h-full overflow-auto bg-[#07070F]">
+      <Topbar title="Certificaciones" subtitle="Exámenes de práctica por proveedor" />
       <div className="px-5 py-5 w-full space-y-4">
 
         {/* Page header */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <BookOpen size={20} className="text-primary" />
-              <h1 className="text-xl font-bold text-white">Certificaciones</h1>
+            <div className="mb-2">
+              <Breadcrumb
+                provider={selectedProvider ?? undefined}
+                exam={selectedExam ?? undefined}
+                onGoRoot={goRoot}
+                onGoProvider={goProvider}
+              />
             </div>
-            <Breadcrumb
-              provider={selectedProvider ?? undefined}
-              exam={selectedExam ?? undefined}
-              onGoRoot={goRoot}
-              onGoProvider={goProvider}
-            />
           </div>
           {view !== 'providers' && (
             <button
@@ -1549,7 +1567,7 @@ export default function CertificacionesView() {
                 <p className="text-xs text-slate-500">{selectedProvider.exams.length} exámenes · {selectedProvider.exams.filter(e => e.dataFile).length} disponibles</p>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5">
               {selectedProvider.exams.map(e => (
                 <ExamCard key={e.id} exam={e} provider={selectedProvider} onClick={() => selectExam(e)} />
               ))}
