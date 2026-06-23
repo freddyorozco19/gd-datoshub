@@ -1815,7 +1815,7 @@ export default function CertificacionesView() {
             <button
               key={id}
               onClick={() => setMainTab(id)}
-              className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b transition-colors ${
+              className={`flex items-center gap-1.5 h-full px-3 text-xs font-medium border-b-2 transition-colors ${
                 active
                   ? 'border-blue-500 text-blue-400'
                   : 'border-transparent text-slate-500 hover:text-slate-300'
