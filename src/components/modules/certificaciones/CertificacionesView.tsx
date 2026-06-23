@@ -1518,10 +1518,11 @@ export default function CertificacionesView() {
 
   return (
     <div className="flex flex-col h-full overflow-auto bg-[#07070F]">
-      <Topbar title="Certificaciones" subtitle="Exámenes de práctica por proveedor" />
+      <Topbar title="Certificaciones" />
       <div className="px-5 py-5 w-full space-y-4">
 
         {/* Page header */}
+        {view !== 'providers' && (
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <div className="mb-2">
@@ -1533,16 +1534,15 @@ export default function CertificacionesView() {
               />
             </div>
           </div>
-          {view !== 'providers' && (
-            <button
-              onClick={view === 'viewer' ? goProvider : goRoot}
-              className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={15} />
-              Volver
-            </button>
-          )}
+          <button
+            onClick={view === 'viewer' ? goProvider : goRoot}
+            className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft size={15} />
+            Volver
+          </button>
         </div>
+        )}
 
         {/* ── Nivel 1: Proveedores ── */}
         {view === 'providers' && (
