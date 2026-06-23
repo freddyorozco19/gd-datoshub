@@ -98,7 +98,7 @@ function formatDate(iso: string) {
 function DashboardView() {
   return (
     <div className="flex flex-col h-full overflow-auto">
-      <Topbar title="Dashboard" subtitle="Resumen general del hub de datos GrowData" />
+      <Topbar title="Dashboard" />
       <main className="flex-1 p-6 space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
           <StatsCard label="Total Leads"           value="—" icon={Users}       color="blue"   />
