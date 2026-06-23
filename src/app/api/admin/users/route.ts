@@ -51,6 +51,55 @@ export async function GET() {
   return Response.json({ users });
 }
 
+/** POST — invita un nuevo usuario por email (Supabase envía el correo). */
+export async function POST(req: NextRequest) {
+  const admin = await requireAdmin();
+  if (!admin) {
+    return Response.json({ error: "Acceso restringido a administradores." }, { status: 403 });
+  }
+
+  let body: { email?: string; role?: string };
+  try {
+    body = await req.json();
+  } catch {
+    return Response.json({ error: "Cuerpo JSON inválido." }, { status: 400 });
+  }
+
+  const { email, role = "user" } = body;
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return Response.json({ error: "Email inválido." }, { status: 400 });
+  }
+  if (!ROLES.has(role)) {
+    return Response.json({ error: "Rol inválido." }, { status: 400 });
+  }
+
+  // Supabase envía automáticamente el correo de invitación con link para establecer contraseña
+  const inviteRes = await adminFetch("/invite", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
+  if (!inviteRes.ok) {
+    const err = await inviteRes.json().catch(() => ({}));
+    return Response.json({ error: err.msg || err.message || "No se pudo enviar la invitación." }, { status: 502 });
+  }
+  const u = (await inviteRes.json()) as GoTrueUser;
+
+  // Si el rol es admin, actualizamos app_metadata
+  if (role === "admin") {
+    await adminFetch(`/users/${u.id}`, {
+      method: "PUT",
+      body: JSON.stringify({ app_metadata: { role: "admin" } }),
+    });
+  }
+
+  return Response.json({
+    id:    u.id,
+    email: u.email ?? email,
+    role,
+    invited: true,
+  }, { status: 201 });
+}
+
 /** PATCH — cambia el rol de un usuario (solo admin). */
 export async function PATCH(req: NextRequest) {
   const admin = await requireAdmin();

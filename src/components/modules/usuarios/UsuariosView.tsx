@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   Users, Shield, User as UserIcon, Loader2, AlertCircle, RefreshCw, Clock,
-  History, Globe, Monitor, CheckCircle2, XCircle,
+  History, Globe, Monitor, CheckCircle2, XCircle, UserPlus, X, Mail,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 
@@ -71,11 +71,128 @@ export default function UsuariosView() {
   );
 }
 
+function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (email: string) => void }) {
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState<"user" | "admin">("user");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true); setError(null);
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim().toLowerCase(), role }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
+      setDone(true);
+      onSuccess(email.trim().toLowerCase());
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al invitar usuario.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-[#0e0e1c] shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+              <UserPlus size={15} className="text-blue-400" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-white leading-none">Invitar usuario</h3>
+              <p className="text-[10px] text-slate-500 mt-0.5">Se enviará un correo de invitación</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-slate-600 hover:text-slate-300 transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="px-6 py-5">
+          {done ? (
+            <div className="flex flex-col items-center gap-3 py-4 text-center">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                <Mail size={22} className="text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white">Invitación enviada</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  <span className="text-slate-300">{email}</span> recibirá un correo con un link para activar su cuenta.
+                </p>
+              </div>
+              <button onClick={onClose} className="mt-2 px-5 py-2 rounded-lg bg-white/[0.06] hover:bg-white/[0.1] text-sm text-slate-300 transition-colors">
+                Cerrar
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={submit} className="space-y-4">
+              <div>
+                <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Correo electrónico</label>
+                <input
+                  type="email"
+                  required
+                  autoFocus
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="usuario@empresa.com"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Rol</label>
+                <select
+                  value={role}
+                  onChange={e => setRole(e.target.value as "user" | "admin")}
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors"
+                >
+                  <option value="user">Usuario</option>
+                  <option value="admin">Administrador</option>
+                </select>
+              </div>
+
+              {error && (
+                <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2.5 text-xs text-rose-400">
+                  <AlertCircle size={14} className="shrink-0 mt-0.5" /> {error}
+                </div>
+              )}
+
+              <div className="flex items-center justify-end gap-3 pt-1">
+                <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-slate-200 transition-colors">
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading || !email}
+                  className="flex items-center gap-2 px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium disabled:opacity-60 transition-colors"
+                >
+                  {loading ? <Loader2 size={14} className="animate-spin" /> : <Mail size={14} />}
+                  Enviar invitación
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function UsuariosPanel() {
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [showInvite, setShowInvite] = useState(false);
 
   async function load() {
     setLoading(true); setError(null);
@@ -128,14 +245,29 @@ function UsuariosPanel() {
           <span className="font-semibold text-slate-200">{admins}</span>
           <span className="text-slate-500">administradores</span>
         </div>
-        <button
-          onClick={load}
-          disabled={loading}
-          className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] disabled:opacity-60 transition-colors"
-        >
-          <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
-        </button>
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            onClick={() => setShowInvite(true)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-blue-400 border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 transition-colors"
+          >
+            <UserPlus size={13} /> Nuevo usuario
+          </button>
+          <button
+            onClick={load}
+            disabled={loading}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] disabled:opacity-60 transition-colors"
+          >
+            <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
+          </button>
+        </div>
       </div>
+
+      {showInvite && (
+        <InviteModal
+          onClose={() => setShowInvite(false)}
+          onSuccess={() => { setShowInvite(false); load(); }}
+        />
+      )}
 
       {error && (
         <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
