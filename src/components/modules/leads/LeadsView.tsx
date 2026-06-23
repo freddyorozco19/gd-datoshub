@@ -8,7 +8,7 @@ import {
   CalendarCheck2, ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight, Eye, X, History,
   ExternalLink, Sparkles, SlidersHorizontal, Calendar,
-  BarChart2, Trophy, Activity, Layers,
+  BarChart2, Trophy, Activity,
   Paperclip, FileText, FileImage, File,
 } from "lucide-react";
 import type { Lead, OdooAttachment } from "@/lib/odoo/types";
@@ -57,19 +57,6 @@ const ETAPA_STYLE: Record<string, string> = {
   "Negociación":         "bg-amber-500/10 text-amber-400",
   "Ganado":              "bg-emerald-500/10 text-emerald-400",
   "Perdido":             "bg-rose-500/10 text-rose-400",
-};
-
-const ETAPA_ORDER = [
-  "Nuevo", "En proceso", "Propuesta enviada", "Negociación", "Ganado", "Perdido",
-] as const;
-
-const ETAPA_BAR: Record<string, string> = {
-  "Nuevo":               "bg-slate-400",
-  "En proceso":          "bg-sky-500",
-  "Propuesta enviada":   "bg-violet-500",
-  "Negociación":         "bg-amber-500",
-  "Ganado":              "bg-emerald-500",
-  "Perdido":             "bg-rose-400",
 };
 
 /* ── alias de visualización para nombres de línea ───────────────────── */
@@ -900,153 +887,6 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   );
 }
 
-/* ── widget: funnel de ventas ────────────────────────────────────────── */
-interface FunnelProps {
-  leads:         Lead[];
-  activeEtapa:   string;
-  onEtapaClick:  (etapa: string) => void;
-}
-
-function SalesFunnelWidget({ leads, activeEtapa, onEtapaClick }: FunnelProps) {
-  const [lineaFilter, setLineaFilter] = useState("ALL");
-
-  const availableLineas = useMemo(
-    () => Array.from(new Set(leads.map((l) => l.linea).filter(Boolean))).sort(),
-    [leads]
-  );
-
-  const baseLeads = useMemo(
-    () => lineaFilter === "ALL" ? leads : leads.filter((l) => l.linea === lineaFilter),
-    [leads, lineaFilter]
-  );
-
-  const funnelData = useMemo(() => {
-    const counts: Record<string, number> = {};
-    baseLeads.forEach((l) => { if (l.etapa) counts[l.etapa] = (counts[l.etapa] || 0) + 1; });
-
-    // primero etapas conocidas en orden, luego cualquier otra
-    const ordered = (ETAPA_ORDER as readonly string[])
-      .filter((e) => counts[e])
-      .map((etapa) => ({ etapa, count: counts[etapa] }));
-    Object.entries(counts)
-      .filter(([e]) => !(ETAPA_ORDER as readonly string[]).includes(e))
-      .forEach(([etapa, count]) => ordered.splice(ordered.length - 1, 0, { etapa, count }));
-    return ordered;
-  }, [baseLeads]);
-
-  // etapas de pipeline (excluye Perdido para la tasa de conversión)
-  const PIPELINE_SET = new Set(["Nuevo", "En proceso", "Propuesta enviada", "Negociación", "Ganado"]);
-  const max = Math.max(...funnelData.map((e) => e.count), 1);
-
-  return (
-    <div className="bg-[#111120] rounded-xl border border-white/[0.07] px-5 py-4">
-      {/* header */}
-      <div className="flex items-center gap-3 mb-5 flex-wrap">
-        <div className="flex items-center gap-2 shrink-0">
-          <div className="p-1.5 rounded-lg bg-violet-500/10">
-            <Layers size={15} className="text-violet-400" />
-          </div>
-          <span className="text-sm font-semibold text-slate-200">Pipeline de ventas</span>
-        </div>
-        <div className="w-px h-4 bg-white/[0.08] shrink-0" />
-        {/* pills de línea */}
-        <div className="flex flex-wrap gap-1">
-          <button
-            onClick={() => setLineaFilter("ALL")}
-            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full transition-colors ${
-              lineaFilter === "ALL"
-                ? "bg-violet-500/10 text-violet-400 ring-1 ring-current"
-                : "bg-white/[0.06] text-slate-400 hover:bg-white/[0.08]"
-            }`}
-          >
-            Todas
-          </button>
-          {availableLineas.map((linea) => (
-            <button
-              key={linea}
-              title={linea}
-              onClick={() => setLineaFilter(lineaFilter === linea ? "ALL" : linea)}
-              className={`text-[10px] font-semibold px-2 py-0.5 rounded-full transition-colors truncate max-w-[110px] ${
-                lineaFilter === linea
-                  ? "bg-violet-500/10 text-violet-400 ring-1 ring-current"
-                  : "bg-white/[0.06] text-slate-400 hover:bg-white/[0.08]"
-              }`}
-            >
-              {lineaLabel(linea)}
-            </button>
-          ))}
-        </div>
-        <span className="ml-auto text-[10px] text-slate-400 hidden sm:block">
-          Haz click en una etapa para filtrar la tabla
-        </span>
-      </div>
-
-      {funnelData.length === 0 ? (
-        <p className="text-xs text-slate-400 text-center py-6">Sin datos para mostrar</p>
-      ) : (
-        <div className="space-y-1">
-          {funnelData.map(({ etapa, count }, i) => {
-            const pct      = Math.max(4, Math.round((count / max) * 100));
-            const barColor = ETAPA_BAR[etapa] ?? "bg-blue-400";
-            const isActive = activeEtapa === etapa;
-
-            // tasa de conversión respecto a la anterior etapa del pipeline
-            const prevItem = PIPELINE_SET.has(etapa) && i > 0
-              ? funnelData.slice(0, i).filter((d) => PIPELINE_SET.has(d.etapa)).at(-1)
-              : null;
-            const convRate = prevItem && prevItem.count > 0
-              ? Math.round((count / prevItem.count) * 100)
-              : null;
-
-            // separador visual antes de "Perdido"
-            const showSeparator = etapa === "Perdido" && funnelData.some((d) => PIPELINE_SET.has(d.etapa));
-
-            return (
-              <div key={etapa}>
-                {showSeparator && <div className="border-t border-dashed border-white/[0.07] my-3" />}
-                {convRate !== null && (
-                  <div className="flex items-center gap-2 mb-1 pl-[148px]">
-                    <div className="w-px h-2.5 bg-white/[0.08]" />
-                    <span className="text-[9px] text-slate-400">{convRate}% pasan a la siguiente etapa</span>
-                  </div>
-                )}
-                <button
-                  type="button"
-                  onClick={() => onEtapaClick(isActive ? "ALL" : etapa)}
-                  className={`w-full flex items-center gap-3 rounded-lg py-0.5 transition-all group ${
-                    isActive ? "ring-2 ring-violet-400 ring-offset-1 rounded-lg" : ""
-                  }`}
-                >
-                  {/* label etapa */}
-                  <span
-                    className="text-xs text-slate-500 w-36 shrink-0 text-right pr-1 truncate leading-snug"
-                    title={etapa}
-                  >
-                    {etapa}
-                  </span>
-                  {/* barra */}
-                  <div className="flex-1 h-7 bg-white/[0.04] rounded-lg overflow-hidden">
-                    <div
-                      className={`h-full rounded-lg flex items-center justify-end pr-2.5 transition-all duration-500 group-hover:opacity-80 ${barColor}`}
-                      style={{ width: `${pct}%` }}
-                    >
-                      {count > 3 && (
-                        <span className="text-[10px] font-bold text-white">{count}</span>
-                      )}
-                    </div>
-                  </div>
-                  {/* número */}
-                  <span className="text-xs font-bold text-slate-200 w-7 text-right shrink-0">{count}</span>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
 /* ── widget: Leads por día ───────────────────────────────────────────── */
 function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
   function todayGMT5() {
@@ -1433,15 +1273,6 @@ export default function LeadsView() {
             </div>
           </div>
         </div>
-
-        {/* ── funnel de ventas ── */}
-        {leads.length > 0 && (
-          <SalesFunnelWidget
-            leads={leads}
-            activeEtapa={filters.etapa}
-            onEtapaClick={(etapa) => setFilters((f) => ({ ...f, etapa }))}
-          />
-        )}
 
         {/* ── error ── */}
         {error && (
