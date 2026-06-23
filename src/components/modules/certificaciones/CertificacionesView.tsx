@@ -297,6 +297,14 @@ function isCorrectOpt(opt: string, correctAnswer?: string): boolean {
   return ans.toLowerCase().includes(opt.substring(0, 12).toLowerCase().trim())
 }
 
+const LEVEL_ORDER: Record<string, number> = {
+  Fundamental:  0,
+  Associate:    1,
+  Professional: 2,
+  Expert:       3,
+  Specialty:    4,
+}
+
 const LEVEL_COLOR: Record<string, string> = {
   Fundamental:  'text-emerald-400 bg-emerald-900/30 border-emerald-800',
   Associate:    'text-blue-400    bg-blue-900/30    border-blue-800',
@@ -1568,9 +1576,11 @@ export default function CertificacionesView() {
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5">
-              {selectedProvider.exams.map(e => (
-                <ExamCard key={e.id} exam={e} provider={selectedProvider} onClick={() => selectExam(e)} />
-              ))}
+              {[...selectedProvider.exams]
+                .sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level])
+                .map(e => (
+                  <ExamCard key={e.id} exam={e} provider={selectedProvider} onClick={() => selectExam(e)} />
+                ))}
             </div>
           </>
         )}
