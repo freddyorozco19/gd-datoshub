@@ -86,8 +86,12 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Rol inválido." }, { status: 400 });
   }
 
-  // Supabase envía automáticamente el correo de invitación con link para establecer contraseña
-  const inviteRes = await authFetch("/invite", {
+  // Supabase envía automáticamente el correo de invitación con link para establecer contraseña.
+  // redirect_to debe apuntar al dominio real de la app (si no, Supabase usa la Site URL del
+  // dashboard, que por defecto es localhost:3000 y por eso el link del correo no funcionaba).
+  const origin = new URL(req.url).origin;
+  const redirectTo = `${origin}/api/auth/callback?next=/set-password`;
+  const inviteRes = await authFetch(`/invite?redirect_to=${encodeURIComponent(redirectTo)}`, {
     method: "POST",
     body: JSON.stringify({ email }),
   });
