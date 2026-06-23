@@ -17,10 +17,26 @@ export default function SetPasswordPage() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getSession().then(({ data }) => {
-      setHasSession(!!data.session);
+
+    // El SDK procesa el access_token/refresh_token del hash de la URL al inicializarse
+    // (detectSessionInUrl). onAuthStateChange cubre el caso en que esa detección termine
+    // después del primer getSession(); getSession() cubre el caso en que ya haya terminado.
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setHasSession(!!session);
       setChecking(false);
+      if (session && typeof window !== "undefined" && window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
     });
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) { setHasSession(true); setChecking(false); }
+    });
+
+    // Si tras unos segundos no hay sesión (link inválido/expirado), deja de mostrar el loader.
+    const timeout = setTimeout(() => setChecking(false), 4000);
+
+    return () => { sub.subscription.unsubscribe(); clearTimeout(timeout); };
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {

@@ -87,10 +87,11 @@ export async function POST(req: NextRequest) {
   }
 
   // Supabase envía automáticamente el correo de invitación con link para establecer contraseña.
-  // redirect_to debe apuntar al dominio real de la app (si no, Supabase usa la Site URL del
-  // dashboard, que por defecto es localhost:3000 y por eso el link del correo no funcionaba).
+  // Los links de invite/magiclink usan flujo implícito (tokens en el hash de la URL), que solo
+  // el cliente puede leer — por eso se redirige directo a /set-password (página cliente) y NO a
+  // /api/auth/callback (ruta de servidor, que solo entiende el flujo PKCE con ?code=).
   const origin = new URL(req.url).origin;
-  const redirectTo = `${origin}/api/auth/callback?next=/set-password`;
+  const redirectTo = `${origin}/set-password`;
   const inviteRes = await authFetch(`/invite?redirect_to=${encodeURIComponent(redirectTo)}`, {
     method: "POST",
     body: JSON.stringify({ email }),

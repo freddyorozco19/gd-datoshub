@@ -31,6 +31,7 @@ export async function proxy(request: NextRequest) {
 
   const isPublic =
     pathname.startsWith("/login") ||
+    pathname.startsWith("/set-password") ||
     pathname.startsWith("/api/auth");
 
   if (!user && !isPublic) {
