@@ -19,6 +19,19 @@ function adminFetch(path: string, init?: RequestInit) {
   });
 }
 
+/** Llama a la API de auth de GoTrue (sin prefijo /admin) — usado por /invite. */
+function authFetch(path: string, init?: RequestInit) {
+  return fetch(`${SUPABASE_URL}/auth/v1${path}`, {
+    ...init,
+    headers: {
+      apikey: SERVICE_KEY,
+      Authorization: `Bearer ${SERVICE_KEY}`,
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+  });
+}
+
 interface GoTrueUser {
   id: string;
   email?: string;
@@ -74,7 +87,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Supabase envía automáticamente el correo de invitación con link para establecer contraseña
-  const inviteRes = await adminFetch("/invite", {
+  const inviteRes = await authFetch("/invite", {
     method: "POST",
     body: JSON.stringify({ email }),
   });
