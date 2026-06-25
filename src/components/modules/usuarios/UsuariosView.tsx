@@ -252,6 +252,121 @@ function DeleteUserModal({
   );
 }
 
+function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => void }) {
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+
+    if (password.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
+    if (password !== confirm) {
+      setError("Las contraseñas no coinciden.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/users/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: user.id, password }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
+      setDone(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo cambiar la contraseña.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-[#0e0e1c] shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+              <KeyRound size={15} className="text-amber-400" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-white leading-none">Cambiar contraseña</h3>
+              <p className="text-[10px] text-slate-500 mt-0.5 truncate max-w-[200px]">{user.email}</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-slate-600 hover:text-slate-300 transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="px-6 py-5">
+          {done ? (
+            <div className="flex flex-col items-center gap-2 py-4 text-center">
+              <CheckCircle2 size={28} className="text-emerald-500" />
+              <p className="text-sm text-slate-300">Contraseña actualizada correctamente.</p>
+              <button onClick={onClose} className="mt-2 px-5 py-2 rounded-lg bg-white/[0.06] hover:bg-white/[0.1] text-sm text-slate-300 transition-colors">
+                Cerrar
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={submit} className="space-y-4">
+              <div>
+                <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Nueva contraseña</label>
+                <input
+                  type="password"
+                  autoFocus
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Mínimo 8 caracteres"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-amber-500/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Confirmar contraseña</label>
+                <input
+                  type="password"
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  placeholder="Repite la contraseña"
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-amber-500/50 transition-colors"
+                />
+              </div>
+
+              {error && (
+                <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2.5 text-xs text-rose-400">
+                  <AlertCircle size={14} className="shrink-0 mt-0.5" /> {error}
+                </div>
+              )}
+
+              <div className="flex items-center justify-end gap-3 pt-1">
+                <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-slate-200 transition-colors">
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading || !password}
+                  className="flex items-center gap-2 px-5 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-sm text-white font-medium disabled:opacity-60 transition-colors"
+                >
+                  {loading ? <Loader2 size={14} className="animate-spin" /> : <KeyRound size={14} />}
+                  Cambiar contraseña
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function UsuariosPanel() {
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -259,8 +374,7 @@ function UsuariosPanel() {
   const [savingId, setSavingId] = useState<string | null>(null);
   const [showInvite, setShowInvite] = useState(false);
   const [deletingUser, setDeletingUser] = useState<UserRow | null>(null);
-  const [resettingId, setResettingId] = useState<string | null>(null);
-  const [resetMsg, setResetMsg] = useState<{ id: string; ok: boolean; text: string } | null>(null);
+  const [resettingUser, setResettingUser] = useState<UserRow | null>(null);
 
   async function load() {
     setLoading(true); setError(null);
@@ -297,24 +411,6 @@ function UsuariosPanel() {
     }
   }
 
-  async function resetPassword(u: UserRow) {
-    setResettingId(u.id); setResetMsg(null);
-    try {
-      const res = await fetch("/api/admin/users/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: u.email }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
-      setResetMsg({ id: u.id, ok: true, text: "Correo de restablecimiento enviado." });
-    } catch (e) {
-      setResetMsg({ id: u.id, ok: false, text: e instanceof Error ? e.message : "No se pudo enviar el correo." });
-    } finally {
-      setResettingId(null);
-      setTimeout(() => setResetMsg((m) => (m?.id === u.id ? null : m)), 5000);
-    }
-  }
 
   const admins = users.filter((u) => u.role === "admin").length;
 
@@ -361,6 +457,13 @@ function UsuariosPanel() {
           user={deletingUser}
           onClose={() => setDeletingUser(null)}
           onDeleted={(id) => { setUsers((prev) => prev.filter((u) => u.id !== id)); setDeletingUser(null); }}
+        />
+      )}
+
+      {resettingUser && (
+        <ResetPasswordModal
+          user={resettingUser}
+          onClose={() => setResettingUser(null)}
         />
       )}
 
@@ -423,12 +526,11 @@ function UsuariosPanel() {
                       </select>
                       {savingId === u.id && <Loader2 size={14} className="animate-spin text-slate-500" />}
                       <button
-                        onClick={() => resetPassword(u)}
-                        disabled={resettingId === u.id}
-                        title="Restaurar contraseña"
-                        className="p-1.5 rounded-lg text-slate-500 border border-white/[0.07] hover:bg-amber-500/10 hover:text-amber-400 hover:border-amber-500/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        onClick={() => setResettingUser(u)}
+                        title="Cambiar contraseña"
+                        className="p-1.5 rounded-lg text-slate-500 border border-white/[0.07] hover:bg-amber-500/10 hover:text-amber-400 hover:border-amber-500/30 transition-colors"
                       >
-                        {resettingId === u.id ? <Loader2 size={13} className="animate-spin" /> : <KeyRound size={13} />}
+                        <KeyRound size={13} />
                       </button>
                       <button
                         onClick={() => setDeletingUser(u)}
@@ -439,9 +541,6 @@ function UsuariosPanel() {
                         <Trash2 size={13} />
                       </button>
                     </div>
-                    {resetMsg?.id === u.id && (
-                      <p className={`text-[11px] mt-1.5 ${resetMsg.ok ? "text-emerald-400" : "text-rose-400"}`}>{resetMsg.text}</p>
-                    )}
                   </td>
                 </tr>
               ))}
