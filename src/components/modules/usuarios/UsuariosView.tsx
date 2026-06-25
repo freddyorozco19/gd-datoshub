@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   Users, Shield, User as UserIcon, Loader2, AlertCircle, RefreshCw, Clock,
-  History, Globe, Monitor, CheckCircle2, XCircle, UserPlus, X, Mail, Trash2,
+  History, Globe, Monitor, CheckCircle2, XCircle, UserPlus, X, Mail, Trash2, KeyRound,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 
@@ -259,6 +259,8 @@ function UsuariosPanel() {
   const [savingId, setSavingId] = useState<string | null>(null);
   const [showInvite, setShowInvite] = useState(false);
   const [deletingUser, setDeletingUser] = useState<UserRow | null>(null);
+  const [resettingId, setResettingId] = useState<string | null>(null);
+  const [resetMsg, setResetMsg] = useState<{ id: string; ok: boolean; text: string } | null>(null);
 
   async function load() {
     setLoading(true); setError(null);
@@ -292,6 +294,25 @@ function UsuariosPanel() {
       setError(e instanceof Error ? e.message : "No se pudo actualizar el rol.");
     } finally {
       setSavingId(null);
+    }
+  }
+
+  async function resetPassword(u: UserRow) {
+    setResettingId(u.id); setResetMsg(null);
+    try {
+      const res = await fetch("/api/admin/users/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: u.email }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
+      setResetMsg({ id: u.id, ok: true, text: "Correo de restablecimiento enviado." });
+    } catch (e) {
+      setResetMsg({ id: u.id, ok: false, text: e instanceof Error ? e.message : "No se pudo enviar el correo." });
+    } finally {
+      setResettingId(null);
+      setTimeout(() => setResetMsg((m) => (m?.id === u.id ? null : m)), 5000);
     }
   }
 
@@ -402,6 +423,14 @@ function UsuariosPanel() {
                       </select>
                       {savingId === u.id && <Loader2 size={14} className="animate-spin text-slate-500" />}
                       <button
+                        onClick={() => resetPassword(u)}
+                        disabled={resettingId === u.id}
+                        title="Restaurar contraseña"
+                        className="p-1.5 rounded-lg text-slate-500 border border-white/[0.07] hover:bg-amber-500/10 hover:text-amber-400 hover:border-amber-500/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        {resettingId === u.id ? <Loader2 size={13} className="animate-spin" /> : <KeyRound size={13} />}
+                      </button>
+                      <button
                         onClick={() => setDeletingUser(u)}
                         disabled={u.isSelf}
                         title={u.isSelf ? "No puedes eliminar tu propia cuenta" : "Eliminar usuario"}
@@ -410,6 +439,9 @@ function UsuariosPanel() {
                         <Trash2 size={13} />
                       </button>
                     </div>
+                    {resetMsg?.id === u.id && (
+                      <p className={`text-[11px] mt-1.5 ${resetMsg.ok ? "text-emerald-400" : "text-rose-400"}`}>{resetMsg.text}</p>
+                    )}
                   </td>
                 </tr>
               ))}
