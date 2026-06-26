@@ -100,7 +100,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-[#0e0e1c] shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+      <div className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-white/[0.06] backdrop-blur-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
@@ -209,7 +209,7 @@ function DeleteUserModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-[#0e0e1c] shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-white/[0.06] backdrop-blur-2xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
@@ -291,7 +291,7 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-[#0e0e1c] shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-white/[0.06] backdrop-blur-2xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
@@ -418,12 +418,12 @@ function UsuariosPanel() {
     <div className="space-y-5">
       {/* Resumen */}
       <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex items-center gap-2 bg-[#111120] rounded-xl border border-white/[0.07] px-4 py-2.5 text-sm">
+        <div className="flex items-center gap-2 bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] px-4 py-2.5 text-sm">
           <Users size={16} className="text-blue-400" />
           <span className="font-semibold text-slate-200">{users.length}</span>
           <span className="text-slate-500">usuarios</span>
         </div>
-        <div className="flex items-center gap-2 bg-[#111120] rounded-xl border border-white/[0.07] px-4 py-2.5 text-sm">
+        <div className="flex items-center gap-2 bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] px-4 py-2.5 text-sm">
           <Shield size={16} className="text-violet-400" />
           <span className="font-semibold text-slate-200">{admins}</span>
           <span className="text-slate-500">administradores</span>
@@ -474,11 +474,11 @@ function UsuariosPanel() {
       )}
 
       {/* Tabla */}
-      <div className="bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
+      <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#0e0e1c] border-b border-white/[0.07]">
+              <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
                 {["Usuario", "Rol", "Último ingreso", "Creado", "Acción"].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
@@ -588,7 +588,7 @@ function TrazabilidadPanel() {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex items-center gap-2 bg-[#111120] rounded-xl border border-white/[0.07] px-4 py-2.5 text-sm">
+        <div className="flex items-center gap-2 bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] px-4 py-2.5 text-sm">
           <History size={16} className="text-blue-400" />
           <span className="font-semibold text-slate-200">{events.length}</span>
           <span className="text-slate-500">eventos de acceso</span>
@@ -615,11 +615,11 @@ function TrazabilidadPanel() {
         </div>
       )}
 
-      <div className="bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
+      <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] overflow-hidden">
         <div className="overflow-x-auto max-h-[65vh]">
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-[#0e0e1c] border-b border-white/[0.07]">
+              <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
                 {["Fecha / Hora", "Email", "Acción", "IP", "Navegador", "SO", "Estado"].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}

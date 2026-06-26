@@ -110,7 +110,7 @@ function DashboardView() {
         </div>
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Leads recientes */}
-          <div className="bg-[#111120] rounded-xl border border-white/[0.07]">
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08]">
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.05]">
               <span className="text-sm font-semibold text-slate-300">Leads recientes</span>
             </div>
@@ -127,7 +127,7 @@ function DashboardView() {
             </div>
           </div>
           {/* Reuniones */}
-          <div className="bg-[#111120] rounded-xl border border-white/[0.07]">
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08]">
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.05]">
               <span className="text-sm font-semibold text-slate-300">Próximas reuniones</span>
             </div>
@@ -171,7 +171,7 @@ function ReunionesView() {
         </div>
         <div className="space-y-3">
           {mockMeetings.map((m) => (
-            <div key={m.id} className="bg-[#111120] rounded-xl border border-white/[0.07] p-5">
+            <div key={m.id} className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4">
                   <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 shrink-0 mt-0.5">
@@ -226,7 +226,7 @@ function IntegracionesView() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {mockSources.map((s) => (
-            <div key={s.id} className="bg-[#111120] rounded-xl border border-white/[0.07] p-5">
+            <div key={s.id} className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5">
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
@@ -265,7 +265,7 @@ function ReportesView() {
       <Topbar title="Reportes" subtitle="Análisis y visualización de datos de GrowData" />
       <main className="flex-1 p-6 space-y-6">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-5">
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5">
             <h3 className="text-sm font-semibold text-slate-300 mb-4">Leads por etapa</h3>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={leadsByStage} barSize={28}>
@@ -276,7 +276,7 @@ function ReportesView() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-          <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-5">
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5">
             <h3 className="text-sm font-semibold text-slate-300 mb-4">Ingresos esperados (M COP)</h3>
             <ResponsiveContainer width="100%" height={220}>
               <LineChart data={revenueByMonth}>
@@ -321,7 +321,7 @@ function RepositoriosView() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {mockRepos.map((r) => (
-            <div key={r.id} className="bg-[#111120] rounded-xl border border-white/[0.07] p-5 hover:border-white/[0.14] transition-colors">
+            <div key={r.id} className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 hover:border-white/[0.14] transition-colors">
               <div className="flex items-start justify-between">
                 <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${TYPE_COLORS[r.type]}`}>{r.type}</span>
                 <button className="p-1 text-slate-600 hover:text-slate-400 transition-colors"><ExternalLink size={14} /></button>

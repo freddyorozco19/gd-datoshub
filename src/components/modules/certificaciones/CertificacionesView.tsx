@@ -394,7 +394,7 @@ function ExamCard({ exam, provider, onClick }: { exam: ExamConfig; provider: Pro
   return (
     <button
       onClick={available ? onClick : undefined}
-      className={`relative w-full text-left bg-surface border rounded-lg p-3 transition-all duration-200 ${
+      className={`relative w-full text-left bg-white/[0.04] backdrop-blur-xl border rounded-lg p-3 transition-all duration-200 ${
         available
           ? 'border-border hover:border-white/25 hover:bg-white/5 cursor-pointer group'
           : 'border-border/50 opacity-50 cursor-not-allowed'
@@ -503,7 +503,7 @@ function QuestionCard({
   }
 
   return (
-    <div className={`bg-surface border rounded-xl overflow-hidden transition-all duration-200 ${
+    <div className={`bg-white/[0.04] backdrop-blur-xl border rounded-xl overflow-hidden transition-all duration-200 ${
       open ? 'border-primary/40' : 'border-border hover:border-slate-600'
     }`}>
 
@@ -754,7 +754,7 @@ function ExamConfigModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm px-4">
-      <div className="w-full max-w-md bg-[#0D0D1A] border border-white/10 rounded-2xl shadow-2xl">
+      <div className="w-full max-w-md bg-white/[0.06] backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl">
 
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
           <div className="flex items-center gap-2.5">
@@ -1022,7 +1022,7 @@ function ExamScreen({
 
       {showExit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
-          <div className="bg-[#0D0D1A] border border-white/10 rounded-2xl p-6 max-w-xs w-full mx-4 text-center">
+          <div className="bg-white/[0.06] backdrop-blur-2xl border border-white/10 rounded-2xl p-6 max-w-xs w-full mx-4 text-center">
             <AlertTriangle size={28} className="text-amber-400 mx-auto mb-3" />
             <h3 className="text-white font-semibold mb-1.5">¿Salir del examen?</h3>
             <p className="text-slate-400 text-xs mb-5">Se perderá el progreso actual.</p>
@@ -1104,7 +1104,7 @@ function ExamResults({
         </button>
       </div>
 
-      <div className="bg-surface border border-border rounded-xl overflow-hidden">
+      <div className="bg-white/[0.04] backdrop-blur-xl border border-border rounded-xl overflow-hidden">
         <button onClick={() => setShowDetail(v => !v)}
           className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors text-sm text-slate-400">
           <span className="font-medium text-slate-300">Revisar respuestas</span>
@@ -1301,7 +1301,7 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
                 className={`text-left px-4 py-3 rounded-xl border transition-all duration-150 ${
                   isActive
                     ? active
-                    : 'bg-surface border-border hover:border-slate-500 hover:bg-white/5'
+                    : 'bg-white/[0.04] backdrop-blur-xl border-border hover:border-slate-500 hover:bg-white/5'
                 }`}
               >
                 <p className="text-xs text-slate-500 mb-1">{label}</p>
@@ -1328,13 +1328,13 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
             type="text" value={search}
             onChange={e => { setSearch(e.target.value); setPage(1) }}
             placeholder="Buscar pregunta, opción, respuesta..."
-            className="w-full bg-surface border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/60 transition-colors"
+            className="w-full bg-white/[0.04] backdrop-blur-xl border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/60 transition-colors"
           />
         </div>
         <div className="flex items-center gap-2">
           <Filter size={14} className="text-slate-500" />
           <select value={filter} onChange={e => { setFilter(e.target.value as FilterType); setPage(1) }}
-            className="bg-surface border border-border rounded-lg px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-primary/60 cursor-pointer">
+            className="bg-white/[0.04] backdrop-blur-xl border border-border rounded-lg px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-primary/60 cursor-pointer">
             <option value="all">Todos los tipos</option>
             <option value="mc">Opción múltiple</option>
             <option value="yn">Sí / No</option>
@@ -1344,7 +1344,7 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
         </div>
       </div>
 
-      <div className="bg-surface border border-border rounded-xl overflow-hidden">
+      <div className="bg-white/[0.04] backdrop-blur-xl border border-border rounded-xl overflow-hidden">
 
         <button
           onClick={() => setShowTagPanel(v => !v)}
@@ -1563,7 +1563,7 @@ function EditExamModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-[#0e0e1c] shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+      <div className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-white/[0.06] backdrop-blur-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div>
             <h3 className="text-sm font-semibold text-white">{exam.code}</h3>
@@ -1677,7 +1677,7 @@ function RegistrosPanel() {
             type="text" value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar código, nombre o proveedor..."
-            className="w-full bg-surface border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/60 transition-colors"
+            className="w-full bg-white/[0.04] backdrop-blur-xl border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/60 transition-colors"
           />
         </div>
         <span className="text-xs text-slate-500">{filtered.length} de {allExams.length} registros</span>
@@ -1696,11 +1696,11 @@ function RegistrosPanel() {
         </div>
       )}
 
-      <div className="bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
+      <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.07] overflow-hidden">
         <div className="overflow-x-auto max-h-[65vh]">
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-[#0e0e1c] border-b border-white/[0.07]">
+              <tr className="bg-black/30 backdrop-blur-md border-b border-white/[0.07]">
                 {['Código', 'Nombre', 'Proveedor', 'Nivel', 'Estado', 'Expiración', 'URL', 'Acción'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}

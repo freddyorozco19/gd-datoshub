@@ -28,7 +28,7 @@ export default function StatsCard({
   color = "blue",
 }: StatsCardProps) {
   return (
-    <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-5 flex items-start gap-4">
+    <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 flex items-start gap-4">
       <div className={`p-2.5 rounded-lg ${colorMap[color]}`}>
         <Icon size={20} />
       </div>
