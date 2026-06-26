@@ -1150,13 +1150,13 @@ export default function LeadsView() {
       : <ChevronDown size={13} className="opacity-20" />;
 
   const Select = ({ label, field, options }: { label: string; field: keyof Filters; options: string[] }) => (
-    <div className="flex flex-col gap-1 min-w-0">
-      <label className="text-xs font-medium text-slate-500">{label}</label>
+    <div className="flex flex-col gap-1.5 min-w-0">
+      <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">{label}</label>
       <select value={filters[field] as string}
         onChange={(e) => setFilters((f) => ({ ...f, [field]: e.target.value }))}
-        className="text-xs border border-white/[0.08] rounded-lg px-2 py-1.5 bg-[#111120] focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-200">
+        className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors cursor-pointer">
         {options.map((o) => (
-          <option key={o} value={o}>{o === "ALL" ? "Todos" : o === "true" ? "Activo" : o === "false" ? "Inactivo" : o}</option>
+          <option key={o} value={o} className="bg-[#0e0e1c]">{o === "ALL" ? "Todos" : o === "true" ? "Activo" : o === "false" ? "Inactivo" : o}</option>
         ))}
       </select>
     </div>
@@ -1174,15 +1174,17 @@ export default function LeadsView() {
         {leads.length > 0 && <MonthlyTrendWidget leads={leads} />}
 
         {/* ── barra de filtros ── */}
-        <div className="bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
+        <div className="bg-[#111120] rounded-xl border border-white/[0.08] overflow-hidden">
 
           {/* cabecera de filtros */}
-          <div className="flex items-center justify-between px-4 py-2.5 bg-[#0e0e1c] border-b border-white/[0.07]">
+          <div className="flex items-center justify-between px-4 py-3 bg-[#0e0e1c] border-b border-white/[0.08]">
             <div className="flex items-center gap-2">
-              <SlidersHorizontal size={14} className="text-slate-400" />
-              <span className="text-xs font-semibold text-slate-600">Filtros</span>
+              <div className="w-6 h-6 rounded-md bg-blue-500/10 flex items-center justify-center">
+                <SlidersHorizontal size={12} className="text-blue-400" />
+              </div>
+              <span className="text-xs font-semibold text-slate-300">Filtros</span>
               {activeFilterCount > 0 && (
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 leading-none">
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 leading-none">
                   {activeFilterCount}
                 </span>
               )}
@@ -1190,7 +1192,7 @@ export default function LeadsView() {
             {activeFilterCount > 0 && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-rose-500 transition-colors"
+                className="flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-rose-400 transition-colors"
               >
                 <X size={11} /> Limpiar todo
               </button>
@@ -1198,7 +1200,7 @@ export default function LeadsView() {
           </div>
 
           {/* fila 1: dropdowns en grid de 6 columnas */}
-          <div className="px-4 py-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 border-b border-white/[0.05]">
+          <div className="px-4 py-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 border-b border-white/[0.06]">
             <Select label="Comercial"     field="comercial"        options={opts.comercial} />
             <Select label="Línea"         field="linea"            options={opts.linea} />
             <Select label="Oportunidad"   field="tipoOportunidad"  options={opts.tipoOportunidad} />
@@ -1208,28 +1210,28 @@ export default function LeadsView() {
           </div>
 
           {/* fila 2: rango de fechas · búsqueda · acciones */}
-          <div className="px-4 py-3 flex flex-wrap items-end gap-3">
+          <div className="px-4 py-4 flex flex-wrap items-end gap-4">
 
             {/* rango de fechas agrupado */}
-            <div className="flex items-end gap-2">
-              <Calendar size={14} className="text-slate-400 mb-2 shrink-0" />
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-slate-500">Desde</label>
+            <div className="flex items-end gap-2.5">
+              <Calendar size={14} className="text-slate-500 mb-2.5 shrink-0" />
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Desde</label>
                 <input
                   type="date"
                   value={filters.dateFrom}
                   onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value }))}
-                  className="text-xs border border-white/[0.08] rounded-lg px-2 py-1.5 bg-[#111120] focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-200 w-36"
+                  className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors w-36"
                 />
               </div>
-              <span className="text-slate-300 mb-2 text-sm leading-none">→</span>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-slate-500">Hasta</label>
+              <span className="text-slate-500 mb-2.5 text-sm leading-none">→</span>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Hasta</label>
                 <input
                   type="date"
                   value={filters.dateTo}
                   onChange={(e) => setFilters((f) => ({ ...f, dateTo: e.target.value }))}
-                  className="text-xs border border-white/[0.08] rounded-lg px-2 py-1.5 bg-[#111120] focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-200 w-36"
+                  className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors w-36"
                 />
               </div>
             </div>
@@ -1237,26 +1239,26 @@ export default function LeadsView() {
             <div className="flex-1" />
 
             {/* búsqueda */}
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-medium text-slate-500">Buscar</label>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Buscar</label>
               <div className="relative">
-                <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Nombre, cliente…"
-                  className="pl-8 pr-3 py-1.5 text-xs border border-white/[0.08] rounded-lg w-44 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="pl-8 pr-3 py-2 text-xs rounded-lg w-48 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 placeholder-slate-600 transition-colors"
                 />
               </div>
             </div>
 
             {/* botones de acción */}
-            <div className="flex items-end gap-2">
+            <div className="flex items-end gap-2.5">
               <button
                 onClick={loadLeads}
                 disabled={loading}
                 title="Sincronizar ODOO"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] text-xs text-slate-600 hover:bg-[#0e0e1c] disabled:opacity-50 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/[0.1] bg-white/[0.03] text-xs font-medium text-slate-300 hover:bg-white/[0.07] hover:border-white/[0.18] disabled:opacity-50 transition-colors"
               >
                 <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
                 {loading ? "Cargando…" : "Sincronizar"}
@@ -1265,7 +1267,7 @@ export default function LeadsView() {
                 onClick={exportCSV}
                 disabled={!filtered.length}
                 title="Exportar CSV"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs hover:bg-blue-700 disabled:opacity-40 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-500 disabled:opacity-40 transition-colors"
               >
                 <Download size={13} />
                 Exportar
