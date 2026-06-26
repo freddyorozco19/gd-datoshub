@@ -67,14 +67,14 @@ const lineaLabel = (l: string): string => {
 
 /* ── paleta de colores para líneas ──────────────────────────────────── */
 const LINE_PALETTE = [
-  { bar: "bg-blue-500",    badge: "bg-blue-500/10 text-blue-400" },
-  { bar: "bg-violet-500",  badge: "bg-violet-500/10 text-violet-400" },
-  { bar: "bg-emerald-500", badge: "bg-emerald-500/10 text-emerald-400" },
-  { bar: "bg-amber-500",   badge: "bg-amber-500/10 text-amber-400" },
-  { bar: "bg-rose-500",    badge: "bg-rose-500/10 text-rose-400" },
-  { bar: "bg-cyan-500",    badge: "bg-cyan-500/10 text-cyan-400" },
-  { bar: "bg-orange-500",  badge: "bg-orange-500/10 text-orange-400" },
-  { bar: "bg-indigo-500",  badge: "bg-indigo-500/10 text-indigo-400" },
+  { bar: "bg-blue-500",    badge: "bg-blue-500/10 text-blue-400",    text: "text-blue-400",    glow: "shadow-[0_0_12px_-2px_rgba(59,130,246,0.6)]"  },
+  { bar: "bg-violet-500",  badge: "bg-violet-500/10 text-violet-400",text: "text-violet-400",  glow: "shadow-[0_0_12px_-2px_rgba(139,92,246,0.6)]"  },
+  { bar: "bg-emerald-500", badge: "bg-emerald-500/10 text-emerald-400",text: "text-emerald-400",glow: "shadow-[0_0_12px_-2px_rgba(16,185,129,0.6)]"  },
+  { bar: "bg-amber-500",   badge: "bg-amber-500/10 text-amber-400",  text: "text-amber-400",   glow: "shadow-[0_0_12px_-2px_rgba(245,158,11,0.6)]"  },
+  { bar: "bg-rose-500",    badge: "bg-rose-500/10 text-rose-400",    text: "text-rose-400",    glow: "shadow-[0_0_12px_-2px_rgba(244,63,94,0.6)]"   },
+  { bar: "bg-cyan-500",    badge: "bg-cyan-500/10 text-cyan-400",    text: "text-cyan-400",    glow: "shadow-[0_0_12px_-2px_rgba(6,182,212,0.6)]"   },
+  { bar: "bg-orange-500",  badge: "bg-orange-500/10 text-orange-400",text: "text-orange-400",  glow: "shadow-[0_0_12px_-2px_rgba(249,115,22,0.6)]"  },
+  { bar: "bg-indigo-500",  badge: "bg-indigo-500/10 text-indigo-400",text: "text-indigo-400",  glow: "shadow-[0_0_12px_-2px_rgba(99,102,241,0.6)]"  },
 ];
 
 /* ── skeleton de tabla ────────────────────────────────────────────────── */
@@ -594,21 +594,27 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
   );
 
   return (
-    <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <div className="p-1.5 rounded-lg bg-violet-500/10 shrink-0"><History size={15} className="text-violet-400" /></div>
-        <span className="text-sm font-semibold text-slate-200 flex-1">Últimas asignadas</span>
+    <div className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden">
+      {/* sheen superior, efecto de cristal */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+      <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
+
+      <div className="relative flex items-center gap-2 mb-3">
+        <div className="p-1.5 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0"><History size={15} className="text-violet-400" /></div>
+        <span className="text-sm font-semibold text-slate-100 flex-1">Últimas asignadas</span>
       </div>
 
       {availableLineas.length > 0 && (
-        <div className="flex flex-wrap gap-1 mb-3">
+        <div className="relative flex flex-wrap items-center gap-0.5 mb-3 p-1 rounded-full bg-black/25 backdrop-blur-md border border-white/[0.06] w-fit shadow-[inset_0_1px_2px_rgba(0,0,0,0.4)]">
           {availableLineas.map((linea) => {
             const palette = lineaColor[linea] ?? LINE_PALETTE[0];
             const active = lineaFilter.includes(linea);
             return (
               <button key={linea} type="button" title={linea} onClick={() => toggleLinea(linea)}
-                className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full transition-colors truncate max-w-[96px] ${
-                  active ? `${palette.badge} ring-1 ring-current` : "bg-white/[0.06] text-slate-400 hover:bg-white/[0.08]"
+                className={`relative text-[10px] font-semibold px-3 py-1.5 rounded-full transition-all duration-200 truncate max-w-[110px] ${
+                  active
+                    ? `text-white bg-gradient-to-b from-white/[0.20] to-white/[0.06] ring-1 ring-white/[0.18] shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_2px_rgba(0,0,0,0.25)] ${palette.glow}`
+                    : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]"
                 }`}>
                 {lineaLabel(linea)}
               </button>
@@ -620,20 +626,19 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
       {recent.length === 0 ? (
         <p className="text-xs text-slate-400 text-center py-4">Sin leads en las líneas seleccionadas</p>
       ) : (
-        <div className="space-y-1.5">
+        <div className="relative divide-y divide-white/[0.05]">
           {recent.map((lead, i) => {
+            const palette = lineaColor[lead.linea] ?? LINE_PALETTE[0];
             const fecha = lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "";
             const hora  = lead.fechaCreacion && lead.fechaCreacion.length >= 16 ? lead.fechaCreacion.substring(11, 16) : "";
             return (
               <button key={lead.id} type="button" onClick={() => setSelectedLead(lead)}
-                className="w-full flex gap-2 items-start text-left rounded-lg px-2 py-2 hover:bg-violet-500/10 hover:border-violet-500/30 border border-transparent transition-colors group">
-                <span className="text-[10px] font-bold text-slate-300 mt-0.5 w-3.5 shrink-0 text-right group-hover:text-violet-400 transition-colors">{i + 1}</span>
+                className="w-full flex gap-2.5 items-start text-left px-1.5 py-2.5 hover:bg-white/[0.05] rounded-lg transition-colors group">
+                <span className="text-[10px] font-bold text-slate-500 mt-0.5 w-3.5 shrink-0 text-right group-hover:text-white transition-colors">{i + 1}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-slate-100 truncate leading-snug group-hover:text-violet-400 transition-colors" title={lead.nombre}>{lead.nombre}</p>
-                  {lead.cliente && <p className="text-[10px] text-slate-400 truncate leading-tight mt-0.5">{lead.cliente}</p>}
-                  <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                    {fecha && <span className="text-[9px] text-slate-400 leading-tight whitespace-nowrap">{fecha}{hora && <> · {hora}</>}</span>}
-                  </div>
+                  <p className="text-xs font-semibold text-slate-100 truncate leading-snug group-hover:text-white transition-colors" title={lead.nombre}>{lead.nombre}</p>
+                  {lead.cliente && <p className={`text-[10px] truncate leading-tight mt-0.5 font-medium ${palette.text}`}>{lead.cliente}</p>}
+                  {fecha && <p className="text-[9px] text-slate-500 leading-tight mt-1 whitespace-nowrap">{fecha}{hora && <> · {hora}</>}</p>}
                 </div>
               </button>
             );
