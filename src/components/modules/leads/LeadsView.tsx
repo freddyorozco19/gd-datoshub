@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo, useCallback, Fragment, type ReactNode } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import {
   RefreshCw, Search, Download, ChevronUp, ChevronDown,
@@ -8,7 +8,7 @@ import {
   CalendarCheck2, ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight, Eye, X, History,
   ExternalLink, Sparkles, SlidersHorizontal, Calendar,
-  BarChart2, Trophy, Activity,
+  Trophy, Activity,
   Paperclip, FileText, FileImage, File,
 } from "lucide-react";
 import type { Lead, OdooAttachment } from "@/lib/odoo/types";
@@ -95,162 +95,6 @@ function TableSkeleton() {
             <div className="h-3 w-16 rounded bg-white/[0.06] ml-auto" />
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
-
-/* ── widget: tendencia mensual ──────────────────────────────────────── */
-const TREND_RANGES = [
-  { label: "3M",  value: 3  },
-  { label: "6M",  value: 6  },
-  { label: "12M", value: 12 },
-  { label: "24M", value: 24 },
-  { label: "Todo",value: 0  },
-] as const;
-
-function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
-  const [range,   setRange]   = useState<number>(6);
-  const [hovered, setHovered] = useState<{ label: string; count: number; ganados: number } | null>(null);
-
-  const months = useMemo(() => {
-    const nowGMT5 = new Date();
-    nowGMT5.setHours(nowGMT5.getHours() - 5);
-    nowGMT5.setDate(1);
-
-    let count: number;
-    if (range === 0) {
-      if (leads.length === 0) { count = 6; }
-      else {
-        const earliest = leads.reduce((min, l) => l.fechaCreacion < min ? l.fechaCreacion : min, leads[0].fechaCreacion);
-        const start = new Date(earliest.substring(0, 7) + "-01T12:00:00");
-        const diff  = (nowGMT5.getFullYear() - start.getFullYear()) * 12 + (nowGMT5.getMonth() - start.getMonth()) + 1;
-        count = Math.max(diff, 1);
-      }
-    } else {
-      count = range;
-    }
-
-    return Array.from({ length: count }, (_, i) => {
-      const d = new Date(nowGMT5);
-      d.setMonth(d.getMonth() - (count - 1 - i));
-      const key   = d.toISOString().substring(0, 7);
-      const label = d.toLocaleDateString("es-CO", { month: "short" });
-      const ml = leads.filter((l) => l.fechaCreacion.startsWith(key));
-      return {
-        key, label,
-        count:   ml.length,
-        ganados: ml.filter((l) => l.ganado === "Ganado").length,
-      };
-    });
-  }, [leads, range]);
-
-  const maxCount    = Math.max(...months.map((m) => m.count), 1);
-  const totalLeads  = months.reduce((s, m) => s + m.count, 0);
-  const totalGanados= months.reduce((s, m) => s + m.ganados, 0);
-  const BAR_H       = 72;
-  const showLegend  = range !== 0 && range <= 12 && hovered === null;
-
-  return (
-    <div className="bg-[#111120] rounded-xl border border-white/[0.07] px-5 py-4">
-      {/* header */}
-      <div className="flex items-center gap-2 mb-4 flex-wrap">
-        <div className="p-1.5 rounded-lg bg-indigo-500/10 shrink-0">
-          <BarChart2 size={15} className="text-indigo-400" />
-        </div>
-        <span className="text-sm font-semibold text-slate-200">Tendencia mensual</span>
-
-        {/* selector de rango */}
-        <div className="flex items-center gap-0.5 bg-white/[0.04] rounded-lg p-0.5 ml-1">
-          {TREND_RANGES.map(({ label, value }) => (
-            <button
-              key={label}
-              onClick={() => setRange(value)}
-              className={`px-2.5 py-1 text-[10px] font-semibold rounded-md transition-colors ${
-                range === value ? "bg-indigo-500/20 text-indigo-300" : "text-slate-500 hover:text-slate-300"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* panel derecho: tooltip de hover O leyenda */}
-        <div className="ml-auto flex items-center gap-4 min-h-[22px]">
-          {hovered ? (
-            <>
-              <span className="text-xs font-semibold text-slate-200 capitalize">{hovered.label}</span>
-              <span className="text-[11px] text-slate-400">
-                <span className="text-slate-200 font-bold">{hovered.count}</span> leads
-              </span>
-              <span className="text-[11px] text-emerald-400">
-                <span className="font-bold">{hovered.ganados}</span> ganados
-                {hovered.count > 0 && (
-                  <span className="text-slate-500 ml-1">
-                    · {Math.round((hovered.ganados / hovered.count) * 100)}%
-                  </span>
-                )}
-              </span>
-            </>
-          ) : showLegend ? (
-            <>
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500/30" />
-                <span className="text-[10px] text-slate-500">Total</span>
-                <span className="text-[10px] font-bold text-slate-300">{totalLeads}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500" />
-                <span className="text-[10px] text-slate-500">Ganados</span>
-                <span className="text-[10px] font-bold text-emerald-400">{totalGanados}</span>
-              </div>
-            </>
-          ) : null}
-        </div>
-      </div>
-
-      {/* barras */}
-      <div className="overflow-x-auto pb-1">
-        <div
-          className="flex items-end gap-1"
-          style={{ minWidth: months.length > 16 ? months.length * 26 : undefined }}
-        >
-          {months.map(({ key, label, count, ganados }, i) => {
-            const totalPx = Math.max(3, Math.round((count / maxCount) * BAR_H));
-            const ganPx   = count > 0 ? Math.round((ganados / count) * totalPx) : 0;
-            const year     = key.substring(0, 4);
-            const prevYear = i > 0 ? months[i - 1].key.substring(0, 4) : year;
-            const yearBreak = year !== prevYear;
-            return (
-              <Fragment key={key}>
-                {/* delimitador de año: línea punteada entre diciembre y enero */}
-                {yearBreak && (
-                  <div className="shrink-0 flex flex-col items-center gap-1 self-stretch">
-                    <div className="border-l border-dashed border-white/[0.14]" style={{ height: BAR_H }} />
-                    <span className="text-[9px] font-semibold text-slate-400 leading-none whitespace-nowrap">{year}</span>
-                  </div>
-                )}
-                <div
-                  className="flex-1 min-w-[20px] flex flex-col items-center cursor-default"
-                  onMouseEnter={() => setHovered({ label, count, ganados })}
-                  onMouseLeave={() => setHovered(null)}
-                >
-                  <div className="w-full flex items-end" style={{ height: BAR_H }}>
-                    <div
-                      className="relative w-full rounded-t overflow-hidden bg-indigo-500/20 transition-all duration-300"
-                      style={{ height: totalPx }}
-                    >
-                      <div
-                        className="absolute bottom-0 left-0 right-0 bg-indigo-500 transition-all duration-700"
-                        style={{ height: ganPx }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Fragment>
-            );
-          })}
-        </div>
       </div>
     </div>
   );
@@ -1182,9 +1026,6 @@ export default function LeadsView() {
       <Topbar title="Leads" subtitle="Oportunidades sincronizadas desde ODOO CRM" />
 
       <div className="flex-1 overflow-auto p-5 space-y-4">
-
-        {/* ── tendencia mensual ── */}
-        {leads.length > 0 && <MonthlyTrendWidget leads={leads} />}
 
         {/* ── barra de filtros ── */}
         <div className="bg-[#111120] rounded-xl border border-white/[0.08] overflow-hidden">
