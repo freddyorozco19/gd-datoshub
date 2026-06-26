@@ -258,6 +258,8 @@ function MonthlyTrendWidget({ leads }: { leads: Lead[] }) {
 
 /* ── mapa de calor ───────────────────────────────────────────────────── */
 function LeadHeatmap({ leads }: { leads: Lead[] }) {
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+
   const { weeks, monthLabels } = useMemo(() => {
     const WEEKS = 13;
     const countByDay: Record<string, number> = {};
@@ -356,10 +358,13 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
             {weeks.map((week, wi) => (
               <div key={wi} style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, minWidth: 0 }}>
                 {week.map(({ date, count, level }) => (
-                  <div
+                  <button
                     key={date}
+                    type="button"
+                    onClick={() => count > 0 && setSelectedDay(date)}
+                    disabled={count === 0}
                     title={`${date}: ${count} lead${count !== 1 ? "s" : ""}`}
-                    className={`rounded-sm cursor-default transition-opacity hover:opacity-70 ${COLORS[level]}`}
+                    className={`rounded-sm transition-opacity hover:opacity-70 ${count > 0 ? "cursor-pointer" : "cursor-default"} ${COLORS[level]}`}
                     style={{ width: "100%", aspectRatio: "1 / 1" }}
                   />
                 ))}
@@ -368,6 +373,14 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
           </div>
         </div>
       </div>
+
+      {selectedDay && (
+        <DayLeadsModal
+          leads={leads.filter((l) => l.fechaCreacion.startsWith(selectedDay))}
+          date={selectedDay}
+          onClose={() => setSelectedDay(null)}
+        />
+      )}
     </div>
   );
 }
