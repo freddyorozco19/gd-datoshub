@@ -80,8 +80,8 @@ const LINE_PALETTE = [
 /* ── skeleton de tabla ────────────────────────────────────────────────── */
 function TableSkeleton() {
   return (
-    <div className="flex-1 min-w-0 bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
-      <div className="px-4 py-2.5 border-b border-white/[0.05] bg-[#0e0e1c]">
+    <div className="flex-1 min-w-0 bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] overflow-hidden">
+      <div className="px-4 py-2.5 border-b border-white/[0.05] bg-black/20 backdrop-blur-md">
         <div className="h-3 w-44 bg-white/[0.08] rounded animate-pulse" />
       </div>
       <div className="divide-y divide-white/[0.04]">
@@ -162,7 +162,7 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
   const DAY_LABELS = ["L", "", "X", "", "V", "", "D"];
 
   return (
-    <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
+    <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-4">
       <div className="mb-3">
         <div className="flex items-center justify-center gap-2 mb-2">
           <div className="p-1.5 rounded-lg bg-emerald-500/10 shrink-0">
@@ -273,7 +273,7 @@ function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalPr
       style={{ backgroundColor: "rgba(7,7,15,0.85)" }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="bg-[#111120] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
+      <div className="bg-white/[0.06] backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div>
             <div className="flex items-center gap-2">
@@ -293,7 +293,7 @@ function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalPr
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-6 py-3 border-b border-white/[0.05] bg-[#0e0e1c]">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-6 py-3 border-b border-white/[0.05] bg-black/20 backdrop-blur-md">
           {([
             { label: "Línea",     val: mLinea,     set: setMLinea,     opts: mOpts.linea },
             { label: "Comercial", val: mComercial, set: setMComercial, opts: mOpts.comercial },
@@ -320,7 +320,7 @@ function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalPr
             <div className="flex items-center justify-center py-16 text-slate-400 text-sm">Sin leads con los filtros seleccionados</div>
           ) : (
             <table className="w-full text-xs">
-              <thead className="sticky top-0 bg-[#0e0e1c] border-b border-white/[0.07]">
+              <thead className="sticky top-0 bg-black/40 backdrop-blur-md border-b border-white/[0.07]">
                 <tr>
                   {["Nombre","Cliente","Comercial","Línea","Etapa","Tipo Oportunidad","Preventa","Ingresos Esp.","Estado"].map((h) => (
                     <th key={h} className="text-left px-4 py-3 font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
@@ -403,7 +403,7 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
       style={{ backgroundColor: "rgba(7,7,15,0.85)" }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="bg-[#111120] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-white/[0.06] backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
 
         {/* header */}
         <div className="flex items-start justify-between px-6 py-5 border-b border-white/[0.07]">
@@ -689,7 +689,7 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   }
 
   return (
-    <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
+    <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-4">
       <div className="flex items-center gap-2 mb-3">
         <div className="p-1.5 rounded-lg bg-amber-500/10 shrink-0">
           <Trophy size={15} className="text-amber-400" />
@@ -778,7 +778,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
   return (
     <div className="w-56 shrink-0 flex flex-col gap-2">
       <LeadHeatmap leads={leads} />
-      <div className="bg-[#111120] rounded-xl border border-white/[0.07] p-4">
+      <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-4">
         <div className="flex items-center gap-2 mb-3">
           <div className="p-1.5 rounded-lg bg-blue-500/10 shrink-0"><CalendarCheck2 size={15} className="text-blue-400" /></div>
           <span className="text-sm font-semibold text-slate-200 flex-1">Leads por día</span>
@@ -792,7 +792,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
           <button onClick={() => shiftDay(-1)} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 transition-colors shrink-0"><ChevronLeft size={14} /></button>
           <input type="date" value={selectedDate} max={todayGMT5()}
             onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
-            className="flex-1 min-w-0 text-xs border border-white/[0.07] rounded-lg px-2 py-1.5 text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#111120]" />
+            className="flex-1 min-w-0 text-xs border border-white/[0.1] rounded-lg px-2 py-1.5 text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/[0.04] backdrop-blur-md" />
           <button onClick={() => shiftDay(1)} disabled={isToday}
             className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 disabled:opacity-30 transition-colors shrink-0"><ChevronRight size={14} /></button>
         </div>
@@ -1042,10 +1042,10 @@ export default function LeadsView() {
         </div>
 
         {/* ── barra de filtros ── */}
-        <div className="bg-[#111120] rounded-xl border border-white/[0.08] overflow-hidden">
+        <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] overflow-hidden">
 
           {/* cabecera de filtros */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#0e0e1c] border-b border-white/[0.08]">
+          <div className="flex items-center justify-between px-4 py-3 bg-black/20 backdrop-blur-md border-b border-white/[0.08]">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-md bg-blue-500/10 flex items-center justify-center">
                 <SlidersHorizontal size={12} className="text-blue-400" />
@@ -1161,7 +1161,7 @@ export default function LeadsView() {
             <TableSkeleton />
             <div className="w-56 shrink-0 space-y-2">
               {[80, 120].map((h) => (
-                <div key={h} className="bg-[#111120] rounded-xl border border-white/[0.07] p-4 animate-pulse" style={{ height: h }}>
+                <div key={h} className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-4 animate-pulse" style={{ height: h }}>
                   <div className="h-3 w-28 bg-white/[0.08] rounded mb-3" />
                   <div className="space-y-2">
                     <div className="h-2 bg-white/[0.06] rounded w-full" />
@@ -1183,9 +1183,9 @@ export default function LeadsView() {
           <div className="flex items-start gap-4">
 
             {/* ── tabla ── */}
-            <div className="flex-1 min-w-0 bg-[#111120] rounded-xl border border-white/[0.07] overflow-hidden">
+            <div className="flex-1 min-w-0 bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] overflow-hidden">
               {/* info bar */}
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.05] bg-[#0e0e1c]">
+              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.05] bg-black/20 backdrop-blur-md">
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-slate-500">
                     {filtered.length} de {leads.length} leads
@@ -1206,7 +1206,7 @@ export default function LeadsView() {
               <div className="overflow-x-auto">
                 <table className="w-full text-xs min-w-[1200px]">
                   <thead>
-                    <tr className="bg-[#0e0e1c] border-b border-white/[0.07]">
+                    <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
                       {(
                         [
                           ["nombre",             "Nombre"],
@@ -1227,7 +1227,7 @@ export default function LeadsView() {
                           key={key}
                           onClick={() => toggleSort(key)}
                           className={`text-left px-3 py-2.5 font-semibold text-slate-500 uppercase tracking-wide cursor-pointer hover:text-slate-200 select-none whitespace-nowrap
-                            ${idx === 0 ? "sticky left-0 z-20 bg-[#0e0e1c] shadow-[1px_0_0_0_rgba(255,255,255,0.07)]" : ""}`}
+                            ${idx === 0 ? "sticky left-0 z-20 bg-black/50 backdrop-blur-md shadow-[1px_0_0_0_rgba(255,255,255,0.07)]" : ""}`}
                         >
                           <span className="flex items-center gap-1">{label}<SortIcon col={key} /></span>
                         </th>
@@ -1304,7 +1304,7 @@ export default function LeadsView() {
 
               {/* paginación */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.05] bg-[#0e0e1c]">
+                <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.05] bg-black/20 backdrop-blur-md">
                   <span className="text-xs text-slate-500">
                     {((currentPage - 1) * PAGE_SIZE) + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)} de {filtered.length} registros
                   </span>
