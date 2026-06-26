@@ -1252,11 +1252,11 @@ export default function LeadsView() {
                         <tr
                           key={lead.id}
                           onClick={() => setSelectedLead(lead)}
-                          className={`transition-colors cursor-pointer group ${isNew ? "bg-emerald-500/10/40 hover:bg-emerald-100/50" : "hover:bg-blue-500/10/50"}`}
+                          className={`transition-colors cursor-pointer group ${isNew ? "bg-emerald-500/10 hover:bg-emerald-500/20" : "hover:bg-blue-500/10"}`}
                         >
                           {/* 3. columna Nombre sticky */}
-                          <td className={`px-3 py-2.5 sticky left-0 z-10 shadow-[1px_0_0_0_#e2e8f0] ${
-                            isNew ? "bg-emerald-500/10/40 group-hover:bg-emerald-100/50" : "bg-[#111120] group-hover:bg-blue-500/10/50"
+                          <td className={`px-3 py-2.5 sticky left-0 z-10 backdrop-blur-md shadow-[1px_0_0_0_#e2e8f0] ${
+                            isNew ? "bg-emerald-500/20 group-hover:bg-emerald-500/30" : "bg-black/40 group-hover:bg-blue-500/15"
                           }`}>
                             <div className="flex items-start gap-1.5">
                               {/* 7. badge NEW */}
