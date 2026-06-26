@@ -1030,7 +1030,15 @@ export default function LeadsView() {
     <div className="flex flex-col h-full overflow-hidden">
       <Topbar title="Leads" subtitle="Oportunidades sincronizadas desde ODOO CRM" />
 
-      <div className="flex-1 overflow-auto p-5 space-y-4">
+      <div className="flex-1 overflow-auto p-5 space-y-4 relative">
+
+        {/* fondo decorativo — manchas de color difusas para que el efecto "liquid glass" sea visible */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute top-10 right-[8%] w-[420px] h-[420px] rounded-full bg-violet-600/25 blur-[110px]" />
+          <div className="absolute top-[28%] right-[22%] w-[320px] h-[320px] rounded-full bg-cyan-500/20 blur-[100px]" />
+          <div className="absolute top-[8%] left-[20%] w-[360px] h-[360px] rounded-full bg-amber-500/15 blur-[110px]" />
+          <div className="absolute top-[45%] left-[5%] w-[300px] h-[300px] rounded-full bg-emerald-500/15 blur-[100px]" />
+        </div>
 
         {/* ── barra de filtros ── */}
         <div className="bg-[#111120] rounded-xl border border-white/[0.08] overflow-hidden">
