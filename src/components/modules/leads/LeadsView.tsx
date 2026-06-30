@@ -974,18 +974,30 @@ export default function LeadsView() {
 
   /* sincroniza alturas entre la columna fija y las columnas scrollables */
   useEffect(() => {
-    requestAnimationFrame(() => {
-      const fRows = frozenBodyRef.current ? Array.from(frozenBodyRef.current.rows) : [];
-      const sRows = scrollBodyRef.current ? Array.from(scrollBodyRef.current.rows) : [];
-      fRows.forEach((r) => { r.style.height = ""; });
-      sRows.forEach((r) => { r.style.height = ""; });
-      const n = Math.min(fRows.length, sRows.length);
-      for (let i = 0; i < n; i++) {
-        const h = Math.max(fRows[i].offsetHeight, sRows[i].offsetHeight);
-        fRows[i].style.height = `${h}px`;
-        sRows[i].style.height = `${h}px`;
-      }
+    let id1: number, id2: number;
+    id1 = requestAnimationFrame(() => {
+      id2 = requestAnimationFrame(() => {
+        const fRows = frozenBodyRef.current ? Array.from(frozenBodyRef.current.rows) : [];
+        const sRows = scrollBodyRef.current ? Array.from(scrollBodyRef.current.rows) : [];
+        const n = Math.min(fRows.length, sRows.length);
+
+        // 1. reset para medir sin restricciones previas
+        for (let i = 0; i < n; i++) { fRows[i].style.height = ""; sRows[i].style.height = ""; }
+
+        // 2. leer TODAS las alturas en un solo batch (evita layout thrashing)
+        const heights: number[] = [];
+        for (let i = 0; i < n; i++) {
+          heights.push(Math.max(fRows[i].offsetHeight, sRows[i].offsetHeight));
+        }
+
+        // 3. escribir TODAS las alturas en un solo batch
+        for (let i = 0; i < n; i++) {
+          fRows[i].style.height = `${heights[i]}px`;
+          sRows[i].style.height = `${heights[i]}px`;
+        }
+      });
     });
+    return () => { cancelAnimationFrame(id1); cancelAnimationFrame(id2); };
   }, [paginated, loading]);
 
   const activeFilterCount = useMemo(() => {
