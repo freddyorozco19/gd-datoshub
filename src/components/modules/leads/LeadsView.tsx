@@ -1230,7 +1230,7 @@ export default function LeadsView() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody ref={frozenBodyRef} className="divide-y divide-white/[0.06]">
+                  <tbody ref={frozenBodyRef}>
                     {filtered.length === 0 ? (
                       <tr><td className="px-3 py-12" /></tr>
                     ) : paginated.map((lead, i) => {
@@ -1239,7 +1239,7 @@ export default function LeadsView() {
                         <tr
                           key={lead.id}
                           onClick={() => setSelectedLead(lead)}
-                          className={`transition-colors cursor-pointer group ${
+                          className={`border-b border-white/[0.06] transition-colors cursor-pointer group ${
                             isNew ? "bg-emerald-500/10 hover:bg-emerald-500/20" : i % 2 === 1 ? "bg-white/[0.02] hover:bg-blue-500/10" : "hover:bg-blue-500/10"
                           }`}
                         >
@@ -1297,7 +1297,7 @@ export default function LeadsView() {
                         ))}
                       </tr>
                     </thead>
-                    <tbody ref={scrollBodyRef} className="divide-y divide-white/[0.06]">
+                    <tbody ref={scrollBodyRef}>
                       {filtered.length === 0 ? (
                         <tr>
                           <td colSpan={11} className="px-4 py-12 text-center text-slate-400 text-sm">
@@ -1310,7 +1310,7 @@ export default function LeadsView() {
                           <tr
                             key={lead.id}
                             onClick={() => setSelectedLead(lead)}
-                            className={`transition-colors cursor-pointer ${
+                            className={`border-b border-white/[0.06] transition-colors cursor-pointer ${
                               isNew ? "bg-emerald-500/10 hover:bg-emerald-500/20" : i % 2 === 1 ? "bg-white/[0.02] hover:bg-blue-500/10" : "hover:bg-blue-500/10"
                             }`}
                           >
