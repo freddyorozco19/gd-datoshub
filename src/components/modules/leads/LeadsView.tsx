@@ -1222,7 +1222,7 @@ export default function LeadsView() {
                           key={key}
                           onClick={() => toggleSort(key)}
                           className={`text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide cursor-pointer hover:text-white select-none whitespace-nowrap
-                            ${idx === 0 ? "sticky left-0 z-20 bg-[#0b0b17]" : ""}`}
+                            ${idx === 0 ? "sticky left-0 z-20 bg-[#0d0d14]" : ""}`}
                         >
                           <span className="flex items-center gap-1">{label}<SortIcon col={key} /></span>
                         </th>
@@ -1248,7 +1248,7 @@ export default function LeadsView() {
                           }`}
                         >
                           {/* 3. columna Nombre sticky */}
-                          <td className="px-3 py-3 sticky left-0 z-10 bg-[#07070f] shadow-[1px_0_0_0_rgba(255,255,255,0.07)]">
+                          <td className="px-3 py-3 sticky left-0 z-10 bg-[#111119] shadow-[1px_0_0_0_rgba(255,255,255,0.07)]">
                             <div className="flex items-start gap-1.5">
                               {/* 7. badge NEW */}
                               {isNew && (
