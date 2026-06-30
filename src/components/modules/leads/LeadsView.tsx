@@ -1012,11 +1012,11 @@ export default function LeadsView() {
       : <ChevronDown size={13} className="opacity-20" />;
 
   const Select = ({ label, field, options }: { label: string; field: keyof Filters; options: string[] }) => (
-    <div className="flex flex-col gap-1.5 min-w-0">
-      <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">{label}</label>
+    <div className="flex flex-col gap-1.5 shrink-0 w-32">
+      <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{label}</label>
       <select value={filters[field] as string}
         onChange={(e) => setFilters((f) => ({ ...f, [field]: e.target.value }))}
-        className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors cursor-pointer">
+        className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors cursor-pointer w-full">
         {options.map((o) => (
           <option key={o} value={o} className="bg-[#0e0e1c]">{o === "ALL" ? "Todos" : o === "true" ? "Activo" : o === "false" ? "Inactivo" : o}</option>
         ))}
@@ -1058,66 +1058,66 @@ export default function LeadsView() {
             )}
           </div>
 
-          {/* fila 1: dropdowns en grid de 6 columnas */}
-          <div className="px-4 py-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 border-b border-white/[0.06]">
+          {/* todo en un solo renglón — scroll horizontal si no cabe */}
+          <div className="px-4 py-4 flex items-end gap-3.5 overflow-x-auto">
             <Select label="Comercial"     field="comercial"        options={opts.comercial} />
             <Select label="Línea"         field="linea"            options={opts.linea} />
             <Select label="Oportunidad"   field="tipoOportunidad"  options={opts.tipoOportunidad} />
             <Select label="Equipo Ventas" field="equipoVentas"     options={opts.equipoVentas} />
             <Select label="Preventa"      field="preventa"         options={opts.preventa} />
             <Select label="Activo"        field="activo"           options={opts.activo} />
-          </div>
 
-          {/* fila 2: rango de fechas · búsqueda · acciones */}
-          <div className="px-4 py-4 flex flex-wrap items-end gap-4">
+            <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
 
             {/* rango de fechas agrupado */}
-            <div className="flex items-end gap-2.5">
+            <div className="flex items-end gap-2.5 shrink-0">
               <Calendar size={14} className="text-slate-500 mb-2.5 shrink-0" />
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Desde</label>
+                <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Desde</label>
                 <input
                   type="date"
                   value={filters.dateFrom}
                   onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value }))}
-                  className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors w-36"
+                  className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors w-32"
                 />
               </div>
               <span className="text-slate-500 mb-2.5 text-sm leading-none">→</span>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Hasta</label>
+                <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Hasta</label>
                 <input
                   type="date"
                   value={filters.dateTo}
                   onChange={(e) => setFilters((f) => ({ ...f, dateTo: e.target.value }))}
-                  className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors w-36"
+                  className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors w-32"
                 />
               </div>
             </div>
 
-            <div className="flex-1" />
+            <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
 
             {/* búsqueda */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Buscar</label>
+            <div className="flex flex-col gap-1.5 shrink-0">
+              <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Buscar</label>
               <div className="relative">
                 <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Nombre, cliente…"
-                  className="pl-8 pr-3 py-2 text-xs rounded-lg w-48 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 placeholder-slate-600 transition-colors"
+                  className="pl-8 pr-3 py-2 text-xs rounded-lg w-44 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 placeholder-slate-600 transition-colors"
                 />
               </div>
             </div>
 
+            <div className="flex-1 min-w-2" />
+
             {/* botones de acción */}
-            <div className="flex items-end gap-2.5">
+            <div className="flex items-end gap-2.5 shrink-0">
               <button
                 onClick={loadLeads}
                 disabled={loading}
                 title="Sincronizar ODOO"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/[0.1] bg-white/[0.03] text-xs font-medium text-slate-300 hover:bg-white/[0.07] hover:border-white/[0.18] disabled:opacity-50 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/[0.1] bg-white/[0.03] text-xs font-medium text-slate-300 hover:bg-white/[0.07] hover:border-white/[0.18] disabled:opacity-50 transition-colors whitespace-nowrap"
               >
                 <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
                 {loading ? "Cargando…" : "Sincronizar"}
@@ -1126,7 +1126,7 @@ export default function LeadsView() {
                 onClick={exportCSV}
                 disabled={!filtered.length}
                 title="Exportar CSV"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-500 disabled:opacity-40 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-500 disabled:opacity-40 transition-colors whitespace-nowrap"
               >
                 <Download size={13} />
                 Exportar
