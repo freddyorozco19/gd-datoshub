@@ -605,18 +605,24 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
       </div>
 
       {availableLineas.length > 0 && (
-        <div className="relative flex flex-wrap items-center gap-0.5 mb-3 p-1 rounded-full bg-black/25 backdrop-blur-md border border-white/[0.06] w-fit shadow-[inset_0_1px_2px_rgba(0,0,0,0.4)]">
+        <div className="flex flex-wrap gap-1 mb-3">
           {availableLineas.map((linea) => {
             const palette = lineaColor[linea] ?? LINE_PALETTE[0];
             const active = lineaFilter.includes(linea);
             return (
-              <button key={linea} type="button" title={linea} onClick={() => toggleLinea(linea)}
-                className={`relative text-[10px] font-semibold px-3 py-1.5 rounded-full transition-all duration-200 truncate max-w-[110px] ${
+              <button
+                key={linea}
+                type="button"
+                title={linea}
+                onClick={() => toggleLinea(linea)}
+                className={`flex items-center gap-1.5 text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-all duration-150 truncate max-w-[120px] ${
                   active
-                    ? `text-white bg-gradient-to-b from-white/[0.20] to-white/[0.06] ring-1 ring-white/[0.18] shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-1px_2px_rgba(0,0,0,0.25)] ${palette.glow}`
-                    : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]"
-                }`}>
-                {lineaLabel(linea)}
+                    ? `${palette.badge} border-current/[0.15]`
+                    : "text-slate-500 bg-white/[0.03] border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.05] hover:border-white/[0.12]"
+                }`}
+              >
+                <span className={`shrink-0 w-1.5 h-1.5 rounded-full ${active ? palette.bar : "bg-slate-600"}`} />
+                <span className="truncate">{lineaLabel(linea)}</span>
               </button>
             );
           })}
@@ -698,13 +704,15 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
       </div>
 
       {/* tabs de ordenamiento */}
-      <div className="flex gap-0.5 mb-3 bg-white/[0.06] rounded-lg p-0.5">
+      <div className="flex gap-1 mb-3">
         {(["leads", "ganados", "ingresos"] as const).map((key) => (
           <button
             key={key}
             onClick={() => setSortBy(key)}
-            className={`flex-1 text-[10px] font-semibold py-1 rounded-md transition-colors capitalize ${
-              sortBy === key ? "bg-white/[0.10] text-amber-400 shadow-sm" : "text-slate-400 hover:text-slate-300"
+            className={`flex-1 text-[10px] font-semibold py-1.5 rounded-lg border transition-all duration-150 capitalize ${
+              sortBy === key
+                ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                : "text-slate-500 bg-white/[0.03] border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.05]"
             }`}
           >
             {key}
