@@ -804,8 +804,6 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
             className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 disabled:opacity-30 transition-colors shrink-0"><ChevronRight size={14} /></button>
         </div>
 
-        <p className="text-xs text-slate-400 capitalize mb-3">{fmtLabel}</p>
-
         <div className="flex items-end gap-1.5 mb-4">
           <span className="text-4xl font-bold text-slate-100 leading-none">{dayLeads.length}</span>
           <span className="text-xs text-slate-400 mb-1">leads</span>
