@@ -974,30 +974,26 @@ export default function LeadsView() {
 
   /* sincroniza alturas entre la columna fija y las columnas scrollables */
   useEffect(() => {
-    let id1: number, id2: number;
-    id1 = requestAnimationFrame(() => {
-      id2 = requestAnimationFrame(() => {
-        const fRows = frozenBodyRef.current ? Array.from(frozenBodyRef.current.rows) : [];
-        const sRows = scrollBodyRef.current ? Array.from(scrollBodyRef.current.rows) : [];
-        const n = Math.min(fRows.length, sRows.length);
+    const syncHeights = () => {
+      const fRows = frozenBodyRef.current ? Array.from(frozenBodyRef.current.rows) : [];
+      const sRows = scrollBodyRef.current ? Array.from(scrollBodyRef.current.rows) : [];
+      const n = Math.min(fRows.length, sRows.length);
+      if (n === 0) return;
+      // reset (batch write)
+      for (let i = 0; i < n; i++) { fRows[i].style.height = ""; sRows[i].style.height = ""; }
+      // leer todas las alturas naturales en un solo batch (evita layout thrashing)
+      const heights: number[] = [];
+      for (let i = 0; i < n; i++) heights.push(Math.max(fRows[i].offsetHeight, sRows[i].offsetHeight));
+      // escribir en un solo batch
+      for (let i = 0; i < n; i++) { fRows[i].style.height = `${heights[i]}px`; sRows[i].style.height = `${heights[i]}px`; }
+    };
 
-        // 1. reset para medir sin restricciones previas
-        for (let i = 0; i < n; i++) { fRows[i].style.height = ""; sRows[i].style.height = ""; }
+    // primera pasada: tras render de React
+    const r1 = requestAnimationFrame(() => requestAnimationFrame(syncHeights));
+    // segunda pasada: fallback para reflows tardíos (fuentes, subpixel, etc.)
+    const t1 = setTimeout(syncHeights, 120);
 
-        // 2. leer TODAS las alturas en un solo batch (evita layout thrashing)
-        const heights: number[] = [];
-        for (let i = 0; i < n; i++) {
-          heights.push(Math.max(fRows[i].offsetHeight, sRows[i].offsetHeight));
-        }
-
-        // 3. escribir TODAS las alturas en un solo batch
-        for (let i = 0; i < n; i++) {
-          fRows[i].style.height = `${heights[i]}px`;
-          sRows[i].style.height = `${heights[i]}px`;
-        }
-      });
-    });
-    return () => { cancelAnimationFrame(id1); cancelAnimationFrame(id2); };
+    return () => { cancelAnimationFrame(r1); clearTimeout(t1); };
   }, [paginated, loading]);
 
   const activeFilterCount = useMemo(() => {
