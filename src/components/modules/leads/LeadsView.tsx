@@ -1195,7 +1195,7 @@ export default function LeadsView() {
 
               {/* tabla */}
               <div className="overflow-x-auto">
-                <table className="w-full text-xs min-w-[1200px]">
+                <table className="leads-table w-full text-xs min-w-[1200px]">
                   <thead>
                     <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
                       {(

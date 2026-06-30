@@ -54,6 +54,15 @@ body {
   letter-spacing: -0.006em;
 }
 
+/* ── Tipografía Inter SOLO para la tabla de Leads (mejor legibilidad que
+   Century Gothic en texto denso/pequeño: mayor x-height, números más
+   distinguibles). Alta especificidad para ganarle a la regla global. */
+.leads-table,
+.leads-table * {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.006em;
+}
+
 /* ── Scrollbar coherente con el sidebar oscuro ─────────────────────────── */
 .sidebar-scroll {
   scrollbar-width: thin;                                  /* Firefox */
