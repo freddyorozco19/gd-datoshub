@@ -605,7 +605,7 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
       </div>
 
       {availableLineas.length > 0 && (
-        <div className="flex flex-wrap gap-1 mb-3">
+        <div className="flex gap-1 mb-3 overflow-x-auto pb-0.5">
           {availableLineas.map((linea) => {
             const palette = lineaColor[linea] ?? LINE_PALETTE[0];
             const active = lineaFilter.includes(linea);
@@ -615,14 +615,13 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
                 type="button"
                 title={linea}
                 onClick={() => toggleLinea(linea)}
-                className={`flex items-center gap-1.5 text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-all duration-150 truncate max-w-[120px] ${
+                className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-all duration-150 whitespace-nowrap ${
                   active
                     ? `${palette.badge} border-current/[0.15]`
                     : "text-slate-500 bg-white/[0.03] border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.05] hover:border-white/[0.12]"
                 }`}
               >
-                <span className={`shrink-0 w-1.5 h-1.5 rounded-full ${active ? palette.bar : "bg-slate-600"}`} />
-                <span className="truncate">{lineaLabel(linea)}</span>
+                {lineaLabel(linea)}
               </button>
             );
           })}
