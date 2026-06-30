@@ -807,7 +807,6 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
         <div className="flex items-end gap-1.5 mb-4">
           <span className="text-4xl font-bold text-slate-100 leading-none">{dayLeads.length}</span>
           <span className="text-xs text-slate-400 mb-1">leads</span>
-          {isToday && <span className="ml-auto text-xs font-medium px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-400">hoy</span>}
         </div>
 
         {sorted.length === 0 ? (
