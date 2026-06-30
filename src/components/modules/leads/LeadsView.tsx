@@ -878,6 +878,8 @@ export default function LeadsView() {
   const [newLeadIds,    setNewLeadIds]    = useState<Set<number>>(new Set());
   const prevLeadIdsRef = useRef<Set<number>>(new Set());
   const isFirstLoad    = useRef(true);
+  const frozenBodyRef  = useRef<HTMLTableSectionElement>(null);
+  const scrollBodyRef  = useRef<HTMLTableSectionElement>(null);
 
   const [search,  setSearch]  = useState("");
   const [filters, setFilters] = useState<Filters>({
@@ -969,6 +971,22 @@ export default function LeadsView() {
     return filtered.slice(start, start + PAGE_SIZE);
   }, [filtered, currentPage]);
   const goTo = useCallback((p: number) => setCurrentPage(Math.max(1, Math.min(p, totalPages))), [totalPages]);
+
+  /* sincroniza alturas entre la columna fija y las columnas scrollables */
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      const fRows = frozenBodyRef.current ? Array.from(frozenBodyRef.current.rows) : [];
+      const sRows = scrollBodyRef.current ? Array.from(scrollBodyRef.current.rows) : [];
+      fRows.forEach((r) => { r.style.height = ""; });
+      sRows.forEach((r) => { r.style.height = ""; });
+      const n = Math.min(fRows.length, sRows.length);
+      for (let i = 0; i < n; i++) {
+        const h = Math.max(fRows[i].offsetHeight, sRows[i].offsetHeight);
+        fRows[i].style.height = `${h}px`;
+        sRows[i].style.height = `${h}px`;
+      }
+    });
+  }, [paginated, loading]);
 
   const activeFilterCount = useMemo(() => {
     let c = 0;
@@ -1197,49 +1215,27 @@ export default function LeadsView() {
                 {loading && <RefreshCw size={13} className="animate-spin text-blue-500" />}
               </div>
 
-              {/* tabla */}
-              <div className="overflow-x-auto">
-                <table className="leads-table w-full text-xs min-w-[1200px]">
+              {/* tabla — columna NOMBRE fija + resto scrollable */}
+              <div className="flex overflow-hidden">
+
+                {/* ── panel izquierdo: NOMBRE (no scrollea) ── */}
+                <table className="leads-table text-xs shrink-0 border-r border-white/[0.07]" style={{ width: 244 }}>
                   <thead>
                     <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
-                      {(
-                        [
-                          ["nombre",             "Nombre"],
-                          ["cliente",            "Cliente"],
-                          ["comercial",          "Comercial"],
-                          ["linea",              "Línea"],
-                          ["id",                 "ID"],
-                          ["preventa",           "Preventa"],
-                          ["fechaCreacion",      "Fecha Creación"],
-                          ["ingresosEsperados",  "Ingresos Esp."],
-                          ["cierreEsperado",     "Cierre Esp."],
-                          ["ganado",             "Estado"],
-                          ["activo",             "Activo"],
-                          ["ultimaModificacion", "Actualizado"],
-                        ] as [SortKey, string][]
-                      ).map(([key, label], idx) => (
-                        <th
-                          key={key}
-                          onClick={() => toggleSort(key)}
-                          className={`text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide cursor-pointer hover:text-white select-none whitespace-nowrap
-                            ${idx === 0 ? "sticky left-0 z-20 bg-[#121420]" : ""}`}
-                        >
-                          <span className="flex items-center gap-1">{label}<SortIcon col={key} /></span>
-                        </th>
-                      ))}
+                      <th
+                        onClick={() => toggleSort("nombre")}
+                        className="text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide cursor-pointer hover:text-white select-none whitespace-nowrap"
+                      >
+                        <span className="flex items-center gap-1">Nombre <SortIcon col="nombre" /></span>
+                      </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/[0.06]">
+                  <tbody ref={frozenBodyRef} className="divide-y divide-white/[0.06]">
                     {filtered.length === 0 ? (
-                      <tr>
-                        <td colSpan={12} className="px-4 py-12 text-center text-slate-400 text-sm">
-                          Sin leads con los filtros aplicados
-                        </td>
-                      </tr>
+                      <tr><td className="px-3 py-12" /></tr>
                     ) : paginated.map((lead, i) => {
                       const isNew = newLeadIds.has(lead.id);
                       return (
-                        // 1. fila clickable → LeadDetailModal
                         <tr
                           key={lead.id}
                           onClick={() => setSelectedLead(lead)}
@@ -1247,14 +1243,10 @@ export default function LeadsView() {
                             isNew ? "bg-emerald-500/10 hover:bg-emerald-500/20" : i % 2 === 1 ? "bg-white/[0.02] hover:bg-blue-500/10" : "hover:bg-blue-500/10"
                           }`}
                         >
-                          {/* 3. columna Nombre sticky */}
-                          <td className="px-3 py-3 sticky left-0 z-10 bg-[#161828] shadow-[1px_0_0_0_rgba(255,255,255,0.07)]">
+                          <td className="px-3 py-3">
                             <div className="flex items-start gap-1.5">
-                              {/* 7. badge NEW */}
                               {isNew && (
-                                <span className="mt-0.5 shrink-0 text-[8px] font-bold px-1 py-px rounded bg-emerald-500 text-white uppercase leading-tight">
-                                  NEW
-                                </span>
+                                <span className="mt-0.5 shrink-0 text-[8px] font-bold px-1 py-px rounded bg-emerald-500 text-white uppercase leading-tight">NEW</span>
                               )}
                               <div className="min-w-0">
                                 <p className="font-semibold text-white max-w-[200px] truncate" title={lead.nombre}>{lead.nombre}</p>
@@ -1269,30 +1261,84 @@ export default function LeadsView() {
                               </div>
                             </div>
                           </td>
-                          <td className="px-3 py-3 text-slate-300 max-w-[160px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
-                          <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.comercial || "—"}</td>
-                          <td className="px-3 py-3 whitespace-nowrap max-w-[180px]">
-                            {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium truncate inline-block max-w-full align-bottom" title={lead.linea}>{lead.linea}</span> : <span className="text-slate-600">—</span>}
-                          </td>
-                          <td className="px-3 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">{lead.id}</td>
-                          <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
-                          <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
-                          <td className="px-3 py-3 text-right font-semibold text-white whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
-                          <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
-                          <td className="px-3 py-3">
-                            <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-300"}`}>{lead.ganado}</span>
-                          </td>
-                          <td className="px-3 py-3 text-center">
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-400"}`}>
-                              {lead.activo ? "Sí" : "No"}
-                            </span>
-                          </td>
-                          <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.ultimaModificacion || "—"}</td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
+
+                {/* ── panel derecho: resto de columnas con scroll horizontal ── */}
+                <div className="overflow-x-auto flex-1 min-w-0">
+                  <table className="leads-table text-xs" style={{ minWidth: 960 }}>
+                    <thead>
+                      <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
+                        {(
+                          [
+                            ["cliente",            "Cliente"],
+                            ["comercial",          "Comercial"],
+                            ["linea",              "Línea"],
+                            ["id",                 "ID"],
+                            ["preventa",           "Preventa"],
+                            ["fechaCreacion",      "Fecha Creación"],
+                            ["ingresosEsperados",  "Ingresos Esp."],
+                            ["cierreEsperado",     "Cierre Esp."],
+                            ["ganado",             "Estado"],
+                            ["activo",             "Activo"],
+                            ["ultimaModificacion", "Actualizado"],
+                          ] as [SortKey, string][]
+                        ).map(([key, label]) => (
+                          <th
+                            key={key}
+                            onClick={() => toggleSort(key)}
+                            className="text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide cursor-pointer hover:text-white select-none whitespace-nowrap"
+                          >
+                            <span className="flex items-center gap-1">{label}<SortIcon col={key} /></span>
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody ref={scrollBodyRef} className="divide-y divide-white/[0.06]">
+                      {filtered.length === 0 ? (
+                        <tr>
+                          <td colSpan={11} className="px-4 py-12 text-center text-slate-400 text-sm">
+                            Sin leads con los filtros aplicados
+                          </td>
+                        </tr>
+                      ) : paginated.map((lead, i) => {
+                        const isNew = newLeadIds.has(lead.id);
+                        return (
+                          <tr
+                            key={lead.id}
+                            onClick={() => setSelectedLead(lead)}
+                            className={`transition-colors cursor-pointer ${
+                              isNew ? "bg-emerald-500/10 hover:bg-emerald-500/20" : i % 2 === 1 ? "bg-white/[0.02] hover:bg-blue-500/10" : "hover:bg-blue-500/10"
+                            }`}
+                          >
+                            <td className="px-3 py-3 text-slate-300 max-w-[160px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
+                            <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.comercial || "—"}</td>
+                            <td className="px-3 py-3 whitespace-nowrap max-w-[180px]">
+                              {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium truncate inline-block max-w-full align-bottom" title={lead.linea}>{lead.linea}</span> : <span className="text-slate-600">—</span>}
+                            </td>
+                            <td className="px-3 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">{lead.id}</td>
+                            <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
+                            <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
+                            <td className="px-3 py-3 text-right font-semibold text-white whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
+                            <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
+                            <td className="px-3 py-3">
+                              <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-300"}`}>{lead.ganado}</span>
+                            </td>
+                            <td className="px-3 py-3 text-center">
+                              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-400"}`}>
+                                {lead.activo ? "Sí" : "No"}
+                              </span>
+                            </td>
+                            <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.ultimaModificacion || "—"}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               {/* paginación */}
