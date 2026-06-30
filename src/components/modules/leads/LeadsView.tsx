@@ -1217,7 +1217,7 @@ export default function LeadsView() {
                         <th
                           key={key}
                           onClick={() => toggleSort(key)}
-                          className={`text-left px-3 py-2.5 font-semibold text-slate-500 uppercase tracking-wide cursor-pointer hover:text-slate-200 select-none whitespace-nowrap
+                          className={`text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide cursor-pointer hover:text-white select-none whitespace-nowrap
                             ${idx === 0 ? "sticky left-0 z-20" : ""}`}
                         >
                           <span className="flex items-center gap-1">{label}<SortIcon col={key} /></span>
@@ -1225,24 +1225,26 @@ export default function LeadsView() {
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/[0.04]">
+                  <tbody className="divide-y divide-white/[0.06]">
                     {filtered.length === 0 ? (
                       <tr>
                         <td colSpan={12} className="px-4 py-12 text-center text-slate-400 text-sm">
                           Sin leads con los filtros aplicados
                         </td>
                       </tr>
-                    ) : paginated.map((lead) => {
+                    ) : paginated.map((lead, i) => {
                       const isNew = newLeadIds.has(lead.id);
                       return (
                         // 1. fila clickable → LeadDetailModal
                         <tr
                           key={lead.id}
                           onClick={() => setSelectedLead(lead)}
-                          className={`transition-colors cursor-pointer group ${isNew ? "bg-emerald-500/10 hover:bg-emerald-500/20" : "hover:bg-blue-500/10"}`}
+                          className={`transition-colors cursor-pointer group ${
+                            isNew ? "bg-emerald-500/10 hover:bg-emerald-500/20" : i % 2 === 1 ? "bg-white/[0.02] hover:bg-blue-500/10" : "hover:bg-blue-500/10"
+                          }`}
                         >
                           {/* 3. columna Nombre sticky */}
-                          <td className="px-3 py-2.5 sticky left-0 z-10 shadow-[1px_0_0_0_#e2e8f0]">
+                          <td className="px-3 py-3 sticky left-0 z-10 shadow-[1px_0_0_0_#e2e8f0]">
                             <div className="flex items-start gap-1.5">
                               {/* 7. badge NEW */}
                               {isNew && (
@@ -1251,11 +1253,11 @@ export default function LeadsView() {
                                 </span>
                               )}
                               <div className="min-w-0">
-                                <p className="font-medium text-slate-100 max-w-[200px] truncate" title={lead.nombre}>{lead.nombre}</p>
+                                <p className="font-semibold text-white max-w-[200px] truncate" title={lead.nombre}>{lead.nombre}</p>
                                 <div className="flex items-center gap-2 mt-0.5">
-                                  {lead.correo && <p className="text-slate-400 truncate max-w-[170px] text-[10px]">{lead.correo}</p>}
+                                  {lead.correo && <p className="text-slate-500 truncate max-w-[170px] text-[10px]">{lead.correo}</p>}
                                   {lead.adjuntos > 0 && (
-                                    <span className="flex items-center gap-0.5 text-[9px] text-slate-400 shrink-0">
+                                    <span className="flex items-center gap-0.5 text-[9px] text-slate-500 shrink-0">
                                       <Paperclip size={9} />{lead.adjuntos}
                                     </span>
                                   )}
@@ -1263,27 +1265,27 @@ export default function LeadsView() {
                               </div>
                             </div>
                           </td>
-                          <td className="px-3 py-2.5 text-slate-600 max-w-[160px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
-                          <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{lead.comercial || "—"}</td>
-                          <td className="px-3 py-2.5 whitespace-nowrap">
-                            {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium">{lead.linea}</span> : "—"}
+                          <td className="px-3 py-3 text-slate-300 max-w-[160px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
+                          <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.comercial || "—"}</td>
+                          <td className="px-3 py-3 whitespace-nowrap max-w-[180px]">
+                            {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium truncate inline-block max-w-full align-bottom" title={lead.linea}>{lead.linea}</span> : <span className="text-slate-600">—</span>}
                           </td>
-                          <td className="px-3 py-2.5">
-                            <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa || "—"}</span>
+                          <td className="px-3 py-3">
+                            <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-300"}`}>{lead.etapa || "—"}</span>
                           </td>
-                          <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{lead.preventa || "—"}</td>
-                          <td className="px-3 py-2.5 text-slate-500 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
-                          <td className="px-3 py-2.5 text-right font-medium text-slate-200 whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
-                          <td className="px-3 py-2.5 text-slate-500 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
-                          <td className="px-3 py-2.5">
-                            <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
+                          <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
+                          <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
+                          <td className="px-3 py-3 text-right font-semibold text-white whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
+                          <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
+                          <td className="px-3 py-3">
+                            <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-300"}`}>{lead.ganado}</span>
                           </td>
-                          <td className="px-3 py-2.5 text-center">
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-500"}`}>
+                          <td className="px-3 py-3 text-center">
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-400"}`}>
                               {lead.activo ? "Sí" : "No"}
                             </span>
                           </td>
-                          <td className="px-3 py-2.5 text-slate-400 whitespace-nowrap">{lead.ultimaModificacion || "—"}</td>
+                          <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.ultimaModificacion || "—"}</td>
                         </tr>
                       );
                     })}
