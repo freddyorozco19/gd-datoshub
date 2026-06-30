@@ -1208,7 +1208,7 @@ export default function LeadsView() {
                           ["cliente",            "Cliente"],
                           ["comercial",          "Comercial"],
                           ["linea",              "Línea"],
-                          ["id",                 "ID Oportunidad"],
+                          ["id",                 "ID"],
                           ["preventa",           "Preventa"],
                           ["fechaCreacion",      "Fecha Creación"],
                           ["ingresosEsperados",  "Ingresos Esp."],
@@ -1274,7 +1274,7 @@ export default function LeadsView() {
                           <td className="px-3 py-3 whitespace-nowrap max-w-[180px]">
                             {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium truncate inline-block max-w-full align-bottom" title={lead.linea}>{lead.linea}</span> : <span className="text-slate-600">—</span>}
                           </td>
-                          <td className="px-3 py-3 whitespace-nowrap"><span className="font-mono text-[11px] text-slate-500">#</span><span className="font-mono text-[11px] text-slate-300">{lead.id}</span></td>
+                          <td className="px-3 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">{lead.id}</td>
                           <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
                           <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
                           <td className="px-3 py-3 text-right font-semibold text-white whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
