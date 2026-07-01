@@ -880,6 +880,21 @@ export default function LeadsView() {
   const isFirstLoad    = useRef(true);
   const frozenBodyRef  = useRef<HTMLTableSectionElement>(null);
   const scrollBodyRef  = useRef<HTMLTableSectionElement>(null);
+  const outerScrollRef = useRef<HTMLDivElement>(null);
+  const rightPanelRef  = useRef<HTMLDivElement>(null);
+
+  const handleTableScroll = useCallback(() => {
+    const sl = outerScrollRef.current?.scrollLeft ?? 0;
+    if (!rightPanelRef.current) return;
+    if (sl > 0) {
+      const mask = `linear-gradient(to right, transparent ${sl}px, black ${sl}px)`;
+      rightPanelRef.current.style.maskImage = mask;
+      rightPanelRef.current.style.webkitMaskImage = mask;
+    } else {
+      rightPanelRef.current.style.maskImage = "";
+      rightPanelRef.current.style.webkitMaskImage = "";
+    }
+  }, []);
 
   const [search,  setSearch]  = useState("");
   const [filters, setFilters] = useState<Filters>({
@@ -1223,12 +1238,12 @@ export default function LeadsView() {
                 {loading && <RefreshCw size={13} className="animate-spin text-blue-500" />}
               </div>
 
-              {/* tabla — un solo scroll horizontal; NOMBRE sticky con backdrop-blur */}
-              <div className="overflow-x-auto">
+              {/* tabla — un solo scroll; mask dinámico oculta lo que queda detrás de NOMBRE */}
+              <div className="overflow-x-auto" ref={outerScrollRef} onScroll={handleTableScroll}>
               <div className="flex" style={{ minWidth: 1204 }}>
 
-                {/* ── columna NOMBRE: sticky, sin fondo, backdrop-blur bloquea el scroll ── */}
-                <div className="sticky left-0 z-20 shrink-0 backdrop-blur-md border-r border-white/[0.07]" style={{ width: 244 }}>
+                {/* ── columna NOMBRE: sticky transparente (mask del panel derecho evita bleed-through) ── */}
+                <div className="sticky left-0 z-20 shrink-0 border-r border-white/[0.07]" style={{ width: 244 }}>
                 <table className="leads-table text-xs w-full">
                   <thead>
                     <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
@@ -1278,8 +1293,8 @@ export default function LeadsView() {
                 </table>
                 </div>{/* ── cierre div sticky wrapper ── */}
 
-                {/* ── panel derecho: resto de columnas ── */}
-                <div className="flex-1 min-w-0">
+                {/* ── panel derecho: mask dinámico oculta lo que pasa bajo NOMBRE ── */}
+                <div className="flex-1 min-w-0" ref={rightPanelRef}>
                   <table className="leads-table text-xs w-full">
                     <thead>
                       <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
