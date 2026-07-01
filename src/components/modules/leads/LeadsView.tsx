@@ -856,7 +856,7 @@ interface Filters {
   comercial:       string;
   linea:           string;
   tipoOportunidad: string;
-  equipoVentas:    string;
+  etapaPreventa:   string;
   preventa:        string;
   activo:          string;
   etapa:           string;  // funnel click
@@ -888,7 +888,7 @@ export default function LeadsView() {
   const [search,  setSearch]  = useState("");
   const [filters, setFilters] = useState<Filters>({
     comercial: "ALL", linea: "ALL", tipoOportunidad: "ALL",
-    equipoVentas: "ALL", preventa: "ALL", activo: "ALL",
+    etapaPreventa: "ALL", preventa: "ALL", activo: "ALL",
     etapa: "ALL", dateFrom: "", dateTo: "",
   });
   const [sort, setSort] = useState<{ key: SortKey; dir: SortDir }>({ key: "ultimaModificacion", dir: "desc" });
@@ -931,7 +931,7 @@ export default function LeadsView() {
     comercial:       unique(leads.map((l) => l.comercial)),
     linea:           unique(leads.map((l) => l.linea)),
     tipoOportunidad: unique(leads.map((l) => l.tipoOportunidad)),
-    equipoVentas:    unique(leads.map((l) => l.equipoVentas)),
+    etapaPreventa:   unique(leads.map((l) => l.etapaPreventa)),
     preventa:        unique(leads.map((l) => l.preventa)),
     activo:          ["ALL", "true", "false"],
   }), [leads]);
@@ -942,7 +942,7 @@ export default function LeadsView() {
     if (filters.comercial       !== "ALL") data = data.filter((l) => l.comercial       === filters.comercial);
     if (filters.linea           !== "ALL") data = data.filter((l) => l.linea           === filters.linea);
     if (filters.tipoOportunidad !== "ALL") data = data.filter((l) => l.tipoOportunidad === filters.tipoOportunidad);
-    if (filters.equipoVentas    !== "ALL") data = data.filter((l) => l.equipoVentas    === filters.equipoVentas);
+    if (filters.etapaPreventa   !== "ALL") data = data.filter((l) => l.etapaPreventa   === filters.etapaPreventa);
     if (filters.preventa        !== "ALL") data = data.filter((l) => l.preventa        === filters.preventa);
     if (filters.activo          !== "ALL") data = data.filter((l) => String(l.activo)  === filters.activo);
     if (filters.etapa           !== "ALL") data = data.filter((l) => l.etapa           === filters.etapa);
@@ -1031,7 +1031,7 @@ export default function LeadsView() {
     if (filters.comercial       !== "ALL") c++;
     if (filters.linea           !== "ALL") c++;
     if (filters.tipoOportunidad !== "ALL") c++;
-    if (filters.equipoVentas    !== "ALL") c++;
+    if (filters.etapaPreventa   !== "ALL") c++;
     if (filters.preventa        !== "ALL") c++;
     if (filters.activo          !== "ALL") c++;
     if (filters.etapa           !== "ALL") c++;
@@ -1044,7 +1044,7 @@ export default function LeadsView() {
   function clearFilters() {
     setFilters({
       comercial: "ALL", linea: "ALL", tipoOportunidad: "ALL",
-      equipoVentas: "ALL", preventa: "ALL", activo: "ALL",
+      etapaPreventa: "ALL", preventa: "ALL", activo: "ALL",
       etapa: "ALL", dateFrom: "", dateTo: "",
     });
     setSearch("");
@@ -1123,7 +1123,7 @@ export default function LeadsView() {
             <Select label="Comercial"     field="comercial"        options={opts.comercial} />
             <Select label="Línea"         field="linea"            options={opts.linea} />
             <Select label="Oportunidad"   field="tipoOportunidad"  options={opts.tipoOportunidad} />
-            <Select label="Equipo Ventas" field="equipoVentas"     options={opts.equipoVentas} />
+            <Select label="Etapa Prev."   field="etapaPreventa"    options={opts.etapaPreventa} />
             <Select label="Preventa"      field="preventa"         options={opts.preventa} />
             <Select label="Activo"        field="activo"           options={opts.activo} />
 
@@ -1302,6 +1302,7 @@ export default function LeadsView() {
                             ["linea",              "Línea"],
                             ["id",                 "ID"],
                             ["preventa",           "Preventa"],
+                            ["etapaPreventa",      "Etapa Preventa"],
                             ["fechaCreacion",      "Fecha Creación"],
                             ["ingresosEsperados",  "Ingresos Esp."],
                             ["cierreEsperado",     "Cierre Esp."],
@@ -1344,6 +1345,7 @@ export default function LeadsView() {
                             </td>
                             <td className="px-3 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">{lead.id}</td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
+                            <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.etapaPreventa || "—"}</td>
                             <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
                             <td className="px-3 py-3 text-right font-semibold text-white whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
                             <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
