@@ -1249,7 +1249,7 @@ export default function LeadsView() {
 
               {/* tabla — un solo scroll; mask dinámico oculta lo que queda detrás de NOMBRE */}
               <div className="overflow-x-auto" ref={outerScrollRef} onScroll={handleTableScroll}>
-              <div className="flex" style={{ minWidth: 1204 }}>
+              <div className="flex">
 
                 {/* ── columna NOMBRE: sticky transparente (mask del panel derecho evita bleed-through) ── */}
                 <div className="sticky left-0 z-20 shrink-0 border-r border-white/[0.07]" style={{ width: 244 }}>
@@ -1303,8 +1303,8 @@ export default function LeadsView() {
                 </div>{/* ── cierre div sticky wrapper ── */}
 
                 {/* ── panel derecho: mask dinámico oculta lo que pasa bajo NOMBRE ── */}
-                <div className="flex-1 min-w-0" ref={rightPanelRef}>
-                  <table className="leads-table text-xs w-full">
+                <div className="shrink-0" ref={rightPanelRef}>
+                  <table className="leads-table text-xs">
                     <thead>
                       <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
                         {(
