@@ -994,21 +994,23 @@ export default function LeadsView() {
       const sRows = scrollBodyRef.current ? Array.from(scrollBodyRef.current.rows) : [];
       const n = Math.min(fRows.length, sRows.length);
       if (n === 0) return;
-      // reset (batch write)
       for (let i = 0; i < n; i++) { fRows[i].style.height = ""; sRows[i].style.height = ""; }
-      // leer todas las alturas naturales en un solo batch (evita layout thrashing)
       const heights: number[] = [];
       for (let i = 0; i < n; i++) heights.push(Math.max(fRows[i].offsetHeight, sRows[i].offsetHeight));
-      // escribir en un solo batch
       for (let i = 0; i < n; i++) { fRows[i].style.height = `${heights[i]}px`; sRows[i].style.height = `${heights[i]}px`; }
     };
 
-    // primera pasada: tras render de React
     const r1 = requestAnimationFrame(() => requestAnimationFrame(syncHeights));
-    // segunda pasada: fallback para reflows tardíos (fuentes, subpixel, etc.)
     const t1 = setTimeout(syncHeights, 120);
 
-    return () => { cancelAnimationFrame(r1); clearTimeout(t1); };
+    // re-sincroniza si el contenido cambia de altura después del render inicial
+    let rafId = 0;
+    const debouncedSync = () => { cancelAnimationFrame(rafId); rafId = requestAnimationFrame(syncHeights); };
+    const ro = new ResizeObserver(debouncedSync);
+    if (frozenBodyRef.current) ro.observe(frozenBodyRef.current);
+    if (scrollBodyRef.current) ro.observe(scrollBodyRef.current);
+
+    return () => { cancelAnimationFrame(r1); clearTimeout(t1); cancelAnimationFrame(rafId); ro.disconnect(); };
   }, [paginated, loading]);
 
   const activeFilterCount = useMemo(() => {
