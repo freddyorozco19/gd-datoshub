@@ -1303,8 +1303,8 @@ export default function LeadsView() {
                 </div>{/* ── cierre div sticky wrapper ── */}
 
                 {/* ── panel derecho: mask dinámico oculta lo que pasa bajo NOMBRE ── */}
-                <div className="shrink-0" ref={rightPanelRef}>
-                  <table className="leads-table text-xs">
+                <div className="flex-1 min-w-max" ref={rightPanelRef}>
+                  <table className="leads-table text-xs w-full">
                     <thead>
                       <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
                         {(
