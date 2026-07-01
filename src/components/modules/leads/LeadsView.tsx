@@ -1235,24 +1235,6 @@ export default function LeadsView() {
 
             {/* ── tabla ── */}
             <div className="flex-1 min-w-0 bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] overflow-hidden">
-              {/* info bar */}
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.05] bg-black/20 backdrop-blur-md">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-slate-500">
-                    {filtered.length} de {leads.length} leads
-                    {lastFetch && ` · actualizado ${lastFetch.toLocaleTimeString("es-CO")}`}
-                  </span>
-                  {/* 7. badge nuevos leads */}
-                  {newCount > 0 && (
-                    <span className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">
-                      <Sparkles size={10} />
-                      {newCount} nuevo{newCount > 1 ? "s" : ""}
-                    </span>
-                  )}
-                </div>
-                {loading && <RefreshCw size={13} className="animate-spin text-blue-500" />}
-              </div>
-
               {/* tabla — scrollbar nativo oculto con CSS; scrollbar externo debajo */}
               <div className="relative" style={{ paddingLeft: 244 }}>
 
@@ -1393,12 +1375,26 @@ export default function LeadsView() {
                 <div ref={extScrollInner} style={{ height: 1 }} />
               </div>
 
-              {/* paginación */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.05] bg-black/20 backdrop-blur-md">
+              {/* pie: datetime + conteo + paginación */}
+              <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.05] bg-black/20 backdrop-blur-md">
+                <div className="flex items-center gap-3">
                   <span className="text-xs text-slate-500">
-                    {((currentPage - 1) * PAGE_SIZE) + 1}–{Math.min(currentPage * PAGE_SIZE, filtered.length)} de {filtered.length} registros
+                    {totalPages > 1
+                      ? `${((currentPage - 1) * PAGE_SIZE) + 1}–${Math.min(currentPage * PAGE_SIZE, filtered.length)} de ${filtered.length} registros`
+                      : `${filtered.length} registros`}
                   </span>
+                  {lastFetch && (
+                    <span className="text-xs text-slate-600">· actualizado {lastFetch.toLocaleTimeString("es-CO")}</span>
+                  )}
+                  {newCount > 0 && (
+                    <span className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">
+                      <Sparkles size={10} />
+                      {newCount} nuevo{newCount > 1 ? "s" : ""}
+                    </span>
+                  )}
+                  {loading && <RefreshCw size={13} className="animate-spin text-blue-500" />}
+                </div>
+                {totalPages > 1 && (
                   <div className="flex items-center gap-1">
                     <button onClick={() => goTo(1)} disabled={currentPage === 1} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.08] disabled:opacity-30 transition-colors"><ChevronsLeft size={14} /></button>
                     <button onClick={() => goTo(currentPage - 1)} disabled={currentPage === 1} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.08] disabled:opacity-30 transition-colors"><ChevronLeft size={14} /></button>
@@ -1421,8 +1417,8 @@ export default function LeadsView() {
                     <button onClick={() => goTo(currentPage + 1)} disabled={currentPage === totalPages} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.08] disabled:opacity-30 transition-colors"><ChevronRight size={14} /></button>
                     <button onClick={() => goTo(totalPages)} disabled={currentPage === totalPages} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.08] disabled:opacity-30 transition-colors"><ChevronsRight size={14} /></button>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
             <TodayLeadsWidget leads={leads} />
