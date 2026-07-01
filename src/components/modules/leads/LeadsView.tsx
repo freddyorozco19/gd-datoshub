@@ -878,10 +878,12 @@ export default function LeadsView() {
   const [newLeadIds,    setNewLeadIds]    = useState<Set<number>>(new Set());
   const prevLeadIdsRef = useRef<Set<number>>(new Set());
   const isFirstLoad    = useRef(true);
-  const frozenBodyRef  = useRef<HTMLTableSectionElement>(null);
-  const scrollBodyRef  = useRef<HTMLTableSectionElement>(null);
-  const frozenColRef   = useRef<HTMLDivElement>(null);          // div absoluto de NOMBRE
-  const rightScrollRef = useRef<HTMLDivElement>(null);          // overflow-x-auto del panel derecho
+  const frozenBodyRef    = useRef<HTMLTableSectionElement>(null);
+  const scrollBodyRef    = useRef<HTMLTableSectionElement>(null);
+  const frozenColRef     = useRef<HTMLDivElement>(null);   // div absoluto de NOMBRE
+  const rightScrollRef   = useRef<HTMLDivElement>(null);   // overflow-x-auto oculto
+  const extScrollRef     = useRef<HTMLDivElement>(null);   // scrollbar externo visible
+  const extScrollInner   = useRef<HTMLDivElement>(null);   // div fantasma que da el ancho
 
   const [search,  setSearch]  = useState("");
   const [filters, setFilters] = useState<Filters>({
@@ -985,26 +987,43 @@ export default function LeadsView() {
       const heights: number[] = [];
       for (let i = 0; i < n; i++) heights.push(Math.max(fRows[i].offsetHeight, sRows[i].offsetHeight));
       for (let i = 0; i < n; i++) { fRows[i].style.height = `${heights[i]}px`; sRows[i].style.height = `${heights[i]}px`; }
-
-      // iguala el padding-bottom de la columna fija al alto de la barra de scroll del panel derecho
-      if (rightScrollRef.current && frozenColRef.current) {
-        const sbh = rightScrollRef.current.offsetHeight - rightScrollRef.current.clientHeight;
-        frozenColRef.current.style.paddingBottom = sbh > 0 ? `${sbh}px` : "";
-      }
     };
 
     const r1 = requestAnimationFrame(() => requestAnimationFrame(syncHeights));
     const t1 = setTimeout(syncHeights, 120);
 
-    // re-sincroniza si el contenido cambia de altura después del render inicial
     let rafId = 0;
     const debouncedSync = () => { cancelAnimationFrame(rafId); rafId = requestAnimationFrame(syncHeights); };
     const ro = new ResizeObserver(debouncedSync);
-    if (frozenBodyRef.current)  ro.observe(frozenBodyRef.current);
-    if (scrollBodyRef.current)  ro.observe(scrollBodyRef.current);
-    if (rightScrollRef.current) ro.observe(rightScrollRef.current);
+    if (frozenBodyRef.current) ro.observe(frozenBodyRef.current);
+    if (scrollBodyRef.current) ro.observe(scrollBodyRef.current);
 
     return () => { cancelAnimationFrame(r1); clearTimeout(t1); cancelAnimationFrame(rafId); ro.disconnect(); };
+  }, [paginated, loading]);
+
+  /* sincroniza scroll horizontal entre el contenedor oculto y el scrollbar externo */
+  useEffect(() => {
+    const table = rightScrollRef.current;
+    const bar   = extScrollRef.current;
+    if (!table || !bar) return;
+    let busy = false;
+    const onTable = () => { if (!busy) { busy = true; bar.scrollLeft   = table.scrollLeft; busy = false; } };
+    const onBar   = () => { if (!busy) { busy = true; table.scrollLeft = bar.scrollLeft;   busy = false; } };
+    table.addEventListener("scroll", onTable, { passive: true });
+    bar.addEventListener("scroll",   onBar,   { passive: true });
+    return () => { table.removeEventListener("scroll", onTable); bar.removeEventListener("scroll", onBar); };
+  }, []);
+
+  /* mantiene el ancho del scrollbar externo igual al scrollWidth de la tabla */
+  useEffect(() => {
+    const table = rightScrollRef.current;
+    const inner = extScrollInner.current;
+    if (!table || !inner) return;
+    const update = () => { inner.style.width = table.scrollWidth + "px"; };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(table);
+    return () => ro.disconnect();
   }, [paginated, loading]);
 
   const activeFilterCount = useMemo(() => {
@@ -1234,7 +1253,8 @@ export default function LeadsView() {
                 {loading && <RefreshCw size={13} className="animate-spin text-blue-500" />}
               </div>
 
-              {/* tabla — NOMBRE absoluto fuera del scroll; el scroll empieza en x=244, imposible bleed-through */}
+              {/* tabla — scrollbar nativo oculto por overflow:clip; scrollbar externo debajo */}
+              <div style={{ overflow: "clip" }}>
               <div className="relative" style={{ paddingLeft: 244 }}>
 
                 {/* ── columna NOMBRE: absoluta, nunca dentro del área scrollable ── */}
@@ -1288,8 +1308,8 @@ export default function LeadsView() {
                 </table>
                 </div>{/* ── cierre div NOMBRE absoluto ── */}
 
-                {/* ── panel derecho: scroll container propio, empieza en x=244 por el padding del padre ── */}
-                <div ref={rightScrollRef} className="overflow-x-auto">
+                {/* ── panel derecho: scrollbar nativo empujado 24px abajo y ocultado por overflow:clip ── */}
+                <div ref={rightScrollRef} className="overflow-x-auto" style={{ paddingBottom: 24, marginBottom: -24 }}>
                 <div className="w-full min-w-max">
                   <table className="leads-table text-xs w-full">
                     <thead>
@@ -1361,9 +1381,19 @@ export default function LeadsView() {
                     </tbody>
                   </table>
                 </div>
-                </div>{/* ── cierre overflow-x-auto derecho ── */}
+                </div>{/* ── cierre overflow-x-auto oculto ── */}
 
               </div>{/* ── cierre relative wrapper ── */}
+              </div>{/* ── cierre overflow:clip ── */}
+
+              {/* scrollbar externo — fuera de la tabla, sincronizado por JS */}
+              <div
+                ref={extScrollRef}
+                className="overflow-x-auto border-t border-white/[0.05]"
+                style={{ marginLeft: 244 }}
+              >
+                <div ref={extScrollInner} style={{ height: 1 }} />
+              </div>
 
               {/* paginación */}
               {totalPages > 1 && (
