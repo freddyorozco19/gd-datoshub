@@ -1340,7 +1340,7 @@ export default function LeadsView() {
                             <td className="px-3 py-3 text-slate-300 max-w-[160px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.comercial || "—"}</td>
                             <td className="px-3 py-3 whitespace-nowrap max-w-[180px]">
-                              {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium truncate inline-block max-w-full align-bottom" title={lead.linea}>{lead.linea}</span> : <span className="text-slate-600">—</span>}
+                              {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium truncate inline-block max-w-full align-bottom" title={lead.linea}>{lineaLabel(lead.linea)}</span> : <span className="text-slate-600">—</span>}
                             </td>
                             <td className="px-3 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">{lead.id}</td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
