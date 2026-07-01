@@ -880,28 +880,6 @@ export default function LeadsView() {
   const isFirstLoad    = useRef(true);
   const frozenBodyRef  = useRef<HTMLTableSectionElement>(null);
   const scrollBodyRef  = useRef<HTMLTableSectionElement>(null);
-  const outerScrollRef = useRef<HTMLDivElement>(null);
-  const rightPanelRef  = useRef<HTMLDivElement>(null);
-
-  const handleTableScroll = useCallback(() => {
-    const sl = outerScrollRef.current?.scrollLeft ?? 0;
-    const el = rightPanelRef.current;
-    if (!el) return;
-    if (sl > 0) {
-      const mask = `linear-gradient(to right, transparent ${sl}px, black ${sl}px)`;
-      el.style.maskImage      = mask;
-      el.style.maskSize       = "9999px 100%";
-      el.style.maskRepeat     = "no-repeat";
-      el.style.webkitMaskImage  = mask;
-      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskSize   = "9999px 100%";
-      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskRepeat = "no-repeat";
-    } else {
-      el.style.maskImage = el.style.maskSize = el.style.maskRepeat = "";
-      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskImage =
-      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskSize  =
-      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskRepeat = "";
-    }
-  }, []);
 
   const [search,  setSearch]  = useState("");
   const [filters, setFilters] = useState<Filters>({
@@ -1247,12 +1225,11 @@ export default function LeadsView() {
                 {loading && <RefreshCw size={13} className="animate-spin text-blue-500" />}
               </div>
 
-              {/* tabla — un solo scroll; mask dinámico oculta lo que queda detrás de NOMBRE */}
-              <div className="overflow-x-auto" ref={outerScrollRef} onScroll={handleTableScroll}>
-              <div className="flex min-w-max">
+              {/* tabla — NOMBRE absoluto fuera del scroll; el scroll empieza en x=244, imposible bleed-through */}
+              <div className="relative" style={{ paddingLeft: 244 }}>
 
-                {/* ── columna NOMBRE: sticky transparente (mask del panel derecho evita bleed-through) ── */}
-                <div className="sticky left-0 z-20 shrink-0 border-r border-white/[0.07]" style={{ width: 244 }}>
+                {/* ── columna NOMBRE: absoluta, nunca dentro del área scrollable ── */}
+                <div className="absolute left-0 top-0 z-20 border-r border-white/[0.07]" style={{ width: 244 }}>
                 <table className="leads-table text-xs w-full">
                   <thead>
                     <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
@@ -1300,10 +1277,11 @@ export default function LeadsView() {
                     })}
                   </tbody>
                 </table>
-                </div>{/* ── cierre div sticky wrapper ── */}
+                </div>{/* ── cierre div NOMBRE absoluto ── */}
 
-                {/* ── panel derecho: mask dinámico oculta lo que pasa bajo NOMBRE ── */}
-                <div className="flex-1 min-w-0" ref={rightPanelRef}>
+                {/* ── panel derecho: scroll container propio, empieza en x=244 por el padding del padre ── */}
+                <div className="overflow-x-auto">
+                <div className="w-full min-w-max">
                   <table className="leads-table text-xs w-full">
                     <thead>
                       <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
@@ -1374,8 +1352,9 @@ export default function LeadsView() {
                     </tbody>
                   </table>
                 </div>
-              </div>{/* ── cierre div flex ── */}
-              </div>{/* ── cierre overflow-x-auto externo ── */}
+                </div>{/* ── cierre overflow-x-auto derecho ── */}
+
+              </div>{/* ── cierre relative wrapper ── */}
 
               {/* paginación */}
               {totalPages > 1 && (
