@@ -1253,8 +1253,7 @@ export default function LeadsView() {
                 {loading && <RefreshCw size={13} className="animate-spin text-blue-500" />}
               </div>
 
-              {/* tabla — scrollbar nativo oculto por overflow:clip; scrollbar externo debajo */}
-              <div style={{ overflow: "clip" }}>
+              {/* tabla — scrollbar nativo oculto con CSS; scrollbar externo debajo */}
               <div className="relative" style={{ paddingLeft: 244 }}>
 
                 {/* ── columna NOMBRE: absoluta, nunca dentro del área scrollable ── */}
@@ -1308,8 +1307,8 @@ export default function LeadsView() {
                 </table>
                 </div>{/* ── cierre div NOMBRE absoluto ── */}
 
-                {/* ── panel derecho: scrollbar nativo empujado 24px abajo y ocultado por overflow:clip ── */}
-                <div ref={rightScrollRef} className="overflow-x-auto" style={{ paddingBottom: 24, marginBottom: -24 }}>
+                {/* ── panel derecho: scrollbar nativo oculto con .no-scrollbar; scrollbar externo fuera ── */}
+                <div ref={rightScrollRef} className="overflow-x-auto no-scrollbar" style={{ scrollbarWidth: "none" } as React.CSSProperties}>
                 <div className="w-full min-w-max">
                   <table className="leads-table text-xs w-full">
                     <thead>
@@ -1384,7 +1383,6 @@ export default function LeadsView() {
                 </div>{/* ── cierre overflow-x-auto oculto ── */}
 
               </div>{/* ── cierre relative wrapper ── */}
-              </div>{/* ── cierre overflow:clip ── */}
 
               {/* scrollbar externo — fuera de la tabla, sincronizado por JS */}
               <div
