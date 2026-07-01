@@ -1223,11 +1223,13 @@ export default function LeadsView() {
                 {loading && <RefreshCw size={13} className="animate-spin text-blue-500" />}
               </div>
 
-              {/* tabla — columna NOMBRE fija + resto scrollable */}
-              <div className="flex overflow-hidden">
+              {/* tabla — un solo scroll horizontal; NOMBRE sticky con backdrop-blur */}
+              <div className="overflow-x-auto">
+              <div className="flex" style={{ minWidth: 1204 }}>
 
-                {/* ── panel izquierdo: NOMBRE (no scrollea) ── */}
-                <table className="leads-table text-xs shrink-0 border-r border-white/[0.07]" style={{ width: 244 }}>
+                {/* ── columna NOMBRE: sticky, sin fondo, backdrop-blur bloquea el scroll ── */}
+                <div className="sticky left-0 z-20 shrink-0 backdrop-blur-md border-r border-white/[0.07]" style={{ width: 244 }}>
+                <table className="leads-table text-xs w-full">
                   <thead>
                     <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
                       <th
@@ -1274,10 +1276,11 @@ export default function LeadsView() {
                     })}
                   </tbody>
                 </table>
+                </div>{/* ── cierre div sticky wrapper ── */}
 
-                {/* ── panel derecho: resto de columnas con scroll horizontal ── */}
-                <div className="overflow-x-auto flex-1 min-w-0">
-                  <table className="leads-table text-xs" style={{ minWidth: 960 }}>
+                {/* ── panel derecho: resto de columnas ── */}
+                <div className="flex-1 min-w-0">
+                  <table className="leads-table text-xs w-full">
                     <thead>
                       <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
                         {(
@@ -1347,7 +1350,8 @@ export default function LeadsView() {
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </div>{/* ── cierre div flex ── */}
+              </div>{/* ── cierre overflow-x-auto externo ── */}
 
               {/* paginación */}
               {totalPages > 1 && (
