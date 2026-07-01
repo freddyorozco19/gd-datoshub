@@ -662,10 +662,13 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   const [selectedComercial, setSelectedComercial] = useState<string | null>(null);
 
   const comercialLeads = useMemo(
-    () => selectedComercial
-      ? leads.filter((l) => (l.comercial || "Sin asignar") === selectedComercial)
-      : [],
-    [leads, selectedComercial]
+    () => {
+      if (!selectedComercial) return [];
+      const byComercial = leads.filter((l) => (l.comercial || "Sin asignar") === selectedComercial);
+      if (sortBy === "ganados") return byComercial.filter((l) => l.ganado === "Ganado");
+      return byComercial;
+    },
+    [leads, selectedComercial, sortBy]
   );
 
   const ranking = useMemo(() => {
@@ -696,8 +699,8 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   return (
     <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-4">
       <div className="flex items-center gap-2 mb-3">
-        <div className="p-1.5 rounded-lg bg-amber-500/10 shrink-0">
-          <Trophy size={15} className="text-amber-400" />
+        <div className="p-1.5 rounded-lg bg-violet-500/10 shrink-0">
+          <Users size={15} className="text-violet-400" />
         </div>
         <span className="text-sm font-semibold text-slate-200 flex-1">Ranking</span>
       </div>
@@ -710,7 +713,7 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
             onClick={() => setSortBy(key)}
             className={`flex-1 text-[10px] font-semibold py-1.5 rounded-lg border transition-all duration-150 capitalize ${
               sortBy === key
-                ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                ? "bg-violet-500/10 text-violet-400 border-violet-500/20"
                 : "text-slate-500 bg-white/[0.03] border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.05]"
             }`}
           >
@@ -726,18 +729,18 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
             type="button"
             onClick={() => setSelectedComercial(r.name)}
             title={`Ver leads de ${r.name}`}
-            className="w-full text-left rounded-lg px-1.5 py-1 -mx-1.5 hover:bg-amber-500/10 transition-colors group focus:outline-none"
+            className="w-full text-left rounded-lg px-1.5 py-1 -mx-1.5 hover:bg-violet-500/10 transition-colors group focus:outline-none"
           >
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-1.5 min-w-0">
                 <span className="w-4 text-center shrink-0 text-[10px] font-bold text-slate-300">{i + 1}</span>
-                <span className="text-xs text-slate-200 truncate leading-none group-hover:text-amber-400 transition-colors" title={r.name}>{r.name}</span>
+                <span className="text-xs text-slate-200 truncate leading-none group-hover:text-violet-400 transition-colors" title={r.name}>{r.name}</span>
               </div>
               <span className="text-[10px] font-bold text-slate-600 shrink-0 ml-2">{fmt(r)}</span>
             </div>
             <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden ml-5">
               <div
-                className="h-full bg-amber-400 rounded-full transition-all duration-500"
+                className="h-full bg-violet-500 rounded-full transition-all duration-500"
                 style={{ width: `${Math.round((r[sortBy] / maxVal) * 100)}%` }}
               />
             </div>
