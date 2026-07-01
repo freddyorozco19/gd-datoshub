@@ -1012,7 +1012,7 @@ export default function LeadsView() {
     table.addEventListener("scroll", onTable, { passive: true });
     bar.addEventListener("scroll",   onBar,   { passive: true });
     return () => { table.removeEventListener("scroll", onTable); bar.removeEventListener("scroll", onBar); };
-  }, []);
+  }, [paginated, loading]);
 
   /* mantiene el ancho del scrollbar externo igual al scrollWidth de la tabla */
   useEffect(() => {
