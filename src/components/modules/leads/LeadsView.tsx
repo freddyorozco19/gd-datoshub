@@ -855,7 +855,6 @@ const PAGE_SIZE = 20;
 interface Filters {
   comercial:       string;
   linea:           string;
-  tipoOportunidad: string;
   etapaPreventa:   string;
   preventa:        string;
   activo:          string;
@@ -887,7 +886,7 @@ export default function LeadsView() {
 
   const [search,  setSearch]  = useState("");
   const [filters, setFilters] = useState<Filters>({
-    comercial: "ALL", linea: "ALL", tipoOportunidad: "ALL",
+    comercial: "ALL", linea: "ALL",
     etapaPreventa: "ALL", preventa: "ALL", activo: "ALL",
     etapa: "ALL", dateFrom: "", dateTo: "",
   });
@@ -930,7 +929,6 @@ export default function LeadsView() {
   const opts = useMemo(() => ({
     comercial:       unique(leads.map((l) => l.comercial)),
     linea:           unique(leads.map((l) => l.linea)),
-    tipoOportunidad: unique(leads.map((l) => l.tipoOportunidad)),
     etapaPreventa:   unique(leads.map((l) => l.etapaPreventa)),
     preventa:        unique(leads.map((l) => l.preventa)),
     activo:          ["ALL", "true", "false"],
@@ -941,7 +939,6 @@ export default function LeadsView() {
     let data = [...leads];
     if (filters.comercial       !== "ALL") data = data.filter((l) => l.comercial       === filters.comercial);
     if (filters.linea           !== "ALL") data = data.filter((l) => l.linea           === filters.linea);
-    if (filters.tipoOportunidad !== "ALL") data = data.filter((l) => l.tipoOportunidad === filters.tipoOportunidad);
     if (filters.etapaPreventa   !== "ALL") data = data.filter((l) => l.etapaPreventa   === filters.etapaPreventa);
     if (filters.preventa        !== "ALL") data = data.filter((l) => l.preventa        === filters.preventa);
     if (filters.activo          !== "ALL") data = data.filter((l) => String(l.activo)  === filters.activo);
@@ -1030,7 +1027,6 @@ export default function LeadsView() {
     let c = 0;
     if (filters.comercial       !== "ALL") c++;
     if (filters.linea           !== "ALL") c++;
-    if (filters.tipoOportunidad !== "ALL") c++;
     if (filters.etapaPreventa   !== "ALL") c++;
     if (filters.preventa        !== "ALL") c++;
     if (filters.activo          !== "ALL") c++;
@@ -1043,7 +1039,7 @@ export default function LeadsView() {
 
   function clearFilters() {
     setFilters({
-      comercial: "ALL", linea: "ALL", tipoOportunidad: "ALL",
+      comercial: "ALL", linea: "ALL",
       etapaPreventa: "ALL", preventa: "ALL", activo: "ALL",
       etapa: "ALL", dateFrom: "", dateTo: "",
     });
@@ -1122,7 +1118,6 @@ export default function LeadsView() {
           <div className="px-4 py-4 flex items-end gap-3.5 overflow-x-auto">
             <Select label="Comercial"     field="comercial"        options={opts.comercial} />
             <Select label="Línea"         field="linea"            options={opts.linea} />
-            <Select label="Oportunidad"   field="tipoOportunidad"  options={opts.tipoOportunidad} />
             <Select label="Etapa Prev."   field="etapaPreventa"    options={opts.etapaPreventa} />
             <Select label="Preventa"      field="preventa"         options={opts.preventa} />
             <Select label="Activo"        field="activo"           options={opts.activo} />
