@@ -885,14 +885,21 @@ export default function LeadsView() {
 
   const handleTableScroll = useCallback(() => {
     const sl = outerScrollRef.current?.scrollLeft ?? 0;
-    if (!rightPanelRef.current) return;
+    const el = rightPanelRef.current;
+    if (!el) return;
     if (sl > 0) {
       const mask = `linear-gradient(to right, transparent ${sl}px, black ${sl}px)`;
-      rightPanelRef.current.style.maskImage = mask;
-      rightPanelRef.current.style.webkitMaskImage = mask;
+      el.style.maskImage      = mask;
+      el.style.maskSize       = "9999px 100%";
+      el.style.maskRepeat     = "no-repeat";
+      el.style.webkitMaskImage  = mask;
+      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskSize   = "9999px 100%";
+      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskRepeat = "no-repeat";
     } else {
-      rightPanelRef.current.style.maskImage = "";
-      rightPanelRef.current.style.webkitMaskImage = "";
+      el.style.maskImage = el.style.maskSize = el.style.maskRepeat = "";
+      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskImage =
+      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskSize  =
+      (el.style as CSSStyleDeclaration & Record<string,string>).webkitMaskRepeat = "";
     }
   }, []);
 
