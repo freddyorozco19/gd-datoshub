@@ -244,6 +244,7 @@ function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalPr
   const [mComercial, setMComercial] = useState("ALL");
   const [mEstado,    setMEstado]    = useState("ALL");
   const [detailLead, setDetailLead] = useState<Lead | null>(null);
+  const [mSort, setMSort] = useState<{ key: keyof Lead; dir: "asc" | "desc" }>({ key: "nombre", dir: "asc" });
 
   const mOpts = useMemo(() => ({
     linea:     unique(leads.map((l) => l.linea)),
@@ -256,8 +257,17 @@ function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalPr
     if (mLinea     !== "ALL") data = data.filter((l) => l.linea     === mLinea);
     if (mComercial !== "ALL") data = data.filter((l) => l.comercial === mComercial);
     if (mEstado    !== "ALL") data = data.filter((l) => l.ganado    === mEstado);
+    data.sort((a, b) => {
+      const av = a[mSort.key] ?? "", bv = b[mSort.key] ?? "";
+      const cmp = String(av).localeCompare(String(bv), "es", { numeric: true });
+      return mSort.dir === "asc" ? cmp : -cmp;
+    });
     return data;
-  }, [leads, mLinea, mComercial, mEstado]);
+  }, [leads, mLinea, mComercial, mEstado, mSort]);
+
+  function mToggleSort(key: keyof Lead) {
+    setMSort((s) => s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" });
+  }
 
   const anyActive = mLinea !== "ALL" || mComercial !== "ALL" || mEstado !== "ALL";
 
@@ -322,8 +332,16 @@ function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalPr
             <table className="w-full text-xs">
               <thead className="sticky top-0 bg-black/40 backdrop-blur-md border-b border-white/[0.07]">
                 <tr>
-                  {["Nombre","Cliente","Comercial","Línea","Etapa","Tipo Oportunidad","Preventa","Ingresos Esp.","Estado"].map((h) => (
-                    <th key={h} className="text-left px-4 py-3 font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                  {([ ["nombre","Nombre"], ["cliente","Cliente"], ["comercial","Comercial"], ["linea","Línea"], ["etapa","Etapa"], ["tipoOportunidad","Tipo Oportunidad"], ["preventa","Preventa"], ["ingresosEsperados","Ingresos Esp."], ["ganado","Estado"] ] as [keyof Lead, string][]).map(([key, label]) => (
+                    <th key={key} onClick={() => mToggleSort(key)}
+                      className="text-left px-4 py-3 font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap cursor-pointer hover:text-white select-none transition-colors">
+                      <span className="flex items-center gap-1">
+                        {label}
+                        {mSort.key === key
+                          ? mSort.dir === "asc" ? <ChevronUp size={12} /> : <ChevronDown size={12} />
+                          : <ChevronDown size={12} className="opacity-20" />}
+                      </span>
+                    </th>
                   ))}
                 </tr>
               </thead>
