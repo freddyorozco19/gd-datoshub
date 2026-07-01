@@ -880,6 +880,8 @@ export default function LeadsView() {
   const isFirstLoad    = useRef(true);
   const frozenBodyRef  = useRef<HTMLTableSectionElement>(null);
   const scrollBodyRef  = useRef<HTMLTableSectionElement>(null);
+  const frozenColRef   = useRef<HTMLDivElement>(null);          // div absoluto de NOMBRE
+  const rightScrollRef = useRef<HTMLDivElement>(null);          // overflow-x-auto del panel derecho
 
   const [search,  setSearch]  = useState("");
   const [filters, setFilters] = useState<Filters>({
@@ -983,6 +985,12 @@ export default function LeadsView() {
       const heights: number[] = [];
       for (let i = 0; i < n; i++) heights.push(Math.max(fRows[i].offsetHeight, sRows[i].offsetHeight));
       for (let i = 0; i < n; i++) { fRows[i].style.height = `${heights[i]}px`; sRows[i].style.height = `${heights[i]}px`; }
+
+      // iguala el padding-bottom de la columna fija al alto de la barra de scroll del panel derecho
+      if (rightScrollRef.current && frozenColRef.current) {
+        const sbh = rightScrollRef.current.offsetHeight - rightScrollRef.current.clientHeight;
+        frozenColRef.current.style.paddingBottom = sbh > 0 ? `${sbh}px` : "";
+      }
     };
 
     const r1 = requestAnimationFrame(() => requestAnimationFrame(syncHeights));
@@ -992,8 +1000,9 @@ export default function LeadsView() {
     let rafId = 0;
     const debouncedSync = () => { cancelAnimationFrame(rafId); rafId = requestAnimationFrame(syncHeights); };
     const ro = new ResizeObserver(debouncedSync);
-    if (frozenBodyRef.current) ro.observe(frozenBodyRef.current);
-    if (scrollBodyRef.current) ro.observe(scrollBodyRef.current);
+    if (frozenBodyRef.current)  ro.observe(frozenBodyRef.current);
+    if (scrollBodyRef.current)  ro.observe(scrollBodyRef.current);
+    if (rightScrollRef.current) ro.observe(rightScrollRef.current);
 
     return () => { cancelAnimationFrame(r1); clearTimeout(t1); cancelAnimationFrame(rafId); ro.disconnect(); };
   }, [paginated, loading]);
@@ -1229,7 +1238,7 @@ export default function LeadsView() {
               <div className="relative" style={{ paddingLeft: 244 }}>
 
                 {/* ── columna NOMBRE: absoluta, nunca dentro del área scrollable ── */}
-                <div className="absolute left-0 top-0 z-20 border-r border-white/[0.07]" style={{ width: 244 }}>
+                <div ref={frozenColRef} className="absolute left-0 top-0 z-20 border-r border-white/[0.07]" style={{ width: 244 }}>
                 <table className="leads-table text-xs w-full">
                   <thead>
                     <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
@@ -1280,7 +1289,7 @@ export default function LeadsView() {
                 </div>{/* ── cierre div NOMBRE absoluto ── */}
 
                 {/* ── panel derecho: scroll container propio, empieza en x=244 por el padding del padre ── */}
-                <div className="overflow-x-auto">
+                <div ref={rightScrollRef} className="overflow-x-auto">
                 <div className="w-full min-w-max">
                   <table className="leads-table text-xs w-full">
                     <thead>
