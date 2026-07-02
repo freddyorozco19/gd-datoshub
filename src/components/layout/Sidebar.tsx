@@ -205,7 +205,7 @@ export default function Sidebar() {
                     key={href}
                     href={href}
                     title={collapsed ? label : undefined}
-                    className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-[13px] font-light transition-all ${
+                    className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-[11px] font-light transition-all ${
                       active
                         ? "bg-gradient-to-r from-transparent via-blue-800/40 to-blue-500 text-white"
                         : "text-slate-200 hover:bg-white/[0.05] hover:text-white"
@@ -230,7 +230,7 @@ export default function Sidebar() {
         <button
           onClick={cycleMode}
           title={`Vista: ${MODE_LABEL[mode]} · clic para cambiar`}
-          className={`flex w-full items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-400 hover:bg-white/[0.05] hover:text-slate-200 transition-colors ${
+          className={`flex w-full items-center gap-3 px-2.5 py-2 rounded-lg text-[11px] font-medium text-slate-400 hover:bg-white/[0.05] hover:text-slate-200 transition-colors ${
             collapsed ? "justify-center" : ""
           }`}
         >
@@ -243,7 +243,7 @@ export default function Sidebar() {
               {initials}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-slate-200 truncate" title={email}>{email || "—"}</p>
+              <p className="text-[11px] font-medium text-slate-200 truncate" title={email}>{email || "—"}</p>
               <p className="text-[10px] text-slate-500">{isAdmin ? "Administrador" : "Usuario"}</p>
             </div>
           </div>
@@ -257,7 +257,7 @@ export default function Sidebar() {
         <button
           onClick={handleLogout}
           title={collapsed ? "Cerrar sesión" : undefined}
-          className={`flex w-full items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium text-slate-400 hover:bg-white/[0.05] hover:text-rose-300 transition-colors ${
+          className={`flex w-full items-center gap-3 px-2.5 py-2 rounded-lg text-[11px] font-medium text-slate-400 hover:bg-white/[0.05] hover:text-rose-300 transition-colors ${
             collapsed ? "justify-center" : ""
           }`}
         >
