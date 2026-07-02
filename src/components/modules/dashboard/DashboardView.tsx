@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import Topbar from "@/components/layout/Topbar";
+import LeadDetailModal from "@/components/modules/leads/LeadDetailModal";
 
 /* ── Sparkline (igual que mainFJ-hub) ─────────────────────────────────────── */
 function Sparkline({ data, color = "#7C3AED" }: { data: number[]; color?: string }) {
@@ -91,9 +92,10 @@ function SkeletonCard() {
 
 /* ── DashboardView ────────────────────────────────────────────────────────── */
 export default function DashboardView() {
-  const [leads, setLeads]       = useState<Lead[]>([]);
-  const [loading, setLoading]   = useState(true);
-  const [userName, setUserName] = useState("Usuario");
+  const [leads, setLeads]           = useState<Lead[]>([]);
+  const [loading, setLoading]       = useState(true);
+  const [userName, setUserName]     = useState("Usuario");
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [now, setNow]           = useState(new Date());
 
   useEffect(() => {
@@ -366,10 +368,7 @@ export default function DashboardView() {
                 <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
                   <Users size={13} className="text-cyan-400" />
                 </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-white leading-none">Leads Recientes</h3>
-                  <p className="text-[10px] text-slate-600 mt-0.5">Últimas oportunidades registradas</p>
-                </div>
+                <h3 className="text-sm font-semibold text-white leading-none">Leads Recientes</h3>
               </div>
               <Link href="/leads" className="flex items-center gap-1 text-[11px] text-slate-600 hover:text-cyan-400 transition-colors">
                 Ver todo <ArrowUpRight size={11} />
@@ -378,18 +377,17 @@ export default function DashboardView() {
             <div className="h-px bg-white/[0.05]" />
             <div className="space-y-0.5">
               {recentLeads.map((lead) => (
-                <div key={lead.id} className="flex items-center gap-2.5 py-2 border-b border-white/[0.04] last:border-0">
-                  <div
-                    className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                      lead.ganado === "Ganado" ? "bg-emerald-400" : "bg-slate-600"
-                    }`}
-                  />
+                <button
+                  key={lead.id}
+                  type="button"
+                  onClick={() => setSelectedLead(lead)}
+                  className="w-full flex items-center gap-2.5 py-2 px-1.5 rounded-lg border-b border-white/[0.04] last:border-0 hover:bg-white/[0.04] hover:border-transparent transition-all text-left cursor-pointer group"
+                >
+                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${lead.ganado === "Ganado" ? "bg-emerald-400" : "bg-slate-600"}`} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-slate-300 truncate">{lead.nombre}</p>
+                    <p className="text-xs text-slate-300 truncate group-hover:text-white transition-colors">{lead.nombre}</p>
                     <div className="flex items-center gap-2 mt-0.5">
-                      {lead.cliente && (
-                        <span className="text-[10px] text-slate-700 truncate max-w-[100px]">{lead.cliente}</span>
-                      )}
+                      {lead.cliente && <span className="text-[10px] text-slate-700 truncate max-w-[100px]">{lead.cliente}</span>}
                       <span className="text-[10px] text-slate-600">{lineaLabel(lead.linea)}</span>
                     </div>
                   </div>
@@ -397,7 +395,7 @@ export default function DashboardView() {
                     <p className="text-[10px] text-slate-500">{lead.comercial || "—"}</p>
                     <p className="text-[10px] text-slate-700">{fmtDate(lead.fechaCreacion)}</p>
                   </div>
-                </div>
+                </button>
               ))}
               {!loading && recentLeads.length === 0 && (
                 <p className="text-xs text-slate-600 text-center py-6">Sin leads disponibles</p>
@@ -442,6 +440,8 @@ export default function DashboardView() {
           </div>
         </div>
       </div>
+
+      {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} />}
     </div>
   );
 }
