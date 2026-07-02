@@ -95,6 +95,7 @@ export default function Sidebar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [email, setEmail]     = useState<string>("");
   const [closedSections, setClosedSections] = useState<Record<string, boolean>>({});
+  const [avatarOpen, setAvatarOpen]         = useState(false);
 
   // En modo hover el sidebar se expande solo al pasar el cursor
   const collapsed = mode === "collapsed" || (mode === "hover" && !hovered);
@@ -112,6 +113,16 @@ export default function Sidebar() {
     if (saved && MODE_ORDER.includes(saved)) setMode(saved);
   }, []);
   useEffect(() => { localStorage.setItem("sidebarMode", mode); }, [mode]);
+
+  useEffect(() => {
+    if (!avatarOpen) return;
+    const close = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("[data-avatar-menu]")) setAvatarOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [avatarOpen]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -205,7 +216,7 @@ export default function Sidebar() {
                     key={href}
                     href={href}
                     title={collapsed ? label : undefined}
-                    className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-[9px] font-semibold transition-all ${
+                    className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-[10px] font-semibold transition-all ${
                       active
                         ? "bg-gradient-to-r from-transparent via-blue-800/40 to-blue-500 text-white"
                         : "text-slate-200 hover:bg-white/[0.05] hover:text-white"
@@ -225,44 +236,64 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* ── Footer: modo + usuario + logout ── */}
-      <div className="px-2 py-2.5 border-t border-white/[0.06] space-y-1.5">
+      {/* ── Footer: avatar (abre menú con Vista y Logout) ── */}
+      <div className="relative px-2 py-2.5 border-t border-white/[0.06]" data-avatar-menu>
+        {/* Menú emergente sobre el avatar */}
+        {avatarOpen && (
+          <div className={`absolute bottom-full mb-2 ${collapsed ? "left-1/2 -translate-x-1/2" : "left-2 right-2"} bg-[#15151f] border border-white/[0.1] rounded-xl shadow-2xl shadow-black/60 overflow-hidden z-50`}>
+            {/* Email (solo expandido) */}
+            {!collapsed && (
+              <div className="px-3 py-2.5 border-b border-white/[0.06]">
+                <p className="text-[11px] font-medium text-slate-200 truncate" title={email}>{email || "—"}</p>
+                <p className="text-[10px] text-slate-500">{isAdmin ? "Administrador" : "Usuario"}</p>
+              </div>
+            )}
+            {/* Opciones de vista */}
+            {MODE_ORDER.map((m) => {
+              const Icon = m === "expanded" ? PanelLeftClose : m === "collapsed" ? PanelLeftOpen : PanelLeft;
+              return (
+                <button
+                  key={m}
+                  onClick={() => { setMode(m); setAvatarOpen(false); }}
+                  className={`flex w-full items-center gap-2.5 px-3 py-2 text-[11px] transition-colors ${
+                    mode === m
+                      ? "text-blue-300 bg-blue-500/10"
+                      : "text-slate-400 hover:bg-white/[0.05] hover:text-slate-200"
+                  }`}
+                >
+                  <Icon size={15} className="shrink-0" />
+                  <span>Vista {MODE_LABEL[m]}</span>
+                </button>
+              );
+            })}
+            {/* Separador */}
+            <div className="h-px bg-white/[0.06] mx-2" />
+            {/* Cerrar sesión */}
+            <button
+              onClick={() => { setAvatarOpen(false); handleLogout(); }}
+              className="flex w-full items-center gap-2.5 px-3 py-2 text-[11px] text-slate-400 hover:bg-white/[0.05] hover:text-rose-300 transition-colors"
+            >
+              <LogOut size={15} className="shrink-0" />
+              <span>Cerrar sesión</span>
+            </button>
+          </div>
+        )}
+
+        {/* Avatar clickeable */}
         <button
-          onClick={cycleMode}
-          title={`Vista: ${MODE_LABEL[mode]} · clic para cambiar`}
-          className={`flex w-full items-center gap-3 px-2.5 py-2 rounded-lg text-[11px] font-medium text-slate-400 hover:bg-white/[0.05] hover:text-slate-200 transition-colors ${
-            collapsed ? "justify-center" : ""
-          }`}
+          onClick={() => setAvatarOpen((v) => !v)}
+          className={`flex w-full items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/[0.05] transition-colors ${collapsed ? "justify-center" : ""}`}
+          title={collapsed ? email : undefined}
         >
-          <ModeIcon size={18} className="shrink-0" />
-          {!collapsed && <span className="truncate">Vista · {MODE_LABEL[mode]}</span>}
-        </button>
-        {!collapsed ? (
-          <div className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg">
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 text-[11px] font-bold text-white shrink-0">
-              {initials}
-            </div>
-            <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 text-[11px] font-bold text-white shrink-0">
+            {initials}
+          </div>
+          {!collapsed && (
+            <div className="flex-1 min-w-0 text-left">
               <p className="text-[11px] font-medium text-slate-200 truncate" title={email}>{email || "—"}</p>
               <p className="text-[10px] text-slate-500">{isAdmin ? "Administrador" : "Usuario"}</p>
             </div>
-          </div>
-        ) : (
-          <div className="flex justify-center py-1">
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 text-[11px] font-bold text-white" title={email}>
-              {initials}
-            </div>
-          </div>
-        )}
-        <button
-          onClick={handleLogout}
-          title={collapsed ? "Cerrar sesión" : undefined}
-          className={`flex w-full items-center gap-3 px-2.5 py-2 rounded-lg text-[11px] font-medium text-slate-400 hover:bg-white/[0.05] hover:text-rose-300 transition-colors ${
-            collapsed ? "justify-center" : ""
-          }`}
-        >
-          <LogOut size={18} className="shrink-0" />
-          {!collapsed && <span className="truncate">Cerrar sesión</span>}
+          )}
         </button>
       </div>
       </aside>
