@@ -695,18 +695,6 @@ function ProductoDetalle({ producto, onBack }: { producto: Producto; onBack: () 
               ))}
             </div>
 
-            {/* CTA */}
-            <div className="mt-4 rounded-2xl border border-white/[0.06] bg-[#0D0D1A] p-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold text-slate-300">¿Tienes un caso de uso específico?</p>
-                <p className="text-[11px] text-slate-600 mt-0.5">Contacta al equipo comercial para explorar cómo podemos adaptar la solución.</p>
-              </div>
-              <a href="/leads"
-                className="shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-white transition-all whitespace-nowrap"
-                style={{ background: `linear-gradient(135deg, rgba(${producto.rgb},0.8), rgba(${producto.rgb},1))`, boxShadow: `0 4px 16px rgba(${producto.rgb},0.25)` }}>
-                <Icon size={13} /> Solicitar demo
-              </a>
-            </div>
           </div>
         )}
       </div>
