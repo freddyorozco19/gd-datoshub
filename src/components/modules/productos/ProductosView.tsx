@@ -535,7 +535,7 @@ function ProductoDetalle({ producto, onBack }: { producto: Producto; onBack: () 
   const current = TABS.find((t) => t.id === tab)!;
 
   return (
-    <div className="flex flex-col h-full overflow-auto">
+    <div className="h-full overflow-y-auto">
       <Topbar />
 
       {/* Hero */}
@@ -561,7 +561,8 @@ function ProductoDetalle({ producto, onBack }: { producto: Producto; onBack: () 
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-white/[0.06] px-6 md:px-10 overflow-x-auto no-scrollbar">
+      <div className="sticky top-[52px] z-20 border-b border-white/[0.06] px-6 md:px-10 overflow-x-auto no-scrollbar"
+        style={{ background: "rgba(8,8,15,0.96)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
         <div className="flex gap-0 min-w-max">
           {TABS.map((t) => {
             const TabIcon = t.icon;
@@ -583,7 +584,7 @@ function ProductoDetalle({ producto, onBack }: { producto: Producto; onBack: () 
       </div>
 
       {/* Contenido del tab */}
-      <div className="flex-1 px-6 md:px-10 py-7 max-w-5xl">
+      <div className="px-6 md:px-10 py-7 max-w-5xl pb-12">
 
         {/* Tab: Problema del Cliente */}
         {tab === "problema" && (
