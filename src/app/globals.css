@@ -71,6 +71,11 @@ body {
   animation: ping-slow 1.5s ease-in-out infinite;
 }
 
+.divider {
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+}
+
 /* ── Scrollbar completamente oculto (tabla de Leads) ─────────────────────── */
 .no-scrollbar { scrollbar-width: none !important; -ms-overflow-style: none !important; }
 .no-scrollbar::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
