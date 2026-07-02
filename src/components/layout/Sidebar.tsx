@@ -7,35 +7,9 @@ import {
   FolderOpen, ShieldCheck, BookOpen, UserCog, LogOut, Zap,
   ChevronDown, PanelLeftClose, PanelLeftOpen, PanelLeft, Loader2,
 } from "lucide-react";
-import { CSSProperties, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-/* ── Colores por ruta ─────────────────────────────────────────────────────── */
-const ROUTE_COLORS: Record<string, { rgb: string; pill: string; icon: string }> = {
-  "/dashboard":       { rgb: "59,130,246",   pill: "#93C5FD", icon: "text-blue-300"    },
-  "/leads":           { rgb: "124,58,237",   pill: "#C4B5FD", icon: "text-violet-300"  },
-  "/reuniones":       { rgb: "6,182,212",    pill: "#67E8F9", icon: "text-cyan-300"    },
-  "/integraciones":   { rgb: "16,185,129",   pill: "#6EE7B7", icon: "text-emerald-300" },
-  "/reportes":        { rgb: "249,115,22",   pill: "#FCA5A1", icon: "text-orange-300"  },
-  "/repositorios":    { rgb: "139,92,246",   pill: "#DDD6FE", icon: "text-purple-300"  },
-  "/cmmi":            { rgb: "245,158,11",   pill: "#FDE68A", icon: "text-amber-300"   },
-  "/certificaciones": { rgb: "236,72,153",   pill: "#F9A8D4", icon: "text-pink-300"    },
-  "/usuarios":        { rgb: "99,102,241",   pill: "#A5B4FC", icon: "text-indigo-300"  },
-};
-
-const DEFAULT_COLOR = { rgb: "59,130,246", pill: "#93C5FD", icon: "text-blue-300" };
-
-function getRowStyle(href: string, active: boolean): CSSProperties {
-  const { rgb } = ROUTE_COLORS[href] ?? DEFAULT_COLOR;
-  if (active) {
-    return {
-      background: `linear-gradient(to right, transparent, rgba(${rgb},0.25) 40%, rgba(${rgb},0.55))`,
-    };
-  }
-  return {
-    background: `linear-gradient(to right, transparent, rgba(${rgb},0.05) 40%, rgba(${rgb},0.12))`,
-  };
-}
 
 /* ── Estructura de navegación ─────────────────────────────────────────────── */
 interface NavItem  { label: string; href: string; icon: typeof LayoutDashboard; adminOnly?: boolean }
@@ -191,31 +165,25 @@ export default function Sidebar() {
                 {/* Nav items */}
                 {!closed && sec.items.map(({ label, href, icon: Icon }) => {
                   const active = pathname === href || pathname.startsWith(href + "/");
-                  const color  = ROUTE_COLORS[href] ?? DEFAULT_COLOR;
                   return (
                     <Link
                       key={href}
                       href={href}
                       title={collapsed ? label : undefined}
-                      style={getRowStyle(href, active)}
                       className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium tracking-tight transition-all ${
-                        active ? "text-white" : "text-slate-400 hover:text-white"
+                        active
+                          ? "bg-gradient-to-r from-transparent via-blue-800/40 to-blue-500 text-white"
+                          : "text-slate-400 hover:bg-white/[0.05] hover:text-white"
                       } ${collapsed ? "justify-center" : ""}`}
                     >
                       <Icon
                         size={16}
-                        className={`shrink-0 transition-colors ${active ? color.icon : "text-slate-500 group-hover:text-slate-300"}`}
+                        className={`shrink-0 transition-colors ${active ? "text-white" : "text-slate-500 group-hover:text-slate-300"}`}
                       />
                       {!collapsed && <span className="truncate">{label}</span>}
                       <NavSpinner />
                       {active && (
-                        <span
-                          className="absolute right-[-7px] top-1/2 -translate-y-1/2 h-4 w-[3px] rounded-full"
-                          style={{
-                            background: color.pill,
-                            boxShadow: `0 0 8px 1px ${color.pill}99`,
-                          }}
-                        />
+                        <span className="absolute right-[-7px] top-1/2 -translate-y-1/2 h-4 w-[3px] rounded-full bg-blue-300 shadow-[0_0_8px_1px_rgba(147,197,253,0.9)]" />
                       )}
                     </Link>
                   );
