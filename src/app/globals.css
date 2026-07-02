@@ -38,6 +38,39 @@ body {
 .scrollbar-thin::-webkit-scrollbar { width: 4px; }
 
 
+/* ── Utilidades de diseño (mismo sistema que mainFJ-hub) ─────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #7C3AED 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-hover {
+  transition: all 0.2s ease;
+}
+.card-hover:hover {
+  border-color: rgba(124, 58, 237, 0.3) !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 20px rgba(124,58,237,0.08);
+  transform: translateY(-1px);
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #374151;
+  white-space: nowrap;
+}
+
+@keyframes ping-slow {
+  75%, 100% { transform: scale(1.5); opacity: 0; }
+}
+.animate-ping-slow {
+  animation: ping-slow 1.5s ease-in-out infinite;
+}
+
 /* ── Scrollbar completamente oculto (tabla de Leads) ─────────────────────── */
 .no-scrollbar { scrollbar-width: none !important; -ms-overflow-style: none !important; }
 .no-scrollbar::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }

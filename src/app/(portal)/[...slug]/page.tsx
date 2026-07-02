@@ -3,9 +3,8 @@
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import Topbar from "@/components/layout/Topbar";
-import StatsCard from "@/components/ui/StatsCard";
 import {
-  Users, CalendarDays, Plug2, FolderOpen, ShieldCheck, TrendingUp,
+  Users, CalendarDays, Plug2,
   Plus, RefreshCw, Search, Clock, CheckCircle2, XCircle, Minus,
   ExternalLink,
 } from "lucide-react";
@@ -27,9 +26,10 @@ function ViewLoading() {
 }
 
 /* ─── Vistas pesadas cargadas bajo demanda (chunks separados) ─────────── */
-const LeadsView          = dynamic(() => import("@/components/modules/leads/LeadsView"),                   { loading: ViewLoading });
-const CMMIView           = dynamic(() => import("@/components/modules/cmmi/CMMIView"),                     { loading: ViewLoading });
-const UsuariosView       = dynamic(() => import("@/components/modules/usuarios/UsuariosView"),             { loading: ViewLoading });
+const DashboardView       = dynamic(() => import("@/components/modules/dashboard/DashboardView"),             { loading: ViewLoading });
+const LeadsView           = dynamic(() => import("@/components/modules/leads/LeadsView"),                     { loading: ViewLoading });
+const CMMIView            = dynamic(() => import("@/components/modules/cmmi/CMMIView"),                       { loading: ViewLoading });
+const UsuariosView        = dynamic(() => import("@/components/modules/usuarios/UsuariosView"),               { loading: ViewLoading });
 const CertificacionesView = dynamic(() => import("@/components/modules/certificaciones/CertificacionesView"), { loading: ViewLoading });
 
 /* ─── DATOS MOCK ─────────────────────────────────────────────────── */
@@ -95,63 +95,7 @@ function formatDate(iso: string) {
 
 /* ─── VISTAS ─────────────────────────────────────────────────────── */
 
-function DashboardView() {
-  return (
-    <div className="flex flex-col h-full overflow-auto">
-      <Topbar title="Dashboard" />
-      <main className="flex-1 p-6 space-y-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-          <StatsCard label="Total Leads"           value="—" icon={Users}       color="blue"   />
-          <StatsCard label="Leads este mes"        value="—" icon={TrendingUp}  color="green"  />
-          <StatsCard label="Reuniones esta semana" value="—" icon={CalendarDays}color="amber"  />
-          <StatsCard label="Fuentes activas"       value="—" icon={Plug2}       color="violet" />
-          <StatsCard label="Repositorios"          value="—" icon={FolderOpen}  color="cyan"   />
-          <StatsCard label="CMMI completados"      value="—" icon={ShieldCheck} color="rose"   />
-        </div>
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          {/* Leads recientes */}
-          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08]">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.05]">
-              <span className="text-sm font-semibold text-slate-300">Leads recientes</span>
-            </div>
-            <div className="divide-y divide-white/[0.04]">
-              {mockLeads.map((lead) => (
-                <div key={lead.id} className="flex items-center justify-between px-5 py-3.5">
-                  <div>
-                    <p className="text-sm font-medium text-slate-200">{lead.name}</p>
-                    <p className="text-xs text-slate-500">{lead.company}</p>
-                  </div>
-                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STAGE_COLORS[lead.stage]}`}>{lead.stage}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* Reuniones */}
-          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08]">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.05]">
-              <span className="text-sm font-semibold text-slate-300">Próximas reuniones</span>
-            </div>
-            <div className="divide-y divide-white/[0.04]">
-              {mockMeetings.map((m) => (
-                <div key={m.id} className="flex items-center gap-4 px-5 py-3.5">
-                  <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 shrink-0">
-                    <CalendarDays size={16} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-200 truncate">{m.title}</p>
-                    <p className="text-xs text-slate-500">{formatDate(m.start_at)}</p>
-                  </div>
-                  <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 shrink-0">{m.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-}
-
+// DashboardView se importa desde @/components/modules/dashboard/DashboardView
 // LeadsView se importa desde @/components/modules/leads/LeadsView (integración ODOO real)
 
 function ReunionesView() {
@@ -347,7 +291,7 @@ function RepositoriosView() {
 /* ─── ROUTER PRINCIPAL ───────────────────────────────────────────── */
 
 const VIEWS: Record<string, React.ComponentType> = {
-  "/dashboard":       DashboardView,
+  "/dashboard":       DashboardView as React.ComponentType,
   "/leads":           LeadsView,
   "/reuniones":       ReunionesView,
   "/integraciones":   IntegracionesView,
