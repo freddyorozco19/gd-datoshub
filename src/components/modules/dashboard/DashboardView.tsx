@@ -8,6 +8,7 @@ import {
   BarChart3, CalendarDays, ShieldCheck,
 } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
+import Topbar from "@/components/layout/Topbar";
 
 /* ── Sparkline (igual que mainFJ-hub) ─────────────────────────────────────── */
 function Sparkline({ data, color = "#7C3AED" }: { data: number[]; color?: string }) {
@@ -204,7 +205,8 @@ export default function DashboardView() {
   ];
 
   return (
-    <div className="flex-1 overflow-auto" style={{ background: "var(--color-background)" }}>
+    <div className="flex flex-col flex-1 overflow-auto" style={{ background: "var(--color-background)" }}>
+      <Topbar title="Dashboard" />
       {/* ── Hero header ── */}
       <div className="relative px-5 md:px-7 pt-7 pb-5 overflow-hidden">
         <div
