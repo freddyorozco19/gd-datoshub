@@ -52,7 +52,6 @@ export default function LoginPage() {
           </div>
           <div className="text-center">
             <h1 className="text-lg font-bold text-slate-100 tracking-tight">GD-DatosHub</h1>
-            <p className="text-xs text-slate-500 mt-0.5 font-medium tracking-wide uppercase">GrowData</p>
           </div>
         </div>
 
@@ -109,13 +108,10 @@ export default function LoginPage() {
             className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors shadow-[0_0_20px_-4px_rgba(37,99,235,0.5)] mt-2"
           >
             {loading && <Loader2 size={14} className="animate-spin" />}
-            {loading ? "Ingresando…" : "Iniciar sesión"}
+            {loading ? "Ingresando…" : "Login"}
           </button>
         </form>
 
-        <p className="text-center text-[11px] text-slate-600 mt-6 tracking-wide">
-          Acceso restringido al equipo GrowData
-        </p>
       </div>
     </div>
   );
