@@ -99,7 +99,7 @@ export default function Sidebar() {
   // En modo hover el sidebar se expande solo al pasar el cursor
   const collapsed = mode === "collapsed" || (mode === "hover" && !hovered);
   // El espacio reservado en el layout (footprint): hover y collapsed ocupan 68px
-  const footprintW = mode === "expanded" ? 240 : 68;
+  const footprintW = mode === "expanded" ? 200 : 60;
   const overlaying = mode === "hover" && hovered;
 
   function cycleMode() {
@@ -154,7 +154,7 @@ export default function Sidebar() {
         onMouseEnter={() => mode === "hover" && setHovered(true)}
         onMouseLeave={() => mode === "hover" && setHovered(false)}
         className={`sidebar-font flex flex-col h-screen bg-[#0e0e1c] text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
-          collapsed ? "w-[68px]" : "w-60"
+          collapsed ? "w-[60px]" : "w-[200px]"
         } ${mode === "hover" ? `absolute inset-y-0 left-0 z-40 ${overlaying ? "shadow-2xl shadow-black/60" : ""}` : "h-screen"}`}
       >
       {/* ── Brand / workspace ── */}
