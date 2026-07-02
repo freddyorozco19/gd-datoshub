@@ -123,7 +123,8 @@ export default function Sidebar() {
       <aside
         onMouseEnter={() => mode === "hover" && setHovered(true)}
         onMouseLeave={() => mode === "hover" && setHovered(false)}
-        className={`flex flex-col h-screen bg-[#0e0e1c] text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
+        style={{ background: "rgba(8,8,15,0.92)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
+        className={`flex flex-col h-screen text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
           collapsed ? "w-16" : "w-[220px]"
         } ${mode === "hover" ? `absolute inset-y-0 left-0 z-40 ${overlaying ? "shadow-2xl shadow-black/60" : ""}` : ""}`}
       >
