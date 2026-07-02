@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { Database, Loader2, Mail, Lock } from "lucide-react";
+import { Database, Loader2, Mail, Lock, AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [error,    setError]    = useState<string | null>(null);
+  const [loading,  setLoading]  = useState(false);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -26,7 +26,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Registro de trazabilidad (best-effort, no bloquea el acceso).
     try {
       await fetch("/api/auth/log-access", {
         method: "POST",
@@ -40,78 +39,81 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="w-full max-w-sm mx-auto px-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8">
+    <div className="w-full max-w-sm mx-auto px-4 relative z-10">
+      {/* Card glassmorphism */}
+      <div className="relative bg-white/[0.05] backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 p-8 overflow-hidden">
+        {/* sheen superior */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+
         {/* Logo */}
         <div className="flex flex-col items-center gap-3 mb-8">
-          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600">
-            <Database size={24} className="text-white" />
+          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600 shadow-[0_0_24px_-4px_rgba(37,99,235,0.7)]">
+            <Database size={22} className="text-white" />
           </div>
           <div className="text-center">
-            <h1 className="text-xl font-bold text-slate-900">GD-DatosHub</h1>
-            <p className="text-sm text-slate-500 mt-0.5">GrowData</p>
+            <h1 className="text-lg font-bold text-slate-100 tracking-tight">GD-DatosHub</h1>
+            <p className="text-xs text-slate-500 mt-0.5 font-medium tracking-wide uppercase">GrowData</p>
           </div>
         </div>
 
         {/* Formulario */}
         <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          {/* Email */}
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
               Correo electrónico
             </label>
             <div className="relative">
-              <Mail
-                size={16}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
+              <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="correo@growdata.co"
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg text-sm bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:border-blue-500/60 focus:outline-none focus:ring-1 focus:ring-blue-500/30 text-slate-200 placeholder-slate-600 transition-colors"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          {/* Contraseña */}
+          <div className="space-y-1.5">
+            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
               Contraseña
             </label>
             <div className="relative">
-              <Lock
-                size={16}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
+              <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg text-sm bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:border-blue-500/60 focus:outline-none focus:ring-1 focus:ring-blue-500/30 text-slate-200 placeholder-slate-600 transition-colors"
               />
             </div>
           </div>
 
+          {/* Error */}
           {error && (
-            <p className="text-sm text-rose-600 bg-rose-50 rounded-lg px-3 py-2">
-              {error}
-            </p>
+            <div className="flex items-start gap-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2.5">
+              <AlertCircle size={14} className="text-rose-400 shrink-0 mt-0.5" />
+              <p className="text-xs text-rose-400 leading-snug">{error}</p>
+            </div>
           )}
 
+          {/* Botón */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2.5 rounded-lg text-sm transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors shadow-[0_0_20px_-4px_rgba(37,99,235,0.5)] mt-2"
           >
-            {loading && <Loader2 size={15} className="animate-spin" />}
+            {loading && <Loader2 size={14} className="animate-spin" />}
             {loading ? "Ingresando…" : "Iniciar sesión"}
           </button>
         </form>
 
-        <p className="text-center text-xs text-slate-400 mt-6">
+        <p className="text-center text-[11px] text-slate-600 mt-6 tracking-wide">
           Acceso restringido al equipo GrowData
         </p>
       </div>
