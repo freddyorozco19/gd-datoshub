@@ -354,51 +354,43 @@ export default function ProductosView() {
     <div className="flex flex-col h-full overflow-auto">
       <Topbar />
 
-      <div className="px-6 md:px-8 py-6 space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-xl font-bold text-white">Catálogo de Productos</h1>
-          <p className="text-sm text-slate-500 mt-1">Soluciones GrowData para transformación digital y analítica avanzada</p>
-        </div>
-
-        {/* Filtros */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          {/* Búsqueda */}
-          <div className="relative flex-1 max-w-xs">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+      <div className="px-6 md:px-8 py-6 space-y-5">
+        {/* Header + búsqueda en una sola fila */}
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="text-xl font-bold text-white shrink-0">Catálogo de Productos</h1>
+          <div className="relative w-56 shrink-0">
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               type="text"
-              placeholder="Buscar producto…"
+              placeholder="Buscar…"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               className="w-full pl-8 pr-3 py-2 rounded-lg border border-white/[0.07] bg-white/[0.03] text-xs text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-white/[0.15] transition-colors"
             />
           </div>
-
-          {/* Categorías */}
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIAS.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setCategoriaFiltro(cat)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
-                  categoriaFiltro === cat
-                    ? "bg-white/[0.1] border-white/[0.2] text-white"
-                    : "border-white/[0.06] text-slate-500 hover:text-slate-300 hover:border-white/[0.1]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
         </div>
 
-        {/* Contador */}
-        <p className="text-[11px] text-slate-600">
-          {filtrados.length} {filtrados.length === 1 ? "producto" : "productos"}
-          {categoriaFiltro !== "Todas" && ` en ${categoriaFiltro}`}
-          {busqueda && ` · "${busqueda}"`}
-        </p>
+        {/* Filtros de categoría — scroll horizontal */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+          {CATEGORIAS.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setCategoriaFiltro(cat)}
+              className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border whitespace-nowrap ${
+                categoriaFiltro === cat
+                  ? "bg-white/[0.12] border-white/[0.25] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+                  : "border-white/[0.06] text-slate-500 hover:text-slate-300 hover:bg-white/[0.05] hover:border-white/[0.1]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+          {busqueda && (
+            <span className="shrink-0 ml-2 text-[11px] text-slate-600">
+              {filtrados.length} resultado{filtrados.length !== 1 ? "s" : ""} · &quot;{busqueda}&quot;
+            </span>
+          )}
+        </div>
 
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-8">
