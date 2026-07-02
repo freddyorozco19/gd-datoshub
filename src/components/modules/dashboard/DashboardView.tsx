@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import {
-  Users, TrendingUp, Target, Award, ArrowUpRight, Zap,
+  Users, TrendingUp, Target, Award, ArrowUpRight,
   BarChart3, CalendarDays, ShieldCheck,
 } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
@@ -208,7 +208,7 @@ export default function DashboardView() {
     <div className="flex flex-col flex-1 overflow-auto" style={{ background: "var(--color-background)" }}>
       <Topbar title="Dashboard" />
       {/* ── Hero header ── */}
-      <div className="relative px-5 md:px-7 pt-7 pb-5">
+      <div className="relative px-5 md:px-7 pt-4 pb-5">
         {/* Halo decorativo contenido en su propio elemento */}
         <div
           className="absolute top-0 left-0 right-0 h-48 pointer-events-none"
@@ -219,12 +219,6 @@ export default function DashboardView() {
         />
         <div className="relative z-10 flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-5 h-5 rounded-md bg-violet-600 flex items-center justify-center shadow-[0_0_10px_rgba(124,58,237,0.5)]">
-                <Zap size={10} className="text-white" />
-              </div>
-              <span className="text-xs text-slate-500 font-medium">GD-DatosHub</span>
-            </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
               <span className="text-white">{greeting}, </span>
               <span style={{ background: "linear-gradient(135deg, #7C3AED 0%, #06B6D4 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
