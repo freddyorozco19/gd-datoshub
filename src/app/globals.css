@@ -1,25 +1,20 @@
 @import "tailwindcss";
 
-/* ── Century Gothic como fuente principal ──────────────────────────────
-   @theme (sin inline) sobreescribe --font-sans en el sistema de Tailwind v4,
-   lo que reemplaza la font-family en el preflight (html, body, *).
-   El bloque html/body lo refuerza directamente para máxima compatibilidad.
-─────────────────────────────────────────────────────────────────────── */
 @theme {
-  --font-sans: 'Century Gothic', CenturyGothic, 'Century Gothic Pro',
-               AppleGothic, 'Trebuchet MS', Futura, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --color-background: #07070f;
   --color-foreground: #e2e8f0;
 }
 
 html, body, input, button, select, textarea {
-  font-family: 'Century Gothic', CenturyGothic, 'Century Gothic Pro',
-               AppleGothic, 'Trebuchet MS', Futura, sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.006em;
 }
 
 body {
   background: #07070f;
   color: #e2e8f0;
+  line-height: 1.6;
 }
 
 * {
@@ -42,26 +37,6 @@ body {
 .scrollbar-track-transparent::-webkit-scrollbar-track { background: transparent; }
 .scrollbar-thin::-webkit-scrollbar { width: 4px; }
 
-/* ── Tipografía Inter SOLO para el sidebar (como la referencia) ──────────
-   Los selectores con clase + tipo (.sidebar-font input) ganan en
-   especificidad a la regla global de input/button con Century Gothic. */
-.sidebar-font,
-.sidebar-font input,
-.sidebar-font button,
-.sidebar-font select,
-.sidebar-font kbd {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  letter-spacing: -0.006em;
-}
-
-/* ── Tipografía Inter SOLO para la tabla de Leads (mejor legibilidad que
-   Century Gothic en texto denso/pequeño: mayor x-height, números más
-   distinguibles). Alta especificidad para ganarle a la regla global. */
-.leads-table,
-.leads-table * {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  letter-spacing: -0.006em;
-}
 
 /* ── Scrollbar completamente oculto (tabla de Leads) ─────────────────────── */
 .no-scrollbar { scrollbar-width: none !important; -ms-overflow-style: none !important; }

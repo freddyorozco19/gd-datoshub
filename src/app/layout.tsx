@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-// Inter solo se expone como variable CSS; se aplica únicamente al sidebar.
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap", weight: ["300","400","500","600","700","800"] });
 
 export const metadata: Metadata = {
   title: "GD-DatosHub | GrowData",
