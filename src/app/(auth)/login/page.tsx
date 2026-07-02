@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { Database, Loader2, Mail, Lock, AlertCircle, Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+import { Loader2, Mail, Lock, AlertCircle, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -70,9 +71,13 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div className="flex flex-col items-center gap-3 mb-8">
-          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600 shadow-[0_0_24px_-4px_rgba(37,99,235,0.7)]">
-            <Database size={22} className="text-white" />
-          </div>
+          <Image
+            src="/growdata-icon.webp"
+            alt="GrowData"
+            width={56}
+            height={56}
+            className="rounded-xl shadow-[0_0_24px_-4px_rgba(37,99,235,0.5)]"
+          />
           <h1 className="text-lg font-bold text-slate-100 tracking-widest uppercase">GD-DatosHub</h1>
         </div>
 
