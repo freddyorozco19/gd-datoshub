@@ -567,7 +567,7 @@ function ProductoDetalle({ producto, onBack }: { producto: Producto; onBack: () 
             const TabIcon = t.icon;
             const active = tab === t.id;
             return (
-              <button key={t.id} onClick={() => setTab(t.id)}
+              <button type="button" key={t.id} onClick={() => setTab(t.id)}
                 className={`flex items-center gap-2 px-4 py-3.5 text-xs font-semibold border-b-2 transition-all whitespace-nowrap ${
                   active
                     ? "border-current text-white"
