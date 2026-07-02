@@ -263,7 +263,7 @@ export default function DashboardView() {
         </div>
 
         {/* ── Bento grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Panel 1 — Leads por Línea */}
           <div className="rounded-2xl border border-white/[0.06] bg-[#0D0D1A] p-5 space-y-4">
             <div className="flex items-center justify-between">
@@ -307,6 +307,55 @@ export default function DashboardView() {
                 <span className="text-xs text-slate-500">Total</span>
                 <span className="text-sm font-bold gradient-text">{totalLeads} leads</span>
               </div>
+            </div>
+          </div>
+
+          {/* Panel 3 — CMMI Ejecuciones */}
+          <div className="rounded-2xl border border-white/[0.06] bg-[#0D0D1A] p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                  <ShieldCheck size={13} className="text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-white leading-none">CMMI · Ejecuciones</h3>
+                  <p className="text-[10px] text-slate-600 mt-0.5">Estado de verticales y modelos</p>
+                </div>
+              </div>
+              <Link href="/cmmi" className="flex items-center gap-1 text-[11px] text-slate-600 hover:text-emerald-400 transition-colors">
+                Ir a CMMI <ArrowUpRight size={11} />
+              </Link>
+            </div>
+            <div className="h-px bg-white/[0.05]" />
+            <div className="space-y-2.5">
+              {/* Vertical Comercial — activo */}
+              <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-3">
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="text-xs font-semibold text-white">Comercial</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">Activo</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1.5">
+                  <Link href="/cmmi" className="group flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] hover:border-emerald-500/30 hover:bg-emerald-500/[0.06] transition-all">
+                    <TrendingUp size={11} className="text-emerald-400 shrink-0" />
+                    <span className="text-[10px] text-slate-400 group-hover:text-slate-200 transition-colors">SPC</span>
+                  </Link>
+                  <Link href="/cmmi" className="group flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] hover:border-emerald-500/30 hover:bg-emerald-500/[0.06] transition-all">
+                    <Target size={11} className="text-emerald-400 shrink-0" />
+                    <span className="text-[10px] text-slate-400 group-hover:text-slate-200 transition-colors">Random Forest</span>
+                  </Link>
+                </div>
+              </div>
+              {/* Verticales próximamente */}
+              {[
+                { label: "Financiero", color: "text-amber-400",  border: "border-amber-500/10",  bg: "bg-amber-500/[0.03]"  },
+                { label: "PMO",        color: "text-blue-400",   border: "border-blue-500/10",   bg: "bg-blue-500/[0.03]"   },
+                { label: "Datos",      color: "text-violet-400", border: "border-violet-500/10", bg: "bg-violet-500/[0.03]" },
+              ].map(({ label, color, border, bg }) => (
+                <div key={label} className={`rounded-xl border ${border} ${bg} px-3 py-2.5 flex items-center justify-between opacity-50`}>
+                  <span className={`text-xs font-semibold ${color}`}>{label}</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-white/[0.04] text-slate-600 border border-white/[0.06]">Próximamente</span>
+                </div>
+              ))}
             </div>
           </div>
 
