@@ -38,14 +38,8 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
         WebkitBackdropFilter: "blur(16px)",
       }}
     >
-      {/* ── Izquierda: live badge + separador + breadcrumb + tabs ── */}
+      {/* ── Izquierda: breadcrumb + tabs ── */}
       <div className="flex items-center gap-3">
-        {/* Connection status — punto verde */}
-        <div className="relative flex items-center justify-center w-2 h-2">
-          <div className="absolute inset-0 rounded-full bg-emerald-400 animate-ping-slow opacity-40" />
-          <div className="w-2 h-2 rounded-full bg-emerald-400" />
-        </div>
-
         <div className="w-px h-4 bg-white/[0.08]" />
 
         {/* Breadcrumb — misma línea horizontal que mainFJ-hub */}
@@ -69,8 +63,14 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
         {tabs && <div className="flex items-center gap-1 h-full ml-2">{tabs}</div>}
       </div>
 
-      {/* ── Derecha: search + bell + avatar ── */}
+      {/* ── Derecha: punto verde + search + bell ── */}
       <div className="flex items-center gap-2">
+        {/* Connection status — punto verde */}
+        <div className="relative flex items-center justify-center w-2 h-2 mr-1">
+          <div className="absolute inset-0 rounded-full bg-emerald-400 animate-ping-slow opacity-40" />
+          <div className="w-2 h-2 rounded-full bg-emerald-400" />
+        </div>
+
         {/* Search */}
         <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:text-slate-300 transition-colors border border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06]">
           <Search className="w-3 h-3" />
