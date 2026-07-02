@@ -4,7 +4,7 @@ import Link, { useLinkStatus } from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Users, CalendarDays, Plug2, BarChart3,
-  FolderOpen, ShieldCheck, BookOpen, UserCog, LogOut,
+  FolderOpen, ShieldCheck, BookOpen, UserCog, LogOut, Package,
   ChevronDown, PanelLeftClose, PanelLeftOpen, PanelLeft, Loader2,
 } from "lucide-react";
 import Image from "next/image";
@@ -23,6 +23,7 @@ const SECTIONS: NavSection[] = [
     items: [
       { label: "Dashboard",     href: "/dashboard",     icon: LayoutDashboard },
       { label: "Leads",         href: "/leads",         icon: Users           },
+      { label: "Productos",     href: "/productos",     icon: Package         },
       { label: "Reuniones",     href: "/reuniones",     icon: CalendarDays    },
       { label: "Integraciones", href: "/integraciones", icon: Plug2           },
     ],

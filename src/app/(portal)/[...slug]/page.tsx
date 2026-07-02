@@ -31,6 +31,7 @@ const LeadsView           = dynamic(() => import("@/components/modules/leads/Lea
 const CMMIView            = dynamic(() => import("@/components/modules/cmmi/CMMIView"),                       { loading: ViewLoading });
 const UsuariosView        = dynamic(() => import("@/components/modules/usuarios/UsuariosView"),               { loading: ViewLoading });
 const CertificacionesView = dynamic(() => import("@/components/modules/certificaciones/CertificacionesView"), { loading: ViewLoading });
+const ProductosView       = dynamic(() => import("@/components/modules/productos/ProductosView"),               { loading: ViewLoading });
 
 /* ─── DATOS MOCK ─────────────────────────────────────────────────── */
 
@@ -297,6 +298,7 @@ const VIEWS: Record<string, React.ComponentType> = {
   "/integraciones":   IntegracionesView,
   "/reportes":        ReportesView,
   "/repositorios":    RepositoriosView,
+  "/productos":       ProductosView,
   "/cmmi":            CMMIView,
   "/usuarios":        UsuariosView,
   "/certificaciones": CertificacionesView,

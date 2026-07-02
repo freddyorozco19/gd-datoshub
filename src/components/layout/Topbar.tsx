@@ -8,6 +8,7 @@ import type { ReactNode } from "react";
 const ROUTE_META: Record<string, { label: string; parent?: string }> = {
   "/dashboard":       { label: "Dashboard" },
   "/leads":           { label: "Leads",          parent: "Comercial" },
+  "/productos":       { label: "Productos",      parent: "Comercial" },
   "/reuniones":       { label: "Reuniones",       parent: "Comercial" },
   "/integraciones":   { label: "Integraciones",   parent: "Sistemas"  },
   "/reportes":        { label: "Reportes",        parent: "Análisis"  },
