@@ -205,14 +205,14 @@ export default function Sidebar() {
                     key={href}
                     href={href}
                     title={collapsed ? label : undefined}
-                    className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-[11px] font-light transition-all ${
+                    className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-[9px] font-semibold transition-all ${
                       active
                         ? "bg-gradient-to-r from-transparent via-blue-800/40 to-blue-500 text-white"
                         : "text-slate-200 hover:bg-white/[0.05] hover:text-white"
                     } ${collapsed ? "justify-center" : ""}`}
                   >
                     <Icon size={18} className={`shrink-0 ${active ? "text-white" : "text-slate-500 group-hover:text-slate-300"}`} />
-                    {!collapsed && <span className="truncate uppercase">{label}</span>}
+                    {!collapsed && <span className="truncate uppercase tracking-wider">{label}</span>}
                     <NavSpinner />
                     {active && (
                       <span className="absolute right-[-7px] top-1/2 -translate-y-1/2 h-4 w-[3px] rounded-full bg-blue-300 shadow-[0_0_8px_1px_rgba(147,197,253,0.9)]" />
