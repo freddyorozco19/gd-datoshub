@@ -51,7 +51,7 @@ export default function LoginPage() {
             <Database size={22} className="text-white" />
           </div>
           <div className="text-center">
-            <h1 className="text-lg font-bold text-slate-100 tracking-tight">GD-DatosHub</h1>
+            <h1 className="text-lg font-bold text-slate-100 tracking-widest uppercase">GD-DatosHub</h1>
           </div>
         </div>
 
