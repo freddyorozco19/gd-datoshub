@@ -208,31 +208,37 @@ export default function DashboardView() {
     <div className="flex flex-col flex-1 overflow-auto" style={{ background: "var(--color-background)" }}>
       <Topbar title="Dashboard" />
       {/* ── Hero header ── */}
-      <div className="relative px-5 md:px-7 pt-7 pb-5 overflow-hidden">
+      <div className="relative px-5 md:px-7 pt-7 pb-5">
+        {/* Halo decorativo contenido en su propio elemento */}
         <div
           className="absolute top-0 left-0 right-0 h-48 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 60% 100% at 20% -20%, rgba(124,58,237,0.12) 0%, transparent 70%)" }}
+          style={{
+            background: "radial-gradient(ellipse 60% 100% at 20% -20%, rgba(124,58,237,0.12) 0%, transparent 70%)",
+            zIndex: 0,
+          }}
         />
-        <div className="relative flex items-start justify-between">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
+        <div className="relative z-10 flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 mb-2">
               <div className="w-5 h-5 rounded-md bg-violet-600 flex items-center justify-center shadow-[0_0_10px_rgba(124,58,237,0.5)]">
                 <Zap size={10} className="text-white" />
               </div>
-              <span className="text-xs text-slate-600 font-medium">GD-DatosHub</span>
+              <span className="text-xs text-slate-500 font-medium">GD-DatosHub</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
-              {greeting},{" "}
-              <span className="gradient-text">{userName}</span>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+              <span className="text-white">{greeting}, </span>
+              <span style={{ background: "linear-gradient(135deg, #7C3AED 0%, #06B6D4 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+                {userName}
+              </span>
             </h1>
             <p className="text-sm text-slate-500 mt-1.5">
               {now.toLocaleDateString("es-CO", { weekday: "long", day: "numeric", month: "long" })}
             </p>
           </div>
-          <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-2 mt-1 shrink-0">
             <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping-slow" />
-              <span className="text-[10px] text-emerald-400 font-medium">{activeLeads} activos</span>
+              <span className="text-[10px] text-emerald-400 font-medium whitespace-nowrap">{activeLeads} activos</span>
             </div>
           </div>
         </div>

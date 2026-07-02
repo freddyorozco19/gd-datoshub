@@ -65,26 +65,24 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
 
         <div className="w-px h-4 bg-white/[0.08]" />
 
-        {/* Breadcrumb */}
+        {/* Breadcrumb + título */}
         {meta && (
-          <div className="hidden md:flex items-center gap-1.5 text-xs">
+          <div className="flex flex-col justify-center">
             {meta.parent && (
-              <>
-                <span className="text-slate-600">{meta.parent}</span>
-                <ChevronRight size={12} className="text-slate-700" />
-              </>
+              <div className="hidden md:flex items-center gap-1 mb-0.5">
+                <span className="text-[10px] text-slate-600">{meta.parent}</span>
+                <ChevronRight size={10} className="text-slate-700" />
+              </div>
             )}
-            <span className="text-slate-400 font-medium">{meta.label}</span>
+            <span className="text-sm font-semibold text-slate-200">{meta.label}</span>
+            {subtitle && (
+              <span className="hidden md:block text-[10px] text-slate-500 mt-0.5">{subtitle}</span>
+            )}
           </div>
         )}
 
-        {/* Mobile: solo el label */}
-        {meta && (
-          <span className="md:hidden text-sm font-medium text-slate-400">{meta.label}</span>
-        )}
-
         {/* Tabs opcionales */}
-        {tabs && <div className="flex items-center gap-1 h-full">{tabs}</div>}
+        {tabs && <div className="flex items-center gap-1 h-full ml-2">{tabs}</div>}
       </div>
 
       {/* ── Derecha: search + bell + avatar ── */}
