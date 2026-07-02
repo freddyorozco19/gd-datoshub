@@ -561,8 +561,7 @@ function ProductoDetalle({ producto, onBack }: { producto: Producto; onBack: () 
       </div>
 
       {/* Tabs */}
-      <div className="sticky top-[52px] z-20 border-b border-white/[0.06] px-6 md:px-10 overflow-x-auto no-scrollbar"
-        style={{ background: "rgba(8,8,15,0.96)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
+      <div className="sticky top-[52px] z-20 border-b border-white/[0.06] px-6 md:px-10 overflow-x-auto no-scrollbar">
         <div className="flex gap-0 min-w-max">
           {TABS.map((t) => {
             const TabIcon = t.icon;
