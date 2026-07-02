@@ -3,14 +3,20 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { Database, Loader2, Mail, Lock, AlertCircle } from "lucide-react";
+import { Database, Loader2, Mail, Lock, AlertCircle, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email,    setEmail]    = useState("");
-  const [password, setPassword] = useState("");
-  const [error,    setError]    = useState<string | null>(null);
-  const [loading,  setLoading]  = useState(false);
+  const [email,        setEmail]        = useState("");
+  const [password,     setPassword]     = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error,        setError]        = useState<string | null>(null);
+  const [loading,      setLoading]      = useState(false);
+
+  // reset password
+  const [resetMode, setResetMode] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -38,9 +44,26 @@ export default function LoginPage() {
     router.refresh();
   }
 
+  async function handleReset(e: React.FormEvent) {
+    e.preventDefault();
+    setResetLoading(true);
+    setError(null);
+
+    const supabase = createClient();
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/set-password`,
+    });
+
+    setResetLoading(false);
+    if (error) {
+      setError("No se pudo enviar el correo. Verifica el email e intenta de nuevo.");
+      return;
+    }
+    setResetSent(true);
+  }
+
   return (
     <div className="w-full max-w-sm mx-auto px-4 relative z-10">
-      {/* Card glassmorphism */}
       <div className="relative bg-white/[0.05] backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 p-8 overflow-hidden">
         {/* sheen superior */}
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
@@ -50,68 +73,124 @@ export default function LoginPage() {
           <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600 shadow-[0_0_24px_-4px_rgba(37,99,235,0.7)]">
             <Database size={22} className="text-white" />
           </div>
-          <div className="text-center">
-            <h1 className="text-lg font-bold text-slate-100 tracking-widest uppercase">GD-DatosHub</h1>
-          </div>
+          <h1 className="text-lg font-bold text-slate-100 tracking-widest uppercase">GD-DatosHub</h1>
         </div>
 
-        {/* Formulario */}
-        <form onSubmit={handleLogin} className="space-y-4">
-          {/* Email */}
-          <div className="space-y-1.5">
-            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
-              Correo electrónico
-            </label>
-            <div className="relative">
-              <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="correo@growdata.co"
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg text-sm bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:border-blue-500/60 focus:outline-none focus:ring-1 focus:ring-blue-500/30 text-slate-200 placeholder-slate-600 transition-colors"
-              />
+        {/* ── MODO RESET ── */}
+        {resetMode ? (
+          resetSent ? (
+            <div className="flex flex-col items-center gap-3 py-4 text-center">
+              <CheckCircle2 size={32} className="text-emerald-400" />
+              <p className="text-sm text-slate-300">Revisa tu correo. Te enviamos un enlace para restablecer tu contraseña.</p>
+              <button onClick={() => { setResetMode(false); setResetSent(false); }}
+                className="text-xs text-blue-400 hover:underline mt-2">
+                Volver al login
+              </button>
             </div>
-          </div>
+          ) : (
+            <form onSubmit={handleReset} className="space-y-4">
+              <p className="text-xs text-slate-400 text-center mb-1">Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.</p>
 
-          {/* Contraseña */}
-          <div className="space-y-1.5">
-            <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
-              Contraseña
-            </label>
-            <div className="relative">
-              <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg text-sm bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:border-blue-500/60 focus:outline-none focus:ring-1 focus:ring-blue-500/30 text-slate-200 placeholder-slate-600 transition-colors"
-              />
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Correo electrónico</label>
+                <div className="relative">
+                  <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="correo@growdata.co"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-lg text-sm bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:border-blue-500/60 focus:outline-none focus:ring-1 focus:ring-blue-500/30 text-slate-200 placeholder-slate-600 transition-colors"
+                  />
+                </div>
+              </div>
+
+              {error && (
+                <div className="flex items-start gap-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2.5">
+                  <AlertCircle size={14} className="text-rose-400 shrink-0 mt-0.5" />
+                  <p className="text-xs text-rose-400 leading-snug">{error}</p>
+                </div>
+              )}
+
+              <button type="submit" disabled={resetLoading}
+                className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors shadow-[0_0_20px_-4px_rgba(37,99,235,0.5)]">
+                {resetLoading && <Loader2 size={14} className="animate-spin" />}
+                {resetLoading ? "Enviando…" : "ENVIAR ENLACE"}
+              </button>
+
+              <button type="button" onClick={() => { setResetMode(false); setError(null); }}
+                className="w-full text-xs text-slate-500 hover:text-slate-300 transition-colors text-center mt-1">
+                Volver al login
+              </button>
+            </form>
+          )
+        ) : (
+        /* ── MODO LOGIN ── */
+          <form onSubmit={handleLogin} className="space-y-4">
+            {/* Email */}
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Correo electrónico</label>
+              <div className="relative">
+                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="correo@growdata.co"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-lg text-sm bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:border-blue-500/60 focus:outline-none focus:ring-1 focus:ring-blue-500/30 text-slate-200 placeholder-slate-600 transition-colors"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Error */}
-          {error && (
-            <div className="flex items-start gap-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2.5">
-              <AlertCircle size={14} className="text-rose-400 shrink-0 mt-0.5" />
-              <p className="text-xs text-rose-400 leading-snug">{error}</p>
+            {/* Contraseña */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Contraseña</label>
+                <button type="button" onClick={() => { setResetMode(true); setError(null); }}
+                  className="text-[11px] text-blue-400 hover:text-blue-300 transition-colors">
+                  ¿Olvidaste tu contraseña?
+                </button>
+              </div>
+              <div className="relative">
+                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="••••••••"
+                  className="w-full pl-9 pr-10 py-2.5 rounded-lg text-sm bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:border-blue-500/60 focus:outline-none focus:ring-1 focus:ring-blue-500/30 text-slate-200 placeholder-slate-600 transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                </button>
+              </div>
             </div>
-          )}
 
-          {/* Botón */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors shadow-[0_0_20px_-4px_rgba(37,99,235,0.5)] mt-2"
-          >
-            {loading && <Loader2 size={14} className="animate-spin" />}
-            {loading ? "Ingresando…" : "Login"}
-          </button>
-        </form>
+            {error && (
+              <div className="flex items-start gap-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2.5">
+                <AlertCircle size={14} className="text-rose-400 shrink-0 mt-0.5" />
+                <p className="text-xs text-rose-400 leading-snug">{error}</p>
+              </div>
+            )}
 
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors shadow-[0_0_20px_-4px_rgba(37,99,235,0.5)] mt-2"
+            >
+              {loading && <Loader2 size={14} className="animate-spin" />}
+              {loading ? "Ingresando…" : "LOGIN"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
