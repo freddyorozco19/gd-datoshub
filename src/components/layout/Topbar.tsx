@@ -65,20 +65,21 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
 
         <div className="w-px h-4 bg-white/[0.08]" />
 
-        {/* Breadcrumb + título */}
+        {/* Breadcrumb — misma línea horizontal que mainFJ-hub */}
         {meta && (
-          <div className="flex flex-col justify-center">
+          <div className="hidden md:flex items-center gap-1.5 text-xs">
             {meta.parent && (
-              <div className="hidden md:flex items-center gap-1 mb-0.5">
-                <span className="text-[10px] text-slate-600">{meta.parent}</span>
-                <ChevronRight size={10} className="text-slate-700" />
-              </div>
+              <>
+                <span className="text-slate-600">{meta.parent}</span>
+                <ChevronRight size={12} className="text-slate-700" />
+              </>
             )}
-            <span className="text-sm font-semibold text-slate-200">{meta.label}</span>
-            {subtitle && (
-              <span className="hidden md:block text-[10px] text-slate-500 mt-0.5">{subtitle}</span>
-            )}
+            <span className="text-slate-300 font-semibold">{meta.label}</span>
           </div>
+        )}
+        {/* Mobile: solo label */}
+        {meta && (
+          <span className="md:hidden text-sm font-semibold text-slate-300">{meta.label}</span>
         )}
 
         {/* Tabs opcionales */}
