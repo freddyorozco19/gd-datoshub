@@ -171,7 +171,7 @@ export default function Sidebar() {
                       key={href}
                       href={href}
                       title={collapsed ? label : undefined}
-                      className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium tracking-tight transition-all ${
+                      className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-lg text-xs font-semibold transition-all ${
                         active
                           ? "bg-gradient-to-r from-transparent via-blue-800/40 to-blue-500 text-white"
                           : "text-slate-400 hover:bg-white/[0.05] hover:text-white"
