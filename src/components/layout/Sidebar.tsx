@@ -4,9 +4,10 @@ import Link, { useLinkStatus } from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Users, CalendarDays, Plug2, BarChart3,
-  FolderOpen, ShieldCheck, BookOpen, UserCog, LogOut, Zap,
+  FolderOpen, ShieldCheck, BookOpen, UserCog, LogOut,
   ChevronDown, PanelLeftClose, PanelLeftOpen, PanelLeft, Loader2,
 } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -131,14 +132,11 @@ export default function Sidebar() {
         {/* ── Brand ── */}
         <div className={`flex items-center gap-2 px-3 py-3.5 ${collapsed ? "justify-center" : ""}`}>
           <div className={`flex items-center gap-2.5 min-w-0 ${collapsed ? "" : "flex-1"}`}>
-            <div className="flex items-center justify-center w-8 h-8 shrink-0 rounded-lg bg-violet-600 shadow-[0_0_12px_rgba(124,58,237,0.4)]">
-              <Zap size={14} className="text-white" />
+            <div className="flex items-center justify-center w-8 h-8 shrink-0 rounded-lg overflow-hidden">
+              <Image src="/growdata-icon.webp" alt="GrowData" width={32} height={32} className="w-full h-full object-contain" />
             </div>
             {!collapsed && (
-              <div className="min-w-0">
-                <span className="text-sm font-bold tracking-wide text-white truncate block">GD-DatosHub</span>
-                <span className="text-[9px] text-slate-600 tracking-widest uppercase">GrowData</span>
-              </div>
+              <span className="text-sm font-bold tracking-wide text-white truncate block">GD-DatosHub</span>
             )}
           </div>
         </div>
