@@ -174,32 +174,34 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
           </div>
         </div>
 
-        {/* Fila 1: selector de año */}
-        <div className="px-6 pt-3 pb-2 border-b border-white/[0.04] flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-600 uppercase tracking-wider mr-1 shrink-0">Año</span>
-          {CHART_YEARS.map((y) => (
-            <button type="button" key={y} onClick={() => selectYear(y)}
-              className={`px-3 py-1 rounded-lg text-[12px] font-semibold transition-all ${
-                selYear === y ? "text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
-              }`}
-              style={selYear === y ? { background: color + "28", color, border: `1px solid ${color}44` } : { border: "1px solid transparent" }}>
-              {y}
-            </button>
-          ))}
-        </div>
-
-        {/* Fila 2: selector de período dentro del año */}
-        <div className="px-6 pt-2.5 pb-2.5 border-b border-white/[0.06] flex items-center gap-1.5">
-          <span className="text-[10px] text-slate-600 uppercase tracking-wider mr-1 shrink-0">Período</span>
-          {availPeriods.map((p) => (
-            <button type="button" key={p} onClick={() => setSelPeriod(p)}
-              className={`px-3 py-1 rounded-lg text-[12px] font-semibold transition-all ${
-                selPeriod === p ? "text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
-              }`}
-              style={selPeriod === p ? { background: color + "18", color, border: `1px solid ${color}55` } : { border: "1px solid transparent" }}>
+        {/* Selectores en una sola fila — mitad año / mitad período */}
+        <div className="px-6 py-3 border-b border-white/[0.06] flex items-center gap-0 divide-x divide-white/[0.06]">
+          {/* Mitad izquierda: año */}
+          <div className="flex items-center gap-1 pr-4 w-1/2 overflow-x-auto no-scrollbar">
+            <span className="text-[10px] text-slate-600 uppercase tracking-wider mr-1 shrink-0">Año</span>
+            {CHART_YEARS.map((y) => (
+              <button type="button" key={y} onClick={() => selectYear(y)}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all shrink-0 ${
+                  selYear === y ? "text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
+                }`}
+                style={selYear === y ? { background: color + "28", color, border: `1px solid ${color}44` } : { border: "1px solid transparent" }}>
+                {y}
+              </button>
+            ))}
+          </div>
+          {/* Mitad derecha: período */}
+          <div className="flex items-center gap-1 pl-4 w-1/2">
+            <span className="text-[10px] text-slate-600 uppercase tracking-wider mr-1 shrink-0">Período</span>
+            {availPeriods.map((p) => (
+              <button type="button" key={p} onClick={() => setSelPeriod(p)}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all shrink-0 ${
+                  selPeriod === p ? "text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
+                }`}
+                style={selPeriod === p ? { background: color + "18", color, border: `1px solid ${color}55` } : { border: "1px solid transparent" }}>
               {PERIOD_LABELS[p]}
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Chart */}
