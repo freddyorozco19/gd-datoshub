@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
@@ -104,6 +104,20 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
   const [selYear,   setSelYear]   = useState<number>(_CUR_YEAR);
   const [selPeriod, setSelPeriod] = useState<Period>("year");
 
+  /* Drag-to-scroll en el selector de años */
+  const yearScrollRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0 });
+  function onDragStart(e: React.MouseEvent) {
+    dragRef.current = { active: true, startX: e.pageX, scrollLeft: yearScrollRef.current?.scrollLeft ?? 0 };
+  }
+  function onDragMove(e: React.MouseEvent) {
+    if (!dragRef.current.active) return;
+    e.preventDefault();
+    const dx = e.pageX - dragRef.current.startX;
+    if (yearScrollRef.current) yearScrollRef.current.scrollLeft = dragRef.current.scrollLeft - dx;
+  }
+  function onDragEnd() { dragRef.current.active = false; }
+
   const yearOffset   = _CUR_YEAR - selYear;
   const availPeriods: Period[] = ["year", "Q1", "Q2", "Q3", "Q4"];
 
@@ -178,7 +192,15 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
           {/* Mitad izquierda: "AÑO" fijo + botones scrollables */}
           <div className="w-1/2 flex items-center pl-6 pr-3">
             <span className="text-[10px] text-slate-600 uppercase tracking-wider mr-2 shrink-0">Año</span>
-            <div className="min-w-0 flex-1 overflow-x-auto no-scrollbar">
+            <div
+              ref={yearScrollRef}
+              className="min-w-0 flex-1 overflow-x-auto no-scrollbar select-none"
+              style={{ cursor: dragRef.current.active ? "grabbing" : "grab" }}
+              onMouseDown={onDragStart}
+              onMouseMove={onDragMove}
+              onMouseUp={onDragEnd}
+              onMouseLeave={onDragEnd}
+            >
             <div className="flex items-center gap-1 min-w-max">
               {CHART_YEARS.map((y) => (
                 <button type="button" key={y} onClick={() => selectYear(y)}
