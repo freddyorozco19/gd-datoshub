@@ -89,14 +89,15 @@ function buildYearData(endValue: number, yearOffset: number) {
   });
 }
 
-function buildQuarterData(endValue: number, qOffset: number) {
+function buildQuarterData(endValue: number, qOffset: number, q: number) {
   const scale = Math.max(0.3, 1 - qOffset * 0.06);
   const base  = endValue * scale;
-  return Array.from({ length: 13 }, (_, i) => {
-    const progress = i / 12;
+  const startMonth = ((q - 1) * 3);
+  return [0, 1, 2].map((offset) => {
+    const progress = offset / 2;
     const v     = base * (0.6 + 0.4 * progress);
-    const noise = (Math.sin(i * 2.3 + qOffset) * 0.07 + Math.cos(i * 1.7) * 0.04) * base;
-    return { name: `Sem ${i + 1}`, valor: Math.max(1, Math.round(v + noise)) };
+    const noise = (Math.sin(offset * 2.3 + qOffset) * 0.07 + Math.cos(offset * 1.7) * 0.04) * base;
+    return { name: MONTH_LABELS[startMonth + offset], valor: Math.max(1, Math.round(v + noise)) };
   });
 }
 
@@ -125,19 +126,18 @@ function aggregateByQuarter(
   q: number,
   metricKey: "count" | "sum"
 ): { name: string; valor: number }[] {
-  const qStart = new Date(year, (q - 1) * 3, 1);
-  return Array.from({ length: 13 }, (_, i) => {
-    const wStart = new Date(qStart.getTime() + i * 7 * 86_400_000);
-    const wEnd   = new Date(qStart.getTime() + (i + 1) * 7 * 86_400_000);
+  const startMonth = (q - 1) * 3;
+  return [0, 1, 2].map((offset) => {
+    const mo = startMonth + offset;
     const bucket = leads.filter((l) => {
       const d = new Date(l.fechaCreacion);
-      return d >= wStart && d < wEnd;
+      return d.getFullYear() === year && d.getMonth() === mo;
     });
     const valor =
       metricKey === "sum"
         ? Math.round(bucket.reduce((acc, l) => acc + (l.ingresosEsperados || 0), 0) / 1_000_000)
         : bucket.length;
-    return { name: `Sem ${i + 1}`, valor };
+    return { name: MONTH_LABELS[mo], valor };
   });
 }
 
@@ -182,9 +182,9 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
 
   const data = (() => {
     if (metricKey === "synthetic") {
-      return selPeriod === "year"
-        ? buildYearData(endValue, yearOffset)
-        : buildQuarterData(endValue, yearOffset * 4 + (_CUR_Q - parseInt(selPeriod[1])));
+      if (selPeriod === "year") return buildYearData(endValue, yearOffset);
+      const qNum = parseInt(selPeriod[1]);
+      return buildQuarterData(endValue, yearOffset * 4 + (_CUR_Q - qNum), qNum);
     }
     if (selPeriod === "year") return aggregateByMonth(leads, selYear, metricKey);
     return aggregateByQuarter(leads, selYear, parseInt(selPeriod[1]), metricKey);
@@ -199,7 +199,7 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
 
   const chartTitle = selPeriod === "year"
     ? `Tendencia mensual — ${selYear}`
-    : `Tendencia semanal — ${selPeriod} ${selYear}`;
+    : `Tendencia mensual — ${selPeriod} ${selYear}`;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -313,7 +313,7 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
               <XAxis dataKey="name" tick={{ fill: "#64748B", fontSize: 11 }} axisLine={false} tickLine={false} dy={8}
-                interval={selPeriod === "year" ? 0 : 2} />
+                interval={0} />
               <YAxis tick={{ fill: "#64748B", fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} cursor={{ stroke: color, strokeWidth: 1, strokeDasharray: "4 4" }} />
               <Area
