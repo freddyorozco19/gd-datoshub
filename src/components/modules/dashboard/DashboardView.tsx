@@ -134,7 +134,8 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
   }
 
   const yearOffset   = _CUR_YEAR - selYear;
-  const availPeriods: Period[] = ["year", "Q1", "Q2", "Q3", "Q4"];
+  const maxQ         = selYear === _CUR_YEAR ? _CUR_Q : 4;
+  const availPeriods = ["year", ...Array.from({ length: maxQ }, (_, i) => `Q${i + 1}`)] as Period[];
 
   const data = selPeriod === "year"
     ? buildYearData(endValue, yearOffset)
@@ -158,6 +159,11 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
   }, [onClose]);
 
   function selectYear(y: number) {
+    const newMaxQ = y === _CUR_YEAR ? _CUR_Q : 4;
+    if (selPeriod !== "year") {
+      const qNum = parseInt(selPeriod[1]);
+      if (qNum > newMaxQ) setSelPeriod("year");
+    }
     setSelYear(y);
     setSelPeriod("year"); // reset al cambiar año
   }
