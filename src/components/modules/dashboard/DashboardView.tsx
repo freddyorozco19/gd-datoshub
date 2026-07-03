@@ -67,40 +67,51 @@ interface ChartModalProps {
   onClose: () => void;
 }
 
-/* Genera trimestres dinámicamente hacia atrás desde el trimestre actual */
-function genQuarters(count = 16) {
-  const now   = new Date();
-  let year    = now.getFullYear();
-  let q       = Math.floor(now.getMonth() / 3) + 1;
-  const result: { id: string; label: string }[] = [];
-  for (let i = 0; i < count; i++) {
-    result.push({ id: `Q${q}-${year}`, label: `Q${q} ${year}` });
-    q--;
-    if (q < 1) { q = 4; year--; }
-  }
-  return result;
-}
-const QUARTERS = genQuarters(16);
+const _NOW        = new Date();
+const _CUR_YEAR   = _NOW.getFullYear();
+const _CUR_Q      = Math.floor(_NOW.getMonth() / 3) + 1;
+const CHART_YEARS = Array.from({ length: 6 }, (_, i) => _CUR_YEAR - i);
+const MONTH_LABELS = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
-/* Genera 13 puntos semanales para el trimestre seleccionado.
-   El índice 0 = trimestre actual, 1 = anterior, etc.
-   La tendencia decrece hacia atrás usando la misma lógica proporcional. */
-function buildQuarterData(endValue: number, quarterIdx: number) {
-  const scale = Math.max(0.3, 1 - quarterIdx * 0.06);
+function buildYearData(endValue: number, yearOffset: number) {
+  const scale = Math.max(0.3, 1 - yearOffset * 0.18);
+  const base  = endValue * scale;
+  const months = yearOffset === 0
+    ? MONTH_LABELS.slice(0, _NOW.getMonth() + 1)  // solo meses transcurridos en año actual
+    : MONTH_LABELS;
+  return months.map((name, i) => {
+    const progress = i / (months.length - 1 || 1);
+    const v     = base * (0.55 + 0.45 * progress);
+    const noise = (Math.sin(i * 1.5 + yearOffset) * 0.08 + Math.cos(i * 2.1) * 0.05) * base;
+    return { name, valor: Math.max(1, Math.round(v + noise)) };
+  });
+}
+
+function buildQuarterData(endValue: number, qOffset: number) {
+  const scale = Math.max(0.3, 1 - qOffset * 0.06);
   const base  = endValue * scale;
   return Array.from({ length: 13 }, (_, i) => {
     const progress = i / 12;
-    const v = base * (0.6 + 0.4 * progress);
-    const noise = (Math.sin(i * 2.3 + quarterIdx) * 0.07 + Math.cos(i * 1.7) * 0.04) * base;
+    const v     = base * (0.6 + 0.4 * progress);
+    const noise = (Math.sin(i * 2.3 + qOffset) * 0.07 + Math.cos(i * 1.7) * 0.04) * base;
     return { name: `Sem ${i + 1}`, valor: Math.max(1, Math.round(v + noise)) };
   });
 }
 
+type Period = "year" | "Q1" | "Q2" | "Q3" | "Q4";
+
 function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText, onClose }: ChartModalProps) {
-  const [rangeId, setRangeId] = useState<string>(QUARTERS[0].id);
-  const qIdx  = QUARTERS.findIndex((q) => q.id === rangeId);
-  const currentQ = QUARTERS[qIdx] ?? QUARTERS[0];
-  const data  = buildQuarterData(endValue, qIdx);
+  const [selYear,   setSelYear]   = useState<number>(_CUR_YEAR);
+  const [selPeriod, setSelPeriod] = useState<Period>("year");
+
+  const yearOffset   = _CUR_YEAR - selYear;
+  const maxQ         = selYear === _CUR_YEAR ? _CUR_Q : 4;
+  const availPeriods = ["year", ...Array.from({ length: maxQ }, (_, i) => `Q${i + 1}`)] as Period[];
+
+  const data = selPeriod === "year"
+    ? buildYearData(endValue, yearOffset)
+    : buildQuarterData(endValue, yearOffset * 4 + (_CUR_Q - parseInt(selPeriod[1])));
+
   const vals  = data.map((d) => d.valor);
   const min   = Math.min(...vals);
   const max   = Math.max(...vals);
@@ -108,13 +119,20 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
   const trend = vals[vals.length - 1] - vals[0];
   const gradId = `modal-grad-${color.replace(/[^a-z0-9]/gi, "")}`;
 
+  const chartTitle = selPeriod === "year"
+    ? `Tendencia mensual — ${selYear}`
+    : `Tendencia semanal — ${selPeriod} ${selYear}`;
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const tickInterval = 2; // cada 2 semanas
+  function selectYear(y: number) {
+    setSelYear(y);
+    setSelPeriod("year"); // reset al cambiar año
+  }
 
   const CustomTooltip = ({ active, payload, label: lbl }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
     if (!active || !payload?.length) return null;
@@ -125,6 +143,10 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
         <p className="font-bold text-white text-sm">{payload[0].value}</p>
       </div>
     );
+  };
+
+  const PERIOD_LABELS: Record<Period, string> = {
+    year: "Año completo", Q1: "Q1", Q2: "Q2", Q3: "Q3", Q4: "Q4",
   };
 
   const modal = (
@@ -152,25 +174,38 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
           </div>
         </div>
 
-        {/* Selector de trimestre */}
-        <div className="px-6 pt-4 pb-1 overflow-x-auto no-scrollbar border-b border-white/[0.04]">
-          <div className="flex gap-1 min-w-max pb-3">
-            {QUARTERS.map((q) => (
-              <button type="button" key={q.id} onClick={() => setRangeId(q.id)}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all whitespace-nowrap ${
-                  rangeId === q.id ? "text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
-                }`}
-                style={rangeId === q.id ? { background: color + "28", color, border: `1px solid ${color}44` } : { border: "1px solid transparent" }}>
-                {q.label}
-              </button>
-            ))}
-          </div>
+        {/* Fila 1: selector de año */}
+        <div className="px-6 pt-3 pb-2 border-b border-white/[0.04] flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-600 uppercase tracking-wider mr-1 shrink-0">Año</span>
+          {CHART_YEARS.map((y) => (
+            <button type="button" key={y} onClick={() => selectYear(y)}
+              className={`px-3 py-1 rounded-lg text-[12px] font-semibold transition-all ${
+                selYear === y ? "text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
+              }`}
+              style={selYear === y ? { background: color + "28", color, border: `1px solid ${color}44` } : { border: "1px solid transparent" }}>
+              {y}
+            </button>
+          ))}
+        </div>
+
+        {/* Fila 2: selector de período dentro del año */}
+        <div className="px-6 pt-2.5 pb-2.5 border-b border-white/[0.06] flex items-center gap-1.5">
+          <span className="text-[10px] text-slate-600 uppercase tracking-wider mr-1 shrink-0">Período</span>
+          {availPeriods.map((p) => (
+            <button type="button" key={p} onClick={() => setSelPeriod(p)}
+              className={`px-3 py-1 rounded-lg text-[12px] font-semibold transition-all ${
+                selPeriod === p ? "text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
+              }`}
+              style={selPeriod === p ? { background: color + "18", color, border: `1px solid ${color}55` } : { border: "1px solid transparent" }}>
+              {PERIOD_LABELS[p]}
+            </button>
+          ))}
         </div>
 
         {/* Chart */}
         <div className="px-6 pt-5 pb-2">
           <p className="text-[11px] text-slate-500 mb-4 uppercase tracking-wider font-semibold">
-            Tendencia semanal — {currentQ.label}
+            {chartTitle}
           </p>
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
@@ -182,7 +217,7 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
               <XAxis dataKey="name" tick={{ fill: "#64748B", fontSize: 11 }} axisLine={false} tickLine={false} dy={8}
-                interval={tickInterval} />
+                interval={selPeriod === "year" ? 0 : 2} />
               <YAxis tick={{ fill: "#64748B", fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} cursor={{ stroke: color, strokeWidth: 1, strokeDasharray: "4 4" }} />
               <Area
