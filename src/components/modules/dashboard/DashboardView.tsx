@@ -106,17 +106,24 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
 
   /* Drag-to-scroll en el selector de años */
   const yearScrollRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0 });
+  const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0, dragged: false });
+
   function onDragStart(e: React.MouseEvent) {
-    dragRef.current = { active: true, startX: e.pageX, scrollLeft: yearScrollRef.current?.scrollLeft ?? 0 };
+    dragRef.current = { active: true, startX: e.pageX, scrollLeft: yearScrollRef.current?.scrollLeft ?? 0, dragged: false };
   }
   function onDragMove(e: React.MouseEvent) {
     if (!dragRef.current.active) return;
-    e.preventDefault();
     const dx = e.pageX - dragRef.current.startX;
-    if (yearScrollRef.current) yearScrollRef.current.scrollLeft = dragRef.current.scrollLeft - dx;
+    if (Math.abs(dx) > 4) {
+      dragRef.current.dragged = true;
+      if (yearScrollRef.current) yearScrollRef.current.scrollLeft = dragRef.current.scrollLeft - dx;
+    }
   }
   function onDragEnd() { dragRef.current.active = false; }
+  function onYearClick(y: number) {
+    if (dragRef.current.dragged) { dragRef.current.dragged = false; return; }
+    selectYear(y);
+  }
 
   const yearOffset   = _CUR_YEAR - selYear;
   const availPeriods: Period[] = ["year", "Q1", "Q2", "Q3", "Q4"];
@@ -203,7 +210,7 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
             >
             <div className="flex items-center gap-1 min-w-max">
               {CHART_YEARS.map((y) => (
-                <button type="button" key={y} onClick={() => selectYear(y)}
+                <button type="button" key={y} onClick={() => onYearClick(y)}
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all shrink-0 ${
                     selYear === y ? "text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
                   }`}
