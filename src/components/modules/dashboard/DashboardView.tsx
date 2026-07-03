@@ -105,8 +105,7 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
   const [selPeriod, setSelPeriod] = useState<Period>("year");
 
   const yearOffset   = _CUR_YEAR - selYear;
-  const maxQ         = selYear === _CUR_YEAR ? _CUR_Q : 4;
-  const availPeriods = ["year", ...Array.from({ length: maxQ }, (_, i) => `Q${i + 1}`)] as Period[];
+  const availPeriods: Period[] = ["year", "Q1", "Q2", "Q3", "Q4"];
 
   const data = selPeriod === "year"
     ? buildYearData(endValue, yearOffset)
@@ -176,10 +175,11 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
 
         {/* Selectores en una sola fila — mitad año / mitad período */}
         <div className="py-3 border-b border-white/[0.06] flex items-center divide-x divide-white/[0.06]">
-          {/* Mitad izquierda: año — scrollable */}
-          <div className="min-w-0 w-1/2 overflow-x-auto no-scrollbar pl-6 pr-3">
+          {/* Mitad izquierda: "AÑO" fijo + botones scrollables */}
+          <div className="w-1/2 flex items-center pl-6 pr-3">
+            <span className="text-[10px] text-slate-600 uppercase tracking-wider mr-2 shrink-0">Año</span>
+            <div className="min-w-0 flex-1 overflow-x-auto no-scrollbar">
             <div className="flex items-center gap-1 min-w-max">
-              <span className="text-[10px] text-slate-600 uppercase tracking-wider mr-1 shrink-0">Año</span>
               {CHART_YEARS.map((y) => (
                 <button type="button" key={y} onClick={() => selectYear(y)}
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all shrink-0 ${
@@ -189,6 +189,7 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
                   {y}
                 </button>
               ))}
+            </div>
             </div>
           </div>
           {/* Mitad derecha: período — los 4 Q + año completo */}
