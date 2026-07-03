@@ -67,30 +67,40 @@ interface ChartModalProps {
   onClose: () => void;
 }
 
-const RANGES = [
-  { id: "4",  label: "4 sem",   n: 4  },
-  { id: "7",  label: "7 sem",   n: 7  },
-  { id: "12", label: "3 meses", n: 12 },
-  { id: "26", label: "6 meses", n: 26 },
-  { id: "52", label: "1 año",   n: 52 },
-] as const;
-type RangeId = typeof RANGES[number]["id"];
+/* Genera trimestres dinámicamente hacia atrás desde el trimestre actual */
+function genQuarters(count = 16) {
+  const now   = new Date();
+  let year    = now.getFullYear();
+  let q       = Math.floor(now.getMonth() / 3) + 1;
+  const result: { id: string; label: string }[] = [];
+  for (let i = 0; i < count; i++) {
+    result.push({ id: `Q${q}-${year}`, label: `Q${q} ${year}` });
+    q--;
+    if (q < 1) { q = 4; year--; }
+  }
+  return result;
+}
+const QUARTERS = genQuarters(16);
 
-function buildData(endValue: number, n: number) {
-  return Array.from({ length: n }, (_, i) => {
-    const progress = i / (n - 1);
-    const base = endValue * (0.45 + 0.55 * progress);
-    const noise = (Math.sin(i * 2.3 + 1) * 0.06 + Math.cos(i * 1.7) * 0.04) * endValue;
-    const valor = Math.max(1, Math.round(base + noise));
-    const label = n <= 12 ? `Sem ${i + 1}` : n <= 26 ? `S${i + 1}` : `S${i + 1}`;
-    return { name: label, valor };
+/* Genera 13 puntos semanales para el trimestre seleccionado.
+   El índice 0 = trimestre actual, 1 = anterior, etc.
+   La tendencia decrece hacia atrás usando la misma lógica proporcional. */
+function buildQuarterData(endValue: number, quarterIdx: number) {
+  const scale = Math.max(0.3, 1 - quarterIdx * 0.06);
+  const base  = endValue * scale;
+  return Array.from({ length: 13 }, (_, i) => {
+    const progress = i / 12;
+    const v = base * (0.6 + 0.4 * progress);
+    const noise = (Math.sin(i * 2.3 + quarterIdx) * 0.07 + Math.cos(i * 1.7) * 0.04) * base;
+    return { name: `Sem ${i + 1}`, valor: Math.max(1, Math.round(v + noise)) };
   });
 }
 
 function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText, onClose }: ChartModalProps) {
-  const [rangeId, setRangeId] = useState<RangeId>("7");
-  const currentRange = RANGES.find((r) => r.id === rangeId)!;
-  const data  = buildData(endValue, currentRange.n);
+  const [rangeId, setRangeId] = useState<string>(QUARTERS[0].id);
+  const qIdx  = QUARTERS.findIndex((q) => q.id === rangeId);
+  const currentQ = QUARTERS[qIdx] ?? QUARTERS[0];
+  const data  = buildQuarterData(endValue, qIdx);
   const vals  = data.map((d) => d.valor);
   const min   = Math.min(...vals);
   const max   = Math.max(...vals);
@@ -104,8 +114,7 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  /* Mostrar solo algunos ticks en rangos largos */
-  const tickInterval = currentRange.n > 26 ? 7 : currentRange.n > 12 ? 3 : 0;
+  const tickInterval = 2; // cada 2 semanas
 
   const CustomTooltip = ({ active, payload, label: lbl }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
     if (!active || !payload?.length) return null;
@@ -132,37 +141,36 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
             className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/[0.08] transition-colors">
             <X size={16} />
           </button>
-          <div className="flex items-start justify-between pr-8">
-            <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 ${iconBg} border rounded-xl flex items-center justify-center`}>
-                <Icon size={18} className={iconText} />
-              </div>
-              <div>
-                <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">{label}</p>
-                <p className="text-2xl font-bold text-white leading-none mt-0.5">{value}</p>
-              </div>
+          <div className="flex items-center gap-3 pr-8">
+            <div className={`w-10 h-10 ${iconBg} border rounded-xl flex items-center justify-center shrink-0`}>
+              <Icon size={18} className={iconText} />
             </div>
-            {/* Selector de rango */}
-            <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-1 border border-white/[0.06]">
-              {RANGES.map((r) => (
-                <button type="button" key={r.id} onClick={() => setRangeId(r.id)}
-                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
-                    rangeId === r.id
-                      ? "text-white"
-                      : "text-slate-500 hover:text-slate-300"
-                  }`}
-                  style={rangeId === r.id ? { background: color + "33", color } : {}}>
-                  {r.label}
-                </button>
-              ))}
+            <div>
+              <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">{label}</p>
+              <p className="text-2xl font-bold text-white leading-none mt-0.5">{value}</p>
             </div>
+          </div>
+        </div>
+
+        {/* Selector de trimestre */}
+        <div className="px-6 pt-4 pb-1 overflow-x-auto no-scrollbar border-b border-white/[0.04]">
+          <div className="flex gap-1 min-w-max pb-3">
+            {QUARTERS.map((q) => (
+              <button type="button" key={q.id} onClick={() => setRangeId(q.id)}
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all whitespace-nowrap ${
+                  rangeId === q.id ? "text-white" : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.04]"
+                }`}
+                style={rangeId === q.id ? { background: color + "28", color, border: `1px solid ${color}44` } : { border: "1px solid transparent" }}>
+                {q.label}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Chart */}
         <div className="px-6 pt-5 pb-2">
           <p className="text-[11px] text-slate-500 mb-4 uppercase tracking-wider font-semibold">
-            Tendencia — últimas {currentRange.label}
+            Tendencia semanal — {currentQ.label}
           </p>
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
@@ -181,7 +189,7 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
                 type="monotone" dataKey="valor"
                 stroke={color} strokeWidth={2.5}
                 fill={`url(#${gradId})`}
-                dot={currentRange.n <= 12 ? { fill: color, r: 3.5, strokeWidth: 0 } : false}
+                dot={{ fill: color, r: 3.5, strokeWidth: 0 }}
                 activeDot={{ r: 6, fill: color, stroke: "rgba(255,255,255,0.2)", strokeWidth: 2 }}
                 animationDuration={400}
               />
