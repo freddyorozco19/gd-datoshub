@@ -64,6 +64,8 @@ interface ChartModalProps {
   Icon: typeof Users;
   iconBg: string;
   iconText: string;
+  leads: Lead[];
+  metricKey: "count" | "sum" | "synthetic";
   onClose: () => void;
 }
 
@@ -77,7 +79,7 @@ function buildYearData(endValue: number, yearOffset: number) {
   const scale = Math.max(0.3, 1 - yearOffset * 0.18);
   const base  = endValue * scale;
   const months = yearOffset === 0
-    ? MONTH_LABELS.slice(0, _NOW.getMonth() + 1)  // solo meses transcurridos en año actual
+    ? MONTH_LABELS.slice(0, _NOW.getMonth() + 1)
     : MONTH_LABELS;
   return months.map((name, i) => {
     const progress = i / (months.length - 1 || 1);
@@ -98,9 +100,50 @@ function buildQuarterData(endValue: number, qOffset: number) {
   });
 }
 
+function aggregateByMonth(
+  leads: Lead[],
+  year: number,
+  metricKey: "count" | "sum"
+): { name: string; valor: number }[] {
+  const maxMonth = year === _CUR_YEAR ? _NOW.getMonth() : 11;
+  return MONTH_LABELS.slice(0, maxMonth + 1).map((name, i) => {
+    const bucket = leads.filter((l) => {
+      const d = new Date(l.fechaCreacion);
+      return d.getFullYear() === year && d.getMonth() === i;
+    });
+    const valor =
+      metricKey === "sum"
+        ? Math.round(bucket.reduce((acc, l) => acc + (l.ingresosEsperados || 0), 0) / 1_000_000)
+        : bucket.length;
+    return { name, valor };
+  });
+}
+
+function aggregateByQuarter(
+  leads: Lead[],
+  year: number,
+  q: number,
+  metricKey: "count" | "sum"
+): { name: string; valor: number }[] {
+  const qStart = new Date(year, (q - 1) * 3, 1);
+  return Array.from({ length: 13 }, (_, i) => {
+    const wStart = new Date(qStart.getTime() + i * 7 * 86_400_000);
+    const wEnd   = new Date(qStart.getTime() + (i + 1) * 7 * 86_400_000);
+    const bucket = leads.filter((l) => {
+      const d = new Date(l.fechaCreacion);
+      return d >= wStart && d < wEnd;
+    });
+    const valor =
+      metricKey === "sum"
+        ? Math.round(bucket.reduce((acc, l) => acc + (l.ingresosEsperados || 0), 0) / 1_000_000)
+        : bucket.length;
+    return { name: `Sem ${i + 1}`, valor };
+  });
+}
+
 type Period = "year" | "Q1" | "Q2" | "Q3" | "Q4";
 
-function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText, onClose }: ChartModalProps) {
+function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText, leads, metricKey, onClose }: ChartModalProps) {
   const [selYear,   setSelYear]   = useState<number>(_CUR_YEAR);
   const [selPeriod, setSelPeriod] = useState<Period>("year");
 
@@ -137,9 +180,15 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
   const maxQ         = selYear === _CUR_YEAR ? _CUR_Q : 4;
   const availPeriods = ["year", ...Array.from({ length: maxQ }, (_, i) => `Q${i + 1}`)] as Period[];
 
-  const data = selPeriod === "year"
-    ? buildYearData(endValue, yearOffset)
-    : buildQuarterData(endValue, yearOffset * 4 + (_CUR_Q - parseInt(selPeriod[1])));
+  const data = (() => {
+    if (metricKey === "synthetic") {
+      return selPeriod === "year"
+        ? buildYearData(endValue, yearOffset)
+        : buildQuarterData(endValue, yearOffset * 4 + (_CUR_Q - parseInt(selPeriod[1])));
+    }
+    if (selPeriod === "year") return aggregateByMonth(leads, selYear, metricKey);
+    return aggregateByQuarter(leads, selYear, parseInt(selPeriod[1]), metricKey);
+  })();
 
   const vals  = data.map((d) => d.valor);
   const min   = Math.min(...vals);
@@ -395,9 +444,25 @@ export default function DashboardView() {
   const tasaCierre   = totalLeads > 0 ? Math.round((ganados / totalLeads) * 100) : 0;
   const activeLeads  = leads.filter((l) => l.ganado !== "Ganado" && l.ganado !== "Perdido").length;
 
-  /* Sparklines basadas en datos reales (tendencia proporcional) */
-  const mkSpark = (end: number) =>
-    [0.5, 0.6, 0.65, 0.72, 0.8, 0.9, 1].map((f) => Math.max(1, Math.round(end * f)));
+  /* Sparkline real: últimos 7 meses para métricas basadas en leads */
+  function realSpark(subset: Lead[], metricKey: "count" | "sum"): number[] {
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(_NOW);
+      d.setMonth(d.getMonth() - (6 - i));
+      const yr = d.getFullYear();
+      const mo = d.getMonth();
+      const bucket = subset.filter((l) => {
+        const ld = new Date(l.fechaCreacion);
+        return ld.getFullYear() === yr && ld.getMonth() === mo;
+      });
+      if (metricKey === "sum") {
+        return Math.round(bucket.reduce((acc, l) => acc + (l.ingresosEsperados || 0), 0) / 1_000_000);
+      }
+      return bucket.length;
+    });
+  }
+
+  const preventaLeads = leads.filter((l) => !!l.etapaPreventa);
 
   const statCards = [
     {
@@ -409,8 +474,10 @@ export default function DashboardView() {
       iconBg: "bg-violet-500/10 border-violet-500/20",
       iconText: "text-violet-400",
       Icon: Users,
-      spark: mkSpark(totalLeads),
+      spark: realSpark(leads, "count"),
       endValue: totalLeads,
+      metricLeads: leads,
+      metricKey: "count" as const,
     },
     {
       label: "CMMI · Ejecuciones",
@@ -421,8 +488,10 @@ export default function DashboardView() {
       iconBg: "bg-emerald-500/10 border-emerald-500/20",
       iconText: "text-emerald-400",
       Icon: ShieldCheck,
-      spark: mkSpark(47),
+      spark: [0.5, 0.6, 0.65, 0.72, 0.8, 0.9, 1].map((f) => Math.max(1, Math.round(47 * f))),
       endValue: 47,
+      metricLeads: [] as Lead[],
+      metricKey: "synthetic" as const,
     },
     {
       label: "En Preventa",
@@ -433,20 +502,24 @@ export default function DashboardView() {
       iconBg: "bg-cyan-500/10 border-cyan-500/20",
       iconText: "text-cyan-400",
       Icon: Target,
-      spark: mkSpark(enPreventa),
+      spark: realSpark(preventaLeads, "count"),
       endValue: enPreventa,
+      metricLeads: preventaLeads,
+      metricKey: "count" as const,
     },
     {
       label: "Ingresos Esperados",
       value: loading ? "—" : `$${fmtM(totalIngresos)}`,
-      sub: "COP acumulado",
+      sub: "COP acumulado (MM)",
       link: "/reportes",
       color: "#F59E0B",
       iconBg: "bg-amber-500/10 border-amber-500/20",
       iconText: "text-amber-400",
       Icon: TrendingUp,
-      spark: [40, 55, 48, 62, 58, 71, 80],
+      spark: realSpark(leads, "sum"),
       endValue: Math.round(totalIngresos / 1_000_000),
+      metricLeads: leads,
+      metricKey: "sum" as const,
     },
   ];
 
@@ -502,7 +575,7 @@ export default function DashboardView() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {loading
             ? [0, 1, 2, 3].map((i) => <SkeletonCard key={i} />)
-            : statCards.map(({ label, value, sub, link, color, iconBg, iconText, Icon, spark, endValue }) => (
+            : statCards.map(({ label, value, sub, link, color, iconBg, iconText, Icon, spark, endValue, metricLeads, metricKey }) => (
                 <Link
                   key={label}
                   href={link}
@@ -523,7 +596,7 @@ export default function DashboardView() {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          setChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText });
+                          setChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText, leads: metricLeads, metricKey });
                         }}
                         className="rounded-lg hover:scale-105 transition-transform cursor-pointer"
                         title="Ver gráfica detallada"
