@@ -106,20 +106,28 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
 
   /* Drag-to-scroll en el selector de años */
   const yearScrollRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0, dragged: false });
+  const dragRef = useRef({ dragged: false });
 
   function onDragStart(e: React.MouseEvent) {
-    dragRef.current = { active: true, startX: e.pageX, scrollLeft: yearScrollRef.current?.scrollLeft ?? 0, dragged: false };
-  }
-  function onDragMove(e: React.MouseEvent) {
-    if (!dragRef.current.active) return;
-    const dx = e.pageX - dragRef.current.startX;
-    if (Math.abs(dx) > 4) {
-      dragRef.current.dragged = true;
-      if (yearScrollRef.current) yearScrollRef.current.scrollLeft = dragRef.current.scrollLeft - dx;
+    const startX    = e.pageX;
+    const scrollLeft = yearScrollRef.current?.scrollLeft ?? 0;
+    dragRef.current.dragged = false;
+
+    function onMove(ev: MouseEvent) {
+      const dx = ev.pageX - startX;
+      if (Math.abs(dx) > 4) {
+        dragRef.current.dragged = true;
+        if (yearScrollRef.current) yearScrollRef.current.scrollLeft = scrollLeft - dx;
+      }
     }
+    function onUp() {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    }
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
   }
-  function onDragEnd() { dragRef.current.active = false; }
+
   function onYearClick(y: number) {
     if (dragRef.current.dragged) { dragRef.current.dragged = false; return; }
     selectYear(y);
@@ -202,11 +210,8 @@ function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText
             <div
               ref={yearScrollRef}
               className="min-w-0 flex-1 overflow-x-auto no-scrollbar select-none"
-              style={{ cursor: dragRef.current.active ? "grabbing" : "grab" }}
+              style={{ cursor: "grab" }}
               onMouseDown={onDragStart}
-              onMouseMove={onDragMove}
-              onMouseUp={onDragEnd}
-              onMouseLeave={onDragEnd}
             >
             <div className="flex items-center gap-1 min-w-max">
               {CHART_YEARS.map((y) => (
