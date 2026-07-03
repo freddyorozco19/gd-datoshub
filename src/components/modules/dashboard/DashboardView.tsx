@@ -1,12 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import {
   Users, TrendingUp, Target, Award, ArrowUpRight,
-  BarChart3, CalendarDays, ShieldCheck,
+  BarChart3, CalendarDays, ShieldCheck, X, TrendingDown,
 } from "lucide-react";
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import type { Lead } from "@/lib/odoo/types";
 import Topbar from "@/components/layout/Topbar";
 import LeadDetailModal from "@/components/modules/leads/LeadDetailModal";
@@ -47,6 +52,128 @@ function Sparkline({ data, color = "#7C3AED" }: { data: number[]; color?: string
       <circle cx={cx} cy={cy} r="2.5" fill={color} />
     </svg>
   );
+}
+
+/* ── Chart Modal ──────────────────────────────────────────────────────────── */
+interface ChartModalProps {
+  label: string;
+  value: string;
+  sub: string;
+  color: string;
+  spark: number[];
+  Icon: typeof Users;
+  iconBg: string;
+  iconText: string;
+  onClose: () => void;
+}
+
+const WEEK_LABELS = ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 6", "Sem 7"];
+
+function ChartModal({ label, value, sub, color, spark, Icon, iconBg, iconText, onClose }: ChartModalProps) {
+  const data = spark.map((v, i) => ({ name: WEEK_LABELS[i] ?? `Sem ${i + 1}`, valor: v }));
+  const min  = Math.min(...spark);
+  const max  = Math.max(...spark);
+  const avg  = Math.round(spark.reduce((a, b) => a + b, 0) / spark.length);
+  const trend = spark[spark.length - 1] - spark[0];
+  const gradId = `modal-grad-${color.replace(/[^a-z0-9]/gi, "")}`;
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const CustomTooltip = ({ active, payload, label: lbl }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
+    if (!active || !payload?.length) return null;
+    return (
+      <div className="rounded-xl border border-white/[0.12] px-3 py-2 text-xs shadow-xl"
+        style={{ background: "rgba(13,13,26,0.95)", backdropFilter: "blur(12px)" }}>
+        <p className="text-slate-400 mb-0.5">{lbl}</p>
+        <p className="font-bold text-white text-sm">{payload[0].value}</p>
+      </div>
+    );
+  };
+
+  const modal = (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)" }}
+      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="relative w-full max-w-2xl rounded-2xl border border-white/[0.10] shadow-2xl overflow-hidden"
+        style={{ background: "rgba(10,10,20,0.98)" }}>
+
+        {/* Header */}
+        <div className="relative px-6 pt-6 pb-5 border-b border-white/[0.06]"
+          style={{ background: `radial-gradient(ellipse 80% 120% at 0% 0%, ${color}18 0%, transparent 65%)` }}>
+          <button type="button" onClick={onClose}
+            className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/[0.08] transition-colors">
+            <X size={16} />
+          </button>
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 ${iconBg} border rounded-xl flex items-center justify-center`}>
+              <Icon size={18} className={iconText} />
+            </div>
+            <div>
+              <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">{label}</p>
+              <p className="text-2xl font-bold text-white leading-none mt-0.5">{value}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Chart */}
+        <div className="px-6 pt-5 pb-2">
+          <p className="text-[11px] text-slate-500 mb-4 uppercase tracking-wider font-semibold">Tendencia — últimas 7 semanas</p>
+          <ResponsiveContainer width="100%" height={220}>
+            <AreaChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
+              <defs>
+                <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%"  stopColor={color} stopOpacity={0.25} />
+                  <stop offset="95%" stopColor={color} stopOpacity={0}    />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+              <XAxis dataKey="name" tick={{ fill: "#64748B", fontSize: 11 }} axisLine={false} tickLine={false} dy={8} />
+              <YAxis tick={{ fill: "#64748B", fontSize: 11 }} axisLine={false} tickLine={false} />
+              <Tooltip content={<CustomTooltip />} cursor={{ stroke: color, strokeWidth: 1, strokeDasharray: "4 4" }} />
+              <Area
+                type="monotone" dataKey="valor"
+                stroke={color} strokeWidth={2.5}
+                fill={`url(#${gradId})`}
+                dot={{ fill: color, r: 3.5, strokeWidth: 0 }}
+                activeDot={{ r: 6, fill: color, stroke: "rgba(255,255,255,0.2)", strokeWidth: 2 }}
+                animationDuration={600}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Stats footer */}
+        <div className="grid grid-cols-4 gap-px mx-6 mb-6 rounded-xl overflow-hidden border border-white/[0.06]">
+          {[
+            { label: "Mínimo",  val: min },
+            { label: "Máximo",  val: max },
+            { label: "Promedio", val: avg },
+            { label: "Variación", val: trend, isVar: true },
+          ].map(({ label: l, val, isVar }) => (
+            <div key={l} className="bg-white/[0.02] px-4 py-3 text-center">
+              <p className="text-[10px] text-slate-600 uppercase tracking-wider mb-1">{l}</p>
+              <p className={`text-sm font-bold flex items-center justify-center gap-1 ${
+                isVar ? (val >= 0 ? "text-emerald-400" : "text-rose-400") : "text-white"
+              }`}>
+                {isVar && (val >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />)}
+                {isVar ? `${val >= 0 ? "+" : ""}${val}` : val}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="px-6 pb-5">
+          <p className="text-[11px] text-slate-600">{sub}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  return typeof document !== "undefined" ? createPortal(modal, document.body) : null;
 }
 
 /* ── Helpers ──────────────────────────────────────────────────────────────── */
@@ -96,6 +223,7 @@ export default function DashboardView() {
   const [loading, setLoading]       = useState(true);
   const [userName, setUserName]     = useState("Usuario");
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [chartModal, setChartModal] = useState<Omit<ChartModalProps, "onClose"> | null>(null);
   const [now, setNow]           = useState(new Date());
 
   useEffect(() => {
@@ -252,7 +380,19 @@ export default function DashboardView() {
                       <div className={`w-8 h-8 ${iconBg} border rounded-lg flex items-center justify-center`}>
                         <Icon size={14} className={iconText} />
                       </div>
-                      <Sparkline data={spark} color={color} />
+                      {/* Sparkline clickeable — abre modal sin navegar */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setChartModal({ label, value, sub, color, spark, Icon, iconBg, iconText });
+                        }}
+                        className="rounded-lg hover:scale-105 transition-transform cursor-pointer"
+                        title="Ver gráfica detallada"
+                      >
+                        <Sparkline data={spark} color={color} />
+                      </button>
                     </div>
                     <div className="text-xl md:text-2xl font-bold text-white tracking-tight">{value}</div>
                     <div className="text-[11px] text-slate-500 mt-0.5">{label}</div>
@@ -442,6 +582,7 @@ export default function DashboardView() {
       </div>
 
       {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} />}
+      {chartModal && <ChartModal {...chartModal} onClose={() => setChartModal(null)} />}
     </div>
   );
 }
