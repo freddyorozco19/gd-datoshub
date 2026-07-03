@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import {
-  Users, TrendingUp, Target, Award, ArrowUpRight,
+  Users, TrendingUp, Target, ArrowUpRight,
   BarChart3, CalendarDays, ShieldCheck, X, TrendingDown,
 } from "lucide-react";
 import {
@@ -323,16 +323,16 @@ export default function DashboardView() {
       endValue: totalLeads,
     },
     {
-      label: "Leads Ganados",
-      value: loading ? "—" : String(ganados),
-      sub: `${tasaCierre}% tasa de cierre`,
-      link: "/leads",
+      label: "CMMI · Ejecuciones",
+      value: "47",
+      sub: "SPC · Random Forest",
+      link: "/cmmi",
       color: "#10B981",
       iconBg: "bg-emerald-500/10 border-emerald-500/20",
       iconText: "text-emerald-400",
-      Icon: Award,
-      spark: mkSpark(ganados),
-      endValue: ganados,
+      Icon: ShieldCheck,
+      spark: mkSpark(47),
+      endValue: 47,
     },
     {
       label: "En Preventa",
