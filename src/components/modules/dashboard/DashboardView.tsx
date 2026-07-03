@@ -60,21 +60,42 @@ interface ChartModalProps {
   value: string;
   sub: string;
   color: string;
-  spark: number[];
+  endValue: number;
   Icon: typeof Users;
   iconBg: string;
   iconText: string;
   onClose: () => void;
 }
 
-const WEEK_LABELS = ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 6", "Sem 7"];
+const RANGES = [
+  { id: "4",  label: "4 sem",   n: 4  },
+  { id: "7",  label: "7 sem",   n: 7  },
+  { id: "12", label: "3 meses", n: 12 },
+  { id: "26", label: "6 meses", n: 26 },
+  { id: "52", label: "1 año",   n: 52 },
+] as const;
+type RangeId = typeof RANGES[number]["id"];
 
-function ChartModal({ label, value, sub, color, spark, Icon, iconBg, iconText, onClose }: ChartModalProps) {
-  const data = spark.map((v, i) => ({ name: WEEK_LABELS[i] ?? `Sem ${i + 1}`, valor: v }));
-  const min  = Math.min(...spark);
-  const max  = Math.max(...spark);
-  const avg  = Math.round(spark.reduce((a, b) => a + b, 0) / spark.length);
-  const trend = spark[spark.length - 1] - spark[0];
+function buildData(endValue: number, n: number) {
+  return Array.from({ length: n }, (_, i) => {
+    const progress = i / (n - 1);
+    const base = endValue * (0.45 + 0.55 * progress);
+    const noise = (Math.sin(i * 2.3 + 1) * 0.06 + Math.cos(i * 1.7) * 0.04) * endValue;
+    const valor = Math.max(1, Math.round(base + noise));
+    const label = n <= 12 ? `Sem ${i + 1}` : n <= 26 ? `S${i + 1}` : `S${i + 1}`;
+    return { name: label, valor };
+  });
+}
+
+function ChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText, onClose }: ChartModalProps) {
+  const [rangeId, setRangeId] = useState<RangeId>("7");
+  const currentRange = RANGES.find((r) => r.id === rangeId)!;
+  const data  = buildData(endValue, currentRange.n);
+  const vals  = data.map((d) => d.valor);
+  const min   = Math.min(...vals);
+  const max   = Math.max(...vals);
+  const avg   = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+  const trend = vals[vals.length - 1] - vals[0];
   const gradId = `modal-grad-${color.replace(/[^a-z0-9]/gi, "")}`;
 
   useEffect(() => {
@@ -82,6 +103,9 @@ function ChartModal({ label, value, sub, color, spark, Icon, iconBg, iconText, o
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  /* Mostrar solo algunos ticks en rangos largos */
+  const tickInterval = currentRange.n > 26 ? 7 : currentRange.n > 12 ? 3 : 0;
 
   const CustomTooltip = ({ active, payload, label: lbl }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
     if (!active || !payload?.length) return null;
@@ -108,20 +132,38 @@ function ChartModal({ label, value, sub, color, spark, Icon, iconBg, iconText, o
             className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/[0.08] transition-colors">
             <X size={16} />
           </button>
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 ${iconBg} border rounded-xl flex items-center justify-center`}>
-              <Icon size={18} className={iconText} />
+          <div className="flex items-start justify-between pr-8">
+            <div className="flex items-center gap-3">
+              <div className={`w-10 h-10 ${iconBg} border rounded-xl flex items-center justify-center`}>
+                <Icon size={18} className={iconText} />
+              </div>
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">{label}</p>
+                <p className="text-2xl font-bold text-white leading-none mt-0.5">{value}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">{label}</p>
-              <p className="text-2xl font-bold text-white leading-none mt-0.5">{value}</p>
+            {/* Selector de rango */}
+            <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-1 border border-white/[0.06]">
+              {RANGES.map((r) => (
+                <button type="button" key={r.id} onClick={() => setRangeId(r.id)}
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all ${
+                    rangeId === r.id
+                      ? "text-white"
+                      : "text-slate-500 hover:text-slate-300"
+                  }`}
+                  style={rangeId === r.id ? { background: color + "33", color } : {}}>
+                  {r.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Chart */}
         <div className="px-6 pt-5 pb-2">
-          <p className="text-[11px] text-slate-500 mb-4 uppercase tracking-wider font-semibold">Tendencia — últimas 7 semanas</p>
+          <p className="text-[11px] text-slate-500 mb-4 uppercase tracking-wider font-semibold">
+            Tendencia — últimas {currentRange.label}
+          </p>
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
               <defs>
@@ -131,16 +173,17 @@ function ChartModal({ label, value, sub, color, spark, Icon, iconBg, iconText, o
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-              <XAxis dataKey="name" tick={{ fill: "#64748B", fontSize: 11 }} axisLine={false} tickLine={false} dy={8} />
+              <XAxis dataKey="name" tick={{ fill: "#64748B", fontSize: 11 }} axisLine={false} tickLine={false} dy={8}
+                interval={tickInterval} />
               <YAxis tick={{ fill: "#64748B", fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} cursor={{ stroke: color, strokeWidth: 1, strokeDasharray: "4 4" }} />
               <Area
                 type="monotone" dataKey="valor"
                 stroke={color} strokeWidth={2.5}
                 fill={`url(#${gradId})`}
-                dot={{ fill: color, r: 3.5, strokeWidth: 0 }}
+                dot={currentRange.n <= 12 ? { fill: color, r: 3.5, strokeWidth: 0 } : false}
                 activeDot={{ r: 6, fill: color, stroke: "rgba(255,255,255,0.2)", strokeWidth: 2 }}
-                animationDuration={600}
+                animationDuration={400}
               />
             </AreaChart>
           </ResponsiveContainer>
@@ -149,9 +192,9 @@ function ChartModal({ label, value, sub, color, spark, Icon, iconBg, iconText, o
         {/* Stats footer */}
         <div className="grid grid-cols-4 gap-px mx-6 mb-6 rounded-xl overflow-hidden border border-white/[0.06]">
           {[
-            { label: "Mínimo",  val: min },
-            { label: "Máximo",  val: max },
-            { label: "Promedio", val: avg },
+            { label: "Mínimo",    val: min },
+            { label: "Máximo",    val: max },
+            { label: "Promedio",  val: avg },
             { label: "Variación", val: trend, isVar: true },
           ].map(({ label: l, val, isVar }) => (
             <div key={l} className="bg-white/[0.02] px-4 py-3 text-center">
@@ -277,6 +320,7 @@ export default function DashboardView() {
       iconText: "text-violet-400",
       Icon: Users,
       spark: mkSpark(totalLeads),
+      endValue: totalLeads,
     },
     {
       label: "Leads Ganados",
@@ -288,6 +332,7 @@ export default function DashboardView() {
       iconText: "text-emerald-400",
       Icon: Award,
       spark: mkSpark(ganados),
+      endValue: ganados,
     },
     {
       label: "En Preventa",
@@ -299,6 +344,7 @@ export default function DashboardView() {
       iconText: "text-cyan-400",
       Icon: Target,
       spark: mkSpark(enPreventa),
+      endValue: enPreventa,
     },
     {
       label: "Ingresos Esperados",
@@ -310,6 +356,7 @@ export default function DashboardView() {
       iconText: "text-amber-400",
       Icon: TrendingUp,
       spark: [40, 55, 48, 62, 58, 71, 80],
+      endValue: Math.round(totalIngresos / 1_000_000),
     },
   ];
 
@@ -365,7 +412,7 @@ export default function DashboardView() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {loading
             ? [0, 1, 2, 3].map((i) => <SkeletonCard key={i} />)
-            : statCards.map(({ label, value, sub, link, color, iconBg, iconText, Icon, spark }) => (
+            : statCards.map(({ label, value, sub, link, color, iconBg, iconText, Icon, spark, endValue }) => (
                 <Link
                   key={label}
                   href={link}
@@ -386,7 +433,7 @@ export default function DashboardView() {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          setChartModal({ label, value, sub, color, spark, Icon, iconBg, iconText });
+                          setChartModal({ label, value, sub, color, endValue, Icon, iconBg, iconText });
                         }}
                         className="rounded-lg hover:scale-105 transition-transform cursor-pointer"
                         title="Ver gráfica detallada"
