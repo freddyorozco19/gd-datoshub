@@ -911,6 +911,59 @@ function ProyectosPanel() {
   );
 }
 
+/* ── Upload Excel reutilizable ─────────────────────────────────────── */
+function UploadExcelRefresh({
+  endpoint, label, onSuccess,
+}: {
+  endpoint: string;
+  label: string;
+  onSuccess: (res: Record<string, unknown>) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [msg, setMsg]             = useState<{ ok: boolean; text: string } | null>(null);
+
+  async function handleFile(file: File) {
+    setUploading(true); setMsg(null);
+    const form = new FormData();
+    form.append("file", file);
+    try {
+      const r    = await fetch(endpoint, { method: "POST", body: form });
+      const json = await r.json();
+      if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      setMsg({ ok: true, text: `Datos actualizados · n=${json.n_obs ?? json.n_proyectos ?? "?"}` });
+      onSuccess(json);
+    } catch (e) {
+      setMsg({ ok: false, text: e instanceof Error ? e.message : "Error al cargar." });
+    } finally { setUploading(false); }
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-xs font-medium text-slate-400">{label}</p>
+      <div
+        className="flex items-center gap-3 px-4 py-3 rounded-lg border border-dashed border-white/[0.12] bg-white/[0.02] hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-colors cursor-pointer"
+        onClick={() => ref.current?.click()}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
+      >
+        <Upload size={16} className="text-slate-500 shrink-0" />
+        <span className="text-xs text-slate-500">
+          {uploading ? "Cargando…" : "Arrastra o haz clic para subir nuevo .xlsx"}
+        </span>
+        {uploading && <Clock size={14} className="animate-spin text-indigo-400 ml-auto" />}
+      </div>
+      <input ref={ref} type="file" accept=".xlsx,.xls" className="hidden"
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }} />
+      {msg && (
+        <p className={`text-xs ${msg.ok ? "text-emerald-400" : "text-rose-400"}`}>
+          {msg.ok ? "✓" : "✗"} {msg.text}
+        </p>
+      )}
+    </div>
+  );
+}
+
 /* ── FINANCIERO ────────────────────────────────────────────────────── */
 
 const CATEGORIAS_FIN = [
@@ -1106,6 +1159,13 @@ function FinancieroPanel() {
               {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
               {loading ? "Calculando…" : "Predecir utilidad"}
             </button>
+            <div className="pt-2 border-t border-white/[0.06]">
+              <UploadExcelRefresh
+                endpoint="/api/cmmi/financiero/cargar"
+                label="Actualizar datos históricos de utilidad"
+                onSuccess={() => { setPRes(null); setLbRes(null); setLbLoaded(false); }}
+              />
+            </div>
           </div>
 
           {notice && <LocalOnlyNotice message={notice} />}
@@ -1328,6 +1388,13 @@ function DatosPanel() {
               {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
               {loading ? "Calculando…" : "Proyectar cubrimiento"}
             </button>
+            <div className="pt-2 border-t border-white/[0.06]">
+              <UploadExcelRefresh
+                endpoint="/api/cmmi/datos/cargar"
+                label="Actualizar datos de Gobierno de Datos"
+                onSuccess={() => { setPRes(null); setLbRes(null); setLbLoaded(false); }}
+              />
+            </div>
           </div>
 
           {notice && <LocalOnlyNotice message={notice} />}

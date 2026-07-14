@@ -157,6 +157,19 @@ class PrediccionInput(BaseModel):
     monto_cop: float = Field(..., gt=0)
 
 
+@app.post("/financiero/cargar")
+def financiero_cargar(file: UploadFile = File(...)) -> dict:
+    """Carga un nuevo Excel de utilidad y reajusta el modelo en memoria."""
+    if not file.filename or not file.filename.lower().endswith((".xlsx", ".xls")):
+        raise HTTPException(400, "Se requiere un archivo .xlsx/.xls")
+    try:
+        return fin.recargar(file.file.read())
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    except Exception as e:
+        raise HTTPException(500, f"Error al recargar: {e}")
+
+
 @app.get("/financiero/lineas-base")
 def financiero_lineas_base() -> dict:
     """Líneas base globales y por categoría (SPC + Nelson) desde datos históricos."""
@@ -180,6 +193,19 @@ def financiero_predecir(body: PrediccionInput) -> dict:
 class DatosPrediccionInput(BaseModel):
     categoria: str
     periodo:   int = Field(..., ge=1)
+
+
+@app.post("/datos/cargar")
+def datos_cargar(file: UploadFile = File(...)) -> dict:
+    """Carga un nuevo Excel de GobiernoDatos y reajusta el modelo en memoria."""
+    if not file.filename or not file.filename.lower().endswith((".xlsx", ".xls")):
+        raise HTTPException(400, "Se requiere un archivo .xlsx/.xls")
+    try:
+        return dat.recargar(file.file.read())
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    except Exception as e:
+        raise HTTPException(500, f"Error al recargar: {e}")
 
 
 @app.get("/datos/lineas-base")

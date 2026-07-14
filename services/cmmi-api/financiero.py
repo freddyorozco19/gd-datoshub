@@ -245,6 +245,28 @@ def predecir_utilidad(categoria: str, monto_cop: float) -> dict:
     }
 
 
+def recargar(xlsx_bytes: bytes) -> dict:
+    """Reemplaza el Excel en disco y recalcula el modelo en memoria."""
+    import io
+    try:
+        df_test = pd.read_excel(io.BytesIO(xlsx_bytes))
+    except Exception as e:
+        raise ValueError(f"No se pudo leer el archivo Excel: {e}")
+    requeridas = {"Utilidad del proyecto", "Categoría de proyecto", "Fecha de finalización"}
+    faltantes  = requeridas - set(df_test.columns)
+    if faltantes:
+        raise ValueError(f"Columnas faltantes: {faltantes}. Esperadas: {requeridas}")
+    XLSX.write_bytes(xlsx_bytes)
+    _load()
+    return {
+        "ok":          True,
+        "n_proyectos": int(_df.shape[0]) if _df is not None else 0,
+        "categorias":  _cats_validas,
+        "modelo_b":    {"r2": _modelo_b["r2"], "rmse": _modelo_b["rmse"], "n": _modelo_b["n"]}
+                       if _modelo_b else None,
+    }
+
+
 def status() -> dict:
     return {
         "xlsx_disponible": XLSX.exists(),

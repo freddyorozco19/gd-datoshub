@@ -182,6 +182,29 @@ def predecir(categoria: str, periodo: int | float) -> dict:
     }
 
 
+def recargar(xlsx_bytes: bytes) -> dict:
+    """Reemplaza el Excel en disco y recalcula el modelo en memoria."""
+    import io
+    # Validar columnas mínimas
+    try:
+        df_test = pd.read_excel(io.BytesIO(xlsx_bytes))
+    except Exception as e:
+        raise ValueError(f"No se pudo leer el archivo Excel: {e}")
+    requeridas = {COL_CAT, COL_PER, COL_COB}
+    faltantes  = requeridas - set(df_test.columns)
+    if faltantes:
+        raise ValueError(f"Columnas faltantes en el Excel: {faltantes}. Esperadas: {requeridas}")
+    XLSX.write_bytes(xlsx_bytes)
+    _load()
+    return {
+        "ok":        True,
+        "n_obs":     int(_df.shape[0]) if _df is not None else 0,
+        "categorias": _categorias,
+        "periodos":  _periodos,
+        "metricas":  _metricas,
+    }
+
+
 def status() -> dict:
     return {
         "xlsx_disponible": XLSX.exists(),
