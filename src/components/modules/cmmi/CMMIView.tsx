@@ -379,7 +379,10 @@ function RfRunner({ file }: { file: File }) {
               <Table2 size={15} /> Predicciones
               <span className="text-xs font-normal text-slate-500">({res.table_counts.predictions})</span>
             </h4>
-            <RecordTable rows={res.tables.predictions} />
+            <RecordTable rows={(res.tables.predictions ?? []).map((r) => ({
+              ...r,
+              "¿ACERTÓ?": r["GANADO_BIN"] === r["PRED_LABEL"] ? "✅ Sí" : "❌ No",
+            }))} />
           </div>
         </div>
       )}
