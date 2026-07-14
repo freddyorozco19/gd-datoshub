@@ -1,5 +1,7 @@
 import type { NextRequest } from "next/server";
 
+export const maxDuration = 120;
+
 const CMMI_API_URL = process.env.CMMI_API_URL ?? "http://127.0.0.1:8008";
 const IS_HOSTED    = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 

@@ -1,5 +1,7 @@
 import type { NextRequest } from "next/server";
 
+export const maxDuration = 120; // segundos — el SPC tarda ~18 s, RF hasta ~60 s
+
 const CMMI_API_URL = process.env.CMMI_API_URL ?? "http://127.0.0.1:8008";
 // Vercel define VERCEL=1 en runtime. Si no hay un microservicio configurado
 // explícitamente (CMMI_API_URL), la ejecución de modelos es solo local.
