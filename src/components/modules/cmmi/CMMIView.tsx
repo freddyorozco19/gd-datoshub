@@ -5,13 +5,14 @@ import {
   ShieldCheck, Upload, FileSpreadsheet, X, Search,
   DollarSign, Trophy, TrendingDown, Clock, Layers, AlertCircle,
   Table2, Activity, Cpu, Play, Maximize2, Filter,
-  BarChart2, CalendarCheck,
+  BarChart2, CalendarCheck, TrendingUp, PieChart,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 import {
   VERTICALES, type Vertical, type OportunidadComercial, type ParseResult,
   type SpcResponse, type RfTrainResponse, type CuracionMeta,
   type KickoffResponse, type SeguimientoResponse, type SemaforoProy, type LineaBaseSpi,
+  type LineasBaseResponse, type PrediccionFinResponse, type LineaBaseBloque,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -909,6 +910,300 @@ function ProyectosPanel() {
   );
 }
 
+/* ── FINANCIERO ────────────────────────────────────────────────────── */
+
+const CATEGORIAS_FIN = [
+  "Arquitectura Empresarial",
+  "Analítica / IA",
+  "Ciberseguridad",
+  "Desarrollo",
+  "Gobierno de Datos",
+  "Infra + Servicios gestionados",
+  "Infra + Servicios + Ciber",
+  "Infraestructura",
+  "Migración",
+  "Procesos",
+  "Servicios gestionados",
+  "Sostenibilidad",
+  "Transformación Digital",
+] as const;
+
+type FinTab = "predictor" | "lineas-base";
+
+const RIESGO_COLORS: Record<string, string> = {
+  Bajo:  "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+  Medio: "text-amber-400   bg-amber-500/10   border-amber-500/20",
+  Alto:  "text-rose-400    bg-rose-500/10    border-rose-500/20",
+};
+const RIESGO_DOT: Record<string, string> = {
+  Bajo: "bg-emerald-400", Medio: "bg-amber-400", Alto: "bg-rose-400",
+};
+
+function NelsonBadges({ nelson }: { nelson: Record<string, number> }) {
+  const active = Object.entries(nelson).filter(([, n]) => n > 0);
+  if (!active.length)
+    return <span className="text-xs text-emerald-400 font-medium">Sin violaciones</span>;
+  return (
+    <div className="flex flex-wrap gap-1">
+      {active.map(([r, n]) => (
+        <span key={r} className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400">
+          {r} ({n})
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function LbCard2({ cat, data }: { cat: string; data: LineaBaseBloque }) {
+  const cls = RIESGO_COLORS[data.riesgo] ?? RIESGO_COLORS.Medio;
+  return (
+    <div className={`rounded-xl border p-4 space-y-3 ${cls}`}>
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-xs font-semibold uppercase tracking-wide opacity-70 truncate">{cat}</p>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className={`w-2 h-2 rounded-full ${RIESGO_DOT[data.riesgo]}`} />
+          <span className="text-xs font-semibold">{data.riesgo}</span>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-2 text-xs text-center">
+        {[["LCL", data.lcl], ["CL", data.mean], ["UCL", data.ucl]].map(([k, v]) => (
+          <div key={k as string}>
+            <p className="font-bold">{((v as number) * 100).toFixed(1)}%</p>
+            <p className="opacity-60">{k as string}</p>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center justify-between text-xs">
+        <span className="opacity-60">n={data.n} · σ={((data.std) * 100).toFixed(1)}% · CV={data.cv.toFixed(0)}%</span>
+        <span className={data.bajo_control ? "text-emerald-400" : "text-amber-400"}>
+          {data.bajo_control ? "✓ control" : "⚠ revisar"}
+        </span>
+      </div>
+      <NelsonBadges nelson={data.nelson} />
+    </div>
+  );
+}
+
+function FinancieroPanel() {
+  const [tab, setTab]     = useState<FinTab>("predictor");
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState<string | null>(null);
+  const [notice, setNotice]     = useState<string | null>(null);
+
+  // Predictor
+  const [pCat,   setPCat]   = useState<string>(CATEGORIAS_FIN[0]);
+  const [pMonto, setPMonto] = useState("");
+  const [pRes,   setPRes]   = useState<PrediccionFinResponse | null>(null);
+
+  // Líneas base
+  const [lbRes,  setLbRes]  = useState<LineasBaseResponse | null>(null);
+  const [lbLoaded, setLbLoaded] = useState(false);
+
+  function reset() { setError(null); setNotice(null); }
+
+  async function runPrediccion() {
+    reset(); setLoading(true); setPRes(null);
+    try {
+      const r = await fetch("/api/cmmi/financiero/predecir", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoria: pCat, monto_cop: parseFloat(pMonto) || 0 }),
+      });
+      const json = await r.json();
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error); return; }
+        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      }
+      setPRes(json as PrediccionFinResponse);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al ejecutar el modelo.");
+    } finally { setLoading(false); }
+  }
+
+  async function loadLineasBase() {
+    reset(); setLoading(true); setLbRes(null);
+    try {
+      const r = await fetch("/api/cmmi/financiero/lineas-base");
+      const json = await r.json();
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error); return; }
+        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      }
+      setLbRes(json as LineasBaseResponse);
+      setLbLoaded(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al cargar líneas base.");
+    } finally { setLoading(false); }
+  }
+
+  const tabs: { id: FinTab; label: string; icon: typeof Activity }[] = [
+    { id: "predictor",    label: "Predictor",     icon: TrendingUp },
+    { id: "lineas-base",  label: "Líneas base",   icon: PieChart   },
+  ];
+
+  const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
+  const labelCls = "text-xs font-medium text-slate-400 mb-1";
+
+  const semColors: Record<string, string> = {
+    VERDE:    "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+    AMARILLO: "text-amber-400   bg-amber-500/10   border-amber-500/20",
+    ROJO:     "text-rose-400    bg-rose-500/10    border-rose-500/20",
+  };
+
+  return (
+    <div className="space-y-5">
+      {/* Tabs */}
+      <div className="flex items-center gap-1.5 border-b border-white/[0.07]">
+        {tabs.map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            onClick={() => { setTab(id); reset(); }}
+            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+              tab === id
+                ? "border-blue-500 text-blue-400"
+                : "border-transparent text-slate-500 hover:text-slate-300 hover:border-white/20"
+            }`}
+          >
+            <Icon size={15} /> {label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── PREDICTOR ──────────────────────────────────────────── */}
+      {tab === "predictor" && (
+        <div className="space-y-5">
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
+            <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+              <TrendingUp size={16} className="text-indigo-400" />
+              Predicción de utilidad por categoría y monto
+            </p>
+            <p className="text-xs text-slate-500">
+              Regresión OLS múltiple (Modelo B, sin outliers |z|{">"}2.5) · R²adj≈16% · usar como referencia indicativa.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <p className={labelCls}>Categoría del proyecto</p>
+                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={inputCls}>
+                  {CATEGORIAS_FIN.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <p className={labelCls}>Monto del contrato COP</p>
+                <input
+                  type="number" min={0} value={pMonto}
+                  onChange={(e) => setPMonto(e.target.value)}
+                  placeholder="ej. 3500000000"
+                  className={inputCls}
+                />
+              </div>
+            </div>
+            <button
+              onClick={runPrediccion}
+              disabled={loading || !pMonto}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            >
+              {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
+              {loading ? "Calculando…" : "Predecir utilidad"}
+            </button>
+          </div>
+
+          {notice && <LocalOnlyNotice message={notice} />}
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+
+          {pRes && (
+            <div className="space-y-4">
+              {pRes.advertencia && (
+                <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-3 py-2 text-xs text-amber-400">
+                  <AlertCircle size={13} className="shrink-0 mt-0.5" /> {pRes.advertencia}
+                </div>
+              )}
+              <div className={`rounded-xl border p-5 space-y-4 ${semColors[pRes.semaforo]}`}>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold uppercase tracking-wide opacity-70">Utilidad estimada — {pRes.categoria}</p>
+                  <span className="text-xs font-bold">{pRes.semaforo}</span>
+                </div>
+                <p className="text-4xl font-bold">{pRes.utilidad_pct}</p>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="bg-black/20 rounded-lg p-3">
+                    <p className="text-xs opacity-60 mb-1">Intervalo ±2σ</p>
+                    <p className="font-semibold">{pRes.intervalo_min_pct} · {pRes.intervalo_max_pct}</p>
+                  </div>
+                  <div className="bg-black/20 rounded-lg p-3">
+                    <p className="text-xs opacity-60 mb-1">Monto</p>
+                    <p className="font-semibold">{pRes.monto_miles_mm.toFixed(2)} MM$</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-xs opacity-70">
+                  <p>R²adj {((pRes.modelo.r2a) * 100).toFixed(1)}%</p>
+                  <p>RMSE {(pRes.rmse * 100).toFixed(1)}pp</p>
+                  <p>n={pRes.modelo.n}</p>
+                </div>
+              </div>
+              <p className="text-xs text-slate-600 italic">
+                F p={pRes.modelo.pF.toFixed(4)} — modelo marginalmente significativo. Usar como orientación, no como compromiso.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── LÍNEAS BASE ────────────────────────────────────────── */}
+      {tab === "lineas-base" && (
+        <div className="space-y-5">
+          {!lbLoaded && (
+            <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5">
+              <p className="text-sm text-slate-400 mb-4">
+                Calcula líneas base de control (SPC) y reglas de Nelson sobre los {" "}
+                <strong className="text-slate-300">~110 proyectos terminados</strong> del dataset histórico.
+              </p>
+              <button
+                onClick={loadLineasBase}
+                disabled={loading}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+              >
+                {loading ? <Clock size={15} className="animate-spin" /> : <PieChart size={15} />}
+                {loading ? "Cargando…" : "Cargar líneas base"}
+              </button>
+            </div>
+          )}
+
+          {notice && <LocalOnlyNotice message={notice} />}
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+
+          {lbRes && (
+            <div className="space-y-6">
+              {/* Global */}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">Global · n={lbRes.global.n}</p>
+                <LbCard2 cat="GLOBAL" data={lbRes.global} />
+              </div>
+              {/* Por categoría */}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">
+                  Por categoría ({lbRes.categorias_disponibles.length} con n≥3)
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                  {lbRes.categorias_disponibles.map((cat) => (
+                    <LbCard2 key={cat} cat={cat} data={lbRes.por_categoria[cat]} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Placeholder verticales pendientes ─────────────────────────────── */
 function PendingPanel({ label }: { label: string }) {
   return (
@@ -958,8 +1253,9 @@ export default function CMMIView() {
           })}
         </div>
 
-        {active.id === "comercial" && active.enabled  ? <ComercialPanel />    :
-         active.id === "proyectos" && active.enabled  ? <ProyectosPanel />    :
+        {active.id === "comercial"  && active.enabled ? <ComercialPanel />   :
+         active.id === "proyectos"  && active.enabled ? <ProyectosPanel />   :
+         active.id === "financiero" && active.enabled ? <FinancieroPanel />  :
          <PendingPanel label={active.label} />}
       </main>
     </div>

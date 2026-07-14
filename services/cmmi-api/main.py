@@ -21,6 +21,7 @@ from pydantic import BaseModel, Field
 from prep import curate_comercial
 from runner import execute, SCRIPTS_DIR, STORE_DIR
 import proyectos as proy
+import financiero as fin
 
 app = FastAPI(title="CMMI Models API", version="1.0.0")
 
@@ -75,6 +76,7 @@ def health() -> dict:
         "modelo_rf_entrenado": STORED_PKL.exists(),
         "pkl_bundled":         BUNDLED_PKL.exists(),
         "proyectos":           proy.status(),
+        "financiero":          fin.status(),
     }
 
 
@@ -142,6 +144,31 @@ def proyectos_seguimiento(body: SeguimientoInput) -> dict:
             body.spi_lag1, body.vra_lag1,
             body.spi_lag2, body.spi_observado,
         )
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
+# ── FINANCIERO ────────────────────────────────────────────────────────
+
+class PrediccionInput(BaseModel):
+    categoria: str
+    monto_cop: float = Field(..., gt=0)
+
+
+@app.get("/financiero/lineas-base")
+def financiero_lineas_base() -> dict:
+    """Líneas base globales y por categoría (SPC + Nelson) desde datos históricos."""
+    try:
+        return fin.lineas_base()
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
+@app.post("/financiero/predecir")
+def financiero_predecir(body: PrediccionInput) -> dict:
+    """Predicción de utilidad via OLS (Modelo B, sin outliers |z|>2.5)."""
+    try:
+        return fin.predecir_utilidad(body.categoria, body.monto_cop)
     except RuntimeError as e:
         raise HTTPException(503, str(e))
 
