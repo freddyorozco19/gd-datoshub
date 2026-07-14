@@ -667,7 +667,7 @@ function AvisosBanner({ avisos }: { avisos: string[] }) {
   );
 }
 
-type ProyTab = "kickoff" | "seguimiento";
+type ProyTab = "kickoff" | "seguimiento" | "reentrenar";
 
 function ProyectosPanel() {
   const [tab, setTab]   = useState<ProyTab>("kickoff");
@@ -748,8 +748,9 @@ function ProyectosPanel() {
   }
 
   const tabs: { id: ProyTab; label: string; icon: typeof Activity }[] = [
-    { id: "kickoff",      label: "Kickoff",      icon: BarChart2     },
-    { id: "seguimiento",  label: "Seguimiento",  icon: CalendarCheck },
+    { id: "kickoff",      label: "Kickoff",       icon: BarChart2     },
+    { id: "seguimiento",  label: "Seguimiento",   icon: CalendarCheck },
+    { id: "reentrenar",   label: "Reentrenar",    icon: Database      },
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
@@ -910,17 +911,45 @@ function ProyectosPanel() {
           )}
         </div>
       )}
+
+      {/* ── REENTRENAR ──────────────────────────────────────────────── */}
+      {tab === "reentrenar" && (
+        <div className="space-y-4">
+          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-xs text-slate-400 space-y-1">
+            <p className="font-semibold text-slate-300">¿Cuándo reentrenar?</p>
+            <ul className="list-disc list-inside space-y-0.5 text-slate-500">
+              <li>Tienes 20+ proyectos nuevos cerrados con SPI mensual registrado</li>
+              <li>Hay nuevos líderes de proyecto que el modelo no conoce</li>
+              <li>Se incorporó un nuevo portafolio</li>
+              <li>El modelo muestra predicciones inconsistentes con la realidad</li>
+            </ul>
+            <p className="pt-1 text-slate-500">
+              El Excel debe tener las columnas: <span className="text-slate-400 font-mono">ProjectId, Portafolio, ProjectOwnerName, Meses, Presupuesto, Mes Relativo, SPI (Schedule Performance Index), Variación Relativa Avance, Completado Real</span>
+            </p>
+          </div>
+          <UploadExcelRefresh
+            endpoint="/api/cmmi/proyectos/reentrenar"
+            label="Subir Excel histórico de proyectos para reentrenar los 4 modelos"
+            successMsg={(r) => {
+              const m = r.metricas as Record<string, number> | undefined;
+              return `✅ Reentrenamiento completado — ${r.n_proyectos} proyectos · ${r.n_obs} obs · Kickoff AUC ${m?.kickoff_auc?.toFixed(3)} · M1 AUC ${m?.modelo1_auc?.toFixed(3)}`;
+            }}
+            onSuccess={() => { setKRes(null); setSRes(null); }}
+          />
+        </div>
+      )}
     </div>
   );
 }
 
 /* ── Upload Excel reutilizable ─────────────────────────────────────── */
 function UploadExcelRefresh({
-  endpoint, label, onSuccess,
+  endpoint, label, onSuccess, successMsg,
 }: {
   endpoint: string;
   label: string;
   onSuccess: (res: Record<string, unknown>) => void;
+  successMsg?: (res: Record<string, unknown>) => string;
 }) {
   const ref = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -934,7 +963,10 @@ function UploadExcelRefresh({
       const r    = await fetch(endpoint, { method: "POST", body: form });
       const json = await r.json();
       if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
-      setMsg({ ok: true, text: `Datos actualizados · n=${json.n_obs ?? json.n_proyectos ?? "?"}` });
+      const text = successMsg
+        ? successMsg(json as Record<string, unknown>)
+        : `Datos actualizados · n=${json.n_obs ?? json.n_proyectos ?? "?"}`;
+      setMsg({ ok: true, text });
       onSuccess(json);
     } catch (e) {
       setMsg({ ok: false, text: e instanceof Error ? e.message : "Error al cargar." });

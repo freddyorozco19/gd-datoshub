@@ -1,17 +1,24 @@
 import type { NextRequest } from "next/server";
 
-export const maxDuration = 120;
+export const maxDuration = 300; // reentrenar 4 modelos puede tomar ~2-3 min
 
 const CMMI_API_URL = process.env.CMMI_API_URL ?? "http://127.0.0.1:8008";
 const IS_HOSTED    = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 
-const ALLOWED = new Set(["kickoff", "seguimiento"]);
+const ALLOWED_JSON   = new Set(["kickoff", "seguimiento"]);
+const ALLOWED_UPLOAD = new Set(["reentrenar"]);
 
 const LOCAL_ONLY_MSG =
   "La ejecución de modelos CMMI de Proyectos requiere el microservicio Python " +
   "(scikit-learn · numpy · pandas) que solo está disponible en entorno local o con " +
   "CMMI_API_URL configurado. Para ejecutarlo localmente corre: " +
   "uvicorn main:app --port 8008 en services/cmmi-api/.";
+
+const unreachable = (err: unknown) =>
+  Response.json(
+    { error: `No se pudo contactar el microservicio CMMI (${CMMI_API_URL}). ¿Está corriendo? ${err instanceof Error ? err.message : String(err)}` },
+    { status: 502 },
+  );
 
 export async function POST(
   req: NextRequest,
@@ -20,12 +27,22 @@ export async function POST(
   const { action } = await ctx.params;
   const path = (action ?? []).join("/");
 
-  if (!ALLOWED.has(path)) {
-    return Response.json({ error: `Acción no válida: ${path}` }, { status: 404 });
-  }
-
   if (IS_HOSTED) {
     return Response.json({ error: LOCAL_ONLY_MSG, localOnly: true }, { status: 503 });
+  }
+
+  // Reentrenamiento — multipart
+  if (ALLOWED_UPLOAD.has(path)) {
+    try {
+      const form = await req.formData();
+      const res  = await fetch(`${CMMI_API_URL}/proyectos/${path}`, { method: "POST", body: form });
+      const text = await res.text();
+      return new Response(text, { status: res.status, headers: { "Content-Type": res.headers.get("Content-Type") ?? "application/json" } });
+    } catch (err) { return unreachable(err); }
+  }
+
+  if (!ALLOWED_JSON.has(path)) {
+    return Response.json({ error: `Acción no válida: ${path}` }, { status: 404 });
   }
 
   let body: unknown;
@@ -46,11 +63,5 @@ export async function POST(
       status:  res.status,
       headers: { "Content-Type": res.headers.get("Content-Type") ?? "application/json" },
     });
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return Response.json(
-      { error: `No se pudo contactar el microservicio CMMI (${CMMI_API_URL}). ¿Está corriendo? ${msg}` },
-      { status: 502 },
-    );
-  }
+  } catch (err) { return unreachable(err); }
 }

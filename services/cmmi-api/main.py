@@ -125,6 +125,19 @@ def comercial_rf_train(file: UploadFile = File(...)) -> dict:
 
 
 # ── PROYECTOS ──────────────────────────────────────────────────────────
+@app.post("/proyectos/reentrenar")
+def proyectos_reentrenar(file: UploadFile = File(...)) -> dict:
+    """Recibe el Excel histórico actualizado, reentrena los 4 modelos y recarga los PKLs."""
+    if not file.filename or not file.filename.lower().endswith((".xlsx", ".xls")):
+        raise HTTPException(400, "Se requiere un archivo .xlsx/.xls")
+    try:
+        return proy.reentrenar(file.file.read())
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    except RuntimeError as e:
+        raise HTTPException(500, str(e))
+
+
 @app.post("/proyectos/kickoff")
 def proyectos_kickoff(body: KickoffInput) -> dict:
     """Modelo Kickoff + Modelo A — evaluación de riesgo en el inicio del proyecto."""

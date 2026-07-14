@@ -323,6 +323,84 @@ def _consultar_lb(portafolio: str, mes_rel: float, spi: float) -> dict:
     }
 
 
+XLSX_PROJ = PROJ_DIR / "Indicadores_Proyectos.xlsx"
+
+COLUMNAS_REQUERIDAS = {
+    "ProjectId", "Portafolio", "ProjectOwnerName",
+    "Meses", "Presupuesto", "Mes Relativo",
+    "SPI (Schedule Performance Index)", "Variación Relativa Avance",
+    "Completado Real",
+}
+
+SCRIPTS_ENTRENAMIENTO = [
+    ("entrenar_modelo_kickoff.py", "modelo_kickoff_params.pkl"),
+    ("entrenar_modeloA.py",        "modeloA_params.pkl"),
+    ("entrenar_modelo1.py",        "modelo1_params.pkl"),
+    ("entrenar_modelo2.py",        "modelo2_params.pkl"),
+]
+
+
+def reentrenar(xlsx_bytes: bytes) -> dict:
+    """Reemplaza el Excel, corre los 4 scripts de entrenamiento y recarga los PKLs."""
+    import io
+    import subprocess
+    import sys
+
+    # Validar columnas
+    try:
+        df_test = __import__("pandas").read_excel(io.BytesIO(xlsx_bytes))
+    except Exception as e:
+        raise ValueError(f"No se pudo leer el archivo Excel: {e}")
+
+    faltantes = COLUMNAS_REQUERIDAS - set(df_test.columns)
+    if faltantes:
+        raise ValueError(f"Columnas faltantes: {sorted(faltantes)}")
+
+    # Guardar en disco
+    XLSX_PROJ.write_bytes(xlsx_bytes)
+
+    resultados = []
+    for script, pkl_name in SCRIPTS_ENTRENAMIENTO:
+        script_path = PROJ_DIR / script
+        cmd = [sys.executable, str(script_path), "--datos", str(XLSX_PROJ),
+               "--salida", pkl_name]
+        r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(PROJ_DIR))
+        resultados.append({
+            "script":   script,
+            "ok":       r.returncode == 0,
+            "stdout":   r.stdout[-500:] if r.stdout else "",
+            "stderr":   r.stderr[-300:] if r.stderr else "",
+        })
+        if r.returncode != 0:
+            raise RuntimeError(
+                f"Entrenamiento falló en {script}:\n{r.stderr[-800:]}"
+            )
+
+    # Recargar modelos en memoria
+    global _kickoff, _modelo_a, _modelo1, _modelo2, _lb_spi, PORTAFOLIOS_VALIDOS
+    _kickoff  = _pkl("modelo_kickoff_params.pkl")
+    _modelo_a = _pkl("modeloA_params.pkl")
+    _modelo1  = _pkl("modelo1_params.pkl")
+    _modelo2  = _pkl("modelo2_params.pkl")
+    if _lb_path.exists():
+        _lb_spi = json.loads(_lb_path.read_text(encoding="utf-8"))
+    PORTAFOLIOS_VALIDOS = list((_kickoff or {}).get("port_map", {}).keys())
+
+    return {
+        "ok":          True,
+        "n_proyectos": int(df_test["ProjectId"].nunique()),
+        "n_obs":       len(df_test),
+        "portafolios": PORTAFOLIOS_VALIDOS,
+        "scripts":     resultados,
+        "metricas": {
+            "kickoff_auc": _kickoff["metricas"]["auc"]  if _kickoff  else None,
+            "modeloA_auc": _modelo_a["metricas"]["auc"] if _modelo_a else None,
+            "modelo1_auc": _modelo1["metricas"]["auc"]  if _modelo1  else None,
+            "modelo2_auc": _modelo2["metricas"]["auc"]  if _modelo2  else None,
+        },
+    }
+
+
 # ── Health info ───────────────────────────────────────────────────────
 def status() -> dict:
     return {
