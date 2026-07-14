@@ -190,6 +190,24 @@ export interface PklBloque {
   metricas?: PklMetricas;
   importancia?: PklImportancia[];
 }
+export interface DatosOrigenPortafolio {
+  n_proyectos: number;
+  duracion_media: number;
+  spi_min_mediana: number;
+  pct_completados: string;
+}
+export interface DatosOrigenProyecto {
+  id: string; lider: string; portafolio: string;
+  meses: number; n_reportes: number;
+  spi_min: number; spi_final: number;
+  completado_final: string; estado: string;
+}
+export interface DatosOrigen {
+  fecha_min: string | null; fecha_max: string | null;
+  n_observaciones: number;
+  por_portafolio: Record<string, DatosOrigenPortafolio>;
+  proyectos: DatosOrigenProyecto[];
+}
 export interface ProyectosInfoResponse {
   kickoff:    PklBloque;
   modelo_a:   PklBloque;
@@ -200,6 +218,7 @@ export interface ProyectosInfoResponse {
   xlsx_bytes: number;
   fecha_datos_hasta: string | null;
   n_proyectos: number;
+  datos_origen: DatosOrigen | null;
 }
 
 export interface SeguimientoResponse {

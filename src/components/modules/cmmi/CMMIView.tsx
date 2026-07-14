@@ -15,6 +15,7 @@ import {
   type LineasBaseResponse, type PrediccionFinResponse, type LineaBaseBloque,
   type LineasBaseDatosResponse, type PrediccionDatosResponse,
   type ProyectosInfoResponse, type PklBloque,
+  type DatosOrigen, type DatosOrigenProyecto,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -800,6 +801,75 @@ function PklInfoPanel({ info }: { info: ProyectosInfoResponse }) {
         <PklCard title="Modelo A — Riesgo de alcance"            bloque={info.modelo_a} />
         <PklCard title="Modelo 1 — Alerta mensual SPI"           bloque={info.modelo1}  />
         <PklCard title="Modelo 2 — Riesgo estructural (early)"   bloque={info.modelo2}  />
+      </div>
+
+      {/* Datos origen */}
+      {info.datos_origen && <DatosOrigenPanel datos={info.datos_origen} />}
+    </div>
+  );
+}
+
+function DatosOrigenPanel({ datos }: { datos: DatosOrigen }) {
+  const portafolios = Object.entries(datos.por_portafolio);
+  const spiColor = (v: number) =>
+    v >= 0.95 ? "text-emerald-400" : v >= 0.80 ? "text-yellow-400" : "text-rose-400";
+  const estadoColor = (e: string) =>
+    e === "Completado" ? "text-emerald-400" : "text-sky-400";
+
+  return (
+    <div className="space-y-4">
+      <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
+        <span className="text-base">📂</span> Datos de entrenamiento
+        <span className="text-xs font-normal text-slate-500 ml-1">
+          {datos.fecha_min} – {datos.fecha_max} · {datos.n_observaciones} observaciones · {datos.proyectos.length} proyectos
+        </span>
+      </h3>
+
+      {/* Resumen por portafolio */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {portafolios.map(([port, p]) => (
+          <div key={port} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-2">
+            <p className="text-xs font-semibold text-slate-300 leading-tight">{port}</p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
+              <span className="text-slate-500">Proyectos</span>
+              <span className="text-slate-200 font-medium">{p.n_proyectos}</span>
+              <span className="text-slate-500">Duración media</span>
+              <span className="text-slate-200 font-medium">{p.duracion_media} meses</span>
+              <span className="text-slate-500">SPI mín mediana</span>
+              <span className={`font-medium ${spiColor(p.spi_min_mediana)}`}>{p.spi_min_mediana}</span>
+              <span className="text-slate-500">Completados</span>
+              <span className="text-emerald-400 font-medium">{p.pct_completados}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Tabla de proyectos */}
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.08] overflow-x-auto">
+        <table className="w-full text-[11px]">
+          <thead>
+            <tr className="border-b border-white/[0.06]">
+              {["ID", "Líder", "Portafolio", "Meses", "Reportes", "SPI mín", "SPI final", "Completado", "Estado"].map(h => (
+                <th key={h} className="px-3 py-2 text-left text-slate-500 font-medium whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {datos.proyectos.map((p: DatosOrigenProyecto, i: number) => (
+              <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
+                <td className="px-3 py-1.5 font-mono text-slate-400">{p.id}</td>
+                <td className="px-3 py-1.5 text-slate-300 whitespace-nowrap">{p.lider.split(" ").slice(0,2).join(" ")}</td>
+                <td className="px-3 py-1.5 text-slate-400">{p.portafolio.split(" ")[0]}</td>
+                <td className="px-3 py-1.5 text-slate-300 text-right tabular-nums">{p.meses}</td>
+                <td className="px-3 py-1.5 text-slate-400 text-right tabular-nums">{p.n_reportes}</td>
+                <td className={`px-3 py-1.5 text-right tabular-nums font-medium ${spiColor(p.spi_min)}`}>{p.spi_min}</td>
+                <td className={`px-3 py-1.5 text-right tabular-nums font-medium ${spiColor(p.spi_final)}`}>{p.spi_final}</td>
+                <td className="px-3 py-1.5 text-slate-300 text-right tabular-nums">{p.completado_final}</td>
+                <td className={`px-3 py-1.5 font-medium ${estadoColor(p.estado)}`}>{p.estado}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

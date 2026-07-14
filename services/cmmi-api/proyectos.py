@@ -429,6 +429,65 @@ def _pkl_size(name: str) -> int:
     return p.stat().st_size if p.exists() else 0
 
 
+def _datos_origen() -> dict | None:
+    """Resumen del Excel de entrenamiento para ilustrar los datos origen."""
+    if not XLSX_PROJ.exists():
+        return None
+    try:
+        import pandas as pd
+        df = pd.read_excel(XLSX_PROJ)
+
+        # Renombrar para comodidad
+        df.rename(columns={
+            "SPI (Schedule Performance Index)": "SPI",
+            "Variación Relativa Avance":        "VRA",
+            "Completado Real":                  "CompletadoReal",
+        }, inplace=True)
+
+        fecha_min = df["Fecha Análisis"].dropna().min()
+        fecha_max = df["Fecha Análisis"].dropna().max()
+
+        # Resumen por portafolio
+        def _pf(g):
+            completados = (g["CompletadoReal"].dropna() >= 0.95).sum()
+            return {
+                "n_proyectos":   int(g["ProjectId"].nunique()),
+                "duracion_media": round(float(g.groupby("ProjectId")["Meses"].first().mean()), 1),
+                "spi_min_mediana": round(float(g.groupby("ProjectId")["SPI"].min().median()), 3),
+                "pct_completados": f"{completados / max(len(g['ProjectId'].unique()), 1):.0%}",
+            }
+
+        por_portafolio = {
+            p: _pf(grp) for p, grp in df.groupby("Portafolio")
+        }
+
+        # Resumen por proyecto (una fila por proyecto)
+        proj_grp = df.groupby("ProjectId")
+        proyectos_lista = []
+        for pid, g in proj_grp:
+            proyectos_lista.append({
+                "id":              str(pid)[:8] + "…",
+                "lider":           g["ProjectOwnerName"].iloc[0],
+                "portafolio":      g["Portafolio"].iloc[0],
+                "meses":           round(float(g["Meses"].iloc[0]), 1),
+                "n_reportes":      int(len(g)),
+                "spi_min":         round(float(g["SPI"].min()), 3),
+                "spi_final":       round(float(g["SPI"].iloc[-1]), 3),
+                "completado_final": f"{g['CompletadoReal'].iloc[-1]:.0%}",
+                "estado":          "Completado" if g["CompletadoReal"].iloc[-1] >= 0.95 else "En ejecución",
+            })
+
+        return {
+            "fecha_min":      fecha_min.strftime("%Y-%m") if not pd.isna(fecha_min) else None,
+            "fecha_max":      fecha_max.strftime("%Y-%m") if not pd.isna(fecha_max) else None,
+            "n_observaciones": len(df),
+            "por_portafolio": por_portafolio,
+            "proyectos":      proyectos_lista,
+        }
+    except Exception:
+        return None
+
+
 def _fmt_importancia(art: dict | None) -> list[dict]:
     if art is None:
         return []
@@ -489,6 +548,7 @@ def info_modelos() -> dict:
         "xlsx_bytes":         XLSX_PROJ.stat().st_size if XLSX_PROJ.exists() else 0,
         "fecha_datos_hasta":  _fecha_datos_hasta(),
         "n_proyectos":        _n_proyectos(),
+        "datos_origen":       _datos_origen(),
     }
 
 
