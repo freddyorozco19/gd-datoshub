@@ -5,11 +5,13 @@ import {
   ShieldCheck, Upload, FileSpreadsheet, X, Search,
   DollarSign, Trophy, TrendingDown, Clock, Layers, AlertCircle,
   Table2, Activity, Cpu, Play, Maximize2, Filter,
+  BarChart2, CalendarCheck,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 import {
   VERTICALES, type Vertical, type OportunidadComercial, type ParseResult,
   type SpcResponse, type RfTrainResponse, type CuracionMeta,
+  type KickoffResponse, type SeguimientoResponse, type SemaforoProy, type LineaBaseSpi,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -575,6 +577,338 @@ function ComercialPanel() {
   );
 }
 
+/* ── PROYECTOS ─────────────────────────────────────────────────────── */
+
+const PORTAFOLIOS = ["TI", "DATOS Y SISTEMAS DE INFORMACIÓN", "CONSULTORÍA"] as const;
+
+const SEM_COLORS: Record<string, string> = {
+  VERDE:    "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+  AMARILLO: "text-amber-400   bg-amber-500/10   border-amber-500/20",
+  ROJO:     "text-rose-400    bg-rose-500/10    border-rose-500/20",
+};
+
+const SEM_DOT: Record<string, string> = {
+  VERDE: "bg-emerald-400", AMARILLO: "bg-amber-400", ROJO: "bg-rose-400",
+};
+
+function SemaforoCard({ titulo, data, subtitulo }: {
+  titulo: string; data: SemaforoProy; subtitulo?: string;
+}) {
+  const cls = SEM_COLORS[data.semaforo] ?? SEM_COLORS.AMARILLO;
+  return (
+    <div className={`rounded-xl border p-4 space-y-2 ${cls}`}>
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-xs font-semibold uppercase tracking-wide opacity-70">{titulo}</p>
+        <span className={`w-2.5 h-2.5 rounded-full ${SEM_DOT[data.semaforo]}`} />
+      </div>
+      <p className="text-3xl font-bold">{data.probabilidad_pct}</p>
+      <p className="text-sm font-semibold">{data.nivel ?? data.estado} · AUC {data.auc}</p>
+      {subtitulo && <p className="text-xs opacity-70">{subtitulo}</p>}
+      {data.vs_historico && <p className="text-xs opacity-70">Vs. histórico: {data.vs_historico}</p>}
+      {data.confianza    && <p className="text-xs opacity-60 italic">{data.confianza}</p>}
+    </div>
+  );
+}
+
+function PerfilCard({ perfil }: { perfil: KickoffResponse["perfil_combinado"] }) {
+  const cls = SEM_COLORS[perfil.semaforo] ?? SEM_COLORS.AMARILLO;
+  return (
+    <div className={`rounded-xl border p-4 col-span-2 ${cls}`}>
+      <p className="text-xs font-semibold uppercase tracking-wide opacity-70 mb-1">Perfil combinado</p>
+      <div className="flex items-center gap-2">
+        <span className={`w-3 h-3 rounded-full ${SEM_DOT[perfil.semaforo]}`} />
+        <p className="text-sm font-medium">{perfil.descripcion}</p>
+      </div>
+    </div>
+  );
+}
+
+function LbCard({ lb }: { lb: LineaBaseSpi }) {
+  const cls = SEM_COLORS[lb.semaforo] ?? SEM_COLORS.AMARILLO;
+  return (
+    <div className={`rounded-xl border p-4 ${cls}`}>
+      <p className="text-xs font-semibold uppercase tracking-wide opacity-70 mb-2">
+        Línea Base SPI · fase {lb.fase}
+      </p>
+      <p className="text-2xl font-bold mb-1">{lb.SPI_observado.toFixed(4)}</p>
+      <p className="text-sm font-semibold mb-2">{lb.estado}</p>
+      <div className="grid grid-cols-3 gap-2 text-xs">
+        {[["LCL", lb.LCL], ["CL", lb.CL], ["UCL", lb.UCL]].map(([k, v]) => (
+          <div key={k as string} className="text-center">
+            <p className="font-bold">{v != null ? (v as number).toFixed(4) : "—"}</p>
+            <p className="opacity-60">{k as string}</p>
+          </div>
+        ))}
+      </div>
+      {lb.sigmas_desde_CL != null && (
+        <p className="text-xs opacity-70 mt-2">
+          {lb.sigmas_desde_CL > 0 ? "+" : ""}{lb.sigmas_desde_CL} σ desde CL · n={lb.n} · {lb.fuente}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function AvisosBanner({ avisos }: { avisos: string[] }) {
+  if (!avisos.length) return null;
+  return (
+    <div className="flex flex-col gap-1.5">
+      {avisos.map((a, i) => (
+        <div key={i} className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-3 py-2 text-xs text-amber-400">
+          <AlertCircle size={13} className="shrink-0 mt-0.5" /> {a}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+type ProyTab = "kickoff" | "seguimiento";
+
+function ProyectosPanel() {
+  const [tab, setTab]   = useState<ProyTab>("kickoff");
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
+  const [notice, setNotice]   = useState<string | null>(null);
+
+  // Kickoff state
+  const [kPort,  setKPort]  = useState<string>(PORTAFOLIOS[0]);
+  const [kLider, setKLider] = useState("");
+  const [kDur,   setKDur]   = useState("");
+  const [kPres,  setKPres]  = useState("");
+  const [kRes,   setKRes]   = useState<KickoffResponse | null>(null);
+
+  // Seguimiento state
+  const [sPort,  setSPort]  = useState<string>(PORTAFOLIOS[0]);
+  const [sLider, setSLider] = useState("");
+  const [sMes,   setSMes]   = useState("");
+  const [sSpi1,  setSSpi1]  = useState("");
+  const [sVra1,  setSVra1]  = useState("");
+  const [sSpi2,  setSSpi2]  = useState("");
+  const [sSpiObs,setSSpiObs]= useState("");
+  const [sRes,   setSRes]   = useState<SeguimientoResponse | null>(null);
+
+  function reset() {
+    setError(null); setNotice(null);
+  }
+
+  async function runKickoff() {
+    reset(); setLoading(true); setKRes(null);
+    try {
+      const r = await fetch("/api/cmmi/proyectos/kickoff", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          portafolio:     kPort,
+          lider:          kLider.trim() || "Desconocido",
+          duracion_meses: parseFloat(kDur) || 0,
+          presupuesto:    kPres ? parseFloat(kPres) : null,
+        }),
+      });
+      const json = await r.json();
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error); return; }
+        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      }
+      setKRes(json as KickoffResponse);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al ejecutar el modelo.");
+    } finally { setLoading(false); }
+  }
+
+  async function runSeguimiento() {
+    reset(); setLoading(true); setSRes(null);
+    try {
+      const r = await fetch("/api/cmmi/proyectos/seguimiento", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          portafolio:    sPort,
+          lider:         sLider.trim() || "Desconocido",
+          mes_rel:       parseFloat(sMes) || 0,
+          spi_lag1:      parseFloat(sSpi1) || 0,
+          vra_lag1:      parseFloat(sVra1) || 0,
+          spi_lag2:      sSpi2   ? parseFloat(sSpi2)   : null,
+          spi_observado: sSpiObs ? parseFloat(sSpiObs) : null,
+        }),
+      });
+      const json = await r.json();
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error); return; }
+        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      }
+      setSRes(json as SeguimientoResponse);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al ejecutar el modelo.");
+    } finally { setLoading(false); }
+  }
+
+  const tabs: { id: ProyTab; label: string; icon: typeof Activity }[] = [
+    { id: "kickoff",      label: "Kickoff",      icon: BarChart2     },
+    { id: "seguimiento",  label: "Seguimiento",  icon: CalendarCheck },
+  ];
+
+  const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
+  const labelCls = "text-xs font-medium text-slate-400 mb-1";
+
+  return (
+    <div className="space-y-5">
+      {/* Tabs */}
+      <div className="flex items-center gap-1.5 border-b border-white/[0.07]">
+        {tabs.map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            onClick={() => { setTab(id); reset(); }}
+            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+              tab === id
+                ? "border-blue-500 text-blue-400"
+                : "border-transparent text-slate-500 hover:text-slate-300 hover:border-white/20"
+            }`}
+          >
+            <Icon size={15} /> {label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── KICKOFF ─────────────────────────────────────────────────── */}
+      {tab === "kickoff" && (
+        <div className="space-y-5">
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
+            <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+              <BarChart2 size={16} className="text-indigo-400" />
+              Evaluación en el kickoff del proyecto
+            </p>
+            <p className="text-xs text-slate-500">
+              Modelo Kickoff (SPI) · Modelo A (alcance) — solo requiere variables disponibles antes de iniciar la ejecución.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <p className={labelCls}>Portafolio</p>
+                <select value={kPort} onChange={(e) => setKPort(e.target.value)} className={inputCls}>
+                  {PORTAFOLIOS.map((p) => <option key={p} value={p}>{p}</option>)}
+                </select>
+              </div>
+              <div>
+                <p className={labelCls}>Líder del proyecto</p>
+                <input value={kLider} onChange={(e) => setKLider(e.target.value)} placeholder="Nombre completo" className={inputCls} />
+              </div>
+              <div>
+                <p className={labelCls}>Duración planificada (meses)</p>
+                <input type="number" min={1} value={kDur} onChange={(e) => setKDur(e.target.value)} placeholder="ej. 8" className={inputCls} />
+              </div>
+              <div>
+                <p className={labelCls}>Presupuesto COP <span className="text-slate-600">(opcional)</span></p>
+                <input type="number" min={0} value={kPres} onChange={(e) => setKPres(e.target.value)} placeholder="ej. 950000000" className={inputCls} />
+              </div>
+            </div>
+            <button
+              onClick={runKickoff}
+              disabled={loading || !kDur}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            >
+              {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
+              {loading ? "Ejecutando…" : "Evaluar en kickoff"}
+            </button>
+          </div>
+
+          {notice && <LocalOnlyNotice message={notice} />}
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+
+          {kRes && (
+            <div className="space-y-4">
+              <AvisosBanner avisos={kRes.avisos} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <SemaforoCard titulo="Modelo Kickoff — Riesgo SPI" data={kRes.kickoff} />
+                <SemaforoCard titulo="Modelo A — Riesgo de alcance" data={kRes.modelo_a} />
+                <PerfilCard perfil={kRes.perfil_combinado} />
+              </div>
+              <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-xs text-slate-500 space-y-1">
+                <p><span className="text-slate-400 font-medium">Siguiente paso:</span> al llegar el primer reporte mensual, pasar a la pestaña <span className="text-blue-400">Seguimiento</span> con el Modelo 2 (AUC 0.85).</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── SEGUIMIENTO ─────────────────────────────────────────────── */}
+      {tab === "seguimiento" && (
+        <div className="space-y-5">
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
+            <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+              <CalendarCheck size={16} className="text-indigo-400" />
+              Seguimiento mensual del proyecto
+            </p>
+            <p className="text-xs text-slate-500">
+              Modelo 1 (alerta SPI este mes) · Modelo 2 (riesgo estructural) · Línea base SPI por fase.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <p className={labelCls}>Portafolio</p>
+                <select value={sPort} onChange={(e) => setSPort(e.target.value)} className={inputCls}>
+                  {PORTAFOLIOS.map((p) => <option key={p} value={p}>{p}</option>)}
+                </select>
+              </div>
+              <div>
+                <p className={labelCls}>Líder del proyecto</p>
+                <input value={sLider} onChange={(e) => setSLider(e.target.value)} placeholder="Nombre completo" className={inputCls} />
+              </div>
+              <div>
+                <p className={labelCls}>Mes relativo [0.0 – 1.0]</p>
+                <input type="number" step={0.01} min={0} max={1} value={sMes} onChange={(e) => setSMes(e.target.value)} placeholder="ej. 0.35 = 35% del ciclo de vida" className={inputCls} />
+              </div>
+              <div>
+                <p className={labelCls}>SPI mes anterior</p>
+                <input type="number" step={0.001} value={sSpi1} onChange={(e) => setSSpi1(e.target.value)} placeholder="ej. 0.92" className={inputCls} />
+              </div>
+              <div>
+                <p className={labelCls}>VRA mes anterior</p>
+                <input type="number" step={0.001} value={sVra1} onChange={(e) => setSVra1(e.target.value)} placeholder="ej. -0.08" className={inputCls} />
+              </div>
+              <div>
+                <p className={labelCls}>SPI hace 2 meses <span className="text-slate-600">(opcional)</span></p>
+                <input type="number" step={0.001} value={sSpi2} onChange={(e) => setSSpi2(e.target.value)} placeholder="ej. 0.97" className={inputCls} />
+              </div>
+              <div className="sm:col-span-2">
+                <p className={labelCls}>SPI observado este mes <span className="text-slate-600">(opcional — para línea base)</span></p>
+                <input type="number" step={0.001} value={sSpiObs} onChange={(e) => setSSpiObs(e.target.value)} placeholder="ej. 0.87" className={inputCls} />
+              </div>
+            </div>
+            <button
+              onClick={runSeguimiento}
+              disabled={loading || !sMes || !sSpi1 || !sVra1}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            >
+              {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
+              {loading ? "Ejecutando…" : "Evaluar seguimiento"}
+            </button>
+          </div>
+
+          {notice && <LocalOnlyNotice message={notice} />}
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+
+          {sRes && (
+            <div className="space-y-4">
+              <AvisosBanner avisos={sRes.avisos} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <SemaforoCard titulo="Modelo 1 — Alerta mensual SPI" data={sRes.modelo1} />
+                <SemaforoCard titulo="Modelo 2 — Riesgo estructural" data={sRes.modelo2} />
+                {sRes.linea_base_spi && <LbCard lb={sRes.linea_base_spi} />}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Placeholder verticales pendientes ─────────────────────────────── */
 function PendingPanel({ label }: { label: string }) {
   return (
@@ -624,7 +958,9 @@ export default function CMMIView() {
           })}
         </div>
 
-        {active.enabled ? <ComercialPanel /> : <PendingPanel label={active.label} />}
+        {active.id === "comercial" && active.enabled  ? <ComercialPanel />    :
+         active.id === "proyectos" && active.enabled  ? <ProyectosPanel />    :
+         <PendingPanel label={active.label} />}
       </main>
     </div>
   );

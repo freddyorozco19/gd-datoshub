@@ -1,8 +1,7 @@
 """
 CMMI Models API — microservicio FastAPI.
 
-Ejecuta los modelos PPB/PPM del área COMERCIAL (SPC Carta P + Random Forest v2)
-sobre un Excel de oportunidades y devuelve resultados (JSON) + imágenes (base64).
+Ejecuta los modelos PPB/PPM de las áreas COMERCIAL y PROYECTOS.
 
 Arranque:
     cd services/cmmi-api
@@ -12,13 +11,16 @@ Arranque:
 from __future__ import annotations
 import io
 from pathlib import Path
+from typing import Annotated
 
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
 
 from prep import curate_comercial
 from runner import execute, SCRIPTS_DIR, STORE_DIR
+import proyectos as proy
 
 app = FastAPI(title="CMMI Models API", version="1.0.0")
 
@@ -48,13 +50,31 @@ def _leer_excel(upload: UploadFile, curar: bool = True) -> tuple[pd.DataFrame, d
     return df_c, meta
 
 
+# ── Schemas Proyectos ──────────────────────────────────────────────────
+class KickoffInput(BaseModel):
+    portafolio:     str
+    lider:          str
+    duracion_meses: float = Field(..., gt=0)
+    presupuesto:    float | None = None
+
+class SeguimientoInput(BaseModel):
+    portafolio:    str
+    lider:         str
+    mes_rel:       float = Field(..., ge=0.0, le=1.0)
+    spi_lag1:      float
+    vra_lag1:      float
+    spi_lag2:      float | None = None
+    spi_observado: float | None = None
+
+
 @app.get("/health")
 def health() -> dict:
     return {
-        "status": "ok",
-        "service": "cmmi-models",
+        "status":              "ok",
+        "service":             "cmmi-models",
         "modelo_rf_entrenado": STORED_PKL.exists(),
-        "pkl_bundled": BUNDLED_PKL.exists(),
+        "pkl_bundled":         BUNDLED_PKL.exists(),
+        "proyectos":           proy.status(),
     }
 
 
@@ -98,6 +118,32 @@ def comercial_rf_train(file: UploadFile = File(...)) -> dict:
         raise HTTPException(500, f"Entrenamiento RF falló: {out['stderr'][-1500:]}")
     out["curacion"] = meta
     return out
+
+
+# ── PROYECTOS ──────────────────────────────────────────────────────────
+@app.post("/proyectos/kickoff")
+def proyectos_kickoff(body: KickoffInput) -> dict:
+    """Modelo Kickoff + Modelo A — evaluación de riesgo en el inicio del proyecto."""
+    try:
+        return proy.predecir_kickoff(
+            body.portafolio, body.lider,
+            body.duracion_meses, body.presupuesto,
+        )
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
+@app.post("/proyectos/seguimiento")
+def proyectos_seguimiento(body: SeguimientoInput) -> dict:
+    """Modelo 1 + Modelo 2 + Línea Base SPI — seguimiento mensual."""
+    try:
+        return proy.predecir_seguimiento(
+            body.portafolio, body.lider, body.mes_rel,
+            body.spi_lag1, body.vra_lag1,
+            body.spi_lag2, body.spi_observado,
+        )
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
 
 
 @app.post("/comercial/rf/predict")

@@ -1,5 +1,5 @@
 /* ── CMMI · Verticales / Áreas ─────────────────────────────────────── */
-export type Vertical = "comercial" | "financiero" | "pmo" | "datos";
+export type Vertical = "comercial" | "proyectos" | "financiero" | "pmo" | "datos";
 
 export interface VerticalConfig {
   id: Vertical;
@@ -10,6 +10,7 @@ export interface VerticalConfig {
 
 export const VERTICALES: VerticalConfig[] = [
   { id: "comercial",  label: "Comercial",  enabled: true  },
+  { id: "proyectos",  label: "Proyectos",  enabled: true  },
   { id: "financiero", label: "Financiero", enabled: false },
   { id: "pmo",        label: "PMO",        enabled: false },
   { id: "datos",      label: "Datos",      enabled: false },
@@ -89,4 +90,50 @@ export interface RfTrainResponse {
   table_counts: { predictions: number };
   stats: { metrics: Record<string, number> | null };
   curacion: CuracionMeta;
+}
+
+/* ── PROYECTOS · Tipos de respuesta ────────────────────────────────── */
+export interface SemaforoProy {
+  probabilidad:     number;
+  probabilidad_pct: string;
+  semaforo:         "VERDE" | "AMARILLO" | "ROJO";
+  nivel?:           string;
+  estado?:          string;
+  auc:              number;
+  vs_historico?:    string;
+  confianza?:       string;
+}
+
+export interface LineaBaseSpi {
+  fase:            string;
+  fuente:          string;
+  SPI_observado:   number;
+  CL:              number | null;
+  UCL:             number | null;
+  LCL:             number | null;
+  n:               number;
+  sigmas_desde_CL: number | null;
+  semaforo:        "VERDE" | "AMARILLO" | "ROJO";
+  estado:          string;
+}
+
+export interface KickoffResponse {
+  portafolio:        string;
+  lider:             string;
+  duracion_meses:    number;
+  presupuesto:       number | null;
+  avisos:            string[];
+  kickoff:           SemaforoProy;
+  modelo_a:          SemaforoProy;
+  perfil_combinado:  { semaforo: "VERDE" | "AMARILLO" | "ROJO"; descripcion: string };
+}
+
+export interface SeguimientoResponse {
+  portafolio:       string;
+  lider:            string;
+  mes_rel:          number;
+  avisos:           string[];
+  modelo1:          SemaforoProy;
+  modelo2:          SemaforoProy;
+  linea_base_spi:   LineaBaseSpi | null;
 }
