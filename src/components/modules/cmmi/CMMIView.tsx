@@ -16,6 +16,7 @@ import {
   type LineasBaseDatosResponse, type PrediccionDatosResponse,
   type ProyectosInfoResponse, type PklBloque,
   type DatosOrigen, type DatosOrigenProyecto,
+  type FinancieroInfoResponse, type FinancieroInfoProyecto,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -1254,7 +1255,7 @@ const CATEGORIAS_FIN = [
   "Transformación Digital",
 ] as const;
 
-type FinTab = "predictor" | "lineas-base";
+type FinTab = "predictor" | "lineas-base" | "datos";
 
 const RIESGO_COLORS: Record<string, string> = {
   Bajo:  "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
@@ -1325,6 +1326,10 @@ function FinancieroPanel() {
   const [lbRes,  setLbRes]  = useState<LineasBaseResponse | null>(null);
   const [lbLoaded, setLbLoaded] = useState(false);
 
+  // Datos origen
+  const [finInfo, setFinInfo] = useState<FinancieroInfoResponse | null>(null);
+  const [finInfoLoaded, setFinInfoLoaded] = useState(false);
+
   function reset() { setError(null); setNotice(null); }
 
   async function runPrediccion() {
@@ -1362,9 +1367,27 @@ function FinancieroPanel() {
     } finally { setLoading(false); }
   }
 
+  async function loadFinInfo() {
+    if (finInfoLoaded) return;
+    reset(); setLoading(true);
+    try {
+      const r = await fetch("/api/cmmi/financiero/info");
+      const json = await r.json();
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error); return; }
+        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      }
+      setFinInfo(json as FinancieroInfoResponse);
+      setFinInfoLoaded(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al cargar datos de entrenamiento.");
+    } finally { setLoading(false); }
+  }
+
   const tabs: { id: FinTab; label: string; icon: typeof Activity }[] = [
-    { id: "predictor",    label: "Predictor",     icon: TrendingUp },
-    { id: "lineas-base",  label: "Líneas base",   icon: PieChart   },
+    { id: "predictor",    label: "Predictor",          icon: TrendingUp  },
+    { id: "lineas-base",  label: "Líneas base",        icon: PieChart    },
+    { id: "datos",        label: "Datos entrenamiento", icon: Database    },
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
@@ -1383,7 +1406,7 @@ function FinancieroPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id); reset(); }}
+            onClick={() => { setTab(id); reset(); if (id === "datos") loadFinInfo(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -1530,6 +1553,23 @@ function FinancieroPanel() {
                 </div>
               </div>
             </div>
+          )}
+        </div>
+      )}
+
+      {/* ── DATOS ENTRENAMIENTO ──────────────────────────────────── */}
+      {tab === "datos" && (
+        <div className="space-y-5">
+          {notice && <LocalOnlyNotice message={notice} />}
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+          {loading && <p className="text-xs text-slate-500 animate-pulse">Cargando datos…</p>}
+          {finInfo && finInfo.disponible && <FinancieroOrigenPanel info={finInfo} />}
+          {finInfo && !finInfo.disponible && (
+            <p className="text-sm text-slate-500">Excel de entrenamiento no disponible en el servidor.</p>
           )}
         </div>
       )}
@@ -1772,6 +1812,84 @@ function DatosPanel() {
           )}
         </div>
       )}
+
+    </div>
+  );
+}
+
+function FinancieroOrigenPanel({ info }: { info: FinancieroInfoResponse }) {
+  const utilColor = (v: number) =>
+    v >= 0.20 ? "text-emerald-400" : v >= 0.05 ? "text-amber-400" : "text-rose-400";
+
+  const cats = Object.entries(info.por_categoria ?? {});
+
+  return (
+    <div className="space-y-4">
+      {/* KPI cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: "Datos hasta",     val: info.fecha_max ?? "—",         color: "text-sky-400"      },
+          { label: "Desde",           val: info.fecha_min ?? "—",         color: "text-slate-400"    },
+          { label: "Proyectos",       val: String(info.n_proyectos ?? "—"), color: "text-slate-200"  },
+          { label: "R² ajustado",     val: info.modelo_r2a != null ? `${(info.modelo_r2a * 100).toFixed(1)}%` : "—", color: "text-indigo-400" },
+        ].map(({ label, val, color }) => (
+          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className={`text-xl font-bold tabular-nums ${color}`}>{val}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Resumen por categoría */}
+      <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
+        <span className="text-base">📂</span> Por categoría
+      </h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {cats.map(([cat, c]) => (
+          <div key={cat} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-2">
+            <p className="text-xs font-semibold text-slate-300 leading-tight">{cat}</p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
+              <span className="text-slate-500">Proyectos</span>
+              <span className="text-slate-200 font-medium">{c.n}</span>
+              <span className="text-slate-500">Utilidad media</span>
+              <span className={`font-medium ${utilColor(parseFloat(c.utilidad_media) / 100)}`}>{c.utilidad_media}</span>
+              <span className="text-slate-500">Rango</span>
+              <span className="text-slate-400">{c.utilidad_min} – {c.utilidad_max}</span>
+              {c.monto_medio_mm != null && <>
+                <span className="text-slate-500">Monto medio</span>
+                <span className="text-slate-400">${c.monto_medio_mm.toFixed(0)} M</span>
+              </>}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Tabla de proyectos */}
+      <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
+        <span className="text-base">📋</span> Proyectos históricos
+      </h3>
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.08] overflow-x-auto">
+        <table className="w-full text-[11px]">
+          <thead>
+            <tr className="border-b border-white/[0.06]">
+              {["Código", "Categoría", "Fecha cierre", "Utilidad", "Monto (M COP)"].map(h => (
+                <th key={h} className="px-3 py-2 text-left text-slate-500 font-medium whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {(info.proyectos ?? []).map((p: FinancieroInfoProyecto, i: number) => (
+              <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
+                <td className="px-3 py-1.5 font-mono text-slate-400">{p.codigo}</td>
+                <td className="px-3 py-1.5 text-slate-300">{p.categoria}</td>
+                <td className="px-3 py-1.5 text-slate-400 tabular-nums">{p.fecha ?? "—"}</td>
+                <td className={`px-3 py-1.5 font-medium tabular-nums ${utilColor(p.utilidad_v)}`}>{p.utilidad}</td>
+                <td className="px-3 py-1.5 text-slate-400 text-right tabular-nums">{p.monto_mm != null ? `$${p.monto_mm.toFixed(0)}` : "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

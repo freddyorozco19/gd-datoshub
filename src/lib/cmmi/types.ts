@@ -221,6 +221,20 @@ export interface ProyectosInfoResponse {
   datos_origen: DatosOrigen | null;
 }
 
+export interface FinancieroInfoCategoria {
+  n: number; utilidad_media: string; utilidad_min: string; utilidad_max: string; monto_medio_mm: number | null;
+}
+export interface FinancieroInfoProyecto {
+  codigo: string; categoria: string; utilidad: string; utilidad_v: number; monto_mm: number | null; fecha: string | null;
+}
+export interface FinancieroInfoResponse {
+  disponible: boolean;
+  n_proyectos?: number; fecha_min?: string | null; fecha_max?: string | null; xlsx_bytes?: number;
+  por_categoria?: Record<string, FinancieroInfoCategoria>;
+  proyectos?: FinancieroInfoProyecto[];
+  modelo_r2?: number | null; modelo_r2a?: number | null; modelo_n?: number | null;
+}
+
 export interface SeguimientoResponse {
   portafolio:       string;
   lider:            string;

@@ -267,6 +267,53 @@ def recargar(xlsx_bytes: bytes) -> dict:
     }
 
 
+def info_financiero() -> dict:
+    """Resumen del Excel de entrenamiento para ilustrar los datos origen."""
+    if _df is None or not XLSX.exists():
+        return {"disponible": False}
+
+    df = _df.copy()
+    fecha_max = df["Fecha de finalización"].max()
+    fecha_min = df["Fecha de finalización"].min()
+
+    por_cat: dict = {}
+    for cat, grp in df.groupby("Cat"):
+        utils = grp["Utilidad del proyecto"].dropna()
+        montos = grp["Monto del Proyecto"].dropna()
+        por_cat[str(cat)] = {
+            "n": int(len(grp)),
+            "utilidad_media": f"{float(utils.mean()):.1%}",
+            "utilidad_min":   f"{float(utils.min()):.1%}",
+            "utilidad_max":   f"{float(utils.max()):.1%}",
+            "monto_medio_mm": round(float(montos.mean()) / 1e6, 1) if len(montos) else None,
+        }
+
+    proyectos: list[dict] = []
+    for _, row in df.iterrows():
+        fecha = row["Fecha de finalización"]
+        proyectos.append({
+            "codigo":    str(row.get("Código de proyecto", ""))[:10] + "…",
+            "categoria": str(row["Cat"]),
+            "utilidad":  f"{row['Utilidad del proyecto']:.1%}",
+            "utilidad_v": round(float(row["Utilidad del proyecto"]), 4),
+            "monto_mm":  round(float(row["Monto del Proyecto"]) / 1e6, 1) if pd.notna(row.get("Monto del Proyecto")) else None,
+            "fecha":     fecha.strftime("%Y-%m") if pd.notna(fecha) else None,
+        })
+
+    return {
+        "disponible":     True,
+        "n_proyectos":    int(len(df)),
+        "fecha_min":      fecha_min.strftime("%Y-%m") if pd.notna(fecha_min) else None,
+        "fecha_max":      fecha_max.strftime("%Y-%m") if pd.notna(fecha_max) else None,
+        "xlsx_bytes":     XLSX.stat().st_size,
+        "por_categoria":  por_cat,
+        "proyectos":      proyectos,
+        "modelo_r2":      round(_modelo_b["r2"],  4) if _modelo_b else None,
+        "modelo_r2a":     round(_modelo_b["r2a"], 4) if _modelo_b else None,
+        "modelo_n":       _modelo_b["n"] if _modelo_b else None,
+    }
+
+
 def status() -> dict:
     return {
         "xlsx_disponible": XLSX.exists(),

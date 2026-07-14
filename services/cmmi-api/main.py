@@ -176,6 +176,12 @@ class PrediccionInput(BaseModel):
     monto_cop: float = Field(..., gt=0)
 
 
+@app.get("/financiero/info")
+def financiero_info() -> dict:
+    """Resumen de los datos de entrenamiento del modelo de financiero."""
+    return fin.info_financiero()
+
+
 @app.post("/financiero/cargar")
 def financiero_cargar(file: UploadFile = File(...)) -> dict:
     """Carga un nuevo Excel de utilidad y reajusta el modelo en memoria."""
