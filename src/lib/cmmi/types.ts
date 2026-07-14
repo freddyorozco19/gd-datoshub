@@ -171,6 +171,35 @@ export interface PrediccionDatosResponse {
   modelo: { r2: number; rmse: number; mae: number; rmse_loo: number; n: number };
 }
 
+export interface PklMetricas {
+  auc: number; brier: number;
+  precision: number; recall: number; f1: number; fpr: number;
+  tp: number; fp: number; fn: number; tn: number;
+  n_obs: number; umbral_alerta: number;
+}
+export interface PklImportancia { variable: string; importancia: number; pct: string; }
+export interface PklBloque {
+  disponible: boolean;
+  version?: string;
+  descripcion?: string;
+  algoritmo?: string;
+  features?: string[];
+  portafolios?: string[];
+  lideres_n?: number;
+  pkl_bytes?: number;
+  metricas?: PklMetricas;
+  importancia?: PklImportancia[];
+}
+export interface ProyectosInfoResponse {
+  kickoff:    PklBloque;
+  modelo_a:   PklBloque;
+  modelo1:    PklBloque;
+  modelo2:    PklBloque;
+  linea_base_spi: { disponible: boolean; n_portafolios: number; portafolios: string[] };
+  xlsx_disponible: boolean;
+  xlsx_bytes: number;
+}
+
 export interface SeguimientoResponse {
   portafolio:       string;
   lider:            string;

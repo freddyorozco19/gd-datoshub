@@ -401,6 +401,72 @@ def reentrenar(xlsx_bytes: bytes) -> dict:
     }
 
 
+def _pkl_size(name: str) -> int:
+    p = PROJ_DIR / name
+    return p.stat().st_size if p.exists() else 0
+
+
+def _fmt_importancia(art: dict | None) -> list[dict]:
+    if art is None:
+        return []
+    imp = art.get("importancia", {})
+    if not imp:
+        return []
+    total = sum(imp.values()) or 1
+    return sorted(
+        [{"variable": k, "importancia": round(v, 4), "pct": f"{v/total:.1%}"}
+         for k, v in imp.items()],
+        key=lambda x: x["importancia"], reverse=True,
+    )
+
+
+def info_modelos() -> dict:
+    """Devuelve metadatos completos de los 4 PKLs cargados en memoria."""
+    def _bloque(art: dict | None, pkl_name: str) -> dict:
+        if art is None:
+            return {"disponible": False}
+        m = art.get("metricas", {})
+        return {
+            "disponible":    True,
+            "version":       art.get("version", "—"),
+            "descripcion":   art.get("descripcion", "—"),
+            "algoritmo":     type(art["modelo"]).__name__ if "modelo" in art else "—",
+            "features":      art.get("features", []),
+            "portafolios":   list(art.get("port_map", {}).keys()),
+            "lideres_n":     len(art.get("lider_map", {})),
+            "pkl_bytes":     _pkl_size(pkl_name),
+            "metricas": {
+                "auc":       round(m.get("auc", 0), 4),
+                "brier":     round(m.get("brier", 0), 4),
+                "precision": round(float(m.get("precision", 0)), 4),
+                "recall":    round(float(m.get("recall", 0)), 4),
+                "f1":        round(float(m.get("f1", 0)), 4),
+                "fpr":       round(float(m.get("fpr", 0)), 4),
+                "tp":        m.get("tp", 0),
+                "fp":        m.get("fp", 0),
+                "fn":        m.get("fn", 0),
+                "tn":        m.get("tn", 0),
+                "n_obs":     m.get("n_obs") or m.get("n_proyectos", 0),
+                "umbral_alerta": m.get("umbral_alerta", 0),
+            },
+            "importancia": _fmt_importancia(art),
+        }
+
+    return {
+        "kickoff":      _bloque(_kickoff,  "modelo_kickoff_params.pkl"),
+        "modelo_a":     _bloque(_modelo_a, "modeloA_params.pkl"),
+        "modelo1":      _bloque(_modelo1,  "modelo1_params.pkl"),
+        "modelo2":      _bloque(_modelo2,  "modelo2_params.pkl"),
+        "linea_base_spi": {
+            "disponible":        _lb_spi is not None,
+            "n_portafolios":     len((_lb_spi or {}).get("por_portafolio", {})),
+            "portafolios":       list((_lb_spi or {}).get("por_portafolio", {}).keys()),
+        },
+        "xlsx_disponible": XLSX_PROJ.exists(),
+        "xlsx_bytes":      XLSX_PROJ.stat().st_size if XLSX_PROJ.exists() else 0,
+    }
+
+
 # ── Health info ───────────────────────────────────────────────────────
 def status() -> dict:
     return {

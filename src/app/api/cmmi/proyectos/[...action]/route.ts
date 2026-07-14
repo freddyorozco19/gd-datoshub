@@ -5,6 +5,7 @@ export const maxDuration = 300; // reentrenar 4 modelos puede tomar ~2-3 min
 const CMMI_API_URL = process.env.CMMI_API_URL ?? "http://127.0.0.1:8008";
 const IS_HOSTED    = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 
+const ALLOWED_GET    = new Set(["info"]);
 const ALLOWED_JSON   = new Set(["kickoff", "seguimiento"]);
 const ALLOWED_UPLOAD = new Set(["reentrenar"]);
 
@@ -19,6 +20,20 @@ const unreachable = (err: unknown) =>
     { error: `No se pudo contactar el microservicio CMMI (${CMMI_API_URL}). ¿Está corriendo? ${err instanceof Error ? err.message : String(err)}` },
     { status: 502 },
   );
+
+export async function GET(
+  _req: NextRequest,
+  ctx: { params: Promise<{ action: string[] }> },
+) {
+  const path = ((await ctx.params).action ?? []).join("/");
+  if (!ALLOWED_GET.has(path)) return Response.json({ error: `Acción no válida: ${path}` }, { status: 404 });
+  if (IS_HOSTED) return Response.json({ error: LOCAL_ONLY_MSG, localOnly: true }, { status: 503 });
+  try {
+    const res  = await fetch(`${CMMI_API_URL}/proyectos/${path}`);
+    const text = await res.text();
+    return new Response(text, { status: res.status, headers: { "Content-Type": res.headers.get("Content-Type") ?? "application/json" } });
+  } catch (err) { return unreachable(err); }
+}
 
 export async function POST(
   req: NextRequest,

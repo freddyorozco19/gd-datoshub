@@ -125,6 +125,12 @@ def comercial_rf_train(file: UploadFile = File(...)) -> dict:
 
 
 # ── PROYECTOS ──────────────────────────────────────────────────────────
+@app.get("/proyectos/info")
+def proyectos_info() -> dict:
+    """Metadatos completos de los 4 PKLs cargados: métricas, features, importancia."""
+    return proy.info_modelos()
+
+
 @app.post("/proyectos/reentrenar")
 def proyectos_reentrenar(file: UploadFile = File(...)) -> dict:
     """Recibe el Excel histórico actualizado, reentrena los 4 modelos y recarga los PKLs."""

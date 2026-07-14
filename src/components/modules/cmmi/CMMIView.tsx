@@ -14,6 +14,7 @@ import {
   type KickoffResponse, type SeguimientoResponse, type SemaforoProy, type LineaBaseSpi,
   type LineasBaseResponse, type PrediccionFinResponse, type LineaBaseBloque,
   type LineasBaseDatosResponse, type PrediccionDatosResponse,
+  type ProyectosInfoResponse, type PklBloque,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -667,7 +668,142 @@ function AvisosBanner({ avisos }: { avisos: string[] }) {
   );
 }
 
-type ProyTab = "kickoff" | "seguimiento" | "reentrenar";
+/* ── PKL Info Panel ────────────────────────────────────────────────── */
+const AUC_COLOR = (auc: number) =>
+  auc >= 0.80 ? "text-emerald-400" : auc >= 0.65 ? "text-yellow-400" : "text-rose-400";
+
+function PklCard({ title, bloque }: { title: string; bloque: PklBloque }) {
+  if (!bloque.disponible) return (
+    <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4">
+      <p className="text-sm font-semibold text-slate-400">{title}</p>
+      <p className="text-xs text-rose-400 mt-1">No disponible</p>
+    </div>
+  );
+  const m = bloque.metricas!;
+  const total = (m.tp + m.fp + m.fn + m.tn) || 1;
+  return (
+    <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-sm font-semibold text-slate-200">{title}</p>
+          <p className="text-xs text-slate-500 mt-0.5">{bloque.algoritmo} · v{bloque.version}</p>
+        </div>
+        <span className={`text-2xl font-bold tabular-nums ${AUC_COLOR(m.auc)}`}>{m.auc.toFixed(3)}<span className="text-xs font-normal ml-1 text-slate-500">AUC</span></span>
+      </div>
+      <p className="text-xs text-slate-500 leading-relaxed">{bloque.descripcion}</p>
+      {/* Métricas en grid */}
+      <div className="grid grid-cols-3 gap-2 text-center">
+        {[
+          { label: "Precisión", val: `${(m.precision * 100).toFixed(1)}%` },
+          { label: "Recall",    val: `${(m.recall    * 100).toFixed(1)}%` },
+          { label: "F1",        val: `${(m.f1        * 100).toFixed(1)}%` },
+          { label: "Brier",     val: m.brier.toFixed(4) },
+          { label: "FPR",       val: `${(m.fpr * 100).toFixed(1)}%` },
+          { label: "n obs",     val: m.n_obs.toLocaleString("es-CO") },
+        ].map(({ label, val }) => (
+          <div key={label} className="bg-black/20 rounded-lg py-1.5">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className="text-xs font-semibold text-slate-300 tabular-nums">{val}</p>
+          </div>
+        ))}
+      </div>
+      {/* Matriz de confusión */}
+      <div>
+        <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">Matriz de confusión (umbral {m.umbral_alerta})</p>
+        <div className="grid grid-cols-2 gap-1 text-center text-xs">
+          <div className="bg-emerald-900/30 border border-emerald-700/30 rounded py-1">
+            <p className="text-[10px] text-slate-500">VP</p>
+            <p className="font-bold text-emerald-400">{m.tp} <span className="font-normal text-slate-500">({(m.tp/total*100).toFixed(1)}%)</span></p>
+          </div>
+          <div className="bg-rose-900/20 border border-rose-700/20 rounded py-1">
+            <p className="text-[10px] text-slate-500">FP</p>
+            <p className="font-bold text-rose-400">{m.fp} <span className="font-normal text-slate-500">({(m.fp/total*100).toFixed(1)}%)</span></p>
+          </div>
+          <div className="bg-rose-900/20 border border-rose-700/20 rounded py-1">
+            <p className="text-[10px] text-slate-500">FN</p>
+            <p className="font-bold text-rose-400">{m.fn} <span className="font-normal text-slate-500">({(m.fn/total*100).toFixed(1)}%)</span></p>
+          </div>
+          <div className="bg-emerald-900/30 border border-emerald-700/30 rounded py-1">
+            <p className="text-[10px] text-slate-500">VN</p>
+            <p className="font-bold text-emerald-400">{m.tn} <span className="font-normal text-slate-500">({(m.tn/total*100).toFixed(1)}%)</span></p>
+          </div>
+        </div>
+      </div>
+      {/* Features */}
+      {bloque.features && bloque.features.length > 0 && (
+        <div>
+          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">Variables del modelo</p>
+          <div className="flex flex-wrap gap-1">
+            {bloque.features.map((f) => (
+              <span key={f} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] text-indigo-300 font-mono">{f}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      {/* Importancia */}
+      {bloque.importancia && bloque.importancia.length > 0 && (
+        <div>
+          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Importancia de variables</p>
+          <div className="space-y-1">
+            {bloque.importancia.map(({ variable, importancia, pct }) => (
+              <div key={variable} className="flex items-center gap-2">
+                <span className="text-[10px] text-slate-400 w-32 truncate font-mono">{variable}</span>
+                <div className="flex-1 h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
+                  <div className="h-full bg-indigo-500 rounded-full" style={{ width: pct }} />
+                </div>
+                <span className="text-[10px] text-slate-500 w-8 text-right tabular-nums">{pct}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {/* Portafolios + líderes */}
+      <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+        <span>{bloque.lideres_n} líderes en historial</span>
+        <span>·</span>
+        <span>{((bloque.pkl_bytes ?? 0) / 1024).toFixed(1)} KB</span>
+      </div>
+    </div>
+  );
+}
+
+function PklInfoPanel({ info }: { info: ProyectosInfoResponse }) {
+  return (
+    <div className="space-y-4">
+      {/* Resumen global */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {([
+          { label: "Kickoff AUC",  val: info.kickoff.metricas?.auc.toFixed(3),   color: AUC_COLOR(info.kickoff.metricas?.auc ?? 0)  },
+          { label: "Modelo A AUC", val: info.modelo_a.metricas?.auc.toFixed(3),  color: AUC_COLOR(info.modelo_a.metricas?.auc ?? 0) },
+          { label: "Modelo 1 AUC", val: info.modelo1.metricas?.auc.toFixed(3),   color: AUC_COLOR(info.modelo1.metricas?.auc ?? 0)  },
+          { label: "Modelo 2 AUC", val: info.modelo2.metricas?.auc.toFixed(3),   color: AUC_COLOR(info.modelo2.metricas?.auc ?? 0)  },
+        ] as {label:string;val?:string;color:string}[]).map(({ label, val, color }) => (
+          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className={`text-xl font-bold tabular-nums ${color}`}>{val ?? "—"}</p>
+          </div>
+        ))}
+      </div>
+      {/* Línea base SPI */}
+      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 flex items-center gap-4 text-xs text-slate-400">
+        <span className={info.linea_base_spi.disponible ? "text-emerald-400" : "text-rose-400"}>
+          {info.linea_base_spi.disponible ? "✅" : "❌"} Línea base SPI
+        </span>
+        <span>{info.linea_base_spi.n_portafolios} portafolios: {info.linea_base_spi.portafolios.join(" · ")}</span>
+        <span className="ml-auto">{info.xlsx_disponible ? `Excel ${(info.xlsx_bytes/1024).toFixed(0)} KB` : "Sin Excel base"}</span>
+      </div>
+      {/* Cards de cada modelo */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <PklCard title="Modelo Kickoff — Riesgo de cronograma"   bloque={info.kickoff}  />
+        <PklCard title="Modelo A — Riesgo de alcance"            bloque={info.modelo_a} />
+        <PklCard title="Modelo 1 — Alerta mensual SPI"           bloque={info.modelo1}  />
+        <PklCard title="Modelo 2 — Riesgo estructural (early)"   bloque={info.modelo2}  />
+      </div>
+    </div>
+  );
+}
+
+type ProyTab = "kickoff" | "seguimiento" | "reentrenar" | "modelos";
 
 function ProyectosPanel() {
   const [tab, setTab]   = useState<ProyTab>("kickoff");
@@ -747,10 +883,24 @@ function ProyectosPanel() {
     } finally { setLoading(false); }
   }
 
+  const [info, setInfo] = useState<ProyectosInfoResponse | null>(null);
+  const [infoLoading, setInfoLoading] = useState(false);
+
+  async function loadInfo() {
+    if (info) return;
+    setInfoLoading(true);
+    try {
+      const r = await fetch("/api/cmmi/proyectos/info");
+      const j = await r.json();
+      if (r.ok) setInfo(j as ProyectosInfoResponse);
+    } finally { setInfoLoading(false); }
+  }
+
   const tabs: { id: ProyTab; label: string; icon: typeof Activity }[] = [
     { id: "kickoff",      label: "Kickoff",       icon: BarChart2     },
     { id: "seguimiento",  label: "Seguimiento",   icon: CalendarCheck },
     { id: "reentrenar",   label: "Reentrenar",    icon: Database      },
+    { id: "modelos",      label: "Modelos PKL",   icon: PieChart      },
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
@@ -763,7 +913,7 @@ function ProyectosPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id); reset(); }}
+            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos") loadInfo(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -909,6 +1059,21 @@ function ProyectosPanel() {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* ── MODELOS PKL ─────────────────────────────────────────────── */}
+      {tab === "modelos" && (
+        <div className="space-y-4">
+          {infoLoading && (
+            <div className="flex items-center gap-2 text-sm text-slate-400 py-6 justify-center">
+              <Clock size={15} className="animate-spin" /> Cargando info de modelos…
+            </div>
+          )}
+          {!infoLoading && !info && (
+            <p className="text-sm text-slate-500 text-center py-6">No se pudo cargar la información. ¿Está corriendo el microservicio?</p>
+          )}
+          {info && <PklInfoPanel info={info} />}
         </div>
       )}
 
