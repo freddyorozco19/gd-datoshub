@@ -771,12 +771,14 @@ function PklInfoPanel({ info }: { info: ProyectosInfoResponse }) {
   return (
     <div className="space-y-4">
       {/* Resumen global */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {([
           { label: "Kickoff AUC",  val: info.kickoff.metricas?.auc.toFixed(3),   color: AUC_COLOR(info.kickoff.metricas?.auc ?? 0)  },
           { label: "Modelo A AUC", val: info.modelo_a.metricas?.auc.toFixed(3),  color: AUC_COLOR(info.modelo_a.metricas?.auc ?? 0) },
           { label: "Modelo 1 AUC", val: info.modelo1.metricas?.auc.toFixed(3),   color: AUC_COLOR(info.modelo1.metricas?.auc ?? 0)  },
           { label: "Modelo 2 AUC", val: info.modelo2.metricas?.auc.toFixed(3),   color: AUC_COLOR(info.modelo2.metricas?.auc ?? 0)  },
+          { label: "Datos hasta",  val: info.fecha_datos_hasta ?? "—",            color: "text-sky-400"                               },
+          { label: "Proyectos",    val: info.n_proyectos ? String(info.n_proyectos) : "—", color: "text-slate-300"                  },
         ] as {label:string;val?:string;color:string}[]).map(({ label, val, color }) => (
           <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
             <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>

@@ -198,6 +198,8 @@ export interface ProyectosInfoResponse {
   linea_base_spi: { disponible: boolean; n_portafolios: number; portafolios: string[] };
   xlsx_disponible: boolean;
   xlsx_bytes: number;
+  fecha_datos_hasta: string | null;
+  n_proyectos: number;
 }
 
 export interface SeguimientoResponse {

@@ -401,6 +401,29 @@ def reentrenar(xlsx_bytes: bytes) -> dict:
     }
 
 
+def _fecha_datos_hasta() -> str | None:
+    if not XLSX_PROJ.exists():
+        return None
+    try:
+        import pandas as pd
+        df = pd.read_excel(XLSX_PROJ, usecols=["Fecha Análisis"])
+        mx = df["Fecha Análisis"].dropna().max()
+        return mx.strftime("%Y-%m") if not pd.isna(mx) else None
+    except Exception:
+        return None
+
+
+def _n_proyectos() -> int:
+    if not XLSX_PROJ.exists():
+        return 0
+    try:
+        import pandas as pd
+        df = pd.read_excel(XLSX_PROJ, usecols=["ProjectId"])
+        return int(df["ProjectId"].nunique())
+    except Exception:
+        return 0
+
+
 def _pkl_size(name: str) -> int:
     p = PROJ_DIR / name
     return p.stat().st_size if p.exists() else 0
@@ -462,8 +485,10 @@ def info_modelos() -> dict:
             "n_portafolios":     len((_lb_spi or {}).get("por_portafolio", {})),
             "portafolios":       list((_lb_spi or {}).get("por_portafolio", {}).keys()),
         },
-        "xlsx_disponible": XLSX_PROJ.exists(),
-        "xlsx_bytes":      XLSX_PROJ.stat().st_size if XLSX_PROJ.exists() else 0,
+        "xlsx_disponible":    XLSX_PROJ.exists(),
+        "xlsx_bytes":         XLSX_PROJ.stat().st_size if XLSX_PROJ.exists() else 0,
+        "fecha_datos_hasta":  _fecha_datos_hasta(),
+        "n_proyectos":        _n_proyectos(),
     }
 
 
