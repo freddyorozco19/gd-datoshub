@@ -22,6 +22,7 @@ from prep import curate_comercial
 from runner import execute, SCRIPTS_DIR, STORE_DIR
 import proyectos as proy
 import financiero as fin
+import datos as dat
 
 app = FastAPI(title="CMMI Models API", version="1.0.0")
 
@@ -77,6 +78,7 @@ def health() -> dict:
         "pkl_bundled":         BUNDLED_PKL.exists(),
         "proyectos":           proy.status(),
         "financiero":          fin.status(),
+        "datos":               dat.status(),
     }
 
 
@@ -169,6 +171,33 @@ def financiero_predecir(body: PrediccionInput) -> dict:
     """Predicción de utilidad via OLS (Modelo B, sin outliers |z|>2.5)."""
     try:
         return fin.predecir_utilidad(body.categoria, body.monto_cop)
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
+# ── DATOS (Gobierno de Datos) ──────────────────────────────────────────
+
+class DatosPrediccionInput(BaseModel):
+    categoria: str
+    periodo:   int = Field(..., ge=1)
+
+
+@app.get("/datos/lineas-base")
+def datos_lineas_base() -> dict:
+    """Líneas base SPC (CL/UCL/LCL/σ) por categoría y período."""
+    try:
+        return dat.lineas_base()
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
+@app.post("/datos/predecir")
+def datos_predecir(body: DatosPrediccionInput) -> dict:
+    """Modelo cuadrático Ĉ = β₀ + β_cat + β₁·P + β₂·P² con IC 95%."""
+    try:
+        return dat.predecir(body.categoria, body.periodo)
+    except ValueError as e:
+        raise HTTPException(422, str(e))
     except RuntimeError as e:
         raise HTTPException(503, str(e))
 

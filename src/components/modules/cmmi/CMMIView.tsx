@@ -5,7 +5,7 @@ import {
   ShieldCheck, Upload, FileSpreadsheet, X, Search,
   DollarSign, Trophy, TrendingDown, Clock, Layers, AlertCircle,
   Table2, Activity, Cpu, Play, Maximize2, Filter,
-  BarChart2, CalendarCheck, TrendingUp, PieChart,
+  BarChart2, CalendarCheck, TrendingUp, PieChart, Database, LineChart,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 import {
@@ -13,6 +13,7 @@ import {
   type SpcResponse, type RfTrainResponse, type CuracionMeta,
   type KickoffResponse, type SeguimientoResponse, type SemaforoProy, type LineaBaseSpi,
   type LineasBaseResponse, type PrediccionFinResponse, type LineaBaseBloque,
+  type LineasBaseDatosResponse, type PrediccionDatosResponse,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -1204,6 +1205,238 @@ function FinancieroPanel() {
   );
 }
 
+/* ── DATOS (Gobierno de Datos) ─────────────────────────────────────── */
+
+const CATEGORIAS_DATOS = [
+  "Calidad de Datos",
+  "Gestion Ciclo-Vida Datos",
+  "Integracion-Flujo Datos",
+  "Uso-Acceso Datos",
+] as const;
+
+type DatosTab = "predictor" | "lineas-base";
+
+function DatosPanel() {
+  const [tab, setTab]       = useState<DatosTab>("predictor");
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
+  const [notice, setNotice]   = useState<string | null>(null);
+
+  // Predictor
+  const [pCat,    setPCat]    = useState<string>(CATEGORIAS_DATOS[0]);
+  const [pPeriodo,setPPeriodo]= useState("");
+  const [pRes,    setPRes]    = useState<PrediccionDatosResponse | null>(null);
+
+  // Líneas base
+  const [lbRes,   setLbRes]   = useState<LineasBaseDatosResponse | null>(null);
+  const [lbLoaded,setLbLoaded]= useState(false);
+
+  function reset() { setError(null); setNotice(null); }
+
+  async function runPrediccion() {
+    reset(); setLoading(true); setPRes(null);
+    try {
+      const r = await fetch("/api/cmmi/datos/predecir", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoria: pCat, periodo: parseInt(pPeriodo) || 1 }),
+      });
+      const json = await r.json();
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error); return; }
+        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      }
+      setPRes(json as PrediccionDatosResponse);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al ejecutar el modelo.");
+    } finally { setLoading(false); }
+  }
+
+  async function loadLineasBase() {
+    reset(); setLoading(true); setLbRes(null);
+    try {
+      const r = await fetch("/api/cmmi/datos/lineas-base");
+      const json = await r.json();
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error); return; }
+        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      }
+      setLbRes(json as LineasBaseDatosResponse);
+      setLbLoaded(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al cargar líneas base.");
+    } finally { setLoading(false); }
+  }
+
+  const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
+  const labelCls = "text-xs font-medium text-slate-400 mb-1";
+
+  const semColors: Record<string, string> = {
+    VERDE:    "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+    AMARILLO: "text-amber-400   bg-amber-500/10   border-amber-500/20",
+    ROJO:     "text-rose-400    bg-rose-500/10    border-rose-500/20",
+  };
+
+  const tabs: { id: DatosTab; label: string; icon: typeof Activity }[] = [
+    { id: "predictor",   label: "Predictor",    icon: LineChart },
+    { id: "lineas-base", label: "Líneas base",  icon: Database  },
+  ];
+
+  return (
+    <div className="space-y-5">
+      {/* Tabs */}
+      <div className="flex items-center gap-1.5 border-b border-white/[0.07]">
+        {tabs.map(({ id, label, icon: Icon }) => (
+          <button key={id} onClick={() => { setTab(id); reset(); }}
+            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
+              tab === id ? "border-blue-500 text-blue-400"
+                        : "border-transparent text-slate-500 hover:text-slate-300 hover:border-white/20"
+            }`}>
+            <Icon size={15} /> {label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── PREDICTOR ─────────────────────────────────────────────── */}
+      {tab === "predictor" && (
+        <div className="space-y-5">
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
+            <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+              <LineChart size={16} className="text-indigo-400" />
+              Proyección de cubrimiento — Gobierno de Datos
+            </p>
+            <p className="text-xs text-slate-500">
+              Modelo cuadrático Ĉ = β₀ + β<sub>cat</sub> + β₁·P + β₂·P² · IC 95% · períodos históricos y futuros.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <p className={labelCls}>Categoría</p>
+                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={inputCls}>
+                  {CATEGORIAS_DATOS.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <p className={labelCls}>Período (número entero)</p>
+                <input type="number" min={1} value={pPeriodo}
+                  onChange={(e) => setPPeriodo(e.target.value)}
+                  placeholder="ej. 11 (siguiente al histórico)"
+                  className={inputCls} />
+              </div>
+            </div>
+            <button onClick={runPrediccion} disabled={loading || !pPeriodo}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
+              {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
+              {loading ? "Calculando…" : "Proyectar cubrimiento"}
+            </button>
+          </div>
+
+          {notice && <LocalOnlyNotice message={notice} />}
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+
+          {pRes && (
+            <div className="space-y-3">
+              {pRes.es_proyeccion && (
+                <div className="flex items-start gap-2 rounded-lg bg-blue-500/10 border border-blue-500/20 px-3 py-2 text-xs text-blue-400">
+                  <AlertCircle size={13} className="shrink-0 mt-0.5" />
+                  Período {pRes.periodo} está fuera del rango histórico (máx. P{pRes.periodo_max_historico}) — es una proyección.
+                </div>
+              )}
+              <div className={`rounded-xl border p-5 space-y-4 ${semColors[pRes.semaforo]}`}>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold uppercase tracking-wide opacity-70">
+                    {pRes.categoria} · P{pRes.periodo}
+                  </p>
+                  <span className="text-xs font-bold">{pRes.semaforo}</span>
+                </div>
+                <p className="text-4xl font-bold">{pRes.prediccion_pct}</p>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="bg-black/20 rounded-lg p-3">
+                    <p className="text-xs opacity-60 mb-1">IC {(pRes.nivel_confianza * 100).toFixed(0)}%</p>
+                    <p className="font-semibold">{pRes.ic_lo_pct} – {pRes.ic_hi_pct}</p>
+                  </div>
+                  <div className="bg-black/20 rounded-lg p-3">
+                    <p className="text-xs opacity-60 mb-1">Métricas del modelo</p>
+                    <p className="font-semibold text-xs">R²={pRes.modelo.r2} · RMSE={(pRes.modelo.rmse * 100).toFixed(2)}pp</p>
+                  </div>
+                </div>
+                <p className="text-xs opacity-60">MAE={( pRes.modelo.mae * 100).toFixed(2)}pp · RMSE-LOO={( pRes.modelo.rmse_loo * 100).toFixed(2)}pp · n={pRes.modelo.n}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── LÍNEAS BASE ───────────────────────────────────────────── */}
+      {tab === "lineas-base" && (
+        <div className="space-y-5">
+          {!lbLoaded && (
+            <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5">
+              <p className="text-sm text-slate-400 mb-4">
+                CL, UCL y LCL dinámicos por categoría y período (σ global por categoría).
+              </p>
+              <button onClick={loadLineasBase} disabled={loading}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
+                {loading ? <Clock size={15} className="animate-spin" /> : <Database size={15} />}
+                {loading ? "Cargando…" : "Cargar líneas base"}
+              </button>
+            </div>
+          )}
+
+          {notice && <LocalOnlyNotice message={notice} />}
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+
+          {lbRes && (
+            <div className="space-y-6">
+              {Object.entries(lbRes.categorias).map(([cat, data]) => (
+                <div key={cat} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-slate-200">{cat}</p>
+                    <span className="text-xs text-slate-500">σ = {(data.sigma * 100).toFixed(2)}%</span>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs text-slate-400">
+                      <thead>
+                        <tr className="border-b border-white/[0.06]">
+                          {["Período", "LCL", "CL", "UCL"].map((h) => (
+                            <th key={h} className="pb-2 text-left font-medium text-slate-500">{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.periodos.map((p) => {
+                          const cl  = (p.CL  * 100).toFixed(1) + "%";
+                          const ucl = (p.UCL * 100).toFixed(1) + "%";
+                          const lcl = (p.LCL * 100).toFixed(1) + "%";
+                          return (
+                            <tr key={p.periodo} className="border-b border-white/[0.03]">
+                              <td className="py-1.5 font-mono">P{p.periodo}</td>
+                              <td className="py-1.5 text-rose-400">{lcl}</td>
+                              <td className="py-1.5 text-emerald-400 font-semibold">{cl}</td>
+                              <td className="py-1.5 text-rose-400">{ucl}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Placeholder verticales pendientes ─────────────────────────────── */
 function PendingPanel({ label }: { label: string }) {
   return (
@@ -1256,6 +1489,7 @@ export default function CMMIView() {
         {active.id === "comercial"  && active.enabled ? <ComercialPanel />   :
          active.id === "proyectos"  && active.enabled ? <ProyectosPanel />   :
          active.id === "financiero" && active.enabled ? <FinancieroPanel />  :
+         active.id === "datos"      && active.enabled ? <DatosPanel />       :
          <PendingPanel label={active.label} />}
       </main>
     </div>

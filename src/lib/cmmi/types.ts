@@ -12,7 +12,7 @@ export const VERTICALES: VerticalConfig[] = [
   { id: "comercial",  label: "Comercial",  enabled: true  },
   { id: "proyectos",  label: "Proyectos",  enabled: true  },
   { id: "financiero", label: "Financiero", enabled: true  },
-  { id: "datos",      label: "Datos",      enabled: false },
+  { id: "datos",      label: "Datos",      enabled: true  },
 ];
 
 /* ── COMERCIAL · Oportunidad normalizada ───────────────────────────── */
@@ -150,6 +150,25 @@ export interface PrediccionFinResponse {
   rmse: number; semaforo: "VERDE" | "AMARILLO" | "ROJO";
   advertencia: string | null;
   modelo: { r2: number; r2a: number; pF: number; rmse: number; n: number };
+}
+
+/* ── DATOS (Gobierno de Datos) · Tipos ─────────────────────────────── */
+export interface LbPeriodo { periodo: number; CL: number; UCL: number; LCL: number; }
+export interface LbCategoria { sigma: number; periodos: LbPeriodo[]; }
+export interface LineasBaseDatosResponse {
+  categorias: Record<string, LbCategoria>;
+  periodos_disponibles: number[];
+}
+export interface PrediccionDatosResponse {
+  categoria: string; periodo: number;
+  prediccion: number; prediccion_pct: string;
+  ic_lo: number; ic_lo_pct: string;
+  ic_hi: number; ic_hi_pct: string;
+  nivel_confianza: number;
+  semaforo: "VERDE" | "AMARILLO" | "ROJO";
+  es_proyeccion: boolean;
+  periodo_max_historico: number;
+  modelo: { r2: number; rmse: number; mae: number; rmse_loo: number; n: number };
 }
 
 export interface SeguimientoResponse {
