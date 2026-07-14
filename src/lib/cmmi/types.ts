@@ -153,6 +153,22 @@ export interface PrediccionFinResponse {
 }
 
 /* ── DATOS (Gobierno de Datos) · Tipos ─────────────────────────────── */
+export interface DatosInfoCategoria {
+  n_obs: number; n_periodos: number; variables: string[];
+  cob_media: string; cob_min: string; cob_max: string;
+}
+export interface DatosInfoRegistro {
+  categoria: string; variable: string; periodo: number; cobertura: string; cob_v: number;
+}
+export interface DatosInfoResponse {
+  disponible: boolean;
+  n_obs?: number; n_categorias?: number; n_periodos?: number;
+  periodos?: number[]; variables?: string[]; xlsx_bytes?: number;
+  por_categoria?: Record<string, DatosInfoCategoria>;
+  registros?: DatosInfoRegistro[];
+  modelo_r2?: number | null; modelo_rmse?: number | null;
+}
+
 export interface LbPeriodo { periodo: number; CL: number; UCL: number; LCL: number; }
 export interface LbCategoria { sigma: number; periodos: LbPeriodo[]; }
 export interface LineasBaseDatosResponse {

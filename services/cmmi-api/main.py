@@ -233,6 +233,12 @@ def datos_cargar(file: UploadFile = File(...)) -> dict:
         raise HTTPException(500, f"Error al recargar: {e}")
 
 
+@app.get("/datos/info")
+def datos_info() -> dict:
+    """Resumen del Excel de entrenamiento de Gobierno de Datos."""
+    return dat.info_datos()
+
+
 @app.get("/datos/lineas-base")
 def datos_lineas_base() -> dict:
     """Líneas base SPC (CL/UCL/LCL/σ) por categoría y período."""

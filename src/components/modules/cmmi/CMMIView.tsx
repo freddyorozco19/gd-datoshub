@@ -17,6 +17,7 @@ import {
   type ProyectosInfoResponse, type PklBloque,
   type DatosOrigen, type DatosOrigenProyecto,
   type FinancieroInfoResponse, type FinancieroInfoProyecto,
+  type DatosInfoResponse, type DatosInfoRegistro,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -1586,7 +1587,7 @@ const CATEGORIAS_DATOS = [
   "Uso-Acceso Datos",
 ] as const;
 
-type DatosTab = "predictor" | "lineas-base";
+type DatosTab = "predictor" | "lineas-base" | "historico";
 
 function DatosPanel() {
   const [tab, setTab]       = useState<DatosTab>("predictor");
@@ -1602,6 +1603,10 @@ function DatosPanel() {
   // Líneas base
   const [lbRes,   setLbRes]   = useState<LineasBaseDatosResponse | null>(null);
   const [lbLoaded,setLbLoaded]= useState(false);
+
+  // Histórico
+  const [datosInfo, setDatosInfo] = useState<DatosInfoResponse | null>(null);
+  const [datosInfoLoaded, setDatosInfoLoaded] = useState(false);
 
   function reset() { setError(null); setNotice(null); }
 
@@ -1649,9 +1654,27 @@ function DatosPanel() {
     ROJO:     "text-rose-400    bg-rose-500/10    border-rose-500/20",
   };
 
+  async function loadDatosInfo() {
+    if (datosInfoLoaded) return;
+    reset(); setLoading(true);
+    try {
+      const r = await fetch("/api/cmmi/datos/info");
+      const json = await r.json();
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error); return; }
+        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      }
+      setDatosInfo(json as DatosInfoResponse);
+      setDatosInfoLoaded(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al cargar datos históricos.");
+    } finally { setLoading(false); }
+  }
+
   const tabs: { id: DatosTab; label: string; icon: typeof Activity }[] = [
-    { id: "predictor",   label: "Predictor",    icon: LineChart },
-    { id: "lineas-base", label: "Líneas base",  icon: Database  },
+    { id: "predictor",   label: "Predictor",       icon: LineChart },
+    { id: "lineas-base", label: "Líneas base",     icon: Database  },
+    { id: "historico",   label: "Data histórica",  icon: Table2    },
   ];
 
   return (
@@ -1659,7 +1682,7 @@ function DatosPanel() {
       {/* Tabs */}
       <div className="flex items-center gap-1.5 border-b border-white/[0.07]">
         {tabs.map(({ id, label, icon: Icon }) => (
-          <button key={id} onClick={() => { setTab(id); reset(); }}
+          <button key={id} onClick={() => { setTab(id); reset(); if (id === "historico") loadDatosInfo(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id ? "border-blue-500 text-blue-400"
                         : "border-transparent text-slate-500 hover:text-slate-300 hover:border-white/20"
@@ -1813,6 +1836,105 @@ function DatosPanel() {
         </div>
       )}
 
+      {/* ── DATA HISTÓRICA ───────────────────────────────────────── */}
+      {tab === "historico" && (
+        <div className="space-y-5">
+          {notice && <LocalOnlyNotice message={notice} />}
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+            </div>
+          )}
+          {loading && <p className="text-xs text-slate-500 animate-pulse">Cargando datos…</p>}
+          {datosInfo && datosInfo.disponible && <DatosHistoricoPanel info={datosInfo} />}
+          {datosInfo && !datosInfo.disponible && (
+            <p className="text-sm text-slate-500">Excel de entrenamiento no disponible en el servidor.</p>
+          )}
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+function DatosHistoricoPanel({ info }: { info: DatosInfoResponse }) {
+  const cobColor = (v: number) =>
+    v >= 0.90 ? "text-emerald-400" : v >= 0.70 ? "text-amber-400" : "text-rose-400";
+
+  const [catFiltro, setCatFiltro] = useState<string>("Todas");
+  const cats = ["Todas", ...Object.keys(info.por_categoria ?? {})];
+
+  const registrosFiltrados = (info.registros ?? []).filter(
+    (r: DatosInfoRegistro) => catFiltro === "Todas" || r.categoria === catFiltro
+  );
+
+  return (
+    <div className="space-y-4">
+      {/* KPI cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: "Observaciones",  val: String(info.n_obs ?? "—"),        color: "text-slate-200"  },
+          { label: "Categorías",     val: String(info.n_categorias ?? "—"), color: "text-sky-400"    },
+          { label: "Períodos",       val: String(info.n_periodos ?? "—"),   color: "text-indigo-400" },
+          { label: "R² modelo",      val: info.modelo_r2 != null ? info.modelo_r2.toFixed(3) : "—", color: "text-emerald-400" },
+        ].map(({ label, val, color }) => (
+          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className={`text-xl font-bold tabular-nums ${color}`}>{val}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Resumen por categoría */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {Object.entries(info.por_categoria ?? {}).map(([cat, c]) => (
+          <div key={cat} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-2">
+            <p className="text-xs font-semibold text-slate-300">{cat}</p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
+              <span className="text-slate-500">Observaciones</span>
+              <span className="text-slate-200 font-medium">{c.n_obs}</span>
+              <span className="text-slate-500">Períodos</span>
+              <span className="text-slate-200 font-medium">{c.n_periodos}</span>
+              <span className="text-slate-500">Cobertura media</span>
+              <span className={`font-medium ${cobColor(parseFloat(c.cob_media) / 100)}`}>{c.cob_media}</span>
+              <span className="text-slate-500">Rango</span>
+              <span className="text-slate-400">{c.cob_min} – {c.cob_max}</span>
+              <span className="text-slate-500">Variables</span>
+              <span className="text-slate-400 leading-tight">{c.variables.join(", ")}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Filtro + tabla */}
+      <div className="flex items-center gap-3">
+        <p className="text-xs font-semibold text-slate-300 flex items-center gap-2"><span>📋</span> Registros históricos</p>
+        <select value={catFiltro} onChange={e => setCatFiltro(e.target.value)}
+          className="ml-auto px-2 py-1 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs text-slate-300 focus:outline-none">
+          {cats.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
+      </div>
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.08] overflow-x-auto">
+        <table className="w-full text-[11px]">
+          <thead>
+            <tr className="border-b border-white/[0.06]">
+              {["Categoría", "Variable", "Período", "Cobertura"].map(h => (
+                <th key={h} className="px-3 py-2 text-left text-slate-500 font-medium whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {registrosFiltrados.map((r: DatosInfoRegistro, i: number) => (
+              <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
+                <td className="px-3 py-1.5 text-slate-400">{r.categoria}</td>
+                <td className="px-3 py-1.5 text-slate-300">{r.variable}</td>
+                <td className="px-3 py-1.5 text-slate-400 tabular-nums text-center">P{r.periodo}</td>
+                <td className={`px-3 py-1.5 font-medium tabular-nums ${cobColor(r.cob_v)}`}>{r.cobertura}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

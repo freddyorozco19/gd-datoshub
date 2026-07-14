@@ -205,6 +205,55 @@ def recargar(xlsx_bytes: bytes) -> dict:
     }
 
 
+def info_datos() -> dict:
+    """Resumen del Excel de entrenamiento de Gobierno de Datos."""
+    if _df is None or not XLSX.exists():
+        return {"disponible": False}
+
+    df = _df.copy()
+    cats = sorted(df[COL_CAT].unique().tolist())
+    periodos = sorted(df[COL_PER].unique().tolist())
+    vars_unicas = sorted(df[COL_VAR].unique().tolist())
+
+    # Resumen por categoría
+    por_cat: dict = {}
+    for cat, grp in df.groupby(COL_CAT):
+        cob = grp[COL_COB].dropna()
+        por_cat[str(cat)] = {
+            "n_obs":         int(len(grp)),
+            "n_periodos":    int(grp[COL_PER].nunique()),
+            "variables":     sorted(grp[COL_VAR].unique().tolist()),
+            "cob_media":     f"{float(cob.mean()):.1%}",
+            "cob_min":       f"{float(cob.min()):.1%}",
+            "cob_max":       f"{float(cob.max()):.1%}",
+        }
+
+    # Tabla detalle: una fila por (categoria, variable, periodo)
+    registros = []
+    for _, row in df.iterrows():
+        registros.append({
+            "categoria": str(row[COL_CAT]),
+            "variable":  str(row[COL_VAR]),
+            "periodo":   int(row[COL_PER]),
+            "cobertura": f"{row[COL_COB]:.1%}",
+            "cob_v":     round(float(row[COL_COB]), 4),
+        })
+
+    return {
+        "disponible":    True,
+        "n_obs":         int(len(df)),
+        "n_categorias":  len(cats),
+        "n_periodos":    len(periodos),
+        "periodos":      periodos,
+        "variables":     vars_unicas,
+        "xlsx_bytes":    XLSX.stat().st_size,
+        "por_categoria": por_cat,
+        "registros":     registros,
+        "modelo_r2":     round(_metricas["r2"],    4) if _metricas else None,
+        "modelo_rmse":   round(_metricas["rmse"],  4) if _metricas else None,
+    }
+
+
 def status() -> dict:
     return {
         "xlsx_disponible": XLSX.exists(),
