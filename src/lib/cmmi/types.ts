@@ -55,6 +55,24 @@ export interface OportunidadComercial {
   vinculante:       string;     // VINCULANTE | NO VINCULANTE
 }
 
+export interface RfStatusResponse {
+  disponible: boolean;
+  comerciales: string[];
+  lineas:      string[];
+  tipos_venta: string[];
+  segmentos:   string[];
+  auc_cv:      number | null;
+}
+export interface PredictOneResponse {
+  probabilidad:     number;
+  probabilidad_pct: string;
+  semaforo:         "VERDE" | "AMARILLO" | "ROJO";
+  nivel:            string;
+  avisos:           string[];
+  inputs:           { comercial: string; linea: string; tipo_venta: string; segmento: string; ingreso_cop: number };
+  modelo:           { auc_cv: number; acc_cv: number; n_total: number };
+}
+
 /** Resultado de un parseo de archivo */
 export interface ParseResult {
   records:   OportunidadComercial[];

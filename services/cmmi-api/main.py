@@ -23,6 +23,7 @@ from runner import execute, SCRIPTS_DIR, STORE_DIR
 import proyectos as proy
 import financiero as fin
 import datos as dat
+import comercial as com
 
 app = FastAPI(title="CMMI Models API", version="1.0.0")
 
@@ -80,6 +81,32 @@ def health() -> dict:
         "financiero":          fin.status(),
         "datos":               dat.status(),
     }
+
+
+class PredictOneInput(BaseModel):
+    comercial:   str
+    linea:       str
+    tipo_venta:  str
+    segmento:    str
+    ingreso_cop: float = Field(..., gt=0)
+
+
+@app.get("/comercial/rf/status")
+def comercial_rf_status() -> dict:
+    """Opciones disponibles para predicción individual (clases del encoder)."""
+    return com.status()
+
+
+@app.post("/comercial/rf/predict-one")
+def comercial_rf_predict_one(body: PredictOneInput) -> dict:
+    """Predice la probabilidad de ganar una oportunidad individual."""
+    try:
+        return com.predict_one(
+            body.comercial, body.linea, body.tipo_venta,
+            body.segmento, body.ingreso_cop,
+        )
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
 
 
 @app.post("/comercial/spc")

@@ -18,6 +18,7 @@ import {
   type DatosOrigen, type DatosOrigenProyecto,
   type FinancieroInfoResponse, type FinancieroInfoProyecto,
   type DatosInfoResponse, type DatosInfoRegistro,
+  type RfStatusResponse, type PredictOneResponse,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -394,9 +395,193 @@ function RfRunner({ file }: { file: File }) {
   );
 }
 
-type ComercialTab = "datos" | "spc" | "rf";
+type ComercialTab = "datos" | "spc" | "rf" | "predictor";
 
 /* ── Vista COMERCIAL ───────────────────────────────────────────────── */
+function PredictorOportunidad() {
+  const [rfStatus, setRfStatus]   = useState<RfStatusResponse | null>(null);
+  const [loading,  setLoading]    = useState(false);
+  const [error,    setError]      = useState<string | null>(null);
+  const [notice,   setNotice]     = useState<string | null>(null);
+  const [result,   setResult]     = useState<PredictOneResponse | null>(null);
+
+  const [comercial,  setComercial]  = useState("");
+  const [linea,      setLinea]      = useState("");
+  const [tipoVenta,  setTipoVenta]  = useState("");
+  const [segmento,   setSegmento]   = useState("");
+  const [ingreso,    setIngreso]    = useState("");
+
+  const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
+  const labelCls = "text-xs font-medium text-slate-400 mb-1";
+
+  const semBg: Record<string, string> = {
+    VERDE:    "border-emerald-500/30 bg-emerald-500/10",
+    AMARILLO: "border-amber-500/30   bg-amber-500/10",
+    ROJO:     "border-rose-500/30    bg-rose-500/10",
+  };
+  const semText: Record<string, string> = {
+    VERDE: "text-emerald-400", AMARILLO: "text-amber-400", ROJO: "text-rose-400",
+  };
+
+  async function loadStatus() {
+    if (rfStatus) return;
+    try {
+      const r = await fetch("/api/cmmi/comercial/rf/status");
+      const json = await r.json();
+      if (json.localOnly) { setNotice(json.error); return; }
+      if (json.disponible) setRfStatus(json as RfStatusResponse);
+    } catch { /* sin microservicio, se usarán valores por defecto */ }
+  }
+
+  useState(() => { loadStatus(); });
+
+  async function predecir() {
+    setError(null); setResult(null); setLoading(true);
+    try {
+      const r = await fetch("/api/cmmi/comercial/rf/predict-one", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          comercial:   comercial.trim() || "Desconocido",
+          linea:       linea,
+          tipo_venta:  tipoVenta,
+          segmento:    segmento,
+          ingreso_cop: parseFloat(ingreso.replace(/\./g, "").replace(",", ".")) || 0,
+        }),
+      });
+      const json = await r.json();
+      if (!r.ok) {
+        if (json.localOnly) { setNotice(json.error); return; }
+        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      }
+      setResult(json as PredictOneResponse);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al predecir.");
+    } finally { setLoading(false); }
+  }
+
+  const lineas      = rfStatus?.lineas      ?? ["CONSULTORÍA", "DATOS Y SISTEMAS DE INFORMACIÓN", "TI"];
+  const tiposVenta  = rfStatus?.tipos_venta ?? ["PROPIO", "REFERENCIADO"];
+  const segmentos   = rfStatus?.segmentos   ?? ["PRIVADO", "PUBLICO"];
+  const comerciales = rfStatus?.comerciales ?? [];
+
+  return (
+    <div className="space-y-5">
+      {notice && <LocalOnlyNotice message={notice} />}
+
+      <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
+        <div>
+          <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+            <Cpu size={16} className="text-indigo-400" /> Predicción de oportunidad individual
+          </p>
+          <p className="text-xs text-slate-500 mt-1">
+            Random Forest v2 · AUC-CV = {rfStatus?.auc_cv?.toFixed(3) ?? "0.789"} · Ingresa los datos de la oportunidad para estimar la probabilidad de ganar.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <p className={labelCls}>Ejecutivo comercial</p>
+            {comerciales.length > 0
+              ? <select value={comercial} onChange={e => setComercial(e.target.value)} className={inputCls}>
+                  <option value="">— Seleccionar o escribir —</option>
+                  {comerciales.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              : <input value={comercial} onChange={e => setComercial(e.target.value)}
+                  placeholder="Nombre del ejecutivo" className={inputCls} />
+            }
+          </div>
+
+          <div>
+            <p className={labelCls}>Línea de negocio</p>
+            <select value={linea} onChange={e => setLinea(e.target.value)} className={inputCls}>
+              <option value="">— Seleccionar —</option>
+              {lineas.map(l => <option key={l} value={l}>{l}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <p className={labelCls}>Tipo de venta</p>
+            <select value={tipoVenta} onChange={e => setTipoVenta(e.target.value)} className={inputCls}>
+              <option value="">— Seleccionar —</option>
+              {tiposVenta.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <p className={labelCls}>Segmento</p>
+            <select value={segmento} onChange={e => setSegmento(e.target.value)} className={inputCls}>
+              <option value="">— Seleccionar —</option>
+              {segmentos.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+
+          <div className="sm:col-span-2">
+            <p className={labelCls}>Ingreso esperado (COP)</p>
+            <input value={ingreso} onChange={e => setIngreso(e.target.value)}
+              placeholder="Ej: 500000000" type="number" min="0" className={inputCls} />
+          </div>
+        </div>
+
+        <button onClick={predecir} disabled={loading || !linea || !tipoVenta || !segmento || !ingreso}
+          className="flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
+          {loading ? "Calculando…" : "Predecir probabilidad"}
+        </button>
+      </div>
+
+      {error && (
+        <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
+        </div>
+      )}
+
+      {result && (
+        <div className={`rounded-xl border p-6 space-y-4 ${semBg[result.semaforo]}`}>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">Probabilidad de ganar</p>
+              <p className={`text-5xl font-bold tabular-nums ${semText[result.semaforo]}`}>{result.probabilidad_pct}</p>
+              <p className={`text-sm font-semibold mt-1 ${semText[result.semaforo]}`}>
+                {result.semaforo} · Confianza {result.nivel}
+              </p>
+            </div>
+            <div className="text-right text-xs text-slate-500 space-y-1">
+              <p>AUC-CV <span className="text-slate-300 font-mono">{result.modelo.auc_cv}</span></p>
+              <p>Acc-CV <span className="text-slate-300 font-mono">{result.modelo.acc_cv}</span></p>
+              <p>n entrenamiento <span className="text-slate-300 font-mono">{result.modelo.n_total}</span></p>
+            </div>
+          </div>
+
+          {result.avisos.length > 0 && (
+            <div className="space-y-1">
+              {result.avisos.map((a, i) => (
+                <p key={i} className="text-xs text-amber-400 flex items-center gap-1.5">
+                  <AlertCircle size={12} /> {a}
+                </p>
+              ))}
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-white/[0.08]">
+            {[
+              { label: "Ejecutivo",  val: result.inputs.comercial },
+              { label: "Línea",      val: result.inputs.linea },
+              { label: "Tipo venta", val: result.inputs.tipo_venta },
+              { label: "Segmento",   val: result.inputs.segmento },
+            ].map(({ label, val }) => (
+              <div key={label}>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+                <p className="text-xs text-slate-200 font-medium truncate">{val}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ComercialPanel() {
   const [data, setData] = useState<ParseResult | null>(null);
   const [rawFile, setRawFile] = useState<File | null>(null);
@@ -456,13 +641,30 @@ function ComercialPanel() {
   const hasFilters = !!(search || fLinea || fSegmento || fEstado);
 
   if (!data) {
-    return <UploadZone onFile={handleFile} loading={loading} error={error} />;
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-1.5 border-b border-white/[0.07] pb-0">
+          <button onClick={() => setTab("datos")}
+            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${tab !== "predictor" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500 hover:text-slate-300"}`}>
+            <Table2 size={15} /> Análisis histórico
+          </button>
+          <button onClick={() => setTab("predictor")}
+            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${tab === "predictor" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500 hover:text-slate-300"}`}>
+            <Cpu size={15} /> Predecir oportunidad
+          </button>
+        </div>
+        {tab === "predictor"
+          ? <PredictorOportunidad />
+          : <UploadZone onFile={handleFile} loading={loading} error={error} />}
+      </div>
+    );
   }
 
   const tabs: { id: ComercialTab; label: string; icon: typeof Table2 }[] = [
-    { id: "datos", label: "Datos",               icon: Table2   },
-    { id: "spc",   label: "SPC · Carta P (PPB)", icon: Activity },
-    { id: "rf",    label: "Random Forest (PPM)", icon: Cpu      },
+    { id: "datos",     label: "Datos",               icon: Table2   },
+    { id: "spc",       label: "SPC · Carta P (PPB)", icon: Activity },
+    { id: "rf",        label: "Random Forest (PPM)", icon: Cpu      },
+    { id: "predictor", label: "Predecir",             icon: TrendingUp },
   ];
 
   return (
@@ -502,8 +704,9 @@ function ComercialPanel() {
         })}
       </div>
 
-      {tab === "spc" && rawFile && <SpcRunner file={rawFile} />}
-      {tab === "rf"  && rawFile && <RfRunner  file={rawFile} />}
+      {tab === "spc"       && rawFile && <SpcRunner file={rawFile} />}
+      {tab === "rf"        && rawFile && <RfRunner  file={rawFile} />}
+      {tab === "predictor" && <PredictorOportunidad />}
 
       {tab === "datos" && (
       <>
