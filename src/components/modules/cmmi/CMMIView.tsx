@@ -400,8 +400,8 @@ function CuracionBar({ meta }: { meta: CuracionMeta }) {
 }
 
 /** Encabezado de panel de modelo con botón Ejecutar */
-function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun }: {
-  icon: typeof Activity; title: string; desc: string; loading: boolean; done: boolean; onRun: () => void;
+function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun, runLabel }: {
+  icon: typeof Activity; title: string; desc: string; loading: boolean; done: boolean; onRun: () => void; runLabel?: string;
 }) {
   return (
     <div className="flex items-start justify-between gap-4 flex-wrap bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] px-4 py-3.5">
@@ -420,7 +420,7 @@ function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun }: {
         className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
       >
         {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
-        {loading ? "Ejecutando…" : done ? "Volver a ejecutar" : "Ejecutar modelo"}
+        {loading ? "Ejecutando…" : done ? "Volver a ejecutar" : (runLabel ?? "Ejecutar modelo")}
       </button>
     </div>
   );
@@ -469,7 +469,7 @@ function SpcRunner({ file }: { file: File }) {
         icon={Activity}
         title="SPC · Carta de Control P (PPB)"
         desc="Línea base de desempeño del Win Rate competitivo por trimestre, con límites de control variables y reglas de Nelson."
-        loading={loading} done={!!res} onRun={run}
+        loading={loading} done={!!res} onRun={run} runLabel="Ejecutar línea base"
       />
       {notice && <LocalOnlyNotice message={notice} />}
       {error && (
