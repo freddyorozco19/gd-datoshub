@@ -7,7 +7,7 @@ const IS_HOSTED    = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 
 const ALLOWED_GET    = new Set(["lineas-base", "info"]);
 const ALLOWED_POST   = new Set(["predecir"]);
-const ALLOWED_UPLOAD = new Set(["cargar"]);
+const ALLOWED_UPLOAD = new Set(["cargar", "lineas-base-excel"]);
 
 const LOCAL_ONLY_MSG =
   "Los modelos de Gobierno de Datos requieren el microservicio Python. " +

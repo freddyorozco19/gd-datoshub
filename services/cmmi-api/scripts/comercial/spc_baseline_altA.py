@@ -810,8 +810,15 @@ def main():
     print('\n[1/5] Cargando y preparando datos...')
     trim, df_raw = cargar_datos(args.input)
 
+    # Fechas de cobertura de la data
+    fecha_col = pd.to_datetime(df_raw['Fecha Final'], errors='coerce').dropna()
+    fecha_min_str = fecha_col.min().strftime('%Y-%m') if not fecha_col.empty else None
+    fecha_max_str = fecha_col.max().strftime('%Y-%m') if not fecha_col.empty else None
+
     print('\n[2/5] Calculando estadísticos SPC...')
     trim, p_bar, stats = calcular_estadisticos(trim)
+    stats['fecha_min'] = fecha_min_str
+    stats['fecha_max'] = fecha_max_str
 
     print('\n[3/5] Aplicando Reglas de Nelson...')
     sig_df = aplicar_nelson(trim, p_bar)

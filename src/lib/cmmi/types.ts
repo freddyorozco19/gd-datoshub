@@ -189,9 +189,13 @@ export interface DatosInfoResponse {
 
 export interface LbPeriodo { periodo: number; CL: number; UCL: number; LCL: number; }
 export interface LbCategoria { sigma: number; periodos: LbPeriodo[]; }
+export interface LbGlobalDatos {
+  n: number; cl: number; sigma: number; cv: number; ucl: number; lcl: number;
+}
 export interface LineasBaseDatosResponse {
   categorias: Record<string, LbCategoria>;
   periodos_disponibles: number[];
+  global?: LbGlobalDatos;
 }
 export interface PrediccionDatosResponse {
   categoria: string; periodo: number;

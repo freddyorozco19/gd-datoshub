@@ -231,6 +231,38 @@ def financiero_lineas_base() -> dict:
         raise HTTPException(503, str(e))
 
 
+@app.post("/financiero/lineas-base-excel")
+def financiero_lineas_base_excel(file: UploadFile = File(...)) -> dict:
+    """Calcula líneas base (SPC + Nelson) desde un Excel subido sin persistirlo."""
+    try:
+        data = file.file.read()
+        import io, numpy as np, pandas as pd
+        from scipy.stats import shapiro
+        df = pd.read_excel(io.BytesIO(data))
+        requeridas = {"Utilidad del proyecto", "Categoría de proyecto"}
+        faltantes = requeridas - set(df.columns)
+        if faltantes:
+            raise HTTPException(400, f"Columnas faltantes: {faltantes}")
+        df = df.dropna(subset=["Utilidad del proyecto"])
+        df["Cat"] = df["Categoría de proyecto"].apply(fin._norm)
+        g_block = fin._stats_block(df["Utilidad del proyecto"].values)
+        counts = df["Cat"].value_counts()
+        cats_validas = counts[counts >= fin.N_MIN].index.tolist()
+        por_cat = {}
+        for cat in cats_validas:
+            sub = df[df["Cat"] == cat]
+            por_cat[cat] = fin._stats_block(sub["Utilidad del proyecto"].values)
+        return {
+            "global": g_block,
+            "por_categoria": por_cat,
+            "categorias_disponibles": cats_validas,
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, f"Error al procesar el archivo: {e}")
+
+
 @app.post("/financiero/predecir")
 def financiero_predecir(body: PrediccionInput) -> dict:
     """Predicción de utilidad via OLS (Modelo B, sin outliers |z|>2.5)."""
@@ -273,6 +305,15 @@ def datos_lineas_base() -> dict:
         return dat.lineas_base()
     except RuntimeError as e:
         raise HTTPException(503, str(e))
+
+
+@app.post("/datos/lineas-base-excel")
+def datos_lineas_base_excel(file: UploadFile = File(...)) -> dict:
+    """Calcula líneas base (CL global + por categoría) desde un Excel subido sin persistirlo."""
+    try:
+        return dat.lineas_base_desde_bytes(file.file.read())
+    except Exception as e:
+        raise HTTPException(500, f"Error al procesar el archivo: {e}")
 
 
 @app.post("/datos/predecir")

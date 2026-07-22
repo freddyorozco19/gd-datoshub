@@ -51,6 +51,125 @@ function lineaBadge(l: string): string {
   return "bg-white/[0.05] text-slate-400";
 }
 
+/* ── Marco de Medición — tabla de indicadores por área ─────────────── */
+type IndicadorRow = { indicador: string; construccion: string; tipo: "Sub-proceso" | "Contexto"; relevancia: string };
+type MarcoArea = { qppo: string; metrica: string; modelo: string; indicadores: IndicadorRow[] };
+
+const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoArea> = {
+  comercial: {
+    qppo: "Win Rate ≥ 44.4%",
+    metrica: "Ganadas / (Ganadas + Perdidas) · excluye Declinadas",
+    modelo: "Random Forest v2 · AUC = 0.804 · 596 oportunidades",
+    indicadores: [
+      { indicador: "Ejecutivo comercial",   construccion: "Quién lleva la oportunidad",            tipo: "Sub-proceso", relevancia: "Importancia 0.248 — predictor #1" },
+      { indicador: "Ingreso esperado (log)",construccion: "Valor COP transformado logarítmicamente",tipo: "Sub-proceso", relevancia: "Importancia 0.123 — predictor #2" },
+      { indicador: "Tipo de venta",         construccion: "PROPIO vs REFERENCIADO",                 tipo: "Contexto",    relevancia: "Importancia 0.073 — referido gana +10pp" },
+      { indicador: "Línea de negocio",      construccion: "TI / Datos y SI / Consultoría",          tipo: "Contexto",    relevancia: "Importancia 0.032" },
+      { indicador: "Segmento",              construccion: "PÚBLICO vs PRIVADO",                     tipo: "Contexto",    relevancia: "Importancia 0.023" },
+    ],
+  },
+  proyectos: {
+    qppo: "SPI ≥ 0.9301",
+    metrica: "EV / PV (Earned Value / Planned Value) — promedio mensual",
+    modelo: "Regresión logística · Modelo 1 AUC=0.88 · Modelo 2 AUC=0.85",
+    indicadores: [
+      { indicador: "SPI_lag2",     construccion: "SPI de hace 2 meses",                           tipo: "Sub-proceso", relevancia: "β = −1.45 — predictor más fuerte" },
+      { indicador: "SPI_lag1",     construccion: "SPI del mes anterior",                           tipo: "Sub-proceso", relevancia: "β = −1.28" },
+      { indicador: "VRA_lag1",     construccion: "(% Real − % Plan) / |% Plan|",                   tipo: "Sub-proceso", relevancia: "β = −1.28 — igual de predictivo que SPI" },
+      { indicador: "SPI_trend",    construccion: "SPI_lag1 − SPI_lag2",                            tipo: "Sub-proceso", relevancia: "β = −0.35 — dirección del cambio" },
+      { indicador: "VRA_trend",    construccion: "VRA_lag1 − VRA_lag2",                            tipo: "Sub-proceso", relevancia: "β = −0.35 — tendencia de la brecha" },
+      { indicador: "Mes relativo", construccion: "Fase del ciclo de vida normalizada [0–1]",        tipo: "Contexto",    relevancia: "β = −0.62" },
+      { indicador: "Portafolio",   construccion: "DATOS Y SI / TI / CONSULTORÍA",                  tipo: "Contexto",    relevancia: "β = −0.03" },
+      { indicador: "Líder",        construccion: "Codificación ordinal del líder del proyecto",     tipo: "Contexto",    relevancia: "β = +0.04" },
+    ],
+  },
+  financiero: {
+    qppo: "Utilidad ≥ 18.40%",
+    metrica: "Utilidad del proyecto (%) — proyectos terminados sin outliers |z|>2.5",
+    modelo: "OLS Regresión Lineal Modelo B · R²adj=16.3% · RMSE=8.79% · n=62",
+    indicadores: [
+      { indicador: "Categoría del proyecto", construccion: "13 tipos (Sostenibilidad, Infra, GD, TI…) codificadas como dummies", tipo: "Sub-proceso", relevancia: "Sostenibilidad β=+0.31 (p=0.005); Infra β=+0.18 (p=0.022)" },
+      { indicador: "Monto contratado",       construccion: "Valor del contrato en miles de millones COP",                       tipo: "Contexto",    relevancia: "β=−0.0003 (p=0.955 — no significativo en Modelo B)" },
+    ],
+  },
+  datos: {
+    qppo: "Cobertura global ≥ 91.89%",
+    metrica: "Promedio de cubrimiento de indicadores de Gobierno de Datos por período",
+    modelo: "Regresión cuadrática · Ĉ = β₀ + β_cat + β₁·P + β₂·P² · 10 períodos",
+    indicadores: [
+      { indicador: "Calidad de datos",        construccion: "Cubrimiento promedio de variables de calidad",            tipo: "Sub-proceso", relevancia: "CL=96.2% · σ=0.047 — tendencia ascendente ↑" },
+      { indicador: "Uso y acceso a datos",    construccion: "Cubrimiento promedio de variables de uso/acceso",         tipo: "Sub-proceso", relevancia: "CL=95.1% · σ=0.035 — más estable" },
+      { indicador: "Integración y flujo",     construccion: "Cubrimiento promedio de variables de integración",        tipo: "Sub-proceso", relevancia: "CL=90.5% · σ=0.089 — caída en P9→P10 ⚠" },
+      { indicador: "Gestión ciclo de vida",   construccion: "Cubrimiento promedio de 6 variables internas de ciclo",   tipo: "Sub-proceso", relevancia: "CL=88.7% · σ=0.141 — mayor riesgo" },
+      { indicador: "Período",                 construccion: "Número de período histórico (P1–P10)",                    tipo: "Contexto",    relevancia: "Coeficiente β lineal + β cuadrático" },
+    ],
+  },
+};
+
+function MarcoMedicion({ area }: { area: keyof typeof MARCO }) {
+  const m = MARCO[area];
+  return (
+    <div className="space-y-5">
+      {/* Encabezado QPPO */}
+      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-5 space-y-3">
+        <p className="text-xs font-semibold uppercase tracking-widest text-blue-400">QPPO</p>
+        <p className="text-2xl font-bold text-slate-100">{m.qppo}</p>
+        <p className="text-xs text-slate-400">{m.metrica}</p>
+        <div className="pt-1 border-t border-white/[0.06]">
+          <p className="text-xs text-slate-500">{m.modelo}</p>
+        </div>
+      </div>
+
+      {/* Tabla de indicadores */}
+      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
+        <div className="px-5 py-3 border-b border-white/[0.07]">
+          <p className="text-sm font-semibold text-slate-200">Indicadores involucrados en el modelo</p>
+          <p className="text-xs text-slate-500 mt-0.5">Variables que participan en la predicción del QPPO</p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/[0.07]">
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Indicador</th>
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Construcción</th>
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Tipo</th>
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Relevancia</th>
+              </tr>
+            </thead>
+            <tbody>
+              {m.indicadores.map((row, i) => (
+                <tr key={i} className="border-b border-white/[0.04] last:border-0 hover:bg-white/[0.02] transition-colors">
+                  <td className="px-4 py-3 font-medium text-slate-200 whitespace-nowrap">{row.indicador}</td>
+                  <td className="px-4 py-3 text-slate-400 text-xs">{row.construccion}</td>
+                  <td className="px-4 py-3">
+                    {row.tipo === "Sub-proceso"
+                      ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-500/10 text-blue-400 whitespace-nowrap">Sub-proceso</span>
+                      : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400 whitespace-nowrap">Contexto</span>
+                    }
+                  </td>
+                  <td className="px-4 py-3 text-slate-400 text-xs">{row.relevancia}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Leyenda */}
+      <div className="flex gap-4 flex-wrap">
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <span className="px-2 py-0.5 rounded-full text-[11px] bg-blue-500/10 text-blue-400">Sub-proceso</span>
+          Métrica que mide directamente la ejecución del proceso
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <span className="px-2 py-0.5 rounded-full text-[11px] bg-amber-500/10 text-amber-400">Contexto</span>
+          Variable de clasificación o atributo del ambiente
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── KPI card ──────────────────────────────────────────────────────── */
 function Kpi({ icon: Icon, label, value, tint }: {
   icon: typeof DollarSign; label: string; value: string; tint: string;
@@ -303,6 +422,23 @@ function SpcRunner({ file }: { file: File }) {
       {res && (
         <div className="space-y-4">
           <CuracionBar meta={res.curacion} />
+          {/* KPI card de cobertura temporal de la data */}
+          {(res.stats.resumen?.fecha_min || res.stats.resumen?.fecha_max) && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-xl border border-sky-500/20 bg-sky-500/10 px-4 py-3 text-center">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-sky-400">Datos desde</p>
+                <p className="mt-1 text-xl font-bold text-slate-200">
+                  {String(res.stats.resumen.fecha_min ?? "—")}
+                </p>
+              </div>
+              <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-center">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-400">Datos hasta</p>
+                <p className="mt-1 text-xl font-bold text-slate-200">
+                  {String(res.stats.resumen.fecha_max ?? "—")}
+                </p>
+              </div>
+            </div>
+          )}
           <StatCards stats={res.stats.resumen} />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <ModelImage b64={res.images.carta_p}      title="Carta de Control P" />
@@ -395,7 +531,7 @@ function RfRunner({ file }: { file: File }) {
   );
 }
 
-type ComercialTab = "datos" | "spc" | "rf" | "predictor";
+type ComercialTab = "datos" | "spc" | "rf" | "predictor" | "marco";
 
 /* ── Vista COMERCIAL ───────────────────────────────────────────────── */
 function PredictorOportunidad() {
@@ -661,10 +797,11 @@ function ComercialPanel() {
   }
 
   const tabs: { id: ComercialTab; label: string; icon: typeof Table2 }[] = [
-    { id: "datos",     label: "Datos",               icon: Table2   },
-    { id: "spc",       label: "SPC · Carta P (PPB)", icon: Activity },
-    { id: "rf",        label: "Random Forest (PPM)", icon: Cpu      },
+    { id: "datos",     label: "Datos",               icon: Table2     },
+    { id: "spc",       label: "SPC · Carta P (PPB)", icon: Activity   },
+    { id: "rf",        label: "Random Forest (PPM)", icon: Cpu        },
     { id: "predictor", label: "Predecir",             icon: TrendingUp },
+    { id: "marco",     label: "Marco de medición",   icon: ShieldCheck },
   ];
 
   return (
@@ -707,6 +844,7 @@ function ComercialPanel() {
       {tab === "spc"       && rawFile && <SpcRunner file={rawFile} />}
       {tab === "rf"        && rawFile && <RfRunner  file={rawFile} />}
       {tab === "predictor" && <PredictorOportunidad />}
+      {tab === "marco"     && <MarcoMedicion area="comercial" />}
 
       {tab === "datos" && (
       <>
@@ -1080,7 +1218,7 @@ function DatosOrigenPanel({ datos }: { datos: DatosOrigen }) {
   );
 }
 
-type ProyTab = "kickoff" | "seguimiento" | "reentrenar" | "modelos";
+type ProyTab = "kickoff" | "seguimiento" | "reentrenar" | "modelos" | "marco";
 
 function ProyectosPanel() {
   const [tab, setTab]   = useState<ProyTab>("kickoff");
@@ -1174,10 +1312,11 @@ function ProyectosPanel() {
   }
 
   const tabs: { id: ProyTab; label: string; icon: typeof Activity }[] = [
-    { id: "kickoff",      label: "Kickoff",       icon: BarChart2     },
-    { id: "seguimiento",  label: "Seguimiento",   icon: CalendarCheck },
-    { id: "reentrenar",   label: "Reentrenar",    icon: Database      },
-    { id: "modelos",      label: "Modelos PKL",   icon: PieChart      },
+    { id: "kickoff",     label: "Kickoff",            icon: BarChart2   },
+    { id: "seguimiento", label: "Seguimiento",         icon: CalendarCheck },
+    { id: "reentrenar",  label: "Reentrenar",          icon: Database    },
+    { id: "modelos",     label: "Modelos PKL",         icon: PieChart    },
+    { id: "marco",       label: "Marco de medición",   icon: ShieldCheck },
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
@@ -1380,6 +1519,8 @@ function ProyectosPanel() {
           />
         </div>
       )}
+
+      {tab === "marco" && <MarcoMedicion area="proyectos" />}
     </div>
   );
 }
@@ -1459,7 +1600,7 @@ const CATEGORIAS_FIN = [
   "Transformación Digital",
 ] as const;
 
-type FinTab = "predictor" | "lineas-base" | "datos";
+type FinTab = "predictor" | "lineas-base" | "datos" | "marco";
 
 const RIESGO_COLORS: Record<string, string> = {
   Bajo:  "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
@@ -1589,9 +1730,10 @@ function FinancieroPanel() {
   }
 
   const tabs: { id: FinTab; label: string; icon: typeof Activity }[] = [
-    { id: "predictor",    label: "Predictor",          icon: TrendingUp  },
-    { id: "lineas-base",  label: "Líneas base",        icon: PieChart    },
-    { id: "datos",        label: "Datos entrenamiento", icon: Database    },
+    { id: "predictor",   label: "Predictor",           icon: TrendingUp  },
+    { id: "lineas-base", label: "Líneas base",         icon: PieChart    },
+    { id: "datos",       label: "Datos entrenamiento", icon: Database    },
+    { id: "marco",       label: "Marco de medición",   icon: ShieldCheck },
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
@@ -1715,19 +1857,40 @@ function FinancieroPanel() {
       {tab === "lineas-base" && (
         <div className="space-y-5">
           {!lbLoaded && (
-            <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5">
-              <p className="text-sm text-slate-400 mb-4">
-                Calcula líneas base de control (SPC) y reglas de Nelson sobre los {" "}
-                <strong className="text-slate-300">~110 proyectos terminados</strong> del dataset histórico.
-              </p>
-              <button
-                onClick={loadLineasBase}
-                disabled={loading}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-              >
-                {loading ? <Clock size={15} className="animate-spin" /> : <PieChart size={15} />}
-                {loading ? "Cargando…" : "Cargar líneas base"}
-              </button>
+            <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-5">
+              {/* Opción 1: datos existentes */}
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-slate-300">Desde datos históricos</p>
+                <p className="text-xs text-slate-500">
+                  Calcula líneas base (SPC) y reglas de Nelson sobre los proyectos terminados ya cargados en el servidor.
+                </p>
+                <button
+                  onClick={loadLineasBase}
+                  disabled={loading}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                >
+                  {loading ? <Clock size={15} className="animate-spin" /> : <PieChart size={15} />}
+                  {loading ? "Cargando…" : "Cargar líneas base"}
+                </button>
+              </div>
+              {/* Divider */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 border-t border-white/[0.07]" />
+                <span className="text-xs text-slate-600">o</span>
+                <div className="flex-1 border-t border-white/[0.07]" />
+              </div>
+              {/* Opción 2: nuevo Excel */}
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-slate-300">Desde un nuevo archivo Excel</p>
+                <p className="text-xs text-slate-500">
+                  Sube un .xlsx con proyectos terminados para calcular CL, σ, UCL, LCL y reglas de Nelson en tiempo real.
+                </p>
+                <UploadExcelRefresh
+                  endpoint="/api/cmmi/financiero/lineas-base-excel"
+                  label="Arrastra o selecciona el Excel de utilidad"
+                  onSuccess={(res) => { setLbRes(res as unknown as LineasBaseResponse); setLbLoaded(true); }}
+                />
+              </div>
             </div>
           )}
 
@@ -1777,6 +1940,8 @@ function FinancieroPanel() {
           )}
         </div>
       )}
+
+      {tab === "marco" && <MarcoMedicion area="financiero" />}
     </div>
   );
 }
@@ -1790,7 +1955,7 @@ const CATEGORIAS_DATOS = [
   "Uso-Acceso Datos",
 ] as const;
 
-type DatosTab = "predictor" | "lineas-base" | "historico";
+type DatosTab = "predictor" | "lineas-base" | "historico" | "marco";
 
 function DatosPanel() {
   const [tab, setTab]       = useState<DatosTab>("predictor");
@@ -1875,9 +2040,10 @@ function DatosPanel() {
   }
 
   const tabs: { id: DatosTab; label: string; icon: typeof Activity }[] = [
-    { id: "predictor",   label: "Predictor",       icon: LineChart },
-    { id: "lineas-base", label: "Líneas base",     icon: Database  },
-    { id: "historico",   label: "Data histórica",  icon: Table2    },
+    { id: "predictor",   label: "Predictor",         icon: LineChart   },
+    { id: "lineas-base", label: "Líneas base",       icon: Database    },
+    { id: "historico",   label: "Data histórica",    icon: Table2      },
+    { id: "marco",       label: "Marco de medición", icon: ShieldCheck },
   ];
 
   return (
@@ -1979,15 +2145,30 @@ function DatosPanel() {
       {tab === "lineas-base" && (
         <div className="space-y-5">
           {!lbLoaded && (
-            <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5">
-              <p className="text-sm text-slate-400 mb-4">
-                CL, UCL y LCL dinámicos por categoría y período (σ global por categoría).
-              </p>
-              <button onClick={loadLineasBase} disabled={loading}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
-                {loading ? <Clock size={15} className="animate-spin" /> : <Database size={15} />}
-                {loading ? "Cargando…" : "Cargar líneas base"}
-              </button>
+            <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-5">
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-slate-300">Desde datos históricos</p>
+                <p className="text-xs text-slate-500">CL, UCL y LCL dinámicos por categoría y período (σ global por categoría).</p>
+                <button onClick={loadLineasBase} disabled={loading}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
+                  {loading ? <Clock size={15} className="animate-spin" /> : <Database size={15} />}
+                  {loading ? "Cargando…" : "Cargar líneas base"}
+                </button>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 border-t border-white/[0.07]" />
+                <span className="text-xs text-slate-600">o</span>
+                <div className="flex-1 border-t border-white/[0.07]" />
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-slate-300">Desde un nuevo archivo Excel</p>
+                <p className="text-xs text-slate-500">Sube el .xlsx de Gobierno de Datos para calcular CL, UCL, LCL globales y por categoría.</p>
+                <UploadExcelRefresh
+                  endpoint="/api/cmmi/datos/lineas-base-excel"
+                  label="Arrastra o selecciona el Excel de Gobierno de Datos"
+                  onSuccess={(res) => { setLbRes(res as unknown as LineasBaseDatosResponse); setLbLoaded(true); }}
+                />
+              </div>
             </div>
           )}
 
@@ -2000,6 +2181,24 @@ function DatosPanel() {
 
           {lbRes && (
             <div className="space-y-6">
+              {/* CL Global */}
+              {lbRes.global && (
+                <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 space-y-2">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-emerald-400">Global — Todas las categorías</p>
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    {([["LCL", lbRes.global.lcl], ["CL", lbRes.global.cl], ["UCL", lbRes.global.ucl]] as [string, number][]).map(([k, v]) => (
+                      <div key={k}>
+                        <p className="text-2xl font-bold text-slate-200">{(v * 100).toFixed(1)}%</p>
+                        <p className="text-xs text-slate-500">{k}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    n={lbRes.global.n} · σ={( lbRes.global.sigma * 100).toFixed(2)}% · CV={lbRes.global.cv.toFixed(1)}%
+                  </p>
+                </div>
+              )}
+              {/* Por categoría */}
               {Object.entries(lbRes.categorias).map(([cat, data]) => (
                 <div key={cat} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
                   <div className="flex items-center justify-between">
@@ -2016,19 +2215,14 @@ function DatosPanel() {
                         </tr>
                       </thead>
                       <tbody>
-                        {data.periodos.map((p) => {
-                          const cl  = (p.CL  * 100).toFixed(1) + "%";
-                          const ucl = (p.UCL * 100).toFixed(1) + "%";
-                          const lcl = (p.LCL * 100).toFixed(1) + "%";
-                          return (
-                            <tr key={p.periodo} className="border-b border-white/[0.03]">
-                              <td className="py-1.5 font-mono">P{p.periodo}</td>
-                              <td className="py-1.5 text-rose-400">{lcl}</td>
-                              <td className="py-1.5 text-emerald-400 font-semibold">{cl}</td>
-                              <td className="py-1.5 text-rose-400">{ucl}</td>
-                            </tr>
-                          );
-                        })}
+                        {data.periodos.map((p) => (
+                          <tr key={p.periodo} className="border-b border-white/[0.03]">
+                            <td className="py-1.5 font-mono">P{p.periodo}</td>
+                            <td className="py-1.5 text-rose-400">{(p.LCL * 100).toFixed(1)}%</td>
+                            <td className="py-1.5 text-emerald-400 font-semibold">{(p.CL * 100).toFixed(1)}%</td>
+                            <td className="py-1.5 text-rose-400">{(p.UCL * 100).toFixed(1)}%</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -2056,6 +2250,7 @@ function DatosPanel() {
         </div>
       )}
 
+      {tab === "marco" && <MarcoMedicion area="datos" />}
     </div>
   );
 }

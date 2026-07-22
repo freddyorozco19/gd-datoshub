@@ -123,10 +123,55 @@ _load()
 
 # ── API pública ────────────────────────────────────────────────────────
 
+def _global_block(df: "pd.DataFrame") -> dict:
+    vals = df[COL_COB].values
+    mean = float(np.mean(vals))
+    std  = float(np.std(vals, ddof=1)) if len(vals) > 1 else 0.0
+    cv   = abs(std / mean * 100) if mean != 0 else 0.0
+    return {
+        "n":     int(len(vals)),
+        "cl":    round(mean, 4),
+        "sigma": round(std, 6),
+        "cv":    round(cv, 2),
+        "ucl":   round(min(mean + 3 * std, 1.0), 4),
+        "lcl":   round(max(mean - 3 * std, 0.0), 4),
+    }
+
+
 def lineas_base() -> dict:
-    if _lb_data is None:
+    if _lb_data is None or _df is None:
         raise RuntimeError("Datos de GobiernoDatos no disponibles.")
-    return _lb_data
+    return {**_lb_data, "global": _global_block(_df)}
+
+
+def lineas_base_desde_bytes(xlsx_bytes: bytes) -> dict:
+    import io
+    df = pd.read_excel(io.BytesIO(xlsx_bytes))
+    df = df.sort_values(COL_PER).reset_index(drop=True)
+    sigma_global = df.groupby(COL_CAT)[COL_COB].std().rename("Sigma")
+    cl = (df.groupby([COL_CAT, COL_PER])[COL_COB]
+            .mean().reset_index().rename(columns={COL_COB: "CL"}))
+    cl = cl.merge(sigma_global, on=COL_CAT)
+    cl["UCL"] = (cl["CL"] + 3 * cl["Sigma"]).clip(upper=1.0)
+    cl["LCL"] = (cl["CL"] - 3 * cl["Sigma"]).clip(lower=0.0)
+    categorias = sorted(df[COL_CAT].unique().tolist())
+    lb: dict = {}
+    for cat in categorias:
+        sub = cl[cl[COL_CAT] == cat].sort_values(COL_PER)
+        sigma = float(sub["Sigma"].iloc[0]) if len(sub) else 0.0
+        lb[cat] = {
+            "sigma": round(sigma, 6),
+            "periodos": [
+                {"periodo": int(r[COL_PER]), "CL": round(float(r["CL"]), 4),
+                 "UCL": round(float(r["UCL"]), 4), "LCL": round(float(r["LCL"]), 4)}
+                for _, r in sub.iterrows()
+            ],
+        }
+    return {
+        "categorias": lb,
+        "periodos_disponibles": sorted(df[COL_PER].unique().tolist()),
+        "global": _global_block(df),
+    }
 
 
 def predecir(categoria: str, periodo: int | float) -> dict:
