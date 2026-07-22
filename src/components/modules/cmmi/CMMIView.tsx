@@ -903,6 +903,13 @@ function ComercialPanel() {
   const [fLinea, setFLinea] = useState("");
   const [fSegmento, setFSegmento] = useState("");
   const [fEstado, setFEstado] = useState("");
+  const [sortCol, setSortCol] = useState<keyof OportunidadComercial | null>(null);
+  const [sortAsc, setSortAsc] = useState(true);
+
+  function toggleSort(col: keyof OportunidadComercial) {
+    if (sortCol === col) setSortAsc((a) => !a);
+    else { setSortCol(col); setSortAsc(true); }
+  }
 
   async function handleFile(file: File) {
     setError(null); setLoading(true);
@@ -929,14 +936,22 @@ function ComercialPanel() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return records.filter((r) => {
+    const base = records.filter((r) => {
       if (fLinea && r.linea !== fLinea) return false;
       if (fSegmento && r.segmento !== fSegmento) return false;
       if (fEstado && r.ganado !== fEstado) return false;
       if (q && !(`${r.oportunidad} ${r.cliente} ${r.comercial} ${r.clienteFinal}`.toLowerCase().includes(q))) return false;
       return true;
     });
-  }, [records, search, fLinea, fSegmento, fEstado]);
+    if (!sortCol) return base;
+    return [...base].sort((a, b) => {
+      const va = a[sortCol]; const vb = b[sortCol];
+      const na = typeof va === "number", nb = typeof vb === "number";
+      const cmp = na && nb ? (va as number) - (vb as number)
+        : String(va ?? "").localeCompare(String(vb ?? ""), "es");
+      return sortAsc ? cmp : -cmp;
+    });
+  }, [records, search, fLinea, fSegmento, fEstado, sortCol, sortAsc]);
 
   const kpis = useMemo(() => {
     const total = filtered.length;
@@ -1070,9 +1085,28 @@ function ComercialPanel() {
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
               <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
-                {["Oportunidad", "Cliente", "Comercial", "Línea", "Segmento", "Ingreso esp.", "Estado", "Etapa actual", "Creado"].map((h, i) => (
-                  <th key={h} className={`px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap ${i === 5 ? "text-right" : "text-left"}`}>{h}</th>
-                ))}
+                {([
+                  ["oportunidad",    "Oportunidad",  false],
+                  ["cliente",        "Cliente",       false],
+                  ["comercial",      "Comercial",     false],
+                  ["linea",          "Línea",         false],
+                  ["segmento",       "Segmento",      false],
+                  ["ingresoEsperado","Ingreso esp.",  true ],
+                  ["ganado",         "Estado",        false],
+                  ["etapaActual",    "Etapa actual",  false],
+                  ["creado",         "Creado",        false],
+                ] as [keyof OportunidadComercial, string, boolean][]).map(([col, label, right]) => {
+                  const active = sortCol === col;
+                  return (
+                    <th key={col} onClick={() => toggleSort(col)}
+                      className={`px-4 py-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap cursor-pointer select-none transition-colors hover:text-slate-300 ${active ? "text-blue-400" : "text-slate-500"} ${right ? "text-right" : "text-left"}`}>
+                      <span className="inline-flex items-center gap-1">
+                        {label}
+                        <span className="text-[10px]">{active ? (sortAsc ? "▲" : "▼") : "⇅"}</span>
+                      </span>
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.04]">
