@@ -86,11 +86,21 @@ function buildColMap(headerRow: unknown[]): Record<keyof Omit<OportunidadComerci
 
   for (const [field, aliases] of Object.entries(HEADER_ALIASES) as [keyof typeof HEADER_ALIASES, string[]][]) {
     let idx = -1;
+    // Pase 1: match exacto
     for (const alias of aliases) {
       const normAlias = alias.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-      // Exact match primero; includes solo para aliases suficientemente específicos (>6 chars)
-      idx = normalized.findIndex((h) => h === normAlias || (normAlias.length > 6 && h.includes(normAlias)));
+      idx = normalized.findIndex((h) => h === normAlias);
       if (idx !== -1) break;
+    }
+    // Pase 2: includes solo si no hubo match exacto y el alias es suficientemente específico
+    if (idx === -1) {
+      for (const alias of aliases) {
+        const normAlias = alias.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+        if (normAlias.length > 8) {
+          idx = normalized.findIndex((h) => h.includes(normAlias));
+          if (idx !== -1) break;
+        }
+      }
     }
     map[field] = idx;
   }
