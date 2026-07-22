@@ -52,7 +52,7 @@ function lineaBadge(l: string): string {
 }
 
 /* ── Marco de Medición — tabla de indicadores por área ─────────────── */
-type IndicadorRow = { indicador: string; construccion: string; tipo: "Sub-proceso" | "Contexto"; relevancia: string };
+type IndicadorRow = { indicador: string; construccion: string; tipo: "Sub-proceso" | "Contexto"; origen: "Calculado" | "Input"; relevancia: string };
 type MarcoArea = { qppo: string; metrica: string; modelo: string; indicadores: IndicadorRow[] };
 
 const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoArea> = {
@@ -61,11 +61,11 @@ const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoAre
     metrica: "Ganadas / (Ganadas + Perdidas) · excluye Declinadas",
     modelo: "Random Forest v2 · AUC = 0.804 · 596 oportunidades",
     indicadores: [
-      { indicador: "Ejecutivo comercial",   construccion: "Quién lleva la oportunidad",            tipo: "Sub-proceso", relevancia: "Importancia 0.248 — predictor #1" },
-      { indicador: "Ingreso esperado (log)",construccion: "Valor COP transformado logarítmicamente",tipo: "Sub-proceso", relevancia: "Importancia 0.123 — predictor #2" },
-      { indicador: "Tipo de venta",         construccion: "PROPIO vs REFERENCIADO",                 tipo: "Contexto",    relevancia: "Importancia 0.073 — referido gana +10pp" },
-      { indicador: "Línea de negocio",      construccion: "TI / Datos y SI / Consultoría",          tipo: "Contexto",    relevancia: "Importancia 0.032" },
-      { indicador: "Segmento",              construccion: "PÚBLICO vs PRIVADO",                     tipo: "Contexto",    relevancia: "Importancia 0.023" },
+      { indicador: "Ejecutivo comercial",   construccion: "Quién lleva la oportunidad",             tipo: "Sub-proceso", origen: "Input",      relevancia: "Importancia 0.248 — predictor #1" },
+      { indicador: "Ingreso esperado (log)",construccion: "Valor COP transformado logarítmicamente", tipo: "Sub-proceso", origen: "Calculado",  relevancia: "Importancia 0.123 — predictor #2" },
+      { indicador: "Tipo de venta",         construccion: "PROPIO vs REFERENCIADO",                  tipo: "Contexto",    origen: "Input",      relevancia: "Importancia 0.073 — referido gana +10pp" },
+      { indicador: "Línea de negocio",      construccion: "TI / Datos y SI / Consultoría",           tipo: "Contexto",    origen: "Input",      relevancia: "Importancia 0.032" },
+      { indicador: "Segmento",              construccion: "PÚBLICO vs PRIVADO",                      tipo: "Contexto",    origen: "Input",      relevancia: "Importancia 0.023" },
     ],
   },
   proyectos: {
@@ -73,14 +73,14 @@ const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoAre
     metrica: "EV / PV (Earned Value / Planned Value) — promedio mensual",
     modelo: "Regresión logística · Modelo 1 AUC=0.88 · Modelo 2 AUC=0.85",
     indicadores: [
-      { indicador: "SPI_lag2",     construccion: "SPI de hace 2 meses",                           tipo: "Sub-proceso", relevancia: "β = −1.45 — predictor más fuerte" },
-      { indicador: "SPI_lag1",     construccion: "SPI del mes anterior",                           tipo: "Sub-proceso", relevancia: "β = −1.28" },
-      { indicador: "VRA_lag1",     construccion: "(% Real − % Plan) / |% Plan|",                   tipo: "Sub-proceso", relevancia: "β = −1.28 — igual de predictivo que SPI" },
-      { indicador: "SPI_trend",    construccion: "SPI_lag1 − SPI_lag2",                            tipo: "Sub-proceso", relevancia: "β = −0.35 — dirección del cambio" },
-      { indicador: "VRA_trend",    construccion: "VRA_lag1 − VRA_lag2",                            tipo: "Sub-proceso", relevancia: "β = −0.35 — tendencia de la brecha" },
-      { indicador: "Mes relativo", construccion: "Fase del ciclo de vida normalizada [0–1]",        tipo: "Contexto",    relevancia: "β = −0.62" },
-      { indicador: "Portafolio",   construccion: "DATOS Y SI / TI / CONSULTORÍA",                  tipo: "Contexto",    relevancia: "β = −0.03" },
-      { indicador: "Líder",        construccion: "Codificación ordinal del líder del proyecto",     tipo: "Contexto",    relevancia: "β = +0.04" },
+      { indicador: "SPI_lag2",     construccion: "SPI de hace 2 meses — shift(2) sobre histórico",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.45 — predictor más fuerte" },
+      { indicador: "SPI_lag1",     construccion: "SPI del mes anterior — shift(1) sobre histórico",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28" },
+      { indicador: "VRA_lag1",     construccion: "(% Real − % Plan) / |% Plan| del mes anterior",            tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28 — igual de predictivo que SPI" },
+      { indicador: "SPI_trend",    construccion: "SPI_lag1 − SPI_lag2 (derivado en el pipeline)",            tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — dirección del cambio" },
+      { indicador: "VRA_trend",    construccion: "VRA_lag1 − VRA_lag2 (derivado en el pipeline)",            tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — tendencia de la brecha" },
+      { indicador: "Mes relativo", construccion: "Fase del ciclo de vida normalizada [0–1]",                 tipo: "Contexto",    origen: "Calculado", relevancia: "β = −0.62" },
+      { indicador: "Portafolio",   construccion: "DATOS Y SI / TI / CONSULTORÍA",                            tipo: "Contexto",    origen: "Input",     relevancia: "β = −0.03" },
+      { indicador: "Líder",        construccion: "Codificación ordinal del líder del proyecto",               tipo: "Contexto",    origen: "Input",     relevancia: "β = +0.04" },
     ],
   },
   financiero: {
@@ -88,8 +88,8 @@ const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoAre
     metrica: "Utilidad del proyecto (%) — proyectos terminados sin outliers |z|>2.5",
     modelo: "OLS Regresión Lineal Modelo B · R²adj=16.3% · RMSE=8.79% · n=62",
     indicadores: [
-      { indicador: "Categoría del proyecto", construccion: "13 tipos (Sostenibilidad, Infra, GD, TI…) codificadas como dummies", tipo: "Sub-proceso", relevancia: "Sostenibilidad β=+0.31 (p=0.005); Infra β=+0.18 (p=0.022)" },
-      { indicador: "Monto contratado",       construccion: "Valor del contrato en miles de millones COP",                       tipo: "Contexto",    relevancia: "β=−0.0003 (p=0.955 — no significativo en Modelo B)" },
+      { indicador: "Categoría del proyecto", construccion: "13 tipos (Sostenibilidad, Infra, GD, TI…) codificadas como dummies", tipo: "Sub-proceso", origen: "Input",     relevancia: "Sostenibilidad β=+0.31 (p=0.005); Infra β=+0.18 (p=0.022)" },
+      { indicador: "Monto contratado",       construccion: "Valor del contrato en miles de millones COP",                        tipo: "Contexto",    origen: "Input",     relevancia: "β=−0.0003 (p=0.955 — no significativo en Modelo B)" },
     ],
   },
   datos: {
@@ -97,11 +97,11 @@ const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoAre
     metrica: "Promedio de cubrimiento de indicadores de Gobierno de Datos por período",
     modelo: "Regresión cuadrática · Ĉ = β₀ + β_cat + β₁·P + β₂·P² · 10 períodos",
     indicadores: [
-      { indicador: "Calidad de datos",        construccion: "Cubrimiento promedio de variables de calidad",            tipo: "Sub-proceso", relevancia: "CL=96.2% · σ=0.047 — tendencia ascendente ↑" },
-      { indicador: "Uso y acceso a datos",    construccion: "Cubrimiento promedio de variables de uso/acceso",         tipo: "Sub-proceso", relevancia: "CL=95.1% · σ=0.035 — más estable" },
-      { indicador: "Integración y flujo",     construccion: "Cubrimiento promedio de variables de integración",        tipo: "Sub-proceso", relevancia: "CL=90.5% · σ=0.089 — caída en P9→P10 ⚠" },
-      { indicador: "Gestión ciclo de vida",   construccion: "Cubrimiento promedio de 6 variables internas de ciclo",   tipo: "Sub-proceso", relevancia: "CL=88.7% · σ=0.141 — mayor riesgo" },
-      { indicador: "Período",                 construccion: "Número de período histórico (P1–P10)",                    tipo: "Contexto",    relevancia: "Coeficiente β lineal + β cuadrático" },
+      { indicador: "Calidad de datos",      construccion: "Promedio de cubrimiento de variables de calidad agrupado por período",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=96.2% · σ=0.047 — tendencia ascendente ↑" },
+      { indicador: "Uso y acceso a datos",  construccion: "Promedio de cubrimiento de variables de uso/acceso agrupado por período",       tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=95.1% · σ=0.035 — más estable" },
+      { indicador: "Integración y flujo",   construccion: "Promedio de cubrimiento de variables de integración agrupado por período",      tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=90.5% · σ=0.089 — caída en P9→P10 ⚠" },
+      { indicador: "Gestión ciclo de vida", construccion: "Promedio de cubrimiento de 6 variables internas de ciclo agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=88.7% · σ=0.141 — mayor riesgo" },
+      { indicador: "Período",               construccion: "Número de período histórico (P1–P10)",                                          tipo: "Contexto",    origen: "Input",     relevancia: "Coeficiente β lineal + β cuadrático" },
     ],
   },
 };
@@ -133,6 +133,7 @@ function MarcoMedicion({ area }: { area: keyof typeof MARCO }) {
                 <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Indicador</th>
                 <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Construcción</th>
                 <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Tipo</th>
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Origen</th>
                 <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Relevancia</th>
               </tr>
             </thead>
@@ -145,6 +146,12 @@ function MarcoMedicion({ area }: { area: keyof typeof MARCO }) {
                     {row.tipo === "Sub-proceso"
                       ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-500/10 text-blue-400 whitespace-nowrap">Sub-proceso</span>
                       : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400 whitespace-nowrap">Contexto</span>
+                    }
+                  </td>
+                  <td className="px-4 py-3">
+                    {row.origen === "Calculado"
+                      ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-violet-500/10 text-violet-400 whitespace-nowrap">Calculado</span>
+                      : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-500/10 text-slate-400 whitespace-nowrap">Input</span>
                     }
                   </td>
                   <td className="px-4 py-3 text-slate-400 text-xs">{row.relevancia}</td>
@@ -164,6 +171,14 @@ function MarcoMedicion({ area }: { area: keyof typeof MARCO }) {
         <div className="flex items-center gap-1.5 text-xs text-slate-500">
           <span className="px-2 py-0.5 rounded-full text-[11px] bg-amber-500/10 text-amber-400">Contexto</span>
           Variable de clasificación o atributo del ambiente
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <span className="px-2 py-0.5 rounded-full text-[11px] bg-violet-500/10 text-violet-400">Calculado</span>
+          El modelo lo deriva internamente desde los datos históricos
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <span className="px-2 py-0.5 rounded-full text-[11px] bg-slate-500/10 text-slate-400">Input</span>
+          Viene directamente del sistema origen (Excel / CRM)
         </div>
       </div>
     </div>
