@@ -1,0 +1,7 @@
+services:
+  cmmi-api:
+    build: .
+    container_name: cmmi-api
+    restart: unless-stopped
+    ports:
+      - "8008:8008"
