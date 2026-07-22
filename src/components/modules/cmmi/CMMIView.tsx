@@ -723,6 +723,7 @@ function PredictorOportunidad() {
   const [ingreso,    setIngreso]    = useState("");
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
+  const selectCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select";
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
 
   const semBg: Record<string, string> = {
@@ -794,7 +795,7 @@ function PredictorOportunidad() {
           <div>
             <p className={labelCls}>Ejecutivo comercial</p>
             {comerciales.length > 0
-              ? <select value={comercial} onChange={e => setComercial(e.target.value)} className={inputCls}>
+              ? <select value={comercial} onChange={e => setComercial(e.target.value)} className={selectCls}>
                   <option value="">— Seleccionar o escribir —</option>
                   {comerciales.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -805,7 +806,7 @@ function PredictorOportunidad() {
 
           <div>
             <p className={labelCls}>Línea de negocio</p>
-            <select value={linea} onChange={e => setLinea(e.target.value)} className={inputCls}>
+            <select value={linea} onChange={e => setLinea(e.target.value)} className={selectCls}>
               <option value="">— Seleccionar —</option>
               {lineas.map(l => <option key={l} value={l}>{l}</option>)}
             </select>
@@ -813,7 +814,7 @@ function PredictorOportunidad() {
 
           <div>
             <p className={labelCls}>Tipo de venta</p>
-            <select value={tipoVenta} onChange={e => setTipoVenta(e.target.value)} className={inputCls}>
+            <select value={tipoVenta} onChange={e => setTipoVenta(e.target.value)} className={selectCls}>
               <option value="">— Seleccionar —</option>
               {tiposVenta.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
@@ -821,7 +822,7 @@ function PredictorOportunidad() {
 
           <div>
             <p className={labelCls}>Segmento</p>
-            <select value={segmento} onChange={e => setSegmento(e.target.value)} className={inputCls}>
+            <select value={segmento} onChange={e => setSegmento(e.target.value)} className={selectCls}>
               <option value="">— Seleccionar —</option>
               {segmentos.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
@@ -1058,15 +1059,15 @@ function ComercialPanel() {
             className="pl-9 pr-4 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors w-72"
           />
         </div>
-        <select value={fLinea} onChange={(e) => setFLinea(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors">
+        <select value={fLinea} onChange={(e) => setFLinea(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select">
           <option value="">Todas las líneas</option>
           {opciones.lineas.map((l) => <option key={l} value={l}>{l}</option>)}
         </select>
-        <select value={fSegmento} onChange={(e) => setFSegmento(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors">
+        <select value={fSegmento} onChange={(e) => setFSegmento(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select">
           <option value="">Todos los segmentos</option>
           {opciones.segmentos.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
-        <select value={fEstado} onChange={(e) => setFEstado(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors">
+        <select value={fEstado} onChange={(e) => setFEstado(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select">
           <option value="">Todos los estados</option>
           {opciones.estados.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
@@ -1547,6 +1548,7 @@ function ProyectosPanel() {
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
+  const selectCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select";
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
 
   return (
@@ -1582,7 +1584,7 @@ function ProyectosPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <p className={labelCls}>Portafolio</p>
-                <select value={kPort} onChange={(e) => setKPort(e.target.value)} className={inputCls}>
+                <select value={kPort} onChange={(e) => setKPort(e.target.value)} className={selectCls}>
                   {PORTAFOLIOS.map((p) => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
@@ -1646,7 +1648,7 @@ function ProyectosPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <p className={labelCls}>Portafolio</p>
-                <select value={sPort} onChange={(e) => setSPort(e.target.value)} className={inputCls}>
+                <select value={sPort} onChange={(e) => setSPort(e.target.value)} className={selectCls}>
                   {PORTAFOLIOS.map((p) => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
@@ -2070,6 +2072,7 @@ function FinancieroPanel() {
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
+  const selectCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select";
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
 
   const semColors: Record<string, string> = {
@@ -2111,7 +2114,7 @@ function FinancieroPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <p className={labelCls}>Categoría del proyecto</p>
-                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={inputCls}>
+                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={selectCls}>
                   {CATEGORIAS_FIN.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
@@ -2347,6 +2350,7 @@ function DatosPanel() {
   }
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
+  const selectCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select";
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
 
   const semColors: Record<string, string> = {
@@ -2408,7 +2412,7 @@ function DatosPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <p className={labelCls}>Categoría</p>
-                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={inputCls}>
+                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={selectCls}>
                   {CATEGORIAS_DATOS.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
@@ -2641,7 +2645,7 @@ function DatosHistoricoPanel({ info }: { info: DatosInfoResponse }) {
       <div className="flex items-center gap-3">
         <p className="text-xs font-semibold text-slate-300 flex items-center gap-2"><span>📋</span> Registros históricos</p>
         <select value={catFiltro} onChange={e => setCatFiltro(e.target.value)}
-          className="ml-auto px-2 py-1 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs text-slate-300 focus:outline-none">
+          className="ml-auto px-2 py-1 rounded-lg border border-white/[0.08] bg-[#141824] text-xs text-slate-300 focus:outline-none cmmi-select">
           {cats.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
       </div>
