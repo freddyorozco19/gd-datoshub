@@ -949,24 +949,25 @@ function ModeloRfPanel() {
         <span><span className="text-slate-500">Tamaño PKL:</span> {((info.pkl_bytes ?? 0) / 1024).toFixed(1)} KB</span>
       </div>
 
-      {/* Métricas detalladas */}
-      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
-        <p className="text-xs font-semibold text-slate-300">Métricas de evaluación (5-fold CV)</p>
-        <div className="grid grid-cols-3 gap-2 text-center">
-          {[
-            { label: "Precisión", val: `${(m.precision*100).toFixed(1)}%` },
-            { label: "Recall",    val: `${(m.recall*100).toFixed(1)}%` },
-            { label: "F1",        val: `${(m.f1*100).toFixed(1)}%` },
-            { label: "Brier",     val: m.brier.toFixed(4) },
-            { label: "FPR",       val: `${(m.f1*100).toFixed(1)}%` },
-          ].map(({ label, val }) => (
-            <div key={label} className="bg-black/20 rounded-lg py-2">
-              <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
-              <p className="text-sm font-semibold text-slate-200 tabular-nums">{val}</p>
-            </div>
-          ))}
+      {/* Métricas detalladas (solo si el PKL las guardó) */}
+      {m.precision > 0 && (
+        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
+          <p className="text-xs font-semibold text-slate-300">Métricas de evaluación (5-fold CV)</p>
+          <div className="grid grid-cols-3 gap-2 text-center">
+            {[
+              { label: "Precisión", val: `${(m.precision*100).toFixed(1)}%` },
+              { label: "Recall",    val: `${(m.recall*100).toFixed(1)}%` },
+              { label: "F1",        val: `${(m.f1*100).toFixed(1)}%` },
+              { label: "Brier",     val: m.brier.toFixed(4) },
+            ].map(({ label, val }) => (
+              <div key={label} className="bg-black/20 rounded-lg py-2">
+                <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+                <p className="text-sm font-semibold text-slate-200 tabular-nums">{val}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Importancia de variables */}
       {info.importancia && info.importancia.length > 0 && (
