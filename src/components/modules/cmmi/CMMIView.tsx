@@ -22,6 +22,7 @@ import {
   type LineasBaseSpiResponse, type LbSpiPortafolio,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
+import * as XLSX from "xlsx";
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 const fmtCOP = (v: number): string =>
@@ -1779,6 +1780,15 @@ function ProyectosPanel() {
       {/* ── SEGUIMIENTO ─────────────────────────────────────────────── */}
       {tab === "seguimiento" && (
         <div className="space-y-5">
+          <SeguimientoExcelPicker onAutoFill={(v) => {
+            if (v.portafolio && PORTAFOLIOS.includes(v.portafolio)) setSPort(v.portafolio);
+            setSLider(v.lider);
+            setSMes(v.mesRel);
+            setSSpi1(v.spi1);
+            setSVra1(v.vra1);
+            setSSpi2(v.spi2);
+            setSSpiObs(v.spiObs);
+          }} />
           <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
             <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
               <CalendarCheck size={16} className="text-indigo-400" />
@@ -1988,6 +1998,217 @@ function LbSpiPanel({ data }: { data: LineasBaseSpiResponse }) {
               })}
             </tbody>
           </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Parser Excel de proyectos para auto-rellenar Seguimiento ──────── */
+type ProyMes = { mesRel: number; spi: number; vra: number };
+type ProySerie = { id: string; portafolio: string; lider: string; meses: ProyMes[] };
+
+function parseProyectosExcel(data: ArrayBuffer): ProySerieConNombre[] {
+  const wb   = XLSX.read(data, { type: "array" });
+  const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(wb.Sheets[wb.SheetNames[0]], { defval: "" });
+
+  const norm = (s: unknown) => String(s ?? "").trim();
+  const byId = new Map<string, ProySerie>();
+
+  for (const row of rows) {
+    const id = norm(row["ProjectId"]) || norm(row["projectid"]) || norm(row["ID"]);
+    if (!id) continue;
+    if (!byId.has(id)) {
+      byId.set(id, {
+        id,
+        portafolio: norm(row["Portafolio"]),
+        lider:      norm(row["ProjectOwnerName"]),
+        meses:      [],
+      });
+    }
+    const mesRel = Number(row["Mes Relativo"] ?? 0);
+    const spi    = Number(row["SPI (Schedule Performance Index)"] ?? row["SPI"] ?? 0);
+    const vra    = Number(row["Variación Relativa Avance"] ?? row["VRA"] ?? 0);
+    byId.get(id)!.meses.push({ mesRel, spi, vra });
+  }
+
+  return Array.from(byId.values())
+    .filter(p => p.meses.length > 0)
+    .map(p => ({ ...p, meses: p.meses.sort((a, b) => a.mesRel - b.mesRel) }));
+}
+type ProySerieConNombre = ProySerie;
+
+/* ── Picker Excel para Seguimiento (auto-rellena el formulario) ─────── */
+function SeguimientoExcelPicker({ onAutoFill }: {
+  onAutoFill: (vals: {
+    portafolio: string; lider: string; mesRel: string;
+    spi1: string; vra1: string; spi2: string; spiObs: string;
+  }) => void;
+}) {
+  const [open, setOpen]           = useState(false);
+  const [series, setSeries]       = useState<ProySerieConNombre[]>([]);
+  const [selId, setSelId]         = useState("");
+  const [ghFiles, setGhFiles]     = useState<GhFile[]>([]);
+  const [ghLoading, setGhLoading] = useState(false);
+  const [ghError, setGhError]     = useState<string | null>(null);
+  const [downloading, setDownloading] = useState<string | null>(null);
+  const [parseError, setParseError]   = useState<string | null>(null);
+  const [mode, setMode]           = useState<"upload" | "github">("github");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  async function loadGhFiles() {
+    if (ghFiles.length) return;
+    setGhLoading(true); setGhError(null);
+    try {
+      const r = await fetch(GH_PROYECTOS_API);
+      const j: { name: string; download_url: string; size: number; type: string }[] = await r.json();
+      setGhFiles(j.filter(f => f.type === "file" && f.name.endsWith(".xlsx")));
+    } catch { setGhError("No se pudo conectar con GitHub."); }
+    finally { setGhLoading(false); }
+  }
+
+  async function handleFile(file: File) {
+    setParseError(null); setSeries([]); setSelId("");
+    try {
+      const buf    = await file.arrayBuffer();
+      const result = parseProyectosExcel(buf);
+      if (!result.length) throw new Error("No se encontraron proyectos válidos.");
+      setSeries(result);
+      setSelId(result[0].id);
+    } catch (e) {
+      setParseError(e instanceof Error ? e.message : "Error al leer el archivo.");
+    }
+  }
+
+  async function pickGhFile(f: GhFile) {
+    setDownloading(f.name);
+    try {
+      const res  = await fetch(f.download_url);
+      const blob = await res.blob();
+      await handleFile(new File([blob], f.name, { type: blob.type }));
+    } catch { setGhError(`No se pudo descargar ${f.name}.`); }
+    finally { setDownloading(null); }
+  }
+
+  function applyAutoFill() {
+    const serie = series.find(s => s.id === selId);
+    if (!serie) return;
+    const m = serie.meses;
+    const last  = m[m.length - 1];
+    const prev  = m[m.length - 2];
+    const prev2 = m[m.length - 3];
+    onAutoFill({
+      portafolio: serie.portafolio,
+      lider:      serie.lider,
+      mesRel:     last  ? last.mesRel.toFixed(3)  : "",
+      spi1:       prev  ? prev.spi.toFixed(4)      : "",
+      vra1:       prev  ? prev.vra.toFixed(4)      : "",
+      spi2:       prev2 ? prev2.spi.toFixed(4)     : "",
+      spiObs:     last  ? last.spi.toFixed(4)      : "",
+    });
+    setOpen(false);
+  }
+
+  const ghIcon = <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 shrink-0"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.42 7.88 10.95.58.1.79-.25.79-.55v-2.02c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.02 11.02 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.13v3.17c0 .3.2.66.8.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>;
+  const btnBase   = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors";
+  const btnActive = `${btnBase} bg-indigo-600 text-white`;
+  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:bg-white/[0.08] hover:text-slate-200`;
+
+  useState(() => { loadGhFiles(); });
+
+  return (
+    <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-4 space-y-3">
+      <button onClick={() => setOpen(o => !o)}
+        className="flex items-center gap-2 text-sm font-medium text-indigo-300 hover:text-indigo-200 transition-colors w-full text-left">
+        <FileSpreadsheet size={15} />
+        Calcular SPI y VRA desde Excel
+        <span className="ml-auto text-xs text-indigo-500">{open ? "▲ ocultar" : "▼ expandir"}</span>
+      </button>
+
+      {open && (
+        <div className="space-y-3 pt-1 border-t border-indigo-500/15">
+          <p className="text-xs text-slate-500">Sube o selecciona el Excel histórico de proyectos — los campos se rellenan automáticamente con los últimos 2 reportes del proyecto seleccionado.</p>
+
+          {/* Selector modo */}
+          <div className="flex gap-2">
+            <button onClick={() => setMode("upload")} className={mode === "upload" ? btnActive : btnIdle}>
+              <Upload size={13} /> Dispositivo
+            </button>
+            <button onClick={() => { setMode("github"); loadGhFiles(); }} className={mode === "github" ? btnActive : btnIdle}>
+              {ghIcon} GitHub
+            </button>
+          </div>
+
+          {mode === "upload" && (
+            <div onClick={() => inputRef.current?.click()}
+              className="flex items-center gap-3 px-4 py-3 rounded-lg border border-dashed border-white/[0.12] bg-white/[0.02] hover:border-indigo-500/40 cursor-pointer transition-colors">
+              <Upload size={15} className="text-slate-500 shrink-0" />
+              <span className="text-xs text-slate-500">Seleccionar Excel de proyectos…</span>
+              <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }} />
+            </div>
+          )}
+
+          {mode === "github" && (
+            <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
+              <div className="px-3 py-2 border-b border-white/[0.06] flex items-center gap-2 text-xs text-slate-500">
+                {ghIcon} FreddyOrozcoGrowData/CMMI-Hub · data/Proyectos
+              </div>
+              {ghLoading && <p className="px-3 py-4 text-xs text-slate-500 text-center">Cargando…</p>}
+              {ghError   && <p className="px-3 py-3 text-xs text-rose-400">{ghError}</p>}
+              {!ghLoading && ghFiles.map(f => (
+                <button key={f.name} onClick={() => pickGhFile(f)} disabled={!!downloading}
+                  className="w-full flex items-center justify-between px-3 py-2.5 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left disabled:opacity-60">
+                  <div className="flex items-center gap-2">
+                    <FileSpreadsheet size={14} className="text-indigo-400 shrink-0" />
+                    <span className="text-xs text-slate-200">{f.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                    <span>{(f.size / 1024).toFixed(0)} KB</span>
+                    {downloading === f.name
+                      ? <Clock size={12} className="animate-spin text-indigo-400" />
+                      : <span className="text-indigo-400 font-medium">Usar</span>}
+                  </div>
+                </button>
+              ))}
+              {!ghLoading && !ghFiles.length && !ghError && (
+                <p className="px-3 py-4 text-xs text-slate-500 text-center">No hay archivos .xlsx.</p>
+              )}
+            </div>
+          )}
+
+          {parseError && <p className="text-xs text-rose-400">{parseError}</p>}
+
+          {series.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs text-slate-400 font-medium">Selecciona el proyecto:</p>
+              <select value={selId} onChange={e => setSelId(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-xs text-slate-300 focus:outline-none cmmi-select">
+                {series.map(s => (
+                  <option key={s.id} value={s.id}>
+                    {s.id} — {s.lider || "Sin líder"} · {s.portafolio} · {s.meses.length} reportes
+                  </option>
+                ))}
+              </select>
+              {selId && (() => {
+                const s = series.find(p => p.id === selId)!;
+                const last = s.meses[s.meses.length - 1];
+                const prev = s.meses[s.meses.length - 2];
+                return (
+                  <div className="bg-black/20 rounded-lg px-3 py-2 text-[11px] text-slate-400 space-y-0.5">
+                    <p><span className="text-slate-500">Mes relativo:</span> <span className="text-slate-200 font-medium tabular-nums">{last?.mesRel.toFixed(3)}</span></p>
+                    <p><span className="text-slate-500">SPI lag1 (mes anterior):</span> <span className="text-slate-200 font-medium tabular-nums">{prev?.spi.toFixed(4) ?? "—"}</span></p>
+                    <p><span className="text-slate-500">VRA lag1:</span> <span className="text-slate-200 font-medium tabular-nums">{prev?.vra.toFixed(4) ?? "—"}</span></p>
+                    <p><span className="text-slate-500">SPI observado (este mes):</span> <span className="text-slate-200 font-medium tabular-nums">{last?.spi.toFixed(4)}</span></p>
+                  </div>
+                );
+              })()}
+              <button onClick={applyAutoFill}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors">
+                <Play size={13} /> Rellenar formulario
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
