@@ -25,7 +25,7 @@ const HEADER_ALIASES: Record<keyof Omit<OportunidadComercial, "rowId">, string[]
   fabricante:            ["fabricante", "manufacturer", "marca"],
   actualizado:           ["actualizado", "ultima actualizacion", "última actualización", "last update"],
   cliente:               ["cliente", "customer", "account"],
-  oportunidad:           ["oportunidad", "nombre oportunidad", "opportunity name", "nombre"],
+  oportunidad:           ["nombre oportunidad", "oportunidad", "opportunity name", "nombre de la oportunidad"],
   linea:                 ["linea", "línea", "línea de negocio", "linea de negocio", "business line"],
   consultoriaCOP:        ["consultoria cop", "consultoría cop", "consultoria", "consultoría"],
   datosCOP:              ["datos cop", "datos"],
@@ -88,7 +88,8 @@ function buildColMap(headerRow: unknown[]): Record<keyof Omit<OportunidadComerci
     let idx = -1;
     for (const alias of aliases) {
       const normAlias = alias.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-      idx = normalized.findIndex((h) => h === normAlias || h.includes(normAlias));
+      // Exact match primero; includes solo para aliases suficientemente específicos (>6 chars)
+      idx = normalized.findIndex((h) => h === normAlias || (normAlias.length > 6 && h.includes(normAlias)));
       if (idx !== -1) break;
     }
     map[field] = idx;
