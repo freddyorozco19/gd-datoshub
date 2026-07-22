@@ -302,7 +302,7 @@ type GhFile = { name: string; download_url: string; size: number };
 function ComercialSourcePicker({ onFile, loading, error }: {
   onFile: (f: File) => void; loading: boolean; error: string | null;
 }) {
-  const [mode, setMode] = useState<"upload" | "github">("upload");
+  const [mode, setMode] = useState<"upload" | "github">("github");
   const [ghFiles, setGhFiles] = useState<GhFile[]>([]);
   const [ghLoading, setGhLoading] = useState(false);
   const [ghError, setGhError] = useState<string | null>(null);
