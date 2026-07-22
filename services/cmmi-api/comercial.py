@@ -60,6 +60,55 @@ def status() -> dict:
     }
 
 
+def info() -> dict:
+    """Metadatos completos del PKL cargado: métricas, features, importancia."""
+    _reload_if_newer()
+    if _art is None:
+        return {"disponible": False}
+
+    pkl = _PKL_STORED if _PKL_STORED.exists() else _PKL_BUNDLED
+    pkl_bytes = pkl.stat().st_size if pkl.exists() else 0
+
+    metrics = _art.get("metrics", {})
+    modelo  = _art.get("modelo")
+    enc     = _art.get("encoders", {})
+
+    features = ["Comercial", "Linea de Negocio", "Tipo de Venta", "Segmento", "log_ingreso"]
+    importancia = []
+    if modelo is not None and hasattr(modelo, "feature_importances_"):
+        total = float(modelo.feature_importances_.sum()) or 1.0
+        for feat, imp in zip(features, modelo.feature_importances_):
+            importancia.append({
+                "variable":   feat,
+                "importancia": round(float(imp), 4),
+                "pct":         f"{float(imp)/total*100:.1f}%",
+            })
+        importancia.sort(key=lambda x: x["importancia"], reverse=True)
+
+    comerciales = list(enc.get("Comercial", {}).classes_) if hasattr(enc.get("Comercial"), "classes_") else []
+
+    return {
+        "disponible":  True,
+        "version":     _art.get("version", "v2"),
+        "descripcion": "Random Forest · clasificación binaria Ganado/Perdido",
+        "algoritmo":   "RandomForestClassifier (scikit-learn)",
+        "features":    features,
+        "pkl_bytes":   pkl_bytes,
+        "n_comerciales": len(comerciales),
+        "comerciales": comerciales,
+        "metricas": {
+            "auc_cv":    round(metrics.get("auc_cv",    0), 4),
+            "acc_cv":    round(metrics.get("acc_cv",    0), 4),
+            "precision": round(metrics.get("precision", 0), 4),
+            "recall":    round(metrics.get("recall",    0), 4),
+            "f1":        round(metrics.get("f1",        0), 4),
+            "brier":     round(metrics.get("brier",     0), 4),
+            "n_total":   int(metrics.get("n_total",     0)),
+        },
+        "importancia": importancia,
+    }
+
+
 def predict_one(
     comercial:      str,
     linea:          str,

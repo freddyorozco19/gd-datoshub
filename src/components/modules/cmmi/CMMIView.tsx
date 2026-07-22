@@ -18,7 +18,7 @@ import {
   type DatosOrigen, type DatosOrigenProyecto,
   type FinancieroInfoResponse, type FinancieroInfoProyecto,
   type DatosInfoResponse, type DatosInfoRegistro,
-  type RfStatusResponse, type PredictOneResponse,
+  type RfStatusResponse, type PredictOneResponse, type RfInfoResponse,
   type LineasBaseSpiResponse, type LbSpiPortafolio,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
@@ -706,7 +706,7 @@ function RfRunner({ file }: { file: File }) {
   );
 }
 
-type ComercialTab = "datos" | "spc" | "rf" | "predictor" | "marco";
+type ComercialTab = "datos" | "spc" | "rf" | "predictor" | "modelo-rf" | "marco";
 
 /* ── Vista COMERCIAL ───────────────────────────────────────────────── */
 function PredictorOportunidad() {
@@ -894,6 +894,126 @@ function PredictorOportunidad() {
   );
 }
 
+/* ── Modelo RF Panel (info PKL Comercial) ──────────────────────────── */
+function ModeloRfPanel() {
+  const [info, setInfo]       = useState<RfInfoResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [notice, setNotice]   = useState<string | null>(null);
+
+  useState(() => {
+    setLoading(true);
+    fetch("/api/cmmi/comercial/rf/info")
+      .then((r) => r.json())
+      .then((j) => {
+        if (j.localOnly) { setNotice(j.error); return; }
+        setInfo(j as RfInfoResponse);
+      })
+      .catch(() => setNotice("No se pudo contactar el microservicio."))
+      .finally(() => setLoading(false));
+  });
+
+  if (loading) return (
+    <div className="flex items-center gap-2 text-sm text-slate-400 py-8 justify-center">
+      <Clock size={15} className="animate-spin" /> Cargando info del modelo…
+    </div>
+  );
+  if (notice) return <LocalOnlyNotice message={notice} />;
+  if (!info?.disponible) return (
+    <p className="text-sm text-slate-500 text-center py-8">Modelo no disponible. Entrena primero desde la pestaña Random Forest (PPM).</p>
+  );
+
+  const m = info.metricas!;
+  const aucColor = m.auc_cv >= 0.80 ? "text-emerald-400" : m.auc_cv >= 0.70 ? "text-yellow-400" : "text-rose-400";
+
+  return (
+    <div className="space-y-4">
+      {/* KPIs */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: "AUC-CV",     val: m.auc_cv.toFixed(3),              color: aucColor },
+          { label: "Acc-CV",     val: `${(m.acc_cv*100).toFixed(1)}%`,  color: "text-slate-200" },
+          { label: "n observ.",  val: m.n_total.toLocaleString("es-CO"), color: "text-slate-200" },
+          { label: "Comerciales",val: String(info.n_comerciales ?? "—"), color: "text-sky-400" },
+        ].map(({ label, val, color }) => (
+          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 text-center">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className={`text-2xl font-bold tabular-nums ${color}`}>{val}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Info modelo */}
+      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-xs text-slate-400 flex flex-wrap gap-4">
+        <span><span className="text-slate-500">Algoritmo:</span> {info.algoritmo ?? "—"}</span>
+        <span><span className="text-slate-500">Versión:</span> {info.version ?? "—"}</span>
+        <span><span className="text-slate-500">Tamaño PKL:</span> {((info.pkl_bytes ?? 0) / 1024).toFixed(1)} KB</span>
+      </div>
+
+      {/* Métricas detalladas */}
+      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
+        <p className="text-xs font-semibold text-slate-300">Métricas de evaluación (5-fold CV)</p>
+        <div className="grid grid-cols-3 gap-2 text-center">
+          {[
+            { label: "Precisión", val: `${(m.precision*100).toFixed(1)}%` },
+            { label: "Recall",    val: `${(m.recall*100).toFixed(1)}%` },
+            { label: "F1",        val: `${(m.f1*100).toFixed(1)}%` },
+            { label: "Brier",     val: m.brier.toFixed(4) },
+            { label: "FPR",       val: `${(m.f1*100).toFixed(1)}%` },
+          ].map(({ label, val }) => (
+            <div key={label} className="bg-black/20 rounded-lg py-2">
+              <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+              <p className="text-sm font-semibold text-slate-200 tabular-nums">{val}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Importancia de variables */}
+      {info.importancia && info.importancia.length > 0 && (
+        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
+          <p className="text-xs font-semibold text-slate-300">Importancia de variables</p>
+          <div className="space-y-2">
+            {info.importancia.map(({ variable, importancia, pct }) => (
+              <div key={variable} className="flex items-center gap-3">
+                <span className="text-xs text-slate-400 w-44 truncate font-mono">{variable}</span>
+                <div className="flex-1 h-2 bg-white/[0.05] rounded-full overflow-hidden">
+                  <div className="h-full bg-indigo-500 rounded-full transition-all" style={{ width: pct }} />
+                </div>
+                <span className="text-xs text-slate-400 w-10 text-right tabular-nums font-medium">{pct}</span>
+                <span className="text-[10px] text-slate-600 w-12 text-right tabular-nums">{importancia.toFixed(4)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Features */}
+      {info.features && (
+        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 space-y-2">
+          <p className="text-xs font-semibold text-slate-300">Variables del modelo</p>
+          <div className="flex flex-wrap gap-1.5">
+            {info.features.map((f) => (
+              <span key={f} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] text-indigo-300 font-mono">{f}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Comerciales conocidos */}
+      {info.comerciales && info.comerciales.length > 0 && (
+        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 space-y-2">
+          <p className="text-xs font-semibold text-slate-300">{info.comerciales.length} ejecutivos en el historial</p>
+          <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto">
+            {info.comerciales.map((c) => (
+              <span key={c} className="px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[10px] text-slate-400">{c}</span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ComercialPanel() {
   const [data, setData] = useState<ParseResult | null>(null);
   const [rawFile, setRawFile] = useState<File | null>(null);
@@ -988,11 +1108,12 @@ function ComercialPanel() {
   }
 
   const tabs: { id: ComercialTab; label: string; icon: typeof Table2 }[] = [
-    { id: "datos",     label: "Datos",               icon: Table2     },
-    { id: "spc",       label: "SPC · Carta P (PPB)", icon: Activity   },
-    { id: "rf",        label: "Random Forest (PPM)", icon: Cpu        },
-    { id: "predictor", label: "Predecir",             icon: TrendingUp },
-    { id: "marco",     label: "Marco de medición",   icon: ShieldCheck },
+    { id: "datos",      label: "Datos",               icon: Table2     },
+    { id: "spc",        label: "SPC · Carta P (PPB)", icon: Activity   },
+    { id: "rf",         label: "Random Forest (PPM)", icon: Cpu        },
+    { id: "predictor",  label: "Predecir",             icon: TrendingUp },
+    { id: "modelo-rf",  label: "Modelo RF",            icon: PieChart   },
+    { id: "marco",      label: "Marco de medición",   icon: ShieldCheck },
   ];
 
   return (
@@ -1035,6 +1156,7 @@ function ComercialPanel() {
       {tab === "spc"       && rawFile && <SpcRunner file={rawFile} />}
       {tab === "rf"        && rawFile && <RfRunner  file={rawFile} />}
       {tab === "predictor" && <PredictorOportunidad />}
+      {tab === "modelo-rf" && <ModeloRfPanel />}
       {tab === "marco"     && <MarcoMedicion area="comercial" />}
 
       {tab === "datos" && (

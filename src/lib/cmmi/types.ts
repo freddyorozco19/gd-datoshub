@@ -55,6 +55,25 @@ export interface OportunidadComercial {
   vinculante:       string;     // VINCULANTE | NO VINCULANTE
 }
 
+export interface RfInfoMetricas {
+  auc_cv: number; acc_cv: number;
+  precision: number; recall: number; f1: number;
+  brier: number; n_total: number;
+}
+export interface RfInfoImportancia { variable: string; importancia: number; pct: string; }
+export interface RfInfoResponse {
+  disponible: boolean;
+  version?: string;
+  descripcion?: string;
+  algoritmo?: string;
+  features?: string[];
+  pkl_bytes?: number;
+  n_comerciales?: number;
+  comerciales?: string[];
+  metricas?: RfInfoMetricas;
+  importancia?: RfInfoImportancia[];
+}
+
 export interface RfStatusResponse {
   disponible: boolean;
   comerciales: string[];

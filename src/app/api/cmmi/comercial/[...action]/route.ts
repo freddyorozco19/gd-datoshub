@@ -5,7 +5,7 @@ export const maxDuration = 120;
 const CMMI_API_URL = process.env.CMMI_API_URL ?? "http://127.0.0.1:8008";
 const IS_HOSTED    = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 
-const ALLOWED_GET    = new Set(["rf/status"]);
+const ALLOWED_GET    = new Set(["rf/status", "rf/info"]);
 const ALLOWED_JSON   = new Set(["rf/predict-one"]);
 const ALLOWED_UPLOAD = new Set(["spc", "rf/train", "rf/predict"]);
 

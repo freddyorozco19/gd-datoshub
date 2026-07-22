@@ -91,6 +91,12 @@ class PredictOneInput(BaseModel):
     ingreso_cop: float = Field(..., gt=0)
 
 
+@app.get("/comercial/rf/info")
+def comercial_rf_info() -> dict:
+    """Metadatos completos del PKL: métricas, features, importancia de variables."""
+    return com.info()
+
+
 @app.get("/comercial/rf/status")
 def comercial_rf_status() -> dict:
     """Opciones disponibles para predicción individual (clases del encoder)."""
