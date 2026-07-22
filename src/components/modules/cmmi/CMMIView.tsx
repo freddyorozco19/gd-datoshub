@@ -1112,7 +1112,7 @@ function ComercialPanel() {
             <tbody className="divide-y divide-white/[0.04]">
               {filtered.map((r) => (
                 <tr key={r.rowId} className="hover:bg-white/[0.03] transition-colors">
-                  <td className="px-4 py-3 font-medium text-slate-200 max-w-[260px] truncate" title={r.oportunidad}>{r.oportunidad || "—"}</td>
+                  <td className="px-4 py-3 font-medium text-slate-200 max-w-[260px] truncate" title={r.oportunidad || r.idExterno}>{r.oportunidad || r.idExterno || "—"}</td>
                   <td className="px-4 py-3 text-slate-400 max-w-[220px] truncate" title={r.cliente}>{r.cliente || "—"}</td>
                   <td className="px-4 py-3 text-slate-500 whitespace-nowrap text-xs">{r.comercial || "—"}</td>
                   <td className="px-4 py-3">{r.linea ? <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${lineaBadge(r.linea)}`}>{r.linea}</span> : "—"}</td>
