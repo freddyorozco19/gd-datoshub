@@ -52,7 +52,7 @@ function lineaBadge(l: string): string {
 }
 
 /* ── Marco de Medición — tabla de indicadores por área ─────────────── */
-type IndicadorRow = { indicador: string; construccion: string; tipo: "Sub-proceso" | "Contexto"; origen: "Calculado" | "Input"; relevancia: string };
+type IndicadorRow = { indicador: string; construccion: string; tipo: "Sub-proceso" | "Contexto"; origen: "Calculado" | "Input"; relevancia: string; descripcion: string };
 type MarcoArea = { qppo: string; metrica: string; modelo: string; indicadores: IndicadorRow[] };
 
 const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoArea> = {
@@ -61,11 +61,16 @@ const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoAre
     metrica: "Ganadas / (Ganadas + Perdidas) · excluye Declinadas",
     modelo: "Random Forest v2 · AUC = 0.804 · 596 oportunidades",
     indicadores: [
-      { indicador: "Ejecutivo comercial",   construccion: "Quién lleva la oportunidad",             tipo: "Sub-proceso", origen: "Input",      relevancia: "Importancia 0.248 — predictor #1" },
-      { indicador: "Ingreso esperado (log)",construccion: "Valor COP transformado logarítmicamente", tipo: "Sub-proceso", origen: "Calculado",  relevancia: "Importancia 0.123 — predictor #2" },
-      { indicador: "Tipo de venta",         construccion: "PROPIO vs REFERENCIADO",                  tipo: "Contexto",    origen: "Input",      relevancia: "Importancia 0.073 — referido gana +10pp" },
-      { indicador: "Línea de negocio",      construccion: "TI / Datos y SI / Consultoría",           tipo: "Contexto",    origen: "Input",      relevancia: "Importancia 0.032" },
-      { indicador: "Segmento",              construccion: "PÚBLICO vs PRIVADO",                      tipo: "Contexto",    origen: "Input",      relevancia: "Importancia 0.023" },
+      { indicador: "Ejecutivo comercial",    construccion: "Quién lleva la oportunidad",             tipo: "Sub-proceso", origen: "Input",     relevancia: "Importancia 0.248 — predictor #1",
+        descripcion: "Es el predictor más importante del modelo con una importancia de 0.248. Existen diferencias de hasta 70 puntos porcentuales en win rate entre ejecutivos. Captura el efecto sistemático de la calidad de gestión, la red de relaciones y la experiencia del comercial. El modelo aprende el historial estadístico de cada uno y ajusta la probabilidad de ganar según quién lleva la oportunidad." },
+      { indicador: "Ingreso esperado (log)", construccion: "Valor COP transformado logarítmicamente", tipo: "Sub-proceso", origen: "Calculado", relevancia: "Importancia 0.123 — predictor #2",
+        descripcion: "Segundo predictor en importancia (0.123). Presenta una relación inversa no lineal: deals más pequeños tienen mayor probabilidad de ganar, posiblemente por menor competencia y menores requisitos técnicos. Se aplica transformación log(1+x) para comprimir el rango extremo de $1M a $59B y evitar que valores atípicos distorsionen el modelo." },
+      { indicador: "Tipo de venta",          construccion: "PROPIO vs REFERENCIADO",                  tipo: "Contexto",    origen: "Input",     relevancia: "Importancia 0.073 — referido gana +10pp",
+        descripcion: "Indica el origen del lead. Los leads referenciados ganan en promedio 10 puntos porcentuales más que los propios. Aunque individualmente tiene AUC univariado de solo 0.55, su poder real emerge en combinación con el ejecutivo comercial y el segmento, lo que justifica su inclusión en el Random Forest." },
+      { indicador: "Línea de negocio",       construccion: "TI / Datos y SI / Consultoría",           tipo: "Contexto",    origen: "Input",     relevancia: "Importancia 0.032",
+        descripcion: "Diferencia el área de solución ofrecida. TI tiene el win rate más alto (51.5%), seguido de Datos y SI (48.2%) y Consultoría (41.4%). Su función principal en el modelo es capturar fortalezas diferenciadas por ejecutivo: ciertos comerciales son significativamente mejores en TI que en Consultoría, lo que el modelo detecta a través de la interacción entre variables." },
+      { indicador: "Segmento",               construccion: "PÚBLICO vs PRIVADO",                      tipo: "Contexto",    origen: "Input",     relevancia: "Importancia 0.023",
+        descripcion: "Sin poder predictivo individual (AUC univariado 0.52), su valor está en las interacciones: Privado + Referenciado es la combinación de mayor win rate esperado (~50%), mientras que Público + Propio es la de menor probabilidad. El Random Forest capta estas interacciones automáticamente sin necesidad de codificarlas manualmente." },
     ],
   },
   proyectos: {
@@ -73,14 +78,22 @@ const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoAre
     metrica: "EV / PV (Earned Value / Planned Value) — promedio mensual",
     modelo: "Regresión logística · Modelo 1 AUC=0.88 · Modelo 2 AUC=0.85",
     indicadores: [
-      { indicador: "SPI_lag2",     construccion: "SPI de hace 2 meses — shift(2) sobre histórico",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.45 — predictor más fuerte" },
-      { indicador: "SPI_lag1",     construccion: "SPI del mes anterior — shift(1) sobre histórico",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28" },
-      { indicador: "VRA_lag1",     construccion: "(% Real − % Plan) / |% Plan| del mes anterior",            tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28 — igual de predictivo que SPI" },
-      { indicador: "SPI_trend",    construccion: "SPI_lag1 − SPI_lag2 (derivado en el pipeline)",            tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — dirección del cambio" },
-      { indicador: "VRA_trend",    construccion: "VRA_lag1 − VRA_lag2 (derivado en el pipeline)",            tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — tendencia de la brecha" },
-      { indicador: "Mes relativo", construccion: "Fase del ciclo de vida normalizada [0–1]",                 tipo: "Contexto",    origen: "Calculado", relevancia: "β = −0.62" },
-      { indicador: "Portafolio",   construccion: "DATOS Y SI / TI / CONSULTORÍA",                            tipo: "Contexto",    origen: "Input",     relevancia: "β = −0.03" },
-      { indicador: "Líder",        construccion: "Codificación ordinal del líder del proyecto",               tipo: "Contexto",    origen: "Input",     relevancia: "β = +0.04" },
+      { indicador: "SPI_lag2",     construccion: "SPI de hace 2 meses — shift(2) sobre histórico",        tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.45 — predictor más fuerte",
+        descripcion: "El predictor con mayor peso absoluto en ambos modelos (β=−1.45 en M2, β=−1.22 en M1). El historial de 2 meses es más predictivo que el estado actual porque revela si el deterioro tiene profundidad o si es puntual. Proyectos con buen SPI hace 2 meses tienen riesgo significativamente menor aunque estén bajos ahora. El modelo lo deriva aplicando shift(2) sobre la serie histórica mensual de SPI." },
+      { indicador: "SPI_lag1",     construccion: "SPI del mes anterior — shift(1) sobre histórico",        tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28",
+        descripcion: "Estado actual del cronograma. Un SPI bajo el mes anterior es señal directa de que el proyecto ya está deteriorado. Se calcula con shift(1) sobre la serie mensual. Su coeficiente (β=−1.28) indica que por cada unidad que baja el SPI del mes anterior, la probabilidad logarítmica de alerta aumenta 1.28 unidades, manteniendo constantes las demás variables." },
+      { indicador: "VRA_lag1",     construccion: "(% Real − % Plan) / |% Plan| del mes anterior",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28 — igual de predictivo que SPI",
+        descripcion: "Variación Relativa de Avance: cuantifica la brecha porcentual entre el avance real y el planeado, normalizada por el planeado. Con el mismo coeficiente que SPI_lag1 (β=−1.28), confirma empíricamente que no es redundante sino complementaria: mide el deterioro desde la perspectiva del avance físico en lugar de la eficiencia de valor ganado. Un proyecto puede tener VRA negativa con SPI aceptable o viceversa." },
+      { indicador: "SPI_trend",    construccion: "SPI_lag1 − SPI_lag2 (derivado en el pipeline)",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — dirección del cambio",
+        descripcion: "Captura la dirección del cambio en el cronograma. Un SPI de 0.88 bajando (trend negativo) es fundamentalmente distinto a un SPI de 0.88 subiendo (trend positivo). El modelo lo calcula restando los dos rezagos disponibles. Aunque su coeficiente (β=−0.35) es menor que los lags, aporta información que el nivel puntual no puede dar: si el proyecto está mejorando o empeorando." },
+      { indicador: "VRA_trend",    construccion: "VRA_lag1 − VRA_lag2 (derivado en el pipeline)",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — tendencia de la brecha",
+        descripcion: "Análogo al SPI_trend pero para la brecha de avance. Detecta si la diferencia entre lo planeado y lo ejecutado está creciendo o reduciéndose. Complementa al VRA_lag1 de la misma forma que SPI_trend complementa a SPI_lag1: el nivel dice dónde está el proyecto, el trend dice hacia dónde va." },
+      { indicador: "Mes relativo", construccion: "Fase del ciclo de vida normalizada [0–1]",               tipo: "Contexto",    origen: "Calculado", relevancia: "β = −0.62",
+        descripcion: "Indica en qué fracción del ciclo de vida está el proyecto (0=inicio, 1=cierre). Es esencial para eliminar falsas alarmas: un SPI de 0.88 en la fase 30–40% de un proyecto TI es históricamente normal, pero el mismo valor en la fase 80–90% es crítico. Sin esta variable el modelo generaría alertas masivas en fases donde el deterioro temporal es parte del patrón esperado del proceso." },
+      { indicador: "Portafolio",   construccion: "DATOS Y SI / TI / CONSULTORÍA",                          tipo: "Contexto",    origen: "Input",     relevancia: "β = −0.03",
+        descripcion: "Controla las diferencias estructurales de riesgo entre portafolios. TI es el más volátil (19 secuencias R2 de Nelson en VRA), mientras que DATOS Y SI es el más predecible al cierre (σ=0.062 en fase 90–100%). Sin este control, el modelo aplicaría los mismos umbrales a portafolios con perfiles de riesgo históricamente distintos, generando alertas incorrectas." },
+      { indicador: "Líder",        construccion: "Codificación ordinal del líder del proyecto",             tipo: "Contexto",    origen: "Input",     relevancia: "β = +0.04",
+        descripcion: "Único coeficiente positivo en el Modelo 1 (+0.04), lo que significa que ciertos líderes están sistemáticamente asociados con mayor riesgo de alerta. Permite al modelo separar el riesgo inherente al tipo de proyecto del riesgo atribuible a la capacidad de gestión del líder. La codificación ordinal preserva el orden de desempeño histórico entre líderes." },
     ],
   },
   financiero: {
@@ -88,8 +101,10 @@ const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoAre
     metrica: "Utilidad del proyecto (%) — proyectos terminados sin outliers |z|>2.5",
     modelo: "OLS Regresión Lineal Modelo B · R²adj=16.3% · RMSE=8.79% · n=62",
     indicadores: [
-      { indicador: "Categoría del proyecto", construccion: "13 tipos (Sostenibilidad, Infra, GD, TI…) codificadas como dummies", tipo: "Sub-proceso", origen: "Input",     relevancia: "Sostenibilidad β=+0.31 (p=0.005); Infra β=+0.18 (p=0.022)" },
-      { indicador: "Monto contratado",       construccion: "Valor del contrato en miles de millones COP",                        tipo: "Contexto",    origen: "Input",     relevancia: "β=−0.0003 (p=0.955 — no significativo en Modelo B)" },
+      { indicador: "Categoría del proyecto", construccion: "13 tipos codificados como variables dummy",   tipo: "Sub-proceso", origen: "Input", relevancia: "Sostenibilidad β=+0.31 (p=0.005); Infra β=+0.18 (p=0.022)",
+        descripcion: "Principal discriminador del modelo. Cada una de las 13 categorías recibe un coeficiente β que representa su desviación respecto al nivel base (Arquitectura Empresarial, 14.29%). Sostenibilidad es la categoría más rentable con utilidad esperada de 44.84% (p=0.005), seguida de Infra + Servicios gestionados con 32.55% (p=0.022). Gobierno de Datos es la de menor utilidad esperada (0.92%, β=−0.134). La categoría es el factor más accionable en el proceso de cotización." },
+      { indicador: "Monto contratado",       construccion: "Valor del contrato en miles de millones COP", tipo: "Contexto",    origen: "Input", relevancia: "β=−0.0003 (p=0.955 — no significativo en Modelo B)",
+        descripcion: "En el Modelo A (con outliers, n=64) el monto era significativo (p=0.044), pero al excluir 2 proyectos con |z|>2.5, pierde toda significancia (p=0.955). Este hallazgo es intencionalmente documentado: revela que eran esos dos proyectos los que generaban artificialmente la relación. La conclusión es que con los datos actuales no se puede afirmar que proyectos más grandes o más pequeños tengan sistemáticamente mayor o menor utilidad." },
     ],
   },
   datos: {
@@ -97,17 +112,24 @@ const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoAre
     metrica: "Promedio de cubrimiento de indicadores de Gobierno de Datos por período",
     modelo: "Regresión cuadrática · Ĉ = β₀ + β_cat + β₁·P + β₂·P² · 10 períodos",
     indicadores: [
-      { indicador: "Calidad de datos",      construccion: "Promedio de cubrimiento de variables de calidad agrupado por período",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=96.2% · σ=0.047 — tendencia ascendente ↑" },
-      { indicador: "Uso y acceso a datos",  construccion: "Promedio de cubrimiento de variables de uso/acceso agrupado por período",       tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=95.1% · σ=0.035 — más estable" },
-      { indicador: "Integración y flujo",   construccion: "Promedio de cubrimiento de variables de integración agrupado por período",      tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=90.5% · σ=0.089 — caída en P9→P10 ⚠" },
-      { indicador: "Gestión ciclo de vida", construccion: "Promedio de cubrimiento de 6 variables internas de ciclo agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=88.7% · σ=0.141 — mayor riesgo" },
-      { indicador: "Período",               construccion: "Número de período histórico (P1–P10)",                                          tipo: "Contexto",    origen: "Input",     relevancia: "Coeficiente β lineal + β cuadrático" },
+      { indicador: "Calidad de datos",      construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=96.2% · σ=0.047 — tendencia ascendente ↑",
+        descripcion: "Mide la integridad y confiabilidad del dato en origen. Es la dimensión más madura del programa: muestra una tendencia claramente ascendente de P1 a P10 y tiene la desviación estándar más baja de las 4 categorías (σ=0.047), lo que indica un proceso estable y predecible. El modelo calcula su cubrimiento promediando todas las variables de calidad registradas en cada período." },
+      { indicador: "Uso y acceso a datos",  construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=95.1% · σ=0.035 — más estable",
+        descripcion: "Mide la disponibilidad y el control de acceso al dato. Es la categoría más estable del programa (σ=0.035, la más baja), con un crecimiento constante de 88.7% en P1 hasta 98.7% en P10. Su alta predictibilidad hace que el modelo polinomial tenga un R²=0.870 para esta categoría, el más alto de las cuatro." },
+      { indicador: "Integración y flujo",   construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=90.5% · σ=0.089 — caída en P9→P10 ⚠",
+        descripcion: "Mide la conectividad y el flujo de datos entre sistemas. Es la categoría con la alerta activa más urgente: muestra una tendencia descendente sostenida desde P7 hasta P10, con P10=74.5%, la lectura más baja reciente en todo el programa. Su σ=0.089 es mayor que Calidad y Uso-Acceso, reflejando mayor volatilidad. El modelo proyecta P11=73.9%, lo que requiere intervención inmediata." },
+      { indicador: "Gestión ciclo de vida", construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=88.7% · σ=0.141 — mayor riesgo",
+        descripcion: "Mide el control del dato a lo largo de su ciclo completo: creación, almacenamiento, uso y eliminación. Es la categoría de mayor riesgo: tiene la σ más alta (0.141) y el LCL más bajo (46.5%), lo que indica alta dispersión entre sus 6 variables internas. El Modelo Mixto (efectos fijos por período + efectos aleatorios por categoría) es el que mejor ajusta esta serie por su comportamiento irregular." },
+      { indicador: "Período",               construccion: "Número de período histórico (P1–P10)",          tipo: "Contexto",    origen: "Input",     relevancia: "Coeficiente β lineal + β cuadrático",
+        descripcion: "Captura la evolución temporal del programa. El modelo usa dos términos: β₁·P (tendencia lineal, β₁=+0.0231) que refleja el crecimiento sostenido, y β₂·P² (curvatura, β₂=−0.0020) que captura la desaceleración natural conforme el cubrimiento se aproxima al techo del 100%. Sin el término cuadrático, el modelo sobreestimaría el crecimiento futuro. Esta es la justificación metodológica para usar regresión polinomial en lugar de lineal simple." },
     ],
   },
 };
 
 function MarcoMedicion({ area }: { area: keyof typeof MARCO }) {
   const m = MARCO[area];
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
   return (
     <div className="space-y-5">
       {/* Encabezado QPPO */}
@@ -124,7 +146,7 @@ function MarcoMedicion({ area }: { area: keyof typeof MARCO }) {
       <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
         <div className="px-5 py-3 border-b border-white/[0.07]">
           <p className="text-sm font-semibold text-slate-200">Indicadores involucrados en el modelo</p>
-          <p className="text-xs text-slate-500 mt-0.5">Variables que participan en la predicción del QPPO</p>
+          <p className="text-xs text-slate-500 mt-0.5">Haz clic en <AlertCircle size={11} className="inline text-slate-500" /> para ver la función e importancia de cada variable</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -139,23 +161,44 @@ function MarcoMedicion({ area }: { area: keyof typeof MARCO }) {
             </thead>
             <tbody>
               {m.indicadores.map((row, i) => (
-                <tr key={i} className="border-b border-white/[0.04] last:border-0 hover:bg-white/[0.02] transition-colors">
-                  <td className="px-4 py-3 font-medium text-slate-200 whitespace-nowrap">{row.indicador}</td>
-                  <td className="px-4 py-3 text-slate-400 text-xs">{row.construccion}</td>
-                  <td className="px-4 py-3">
-                    {row.tipo === "Sub-proceso"
-                      ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-500/10 text-blue-400 whitespace-nowrap">Sub-proceso</span>
-                      : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400 whitespace-nowrap">Contexto</span>
-                    }
-                  </td>
-                  <td className="px-4 py-3">
-                    {row.origen === "Calculado"
-                      ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-violet-500/10 text-violet-400 whitespace-nowrap">Calculado</span>
-                      : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-500/10 text-slate-400 whitespace-nowrap">Input</span>
-                    }
-                  </td>
-                  <td className="px-4 py-3 text-slate-400 text-xs">{row.relevancia}</td>
-                </tr>
+                <>
+                  <tr
+                    key={i}
+                    className={`border-b border-white/[0.04] last:border-0 transition-colors cursor-pointer ${openIdx === i ? "bg-white/[0.04]" : "hover:bg-white/[0.02]"}`}
+                    onClick={() => setOpenIdx(openIdx === i ? null : i)}
+                  >
+                    <td className="px-4 py-3 font-medium text-slate-200 whitespace-nowrap">
+                      <span className="flex items-center gap-1.5">
+                        {row.indicador}
+                        <AlertCircle size={13} className={`shrink-0 transition-colors ${openIdx === i ? "text-blue-400" : "text-slate-600 hover:text-slate-400"}`} />
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-slate-400 text-xs">{row.construccion}</td>
+                    <td className="px-4 py-3">
+                      {row.tipo === "Sub-proceso"
+                        ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-500/10 text-blue-400 whitespace-nowrap">Sub-proceso</span>
+                        : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400 whitespace-nowrap">Contexto</span>
+                      }
+                    </td>
+                    <td className="px-4 py-3">
+                      {row.origen === "Calculado"
+                        ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-violet-500/10 text-violet-400 whitespace-nowrap">Calculado</span>
+                        : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-500/10 text-slate-400 whitespace-nowrap">Input</span>
+                      }
+                    </td>
+                    <td className="px-4 py-3 text-slate-400 text-xs">{row.relevancia}</td>
+                  </tr>
+                  {openIdx === i && (
+                    <tr key={`desc-${i}`} className="border-b border-white/[0.04]">
+                      <td colSpan={5} className="px-4 pb-4 pt-0">
+                        <div className="bg-blue-500/5 border border-blue-500/15 rounded-lg px-4 py-3 text-xs text-slate-300 leading-relaxed">
+                          <p className="text-[11px] font-semibold uppercase tracking-wide text-blue-400 mb-1.5">Función e importancia</p>
+                          {row.descripcion}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
               ))}
             </tbody>
           </table>
