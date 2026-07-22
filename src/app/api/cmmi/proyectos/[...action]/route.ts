@@ -5,7 +5,7 @@ export const maxDuration = 300; // reentrenar 4 modelos puede tomar ~2-3 min
 const CMMI_API_URL = process.env.CMMI_API_URL ?? "http://127.0.0.1:8008";
 const IS_HOSTED    = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 
-const ALLOWED_GET    = new Set(["info"]);
+const ALLOWED_GET    = new Set(["info", "lineas-base"]);
 const ALLOWED_JSON   = new Set(["kickoff", "seguimiento"]);
 const ALLOWED_UPLOAD = new Set(["reentrenar"]);
 

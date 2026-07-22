@@ -183,6 +183,15 @@ def proyectos_kickoff(body: KickoffInput) -> dict:
         raise HTTPException(503, str(e))
 
 
+@app.get("/proyectos/lineas-base")
+def proyectos_lineas_base() -> dict:
+    """Línea base SPI completa: CL/UCL/LCL por portafolio y fase de avance."""
+    try:
+        return proy.lineas_base_spi()
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
 @app.post("/proyectos/seguimiento")
 def proyectos_seguimiento(body: SeguimientoInput) -> dict:
     """Modelo 1 + Modelo 2 + Línea Base SPI — seguimiento mensual."""

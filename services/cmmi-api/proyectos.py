@@ -552,6 +552,49 @@ def info_modelos() -> dict:
     }
 
 
+def lineas_base_spi() -> dict:
+    """Expone la línea base SPI completa (CL/UCL/LCL por portafolio y fase)."""
+    if _lb_spi is None:
+        raise RuntimeError("Línea base SPI no disponible.")
+    por_portafolio = {}
+    for port, data in _lb_spi.get("por_portafolio", {}).items():
+        fases = {}
+        for fase, vals in data.get("por_fase", {}).items():
+            fases[fase] = {
+                "CL":  round(vals["CL"],  4) if vals.get("CL")  is not None else None,
+                "UCL": round(vals["UCL"], 4) if vals.get("UCL") is not None else None,
+                "LCL": round(vals["LCL"], 4) if vals.get("LCL") is not None else None,
+                "n":   vals.get("n", 0),
+                "std": round(vals["std"], 4) if vals.get("std") is not None else None,
+            }
+        g = data.get("global", {})
+        por_portafolio[port] = {
+            "n_proyectos": data.get("n_proyectos", 0),
+            "n_obs":       data.get("n_obs", 0),
+            "global": {
+                "CL":  round(g["CL"],  4) if g.get("CL")  is not None else None,
+                "UCL": round(g["UCL"], 4) if g.get("UCL") is not None else None,
+                "LCL": round(g["LCL"], 4) if g.get("LCL") is not None else None,
+                "std": round(g["std"], 4) if g.get("std") is not None else None,
+                "n":   g.get("n", 0),
+            },
+            "por_fase": fases,
+        }
+    g_all = _lb_spi.get("global", {}).get("global", {})
+    return {
+        "portafolios": list(por_portafolio.keys()),
+        "por_portafolio": por_portafolio,
+        "global": {
+            "CL":  round(g_all["CL"],  4) if g_all.get("CL")  is not None else None,
+            "UCL": round(g_all["UCL"], 4) if g_all.get("UCL") is not None else None,
+            "LCL": round(g_all["LCL"], 4) if g_all.get("LCL") is not None else None,
+            "std": round(g_all["std"], 4) if g_all.get("std") is not None else None,
+            "n":   g_all.get("n", 0),
+        },
+        "metadata": _lb_spi.get("metadata", {}),
+    }
+
+
 # ── Health info ───────────────────────────────────────────────────────
 def status() -> dict:
     return {

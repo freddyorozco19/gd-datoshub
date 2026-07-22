@@ -209,6 +209,22 @@ export interface PrediccionDatosResponse {
   modelo: { r2: number; rmse: number; mae: number; rmse_loo: number; n: number };
 }
 
+export interface LbSpiFase {
+  CL: number | null; UCL: number | null; LCL: number | null;
+  n: number; std: number | null;
+}
+export interface LbSpiPortafolio {
+  n_proyectos: number; n_obs: number;
+  global: LbSpiFase;
+  por_fase: Record<string, LbSpiFase>;
+}
+export interface LineasBaseSpiResponse {
+  portafolios: string[];
+  por_portafolio: Record<string, LbSpiPortafolio>;
+  global: LbSpiFase;
+  metadata: Record<string, unknown>;
+}
+
 export interface PklMetricas {
   auc: number; brier: number;
   precision: number; recall: number; f1: number; fpr: number;

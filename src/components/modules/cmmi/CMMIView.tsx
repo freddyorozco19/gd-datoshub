@@ -19,6 +19,7 @@ import {
   type FinancieroInfoResponse, type FinancieroInfoProyecto,
   type DatosInfoResponse, type DatosInfoRegistro,
   type RfStatusResponse, type PredictOneResponse,
+  type LineasBaseSpiResponse, type LbSpiPortafolio,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -1276,7 +1277,7 @@ function DatosOrigenPanel({ datos }: { datos: DatosOrigen }) {
   );
 }
 
-type ProyTab = "kickoff" | "seguimiento" | "reentrenar" | "modelos" | "marco";
+type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "reentrenar" | "modelos" | "marco";
 
 function ProyectosPanel() {
   const [tab, setTab]   = useState<ProyTab>("kickoff");
@@ -1369,9 +1370,27 @@ function ProyectosPanel() {
     } finally { setInfoLoading(false); }
   }
 
+  const [lbSpi, setLbSpi] = useState<LineasBaseSpiResponse | null>(null);
+  const [lbSpiLoading, setLbSpiLoading] = useState(false);
+  const [lbSpiError, setLbSpiError] = useState<string | null>(null);
+
+  async function loadLbSpi() {
+    if (lbSpi) return;
+    setLbSpiLoading(true); setLbSpiError(null);
+    try {
+      const r = await fetch("/api/cmmi/proyectos/lineas-base");
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.detail ?? j.error ?? `Error ${r.status}`);
+      setLbSpi(j as LineasBaseSpiResponse);
+    } catch (e) {
+      setLbSpiError(e instanceof Error ? e.message : "Error al cargar líneas base.");
+    } finally { setLbSpiLoading(false); }
+  }
+
   const tabs: { id: ProyTab; label: string; icon: typeof Activity }[] = [
     { id: "kickoff",     label: "Kickoff",            icon: BarChart2   },
     { id: "seguimiento", label: "Seguimiento",         icon: CalendarCheck },
+    { id: "lineas-base", label: "Líneas base",         icon: PieChart    },
     { id: "reentrenar",  label: "Reentrenar",          icon: Database    },
     { id: "modelos",     label: "Modelos PKL",         icon: PieChart    },
     { id: "marco",       label: "Marco de medición",   icon: ShieldCheck },
@@ -1387,7 +1406,7 @@ function ProyectosPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos") loadInfo(); }}
+            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos") loadInfo(); if (id === "lineas-base") loadLbSpi(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -1578,7 +1597,113 @@ function ProyectosPanel() {
         </div>
       )}
 
+      {/* ── LÍNEAS BASE SPI ─────────────────────────────────────── */}
+      {tab === "lineas-base" && (
+        <div className="space-y-4">
+          {lbSpiLoading && (
+            <div className="flex items-center gap-2 text-sm text-slate-400 px-1">
+              <Clock size={14} className="animate-spin" /> Cargando líneas base…
+            </div>
+          )}
+          {lbSpiError && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {lbSpiError}
+            </div>
+          )}
+          {lbSpi && <LbSpiPanel data={lbSpi} />}
+        </div>
+      )}
+
       {tab === "marco" && <MarcoMedicion area="proyectos" />}
+    </div>
+  );
+}
+
+/* ── Líneas Base SPI Panel ─────────────────────────────────────────── */
+function LbSpiPanel({ data }: { data: LineasBaseSpiResponse }) {
+  const [selectedPort, setSelectedPort] = useState<string>("GLOBAL");
+  const fases = [
+    "0-10%","10-20%","20-30%","30-40%","40-50%",
+    "50-60%","60-70%","70-80%","80-90%","90-100%",
+  ];
+
+  const portData: LbSpiPortafolio | null = selectedPort === "GLOBAL"
+    ? null
+    : (data.por_portafolio[selectedPort] ?? null);
+
+  const globalFases = selectedPort === "GLOBAL"
+    ? null
+    : portData?.por_fase ?? null;
+
+  function fmtN(v: number | null | undefined) { return v != null ? v.toFixed(4) : "—"; }
+
+  const btnBase = "px-3 py-1.5 rounded-lg text-xs font-medium transition-colors";
+  const btnActive = `${btnBase} bg-indigo-600 text-white`;
+  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 hover:text-slate-200 hover:bg-white/[0.08]`;
+
+  const portafolios = ["GLOBAL", ...data.portafolios];
+
+  return (
+    <div className="space-y-4">
+      {/* Selector portafolio */}
+      <div className="flex flex-wrap gap-2">
+        {portafolios.map((p) => (
+          <button key={p} onClick={() => setSelectedPort(p)} className={selectedPort === p ? btnActive : btnIdle}>
+            {p}
+          </button>
+        ))}
+      </div>
+
+      {/* KPIs globales del portafolio seleccionado */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: "CL",  value: fmtN(selectedPort === "GLOBAL" ? data.global.CL  : portData?.global.CL) },
+          { label: "UCL", value: fmtN(selectedPort === "GLOBAL" ? data.global.UCL : portData?.global.UCL) },
+          { label: "LCL", value: fmtN(selectedPort === "GLOBAL" ? data.global.LCL : portData?.global.LCL) },
+          { label: "σ",   value: fmtN(selectedPort === "GLOBAL" ? data.global.std : portData?.global.std) },
+        ].map(({ label, value }) => (
+          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-center">
+            <p className="text-xl font-bold text-slate-100 tabular-nums">{value}</p>
+            <p className="text-xs text-slate-500 mt-0.5">{label}</p>
+          </div>
+        ))}
+      </div>
+      {selectedPort !== "GLOBAL" && portData && (
+        <p className="text-xs text-slate-500 px-1">{portData.n_proyectos} proyectos · {portData.n_obs} observaciones</p>
+      )}
+
+      {/* Tabla por fase (solo para portafolio específico) */}
+      {selectedPort !== "GLOBAL" && globalFases && (
+        <div className="overflow-x-auto rounded-xl border border-white/[0.08]">
+          <table className="w-full text-xs text-slate-300">
+            <thead>
+              <tr className="border-b border-white/[0.08] bg-white/[0.03]">
+                <th className="px-3 py-2 text-left font-medium text-slate-500">Fase avance</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">CL</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">UCL</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">LCL</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">σ</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">n</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fases.map((fase) => {
+                const vals = globalFases[fase] ?? null;
+                return (
+                  <tr key={fase} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                    <td className="px-3 py-2 font-medium text-slate-400">{fase}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.CL)}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.UCL)}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.LCL)}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.std)}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{vals?.n ?? "—"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
