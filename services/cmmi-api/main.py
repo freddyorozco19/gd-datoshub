@@ -246,6 +246,15 @@ def financiero_lineas_base() -> dict:
         raise HTTPException(503, str(e))
 
 
+@app.get("/financiero/comparacion")
+def financiero_comparacion(meta: float = 0.008) -> dict:
+    """Compara utilidad media histórica (baseline) vs Q1 2026."""
+    try:
+        return fin.comparacion(meta_delta=meta)
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
 @app.post("/financiero/lineas-base-excel")
 def financiero_lineas_base_excel(file: UploadFile = File(...)) -> dict:
     """Calcula líneas base (SPC + Nelson) desde un Excel subido sin persistirlo."""

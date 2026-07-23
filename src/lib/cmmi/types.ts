@@ -308,6 +308,18 @@ export interface FinancieroInfoResponse {
   modelo_r2?: number | null; modelo_r2a?: number | null; modelo_n?: number | null;
 }
 
+export interface FinComparacionPeriodo {
+  label: string; media: number; media_pct: string; n: number;
+  proyectos?: { categoria: string; utilidad_pct: string; utilidad_v: number; fecha: string | null }[];
+}
+export interface FinComparacionResponse {
+  baseline: FinComparacionPeriodo;
+  actual: FinComparacionPeriodo;
+  delta: number; delta_pct: string;
+  meta_delta: number; meta_pct: string;
+  cumple_meta: boolean; semaforo: "VERDE" | "AMARILLO" | "ROJO";
+}
+
 export interface SeguimientoResponse {
   portafolio:       string;
   lider:            string;

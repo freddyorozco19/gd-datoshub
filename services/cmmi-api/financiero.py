@@ -327,6 +327,68 @@ def info_financiero() -> dict:
     }
 
 
+def comparacion(meta_delta: float = 0.008) -> dict:
+    """Compara utilidad media histórica (baseline) vs período reciente (2026)."""
+    if _df is None:
+        raise RuntimeError("Datos no disponibles.")
+
+    df = _df.copy()
+    tiene_fecha = df["Fecha de finalización"].notna().any()
+
+    if tiene_fecha:
+        df_base   = df[df["Fecha de finalización"].dt.year < 2026]
+        df_q1     = df[(df["Fecha de finalización"].dt.year == 2026) &
+                       (df["Fecha de finalización"].dt.quarter == 1)]
+        df_actual = df_q1 if len(df_q1) > 0 else df[df["Fecha de finalización"].dt.year == 2026]
+        periodo_label = "Q1 2026" if len(df_q1) > 0 else "2026"
+    else:
+        n = len(df)
+        df_base   = df.iloc[:int(n * 0.8)]
+        df_actual = df.iloc[int(n * 0.8):]
+        periodo_label = "Período reciente (20% más nuevo)"
+
+    if len(df_base) == 0 or len(df_actual) == 0:
+        raise RuntimeError("No hay suficientes datos para comparar períodos.")
+
+    media_base   = float(df_base["Utilidad del proyecto"].mean())
+    media_actual = float(df_actual["Utilidad del proyecto"].mean())
+    delta        = media_actual - media_base
+    cumple       = delta >= meta_delta
+    semaforo     = "VERDE" if cumple else ("AMARILLO" if delta >= 0 else "ROJO")
+
+    proyectos = []
+    for _, row in df_actual.iterrows():
+        fecha = row["Fecha de finalización"]
+        proyectos.append({
+            "categoria":   str(row["Cat"]),
+            "utilidad_pct": f"{row['Utilidad del proyecto']:.1%}",
+            "utilidad_v":   round(float(row["Utilidad del proyecto"]), 4),
+            "fecha": fecha.strftime("%Y-%m") if pd.notna(fecha) else None,
+        })
+
+    return {
+        "baseline": {
+            "label":     "Histórico (antes de 2026)",
+            "media":     round(media_base, 4),
+            "media_pct": f"{media_base:.1%}",
+            "n":         int(len(df_base)),
+        },
+        "actual": {
+            "label":     periodo_label,
+            "media":     round(media_actual, 4),
+            "media_pct": f"{media_actual:.1%}",
+            "n":         int(len(df_actual)),
+            "proyectos": proyectos,
+        },
+        "delta":       round(delta, 4),
+        "delta_pct":   f"{delta:+.1%}",
+        "meta_delta":  meta_delta,
+        "meta_pct":    f"{meta_delta:+.1%}",
+        "cumple_meta": cumple,
+        "semaforo":    semaforo,
+    }
+
+
 def status() -> dict:
     return {
         "xlsx_disponible": XLSX.exists(),

@@ -5,7 +5,7 @@ export const maxDuration = 120;
 const CMMI_API_URL = process.env.CMMI_API_URL ?? "http://127.0.0.1:8008";
 const IS_HOSTED    = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 
-const ALLOWED_GET    = new Set(["lineas-base", "info"]);
+const ALLOWED_GET    = new Set(["lineas-base", "info", "comparacion"]);
 const ALLOWED_POST   = new Set(["predecir"]);
 const ALLOWED_UPLOAD = new Set(["cargar", "lineas-base-excel"]);
 

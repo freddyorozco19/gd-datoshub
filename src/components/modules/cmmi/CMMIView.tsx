@@ -16,7 +16,7 @@ import {
   type LineasBaseDatosResponse, type PrediccionDatosResponse,
   type ProyectosInfoResponse, type PklBloque,
   type DatosOrigen, type DatosOrigenProyecto,
-  type FinancieroInfoResponse, type FinancieroInfoProyecto,
+  type FinancieroInfoResponse, type FinancieroInfoProyecto, type FinComparacionResponse,
   type DatosInfoResponse, type DatosInfoRegistro,
   type RfStatusResponse, type PredictOneResponse, type RfInfoResponse,
   type LineasBaseSpiResponse, type LbSpiPortafolio,
@@ -2520,7 +2520,7 @@ const CATEGORIAS_FIN = [
   "Transformación Digital",
 ] as const;
 
-type FinTab = "predictor" | "lineas-base" | "datos" | "marco";
+type FinTab = "predictor" | "lineas-base" | "comparacion" | "datos" | "marco";
 
 const RIESGO_COLORS: Record<string, string> = {
   Bajo:  "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
@@ -2614,12 +2614,29 @@ function FinancieroPanel() {
       if (!r.ok) throw new Error((json.detail ?? json.error ?? `Error ${r.status}`) as string);
       setFinCargarMsg({ ok: true, text: `✓ ${file.name} cargado — modelo actualizado.` });
       setFinListo(true);
-      setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false);
+      setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false); setCompRes(null); setCompLoaded(false);
       void loadFinInfo(true);
       void loadLineasBase();
     } catch (e) {
       setFinCargarMsg({ ok: false, text: e instanceof Error ? e.message : "Error al cargar." });
     } finally { setFinCargarUploading(false); }
+  }
+
+  // Comparación baseline vs Q1 2026
+  const [compRes, setCompRes]     = useState<FinComparacionResponse | null>(null);
+  const [compLoaded, setCompLoaded] = useState(false);
+
+  async function loadComparacion() {
+    if (compLoaded) return;
+    reset(); setLoading(true);
+    try {
+      const r = await fetch("/api/cmmi/financiero/comparacion");
+      const json = await r.json();
+      if (!r.ok) { if (json.localOnly) { setNotice(json.error); return; } throw new Error(json.detail ?? json.error ?? `Error ${r.status}`); }
+      setCompRes(json as FinComparacionResponse);
+      setCompLoaded(true);
+    } catch (e) { setError(e instanceof Error ? e.message : "Error al cargar comparación."); }
+    finally { setLoading(false); }
   }
 
   // Líneas base desde Excel (source picker — calcula en tiempo real sin persistir)
@@ -2697,10 +2714,11 @@ function FinancieroPanel() {
   }
 
   const tabs: { id: FinTab; label: string; icon: typeof Activity }[] = [
-    { id: "predictor",   label: "Predictor",           icon: TrendingUp  },
-    { id: "lineas-base", label: "Líneas base",         icon: PieChart    },
-    { id: "datos",       label: "Datos entrenamiento", icon: Database    },
-    { id: "marco",       label: "Marco de medición",   icon: ShieldCheck },
+    { id: "predictor",    label: "Predictor",           icon: TrendingUp  },
+    { id: "lineas-base",  label: "Líneas base",         icon: PieChart    },
+    { id: "comparacion",  label: "Comparación",         icon: Activity    },
+    { id: "datos",        label: "Datos entrenamiento", icon: Database    },
+    { id: "marco",        label: "Marco de medición",   icon: ShieldCheck },
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
@@ -2754,7 +2772,7 @@ function FinancieroPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id); reset(); if (id === "datos") loadFinInfo(); }}
+            onClick={() => { setTab(id); reset(); if (id === "datos") loadFinInfo(); if (id === "comparacion") loadComparacion(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -2947,6 +2965,89 @@ function FinancieroPanel() {
           {finInfo && !finInfo.disponible && (
             <p className="text-sm text-slate-500">Excel de entrenamiento no disponible en el servidor.</p>
           )}
+        </div>
+      )}
+
+      {/* ── COMPARACIÓN ────────────────────────────────────────── */}
+      {tab === "comparacion" && (
+        <div className="space-y-5">
+          {notice && <LocalOnlyNotice message={notice} />}
+          {error && <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400"><AlertCircle size={16} className="shrink-0 mt-0.5" />{error}</div>}
+          {loading && <p className="text-xs text-slate-500 animate-pulse">Calculando comparación…</p>}
+          {!compRes && !loading && !error && !notice && (
+            <button onClick={loadComparacion} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors">
+              <Activity size={15} /> Calcular comparación
+            </button>
+          )}
+          {compRes && (() => {
+            const sem: Record<string, string> = {
+              VERDE:    "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+              AMARILLO: "text-amber-400   bg-amber-500/10   border-amber-500/20",
+              ROJO:     "text-rose-400    bg-rose-500/10    border-rose-500/20",
+            };
+            const maxBar = Math.max(compRes.baseline.media, compRes.actual.media);
+            return (
+              <div className="space-y-5">
+                {/* Resultado principal */}
+                <div className={`rounded-xl border p-5 space-y-4 ${sem[compRes.semaforo]}`}>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold uppercase tracking-wide opacity-70">Meta CMMI · Δ Utilidad ≥ {compRes.meta_pct}</p>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${sem[compRes.semaforo]}`}>{compRes.cumple_meta ? "✓ CUMPLE" : "✗ NO CUMPLE"}</span>
+                  </div>
+                  <p className="text-5xl font-bold">{compRes.delta_pct}</p>
+                  <p className="text-sm opacity-70">Variación de utilidad vs línea base histórica</p>
+                </div>
+
+                {/* Barras comparativas */}
+                <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-5 space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Comparación de períodos</p>
+                  {[
+                    { label: compRes.baseline.label, media: compRes.baseline.media, pct: compRes.baseline.media_pct, n: compRes.baseline.n, color: "bg-slate-500" },
+                    { label: compRes.actual.label,   media: compRes.actual.media,   pct: compRes.actual.media_pct,   n: compRes.actual.n,   color: compRes.cumple_meta ? "bg-emerald-500" : compRes.delta >= 0 ? "bg-amber-500" : "bg-rose-500" },
+                  ].map(({ label, media, pct, n, color }) => (
+                    <div key={label} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-300 font-medium">{label}</span>
+                        <span className="font-bold text-slate-200">{pct} <span className="text-xs text-slate-500 font-normal">n={n}</span></span>
+                      </div>
+                      <div className="h-3 rounded-full bg-white/[0.06] overflow-hidden">
+                        <div className={`h-full rounded-full ${color} transition-all`} style={{ width: `${maxBar > 0 ? (media / maxBar) * 100 : 0}%` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Proyectos del período actual */}
+                {compRes.actual.proyectos && compRes.actual.proyectos.length > 0 && (
+                  <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
+                    <div className="px-4 py-3 border-b border-white/[0.06]">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Proyectos — {compRes.actual.label}</p>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-white/[0.06] text-left">
+                            <th className="px-4 py-2 text-xs font-medium text-slate-500">Categoría</th>
+                            <th className="px-4 py-2 text-xs font-medium text-slate-500">Utilidad</th>
+                            <th className="px-4 py-2 text-xs font-medium text-slate-500">Fecha</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {compRes.actual.proyectos.map((p, i) => (
+                            <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
+                              <td className="px-4 py-2 text-slate-300">{p.categoria}</td>
+                              <td className={`px-4 py-2 font-semibold ${p.utilidad_v >= 0.2 ? "text-emerald-400" : p.utilidad_v >= 0.05 ? "text-amber-400" : "text-rose-400"}`}>{p.utilidad_pct}</td>
+                              <td className="px-4 py-2 text-slate-500">{p.fecha ?? "—"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
       )}
 
