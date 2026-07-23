@@ -2595,7 +2595,7 @@ function FinancieroPanel() {
   const [finInfo, setFinInfo] = useState<FinancieroInfoResponse | null>(null);
   const [finInfoLoaded, setFinInfoLoaded] = useState(false);
 
-  // Cargar datos (source picker)
+  // Cargar datos (source picker — persiste modelo)
   const [finCargarMsg, setFinCargarMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [finCargarUploading, setFinCargarUploading] = useState(false);
 
@@ -2612,6 +2612,26 @@ function FinancieroPanel() {
     } catch (e) {
       setFinCargarMsg({ ok: false, text: e instanceof Error ? e.message : "Error al cargar." });
     } finally { setFinCargarUploading(false); }
+  }
+
+  // Líneas base desde Excel (source picker — calcula en tiempo real sin persistir)
+  const [finLbMsg, setFinLbMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [finLbUploading, setFinLbUploading] = useState(false);
+
+  async function handleFinLineasBase(file: File) {
+    setFinLbUploading(true); setFinLbMsg(null);
+    try {
+      const form = new FormData();
+      form.append("file", file, file.name);
+      const r = await fetch("/api/cmmi/financiero/lineas-base-excel", { method: "POST", body: form });
+      const json = await r.json();
+      if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      setLbRes(json as LineasBaseResponse);
+      setLbLoaded(true);
+      setFinLbMsg({ ok: true, text: `✓ Líneas base calculadas desde ${file.name}.` });
+    } catch (e) {
+      setFinLbMsg({ ok: false, text: e instanceof Error ? e.message : "Error al procesar." });
+    } finally { setFinLbUploading(false); }
   }
 
   function reset() { setError(null); setNotice(null); }
@@ -2824,12 +2844,12 @@ function FinancieroPanel() {
               <div className="space-y-2">
                 <p className="text-sm font-semibold text-slate-300">Desde un nuevo archivo Excel</p>
                 <p className="text-xs text-slate-500">
-                  Sube un .xlsx con proyectos terminados para calcular CL, σ, UCL, LCL y reglas de Nelson en tiempo real.
+                  Calcula CL, σ, UCL, LCL y reglas de Nelson en tiempo real sin persistir los datos en el servidor.
                 </p>
-                <UploadExcelRefresh
-                  endpoint="/api/cmmi/financiero/lineas-base-excel"
-                  label="Arrastra o selecciona el Excel de utilidad"
-                  onSuccess={(res) => { setLbRes(res as unknown as LineasBaseResponse); setLbLoaded(true); }}
+                <FinancieroSourcePicker
+                  onFile={handleFinLineasBase}
+                  uploading={finLbUploading}
+                  msg={finLbMsg}
                 />
               </div>
             </div>
