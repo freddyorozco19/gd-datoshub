@@ -2591,6 +2591,9 @@ function FinancieroPanel() {
   const [lbRes,  setLbRes]  = useState<LineasBaseResponse | null>(null);
   const [lbLoaded, setLbLoaded] = useState(false);
 
+  // Landing — si no hay datos cargados aún se muestra el picker como pantalla principal
+  const [finListo, setFinListo] = useState(false);
+
   // Datos origen
   const [finInfo, setFinInfo] = useState<FinancieroInfoResponse | null>(null);
   const [finInfoLoaded, setFinInfoLoaded] = useState(false);
@@ -2608,6 +2611,7 @@ function FinancieroPanel() {
       const json = await r.json();
       if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
       setFinCargarMsg({ ok: true, text: `✓ ${file.name} cargado — modelo actualizado.` });
+      setFinListo(true);
       setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false);
       void loadFinInfo(true);
       void loadLineasBase();
@@ -2707,6 +2711,40 @@ function FinancieroPanel() {
     ROJO:     "text-rose-400    bg-rose-500/10    border-rose-500/20",
   };
 
+  if (!finListo) {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400">
+              <DollarSign size={20} />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-200">Financiero · Utilidad de proyectos</p>
+              <p className="text-xs text-slate-500">Selecciona el Excel histórico de utilidad para comenzar</p>
+            </div>
+          </div>
+          <FinancieroSourcePicker
+            onFile={handleFinCargar}
+            uploading={finCargarUploading}
+            msg={finCargarMsg}
+          />
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex-1 border-t border-white/[0.07]" />
+          <span className="text-xs text-slate-600">o</span>
+          <div className="flex-1 border-t border-white/[0.07]" />
+        </div>
+        <button
+          onClick={() => setFinListo(true)}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:text-slate-200 transition-colors"
+        >
+          <Database size={15} /> Continuar con datos actuales del servidor
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-5">
       {/* Tabs */}
@@ -2724,6 +2762,12 @@ function FinancieroPanel() {
             <Icon size={15} /> {label}
           </button>
         ))}
+        <button
+          onClick={() => { setFinListo(false); setFinCargarMsg(null); }}
+          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 border border-white/[0.07] hover:bg-white/[0.05] hover:text-slate-300 transition-colors"
+        >
+          <Upload size={12} /> Cambiar datos
+        </button>
       </div>
 
       {/* ── PREDICTOR ──────────────────────────────────────────── */}
