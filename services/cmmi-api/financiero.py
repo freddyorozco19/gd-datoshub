@@ -188,6 +188,8 @@ def _load() -> None:
         sub = df[df["Cat"] == cat]
         _lb_cats[cat] = _stats_block(sub["Utilidad del proyecto"].values)
 
+    if "Monto del Proyecto" not in df.columns:
+        df["Monto del Proyecto"] = np.nan
     df_reg = df.dropna(subset=["Monto del Proyecto"]).copy()
     df_reg["Monto_B"] = df_reg["Monto del Proyecto"] / 1e9
     u_all  = df_reg["Utilidad del proyecto"].values
@@ -263,7 +265,7 @@ def recargar(xlsx_bytes: bytes) -> dict:
     except Exception as e:
         raise ValueError(f"No se pudo leer el archivo Excel: {e}")
     df_test = _fix_cols(df_test)
-    requeridas = {"Utilidad del proyecto", "Categoría de proyecto", "Fecha de finalización", "Monto del Proyecto"}
+    requeridas = {"Utilidad del proyecto", "Categoría de proyecto", "Fecha de finalización"}
     faltantes  = requeridas - set(df_test.columns)
     if faltantes:
         raise ValueError(f"Columnas faltantes: {faltantes}. Esperadas: {requeridas}")
