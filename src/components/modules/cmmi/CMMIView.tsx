@@ -2216,7 +2216,8 @@ function SeguimientoExcelPicker({ onAutoFill }: {
 }
 
 /* ── Selector fuente Proyectos (upload local o GitHub) ─────────────── */
-const GH_PROYECTOS_API = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Proyectos";
+const GH_PROYECTOS_API  = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Proyectos";
+const GH_FINANCIERA_API = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Financiera";
 
 function ProyectosSourcePicker({ onFile, uploading, msg }: {
   onFile: (f: File) => void;
@@ -2296,6 +2297,119 @@ function ProyectosSourcePicker({ onFile, uploading, msg }: {
         <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
           <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2 text-xs text-slate-500">
             {ghIcon} FreddyOrozcoGrowData/CMMI-Hub · data/Proyectos
+          </div>
+          {ghLoading && <p className="px-4 py-6 text-sm text-slate-500 text-center">Cargando archivos…</p>}
+          {ghError  && <p className="px-4 py-4 text-sm text-rose-400">{ghError}</p>}
+          {!ghLoading && ghFiles.map((f) => (
+            <button key={f.name} onClick={() => pickGhFile(f)} disabled={uploading || !!downloading}
+              className="w-full flex items-center justify-between px-4 py-3 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left disabled:opacity-60">
+              <div className="flex items-center gap-3">
+                <FileSpreadsheet size={16} className="text-indigo-400 shrink-0" />
+                <span className="text-sm text-slate-200">{f.name}</span>
+              </div>
+              <div className="flex items-center gap-3 text-xs text-slate-500">
+                <span>{(f.size / 1024).toFixed(0)} KB</span>
+                {downloading === f.name || (uploading && downloading === f.name)
+                  ? <Clock size={14} className="animate-spin text-indigo-400" />
+                  : <span className="text-indigo-400 font-medium">Usar este</span>}
+              </div>
+            </button>
+          ))}
+          {!ghLoading && ghFiles.length === 0 && !ghError && (
+            <p className="px-4 py-6 text-sm text-slate-500 text-center">No hay archivos .xlsx en el repositorio.</p>
+          )}
+        </div>
+      )}
+
+      {msg && (
+        <div className={`flex items-start gap-2 rounded-lg px-4 py-3 text-sm border ${
+          msg.ok ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : "bg-rose-500/10 border-rose-500/20 text-rose-400"
+        }`}>
+          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {msg.text}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FinancieroSourcePicker({ onFile, uploading, msg }: {
+  onFile: (f: File) => void;
+  uploading: boolean;
+  msg: { ok: boolean; text: string } | null;
+}) {
+  const [mode, setMode]           = useState<"upload" | "github">("github");
+  const [ghFiles, setGhFiles]     = useState<GhFile[]>([]);
+  const [ghLoading, setGhLoading] = useState(false);
+  const [ghError, setGhError]     = useState<string | null>(null);
+  const [downloading, setDownloading] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [drag, setDrag]           = useState(false);
+
+  async function loadGhFiles() {
+    if (ghFiles.length) return;
+    setGhLoading(true); setGhError(null);
+    try {
+      const r = await fetch(GH_FINANCIERA_API);
+      const j: { name: string; download_url: string; size: number; type: string }[] = await r.json();
+      setGhFiles(j.filter(f => f.type === "file" && f.name.endsWith(".xlsx")));
+    } catch {
+      setGhError("No se pudo conectar con GitHub.");
+    } finally { setGhLoading(false); }
+  }
+
+  async function pickGhFile(f: GhFile) {
+    setDownloading(f.name);
+    try {
+      const res  = await fetch(f.download_url);
+      const blob = await res.blob();
+      onFile(new File([blob], f.name, { type: blob.type }));
+    } catch {
+      setGhError(`No se pudo descargar ${f.name}.`);
+    } finally { setDownloading(null); }
+  }
+
+  useState(() => { loadGhFiles(); });
+
+  const btnBase   = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors";
+  const btnActive = `${btnBase} bg-indigo-600 text-white`;
+  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:bg-white/[0.08] hover:text-slate-200`;
+  const ghIcon    = <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.42 7.88 10.95.58.1.79-.25.79-.55v-2.02c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.02 11.02 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.13v3.17c0 .3.2.66.8.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <button onClick={() => setMode("upload")} className={mode === "upload" ? btnActive : btnIdle}>
+          <Upload size={15} /> Subir archivo
+        </button>
+        <button onClick={() => { setMode("github"); loadGhFiles(); }} className={mode === "github" ? btnActive : btnIdle}>
+          {ghIcon} Desde GitHub
+        </button>
+      </div>
+
+      {mode === "upload" && (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+          onDragLeave={() => setDrag(false)}
+          onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files?.[0]; if (f) onFile(f); }}
+          onClick={() => inputRef.current?.click()}
+          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 cursor-pointer transition-colors ${
+            drag ? "border-blue-500/60 bg-blue-500/5" : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
+          }`}
+        >
+          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400">
+            {uploading ? <Clock size={26} className="animate-spin" /> : <Upload size={26} />}
+          </div>
+          <p className="text-sm font-semibold text-slate-300">{uploading ? "Actualizando datos…" : "Arrastra el Excel histórico de utilidad aquí"}</p>
+          <p className="text-xs text-slate-500">o haz clic para seleccionar · .xlsx / .xls</p>
+          <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) onFile(f); e.target.value = ""; }} />
+        </div>
+      )}
+
+      {mode === "github" && (
+        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
+          <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2 text-xs text-slate-500">
+            {ghIcon} FreddyOrozcoGrowData/CMMI-Hub · data/Financiera
           </div>
           {ghLoading && <p className="px-4 py-6 text-sm text-slate-500 text-center">Cargando archivos…</p>}
           {ghError  && <p className="px-4 py-4 text-sm text-rose-400">{ghError}</p>}
@@ -2481,6 +2595,25 @@ function FinancieroPanel() {
   const [finInfo, setFinInfo] = useState<FinancieroInfoResponse | null>(null);
   const [finInfoLoaded, setFinInfoLoaded] = useState(false);
 
+  // Cargar datos (source picker)
+  const [finCargarMsg, setFinCargarMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [finCargarUploading, setFinCargarUploading] = useState(false);
+
+  async function handleFinCargar(file: File) {
+    setFinCargarUploading(true); setFinCargarMsg(null);
+    try {
+      const form = new FormData();
+      form.append("file", file, file.name);
+      const r = await fetch("/api/cmmi/financiero/cargar", { method: "POST", body: form });
+      const json = await r.json();
+      if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      setFinCargarMsg({ ok: true, text: `✓ ${file.name} cargado — modelo actualizado.` });
+      setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false);
+    } catch (e) {
+      setFinCargarMsg({ ok: false, text: e instanceof Error ? e.message : "Error al cargar." });
+    } finally { setFinCargarUploading(false); }
+  }
+
   function reset() { setError(null); setNotice(null); }
 
   async function runPrediccion() {
@@ -2608,10 +2741,11 @@ function FinancieroPanel() {
               {loading ? "Calculando…" : "Predecir utilidad"}
             </button>
             <div className="pt-2 border-t border-white/[0.06]">
-              <UploadExcelRefresh
-                endpoint="/api/cmmi/financiero/cargar"
-                label="Actualizar datos históricos de utilidad"
-                onSuccess={() => { setPRes(null); setLbRes(null); setLbLoaded(false); }}
+              <p className="text-xs font-semibold text-slate-400 mb-3">Actualizar datos históricos de utilidad</p>
+              <FinancieroSourcePicker
+                onFile={handleFinCargar}
+                uploading={finCargarUploading}
+                msg={finCargarMsg}
               />
             </div>
           </div>
