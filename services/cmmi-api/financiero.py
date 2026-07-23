@@ -6,6 +6,7 @@ y expone funciones puras sin subprocess.
 """
 from __future__ import annotations
 
+import unicodedata
 import warnings
 from pathlib import Path
 
@@ -15,6 +16,14 @@ from numpy.linalg import lstsq
 from scipy.stats import f as f_dist, shapiro, t as t_dist
 
 warnings.filterwarnings("ignore")
+
+def _norm_col(name: str) -> str:
+    """Normaliza NFC y quita espacios extremos para hacer match robusto de columnas."""
+    return unicodedata.normalize("NFC", str(name)).strip()
+
+def _fix_cols(df: pd.DataFrame) -> pd.DataFrame:
+    df.columns = [_norm_col(c) for c in df.columns]
+    return df
 
 FIN_DIR  = Path(__file__).parent / "scripts" / "financiero"
 XLSX     = FIN_DIR / "Utilidad_Proyectos.xlsx"
@@ -163,13 +172,10 @@ def _load() -> None:
         return
 
     df = pd.read_excel(XLSX)
-    df.columns = [c.strip() for c in df.columns]
+    df = _fix_cols(df)
     df = df.dropna(subset=["Utilidad del proyecto"])
-    if "Fecha de finalización" in df.columns:
-        df["Fecha de finalización"] = pd.to_datetime(df["Fecha de finalización"], errors="coerce")
-        df = df.sort_values("Fecha de finalización").reset_index(drop=True)
-    else:
-        df["Fecha de finalización"] = pd.NaT
+    df["Fecha de finalización"] = pd.to_datetime(df["Fecha de finalización"], errors="coerce")
+    df = df.sort_values("Fecha de finalización").reset_index(drop=True)
     df["Cat"] = df["Categoría de proyecto"].apply(_norm)
 
     _df = df
@@ -182,8 +188,6 @@ def _load() -> None:
         sub = df[df["Cat"] == cat]
         _lb_cats[cat] = _stats_block(sub["Utilidad del proyecto"].values)
 
-    if "Monto del Proyecto" not in df.columns:
-        df["Monto del Proyecto"] = np.nan
     df_reg = df.dropna(subset=["Monto del Proyecto"]).copy()
     df_reg["Monto_B"] = df_reg["Monto del Proyecto"] / 1e9
     u_all  = df_reg["Utilidad del proyecto"].values
@@ -258,8 +262,8 @@ def recargar(xlsx_bytes: bytes) -> dict:
         df_test = pd.read_excel(io.BytesIO(xlsx_bytes))
     except Exception as e:
         raise ValueError(f"No se pudo leer el archivo Excel: {e}")
-    df_test.columns = [c.strip() for c in df_test.columns]
-    requeridas = {"Utilidad del proyecto", "Categoría de proyecto", "Fecha de finalización"}
+    df_test = _fix_cols(df_test)
+    requeridas = {"Utilidad del proyecto", "Categoría de proyecto", "Fecha de finalización", "Monto del Proyecto"}
     faltantes  = requeridas - set(df_test.columns)
     if faltantes:
         raise ValueError(f"Columnas faltantes: {faltantes}. Esperadas: {requeridas}")
