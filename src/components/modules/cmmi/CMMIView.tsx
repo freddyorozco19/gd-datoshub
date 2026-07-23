@@ -1781,7 +1781,7 @@ function ProyectosPanel() {
       {tab === "seguimiento" && (
         <div className="space-y-5">
           <SeguimientoExcelPicker onAutoFill={(v) => {
-            if (v.portafolio && PORTAFOLIOS.includes(v.portafolio)) setSPort(v.portafolio);
+            if (v.portafolio && PORTAFOLIOS.includes(v.portafolio as typeof PORTAFOLIOS[number])) setSPort(v.portafolio as typeof PORTAFOLIOS[number]);
             setSLider(v.lider);
             setSMes(v.mesRel);
             setSSpi1(v.spi1);
