@@ -2609,6 +2609,8 @@ function FinancieroPanel() {
       if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
       setFinCargarMsg({ ok: true, text: `✓ ${file.name} cargado — modelo actualizado.` });
       setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false);
+      void loadFinInfo(true);
+      void loadLineasBase();
     } catch (e) {
       setFinCargarMsg({ ok: false, text: e instanceof Error ? e.message : "Error al cargar." });
     } finally { setFinCargarUploading(false); }
@@ -2671,8 +2673,8 @@ function FinancieroPanel() {
     } finally { setLoading(false); }
   }
 
-  async function loadFinInfo() {
-    if (finInfoLoaded) return;
+  async function loadFinInfo(force = false) {
+    if (finInfoLoaded && !force) return;
     reset(); setLoading(true);
     try {
       const r = await fetch("/api/cmmi/financiero/info");
