@@ -2608,8 +2608,10 @@ function FinancieroPanel() {
       const form = new FormData();
       form.append("file", file, file.name);
       const r = await fetch("/api/cmmi/financiero/cargar", { method: "POST", body: form });
-      const json = await r.json();
-      if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+      const raw = await r.text();
+      let json: Record<string, unknown>;
+      try { json = JSON.parse(raw); } catch { throw new Error(`Respuesta inválida del servidor: ${raw.slice(0, 300)}`); }
+      if (!r.ok) throw new Error((json.detail ?? json.error ?? `Error ${r.status}`) as string);
       setFinCargarMsg({ ok: true, text: `✓ ${file.name} cargado — modelo actualizado.` });
       setFinListo(true);
       setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false);
