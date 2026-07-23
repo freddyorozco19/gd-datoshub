@@ -163,9 +163,13 @@ def _load() -> None:
         return
 
     df = pd.read_excel(XLSX)
+    df.columns = [c.strip() for c in df.columns]
     df = df.dropna(subset=["Utilidad del proyecto"])
-    df["Fecha de finalización"] = pd.to_datetime(df["Fecha de finalización"], errors="coerce")
-    df = df.sort_values("Fecha de finalización").reset_index(drop=True)
+    if "Fecha de finalización" in df.columns:
+        df["Fecha de finalización"] = pd.to_datetime(df["Fecha de finalización"], errors="coerce")
+        df = df.sort_values("Fecha de finalización").reset_index(drop=True)
+    else:
+        df["Fecha de finalización"] = pd.NaT
     df["Cat"] = df["Categoría de proyecto"].apply(_norm)
 
     _df = df
@@ -252,6 +256,7 @@ def recargar(xlsx_bytes: bytes) -> dict:
         df_test = pd.read_excel(io.BytesIO(xlsx_bytes))
     except Exception as e:
         raise ValueError(f"No se pudo leer el archivo Excel: {e}")
+    df_test.columns = [c.strip() for c in df_test.columns]
     requeridas = {"Utilidad del proyecto", "Categoría de proyecto", "Fecha de finalización"}
     faltantes  = requeridas - set(df_test.columns)
     if faltantes:
