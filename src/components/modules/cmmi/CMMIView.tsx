@@ -14,6 +14,9 @@ import {
   type KickoffResponse, type SeguimientoResponse, type SemaforoProy, type LineaBaseSpi,
   type LineasBaseResponse, type PrediccionFinResponse, type LineaBaseBloque,
   type LineasBaseDatosResponse, type PrediccionDatosResponse,
+  type ProyectosInfoResponse, type PklBloque,
+  type DatosOrigen, type DatosOrigenProyecto,
+  type LineasBaseSpiResponse, type LbSpiPortafolio,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 
@@ -664,7 +667,433 @@ function AvisosBanner({ avisos }: { avisos: string[] }) {
   );
 }
 
-type ProyTab = "kickoff" | "seguimiento";
+/* ── Marco de Medición ─────────────────────────────────────────────── */
+type IndicadorRow = {
+  indicador: string; construccion: string;
+  tipo: "Sub-proceso" | "Contexto"; origen: "Calculado" | "Input";
+  relevancia: string; descripcion: string;
+};
+type MarcoArea = { qppo: string; metrica: string; modelo: string; indicadores: IndicadorRow[] };
+
+const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoArea> = {
+  comercial: {
+    qppo: "Win Rate ≥ 44.4%",
+    metrica: "Ganadas / (Ganadas + Perdidas) · excluye Declinadas",
+    modelo: "Random Forest v2 · AUC = 0.804 · 596 oportunidades",
+    indicadores: [
+      { indicador: "Ejecutivo comercial",    construccion: "Quién lleva la oportunidad",             tipo: "Sub-proceso", origen: "Input",     relevancia: "Importancia 0.248 — predictor #1",              descripcion: "Es el predictor más importante del modelo con una importancia de 0.248. Existen diferencias de hasta 70 puntos porcentuales en win rate entre ejecutivos. Captura el efecto sistemático de la calidad de gestión, la red de relaciones y la experiencia del comercial. El modelo aprende el historial estadístico de cada uno y ajusta la probabilidad de ganar según quién lleva la oportunidad." },
+      { indicador: "Ingreso esperado (log)", construccion: "Valor COP transformado logarítmicamente", tipo: "Sub-proceso", origen: "Calculado", relevancia: "Importancia 0.123 — predictor #2",              descripcion: "Segundo predictor en importancia (0.123). Presenta una relación inversa no lineal: deals más pequeños tienen mayor probabilidad de ganar, posiblemente por menor competencia y menores requisitos técnicos. Se aplica transformación log(1+x) para comprimir el rango extremo de $1M a $59B y evitar que valores atípicos distorsionen el modelo." },
+      { indicador: "Tipo de venta",          construccion: "PROPIO vs REFERENCIADO",                  tipo: "Contexto",    origen: "Input",     relevancia: "Importancia 0.073 — referido gana +10pp",        descripcion: "Indica el origen del lead. Los leads referenciados ganan en promedio 10 puntos porcentuales más que los propios. Aunque individualmente tiene AUC univariado de solo 0.55, su poder real emerge en combinación con el ejecutivo comercial y el segmento, lo que justifica su inclusión en el Random Forest." },
+      { indicador: "Línea de negocio",       construccion: "TI / Datos y SI / Consultoría",           tipo: "Contexto",    origen: "Input",     relevancia: "Importancia 0.032",                              descripcion: "Diferencia el área de solución ofrecida. TI tiene el win rate más alto (51.5%), seguido de Datos y SI (48.2%) y Consultoría (41.4%). Su función principal en el modelo es capturar fortalezas diferenciadas por ejecutivo: ciertos comerciales son significativamente mejores en TI que en Consultoría, lo que el modelo detecta a través de la interacción entre variables." },
+      { indicador: "Segmento",               construccion: "PÚBLICO vs PRIVADO",                      tipo: "Contexto",    origen: "Input",     relevancia: "Importancia 0.023",                              descripcion: "Sin poder predictivo individual (AUC univariado 0.52), su valor está en las interacciones: Privado + Referenciado es la combinación de mayor win rate esperado (~50%), mientras que Público + Propio es la de menor probabilidad. El Random Forest capta estas interacciones automáticamente sin necesidad de codificarlas manualmente." },
+    ],
+  },
+  proyectos: {
+    qppo: "SPI ≥ 0.9301",
+    metrica: "EV / PV (Earned Value / Planned Value) — promedio mensual",
+    modelo: "Regresión logística · Modelo 1 AUC=0.88 · Modelo 2 AUC=0.85",
+    indicadores: [
+      { indicador: "SPI_lag2",     construccion: "SPI de hace 2 meses — shift(2) sobre histórico",        tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.45 — predictor más fuerte",          descripcion: "El predictor con mayor peso absoluto en ambos modelos (β=−1.45 en M2, β=−1.22 en M1). El historial de 2 meses es más predictivo que el estado actual porque revela si el deterioro tiene profundidad o si es puntual. Proyectos con buen SPI hace 2 meses tienen riesgo significativamente menor aunque estén bajos ahora." },
+      { indicador: "SPI_lag1",     construccion: "SPI del mes anterior — shift(1) sobre histórico",        tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28",                                 descripcion: "Estado actual del cronograma. Un SPI bajo el mes anterior es señal directa de que el proyecto ya está deteriorado. Se calcula con shift(1) sobre la serie mensual. Su coeficiente (β=−1.28) indica que por cada unidad que baja el SPI del mes anterior, la probabilidad logarítmica de alerta aumenta 1.28 unidades." },
+      { indicador: "VRA_lag1",     construccion: "(% Real − % Plan) / |% Plan| del mes anterior",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28 — igual de predictivo que SPI",    descripcion: "Variación Relativa de Avance: cuantifica la brecha porcentual entre el avance real y el planeado, normalizada por el planeado. Con el mismo coeficiente que SPI_lag1 (β=−1.28), confirma empíricamente que no es redundante sino complementaria: mide el deterioro desde la perspectiva del avance físico en lugar de la eficiencia de valor ganado." },
+      { indicador: "SPI_trend",    construccion: "SPI_lag1 − SPI_lag2 (derivado en el pipeline)",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — dirección del cambio",          descripcion: "Captura la dirección del cambio en el cronograma. Un SPI de 0.88 bajando (trend negativo) es fundamentalmente distinto a un SPI de 0.88 subiendo (trend positivo). Aunque su coeficiente (β=−0.35) es menor que los lags, aporta información que el nivel puntual no puede dar: si el proyecto está mejorando o empeorando." },
+      { indicador: "VRA_trend",    construccion: "VRA_lag1 − VRA_lag2 (derivado en el pipeline)",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — tendencia de la brecha",         descripcion: "Análogo al SPI_trend pero para la brecha de avance. Detecta si la diferencia entre lo planeado y lo ejecutado está creciendo o reduciéndose. Complementa al VRA_lag1 de la misma forma que SPI_trend complementa a SPI_lag1: el nivel dice dónde está el proyecto, el trend dice hacia dónde va." },
+      { indicador: "Mes relativo", construccion: "Fase del ciclo de vida normalizada [0–1]",               tipo: "Contexto",    origen: "Calculado", relevancia: "β = −0.62",                                 descripcion: "Indica en qué fracción del ciclo de vida está el proyecto (0=inicio, 1=cierre). Es esencial para eliminar falsas alarmas: un SPI de 0.88 en la fase 30–40% de un proyecto TI es históricamente normal, pero el mismo valor en la fase 80–90% es crítico." },
+      { indicador: "Portafolio",   construccion: "DATOS Y SI / TI / CONSULTORÍA",                          tipo: "Contexto",    origen: "Input",     relevancia: "β = −0.03",                                 descripcion: "Controla las diferencias estructurales de riesgo entre portafolios. TI es el más volátil (19 secuencias R2 de Nelson en VRA), mientras que DATOS Y SI es el más predecible al cierre (σ=0.062 en fase 90–100%). Sin este control, el modelo aplicaría los mismos umbrales a portafolios con perfiles de riesgo históricamente distintos." },
+      { indicador: "Líder",        construccion: "Codificación ordinal del líder del proyecto",             tipo: "Contexto",    origen: "Input",     relevancia: "β = +0.04",                                 descripcion: "Único coeficiente positivo en el Modelo 1 (+0.04), lo que significa que ciertos líderes están sistemáticamente asociados con mayor riesgo de alerta. Permite al modelo separar el riesgo inherente al tipo de proyecto del riesgo atribuible a la capacidad de gestión del líder." },
+    ],
+  },
+  financiero: {
+    qppo: "Utilidad ≥ 18.40%",
+    metrica: "Utilidad del proyecto (%) — proyectos terminados sin outliers |z|>2.5",
+    modelo: "OLS Regresión Lineal Modelo B · R²adj=16.3% · RMSE=8.79% · n=62",
+    indicadores: [
+      { indicador: "Categoría del proyecto", construccion: "13 tipos codificados como variables dummy",   tipo: "Sub-proceso", origen: "Input", relevancia: "Sostenibilidad β=+0.31 (p=0.005); Infra β=+0.18 (p=0.022)", descripcion: "Principal discriminador del modelo. Cada una de las 13 categorías recibe un coeficiente β que representa su desviación respecto al nivel base (Arquitectura Empresarial, 14.29%). Sostenibilidad es la categoría más rentable con utilidad esperada de 44.84% (p=0.005), seguida de Infra + Servicios gestionados con 32.55% (p=0.022). Gobierno de Datos es la de menor utilidad esperada (0.92%, β=−0.134)." },
+      { indicador: "Monto contratado",       construccion: "Valor del contrato en miles de millones COP", tipo: "Contexto",    origen: "Input", relevancia: "β=−0.0003 (p=0.955 — no significativo en Modelo B)",         descripcion: "En el Modelo A (con outliers, n=64) el monto era significativo (p=0.044), pero al excluir 2 proyectos con |z|>2.5, pierde toda significancia (p=0.955). Este hallazgo es intencionalmente documentado: revela que eran esos dos proyectos los que generaban artificialmente la relación. La conclusión es que con los datos actuales no se puede afirmar que proyectos más grandes o más pequeños tengan sistemáticamente mayor o menor utilidad." },
+    ],
+  },
+  datos: {
+    qppo: "Cobertura global ≥ 91.89%",
+    metrica: "Promedio de cubrimiento de indicadores de Gobierno de Datos por período",
+    modelo: "Regresión cuadrática · Ĉ = β₀ + β_cat + β₁·P + β₂·P² · 10 períodos",
+    indicadores: [
+      { indicador: "Calidad de datos",      construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=96.2% · σ=0.047 — tendencia ascendente ↑",    descripcion: "Mide la integridad y confiabilidad del dato en origen. Es la dimensión más madura del programa: muestra una tendencia claramente ascendente de P1 a P10 y tiene la desviación estándar más baja de las 4 categorías (σ=0.047), lo que indica un proceso estable y predecible." },
+      { indicador: "Uso y acceso a datos",  construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=95.1% · σ=0.035 — más estable",               descripcion: "Mide la disponibilidad y el control de acceso al dato. Es la categoría más estable del programa (σ=0.035, la más baja), con un crecimiento constante de 88.7% en P1 hasta 98.7% en P10. Su alta predictibilidad hace que el modelo polinomial tenga un R²=0.870 para esta categoría, el más alto de las cuatro." },
+      { indicador: "Integración y flujo",   construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=90.5% · σ=0.089 — caída en P9→P10 ⚠",         descripcion: "Mide la conectividad y el flujo de datos entre sistemas. Es la categoría con la alerta activa más urgente: muestra una tendencia descendente sostenida desde P7 hasta P10, con P10=74.5%, la lectura más baja reciente en todo el programa. El modelo proyecta P11=73.9%, lo que requiere intervención inmediata." },
+      { indicador: "Gestión ciclo de vida", construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=88.7% · σ=0.141 — mayor riesgo",              descripcion: "Mide el control del dato a lo largo de su ciclo completo: creación, almacenamiento, uso y eliminación. Es la categoría de mayor riesgo: tiene la σ más alta (0.141) y el LCL más bajo (46.5%), lo que indica alta dispersión entre sus 6 variables internas." },
+      { indicador: "Período",               construccion: "Número de período histórico (P1–P10)",          tipo: "Contexto",    origen: "Input",     relevancia: "Coeficiente β lineal + β cuadrático",            descripcion: "Captura la evolución temporal del programa. El modelo usa dos términos: β₁·P (tendencia lineal, β₁=+0.0231) que refleja el crecimiento sostenido, y β₂·P² (curvatura, β₂=−0.0020) que captura la desaceleración natural conforme el cubrimiento se aproxima al techo del 100%." },
+    ],
+  },
+};
+
+function MarcoMedicion({ area }: { area: keyof typeof MARCO }) {
+  const m = MARCO[area];
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
+  return (
+    <div className="space-y-5">
+      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-5 space-y-3">
+        <p className="text-xs font-semibold uppercase tracking-widest text-blue-400">QPPO</p>
+        <p className="text-2xl font-bold text-slate-100">{m.qppo}</p>
+        <p className="text-xs text-slate-400">{m.metrica}</p>
+        <div className="pt-1 border-t border-white/[0.06]">
+          <p className="text-xs text-slate-500">{m.modelo}</p>
+        </div>
+      </div>
+
+      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
+        <div className="px-5 py-3 border-b border-white/[0.07]">
+          <p className="text-sm font-semibold text-slate-200">Indicadores involucrados en el modelo</p>
+          <p className="text-xs text-slate-500 mt-0.5">Haz clic en cada fila para ver la función e importancia de cada variable</p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/[0.07]">
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Indicador</th>
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Construcción</th>
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Tipo</th>
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Origen</th>
+                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Relevancia</th>
+              </tr>
+            </thead>
+            <tbody>
+              {m.indicadores.map((row, i) => (
+                <>
+                  <tr
+                    key={i}
+                    className={`border-b border-white/[0.04] last:border-0 transition-colors cursor-pointer ${openIdx === i ? "bg-white/[0.04]" : "hover:bg-white/[0.02]"}`}
+                    onClick={() => setOpenIdx(openIdx === i ? null : i)}
+                  >
+                    <td className="px-4 py-3 font-medium text-slate-200 whitespace-nowrap">
+                      <span className="flex items-center gap-1.5">
+                        {row.indicador}
+                        <AlertCircle size={13} className={`shrink-0 transition-colors ${openIdx === i ? "text-blue-400" : "text-slate-600"}`} />
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-slate-400 text-xs">{row.construccion}</td>
+                    <td className="px-4 py-3">
+                      {row.tipo === "Sub-proceso"
+                        ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-500/10 text-blue-400 whitespace-nowrap">Sub-proceso</span>
+                        : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400 whitespace-nowrap">Contexto</span>
+                      }
+                    </td>
+                    <td className="px-4 py-3">
+                      {row.origen === "Calculado"
+                        ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-violet-500/10 text-violet-400 whitespace-nowrap">Calculado</span>
+                        : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-500/10 text-slate-400 whitespace-nowrap">Input</span>
+                      }
+                    </td>
+                    <td className="px-4 py-3 text-slate-400 text-xs">{row.relevancia}</td>
+                  </tr>
+                  {openIdx === i && (
+                    <tr key={`desc-${i}`} className="border-b border-white/[0.04]">
+                      <td colSpan={5} className="px-4 pb-4 pt-0">
+                        <div className="bg-blue-500/5 border border-blue-500/15 rounded-lg px-4 py-3 text-xs text-slate-300 leading-relaxed">
+                          <p className="text-[11px] font-semibold uppercase tracking-wide text-blue-400 mb-1.5">Función e importancia</p>
+                          {row.descripcion}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="flex gap-4 flex-wrap">
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <span className="px-2 py-0.5 rounded-full text-[11px] bg-blue-500/10 text-blue-400">Sub-proceso</span>
+          Métrica que mide directamente la ejecución del proceso
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <span className="px-2 py-0.5 rounded-full text-[11px] bg-amber-500/10 text-amber-400">Contexto</span>
+          Variable de clasificación o atributo del ambiente
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <span className="px-2 py-0.5 rounded-full text-[11px] bg-violet-500/10 text-violet-400">Calculado</span>
+          El modelo lo deriva internamente desde los datos históricos
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+          <span className="px-2 py-0.5 rounded-full text-[11px] bg-slate-500/10 text-slate-400">Input</span>
+          Viene directamente del sistema origen
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── PKL Info Panel ────────────────────────────────────────────────── */
+const AUC_COLOR = (auc: number) =>
+  auc >= 0.80 ? "text-emerald-400" : auc >= 0.65 ? "text-yellow-400" : "text-rose-400";
+
+function PklCard({ title, bloque }: { title: string; bloque: PklBloque }) {
+  if (!bloque.disponible) return (
+    <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4">
+      <p className="text-sm font-semibold text-slate-400">{title}</p>
+      <p className="text-xs text-rose-400 mt-1">No disponible</p>
+    </div>
+  );
+  const m = bloque.metricas!;
+  const total = (m.tp + m.fp + m.fn + m.tn) || 1;
+  return (
+    <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-sm font-semibold text-slate-200">{title}</p>
+          <p className="text-xs text-slate-500 mt-0.5">{bloque.algoritmo} · v{bloque.version}</p>
+        </div>
+        <span className={`text-2xl font-bold tabular-nums ${AUC_COLOR(m.auc)}`}>
+          {m.auc.toFixed(3)}<span className="text-xs font-normal ml-1 text-slate-500">AUC</span>
+        </span>
+      </div>
+      <p className="text-xs text-slate-500 leading-relaxed">{bloque.descripcion}</p>
+      <div className="grid grid-cols-3 gap-2 text-center">
+        {[
+          { label: "Precisión", val: `${(m.precision * 100).toFixed(1)}%` },
+          { label: "Recall",    val: `${(m.recall    * 100).toFixed(1)}%` },
+          { label: "F1",        val: `${(m.f1        * 100).toFixed(1)}%` },
+          { label: "Brier",     val: m.brier.toFixed(4) },
+          { label: "FPR",       val: `${(m.fpr * 100).toFixed(1)}%` },
+          { label: "n obs",     val: m.n_obs.toLocaleString("es-CO") },
+        ].map(({ label, val }) => (
+          <div key={label} className="bg-black/20 rounded-lg py-1.5">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className="text-xs font-semibold text-slate-300 tabular-nums">{val}</p>
+          </div>
+        ))}
+      </div>
+      <div>
+        <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">Matriz de confusión (umbral {m.umbral_alerta})</p>
+        <div className="grid grid-cols-2 gap-1 text-center text-xs">
+          <div className="bg-emerald-900/30 border border-emerald-700/30 rounded py-1">
+            <p className="text-[10px] text-slate-500">VP</p>
+            <p className="font-bold text-emerald-400">{m.tp} <span className="font-normal text-slate-500">({(m.tp/total*100).toFixed(1)}%)</span></p>
+          </div>
+          <div className="bg-rose-900/20 border border-rose-700/20 rounded py-1">
+            <p className="text-[10px] text-slate-500">FP</p>
+            <p className="font-bold text-rose-400">{m.fp} <span className="font-normal text-slate-500">({(m.fp/total*100).toFixed(1)}%)</span></p>
+          </div>
+          <div className="bg-rose-900/20 border border-rose-700/20 rounded py-1">
+            <p className="text-[10px] text-slate-500">FN</p>
+            <p className="font-bold text-rose-400">{m.fn} <span className="font-normal text-slate-500">({(m.fn/total*100).toFixed(1)}%)</span></p>
+          </div>
+          <div className="bg-emerald-900/30 border border-emerald-700/30 rounded py-1">
+            <p className="text-[10px] text-slate-500">VN</p>
+            <p className="font-bold text-emerald-400">{m.tn} <span className="font-normal text-slate-500">({(m.tn/total*100).toFixed(1)}%)</span></p>
+          </div>
+        </div>
+      </div>
+      {bloque.features && bloque.features.length > 0 && (
+        <div>
+          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">Variables del modelo</p>
+          <div className="flex flex-wrap gap-1">
+            {bloque.features.map((f) => (
+              <span key={f} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] text-indigo-300 font-mono">{f}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      {bloque.importancia && bloque.importancia.length > 0 && (
+        <div>
+          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Importancia de variables</p>
+          <div className="space-y-1">
+            {bloque.importancia.map(({ variable, importancia: _imp, pct }) => (
+              <div key={variable} className="flex items-center gap-2">
+                <span className="text-[10px] text-slate-400 w-32 truncate font-mono">{variable}</span>
+                <div className="flex-1 h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
+                  <div className="h-full bg-indigo-500 rounded-full" style={{ width: pct }} />
+                </div>
+                <span className="text-[10px] text-slate-500 w-8 text-right tabular-nums">{pct}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+        <span>{bloque.lideres_n} líderes en historial</span>
+        <span>·</span>
+        <span>{((bloque.pkl_bytes ?? 0) / 1024).toFixed(1)} KB</span>
+      </div>
+    </div>
+  );
+}
+
+function DatosOrigenPanel({ datos }: { datos: DatosOrigen }) {
+  const spiColor = (v: number) =>
+    v >= 0.95 ? "text-emerald-400" : v >= 0.80 ? "text-yellow-400" : "text-rose-400";
+  const estadoColor = (e: string) =>
+    e === "Completado" ? "text-emerald-400" : "text-sky-400";
+
+  return (
+    <div className="space-y-4">
+      <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
+        <span className="text-base">📂</span> Datos de entrenamiento
+        <span className="text-xs font-normal text-slate-500 ml-1">
+          {datos.fecha_min} – {datos.fecha_max} · {datos.n_observaciones} observaciones · {datos.proyectos.length} proyectos
+        </span>
+      </h3>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {Object.entries(datos.por_portafolio).map(([port, p]) => (
+          <div key={port} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-2">
+            <p className="text-xs font-semibold text-slate-300 leading-tight">{port}</p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
+              <span className="text-slate-500">Proyectos</span><span className="text-slate-200 font-medium">{p.n_proyectos}</span>
+              <span className="text-slate-500">Duración media</span><span className="text-slate-200 font-medium">{p.duracion_media} meses</span>
+              <span className="text-slate-500">SPI mín mediana</span><span className={`font-medium ${spiColor(p.spi_min_mediana)}`}>{p.spi_min_mediana}</span>
+              <span className="text-slate-500">Completados</span><span className="text-emerald-400 font-medium">{p.pct_completados}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.08] overflow-x-auto">
+        <table className="w-full text-[11px]">
+          <thead>
+            <tr className="border-b border-white/[0.06]">
+              {["ID", "Líder", "Portafolio", "Meses", "Reportes", "SPI mín", "SPI final", "Completado", "Estado"].map(h => (
+                <th key={h} className="px-3 py-2 text-left text-slate-500 font-medium whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {datos.proyectos.map((p: DatosOrigenProyecto, i: number) => (
+              <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
+                <td className="px-3 py-1.5 font-mono text-slate-400">{p.id}</td>
+                <td className="px-3 py-1.5 text-slate-300 whitespace-nowrap">{p.lider.split(" ").slice(0,2).join(" ")}</td>
+                <td className="px-3 py-1.5 text-slate-400">{p.portafolio.split(" ")[0]}</td>
+                <td className="px-3 py-1.5 text-slate-300 text-right tabular-nums">{p.meses}</td>
+                <td className="px-3 py-1.5 text-slate-400 text-right tabular-nums">{p.n_reportes}</td>
+                <td className={`px-3 py-1.5 text-right tabular-nums font-medium ${spiColor(p.spi_min)}`}>{p.spi_min}</td>
+                <td className={`px-3 py-1.5 text-right tabular-nums font-medium ${spiColor(p.spi_final)}`}>{p.spi_final}</td>
+                <td className="px-3 py-1.5 text-slate-300 text-right tabular-nums">{p.completado_final}</td>
+                <td className={`px-3 py-1.5 font-medium ${estadoColor(p.estado)}`}>{p.estado}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function PklInfoPanel({ info }: { info: ProyectosInfoResponse }) {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        {([
+          { label: "Kickoff AUC",  val: info.kickoff.metricas?.auc.toFixed(3),          color: AUC_COLOR(info.kickoff.metricas?.auc ?? 0)  },
+          { label: "Modelo A AUC", val: info.modelo_a.metricas?.auc.toFixed(3),         color: AUC_COLOR(info.modelo_a.metricas?.auc ?? 0) },
+          { label: "Modelo 1 AUC", val: info.modelo1.metricas?.auc.toFixed(3),          color: AUC_COLOR(info.modelo1.metricas?.auc ?? 0)  },
+          { label: "Modelo 2 AUC", val: info.modelo2.metricas?.auc.toFixed(3),          color: AUC_COLOR(info.modelo2.metricas?.auc ?? 0)  },
+          { label: "Datos hasta",  val: info.fecha_datos_hasta ?? "—",                   color: "text-sky-400"                               },
+          { label: "Proyectos",    val: info.n_proyectos ? String(info.n_proyectos) : "—", color: "text-slate-300"                          },
+        ] as { label: string; val?: string; color: string }[]).map(({ label, val, color }) => (
+          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className={`text-xl font-bold tabular-nums ${color}`}>{val ?? "—"}</p>
+          </div>
+        ))}
+      </div>
+      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 flex items-center gap-4 text-xs text-slate-400">
+        <span className={info.linea_base_spi.disponible ? "text-emerald-400" : "text-rose-400"}>
+          {info.linea_base_spi.disponible ? "✅" : "❌"} Línea base SPI
+        </span>
+        <span>{info.linea_base_spi.n_portafolios} portafolios: {info.linea_base_spi.portafolios.join(" · ")}</span>
+        <span className="ml-auto">{info.xlsx_disponible ? `Excel ${(info.xlsx_bytes/1024).toFixed(0)} KB` : "Sin Excel base"}</span>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <PklCard title="Modelo Kickoff — Riesgo de cronograma"   bloque={info.kickoff}  />
+        <PklCard title="Modelo A — Riesgo de alcance"            bloque={info.modelo_a} />
+        <PklCard title="Modelo 1 — Alerta mensual SPI"           bloque={info.modelo1}  />
+        <PklCard title="Modelo 2 — Riesgo estructural (early)"   bloque={info.modelo2}  />
+      </div>
+      {info.datos_origen && <DatosOrigenPanel datos={info.datos_origen} />}
+    </div>
+  );
+}
+
+/* ── Líneas Base SPI Panel ─────────────────────────────────────────── */
+function LbSpiPanel({ data }: { data: LineasBaseSpiResponse }) {
+  const [selectedPort, setSelectedPort] = useState<string>("GLOBAL");
+  const fases = [
+    "0-10%","10-20%","20-30%","30-40%","40-50%",
+    "50-60%","60-70%","70-80%","80-90%","90-100%",
+  ];
+
+  const portData: LbSpiPortafolio | null = selectedPort === "GLOBAL"
+    ? null
+    : (data.por_portafolio[selectedPort] ?? null);
+
+  const globalFases = selectedPort === "GLOBAL" ? null : portData?.por_fase ?? null;
+
+  function fmtN(v: number | null | undefined) { return v != null ? v.toFixed(4) : "—"; }
+
+  const btnBase   = "px-3 py-1.5 rounded-lg text-xs font-medium transition-colors";
+  const btnActive = `${btnBase} bg-indigo-600 text-white`;
+  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 hover:text-slate-200 hover:bg-white/[0.08]`;
+  const portafolios = ["GLOBAL", ...data.portafolios];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap gap-2">
+        {portafolios.map((p) => (
+          <button key={p} onClick={() => setSelectedPort(p)} className={selectedPort === p ? btnActive : btnIdle}>{p}</button>
+        ))}
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: "CL",  value: fmtN(selectedPort === "GLOBAL" ? data.global.CL  : portData?.global.CL)  },
+          { label: "UCL", value: fmtN(selectedPort === "GLOBAL" ? data.global.UCL : portData?.global.UCL) },
+          { label: "LCL", value: fmtN(selectedPort === "GLOBAL" ? data.global.LCL : portData?.global.LCL) },
+          { label: "σ",   value: fmtN(selectedPort === "GLOBAL" ? data.global.std : portData?.global.std) },
+        ].map(({ label, value }) => (
+          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-center">
+            <p className="text-xl font-bold text-slate-100 tabular-nums">{value}</p>
+            <p className="text-xs text-slate-500 mt-0.5">{label}</p>
+          </div>
+        ))}
+      </div>
+      {selectedPort !== "GLOBAL" && portData && (
+        <p className="text-xs text-slate-500 px-1">{portData.n_proyectos} proyectos · {portData.n_obs} observaciones</p>
+      )}
+      {selectedPort !== "GLOBAL" && globalFases && (
+        <div className="overflow-x-auto rounded-xl border border-white/[0.08]">
+          <table className="w-full text-xs text-slate-300">
+            <thead>
+              <tr className="border-b border-white/[0.08] bg-white/[0.03]">
+                <th className="px-3 py-2 text-left font-medium text-slate-500">Fase avance</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">CL</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">UCL</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">LCL</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">σ</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-500">n</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fases.map((fase) => {
+                const vals = globalFases[fase] ?? null;
+                return (
+                  <tr key={fase} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                    <td className="px-3 py-2 font-medium text-slate-400">{fase}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.CL)}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.UCL)}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.LCL)}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.std)}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{vals?.n ?? "—"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "reentrenar" | "modelos" | "marco";
 
 const GH_PROYECTOS_API = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Proyectos";
 
@@ -791,6 +1220,15 @@ function ProyectosPanel() {
   const [reMsg, setReMsg]             = useState<{ ok: boolean; text: string } | null>(null);
   const [reUploading, setReUploading] = useState(false);
 
+  // Modelos PKL state
+  const [info, setInfo]           = useState<ProyectosInfoResponse | null>(null);
+  const [infoLoading, setInfoLoading] = useState(false);
+
+  // Líneas base SPI state
+  const [lbSpi, setLbSpi]         = useState<LineasBaseSpiResponse | null>(null);
+  const [lbSpiLoading, setLbSpiLoading] = useState(false);
+  const [lbSpiError, setLbSpiError]     = useState<string | null>(null);
+
   // Kickoff state
   const [kPort,  setKPort]  = useState<string>(PORTAFOLIOS[0]);
   const [kLider, setKLider] = useState("");
@@ -827,10 +1265,34 @@ function ProyectosPanel() {
       if (!r.ok) throw new Error((json.detail ?? json.error ?? `Error ${r.status}`) as string);
       const m = json.metricas as Record<string, number> | undefined;
       setReMsg({ ok: true, text: `✅ Modelos entrenados — ${json.n_proyectos} proyectos · Kickoff AUC ${m?.kickoff_auc?.toFixed(3)} · M1 AUC ${m?.modelo1_auc?.toFixed(3)}` });
+      setInfo(null);
       setProyListo(true);
     } catch (e) {
       setReMsg({ ok: false, text: e instanceof Error ? e.message : "Error al reentrenar." });
     } finally { setReUploading(false); }
+  }
+
+  async function loadInfo() {
+    if (info) return;
+    setInfoLoading(true);
+    try {
+      const r = await fetch("/api/cmmi/proyectos/info");
+      const j = await r.json();
+      if (r.ok) setInfo(j as ProyectosInfoResponse);
+    } finally { setInfoLoading(false); }
+  }
+
+  async function loadLbSpi() {
+    if (lbSpi) return;
+    setLbSpiLoading(true); setLbSpiError(null);
+    try {
+      const r = await fetch("/api/cmmi/proyectos/lineas-base");
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.detail ?? j.error ?? `Error ${r.status}`);
+      setLbSpi(j as LineasBaseSpiResponse);
+    } catch (e) {
+      setLbSpiError(e instanceof Error ? e.message : "Error al cargar líneas base.");
+    } finally { setLbSpiLoading(false); }
   }
 
   if (checkingModelos) {
@@ -918,8 +1380,12 @@ function ProyectosPanel() {
   }
 
   const tabs: { id: ProyTab; label: string; icon: typeof Activity }[] = [
-    { id: "kickoff",      label: "Kickoff",      icon: BarChart2     },
-    { id: "seguimiento",  label: "Seguimiento",  icon: CalendarCheck },
+    { id: "kickoff",     label: "Kickoff",          icon: BarChart2     },
+    { id: "seguimiento", label: "Seguimiento",       icon: CalendarCheck },
+    { id: "lineas-base", label: "Líneas base",       icon: PieChart      },
+    { id: "reentrenar",  label: "Reentrenar",        icon: Database      },
+    { id: "modelos",     label: "Modelos PKL",       icon: PieChart      },
+    { id: "marco",       label: "Marco de medición", icon: ShieldCheck   },
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
@@ -928,11 +1394,15 @@ function ProyectosPanel() {
   return (
     <div className="space-y-5">
       {/* Tabs */}
-      <div className="flex items-center gap-1.5 border-b border-white/[0.07]">
+      <div className="flex flex-wrap items-center gap-1.5 border-b border-white/[0.07]">
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id); reset(); }}
+            onClick={() => {
+              setTab(id as ProyTab); reset();
+              if (id === "modelos")     loadInfo();
+              if (id === "lineas-base") loadLbSpi();
+            }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -1086,6 +1556,60 @@ function ProyectosPanel() {
           )}
         </div>
       )}
+
+      {/* ── LÍNEAS BASE SPI ──────────────────────────────────────── */}
+      {tab === "lineas-base" && (
+        <div className="space-y-4">
+          {lbSpiLoading && (
+            <div className="flex items-center gap-2 text-sm text-slate-400 px-1">
+              <Clock size={14} className="animate-spin" /> Cargando líneas base…
+            </div>
+          )}
+          {lbSpiError && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {lbSpiError}
+            </div>
+          )}
+          {lbSpi && <LbSpiPanel data={lbSpi} />}
+        </div>
+      )}
+
+      {/* ── REENTRENAR ───────────────────────────────────────────── */}
+      {tab === "reentrenar" && (
+        <div className="space-y-4">
+          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-xs text-slate-400 space-y-1">
+            <p className="font-semibold text-slate-300">¿Cuándo reentrenar?</p>
+            <ul className="list-disc list-inside space-y-0.5 text-slate-500">
+              <li>Tienes 20+ proyectos nuevos cerrados con SPI mensual registrado</li>
+              <li>Hay nuevos líderes de proyecto que el modelo no conoce</li>
+              <li>Se incorporó un nuevo portafolio</li>
+              <li>El modelo muestra predicciones inconsistentes con la realidad</li>
+            </ul>
+            <p className="pt-1 text-slate-500">
+              El Excel debe tener las columnas: <span className="text-slate-400 font-mono">ProjectId, Portafolio, ProjectOwnerName, Meses, Presupuesto, Mes Relativo, SPI (Schedule Performance Index), Variación Relativa Avance, Completado Real</span>
+            </p>
+          </div>
+          <ProyectosSourcePicker onFile={handleReentrenar} uploading={reUploading} msg={reMsg} />
+        </div>
+      )}
+
+      {/* ── MODELOS PKL ──────────────────────────────────────────── */}
+      {tab === "modelos" && (
+        <div className="space-y-4">
+          {infoLoading && (
+            <div className="flex items-center gap-2 text-sm text-slate-400 py-6 justify-center">
+              <Clock size={15} className="animate-spin" /> Cargando info de modelos…
+            </div>
+          )}
+          {!infoLoading && !info && (
+            <p className="text-sm text-slate-500 text-center py-6">No se pudo cargar la información. ¿Está corriendo el microservicio?</p>
+          )}
+          {info && <PklInfoPanel info={info} />}
+        </div>
+      )}
+
+      {/* ── MARCO DE MEDICIÓN ────────────────────────────────────── */}
+      {tab === "marco" && <MarcoMedicion area="proyectos" />}
     </div>
   );
 }
