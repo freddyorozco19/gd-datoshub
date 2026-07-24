@@ -1552,13 +1552,17 @@ function DatosOrigenPanel({ datos }: { datos: DatosOrigen }) {
   );
 }
 
-type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "reentrenar" | "modelos" | "marco";
+type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "reentrenar" | "modelos" | "dataset" | "marco";
 
 function ProyectosPanel() {
   const [tab, setTab]   = useState<ProyTab>("kickoff");
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
   const [notice, setNotice]   = useState<string | null>(null);
+
+  // Dataset state
+  const [dsSearch, setDsSearch] = useState("");
+  const [dsPort,   setDsPort]   = useState("Todos");
 
   // Kickoff state
   const [kPort,  setKPort]  = useState<string>(PORTAFOLIOS[0]);
@@ -1687,6 +1691,7 @@ function ProyectosPanel() {
     { id: "lineas-base", label: "Líneas base",         icon: PieChart    },
     { id: "reentrenar",  label: "Reentrenar",          icon: Database    },
     { id: "modelos",     label: "Modelos PKL",         icon: PieChart    },
+    { id: "dataset",     label: "Dataset",             icon: Database    },
     { id: "marco",       label: "Marco de medición",   icon: ShieldCheck },
   ];
 
@@ -1701,7 +1706,7 @@ function ProyectosPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos") loadInfo(); if (id === "lineas-base") loadLbSpi(); }}
+            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos" || id === "dataset") loadInfo(); if (id === "lineas-base") loadLbSpi(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -1909,6 +1914,76 @@ function ProyectosPanel() {
           {lbSpi && <LbSpiPanel data={lbSpi} />}
         </div>
       )}
+
+      {/* ── DATASET ─────────────────────────────────────────────────── */}
+      {tab === "dataset" && (() => {
+        const proyectos = info?.datos_origen?.proyectos ?? [];
+        const portafolios = ["Todos", ...Array.from(new Set(proyectos.map(p => p.portafolio))).sort()];
+        const filtered = proyectos.filter(p =>
+          (dsPort === "Todos" || p.portafolio === dsPort) &&
+          (!dsSearch || p.id.toLowerCase().includes(dsSearch.toLowerCase()) || p.lider.toLowerCase().includes(dsSearch.toLowerCase()))
+        );
+        const SEM: Record<string, string> = { VERDE: "text-emerald-400", AMARILLO: "text-amber-400", ROJO: "text-rose-400" };
+        return (
+          <div className="space-y-4">
+            {loading && <p className="text-xs text-slate-500 animate-pulse">Cargando dataset…</p>}
+            {error && <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400"><AlertCircle size={16} className="shrink-0 mt-0.5" />{error}</div>}
+            {info && (
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <Kpi icon={Layers}   label="Proyectos"     value={String(proyectos.length)}                        tint="bg-blue-500/10 text-blue-400"    />
+                  <Kpi icon={Database} label="Observaciones"  value={String(info.datos_origen?.n_observaciones ?? "—")} tint="bg-indigo-500/10 text-indigo-400" />
+                  <Kpi icon={Clock}    label="Desde"          value={info.datos_origen?.fecha_min ?? "—"}              tint="bg-slate-500/10 text-slate-400"  />
+                  <Kpi icon={Clock}    label="Hasta"          value={info.datos_origen?.fecha_max ?? "—"}              tint="bg-slate-500/10 text-slate-400"  />
+                </div>
+                <div className="flex flex-wrap items-center gap-2 bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3">
+                  <div className="relative">
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                    <input value={dsSearch} onChange={e => setDsSearch(e.target.value)} placeholder="Buscar ID o líder…"
+                      className="pl-8 pr-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none w-52" />
+                  </div>
+                  <select value={dsPort} onChange={e => setDsPort(e.target.value)}
+                    className="px-3 py-1.5 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none cmmi-select">
+                    {portafolios.map(p => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                  <span className="ml-auto text-xs text-slate-500">{filtered.length} proyectos</span>
+                </div>
+                <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
+                  <div className="overflow-x-auto max-h-[60vh]">
+                    <table className="w-full text-sm">
+                      <thead className="sticky top-0 z-10">
+                        <tr className="bg-black/30 backdrop-blur border-b border-white/[0.07] text-left">
+                          {["ID", "Portafolio", "Líder", "Meses", "Reportes", "SPI mín.", "SPI final", "Completado", "Estado"].map(h => (
+                            <th key={h} className="px-3 py-2.5 text-xs font-semibold text-slate-400 whitespace-nowrap">{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filtered.map((p, i) => (
+                          <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors">
+                            <td className="px-3 py-2 font-mono text-xs text-slate-400 whitespace-nowrap">{p.id}</td>
+                            <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{p.portafolio}</td>
+                            <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{p.lider}</td>
+                            <td className="px-3 py-2 text-slate-400 text-center">{p.meses}</td>
+                            <td className="px-3 py-2 text-slate-400 text-center">{p.n_reportes}</td>
+                            <td className={`px-3 py-2 font-semibold text-center ${p.spi_min >= 0.9 ? "text-emerald-400" : p.spi_min >= 0.75 ? "text-amber-400" : "text-rose-400"}`}>{p.spi_min.toFixed(2)}</td>
+                            <td className={`px-3 py-2 font-semibold text-center ${p.spi_final >= 0.9 ? "text-emerald-400" : p.spi_final >= 0.75 ? "text-amber-400" : "text-rose-400"}`}>{p.spi_final.toFixed(2)}</td>
+                            <td className="px-3 py-2 text-slate-300 text-center">{p.completado_final}</td>
+                            <td className={`px-3 py-2 font-medium whitespace-nowrap ${SEM[p.estado] ?? "text-slate-400"}`}>{p.estado}</td>
+                          </tr>
+                        ))}
+                        {filtered.length === 0 && (
+                          <tr><td colSpan={9} className="px-4 py-8 text-center text-sm text-slate-500">Sin resultados.</td></tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        );
+      })()}
 
       {tab === "marco" && <MarcoMedicion area="proyectos" />}
     </div>
