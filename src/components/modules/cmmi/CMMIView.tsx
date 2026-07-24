@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ShieldCheck, Upload, FileSpreadsheet, X, Search,
   DollarSign, Trophy, TrendingDown, Clock, Layers, AlertCircle,
@@ -704,7 +704,7 @@ function ProyectosSourcePicker({ onFile, uploading, msg }: {
     } finally { setDownloading(null); }
   }
 
-  useState(() => { loadGhFiles(); });
+  useEffect(() => { loadGhFiles(); }, []);
 
   const btnBase   = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors";
   const btnActive = `${btnBase} bg-indigo-600 text-white`;
@@ -788,17 +788,34 @@ function ProyectosPanel() {
   const [error, setError]     = useState<string | null>(null);
   const [notice, setNotice]   = useState<string | null>(null);
 
+  const [reMsg, setReMsg]             = useState<{ ok: boolean; text: string } | null>(null);
+  const [reUploading, setReUploading] = useState(false);
+
+  // Kickoff state
+  const [kPort,  setKPort]  = useState<string>(PORTAFOLIOS[0]);
+  const [kLider, setKLider] = useState("");
+  const [kDur,   setKDur]   = useState("");
+  const [kPres,  setKPres]  = useState("");
+  const [kRes,   setKRes]   = useState<KickoffResponse | null>(null);
+
+  // Seguimiento state
+  const [sPort,  setSPort]  = useState<string>(PORTAFOLIOS[0]);
+  const [sLider, setSLider] = useState("");
+  const [sMes,   setSMes]   = useState("");
+  const [sSpi1,  setSSpi1]  = useState("");
+  const [sVra1,  setSVra1]  = useState("");
+  const [sSpi2,  setSSpi2]  = useState("");
+  const [sSpiObs,setSSpiObs]= useState("");
+  const [sRes,   setSRes]   = useState<SeguimientoResponse | null>(null);
+
   // Verificar al montar si los modelos ya están disponibles
-  useState(() => {
+  useEffect(() => {
     fetch("/api/cmmi/proyectos/info")
       .then(r => r.json())
       .then(j => { if (j?.kickoff?.disponible) setProyListo(true); })
       .catch(() => {})
       .finally(() => setCheckingModelos(false));
-  });
-
-  const [reMsg, setReMsg]             = useState<{ ok: boolean; text: string } | null>(null);
-  const [reUploading, setReUploading] = useState(false);
+  }, []);
 
   async function handleReentrenar(file: File) {
     setReUploading(true); setReMsg(null);
@@ -844,23 +861,6 @@ function ProyectosPanel() {
       </div>
     );
   }
-
-  // Kickoff state
-  const [kPort,  setKPort]  = useState<string>(PORTAFOLIOS[0]);
-  const [kLider, setKLider] = useState("");
-  const [kDur,   setKDur]   = useState("");
-  const [kPres,  setKPres]  = useState("");
-  const [kRes,   setKRes]   = useState<KickoffResponse | null>(null);
-
-  // Seguimiento state
-  const [sPort,  setSPort]  = useState<string>(PORTAFOLIOS[0]);
-  const [sLider, setSLider] = useState("");
-  const [sMes,   setSMes]   = useState("");
-  const [sSpi1,  setSSpi1]  = useState("");
-  const [sVra1,  setSVra1]  = useState("");
-  const [sSpi2,  setSSpi2]  = useState("");
-  const [sSpiObs,setSSpiObs]= useState("");
-  const [sRes,   setSRes]   = useState<SeguimientoResponse | null>(null);
 
   function reset() {
     setError(null); setNotice(null);
