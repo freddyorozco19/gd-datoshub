@@ -14,15 +14,8 @@ import {
   type KickoffResponse, type SeguimientoResponse, type SemaforoProy, type LineaBaseSpi,
   type LineasBaseResponse, type PrediccionFinResponse, type LineaBaseBloque,
   type LineasBaseDatosResponse, type PrediccionDatosResponse,
-  type ProyectosInfoResponse, type PklBloque,
-  type DatosOrigen, type DatosOrigenProyecto,
-  type FinancieroInfoResponse, type FinancieroInfoProyecto, type FinComparacionResponse,
-  type DatosInfoResponse, type DatosInfoRegistro,
-  type RfStatusResponse, type PredictOneResponse, type RfInfoResponse,
-  type LineasBaseSpiResponse, type LbSpiPortafolio,
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
-import * as XLSX from "xlsx";
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 const fmtCOP = (v: number): string =>
@@ -51,183 +44,6 @@ function lineaBadge(l: string): string {
   if (k === "TI")                return "bg-sky-500/10 text-sky-400";
   if (k.startsWith("DATOS"))     return "bg-emerald-500/10 text-emerald-400";
   return "bg-white/[0.05] text-slate-400";
-}
-
-/* ── Marco de Medición — tabla de indicadores por área ─────────────── */
-type IndicadorRow = { indicador: string; construccion: string; tipo: "Sub-proceso" | "Contexto"; origen: "Calculado" | "Input"; relevancia: string; descripcion: string };
-type MarcoArea = { qppo: string; metrica: string; modelo: string; indicadores: IndicadorRow[] };
-
-const MARCO: Record<"comercial" | "proyectos" | "financiero" | "datos", MarcoArea> = {
-  comercial: {
-    qppo: "Win Rate ≥ 44.4%",
-    metrica: "Ganadas / (Ganadas + Perdidas) · excluye Declinadas",
-    modelo: "Random Forest v2 · AUC = 0.804 · 596 oportunidades",
-    indicadores: [
-      { indicador: "Ejecutivo comercial",    construccion: "Quién lleva la oportunidad",             tipo: "Sub-proceso", origen: "Input",     relevancia: "Importancia 0.248 — predictor #1",
-        descripcion: "Es el predictor más importante del modelo con una importancia de 0.248. Existen diferencias de hasta 70 puntos porcentuales en win rate entre ejecutivos. Captura el efecto sistemático de la calidad de gestión, la red de relaciones y la experiencia del comercial. El modelo aprende el historial estadístico de cada uno y ajusta la probabilidad de ganar según quién lleva la oportunidad." },
-      { indicador: "Ingreso esperado (log)", construccion: "Valor COP transformado logarítmicamente", tipo: "Sub-proceso", origen: "Calculado", relevancia: "Importancia 0.123 — predictor #2",
-        descripcion: "Segundo predictor en importancia (0.123). Presenta una relación inversa no lineal: deals más pequeños tienen mayor probabilidad de ganar, posiblemente por menor competencia y menores requisitos técnicos. Se aplica transformación log(1+x) para comprimir el rango extremo de $1M a $59B y evitar que valores atípicos distorsionen el modelo." },
-      { indicador: "Tipo de venta",          construccion: "PROPIO vs REFERENCIADO",                  tipo: "Contexto",    origen: "Input",     relevancia: "Importancia 0.073 — referido gana +10pp",
-        descripcion: "Indica el origen del lead. Los leads referenciados ganan en promedio 10 puntos porcentuales más que los propios. Aunque individualmente tiene AUC univariado de solo 0.55, su poder real emerge en combinación con el ejecutivo comercial y el segmento, lo que justifica su inclusión en el Random Forest." },
-      { indicador: "Línea de negocio",       construccion: "TI / Datos y SI / Consultoría",           tipo: "Contexto",    origen: "Input",     relevancia: "Importancia 0.032",
-        descripcion: "Diferencia el área de solución ofrecida. TI tiene el win rate más alto (51.5%), seguido de Datos y SI (48.2%) y Consultoría (41.4%). Su función principal en el modelo es capturar fortalezas diferenciadas por ejecutivo: ciertos comerciales son significativamente mejores en TI que en Consultoría, lo que el modelo detecta a través de la interacción entre variables." },
-      { indicador: "Segmento",               construccion: "PÚBLICO vs PRIVADO",                      tipo: "Contexto",    origen: "Input",     relevancia: "Importancia 0.023",
-        descripcion: "Sin poder predictivo individual (AUC univariado 0.52), su valor está en las interacciones: Privado + Referenciado es la combinación de mayor win rate esperado (~50%), mientras que Público + Propio es la de menor probabilidad. El Random Forest capta estas interacciones automáticamente sin necesidad de codificarlas manualmente." },
-    ],
-  },
-  proyectos: {
-    qppo: "SPI ≥ 0.9301",
-    metrica: "EV / PV (Earned Value / Planned Value) — promedio mensual",
-    modelo: "Regresión logística · Modelo 1 AUC=0.88 · Modelo 2 AUC=0.85",
-    indicadores: [
-      { indicador: "SPI_lag2",     construccion: "SPI de hace 2 meses — shift(2) sobre histórico",        tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.45 — predictor más fuerte",
-        descripcion: "El predictor con mayor peso absoluto en ambos modelos (β=−1.45 en M2, β=−1.22 en M1). El historial de 2 meses es más predictivo que el estado actual porque revela si el deterioro tiene profundidad o si es puntual. Proyectos con buen SPI hace 2 meses tienen riesgo significativamente menor aunque estén bajos ahora. El modelo lo deriva aplicando shift(2) sobre la serie histórica mensual de SPI." },
-      { indicador: "SPI_lag1",     construccion: "SPI del mes anterior — shift(1) sobre histórico",        tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28",
-        descripcion: "Estado actual del cronograma. Un SPI bajo el mes anterior es señal directa de que el proyecto ya está deteriorado. Se calcula con shift(1) sobre la serie mensual. Su coeficiente (β=−1.28) indica que por cada unidad que baja el SPI del mes anterior, la probabilidad logarítmica de alerta aumenta 1.28 unidades, manteniendo constantes las demás variables." },
-      { indicador: "VRA_lag1",     construccion: "(% Real − % Plan) / |% Plan| del mes anterior",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −1.28 — igual de predictivo que SPI",
-        descripcion: "Variación Relativa de Avance: cuantifica la brecha porcentual entre el avance real y el planeado, normalizada por el planeado. Con el mismo coeficiente que SPI_lag1 (β=−1.28), confirma empíricamente que no es redundante sino complementaria: mide el deterioro desde la perspectiva del avance físico en lugar de la eficiencia de valor ganado. Un proyecto puede tener VRA negativa con SPI aceptable o viceversa." },
-      { indicador: "SPI_trend",    construccion: "SPI_lag1 − SPI_lag2 (derivado en el pipeline)",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — dirección del cambio",
-        descripcion: "Captura la dirección del cambio en el cronograma. Un SPI de 0.88 bajando (trend negativo) es fundamentalmente distinto a un SPI de 0.88 subiendo (trend positivo). El modelo lo calcula restando los dos rezagos disponibles. Aunque su coeficiente (β=−0.35) es menor que los lags, aporta información que el nivel puntual no puede dar: si el proyecto está mejorando o empeorando." },
-      { indicador: "VRA_trend",    construccion: "VRA_lag1 − VRA_lag2 (derivado en el pipeline)",          tipo: "Sub-proceso", origen: "Calculado", relevancia: "β = −0.35 — tendencia de la brecha",
-        descripcion: "Análogo al SPI_trend pero para la brecha de avance. Detecta si la diferencia entre lo planeado y lo ejecutado está creciendo o reduciéndose. Complementa al VRA_lag1 de la misma forma que SPI_trend complementa a SPI_lag1: el nivel dice dónde está el proyecto, el trend dice hacia dónde va." },
-      { indicador: "Mes relativo", construccion: "Fase del ciclo de vida normalizada [0–1]",               tipo: "Contexto",    origen: "Calculado", relevancia: "β = −0.62",
-        descripcion: "Indica en qué fracción del ciclo de vida está el proyecto (0=inicio, 1=cierre). Es esencial para eliminar falsas alarmas: un SPI de 0.88 en la fase 30–40% de un proyecto TI es históricamente normal, pero el mismo valor en la fase 80–90% es crítico. Sin esta variable el modelo generaría alertas masivas en fases donde el deterioro temporal es parte del patrón esperado del proceso." },
-      { indicador: "Portafolio",   construccion: "DATOS Y SI / TI / CONSULTORÍA",                          tipo: "Contexto",    origen: "Input",     relevancia: "β = −0.03",
-        descripcion: "Controla las diferencias estructurales de riesgo entre portafolios. TI es el más volátil (19 secuencias R2 de Nelson en VRA), mientras que DATOS Y SI es el más predecible al cierre (σ=0.062 en fase 90–100%). Sin este control, el modelo aplicaría los mismos umbrales a portafolios con perfiles de riesgo históricamente distintos, generando alertas incorrectas." },
-      { indicador: "Líder",        construccion: "Codificación ordinal del líder del proyecto",             tipo: "Contexto",    origen: "Input",     relevancia: "β = +0.04",
-        descripcion: "Único coeficiente positivo en el Modelo 1 (+0.04), lo que significa que ciertos líderes están sistemáticamente asociados con mayor riesgo de alerta. Permite al modelo separar el riesgo inherente al tipo de proyecto del riesgo atribuible a la capacidad de gestión del líder. La codificación ordinal preserva el orden de desempeño histórico entre líderes." },
-    ],
-  },
-  financiero: {
-    qppo: "Utilidad ≥ 18.40%",
-    metrica: "Utilidad del proyecto (%) — proyectos terminados sin outliers |z|>2.5",
-    modelo: "OLS Regresión Lineal Modelo B · R²adj=16.3% · RMSE=8.79% · n=62",
-    indicadores: [
-      { indicador: "Categoría del proyecto", construccion: "13 tipos codificados como variables dummy",   tipo: "Sub-proceso", origen: "Input", relevancia: "Sostenibilidad β=+0.31 (p=0.005); Infra β=+0.18 (p=0.022)",
-        descripcion: "Principal discriminador del modelo. Cada una de las 13 categorías recibe un coeficiente β que representa su desviación respecto al nivel base (Arquitectura Empresarial, 14.29%). Sostenibilidad es la categoría más rentable con utilidad esperada de 44.84% (p=0.005), seguida de Infra + Servicios gestionados con 32.55% (p=0.022). Gobierno de Datos es la de menor utilidad esperada (0.92%, β=−0.134). La categoría es el factor más accionable en el proceso de cotización." },
-      { indicador: "Monto contratado",       construccion: "Valor del contrato en miles de millones COP", tipo: "Contexto",    origen: "Input", relevancia: "β=−0.0003 (p=0.955 — no significativo en Modelo B)",
-        descripcion: "En el Modelo A (con outliers, n=64) el monto era significativo (p=0.044), pero al excluir 2 proyectos con |z|>2.5, pierde toda significancia (p=0.955). Este hallazgo es intencionalmente documentado: revela que eran esos dos proyectos los que generaban artificialmente la relación. La conclusión es que con los datos actuales no se puede afirmar que proyectos más grandes o más pequeños tengan sistemáticamente mayor o menor utilidad." },
-    ],
-  },
-  datos: {
-    qppo: "Cobertura global ≥ 91.89%",
-    metrica: "Promedio de cubrimiento de indicadores de Gobierno de Datos por período",
-    modelo: "Regresión cuadrática · Ĉ = β₀ + β_cat + β₁·P + β₂·P² · 10 períodos",
-    indicadores: [
-      { indicador: "Calidad de datos",      construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=96.2% · σ=0.047 — tendencia ascendente ↑",
-        descripcion: "Mide la integridad y confiabilidad del dato en origen. Es la dimensión más madura del programa: muestra una tendencia claramente ascendente de P1 a P10 y tiene la desviación estándar más baja de las 4 categorías (σ=0.047), lo que indica un proceso estable y predecible. El modelo calcula su cubrimiento promediando todas las variables de calidad registradas en cada período." },
-      { indicador: "Uso y acceso a datos",  construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=95.1% · σ=0.035 — más estable",
-        descripcion: "Mide la disponibilidad y el control de acceso al dato. Es la categoría más estable del programa (σ=0.035, la más baja), con un crecimiento constante de 88.7% en P1 hasta 98.7% en P10. Su alta predictibilidad hace que el modelo polinomial tenga un R²=0.870 para esta categoría, el más alto de las cuatro." },
-      { indicador: "Integración y flujo",   construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=90.5% · σ=0.089 — caída en P9→P10 ⚠",
-        descripcion: "Mide la conectividad y el flujo de datos entre sistemas. Es la categoría con la alerta activa más urgente: muestra una tendencia descendente sostenida desde P7 hasta P10, con P10=74.5%, la lectura más baja reciente en todo el programa. Su σ=0.089 es mayor que Calidad y Uso-Acceso, reflejando mayor volatilidad. El modelo proyecta P11=73.9%, lo que requiere intervención inmediata." },
-      { indicador: "Gestión ciclo de vida", construccion: "Promedio de cubrimiento agrupado por período", tipo: "Sub-proceso", origen: "Calculado", relevancia: "CL=88.7% · σ=0.141 — mayor riesgo",
-        descripcion: "Mide el control del dato a lo largo de su ciclo completo: creación, almacenamiento, uso y eliminación. Es la categoría de mayor riesgo: tiene la σ más alta (0.141) y el LCL más bajo (46.5%), lo que indica alta dispersión entre sus 6 variables internas. El Modelo Mixto (efectos fijos por período + efectos aleatorios por categoría) es el que mejor ajusta esta serie por su comportamiento irregular." },
-      { indicador: "Período",               construccion: "Número de período histórico (P1–P10)",          tipo: "Contexto",    origen: "Input",     relevancia: "Coeficiente β lineal + β cuadrático",
-        descripcion: "Captura la evolución temporal del programa. El modelo usa dos términos: β₁·P (tendencia lineal, β₁=+0.0231) que refleja el crecimiento sostenido, y β₂·P² (curvatura, β₂=−0.0020) que captura la desaceleración natural conforme el cubrimiento se aproxima al techo del 100%. Sin el término cuadrático, el modelo sobreestimaría el crecimiento futuro. Esta es la justificación metodológica para usar regresión polinomial en lugar de lineal simple." },
-    ],
-  },
-};
-
-function MarcoMedicion({ area }: { area: keyof typeof MARCO }) {
-  const m = MARCO[area];
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
-
-  return (
-    <div className="space-y-5">
-      {/* Encabezado QPPO */}
-      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-5 space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-widest text-blue-400">QPPO</p>
-        <p className="text-2xl font-bold text-slate-100">{m.qppo}</p>
-        <p className="text-xs text-slate-400">{m.metrica}</p>
-        <div className="pt-1 border-t border-white/[0.06]">
-          <p className="text-xs text-slate-500">{m.modelo}</p>
-        </div>
-      </div>
-
-      {/* Tabla de indicadores */}
-      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
-        <div className="px-5 py-3 border-b border-white/[0.07]">
-          <p className="text-sm font-semibold text-slate-200">Indicadores involucrados en el modelo</p>
-          <p className="text-xs text-slate-500 mt-0.5">Haz clic en <AlertCircle size={11} className="inline text-slate-500" /> para ver la función e importancia de cada variable</p>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-white/[0.07]">
-                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Indicador</th>
-                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Construcción</th>
-                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Tipo</th>
-                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Origen</th>
-                <th className="px-4 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-slate-500">Relevancia</th>
-              </tr>
-            </thead>
-            <tbody>
-              {m.indicadores.map((row, i) => (
-                <>
-                  <tr
-                    key={i}
-                    className={`border-b border-white/[0.04] last:border-0 transition-colors cursor-pointer ${openIdx === i ? "bg-white/[0.04]" : "hover:bg-white/[0.02]"}`}
-                    onClick={() => setOpenIdx(openIdx === i ? null : i)}
-                  >
-                    <td className="px-4 py-3 font-medium text-slate-200 whitespace-nowrap">
-                      <span className="flex items-center gap-1.5">
-                        {row.indicador}
-                        <AlertCircle size={13} className={`shrink-0 transition-colors ${openIdx === i ? "text-blue-400" : "text-slate-600 hover:text-slate-400"}`} />
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-slate-400 text-xs">{row.construccion}</td>
-                    <td className="px-4 py-3">
-                      {row.tipo === "Sub-proceso"
-                        ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-500/10 text-blue-400 whitespace-nowrap">Sub-proceso</span>
-                        : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400 whitespace-nowrap">Contexto</span>
-                      }
-                    </td>
-                    <td className="px-4 py-3">
-                      {row.origen === "Calculado"
-                        ? <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-violet-500/10 text-violet-400 whitespace-nowrap">Calculado</span>
-                        : <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-500/10 text-slate-400 whitespace-nowrap">Input</span>
-                      }
-                    </td>
-                    <td className="px-4 py-3 text-slate-400 text-xs">{row.relevancia}</td>
-                  </tr>
-                  {openIdx === i && (
-                    <tr key={`desc-${i}`} className="border-b border-white/[0.04]">
-                      <td colSpan={5} className="px-4 pb-4 pt-0">
-                        <div className="bg-blue-500/5 border border-blue-500/15 rounded-lg px-4 py-3 text-xs text-slate-300 leading-relaxed">
-                          <p className="text-[11px] font-semibold uppercase tracking-wide text-blue-400 mb-1.5">Función e importancia</p>
-                          {row.descripcion}
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Leyenda */}
-      <div className="flex gap-4 flex-wrap">
-        <div className="flex items-center gap-1.5 text-xs text-slate-500">
-          <span className="px-2 py-0.5 rounded-full text-[11px] bg-blue-500/10 text-blue-400">Sub-proceso</span>
-          Métrica que mide directamente la ejecución del proceso
-        </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-500">
-          <span className="px-2 py-0.5 rounded-full text-[11px] bg-amber-500/10 text-amber-400">Contexto</span>
-          Variable de clasificación o atributo del ambiente
-        </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-500">
-          <span className="px-2 py-0.5 rounded-full text-[11px] bg-violet-500/10 text-violet-400">Calculado</span>
-          El modelo lo deriva internamente desde los datos históricos
-        </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-500">
-          <span className="px-2 py-0.5 rounded-full text-[11px] bg-slate-500/10 text-slate-400">Input</span>
-          Viene directamente del sistema origen (Excel / CRM)
-        </div>
-      </div>
-    </div>
-  );
 }
 
 /* ── KPI card ──────────────────────────────────────────────────────── */
@@ -288,122 +104,6 @@ function UploadZone({ onFile, loading, error }: {
       </div>
       {error && (
         <div className="mt-4 flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
-          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ── Selector fuente Comercial (upload local o GitHub) ─────────────── */
-const GH_COMERCIAL_API = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Comercial";
-
-type GhFile = { name: string; download_url: string; size: number };
-
-function ComercialSourcePicker({ onFile, loading, error }: {
-  onFile: (f: File) => void; loading: boolean; error: string | null;
-}) {
-  const [mode, setMode] = useState<"upload" | "github">("github");
-  const [ghFiles, setGhFiles] = useState<GhFile[]>([]);
-  const [ghLoading, setGhLoading] = useState(false);
-  const [ghError, setGhError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [drag, setDrag] = useState(false);
-  const [downloading, setDownloading] = useState<string | null>(null);
-
-  async function loadGhFiles() {
-    if (ghFiles.length) return;
-    setGhLoading(true); setGhError(null);
-    try {
-      const r = await fetch(GH_COMERCIAL_API);
-      const j: { name: string; download_url: string; size: number; type: string }[] = await r.json();
-      setGhFiles(j.filter(f => f.type === "file" && f.name.endsWith(".xlsx")));
-    } catch {
-      setGhError("No se pudo conectar con GitHub.");
-    } finally { setGhLoading(false); }
-  }
-
-  async function pickGhFile(f: GhFile) {
-    setDownloading(f.name);
-    try {
-      const res = await fetch(f.download_url);
-      const blob = await res.blob();
-      onFile(new File([blob], f.name, { type: blob.type }));
-    } catch {
-      setGhError(`No se pudo descargar ${f.name}.`);
-    } finally { setDownloading(null); }
-  }
-
-  const btnBase = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors";
-  const btnActive = `${btnBase} bg-indigo-600 text-white`;
-  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:bg-white/[0.08] hover:text-slate-200`;
-
-  return (
-    <div className="max-w-xl mx-auto mt-10 space-y-4">
-      {/* Selector de modo */}
-      <div className="flex gap-2">
-        <button onClick={() => setMode("upload")} className={mode === "upload" ? btnActive : btnIdle}>
-          <Upload size={15} /> Subir archivo
-        </button>
-        <button onClick={() => { setMode("github"); loadGhFiles(); }} className={mode === "github" ? btnActive : btnIdle}>
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.42 7.88 10.95.58.1.79-.25.79-.55v-2.02c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.02 11.02 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.13v3.17c0 .3.2.66.8.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-          Desde GitHub
-        </button>
-      </div>
-
-      {/* Upload local */}
-      {mode === "upload" && (
-        <div
-          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
-          onDragLeave={() => setDrag(false)}
-          onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files?.[0]; if (f) onFile(f); }}
-          onClick={() => inputRef.current?.click()}
-          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-14 cursor-pointer transition-colors ${
-            drag ? "border-blue-500/60 bg-blue-500/5" : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
-          }`}
-        >
-          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400">
-            {loading ? <Clock size={26} className="animate-spin" /> : <Upload size={26} />}
-          </div>
-          <p className="text-sm font-semibold text-slate-300">{loading ? "Procesando archivo…" : "Arrastra el Excel de Comercial aquí"}</p>
-          <p className="text-xs text-slate-500">o haz clic para seleccionar · .xlsx / .xls</p>
-          <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
-            onChange={(e) => { const f = e.target.files?.[0]; if (f) onFile(f); e.target.value = ""; }} />
-        </div>
-      )}
-
-      {/* GitHub file list */}
-      {mode === "github" && (
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
-          <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2 text-xs text-slate-500">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.42 7.88 10.95.58.1.79-.25.79-.55v-2.02c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.02 11.02 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.13v3.17c0 .3.2.66.8.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-            FreddyOrozcoGrowData/CMMI-Hub · data/Comercial
-          </div>
-          {ghLoading && <p className="px-4 py-6 text-sm text-slate-500 text-center">Cargando archivos…</p>}
-          {ghError && <p className="px-4 py-4 text-sm text-rose-400">{ghError}</p>}
-          {!ghLoading && ghFiles.map((f) => (
-            <button key={f.name} onClick={() => pickGhFile(f)} disabled={!!downloading}
-              className="w-full flex items-center justify-between px-4 py-3 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left disabled:opacity-60">
-              <div className="flex items-center gap-3">
-                <FileSpreadsheet size={16} className="text-emerald-400 shrink-0" />
-                <span className="text-sm text-slate-200">{f.name}</span>
-              </div>
-              <div className="flex items-center gap-3 text-xs text-slate-500">
-                <span>{(f.size / 1024).toFixed(0)} KB</span>
-                {downloading === f.name
-                  ? <Clock size={14} className="animate-spin text-indigo-400" />
-                  : <span className="text-indigo-400 font-medium">Usar este</span>}
-              </div>
-            </button>
-          ))}
-          {!ghLoading && ghFiles.length === 0 && !ghError && (
-            <p className="px-4 py-6 text-sm text-slate-500 text-center">No hay archivos .xlsx en el repositorio.</p>
-          )}
-        </div>
-      )}
-
-      {error && (
-        <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
           <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
         </div>
       )}
@@ -518,8 +218,8 @@ function CuracionBar({ meta }: { meta: CuracionMeta }) {
 }
 
 /** Encabezado de panel de modelo con botón Ejecutar */
-function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun, runLabel }: {
-  icon: typeof Activity; title: string; desc: string; loading: boolean; done: boolean; onRun: () => void; runLabel?: string;
+function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun }: {
+  icon: typeof Activity; title: string; desc: string; loading: boolean; done: boolean; onRun: () => void;
 }) {
   return (
     <div className="flex items-start justify-between gap-4 flex-wrap bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] px-4 py-3.5">
@@ -538,7 +238,7 @@ function RunnerHeader({ icon: Icon, title, desc, loading, done, onRun, runLabel 
         className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
       >
         {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
-        {loading ? "Ejecutando…" : done ? "Volver a ejecutar" : (runLabel ?? "Ejecutar modelo")}
+        {loading ? "Ejecutando…" : done ? "Volver a ejecutar" : "Ejecutar modelo"}
       </button>
     </div>
   );
@@ -587,7 +287,7 @@ function SpcRunner({ file }: { file: File }) {
         icon={Activity}
         title="SPC · Carta de Control P (PPB)"
         desc="Línea base de desempeño del Win Rate competitivo por trimestre, con límites de control variables y reglas de Nelson."
-        loading={loading} done={!!res} onRun={run} runLabel="Ejecutar línea base"
+        loading={loading} done={!!res} onRun={run}
       />
       {notice && <LocalOnlyNotice message={notice} />}
       {error && (
@@ -598,23 +298,6 @@ function SpcRunner({ file }: { file: File }) {
       {res && (
         <div className="space-y-4">
           <CuracionBar meta={res.curacion} />
-          {/* KPI card de cobertura temporal de la data */}
-          {(res.stats.resumen?.fecha_min || res.stats.resumen?.fecha_max) && (
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl border border-sky-500/20 bg-sky-500/10 px-4 py-3 text-center">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-sky-400">Datos desde</p>
-                <p className="mt-1 text-xl font-bold text-slate-200">
-                  {String(res.stats.resumen.fecha_min ?? "—")}
-                </p>
-              </div>
-              <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-center">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-400">Datos hasta</p>
-                <p className="mt-1 text-xl font-bold text-slate-200">
-                  {String(res.stats.resumen.fecha_max ?? "—")}
-                </p>
-              </div>
-            </div>
-          )}
           <StatCards stats={res.stats.resumen} />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <ModelImage b64={res.images.carta_p}      title="Carta de Control P" />
@@ -696,10 +379,7 @@ function RfRunner({ file }: { file: File }) {
               <Table2 size={15} /> Predicciones
               <span className="text-xs font-normal text-slate-500">({res.table_counts.predictions})</span>
             </h4>
-            <RecordTable rows={(res.tables.predictions ?? []).map((r) => ({
-              ...r,
-              "¿ACERTÓ?": r["GANADO_BIN"] === r["PRED_LABEL"] ? "✅ Sí" : "❌ No",
-            }))} />
+            <RecordTable rows={res.tables.predictions} />
           </div>
         </div>
       )}
@@ -707,315 +387,9 @@ function RfRunner({ file }: { file: File }) {
   );
 }
 
-type ComercialTab = "datos" | "spc" | "rf" | "predictor" | "modelo-rf" | "marco";
+type ComercialTab = "datos" | "spc" | "rf";
 
 /* ── Vista COMERCIAL ───────────────────────────────────────────────── */
-function PredictorOportunidad() {
-  const [rfStatus, setRfStatus]   = useState<RfStatusResponse | null>(null);
-  const [loading,  setLoading]    = useState(false);
-  const [error,    setError]      = useState<string | null>(null);
-  const [notice,   setNotice]     = useState<string | null>(null);
-  const [result,   setResult]     = useState<PredictOneResponse | null>(null);
-
-  const [comercial,  setComercial]  = useState("");
-  const [linea,      setLinea]      = useState("");
-  const [tipoVenta,  setTipoVenta]  = useState("");
-  const [segmento,   setSegmento]   = useState("");
-  const [ingreso,    setIngreso]    = useState("");
-
-  const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
-  const selectCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select";
-  const labelCls = "text-xs font-medium text-slate-400 mb-1";
-
-  const semBg: Record<string, string> = {
-    VERDE:    "border-emerald-500/30 bg-emerald-500/10",
-    AMARILLO: "border-amber-500/30   bg-amber-500/10",
-    ROJO:     "border-rose-500/30    bg-rose-500/10",
-  };
-  const semText: Record<string, string> = {
-    VERDE: "text-emerald-400", AMARILLO: "text-amber-400", ROJO: "text-rose-400",
-  };
-
-  async function loadStatus() {
-    if (rfStatus) return;
-    try {
-      const r = await fetch("/api/cmmi/comercial/rf/status");
-      const json = await r.json();
-      if (json.localOnly) { setNotice(json.error); return; }
-      if (json.disponible) setRfStatus(json as RfStatusResponse);
-    } catch { /* sin microservicio, se usarán valores por defecto */ }
-  }
-
-  useState(() => { loadStatus(); });
-
-  async function predecir() {
-    setError(null); setResult(null); setLoading(true);
-    try {
-      const r = await fetch("/api/cmmi/comercial/rf/predict-one", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          comercial:   comercial.trim() || "Desconocido",
-          linea:       linea,
-          tipo_venta:  tipoVenta,
-          segmento:    segmento,
-          ingreso_cop: parseFloat(ingreso.replace(/\./g, "").replace(",", ".")) || 0,
-        }),
-      });
-      const json = await r.json();
-      if (!r.ok) {
-        if (json.localOnly) { setNotice(json.error); return; }
-        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
-      }
-      setResult(json as PredictOneResponse);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Error al predecir.");
-    } finally { setLoading(false); }
-  }
-
-  const lineas      = rfStatus?.lineas      ?? ["CONSULTORÍA", "DATOS Y SISTEMAS DE INFORMACIÓN", "TI"];
-  const tiposVenta  = rfStatus?.tipos_venta ?? ["PROPIO", "REFERENCIADO"];
-  const segmentos   = rfStatus?.segmentos   ?? ["PRIVADO", "PUBLICO"];
-  const comerciales = rfStatus?.comerciales ?? [];
-
-  return (
-    <div className="space-y-5">
-      {notice && <LocalOnlyNotice message={notice} />}
-
-      <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
-        <div>
-          <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-            <Cpu size={16} className="text-indigo-400" /> Predicción de oportunidad individual
-          </p>
-          <p className="text-xs text-slate-500 mt-1">
-            Random Forest v2 · AUC-CV = {rfStatus?.auc_cv?.toFixed(3) ?? "0.789"} · Ingresa los datos de la oportunidad para estimar la probabilidad de ganar.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <p className={labelCls}>Ejecutivo comercial</p>
-            {comerciales.length > 0
-              ? <select value={comercial} onChange={e => setComercial(e.target.value)} className={selectCls}>
-                  <option value="">— Seleccionar o escribir —</option>
-                  {comerciales.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
-              : <input value={comercial} onChange={e => setComercial(e.target.value)}
-                  placeholder="Nombre del ejecutivo" className={inputCls} />
-            }
-          </div>
-
-          <div>
-            <p className={labelCls}>Línea de negocio</p>
-            <select value={linea} onChange={e => setLinea(e.target.value)} className={selectCls}>
-              <option value="">— Seleccionar —</option>
-              {lineas.map(l => <option key={l} value={l}>{l}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <p className={labelCls}>Tipo de venta</p>
-            <select value={tipoVenta} onChange={e => setTipoVenta(e.target.value)} className={selectCls}>
-              <option value="">— Seleccionar —</option>
-              {tiposVenta.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </div>
-
-          <div>
-            <p className={labelCls}>Segmento</p>
-            <select value={segmento} onChange={e => setSegmento(e.target.value)} className={selectCls}>
-              <option value="">— Seleccionar —</option>
-              {segmentos.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
-          </div>
-
-          <div className="sm:col-span-2">
-            <p className={labelCls}>Ingreso esperado (COP)</p>
-            <input value={ingreso} onChange={e => setIngreso(e.target.value)}
-              placeholder="Ej: 500000000" type="number" min="0" className={inputCls} />
-          </div>
-        </div>
-
-        <button onClick={predecir} disabled={loading || !linea || !tipoVenta || !segmento || !ingreso}
-          className="flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-          {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
-          {loading ? "Calculando…" : "Predecir probabilidad"}
-        </button>
-      </div>
-
-      {error && (
-        <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
-          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
-        </div>
-      )}
-
-      {result && (
-        <div className={`rounded-xl border p-6 space-y-4 ${semBg[result.semaforo]}`}>
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">Probabilidad de ganar</p>
-              <p className={`text-5xl font-bold tabular-nums ${semText[result.semaforo]}`}>{result.probabilidad_pct}</p>
-              <p className={`text-sm font-semibold mt-1 ${semText[result.semaforo]}`}>
-                {result.semaforo} · Confianza {result.nivel}
-              </p>
-            </div>
-            <div className="text-right text-xs text-slate-500 space-y-1">
-              <p>AUC-CV <span className="text-slate-300 font-mono">{result.modelo.auc_cv}</span></p>
-              <p>Acc-CV <span className="text-slate-300 font-mono">{result.modelo.acc_cv}</span></p>
-              <p>n entrenamiento <span className="text-slate-300 font-mono">{result.modelo.n_total}</span></p>
-            </div>
-          </div>
-
-          {result.avisos.length > 0 && (
-            <div className="space-y-1">
-              {result.avisos.map((a, i) => (
-                <p key={i} className="text-xs text-amber-400 flex items-center gap-1.5">
-                  <AlertCircle size={12} /> {a}
-                </p>
-              ))}
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-white/[0.08]">
-            {[
-              { label: "Ejecutivo",  val: result.inputs.comercial },
-              { label: "Línea",      val: result.inputs.linea },
-              { label: "Tipo venta", val: result.inputs.tipo_venta },
-              { label: "Segmento",   val: result.inputs.segmento },
-            ].map(({ label, val }) => (
-              <div key={label}>
-                <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
-                <p className="text-xs text-slate-200 font-medium truncate">{val}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ── Modelo RF Panel (info PKL Comercial) ──────────────────────────── */
-function ModeloRfPanel() {
-  const [info, setInfo]       = useState<RfInfoResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [notice, setNotice]   = useState<string | null>(null);
-
-  useState(() => {
-    setLoading(true);
-    fetch("/api/cmmi/comercial/rf/info")
-      .then((r) => r.json())
-      .then((j) => {
-        if (j.localOnly) { setNotice(j.error); return; }
-        setInfo(j as RfInfoResponse);
-      })
-      .catch(() => setNotice("No se pudo contactar el microservicio."))
-      .finally(() => setLoading(false));
-  });
-
-  if (loading) return (
-    <div className="flex items-center gap-2 text-sm text-slate-400 py-8 justify-center">
-      <Clock size={15} className="animate-spin" /> Cargando info del modelo…
-    </div>
-  );
-  if (notice) return <LocalOnlyNotice message={notice} />;
-  if (!info?.disponible) return (
-    <p className="text-sm text-slate-500 text-center py-8">Modelo no disponible. Entrena primero desde la pestaña Random Forest (PPM).</p>
-  );
-
-  const m = info.metricas!;
-  const aucColor = m.auc_cv >= 0.80 ? "text-emerald-400" : m.auc_cv >= 0.70 ? "text-yellow-400" : "text-rose-400";
-
-  return (
-    <div className="space-y-4">
-      {/* KPIs */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {[
-          { label: "AUC-CV",     val: m.auc_cv.toFixed(3),              color: aucColor },
-          { label: "Acc-CV",     val: `${(m.acc_cv*100).toFixed(1)}%`,  color: "text-slate-200" },
-          { label: "n observ.",  val: m.n_total.toLocaleString("es-CO"), color: "text-slate-200" },
-          { label: "Comerciales",val: String(info.n_comerciales ?? "—"), color: "text-sky-400" },
-        ].map(({ label, val, color }) => (
-          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 text-center">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
-            <p className={`text-2xl font-bold tabular-nums ${color}`}>{val}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Info modelo */}
-      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-xs text-slate-400 flex flex-wrap gap-4">
-        <span><span className="text-slate-500">Algoritmo:</span> {info.algoritmo ?? "—"}</span>
-        <span><span className="text-slate-500">Versión:</span> {info.version ?? "—"}</span>
-        <span><span className="text-slate-500">Tamaño PKL:</span> {((info.pkl_bytes ?? 0) / 1024).toFixed(1)} KB</span>
-      </div>
-
-      {/* Métricas detalladas (solo si el PKL las guardó) */}
-      {m.precision > 0 && (
-        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
-          <p className="text-xs font-semibold text-slate-300">Métricas de evaluación (5-fold CV)</p>
-          <div className="grid grid-cols-3 gap-2 text-center">
-            {[
-              { label: "Precisión", val: `${(m.precision*100).toFixed(1)}%` },
-              { label: "Recall",    val: `${(m.recall*100).toFixed(1)}%` },
-              { label: "F1",        val: `${(m.f1*100).toFixed(1)}%` },
-              { label: "Brier",     val: m.brier.toFixed(4) },
-            ].map(({ label, val }) => (
-              <div key={label} className="bg-black/20 rounded-lg py-2">
-                <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
-                <p className="text-sm font-semibold text-slate-200 tabular-nums">{val}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Importancia de variables */}
-      {info.importancia && info.importancia.length > 0 && (
-        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
-          <p className="text-xs font-semibold text-slate-300">Importancia de variables</p>
-          <div className="space-y-2">
-            {info.importancia.map(({ variable, importancia, pct }) => (
-              <div key={variable} className="flex items-center gap-3">
-                <span className="text-xs text-slate-400 w-44 truncate font-mono">{variable}</span>
-                <div className="flex-1 h-2 bg-white/[0.05] rounded-full overflow-hidden">
-                  <div className="h-full bg-indigo-500 rounded-full transition-all" style={{ width: pct }} />
-                </div>
-                <span className="text-xs text-slate-400 w-10 text-right tabular-nums font-medium">{pct}</span>
-                <span className="text-[10px] text-slate-600 w-12 text-right tabular-nums">{importancia.toFixed(4)}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Features */}
-      {info.features && (
-        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 space-y-2">
-          <p className="text-xs font-semibold text-slate-300">Variables del modelo</p>
-          <div className="flex flex-wrap gap-1.5">
-            {info.features.map((f) => (
-              <span key={f} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] text-indigo-300 font-mono">{f}</span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Comerciales conocidos */}
-      {info.comerciales && info.comerciales.length > 0 && (
-        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 space-y-2">
-          <p className="text-xs font-semibold text-slate-300">{info.comerciales.length} ejecutivos en el historial</p>
-          <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto">
-            {info.comerciales.map((c) => (
-              <span key={c} className="px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[10px] text-slate-400">{c}</span>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
 function ComercialPanel() {
   const [data, setData] = useState<ParseResult | null>(null);
   const [rawFile, setRawFile] = useState<File | null>(null);
@@ -1026,13 +400,6 @@ function ComercialPanel() {
   const [fLinea, setFLinea] = useState("");
   const [fSegmento, setFSegmento] = useState("");
   const [fEstado, setFEstado] = useState("");
-  const [sortCol, setSortCol] = useState<keyof OportunidadComercial | null>(null);
-  const [sortAsc, setSortAsc] = useState(true);
-
-  function toggleSort(col: keyof OportunidadComercial) {
-    if (sortCol === col) setSortAsc((a) => !a);
-    else { setSortCol(col); setSortAsc(true); }
-  }
 
   async function handleFile(file: File) {
     setError(null); setLoading(true);
@@ -1059,22 +426,14 @@ function ComercialPanel() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    const base = records.filter((r) => {
+    return records.filter((r) => {
       if (fLinea && r.linea !== fLinea) return false;
       if (fSegmento && r.segmento !== fSegmento) return false;
       if (fEstado && r.ganado !== fEstado) return false;
       if (q && !(`${r.oportunidad} ${r.cliente} ${r.comercial} ${r.clienteFinal}`.toLowerCase().includes(q))) return false;
       return true;
     });
-    if (!sortCol) return base;
-    return [...base].sort((a, b) => {
-      const va = a[sortCol]; const vb = b[sortCol];
-      const na = typeof va === "number", nb = typeof vb === "number";
-      const cmp = na && nb ? (va as number) - (vb as number)
-        : String(va ?? "").localeCompare(String(vb ?? ""), "es");
-      return sortAsc ? cmp : -cmp;
-    });
-  }, [records, search, fLinea, fSegmento, fEstado, sortCol, sortAsc]);
+  }, [records, search, fLinea, fSegmento, fEstado]);
 
   const kpis = useMemo(() => {
     const total = filtered.length;
@@ -1090,32 +449,13 @@ function ComercialPanel() {
   const hasFilters = !!(search || fLinea || fSegmento || fEstado);
 
   if (!data) {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center gap-1.5 border-b border-white/[0.07] pb-0">
-          <button onClick={() => setTab("datos")}
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${tab !== "predictor" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500 hover:text-slate-300"}`}>
-            <Table2 size={15} /> Análisis histórico
-          </button>
-          <button onClick={() => setTab("predictor")}
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${tab === "predictor" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500 hover:text-slate-300"}`}>
-            <Cpu size={15} /> Predecir oportunidad
-          </button>
-        </div>
-        {tab === "predictor"
-          ? <PredictorOportunidad />
-          : <ComercialSourcePicker onFile={handleFile} loading={loading} error={error} />}
-      </div>
-    );
+    return <UploadZone onFile={handleFile} loading={loading} error={error} />;
   }
 
   const tabs: { id: ComercialTab; label: string; icon: typeof Table2 }[] = [
-    { id: "datos",      label: "Datos",               icon: Table2     },
-    { id: "spc",        label: "SPC · Carta P (PPB)", icon: Activity   },
-    { id: "rf",         label: "Random Forest (PPM)", icon: Cpu        },
-    { id: "predictor",  label: "Predecir",             icon: TrendingUp },
-    { id: "modelo-rf",  label: "Modelo RF",            icon: PieChart   },
-    { id: "marco",      label: "Marco de medición",   icon: ShieldCheck },
+    { id: "datos", label: "Datos",               icon: Table2   },
+    { id: "spc",   label: "SPC · Carta P (PPB)", icon: Activity },
+    { id: "rf",    label: "Random Forest (PPM)", icon: Cpu      },
   ];
 
   return (
@@ -1155,11 +495,8 @@ function ComercialPanel() {
         })}
       </div>
 
-      {tab === "spc"       && rawFile && <SpcRunner file={rawFile} />}
-      {tab === "rf"        && rawFile && <RfRunner  file={rawFile} />}
-      {tab === "predictor" && <PredictorOportunidad />}
-      {tab === "modelo-rf" && <ModeloRfPanel />}
-      {tab === "marco"     && <MarcoMedicion area="comercial" />}
+      {tab === "spc" && rawFile && <SpcRunner file={rawFile} />}
+      {tab === "rf"  && rawFile && <RfRunner  file={rawFile} />}
 
       {tab === "datos" && (
       <>
@@ -1183,15 +520,15 @@ function ComercialPanel() {
             className="pl-9 pr-4 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors w-72"
           />
         </div>
-        <select value={fLinea} onChange={(e) => setFLinea(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select">
+        <select value={fLinea} onChange={(e) => setFLinea(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors">
           <option value="">Todas las líneas</option>
           {opciones.lineas.map((l) => <option key={l} value={l}>{l}</option>)}
         </select>
-        <select value={fSegmento} onChange={(e) => setFSegmento(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select">
+        <select value={fSegmento} onChange={(e) => setFSegmento(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors">
           <option value="">Todos los segmentos</option>
           {opciones.segmentos.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
-        <select value={fEstado} onChange={(e) => setFEstado(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select">
+        <select value={fEstado} onChange={(e) => setFEstado(e.target.value)} className="px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors">
           <option value="">Todos los estados</option>
           {opciones.estados.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
@@ -1210,34 +547,15 @@ function ComercialPanel() {
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
               <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
-                {([
-                  ["oportunidad",    "Oportunidad",  false],
-                  ["cliente",        "Cliente",       false],
-                  ["comercial",      "Comercial",     false],
-                  ["linea",          "Línea",         false],
-                  ["segmento",       "Segmento",      false],
-                  ["ingresoEsperado","Ingreso esp.",  true ],
-                  ["ganado",         "Estado",        false],
-                  ["etapaActual",    "Etapa actual",  false],
-                  ["creado",         "Creado",        false],
-                ] as [keyof OportunidadComercial, string, boolean][]).map(([col, label, right]) => {
-                  const active = sortCol === col;
-                  return (
-                    <th key={col} onClick={() => toggleSort(col)}
-                      className={`px-4 py-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap cursor-pointer select-none transition-colors hover:text-slate-300 ${active ? "text-blue-400" : "text-slate-500"} ${right ? "text-right" : "text-left"}`}>
-                      <span className="inline-flex items-center gap-1">
-                        {label}
-                        <span className="text-[10px]">{active ? (sortAsc ? "▲" : "▼") : "⇅"}</span>
-                      </span>
-                    </th>
-                  );
-                })}
+                {["Oportunidad", "Cliente", "Comercial", "Línea", "Segmento", "Ingreso esp.", "Estado", "Etapa actual", "Creado"].map((h, i) => (
+                  <th key={h} className={`px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap ${i === 5 ? "text-right" : "text-left"}`}>{h}</th>
+                ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.04]">
               {filtered.map((r) => (
                 <tr key={r.rowId} className="hover:bg-white/[0.03] transition-colors">
-                  <td className="px-4 py-3 font-medium text-slate-200 max-w-[260px] truncate" title={r.oportunidad || r.idExterno}>{r.oportunidad || r.idExterno || "—"}</td>
+                  <td className="px-4 py-3 font-medium text-slate-200 max-w-[260px] truncate" title={r.oportunidad}>{r.oportunidad || "—"}</td>
                   <td className="px-4 py-3 text-slate-400 max-w-[220px] truncate" title={r.cliente}>{r.cliente || "—"}</td>
                   <td className="px-4 py-3 text-slate-500 whitespace-nowrap text-xs">{r.comercial || "—"}</td>
                   <td className="px-4 py-3">{r.linea ? <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${lineaBadge(r.linea)}`}>{r.linea}</span> : "—"}</td>
@@ -1346,223 +664,186 @@ function AvisosBanner({ avisos }: { avisos: string[] }) {
   );
 }
 
-/* ── PKL Info Panel ────────────────────────────────────────────────── */
-const AUC_COLOR = (auc: number) =>
-  auc >= 0.80 ? "text-emerald-400" : auc >= 0.65 ? "text-yellow-400" : "text-rose-400";
+type ProyTab = "kickoff" | "seguimiento";
 
-function PklCard({ title, bloque }: { title: string; bloque: PklBloque }) {
-  if (!bloque.disponible) return (
-    <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4">
-      <p className="text-sm font-semibold text-slate-400">{title}</p>
-      <p className="text-xs text-rose-400 mt-1">No disponible</p>
-    </div>
-  );
-  const m = bloque.metricas!;
-  const total = (m.tp + m.fp + m.fn + m.tn) || 1;
+const GH_PROYECTOS_API = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Proyectos";
+
+function ProyectosSourcePicker({ onFile, uploading, msg }: {
+  onFile: (f: File) => void;
+  uploading: boolean;
+  msg: { ok: boolean; text: string } | null;
+}) {
+  const [mode, setMode]           = useState<"upload" | "github">("github");
+  const [ghFiles, setGhFiles]     = useState<{ name: string; download_url: string; size: number }[]>([]);
+  const [ghLoading, setGhLoading] = useState(false);
+  const [ghError, setGhError]     = useState<string | null>(null);
+  const [downloading, setDownloading] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [drag, setDrag]           = useState(false);
+
+  async function loadGhFiles() {
+    if (ghFiles.length) return;
+    setGhLoading(true); setGhError(null);
+    try {
+      const r = await fetch(GH_PROYECTOS_API);
+      const j: { name: string; download_url: string; size: number; type: string }[] = await r.json();
+      setGhFiles(j.filter(f => f.type === "file" && f.name.endsWith(".xlsx")));
+    } catch {
+      setGhError("No se pudo conectar con GitHub.");
+    } finally { setGhLoading(false); }
+  }
+
+  async function pickGhFile(f: { name: string; download_url: string; size: number }) {
+    setDownloading(f.name);
+    try {
+      const res  = await fetch(f.download_url);
+      const blob = await res.blob();
+      onFile(new File([blob], f.name, { type: blob.type }));
+    } catch {
+      setGhError(`No se pudo descargar ${f.name}.`);
+    } finally { setDownloading(null); }
+  }
+
+  useState(() => { loadGhFiles(); });
+
+  const btnBase   = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors";
+  const btnActive = `${btnBase} bg-indigo-600 text-white`;
+  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:bg-white/[0.08] hover:text-slate-200`;
+  const ghIcon    = <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.42 7.88 10.95.58.1.79-.25.79-.55v-2.02c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.02 11.02 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.13v3.17c0 .3.2.66.8.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>;
+
   return (
-    <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-sm font-semibold text-slate-200">{title}</p>
-          <p className="text-xs text-slate-500 mt-0.5">{bloque.algoritmo} · v{bloque.version}</p>
-        </div>
-        <span className={`text-2xl font-bold tabular-nums ${AUC_COLOR(m.auc)}`}>{m.auc.toFixed(3)}<span className="text-xs font-normal ml-1 text-slate-500">AUC</span></span>
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <button onClick={() => setMode("upload")} className={mode === "upload" ? btnActive : btnIdle}>
+          <Upload size={15} /> Subir archivo
+        </button>
+        <button onClick={() => { setMode("github"); loadGhFiles(); }} className={mode === "github" ? btnActive : btnIdle}>
+          {ghIcon} Desde GitHub
+        </button>
       </div>
-      <p className="text-xs text-slate-500 leading-relaxed">{bloque.descripcion}</p>
-      {/* Métricas en grid */}
-      <div className="grid grid-cols-3 gap-2 text-center">
-        {[
-          { label: "Precisión", val: `${(m.precision * 100).toFixed(1)}%` },
-          { label: "Recall",    val: `${(m.recall    * 100).toFixed(1)}%` },
-          { label: "F1",        val: `${(m.f1        * 100).toFixed(1)}%` },
-          { label: "Brier",     val: m.brier.toFixed(4) },
-          { label: "FPR",       val: `${(m.fpr * 100).toFixed(1)}%` },
-          { label: "n obs",     val: m.n_obs.toLocaleString("es-CO") },
-        ].map(({ label, val }) => (
-          <div key={label} className="bg-black/20 rounded-lg py-1.5">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
-            <p className="text-xs font-semibold text-slate-300 tabular-nums">{val}</p>
+
+      {mode === "upload" && (
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+          onDragLeave={() => setDrag(false)}
+          onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files?.[0]; if (f) onFile(f); }}
+          onClick={() => inputRef.current?.click()}
+          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 cursor-pointer transition-colors ${
+            drag ? "border-blue-500/60 bg-blue-500/5" : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
+          }`}
+        >
+          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400">
+            {uploading ? <Clock size={26} className="animate-spin" /> : <Upload size={26} />}
           </div>
-        ))}
-      </div>
-      {/* Matriz de confusión */}
-      <div>
-        <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">Matriz de confusión (umbral {m.umbral_alerta})</p>
-        <div className="grid grid-cols-2 gap-1 text-center text-xs">
-          <div className="bg-emerald-900/30 border border-emerald-700/30 rounded py-1">
-            <p className="text-[10px] text-slate-500">VP</p>
-            <p className="font-bold text-emerald-400">{m.tp} <span className="font-normal text-slate-500">({(m.tp/total*100).toFixed(1)}%)</span></p>
-          </div>
-          <div className="bg-rose-900/20 border border-rose-700/20 rounded py-1">
-            <p className="text-[10px] text-slate-500">FP</p>
-            <p className="font-bold text-rose-400">{m.fp} <span className="font-normal text-slate-500">({(m.fp/total*100).toFixed(1)}%)</span></p>
-          </div>
-          <div className="bg-rose-900/20 border border-rose-700/20 rounded py-1">
-            <p className="text-[10px] text-slate-500">FN</p>
-            <p className="font-bold text-rose-400">{m.fn} <span className="font-normal text-slate-500">({(m.fn/total*100).toFixed(1)}%)</span></p>
-          </div>
-          <div className="bg-emerald-900/30 border border-emerald-700/30 rounded py-1">
-            <p className="text-[10px] text-slate-500">VN</p>
-            <p className="font-bold text-emerald-400">{m.tn} <span className="font-normal text-slate-500">({(m.tn/total*100).toFixed(1)}%)</span></p>
-          </div>
-        </div>
-      </div>
-      {/* Features */}
-      {bloque.features && bloque.features.length > 0 && (
-        <div>
-          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">Variables del modelo</p>
-          <div className="flex flex-wrap gap-1">
-            {bloque.features.map((f) => (
-              <span key={f} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] text-indigo-300 font-mono">{f}</span>
-            ))}
-          </div>
+          <p className="text-sm font-semibold text-slate-300">{uploading ? "Entrenando modelos…" : "Arrastra el Excel histórico de proyectos aquí"}</p>
+          <p className="text-xs text-slate-500">o haz clic para seleccionar · .xlsx / .xls</p>
+          <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) onFile(f); e.target.value = ""; }} />
         </div>
       )}
-      {/* Importancia */}
-      {bloque.importancia && bloque.importancia.length > 0 && (
-        <div>
-          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Importancia de variables</p>
-          <div className="space-y-1">
-            {bloque.importancia.map(({ variable, importancia, pct }) => (
-              <div key={variable} className="flex items-center gap-2">
-                <span className="text-[10px] text-slate-400 w-32 truncate font-mono">{variable}</span>
-                <div className="flex-1 h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
-                  <div className="h-full bg-indigo-500 rounded-full" style={{ width: pct }} />
-                </div>
-                <span className="text-[10px] text-slate-500 w-8 text-right tabular-nums">{pct}</span>
+
+      {mode === "github" && (
+        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
+          <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2 text-xs text-slate-500">
+            {ghIcon} FreddyOrozcoGrowData/CMMI-Hub · data/Proyectos
+          </div>
+          {ghLoading && <p className="px-4 py-6 text-sm text-slate-500 text-center">Cargando archivos…</p>}
+          {ghError  && <p className="px-4 py-4 text-sm text-rose-400">{ghError}</p>}
+          {!ghLoading && ghFiles.map((f) => (
+            <button key={f.name} onClick={() => pickGhFile(f)} disabled={!!downloading || uploading}
+              className="w-full flex items-center justify-between px-4 py-3 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left disabled:opacity-60">
+              <div className="flex items-center gap-3">
+                <FileSpreadsheet size={16} className="text-indigo-400 shrink-0" />
+                <span className="text-sm text-slate-200">{f.name}</span>
               </div>
-            ))}
-          </div>
+              <div className="flex items-center gap-3 text-xs text-slate-500">
+                <span>{(f.size / 1024).toFixed(0)} KB</span>
+                {downloading === f.name
+                  ? <Clock size={14} className="animate-spin text-indigo-400" />
+                  : <span className="text-indigo-400 font-medium">Usar este</span>}
+              </div>
+            </button>
+          ))}
+          {!ghLoading && ghFiles.length === 0 && !ghError && (
+            <p className="px-4 py-6 text-sm text-slate-500 text-center">No hay archivos .xlsx en el repositorio.</p>
+          )}
         </div>
       )}
-      {/* Portafolios + líderes */}
-      <div className="flex flex-wrap gap-3 text-xs text-slate-500">
-        <span>{bloque.lideres_n} líderes en historial</span>
-        <span>·</span>
-        <span>{((bloque.pkl_bytes ?? 0) / 1024).toFixed(1)} KB</span>
-      </div>
+
+      {msg && (
+        <div className={`flex items-start gap-2 rounded-lg px-4 py-3 text-sm ${msg.ok ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400" : "bg-rose-500/10 border border-rose-500/20 text-rose-400"}`}>
+          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {msg.text}
+        </div>
+      )}
     </div>
   );
 }
-
-function PklInfoPanel({ info }: { info: ProyectosInfoResponse }) {
-  return (
-    <div className="space-y-4">
-      {/* Resumen global */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        {([
-          { label: "Kickoff AUC",  val: info.kickoff.metricas?.auc.toFixed(3),   color: AUC_COLOR(info.kickoff.metricas?.auc ?? 0)  },
-          { label: "Modelo A AUC", val: info.modelo_a.metricas?.auc.toFixed(3),  color: AUC_COLOR(info.modelo_a.metricas?.auc ?? 0) },
-          { label: "Modelo 1 AUC", val: info.modelo1.metricas?.auc.toFixed(3),   color: AUC_COLOR(info.modelo1.metricas?.auc ?? 0)  },
-          { label: "Modelo 2 AUC", val: info.modelo2.metricas?.auc.toFixed(3),   color: AUC_COLOR(info.modelo2.metricas?.auc ?? 0)  },
-          { label: "Datos hasta",  val: info.fecha_datos_hasta ?? "—",            color: "text-sky-400"                               },
-          { label: "Proyectos",    val: info.n_proyectos ? String(info.n_proyectos) : "—", color: "text-slate-300"                  },
-        ] as {label:string;val?:string;color:string}[]).map(({ label, val, color }) => (
-          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
-            <p className={`text-xl font-bold tabular-nums ${color}`}>{val ?? "—"}</p>
-          </div>
-        ))}
-      </div>
-      {/* Línea base SPI */}
-      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 flex items-center gap-4 text-xs text-slate-400">
-        <span className={info.linea_base_spi.disponible ? "text-emerald-400" : "text-rose-400"}>
-          {info.linea_base_spi.disponible ? "✅" : "❌"} Línea base SPI
-        </span>
-        <span>{info.linea_base_spi.n_portafolios} portafolios: {info.linea_base_spi.portafolios.join(" · ")}</span>
-        <span className="ml-auto">{info.xlsx_disponible ? `Excel ${(info.xlsx_bytes/1024).toFixed(0)} KB` : "Sin Excel base"}</span>
-      </div>
-      {/* Cards de cada modelo */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <PklCard title="Modelo Kickoff — Riesgo de cronograma"   bloque={info.kickoff}  />
-        <PklCard title="Modelo A — Riesgo de alcance"            bloque={info.modelo_a} />
-        <PklCard title="Modelo 1 — Alerta mensual SPI"           bloque={info.modelo1}  />
-        <PklCard title="Modelo 2 — Riesgo estructural (early)"   bloque={info.modelo2}  />
-      </div>
-
-      {/* Datos origen */}
-      {info.datos_origen && <DatosOrigenPanel datos={info.datos_origen} />}
-    </div>
-  );
-}
-
-function DatosOrigenPanel({ datos }: { datos: DatosOrigen }) {
-  const portafolios = Object.entries(datos.por_portafolio);
-  const spiColor = (v: number) =>
-    v >= 0.95 ? "text-emerald-400" : v >= 0.80 ? "text-yellow-400" : "text-rose-400";
-  const estadoColor = (e: string) =>
-    e === "Completado" ? "text-emerald-400" : "text-sky-400";
-
-  return (
-    <div className="space-y-4">
-      <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
-        <span className="text-base">📂</span> Datos de entrenamiento
-        <span className="text-xs font-normal text-slate-500 ml-1">
-          {datos.fecha_min} – {datos.fecha_max} · {datos.n_observaciones} observaciones · {datos.proyectos.length} proyectos
-        </span>
-      </h3>
-
-      {/* Resumen por portafolio */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {portafolios.map(([port, p]) => (
-          <div key={port} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-2">
-            <p className="text-xs font-semibold text-slate-300 leading-tight">{port}</p>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
-              <span className="text-slate-500">Proyectos</span>
-              <span className="text-slate-200 font-medium">{p.n_proyectos}</span>
-              <span className="text-slate-500">Duración media</span>
-              <span className="text-slate-200 font-medium">{p.duracion_media} meses</span>
-              <span className="text-slate-500">SPI mín mediana</span>
-              <span className={`font-medium ${spiColor(p.spi_min_mediana)}`}>{p.spi_min_mediana}</span>
-              <span className="text-slate-500">Completados</span>
-              <span className="text-emerald-400 font-medium">{p.pct_completados}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Tabla de proyectos */}
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.08] overflow-x-auto">
-        <table className="w-full text-[11px]">
-          <thead>
-            <tr className="border-b border-white/[0.06]">
-              {["ID", "Líder", "Portafolio", "Meses", "Reportes", "SPI mín", "SPI final", "Completado", "Estado"].map(h => (
-                <th key={h} className="px-3 py-2 text-left text-slate-500 font-medium whitespace-nowrap">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {datos.proyectos.map((p: DatosOrigenProyecto, i: number) => (
-              <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
-                <td className="px-3 py-1.5 font-mono text-slate-400">{p.id}</td>
-                <td className="px-3 py-1.5 text-slate-300 whitespace-nowrap">{p.lider.split(" ").slice(0,2).join(" ")}</td>
-                <td className="px-3 py-1.5 text-slate-400">{p.portafolio.split(" ")[0]}</td>
-                <td className="px-3 py-1.5 text-slate-300 text-right tabular-nums">{p.meses}</td>
-                <td className="px-3 py-1.5 text-slate-400 text-right tabular-nums">{p.n_reportes}</td>
-                <td className={`px-3 py-1.5 text-right tabular-nums font-medium ${spiColor(p.spi_min)}`}>{p.spi_min}</td>
-                <td className={`px-3 py-1.5 text-right tabular-nums font-medium ${spiColor(p.spi_final)}`}>{p.spi_final}</td>
-                <td className="px-3 py-1.5 text-slate-300 text-right tabular-nums">{p.completado_final}</td>
-                <td className={`px-3 py-1.5 font-medium ${estadoColor(p.estado)}`}>{p.estado}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "reentrenar" | "modelos" | "dataset" | "marco";
 
 function ProyectosPanel() {
+  const [proyListo, setProyListo] = useState(false);
+  const [checkingModelos, setCheckingModelos] = useState(true);
+
   const [tab, setTab]   = useState<ProyTab>("kickoff");
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
   const [notice, setNotice]   = useState<string | null>(null);
 
-  // Dataset state
-  const [dsSearch, setDsSearch] = useState("");
-  const [dsPort,   setDsPort]   = useState("Todos");
+  // Verificar al montar si los modelos ya están disponibles
+  useState(() => {
+    fetch("/api/cmmi/proyectos/info")
+      .then(r => r.json())
+      .then(j => { if (j?.kickoff?.disponible) setProyListo(true); })
+      .catch(() => {})
+      .finally(() => setCheckingModelos(false));
+  });
+
+  const [reMsg, setReMsg]             = useState<{ ok: boolean; text: string } | null>(null);
+  const [reUploading, setReUploading] = useState(false);
+
+  async function handleReentrenar(file: File) {
+    setReUploading(true); setReMsg(null);
+    const form = new FormData();
+    form.append("file", file);
+    try {
+      const r    = await fetch("/api/cmmi/proyectos/reentrenar", { method: "POST", body: form });
+      const json = await r.json() as Record<string, unknown>;
+      if (!r.ok) throw new Error((json.detail ?? json.error ?? `Error ${r.status}`) as string);
+      const m = json.metricas as Record<string, number> | undefined;
+      setReMsg({ ok: true, text: `✅ Modelos entrenados — ${json.n_proyectos} proyectos · Kickoff AUC ${m?.kickoff_auc?.toFixed(3)} · M1 AUC ${m?.modelo1_auc?.toFixed(3)}` });
+      setProyListo(true);
+    } catch (e) {
+      setReMsg({ ok: false, text: e instanceof Error ? e.message : "Error al reentrenar." });
+    } finally { setReUploading(false); }
+  }
+
+  if (checkingModelos) {
+    return (
+      <div className="flex items-center justify-center gap-2 text-sm text-slate-400 py-16">
+        <Clock size={15} className="animate-spin" /> Verificando modelos…
+      </div>
+    );
+  }
+
+  if (!proyListo) {
+    return (
+      <div className="max-w-xl mx-auto mt-6 space-y-6">
+        <div className="text-center space-y-2">
+          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400 mx-auto">
+            <Database size={26} />
+          </div>
+          <p className="text-lg font-semibold text-slate-200">Cargar dataset de Proyectos</p>
+          <p className="text-sm text-slate-400">
+            Para usar los modelos de predicción SPI debes suministrar el Excel histórico de proyectos.
+            El archivo se usará para entrenar los 4 modelos.
+          </p>
+          <p className="text-xs text-slate-500">
+            Columnas requeridas: <span className="font-mono text-slate-400">ProjectId, Portafolio, ProjectOwnerName, Meses, Presupuesto, Mes Relativo, SPI (Schedule Performance Index), Variación Relativa Avance, Completado Real</span>
+          </p>
+        </div>
+        <ProyectosSourcePicker onFile={handleReentrenar} uploading={reUploading} msg={reMsg} />
+      </div>
+    );
+  }
 
   // Kickoff state
   const [kPort,  setKPort]  = useState<string>(PORTAFOLIOS[0]);
@@ -1636,67 +917,12 @@ function ProyectosPanel() {
     } finally { setLoading(false); }
   }
 
-  const [info, setInfo] = useState<ProyectosInfoResponse | null>(null);
-  const [infoLoading, setInfoLoading] = useState(false);
-
-  async function loadInfo() {
-    if (info) return;
-    setInfoLoading(true);
-    try {
-      const r = await fetch("/api/cmmi/proyectos/info");
-      const j = await r.json();
-      if (r.ok) setInfo(j as ProyectosInfoResponse);
-    } finally { setInfoLoading(false); }
-  }
-
-  const [reMsg, setReMsg]           = useState<{ ok: boolean; text: string } | null>(null);
-  const [reUploading, setReUploading] = useState(false);
-
-  async function handleReentrenar(file: File) {
-    setReUploading(true); setReMsg(null);
-    const form = new FormData();
-    form.append("file", file);
-    try {
-      const r    = await fetch("/api/cmmi/proyectos/reentrenar", { method: "POST", body: form });
-      const json = await r.json() as Record<string, unknown>;
-      if (!r.ok) throw new Error((json.detail ?? json.error ?? `Error ${r.status}`) as string);
-      const m = json.metricas as Record<string, number> | undefined;
-      setReMsg({ ok: true, text: `✅ Reentrenamiento completado — ${json.n_proyectos} proyectos · ${json.n_obs} obs · Kickoff AUC ${m?.kickoff_auc?.toFixed(3)} · M1 AUC ${m?.modelo1_auc?.toFixed(3)}` });
-      setKRes(null); setSRes(null);
-    } catch (e) {
-      setReMsg({ ok: false, text: e instanceof Error ? e.message : "Error al reentrenar." });
-    } finally { setReUploading(false); }
-  }
-
-  const [lbSpi, setLbSpi] = useState<LineasBaseSpiResponse | null>(null);
-  const [lbSpiLoading, setLbSpiLoading] = useState(false);
-  const [lbSpiError, setLbSpiError] = useState<string | null>(null);
-
-  async function loadLbSpi() {
-    if (lbSpi) return;
-    setLbSpiLoading(true); setLbSpiError(null);
-    try {
-      const r = await fetch("/api/cmmi/proyectos/lineas-base");
-      const j = await r.json();
-      if (!r.ok) throw new Error(j.detail ?? j.error ?? `Error ${r.status}`);
-      setLbSpi(j as LineasBaseSpiResponse);
-    } catch (e) {
-      setLbSpiError(e instanceof Error ? e.message : "Error al cargar líneas base.");
-    } finally { setLbSpiLoading(false); }
-  }
-
   const tabs: { id: ProyTab; label: string; icon: typeof Activity }[] = [
-    { id: "kickoff",     label: "Kickoff",            icon: BarChart2   },
-    { id: "seguimiento", label: "Seguimiento",         icon: CalendarCheck },
-    { id: "lineas-base", label: "Líneas base",         icon: PieChart    },
-    { id: "reentrenar",  label: "Reentrenar",          icon: Database    },
-    { id: "modelos",     label: "Modelos PKL",         icon: PieChart    },
-    { id: "dataset",     label: "Dataset",             icon: Database    },
-    { id: "marco",       label: "Marco de medición",   icon: ShieldCheck },
+    { id: "kickoff",      label: "Kickoff",      icon: BarChart2     },
+    { id: "seguimiento",  label: "Seguimiento",  icon: CalendarCheck },
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
-  const selectCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select";
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
 
   return (
@@ -1706,7 +932,7 @@ function ProyectosPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos" || id === "dataset") loadInfo(); if (id === "lineas-base") loadLbSpi(); }}
+            onClick={() => { setTab(id); reset(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -1716,6 +942,12 @@ function ProyectosPanel() {
             <Icon size={15} /> {label}
           </button>
         ))}
+        <button
+          onClick={() => setProyListo(false)}
+          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] transition-colors mb-1"
+        >
+          <X size={13} /> Cambiar datos
+        </button>
       </div>
 
       {/* ── KICKOFF ─────────────────────────────────────────────────── */}
@@ -1732,7 +964,7 @@ function ProyectosPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <p className={labelCls}>Portafolio</p>
-                <select value={kPort} onChange={(e) => setKPort(e.target.value)} className={selectCls}>
+                <select value={kPort} onChange={(e) => setKPort(e.target.value)} className={inputCls}>
                   {PORTAFOLIOS.map((p) => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
@@ -1785,15 +1017,6 @@ function ProyectosPanel() {
       {/* ── SEGUIMIENTO ─────────────────────────────────────────────── */}
       {tab === "seguimiento" && (
         <div className="space-y-5">
-          <SeguimientoExcelPicker onAutoFill={(v) => {
-            if (v.portafolio && PORTAFOLIOS.includes(v.portafolio as typeof PORTAFOLIOS[number])) setSPort(v.portafolio as typeof PORTAFOLIOS[number]);
-            setSLider(v.lider);
-            setSMes(v.mesRel);
-            setSSpi1(v.spi1);
-            setSVra1(v.vra1);
-            setSSpi2(v.spi2);
-            setSSpiObs(v.spiObs);
-          }} />
           <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
             <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
               <CalendarCheck size={16} className="text-indigo-400" />
@@ -1805,7 +1028,7 @@ function ProyectosPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <p className={labelCls}>Portafolio</p>
-                <select value={sPort} onChange={(e) => setSPort(e.target.value)} className={selectCls}>
+                <select value={sPort} onChange={(e) => setSPort(e.target.value)} className={inputCls}>
                   {PORTAFOLIOS.map((p) => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
@@ -1863,671 +1086,17 @@ function ProyectosPanel() {
           )}
         </div>
       )}
-
-      {/* ── MODELOS PKL ─────────────────────────────────────────────── */}
-      {tab === "modelos" && (
-        <div className="space-y-4">
-          {infoLoading && (
-            <div className="flex items-center gap-2 text-sm text-slate-400 py-6 justify-center">
-              <Clock size={15} className="animate-spin" /> Cargando info de modelos…
-            </div>
-          )}
-          {!infoLoading && !info && (
-            <p className="text-sm text-slate-500 text-center py-6">No se pudo cargar la información. ¿Está corriendo el microservicio?</p>
-          )}
-          {info && <PklInfoPanel info={info} />}
-        </div>
-      )}
-
-      {/* ── REENTRENAR ──────────────────────────────────────────────── */}
-      {tab === "reentrenar" && (
-        <div className="space-y-4">
-          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-xs text-slate-400 space-y-1">
-            <p className="font-semibold text-slate-300">¿Cuándo reentrenar?</p>
-            <ul className="list-disc list-inside space-y-0.5 text-slate-500">
-              <li>Tienes 20+ proyectos nuevos cerrados con SPI mensual registrado</li>
-              <li>Hay nuevos líderes de proyecto que el modelo no conoce</li>
-              <li>Se incorporó un nuevo portafolio</li>
-              <li>El modelo muestra predicciones inconsistentes con la realidad</li>
-            </ul>
-            <p className="pt-1 text-slate-500">
-              El Excel debe tener las columnas: <span className="text-slate-400 font-mono">ProjectId, Portafolio, ProjectOwnerName, Meses, Presupuesto, Mes Relativo, SPI (Schedule Performance Index), Variación Relativa Avance, Completado Real</span>
-            </p>
-          </div>
-          <ProyectosSourcePicker onFile={handleReentrenar} uploading={reUploading} msg={reMsg} />
-        </div>
-      )}
-
-      {/* ── LÍNEAS BASE SPI ─────────────────────────────────────── */}
-      {tab === "lineas-base" && (
-        <div className="space-y-4">
-          {lbSpiLoading && (
-            <div className="flex items-center gap-2 text-sm text-slate-400 px-1">
-              <Clock size={14} className="animate-spin" /> Cargando líneas base…
-            </div>
-          )}
-          {lbSpiError && (
-            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
-              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {lbSpiError}
-            </div>
-          )}
-          {lbSpi && <LbSpiPanel data={lbSpi} />}
-        </div>
-      )}
-
-      {/* ── DATASET ─────────────────────────────────────────────────── */}
-      {tab === "dataset" && (() => {
-        const proyectos = info?.datos_origen?.proyectos ?? [];
-        const portafolios = ["Todos", ...Array.from(new Set(proyectos.map(p => p.portafolio))).sort()];
-        const filtered = proyectos.filter(p =>
-          (dsPort === "Todos" || p.portafolio === dsPort) &&
-          (!dsSearch || p.id.toLowerCase().includes(dsSearch.toLowerCase()) || p.lider.toLowerCase().includes(dsSearch.toLowerCase()))
-        );
-        const SEM: Record<string, string> = { VERDE: "text-emerald-400", AMARILLO: "text-amber-400", ROJO: "text-rose-400" };
-        return (
-          <div className="space-y-4">
-            {loading && <p className="text-xs text-slate-500 animate-pulse">Cargando dataset…</p>}
-            {error && <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400"><AlertCircle size={16} className="shrink-0 mt-0.5" />{error}</div>}
-            {info && (
-              <>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <Kpi icon={Layers}   label="Proyectos"     value={String(proyectos.length)}                        tint="bg-blue-500/10 text-blue-400"    />
-                  <Kpi icon={Database} label="Observaciones"  value={String(info.datos_origen?.n_observaciones ?? "—")} tint="bg-indigo-500/10 text-indigo-400" />
-                  <Kpi icon={Clock}    label="Desde"          value={info.datos_origen?.fecha_min ?? "—"}              tint="bg-slate-500/10 text-slate-400"  />
-                  <Kpi icon={Clock}    label="Hasta"          value={info.datos_origen?.fecha_max ?? "—"}              tint="bg-slate-500/10 text-slate-400"  />
-                </div>
-                <div className="flex flex-wrap items-center gap-2 bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3">
-                  <div className="relative">
-                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                    <input value={dsSearch} onChange={e => setDsSearch(e.target.value)} placeholder="Buscar ID o líder…"
-                      className="pl-8 pr-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none w-52" />
-                  </div>
-                  <select value={dsPort} onChange={e => setDsPort(e.target.value)}
-                    className="px-3 py-1.5 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none cmmi-select">
-                    {portafolios.map(p => <option key={p} value={p}>{p}</option>)}
-                  </select>
-                  <span className="ml-auto text-xs text-slate-500">{filtered.length} proyectos</span>
-                </div>
-                <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
-                  <div className="overflow-x-auto max-h-[60vh]">
-                    <table className="w-full text-sm">
-                      <thead className="sticky top-0 z-10">
-                        <tr className="bg-black/30 backdrop-blur border-b border-white/[0.07] text-left">
-                          {["ID", "Portafolio", "Líder", "Meses", "Reportes", "SPI mín.", "SPI final", "Completado", "Estado"].map(h => (
-                            <th key={h} className="px-3 py-2.5 text-xs font-semibold text-slate-400 whitespace-nowrap">{h}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filtered.map((p, i) => (
-                          <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03] transition-colors">
-                            <td className="px-3 py-2 font-mono text-xs text-slate-400 whitespace-nowrap">{p.id}</td>
-                            <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{p.portafolio}</td>
-                            <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{p.lider}</td>
-                            <td className="px-3 py-2 text-slate-400 text-center">{p.meses}</td>
-                            <td className="px-3 py-2 text-slate-400 text-center">{p.n_reportes}</td>
-                            <td className={`px-3 py-2 font-semibold text-center ${p.spi_min >= 0.9 ? "text-emerald-400" : p.spi_min >= 0.75 ? "text-amber-400" : "text-rose-400"}`}>{p.spi_min.toFixed(2)}</td>
-                            <td className={`px-3 py-2 font-semibold text-center ${p.spi_final >= 0.9 ? "text-emerald-400" : p.spi_final >= 0.75 ? "text-amber-400" : "text-rose-400"}`}>{p.spi_final.toFixed(2)}</td>
-                            <td className="px-3 py-2 text-slate-300 text-center">{p.completado_final}</td>
-                            <td className={`px-3 py-2 font-medium whitespace-nowrap ${SEM[p.estado] ?? "text-slate-400"}`}>{p.estado}</td>
-                          </tr>
-                        ))}
-                        {filtered.length === 0 && (
-                          <tr><td colSpan={9} className="px-4 py-8 text-center text-sm text-slate-500">Sin resultados.</td></tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        );
-      })()}
-
-      {tab === "marco" && <MarcoMedicion area="proyectos" />}
-    </div>
-  );
-}
-
-/* ── Líneas Base SPI Panel ─────────────────────────────────────────── */
-function LbSpiPanel({ data }: { data: LineasBaseSpiResponse }) {
-  const [selectedPort, setSelectedPort] = useState<string>("GLOBAL");
-  const fases = [
-    "0-10%","10-20%","20-30%","30-40%","40-50%",
-    "50-60%","60-70%","70-80%","80-90%","90-100%",
-  ];
-
-  const portData: LbSpiPortafolio | null = selectedPort === "GLOBAL"
-    ? null
-    : (data.por_portafolio[selectedPort] ?? null);
-
-  const globalFases = selectedPort === "GLOBAL"
-    ? null
-    : portData?.por_fase ?? null;
-
-  function fmtN(v: number | null | undefined) { return v != null ? v.toFixed(4) : "—"; }
-
-  const btnBase = "px-3 py-1.5 rounded-lg text-xs font-medium transition-colors";
-  const btnActive = `${btnBase} bg-indigo-600 text-white`;
-  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 hover:text-slate-200 hover:bg-white/[0.08]`;
-
-  const portafolios = ["GLOBAL", ...data.portafolios];
-
-  return (
-    <div className="space-y-4">
-      {/* Selector portafolio */}
-      <div className="flex flex-wrap gap-2">
-        {portafolios.map((p) => (
-          <button key={p} onClick={() => setSelectedPort(p)} className={selectedPort === p ? btnActive : btnIdle}>
-            {p}
-          </button>
-        ))}
-      </div>
-
-      {/* KPIs globales del portafolio seleccionado */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {[
-          { label: "CL",  value: fmtN(selectedPort === "GLOBAL" ? data.global.CL  : portData?.global.CL) },
-          { label: "UCL", value: fmtN(selectedPort === "GLOBAL" ? data.global.UCL : portData?.global.UCL) },
-          { label: "LCL", value: fmtN(selectedPort === "GLOBAL" ? data.global.LCL : portData?.global.LCL) },
-          { label: "σ",   value: fmtN(selectedPort === "GLOBAL" ? data.global.std : portData?.global.std) },
-        ].map(({ label, value }) => (
-          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-center">
-            <p className="text-xl font-bold text-slate-100 tabular-nums">{value}</p>
-            <p className="text-xs text-slate-500 mt-0.5">{label}</p>
-          </div>
-        ))}
-      </div>
-      {selectedPort !== "GLOBAL" && portData && (
-        <p className="text-xs text-slate-500 px-1">{portData.n_proyectos} proyectos · {portData.n_obs} observaciones</p>
-      )}
-
-      {/* Tabla por fase (solo para portafolio específico) */}
-      {selectedPort !== "GLOBAL" && globalFases && (
-        <div className="overflow-x-auto rounded-xl border border-white/[0.08]">
-          <table className="w-full text-xs text-slate-300">
-            <thead>
-              <tr className="border-b border-white/[0.08] bg-white/[0.03]">
-                <th className="px-3 py-2 text-left font-medium text-slate-500">Fase avance</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-500">CL</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-500">UCL</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-500">LCL</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-500">σ</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-500">n</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fases.map((fase) => {
-                const vals = globalFases[fase] ?? null;
-                return (
-                  <tr key={fase} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
-                    <td className="px-3 py-2 font-medium text-slate-400">{fase}</td>
-                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.CL)}</td>
-                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.UCL)}</td>
-                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.LCL)}</td>
-                    <td className="px-3 py-2 text-right tabular-nums">{fmtN(vals?.std)}</td>
-                    <td className="px-3 py-2 text-right tabular-nums">{vals?.n ?? "—"}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ── Parser Excel de proyectos para auto-rellenar Seguimiento ──────── */
-type ProyMes = { mesRel: number; spi: number; vra: number };
-type ProySerie = { id: string; portafolio: string; lider: string; meses: ProyMes[] };
-
-function parseProyectosExcel(data: ArrayBuffer): ProySerieConNombre[] {
-  const wb   = XLSX.read(data, { type: "array" });
-  const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(wb.Sheets[wb.SheetNames[0]], { defval: "" });
-
-  const norm = (s: unknown) => String(s ?? "").trim();
-  const byId = new Map<string, ProySerie>();
-
-  for (const row of rows) {
-    const id = norm(row["ProjectId"]) || norm(row["projectid"]) || norm(row["ID"]);
-    if (!id) continue;
-    if (!byId.has(id)) {
-      byId.set(id, {
-        id,
-        portafolio: norm(row["Portafolio"]),
-        lider:      norm(row["ProjectOwnerName"]),
-        meses:      [],
-      });
-    }
-    const mesRel = Number(row["Mes Relativo"] ?? 0);
-    const spi    = Number(row["SPI (Schedule Performance Index)"] ?? row["SPI"] ?? 0);
-    const vra    = Number(row["Variación Relativa Avance"] ?? row["VRA"] ?? 0);
-    byId.get(id)!.meses.push({ mesRel, spi, vra });
-  }
-
-  return Array.from(byId.values())
-    .filter(p => p.meses.length > 0)
-    .map(p => ({ ...p, meses: p.meses.sort((a, b) => a.mesRel - b.mesRel) }));
-}
-type ProySerieConNombre = ProySerie;
-
-/* ── Picker Excel para Seguimiento (auto-rellena el formulario) ─────── */
-function SeguimientoExcelPicker({ onAutoFill }: {
-  onAutoFill: (vals: {
-    portafolio: string; lider: string; mesRel: string;
-    spi1: string; vra1: string; spi2: string; spiObs: string;
-  }) => void;
-}) {
-  const [open, setOpen]           = useState(false);
-  const [series, setSeries]       = useState<ProySerieConNombre[]>([]);
-  const [selId, setSelId]         = useState("");
-  const [ghFiles, setGhFiles]     = useState<GhFile[]>([]);
-  const [ghLoading, setGhLoading] = useState(false);
-  const [ghError, setGhError]     = useState<string | null>(null);
-  const [downloading, setDownloading] = useState<string | null>(null);
-  const [parseError, setParseError]   = useState<string | null>(null);
-  const [mode, setMode]           = useState<"upload" | "github">("github");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  async function loadGhFiles() {
-    if (ghFiles.length) return;
-    setGhLoading(true); setGhError(null);
-    try {
-      const r = await fetch(GH_PROYECTOS_API);
-      const j: { name: string; download_url: string; size: number; type: string }[] = await r.json();
-      setGhFiles(j.filter(f => f.type === "file" && f.name.endsWith(".xlsx")));
-    } catch { setGhError("No se pudo conectar con GitHub."); }
-    finally { setGhLoading(false); }
-  }
-
-  async function handleFile(file: File) {
-    setParseError(null); setSeries([]); setSelId("");
-    try {
-      const buf    = await file.arrayBuffer();
-      const result = parseProyectosExcel(buf);
-      if (!result.length) throw new Error("No se encontraron proyectos válidos.");
-      setSeries(result);
-      setSelId(result[0].id);
-    } catch (e) {
-      setParseError(e instanceof Error ? e.message : "Error al leer el archivo.");
-    }
-  }
-
-  async function pickGhFile(f: GhFile) {
-    setDownloading(f.name);
-    try {
-      const res  = await fetch(f.download_url);
-      const blob = await res.blob();
-      await handleFile(new File([blob], f.name, { type: blob.type }));
-    } catch { setGhError(`No se pudo descargar ${f.name}.`); }
-    finally { setDownloading(null); }
-  }
-
-  function applyAutoFill() {
-    const serie = series.find(s => s.id === selId);
-    if (!serie) return;
-    const m = serie.meses;
-    const last  = m[m.length - 1];
-    const prev  = m[m.length - 2];
-    const prev2 = m[m.length - 3];
-    onAutoFill({
-      portafolio: serie.portafolio,
-      lider:      serie.lider,
-      mesRel:     last  ? last.mesRel.toFixed(3)  : "",
-      spi1:       prev  ? prev.spi.toFixed(4)      : "",
-      vra1:       prev  ? prev.vra.toFixed(4)      : "",
-      spi2:       prev2 ? prev2.spi.toFixed(4)     : "",
-      spiObs:     last  ? last.spi.toFixed(4)      : "",
-    });
-    setOpen(false);
-  }
-
-  const ghIcon = <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 shrink-0"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.42 7.88 10.95.58.1.79-.25.79-.55v-2.02c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.02 11.02 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.13v3.17c0 .3.2.66.8.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>;
-  const btnBase   = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors";
-  const btnActive = `${btnBase} bg-indigo-600 text-white`;
-  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:bg-white/[0.08] hover:text-slate-200`;
-
-  useState(() => { loadGhFiles(); });
-
-  return (
-    <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-4 space-y-3">
-      <button onClick={() => setOpen(o => !o)}
-        className="flex items-center gap-2 text-sm font-medium text-indigo-300 hover:text-indigo-200 transition-colors w-full text-left">
-        <FileSpreadsheet size={15} />
-        Calcular SPI y VRA desde Excel
-        <span className="ml-auto text-xs text-indigo-500">{open ? "▲ ocultar" : "▼ expandir"}</span>
-      </button>
-
-      {open && (
-        <div className="space-y-3 pt-1 border-t border-indigo-500/15">
-          <p className="text-xs text-slate-500">Sube o selecciona el Excel histórico de proyectos — los campos se rellenan automáticamente con los últimos 2 reportes del proyecto seleccionado.</p>
-
-          {/* Selector modo */}
-          <div className="flex gap-2">
-            <button onClick={() => setMode("upload")} className={mode === "upload" ? btnActive : btnIdle}>
-              <Upload size={13} /> Dispositivo
-            </button>
-            <button onClick={() => { setMode("github"); loadGhFiles(); }} className={mode === "github" ? btnActive : btnIdle}>
-              {ghIcon} GitHub
-            </button>
-          </div>
-
-          {mode === "upload" && (
-            <div onClick={() => inputRef.current?.click()}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg border border-dashed border-white/[0.12] bg-white/[0.02] hover:border-indigo-500/40 cursor-pointer transition-colors">
-              <Upload size={15} className="text-slate-500 shrink-0" />
-              <span className="text-xs text-slate-500">Seleccionar Excel de proyectos…</span>
-              <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
-                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }} />
-            </div>
-          )}
-
-          {mode === "github" && (
-            <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
-              <div className="px-3 py-2 border-b border-white/[0.06] flex items-center gap-2 text-xs text-slate-500">
-                {ghIcon} FreddyOrozcoGrowData/CMMI-Hub · data/Proyectos
-              </div>
-              {ghLoading && <p className="px-3 py-4 text-xs text-slate-500 text-center">Cargando…</p>}
-              {ghError   && <p className="px-3 py-3 text-xs text-rose-400">{ghError}</p>}
-              {!ghLoading && ghFiles.map(f => (
-                <button key={f.name} onClick={() => pickGhFile(f)} disabled={!!downloading}
-                  className="w-full flex items-center justify-between px-3 py-2.5 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left disabled:opacity-60">
-                  <div className="flex items-center gap-2">
-                    <FileSpreadsheet size={14} className="text-indigo-400 shrink-0" />
-                    <span className="text-xs text-slate-200">{f.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[10px] text-slate-500">
-                    <span>{(f.size / 1024).toFixed(0)} KB</span>
-                    {downloading === f.name
-                      ? <Clock size={12} className="animate-spin text-indigo-400" />
-                      : <span className="text-indigo-400 font-medium">Usar</span>}
-                  </div>
-                </button>
-              ))}
-              {!ghLoading && !ghFiles.length && !ghError && (
-                <p className="px-3 py-4 text-xs text-slate-500 text-center">No hay archivos .xlsx.</p>
-              )}
-            </div>
-          )}
-
-          {parseError && <p className="text-xs text-rose-400">{parseError}</p>}
-
-          {series.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-xs text-slate-400 font-medium">Selecciona el proyecto:</p>
-              <select value={selId} onChange={e => setSelId(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-xs text-slate-300 focus:outline-none cmmi-select">
-                {series.map(s => (
-                  <option key={s.id} value={s.id}>
-                    {s.id} — {s.lider || "Sin líder"} · {s.portafolio} · {s.meses.length} reportes
-                  </option>
-                ))}
-              </select>
-              {selId && (() => {
-                const s = series.find(p => p.id === selId)!;
-                const last = s.meses[s.meses.length - 1];
-                const prev = s.meses[s.meses.length - 2];
-                return (
-                  <div className="bg-black/20 rounded-lg px-3 py-2 text-[11px] text-slate-400 space-y-0.5">
-                    <p><span className="text-slate-500">Mes relativo:</span> <span className="text-slate-200 font-medium tabular-nums">{last?.mesRel.toFixed(3)}</span></p>
-                    <p><span className="text-slate-500">SPI lag1 (mes anterior):</span> <span className="text-slate-200 font-medium tabular-nums">{prev?.spi.toFixed(4) ?? "—"}</span></p>
-                    <p><span className="text-slate-500">VRA lag1:</span> <span className="text-slate-200 font-medium tabular-nums">{prev?.vra.toFixed(4) ?? "—"}</span></p>
-                    <p><span className="text-slate-500">SPI observado (este mes):</span> <span className="text-slate-200 font-medium tabular-nums">{last?.spi.toFixed(4)}</span></p>
-                  </div>
-                );
-              })()}
-              <button onClick={applyAutoFill}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors">
-                <Play size={13} /> Rellenar formulario
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ── Selector fuente Proyectos (upload local o GitHub) ─────────────── */
-const GH_PROYECTOS_API  = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Proyectos";
-const GH_FINANCIERA_API = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Financiera";
-
-function ProyectosSourcePicker({ onFile, uploading, msg }: {
-  onFile: (f: File) => void;
-  uploading: boolean;
-  msg: { ok: boolean; text: string } | null;
-}) {
-  const [mode, setMode]           = useState<"upload" | "github">("github");
-  const [ghFiles, setGhFiles]     = useState<GhFile[]>([]);
-  const [ghLoading, setGhLoading] = useState(false);
-  const [ghError, setGhError]     = useState<string | null>(null);
-  const [downloading, setDownloading] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [drag, setDrag]           = useState(false);
-
-  async function loadGhFiles() {
-    if (ghFiles.length) return;
-    setGhLoading(true); setGhError(null);
-    try {
-      const r = await fetch(GH_PROYECTOS_API);
-      const j: { name: string; download_url: string; size: number; type: string }[] = await r.json();
-      setGhFiles(j.filter(f => f.type === "file" && f.name.endsWith(".xlsx")));
-    } catch {
-      setGhError("No se pudo conectar con GitHub.");
-    } finally { setGhLoading(false); }
-  }
-
-  async function pickGhFile(f: GhFile) {
-    setDownloading(f.name);
-    try {
-      const res  = await fetch(f.download_url);
-      const blob = await res.blob();
-      onFile(new File([blob], f.name, { type: blob.type }));
-    } catch {
-      setGhError(`No se pudo descargar ${f.name}.`);
-    } finally { setDownloading(null); }
-  }
-
-  useState(() => { loadGhFiles(); });
-
-  const btnBase   = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors";
-  const btnActive = `${btnBase} bg-indigo-600 text-white`;
-  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:bg-white/[0.08] hover:text-slate-200`;
-  const ghIcon    = <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.42 7.88 10.95.58.1.79-.25.79-.55v-2.02c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.02 11.02 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.13v3.17c0 .3.2.66.8.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>;
-
-  return (
-    <div className="space-y-4">
-      <div className="flex gap-2">
-        <button onClick={() => setMode("upload")} className={mode === "upload" ? btnActive : btnIdle}>
-          <Upload size={15} /> Subir archivo
-        </button>
-        <button onClick={() => { setMode("github"); loadGhFiles(); }} className={mode === "github" ? btnActive : btnIdle}>
-          {ghIcon} Desde GitHub
-        </button>
-      </div>
-
-      {mode === "upload" && (
-        <div
-          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
-          onDragLeave={() => setDrag(false)}
-          onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files?.[0]; if (f) onFile(f); }}
-          onClick={() => inputRef.current?.click()}
-          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 cursor-pointer transition-colors ${
-            drag ? "border-blue-500/60 bg-blue-500/5" : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
-          }`}
-        >
-          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400">
-            {uploading ? <Clock size={26} className="animate-spin" /> : <Upload size={26} />}
-          </div>
-          <p className="text-sm font-semibold text-slate-300">{uploading ? "Reentrenando modelos…" : "Arrastra el Excel histórico de proyectos aquí"}</p>
-          <p className="text-xs text-slate-500">o haz clic para seleccionar · .xlsx / .xls</p>
-          <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
-            onChange={(e) => { const f = e.target.files?.[0]; if (f) onFile(f); e.target.value = ""; }} />
-        </div>
-      )}
-
-      {mode === "github" && (
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
-          <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2 text-xs text-slate-500">
-            {ghIcon} FreddyOrozcoGrowData/CMMI-Hub · data/Proyectos
-          </div>
-          {ghLoading && <p className="px-4 py-6 text-sm text-slate-500 text-center">Cargando archivos…</p>}
-          {ghError  && <p className="px-4 py-4 text-sm text-rose-400">{ghError}</p>}
-          {!ghLoading && ghFiles.map((f) => (
-            <button key={f.name} onClick={() => pickGhFile(f)} disabled={uploading || !!downloading}
-              className="w-full flex items-center justify-between px-4 py-3 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left disabled:opacity-60">
-              <div className="flex items-center gap-3">
-                <FileSpreadsheet size={16} className="text-indigo-400 shrink-0" />
-                <span className="text-sm text-slate-200">{f.name}</span>
-              </div>
-              <div className="flex items-center gap-3 text-xs text-slate-500">
-                <span>{(f.size / 1024).toFixed(0)} KB</span>
-                {downloading === f.name || (uploading && downloading === f.name)
-                  ? <Clock size={14} className="animate-spin text-indigo-400" />
-                  : <span className="text-indigo-400 font-medium">Usar este</span>}
-              </div>
-            </button>
-          ))}
-          {!ghLoading && ghFiles.length === 0 && !ghError && (
-            <p className="px-4 py-6 text-sm text-slate-500 text-center">No hay archivos .xlsx en el repositorio.</p>
-          )}
-        </div>
-      )}
-
-      {msg && (
-        <div className={`flex items-start gap-2 rounded-lg px-4 py-3 text-sm border ${
-          msg.ok ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : "bg-rose-500/10 border-rose-500/20 text-rose-400"
-        }`}>
-          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {msg.text}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function FinancieroSourcePicker({ onFile, uploading, msg }: {
-  onFile: (f: File) => void;
-  uploading: boolean;
-  msg: { ok: boolean; text: string } | null;
-}) {
-  const [mode, setMode]           = useState<"upload" | "github">("github");
-  const [ghFiles, setGhFiles]     = useState<GhFile[]>([]);
-  const [ghLoading, setGhLoading] = useState(false);
-  const [ghError, setGhError]     = useState<string | null>(null);
-  const [downloading, setDownloading] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [drag, setDrag]           = useState(false);
-
-  async function loadGhFiles() {
-    if (ghFiles.length) return;
-    setGhLoading(true); setGhError(null);
-    try {
-      const r = await fetch(GH_FINANCIERA_API);
-      const j: { name: string; download_url: string; size: number; type: string }[] = await r.json();
-      setGhFiles(j.filter(f => f.type === "file" && f.name.endsWith(".xlsx")));
-    } catch {
-      setGhError("No se pudo conectar con GitHub.");
-    } finally { setGhLoading(false); }
-  }
-
-  async function pickGhFile(f: GhFile) {
-    setDownloading(f.name);
-    try {
-      const res  = await fetch(f.download_url);
-      const blob = await res.blob();
-      onFile(new File([blob], f.name, { type: blob.type }));
-    } catch {
-      setGhError(`No se pudo descargar ${f.name}.`);
-    } finally { setDownloading(null); }
-  }
-
-  useState(() => { loadGhFiles(); });
-
-  const btnBase   = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors";
-  const btnActive = `${btnBase} bg-indigo-600 text-white`;
-  const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:bg-white/[0.08] hover:text-slate-200`;
-  const ghIcon    = <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.42 7.88 10.95.58.1.79-.25.79-.55v-2.02c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.02 11.02 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.13v3.17c0 .3.2.66.8.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>;
-
-  return (
-    <div className="space-y-4">
-      <div className="flex gap-2">
-        <button onClick={() => setMode("upload")} className={mode === "upload" ? btnActive : btnIdle}>
-          <Upload size={15} /> Subir archivo
-        </button>
-        <button onClick={() => { setMode("github"); loadGhFiles(); }} className={mode === "github" ? btnActive : btnIdle}>
-          {ghIcon} Desde GitHub
-        </button>
-      </div>
-
-      {mode === "upload" && (
-        <div
-          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
-          onDragLeave={() => setDrag(false)}
-          onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files?.[0]; if (f) onFile(f); }}
-          onClick={() => inputRef.current?.click()}
-          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 cursor-pointer transition-colors ${
-            drag ? "border-blue-500/60 bg-blue-500/5" : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
-          }`}
-        >
-          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400">
-            {uploading ? <Clock size={26} className="animate-spin" /> : <Upload size={26} />}
-          </div>
-          <p className="text-sm font-semibold text-slate-300">{uploading ? "Actualizando datos…" : "Arrastra el Excel histórico de utilidad aquí"}</p>
-          <p className="text-xs text-slate-500">o haz clic para seleccionar · .xlsx / .xls</p>
-          <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
-            onChange={(e) => { const f = e.target.files?.[0]; if (f) onFile(f); e.target.value = ""; }} />
-        </div>
-      )}
-
-      {mode === "github" && (
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
-          <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2 text-xs text-slate-500">
-            {ghIcon} FreddyOrozcoGrowData/CMMI-Hub · data/Financiera
-          </div>
-          {ghLoading && <p className="px-4 py-6 text-sm text-slate-500 text-center">Cargando archivos…</p>}
-          {ghError  && <p className="px-4 py-4 text-sm text-rose-400">{ghError}</p>}
-          {!ghLoading && ghFiles.map((f) => (
-            <button key={f.name} onClick={() => pickGhFile(f)} disabled={uploading || !!downloading}
-              className="w-full flex items-center justify-between px-4 py-3 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left disabled:opacity-60">
-              <div className="flex items-center gap-3">
-                <FileSpreadsheet size={16} className="text-indigo-400 shrink-0" />
-                <span className="text-sm text-slate-200">{f.name}</span>
-              </div>
-              <div className="flex items-center gap-3 text-xs text-slate-500">
-                <span>{(f.size / 1024).toFixed(0)} KB</span>
-                {downloading === f.name || (uploading && downloading === f.name)
-                  ? <Clock size={14} className="animate-spin text-indigo-400" />
-                  : <span className="text-indigo-400 font-medium">Usar este</span>}
-              </div>
-            </button>
-          ))}
-          {!ghLoading && ghFiles.length === 0 && !ghError && (
-            <p className="px-4 py-6 text-sm text-slate-500 text-center">No hay archivos .xlsx en el repositorio.</p>
-          )}
-        </div>
-      )}
-
-      {msg && (
-        <div className={`flex items-start gap-2 rounded-lg px-4 py-3 text-sm border ${
-          msg.ok ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : "bg-rose-500/10 border-rose-500/20 text-rose-400"
-        }`}>
-          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {msg.text}
-        </div>
-      )}
     </div>
   );
 }
 
 /* ── Upload Excel reutilizable ─────────────────────────────────────── */
 function UploadExcelRefresh({
-  endpoint, label, onSuccess, successMsg,
+  endpoint, label, onSuccess,
 }: {
   endpoint: string;
   label: string;
   onSuccess: (res: Record<string, unknown>) => void;
-  successMsg?: (res: Record<string, unknown>) => string;
 }) {
   const ref = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -2541,10 +1110,7 @@ function UploadExcelRefresh({
       const r    = await fetch(endpoint, { method: "POST", body: form });
       const json = await r.json();
       if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
-      const text = successMsg
-        ? successMsg(json as Record<string, unknown>)
-        : `Datos actualizados · n=${json.n_obs ?? json.n_proyectos ?? "?"}`;
-      setMsg({ ok: true, text });
+      setMsg({ ok: true, text: `Datos actualizados · n=${json.n_obs ?? json.n_proyectos ?? "?"}` });
       onSuccess(json);
     } catch (e) {
       setMsg({ ok: false, text: e instanceof Error ? e.message : "Error al cargar." });
@@ -2595,7 +1161,7 @@ const CATEGORIAS_FIN = [
   "Transformación Digital",
 ] as const;
 
-type FinTab = "predictor" | "lineas-base" | "comparacion" | "datos" | "marco";
+type FinTab = "predictor" | "lineas-base";
 
 const RIESGO_COLORS: Record<string, string> = {
   Bajo:  "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
@@ -2666,74 +1232,6 @@ function FinancieroPanel() {
   const [lbRes,  setLbRes]  = useState<LineasBaseResponse | null>(null);
   const [lbLoaded, setLbLoaded] = useState(false);
 
-  // Landing — si no hay datos cargados aún se muestra el picker como pantalla principal
-  const [finListo, setFinListo] = useState(false);
-
-  // Datos origen
-  const [finInfo, setFinInfo] = useState<FinancieroInfoResponse | null>(null);
-  const [finInfoLoaded, setFinInfoLoaded] = useState(false);
-
-  // Cargar datos (source picker — persiste modelo)
-  const [finCargarMsg, setFinCargarMsg] = useState<{ ok: boolean; text: string } | null>(null);
-  const [finCargarUploading, setFinCargarUploading] = useState(false);
-
-  async function handleFinCargar(file: File) {
-    setFinCargarUploading(true); setFinCargarMsg(null);
-    try {
-      const form = new FormData();
-      form.append("file", file, file.name);
-      const r = await fetch("/api/cmmi/financiero/cargar", { method: "POST", body: form });
-      const raw = await r.text();
-      let json: Record<string, unknown>;
-      try { json = JSON.parse(raw); } catch { throw new Error(`Respuesta inválida del servidor: ${raw.slice(0, 300)}`); }
-      if (!r.ok) throw new Error((json.detail ?? json.error ?? `Error ${r.status}`) as string);
-      setFinCargarMsg({ ok: true, text: `✓ ${file.name} cargado — modelo actualizado.` });
-      setFinListo(true);
-      setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false); setCompRes(null); setCompLoaded(false);
-      void loadFinInfo(true);
-      void loadLineasBase();
-    } catch (e) {
-      setFinCargarMsg({ ok: false, text: e instanceof Error ? e.message : "Error al cargar." });
-    } finally { setFinCargarUploading(false); }
-  }
-
-  // Comparación baseline vs Q1 2026
-  const [compRes, setCompRes]     = useState<FinComparacionResponse | null>(null);
-  const [compLoaded, setCompLoaded] = useState(false);
-
-  async function loadComparacion() {
-    if (compLoaded) return;
-    reset(); setLoading(true);
-    try {
-      const r = await fetch("/api/cmmi/financiero/comparacion");
-      const json = await r.json();
-      if (!r.ok) { if (json.localOnly) { setNotice(json.error); return; } throw new Error(json.detail ?? json.error ?? `Error ${r.status}`); }
-      setCompRes(json as FinComparacionResponse);
-      setCompLoaded(true);
-    } catch (e) { setError(e instanceof Error ? e.message : "Error al cargar comparación."); }
-    finally { setLoading(false); }
-  }
-
-  // Líneas base desde Excel (source picker — calcula en tiempo real sin persistir)
-  const [finLbMsg, setFinLbMsg] = useState<{ ok: boolean; text: string } | null>(null);
-  const [finLbUploading, setFinLbUploading] = useState(false);
-
-  async function handleFinLineasBase(file: File) {
-    setFinLbUploading(true); setFinLbMsg(null);
-    try {
-      const form = new FormData();
-      form.append("file", file, file.name);
-      const r = await fetch("/api/cmmi/financiero/lineas-base-excel", { method: "POST", body: form });
-      const json = await r.json();
-      if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
-      setLbRes(json as LineasBaseResponse);
-      setLbLoaded(true);
-      setFinLbMsg({ ok: true, text: `✓ Líneas base calculadas desde ${file.name}.` });
-    } catch (e) {
-      setFinLbMsg({ ok: false, text: e instanceof Error ? e.message : "Error al procesar." });
-    } finally { setFinLbUploading(false); }
-  }
-
   function reset() { setError(null); setNotice(null); }
 
   async function runPrediccion() {
@@ -2771,33 +1269,12 @@ function FinancieroPanel() {
     } finally { setLoading(false); }
   }
 
-  async function loadFinInfo(force = false) {
-    if (finInfoLoaded && !force) return;
-    reset(); setLoading(true);
-    try {
-      const r = await fetch("/api/cmmi/financiero/info");
-      const json = await r.json();
-      if (!r.ok) {
-        if (json.localOnly) { setNotice(json.error); return; }
-        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
-      }
-      setFinInfo(json as FinancieroInfoResponse);
-      setFinInfoLoaded(true);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Error al cargar datos de entrenamiento.");
-    } finally { setLoading(false); }
-  }
-
   const tabs: { id: FinTab; label: string; icon: typeof Activity }[] = [
-    { id: "predictor",    label: "Predictor",           icon: TrendingUp  },
-    { id: "lineas-base",  label: "Líneas base",         icon: PieChart    },
-    { id: "comparacion",  label: "Comparación",         icon: Activity    },
-    { id: "datos",        label: "Datos entrenamiento", icon: Database    },
-    { id: "marco",        label: "Marco de medición",   icon: ShieldCheck },
+    { id: "predictor",    label: "Predictor",     icon: TrendingUp },
+    { id: "lineas-base",  label: "Líneas base",   icon: PieChart   },
   ];
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
-  const selectCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select";
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
 
   const semColors: Record<string, string> = {
@@ -2806,40 +1283,6 @@ function FinancieroPanel() {
     ROJO:     "text-rose-400    bg-rose-500/10    border-rose-500/20",
   };
 
-  if (!finListo) {
-    return (
-      <div className="space-y-6">
-        <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-6 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400">
-              <DollarSign size={20} />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-200">Financiero · Utilidad de proyectos</p>
-              <p className="text-xs text-slate-500">Selecciona el Excel histórico de utilidad para comenzar</p>
-            </div>
-          </div>
-          <FinancieroSourcePicker
-            onFile={handleFinCargar}
-            uploading={finCargarUploading}
-            msg={finCargarMsg}
-          />
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="flex-1 border-t border-white/[0.07]" />
-          <span className="text-xs text-slate-600">o</span>
-          <div className="flex-1 border-t border-white/[0.07]" />
-        </div>
-        <button
-          onClick={() => setFinListo(true)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:text-slate-200 transition-colors"
-        >
-          <Database size={15} /> Continuar con datos actuales del servidor
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-5">
       {/* Tabs */}
@@ -2847,7 +1290,7 @@ function FinancieroPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id); reset(); if (id === "datos") loadFinInfo(); if (id === "comparacion") loadComparacion(); }}
+            onClick={() => { setTab(id); reset(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -2857,12 +1300,6 @@ function FinancieroPanel() {
             <Icon size={15} /> {label}
           </button>
         ))}
-        <button
-          onClick={() => { setFinListo(false); setFinCargarMsg(null); }}
-          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 border border-white/[0.07] hover:bg-white/[0.05] hover:text-slate-300 transition-colors"
-        >
-          <Upload size={12} /> Cambiar datos
-        </button>
       </div>
 
       {/* ── PREDICTOR ──────────────────────────────────────────── */}
@@ -2879,7 +1316,7 @@ function FinancieroPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <p className={labelCls}>Categoría del proyecto</p>
-                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={selectCls}>
+                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={inputCls}>
                   {CATEGORIAS_FIN.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
@@ -2902,11 +1339,10 @@ function FinancieroPanel() {
               {loading ? "Calculando…" : "Predecir utilidad"}
             </button>
             <div className="pt-2 border-t border-white/[0.06]">
-              <p className="text-xs font-semibold text-slate-400 mb-3">Actualizar datos históricos de utilidad</p>
-              <FinancieroSourcePicker
-                onFile={handleFinCargar}
-                uploading={finCargarUploading}
-                msg={finCargarMsg}
+              <UploadExcelRefresh
+                endpoint="/api/cmmi/financiero/cargar"
+                label="Actualizar datos históricos de utilidad"
+                onSuccess={() => { setPRes(null); setLbRes(null); setLbLoaded(false); }}
               />
             </div>
           </div>
@@ -2985,12 +1421,12 @@ function FinancieroPanel() {
               <div className="space-y-2">
                 <p className="text-sm font-semibold text-slate-300">Desde un nuevo archivo Excel</p>
                 <p className="text-xs text-slate-500">
-                  Calcula CL, σ, UCL, LCL y reglas de Nelson en tiempo real sin persistir los datos en el servidor.
+                  Sube un .xlsx con los proyectos terminados para recalcular CL, σ, UCL, LCL y reglas de Nelson en tiempo real.
                 </p>
-                <FinancieroSourcePicker
-                  onFile={handleFinLineasBase}
-                  uploading={finLbUploading}
-                  msg={finLbMsg}
+                <UploadExcelRefresh
+                  endpoint="/api/cmmi/financiero/lineas-base-excel"
+                  label="Arrastra o selecciona el Excel de utilidad"
+                  onSuccess={(res) => { setLbRes(res as unknown as LineasBaseResponse); setLbLoaded(true); }}
                 />
               </div>
             </div>
@@ -3025,108 +1461,6 @@ function FinancieroPanel() {
           )}
         </div>
       )}
-
-      {/* ── DATOS ENTRENAMIENTO ──────────────────────────────────── */}
-      {tab === "datos" && (
-        <div className="space-y-5">
-          {notice && <LocalOnlyNotice message={notice} />}
-          {error && (
-            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
-              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
-            </div>
-          )}
-          {loading && <p className="text-xs text-slate-500 animate-pulse">Cargando datos…</p>}
-          {finInfo && finInfo.disponible && <FinancieroOrigenPanel info={finInfo} />}
-          {finInfo && !finInfo.disponible && (
-            <p className="text-sm text-slate-500">Excel de entrenamiento no disponible en el servidor.</p>
-          )}
-        </div>
-      )}
-
-      {/* ── COMPARACIÓN ────────────────────────────────────────── */}
-      {tab === "comparacion" && (
-        <div className="space-y-5">
-          {notice && <LocalOnlyNotice message={notice} />}
-          {error && <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400"><AlertCircle size={16} className="shrink-0 mt-0.5" />{error}</div>}
-          {loading && <p className="text-xs text-slate-500 animate-pulse">Calculando comparación…</p>}
-          {!compRes && !loading && !error && !notice && (
-            <button onClick={loadComparacion} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors">
-              <Activity size={15} /> Calcular comparación
-            </button>
-          )}
-          {compRes && (() => {
-            const sem: Record<string, string> = {
-              VERDE:    "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-              AMARILLO: "text-amber-400   bg-amber-500/10   border-amber-500/20",
-              ROJO:     "text-rose-400    bg-rose-500/10    border-rose-500/20",
-            };
-            const maxBar = Math.max(compRes.baseline.media, compRes.actual.media);
-            return (
-              <div className="space-y-5">
-                {/* Resultado principal */}
-                <div className={`rounded-xl border p-5 space-y-4 ${sem[compRes.semaforo]}`}>
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs font-semibold uppercase tracking-wide opacity-70">Meta CMMI · Δ Utilidad ≥ {compRes.meta_pct}</p>
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${sem[compRes.semaforo]}`}>{compRes.cumple_meta ? "✓ CUMPLE" : "✗ NO CUMPLE"}</span>
-                  </div>
-                  <p className="text-5xl font-bold">{compRes.delta_pct}</p>
-                  <p className="text-sm opacity-70">Variación de utilidad vs línea base histórica</p>
-                </div>
-
-                {/* Barras comparativas */}
-                <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-5 space-y-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Comparación de períodos</p>
-                  {[
-                    { label: compRes.baseline.label, media: compRes.baseline.media, pct: compRes.baseline.media_pct, n: compRes.baseline.n, color: "bg-slate-500" },
-                    { label: compRes.actual.label,   media: compRes.actual.media,   pct: compRes.actual.media_pct,   n: compRes.actual.n,   color: compRes.cumple_meta ? "bg-emerald-500" : compRes.delta >= 0 ? "bg-amber-500" : "bg-rose-500" },
-                  ].map(({ label, media, pct, n, color }) => (
-                    <div key={label} className="space-y-1.5">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-300 font-medium">{label}</span>
-                        <span className="font-bold text-slate-200">{pct} <span className="text-xs text-slate-500 font-normal">n={n}</span></span>
-                      </div>
-                      <div className="h-3 rounded-full bg-white/[0.06] overflow-hidden">
-                        <div className={`h-full rounded-full ${color} transition-all`} style={{ width: `${maxBar > 0 ? (media / maxBar) * 100 : 0}%` }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Proyectos del período actual */}
-                {compRes.actual.proyectos && compRes.actual.proyectos.length > 0 && (
-                  <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
-                    <div className="px-4 py-3 border-b border-white/[0.06]">
-                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Proyectos — {compRes.actual.label}</p>
-                    </div>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="border-b border-white/[0.06] text-left">
-                            <th className="px-4 py-2 text-xs font-medium text-slate-500">Categoría</th>
-                            <th className="px-4 py-2 text-xs font-medium text-slate-500">Utilidad</th>
-                            <th className="px-4 py-2 text-xs font-medium text-slate-500">Fecha</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {compRes.actual.proyectos.map((p, i) => (
-                            <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
-                              <td className="px-4 py-2 text-slate-300">{p.categoria}</td>
-                              <td className={`px-4 py-2 font-semibold ${p.utilidad_v >= 0.2 ? "text-emerald-400" : p.utilidad_v >= 0.05 ? "text-amber-400" : "text-rose-400"}`}>{p.utilidad_pct}</td>
-                              <td className="px-4 py-2 text-slate-500">{p.fecha ?? "—"}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })()}
-        </div>
-      )}
-
-      {tab === "marco" && <MarcoMedicion area="financiero" />}
     </div>
   );
 }
@@ -3140,7 +1474,7 @@ const CATEGORIAS_DATOS = [
   "Uso-Acceso Datos",
 ] as const;
 
-type DatosTab = "predictor" | "lineas-base" | "historico" | "marco";
+type DatosTab = "predictor" | "lineas-base";
 
 function DatosPanel() {
   const [tab, setTab]       = useState<DatosTab>("predictor");
@@ -3156,10 +1490,6 @@ function DatosPanel() {
   // Líneas base
   const [lbRes,   setLbRes]   = useState<LineasBaseDatosResponse | null>(null);
   const [lbLoaded,setLbLoaded]= useState(false);
-
-  // Histórico
-  const [datosInfo, setDatosInfo] = useState<DatosInfoResponse | null>(null);
-  const [datosInfoLoaded, setDatosInfoLoaded] = useState(false);
 
   function reset() { setError(null); setNotice(null); }
 
@@ -3199,7 +1529,6 @@ function DatosPanel() {
   }
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
-  const selectCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select";
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
 
   const semColors: Record<string, string> = {
@@ -3208,28 +1537,9 @@ function DatosPanel() {
     ROJO:     "text-rose-400    bg-rose-500/10    border-rose-500/20",
   };
 
-  async function loadDatosInfo() {
-    if (datosInfoLoaded) return;
-    reset(); setLoading(true);
-    try {
-      const r = await fetch("/api/cmmi/datos/info");
-      const json = await r.json();
-      if (!r.ok) {
-        if (json.localOnly) { setNotice(json.error); return; }
-        throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
-      }
-      setDatosInfo(json as DatosInfoResponse);
-      setDatosInfoLoaded(true);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Error al cargar datos históricos.");
-    } finally { setLoading(false); }
-  }
-
   const tabs: { id: DatosTab; label: string; icon: typeof Activity }[] = [
-    { id: "predictor",   label: "Predictor",         icon: LineChart   },
-    { id: "lineas-base", label: "Líneas base",       icon: Database    },
-    { id: "historico",   label: "Data histórica",    icon: Table2      },
-    { id: "marco",       label: "Marco de medición", icon: ShieldCheck },
+    { id: "predictor",   label: "Predictor",    icon: LineChart },
+    { id: "lineas-base", label: "Líneas base",  icon: Database  },
   ];
 
   return (
@@ -3237,7 +1547,7 @@ function DatosPanel() {
       {/* Tabs */}
       <div className="flex items-center gap-1.5 border-b border-white/[0.07]">
         {tabs.map(({ id, label, icon: Icon }) => (
-          <button key={id} onClick={() => { setTab(id); reset(); if (id === "historico") loadDatosInfo(); }}
+          <button key={id} onClick={() => { setTab(id); reset(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id ? "border-blue-500 text-blue-400"
                         : "border-transparent text-slate-500 hover:text-slate-300 hover:border-white/20"
@@ -3261,7 +1571,7 @@ function DatosPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <p className={labelCls}>Categoría</p>
-                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={selectCls}>
+                <select value={pCat} onChange={(e) => setPCat(e.target.value)} className={inputCls}>
                   {CATEGORIAS_DATOS.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
@@ -3331,30 +1641,15 @@ function DatosPanel() {
       {tab === "lineas-base" && (
         <div className="space-y-5">
           {!lbLoaded && (
-            <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-5">
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-300">Desde datos históricos</p>
-                <p className="text-xs text-slate-500">CL, UCL y LCL dinámicos por categoría y período (σ global por categoría).</p>
-                <button onClick={loadLineasBase} disabled={loading}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
-                  {loading ? <Clock size={15} className="animate-spin" /> : <Database size={15} />}
-                  {loading ? "Cargando…" : "Cargar líneas base"}
-                </button>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 border-t border-white/[0.07]" />
-                <span className="text-xs text-slate-600">o</span>
-                <div className="flex-1 border-t border-white/[0.07]" />
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-300">Desde un nuevo archivo Excel</p>
-                <p className="text-xs text-slate-500">Sube el .xlsx de Gobierno de Datos para calcular CL, UCL, LCL globales y por categoría.</p>
-                <UploadExcelRefresh
-                  endpoint="/api/cmmi/datos/lineas-base-excel"
-                  label="Arrastra o selecciona el Excel de Gobierno de Datos"
-                  onSuccess={(res) => { setLbRes(res as unknown as LineasBaseDatosResponse); setLbLoaded(true); }}
-                />
-              </div>
+            <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5">
+              <p className="text-sm text-slate-400 mb-4">
+                CL, UCL y LCL dinámicos por categoría y período (σ global por categoría).
+              </p>
+              <button onClick={loadLineasBase} disabled={loading}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
+                {loading ? <Clock size={15} className="animate-spin" /> : <Database size={15} />}
+                {loading ? "Cargando…" : "Cargar líneas base"}
+              </button>
             </div>
           )}
 
@@ -3367,24 +1662,6 @@ function DatosPanel() {
 
           {lbRes && (
             <div className="space-y-6">
-              {/* CL Global */}
-              {lbRes.global && (
-                <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-emerald-400">Global — Todas las categorías</p>
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    {([["LCL", lbRes.global.lcl], ["CL", lbRes.global.cl], ["UCL", lbRes.global.ucl]] as [string, number][]).map(([k, v]) => (
-                      <div key={k}>
-                        <p className="text-2xl font-bold text-slate-200">{(v * 100).toFixed(1)}%</p>
-                        <p className="text-xs text-slate-500">{k}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-xs text-slate-500">
-                    n={lbRes.global.n} · σ={( lbRes.global.sigma * 100).toFixed(2)}% · CV={lbRes.global.cv.toFixed(1)}%
-                  </p>
-                </div>
-              )}
-              {/* Por categoría */}
               {Object.entries(lbRes.categorias).map(([cat, data]) => (
                 <div key={cat} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-3">
                   <div className="flex items-center justify-between">
@@ -3401,14 +1678,19 @@ function DatosPanel() {
                         </tr>
                       </thead>
                       <tbody>
-                        {data.periodos.map((p) => (
-                          <tr key={p.periodo} className="border-b border-white/[0.03]">
-                            <td className="py-1.5 font-mono">P{p.periodo}</td>
-                            <td className="py-1.5 text-rose-400">{(p.LCL * 100).toFixed(1)}%</td>
-                            <td className="py-1.5 text-emerald-400 font-semibold">{(p.CL * 100).toFixed(1)}%</td>
-                            <td className="py-1.5 text-rose-400">{(p.UCL * 100).toFixed(1)}%</td>
-                          </tr>
-                        ))}
+                        {data.periodos.map((p) => {
+                          const cl  = (p.CL  * 100).toFixed(1) + "%";
+                          const ucl = (p.UCL * 100).toFixed(1) + "%";
+                          const lcl = (p.LCL * 100).toFixed(1) + "%";
+                          return (
+                            <tr key={p.periodo} className="border-b border-white/[0.03]">
+                              <td className="py-1.5 font-mono">P{p.periodo}</td>
+                              <td className="py-1.5 text-rose-400">{lcl}</td>
+                              <td className="py-1.5 text-emerald-400 font-semibold">{cl}</td>
+                              <td className="py-1.5 text-rose-400">{ucl}</td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
@@ -3418,184 +1700,6 @@ function DatosPanel() {
           )}
         </div>
       )}
-
-      {/* ── DATA HISTÓRICA ───────────────────────────────────────── */}
-      {tab === "historico" && (
-        <div className="space-y-5">
-          {notice && <LocalOnlyNotice message={notice} />}
-          {error && (
-            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
-              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {error}
-            </div>
-          )}
-          {loading && <p className="text-xs text-slate-500 animate-pulse">Cargando datos…</p>}
-          {datosInfo && datosInfo.disponible && <DatosHistoricoPanel info={datosInfo} />}
-          {datosInfo && !datosInfo.disponible && (
-            <p className="text-sm text-slate-500">Excel de entrenamiento no disponible en el servidor.</p>
-          )}
-        </div>
-      )}
-
-      {tab === "marco" && <MarcoMedicion area="datos" />}
-    </div>
-  );
-}
-
-function DatosHistoricoPanel({ info }: { info: DatosInfoResponse }) {
-  const cobColor = (v: number) =>
-    v >= 0.90 ? "text-emerald-400" : v >= 0.70 ? "text-amber-400" : "text-rose-400";
-
-  const [catFiltro, setCatFiltro] = useState<string>("Todas");
-  const cats = ["Todas", ...Object.keys(info.por_categoria ?? {})];
-
-  const registrosFiltrados = (info.registros ?? []).filter(
-    (r: DatosInfoRegistro) => catFiltro === "Todas" || r.categoria === catFiltro
-  );
-
-  return (
-    <div className="space-y-4">
-      {/* KPI cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {[
-          { label: "Observaciones",  val: String(info.n_obs ?? "—"),        color: "text-slate-200"  },
-          { label: "Categorías",     val: String(info.n_categorias ?? "—"), color: "text-sky-400"    },
-          { label: "Períodos",       val: String(info.n_periodos ?? "—"),   color: "text-indigo-400" },
-          { label: "R² modelo",      val: info.modelo_r2 != null ? info.modelo_r2.toFixed(3) : "—", color: "text-emerald-400" },
-        ].map(({ label, val, color }) => (
-          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
-            <p className={`text-xl font-bold tabular-nums ${color}`}>{val}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Resumen por categoría */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {Object.entries(info.por_categoria ?? {}).map(([cat, c]) => (
-          <div key={cat} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-2">
-            <p className="text-xs font-semibold text-slate-300">{cat}</p>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
-              <span className="text-slate-500">Observaciones</span>
-              <span className="text-slate-200 font-medium">{c.n_obs}</span>
-              <span className="text-slate-500">Períodos</span>
-              <span className="text-slate-200 font-medium">{c.n_periodos}</span>
-              <span className="text-slate-500">Cobertura media</span>
-              <span className={`font-medium ${cobColor(parseFloat(c.cob_media) / 100)}`}>{c.cob_media}</span>
-              <span className="text-slate-500">Rango</span>
-              <span className="text-slate-400">{c.cob_min} – {c.cob_max}</span>
-              <span className="text-slate-500">Variables</span>
-              <span className="text-slate-400 leading-tight">{c.variables.join(", ")}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Filtro + tabla */}
-      <div className="flex items-center gap-3">
-        <p className="text-xs font-semibold text-slate-300 flex items-center gap-2"><span>📋</span> Registros históricos</p>
-        <select value={catFiltro} onChange={e => setCatFiltro(e.target.value)}
-          className="ml-auto px-2 py-1 rounded-lg border border-white/[0.08] bg-[#141824] text-xs text-slate-300 focus:outline-none cmmi-select">
-          {cats.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-      </div>
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.08] overflow-x-auto">
-        <table className="w-full text-[11px]">
-          <thead>
-            <tr className="border-b border-white/[0.06]">
-              {["Categoría", "Variable", "Período", "Cobertura"].map(h => (
-                <th key={h} className="px-3 py-2 text-left text-slate-500 font-medium whitespace-nowrap">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {registrosFiltrados.map((r: DatosInfoRegistro, i: number) => (
-              <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
-                <td className="px-3 py-1.5 text-slate-400">{r.categoria}</td>
-                <td className="px-3 py-1.5 text-slate-300">{r.variable}</td>
-                <td className="px-3 py-1.5 text-slate-400 tabular-nums text-center">P{r.periodo}</td>
-                <td className={`px-3 py-1.5 font-medium tabular-nums ${cobColor(r.cob_v)}`}>{r.cobertura}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-function FinancieroOrigenPanel({ info }: { info: FinancieroInfoResponse }) {
-  const utilColor = (v: number) =>
-    v >= 0.20 ? "text-emerald-400" : v >= 0.05 ? "text-amber-400" : "text-rose-400";
-
-  const cats = Object.entries(info.por_categoria ?? {});
-
-  return (
-    <div className="space-y-4">
-      {/* KPI cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {[
-          { label: "Datos hasta",     val: info.fecha_max ?? "—",         color: "text-sky-400"      },
-          { label: "Desde",           val: info.fecha_min ?? "—",         color: "text-slate-400"    },
-          { label: "Proyectos",       val: String(info.n_proyectos ?? "—"), color: "text-slate-200"  },
-          { label: "R² ajustado",     val: info.modelo_r2a != null ? `${(info.modelo_r2a * 100).toFixed(1)}%` : "—", color: "text-indigo-400" },
-        ].map(({ label, val, color }) => (
-          <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
-            <p className={`text-xl font-bold tabular-nums ${color}`}>{val}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Resumen por categoría */}
-      <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
-        <span className="text-base">📂</span> Por categoría
-      </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {cats.map(([cat, c]) => (
-          <div key={cat} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-2">
-            <p className="text-xs font-semibold text-slate-300 leading-tight">{cat}</p>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
-              <span className="text-slate-500">Proyectos</span>
-              <span className="text-slate-200 font-medium">{c.n}</span>
-              <span className="text-slate-500">Utilidad media</span>
-              <span className={`font-medium ${utilColor(parseFloat(c.utilidad_media) / 100)}`}>{c.utilidad_media}</span>
-              <span className="text-slate-500">Rango</span>
-              <span className="text-slate-400">{c.utilidad_min} – {c.utilidad_max}</span>
-              {c.monto_medio_mm != null && <>
-                <span className="text-slate-500">Monto medio</span>
-                <span className="text-slate-400">${c.monto_medio_mm.toFixed(0)} M</span>
-              </>}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Tabla de proyectos */}
-      <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
-        <span className="text-base">📋</span> Proyectos históricos
-      </h3>
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.08] overflow-x-auto">
-        <table className="w-full text-[11px]">
-          <thead>
-            <tr className="border-b border-white/[0.06]">
-              {["Código", "Categoría", "Fecha cierre", "Utilidad", "Monto (M COP)"].map(h => (
-                <th key={h} className="px-3 py-2 text-left text-slate-500 font-medium whitespace-nowrap">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {(info.proyectos ?? []).map((p: FinancieroInfoProyecto, i: number) => (
-              <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
-                <td className="px-3 py-1.5 font-mono text-slate-400">{p.codigo}</td>
-                <td className="px-3 py-1.5 text-slate-300">{p.categoria}</td>
-                <td className="px-3 py-1.5 text-slate-400 tabular-nums">{p.fecha ?? "—"}</td>
-                <td className={`px-3 py-1.5 font-medium tabular-nums ${utilColor(p.utilidad_v)}`}>{p.utilidad}</td>
-                <td className="px-3 py-1.5 text-slate-400 text-right tabular-nums">{p.monto_mm != null ? `$${p.monto_mm.toFixed(0)}` : "—"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </div>
   );
 }
