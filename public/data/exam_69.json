@@ -1,0 +1,3884 @@
+{
+  "examId": 69,
+  "examTitle": "DP-300: Azure Database Administrator",
+  "totalQuestions": 354,
+  "scrapedAt": "2026-07-27T19:50:25.776Z",
+  "questions": [
+    {
+      "number": "1",
+      "questionText": "You have 20 Azure SQL databases provisioned by using the vCore purchasing model.",
+      "options": [
+        "A. total size of all the databases",
+        "B. geo-replication support",
+        "C. number of concurrently peaking databases * peak CPU utilization per database",
+        "D. maximum number of concurrent sessions for all the databases",
+        "E. total number of databases * average CPU utilization per database"
+      ],
+      "correctAnswer": "total size of all the databases",
+      "images": []
+    },
+    {
+      "number": "2",
+      "questionText": "You are designing a streaming data solution that will ingest variable volumes of data.",
+      "options": [
+        "A. Azure Event Hubs Standard",
+        "B. Azure Stream Analytics",
+        "C. Azure Data Factory",
+        "D. Azure Event Hubs Dedicated"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "3",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0003900001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0004000001.png"
+      ]
+    },
+    {
+      "number": "4",
+      "questionText": "You have an Azure Synapse Analytics Apache Spark pool named Pool1.",
+      "options": [
+        "A. Load the data by using PySpark.",
+        "B. Load the data by using the OPENROWSET Transact-SQL command in an Azure Synapse Analytics serverless SQL pool.",
+        "C. Use a Get Metadata activity in Azure Data Factory.",
+        "D. Use a Conditional Split transformation in an Azure Synapse data flow."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "5",
+      "questionText": "You are designing a date dimension table in an Azure Synapse Analytics dedicated SQL pool. The date dimension table will be used by all the fact tables.",
+      "options": [
+        "A. HASH",
+        "B. REPLICATE",
+        "C. ROUND_ROBIN"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "6",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0004400001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0004500001.png"
+      ]
+    },
+    {
+      "number": "7",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0004800001.png"
+      ]
+    },
+    {
+      "number": "8",
+      "questionText": "You have an Azure Synapse Analytics workspace named WS1 that contains an Apache Spark pool named Pool1.",
+      "options": [
+        "A. JSON",
+        "B. CSV",
+        "C. Parquet",
+        "D. ORC"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "9",
+      "questionText": "You are designing an anomaly detection solution for streaming data from an Azure IoT hub. The solution must meet the following requirements:",
+      "options": [
+        "A. Azure SQL Database",
+        "B. Azure Databricks",
+        "C. Azure Stream Analytics"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "10",
+      "questionText": "You are creating a new notebook in Azure Databricks that will support R as the primary language but will also support Scala and SQL.",
+      "options": [
+        "A. \\\\[<language>]",
+        "B. %<language>",
+        "C. \\\\[<language>]",
+        "D. @<language>"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "21",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0006400001.jpg",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0006500001.png"
+      ]
+    },
+    {
+      "number": "22",
+      "questionText": "You plan to deploy an app that includes an Azure SQL database and an Azure web app. The app has the following requirements:",
+      "options": [
+        "A. Azure Private Link",
+        "B. a network security group (NSG)",
+        "C. a database-level firewall",
+        "D. a server-level firewall"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "23",
+      "questionText": "You have an Azure SQL database that contains a table named factSales. FactSales contains the columns shown in the following table.",
+      "options": [
+        "A. page compression",
+        "B. row compression",
+        "C. columnstore compression",
+        "D. columnstore archival compression"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0002500001.png"
+      ]
+    },
+    {
+      "number": "24",
+      "questionText": "You are planning a solution that will use Azure SQL Database. Usage of the solution will peak from October 1 to January 1 each year.",
+      "options": [
+        "A. Business Critical",
+        "B. Premium",
+        "C. Hyperscale"
+      ],
+      "correctAnswer": "append",
+      "images": []
+    },
+    {
+      "number": "25",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0006800001.png"
+      ]
+    },
+    {
+      "number": "26",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "From the Azure portal, set a mask on the Email column.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0007000001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0007100001.png"
+      ]
+    },
+    {
+      "number": "27",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Create a pool in workspace1.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0007200001.jpg"
+      ]
+    },
+    {
+      "number": "28",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Yes",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0007400001.jpg"
+      ]
+    },
+    {
+      "number": "29",
+      "questionText": "You have an on-premises Microsoft SQL Server 2019 server that hosts a database named DB1.",
+      "options": [
+        "A. Configure service endpoints.",
+        "B. Configure virtual network peering.",
+        "C. Deploy an Azure firewall.",
+        "D. Configure network security groups (NSGs)."
+      ],
+      "correctAnswer": "No",
+      "images": []
+    },
+    {
+      "number": "30",
+      "questionText": "You have an on-premises Microsoft SQL server that uses the FileTables and Filestream features.",
+      "options": [
+        "A. Azure SQL Database",
+        "B. SQL Server on an Azure Virtual Machine",
+        "C. Azure SQL Managed Instance",
+        "D. Azure Database for MySQL"
+      ],
+      "correctAnswer": "No",
+      "images": []
+    },
+    {
+      "number": "31",
+      "questionText": "You need to migrate an on-premises Microsoft SQL Server database to Azure SQL Database. The solution must minimize downtime.",
+      "options": [
+        "A. Configure Transaction Log Shipping.",
+        "B. Implement Always On availability groups.",
+        "C. Configure transactional replication.",
+        "D. Import a BACPAC."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "32",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Configure the columns as sparse.",
+        "B. Change the column type to NVARCHAR(MAX).",
+        "C. Change the column type to VARCHAR(MAX).",
+        "D. Change the column type to VARCHAR(200)."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "33",
+      "questionText": "You have an on-premises Microsoft SQL Server named SQL1 that hosts five databases.",
+      "options": [
+        "A. Always On availability groups",
+        "B. Backup and Restore",
+        "C. log shipping",
+        "D. Database Migration Assistant"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "34",
+      "questionText": "You have a Microsoft SQL Server 2019 database named DB1 that uses the following database-level and instance-level features.",
+      "options": [
+        "A. Clustered columnstore indexes",
+        "B. PolyBase",
+        "C. Change tracking",
+        "D. Automatic tuning"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "35",
+      "questionText": "You have an Azure subscription that contains an Azure SQL database. The database contains a table named tablet that uses partitioned columnstores.",
+      "options": [
+        "A. page compression",
+        "B. columnstore compression",
+        "C. GZIP compression",
+        "D. columnstore archival compression"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "36",
+      "questionText": "You have an Azure subscription linked to an Azure Active Directory (Azure AD) tenant. The subscription contains 10 virtual machines that run Windows Server 2019 and host Microsoft SQL Server 2019 instances.",
+      "options": [
+        "A. Enable a user-assigned managed identity on each virtual machine.",
+        "B. Deploy an Azure Active Directory Domain Services (Azure AD DS) domain and join the virtual machines to the domain.",
+        "C. Enable a system-assigned managed identity on each virtual machine.",
+        "D. Join the virtual machines to the Azure AD tenant."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "37",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image218.png"
+      ]
+    },
+    {
+      "number": "38",
+      "questionText": "You have an Azure SQL Database elastic pool that contains 10 databases.",
+      "options": [
+        "A. Increase the maximum storage of the elastic pool.",
+        "B. Delete data from a database.",
+        "C. Remove a database from the pool.",
+        "D. Enable data compression.",
+        "E. Shrink individual databases."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "39",
+      "questionText": "You have an Azure subscription.",
+      "options": [
+        "A. --name, --edition, and --capacity",
+        "B. --name, --tier, and --min-capacity",
+        "C. --name, --resource-group, and --server",
+        "D. --name, --licence-type, and --capacity"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "40",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image259.png"
+      ]
+    },
+    {
+      "number": "41",
+      "questionText": "You have two on-premises Microsoft SQL Server 2019 instances named SQL1 and SQL2.",
+      "options": [
+        "A. a single Azure SQL database",
+        "B. SQL Server on Azure Virtual Machines",
+        "C. Azure SQL Managed Instance",
+        "D. an Azure SQL Database elastic pool"
+      ],
+      "correctAnswer": "Configure transactional replication.",
+      "images": []
+    },
+    {
+      "number": "42",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Change the column type to VARCHAR(200).",
+      "images": [
+        "https://img.examtopics.com/dp-300/image261.png"
+      ]
+    },
+    {
+      "number": "43",
+      "questionText": "You have a SQL Server on Azure Virtual Machines instance named SQLVM1 that was deployed by using an Azure Marketplace SQL Server 2019 Enterprise image.",
+      "options": [
+        "A. From the SQL Server Installation Center on SQLVM1, run the Edition Upgrade wizard.",
+        "B. From SQLVM1, uninstall the SQL Server instance.",
+        "C. From the SQL Server Installation Center on SQLVM1, run the Repair wizard.",
+        "D. From the Azure portal, reconfigure SQLVM1."
+      ],
+      "correctAnswer": "Backup and Restore",
+      "images": []
+    },
+    {
+      "number": "44",
+      "questionText": "Your on-premises network contains a Microsoft SQL Server 2016 server that hosts a database named db1.",
+      "options": [
+        "A. Business Critical",
+        "B. Hyperscale",
+        "C. General Purpose",
+        "D. Premium"
+      ],
+      "correctAnswer": "PolyBase",
+      "images": []
+    },
+    {
+      "number": "45",
+      "questionText": "You have a Microsoft SQL Server 2019 instance in an on-premises datacenter. The instance contains a 4-TB database named DB1.",
+      "options": [
+        "A. distributed availability groups",
+        "B. database mirroring",
+        "C. Always On Availability Group",
+        "D. Azure Database Migration Service"
+      ],
+      "correctAnswer": "columnstore archival compression",
+      "images": []
+    },
+    {
+      "number": "46",
+      "questionText": "You have an Azure subscription.",
+      "options": [
+        "A. the Business Critical service tier",
+        "B. the serverless compute tier",
+        "C. an elastic pool",
+        "D. the General Purpose service tier"
+      ],
+      "correctAnswer": "Deploy an Azure Active Directory Domain Services (Azure AD DS) domain and join the virtual machines to the domain.",
+      "images": []
+    },
+    {
+      "number": "47",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image263.png"
+      ]
+    },
+    {
+      "number": "48",
+      "questionText": "You have a Microsoft SQL Server 2017 server.",
+      "options": [
+        "A. an Azure SQL Database elastic pool",
+        "B. Azure SQL Database",
+        "C. SQL Server on Azure Virtual Machines",
+        "D. Azure SQL Managed Instance"
+      ],
+      "correctAnswer": "Increase the maximum storage of the elastic pool.",
+      "images": []
+    },
+    {
+      "number": "49",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "--name, --resource-group, and --server",
+      "images": [
+        "https://img.examtopics.com/dp-300/image277.png"
+      ]
+    },
+    {
+      "number": "50",
+      "questionText": "You have an on-premises Microsoft SQL Server 2019 database named SQL1 that uses merge replication.",
+      "options": [
+        "A. Azure SQL Edge",
+        "B. Azure SQL Database",
+        "C. SQL Server on Azure Virtual Machines",
+        "D. Azure SQL Managed Instance"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "51",
+      "questionText": "You have an on-premises datacenter that contains a 2-TB Microsoft SQL Server 2019 database named DB1.",
+      "options": [
+        "A. Log Replay Service (LRS)",
+        "B. log shipping",
+        "C. transactional replication",
+        "D. SQL Data Sync"
+      ],
+      "correctAnswer": "Azure SQL Managed Instance",
+      "images": []
+    },
+    {
+      "number": "52",
+      "questionText": "You have an Azure subscription.",
+      "options": [
+        "A. E-series",
+        "B. G-series",
+        "C. H-series",
+        "D. M-series"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "53",
+      "questionText": "You have an on-premises Microsoft SQL Server 2019 instance that hosts a database named DB1.",
+      "options": [
+        "A. transactional",
+        "B. peer-to-peer",
+        "C. snapshot",
+        "D. merge"
+      ],
+      "correctAnswer": "From SQLVM1, uninstall the SQL Server instance.",
+      "images": []
+    },
+    {
+      "number": "54",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Business Critical",
+      "images": [
+        "https://img.examtopics.com/dp-300/image279.png"
+      ]
+    },
+    {
+      "number": "55",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "Azure Database Migration Service",
+      "images": [
+        "https://img.examtopics.com/dp-300/image281.png"
+      ]
+    },
+    {
+      "number": "56",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "the serverless compute tier",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0002900001.jpg"
+      ]
+    },
+    {
+      "number": "57",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image291.png"
+      ]
+    },
+    {
+      "number": "58",
+      "questionText": "You have an Azure subscription.",
+      "options": [
+        "A. Premium SSD v2",
+        "B. Premium SSD",
+        "C. Standard SSD",
+        "D. Ultra SSD"
+      ],
+      "correctAnswer": "Azure SQL Managed Instance",
+      "images": []
+    },
+    {
+      "number": "59",
+      "questionText": "You have an on-premises datacenter that contains a 14-TB Microsoft SQL Server database.",
+      "options": [
+        "A. General Purpose Standard",
+        "B. Business Critical Memory Optimized Premium",
+        "C. General Purpose Premium",
+        "D. Business Critical Premium",
+        "E. Business Critical Standard"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "60",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "SQL Server on Azure Virtual Machines",
+      "images": []
+    },
+    {
+      "number": "61",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "Log Replay Service (LRS)",
+      "images": []
+    },
+    {
+      "number": "62",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "M-series",
+      "images": []
+    },
+    {
+      "number": "63",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "transactional",
+      "images": []
+    },
+    {
+      "number": "64",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "65",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0003100001.png"
+      ]
+    },
+    {
+      "number": "66",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png",
+        "https://img.examtopics.com/dp-300/image307.png"
+      ]
+    },
+    {
+      "number": "67",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png",
+        "https://img.examtopics.com/dp-300/image309.png"
+      ]
+    },
+    {
+      "number": "68",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Premium SSD v2",
+      "images": [
+        "https://img.examtopics.com/dp-300/image337.png"
+      ]
+    },
+    {
+      "number": "69",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "General Purpose Standard",
+      "images": [
+        "https://img.examtopics.com/dp-300/image339.png"
+      ]
+    },
+    {
+      "number": "70",
+      "questionText": "You have an on-premises Microsoft SQL Server 2022 instance that hosts a 60-TB production database named DB1.",
+      "options": [
+        "A. Hyperscale",
+        "B. Business Critical",
+        "C. General Purpose"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "71",
+      "questionText": "You have an Azure subscription.",
+      "options": [
+        "A. Premium",
+        "B. General Purpose",
+        "C. Business Critical",
+        "D. Standard"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "72",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image349.png"
+      ]
+    },
+    {
+      "number": "73",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image351.png"
+      ]
+    },
+    {
+      "number": "74",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0003300001.png"
+      ]
+    },
+    {
+      "number": "75",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0003600001.png"
+      ]
+    },
+    {
+      "number": "76",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0022900001.png"
+      ]
+    },
+    {
+      "number": "77",
+      "questionText": "You need to provide an implementation plan to configure data retention for ResearchDB1. The solution must meet the security and compliance requirements.",
+      "options": [
+        "A. Configure the Deleted databases settings for ResearchSrv01.",
+        "B. Deploy and configure an Azure Backup server.",
+        "C. Configure the Advanced Data Security settings for ResearchDB1.",
+        "D. Configure the Manage Backups settings for ResearchSrv01."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "78",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0025700001.png"
+      ]
+    },
+    {
+      "number": "79",
+      "questionText": "What should you do after a failover of SalesSQLDb1 to ensure that the database remains accessible to SalesSQLDb1App1?",
+      "options": [
+        "A. Configure SalesSQLDb1 as writable.",
+        "B. Update the connection strings of SalesSQLDb1App1.",
+        "C. Update the firewall rules of SalesSQLDb1.",
+        "D. Update the users in SalesSQLDb1."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "80",
+      "questionText": "What should you implement to meet the disaster recovery requirements for the PaaS solution?",
+      "options": [
+        "A. Availability Zones",
+        "B. failover groups",
+        "C. Always On availability groups",
+        "D. geo-replication"
+      ],
+      "correctAnswer": "Hyperscale",
+      "images": []
+    },
+    {
+      "number": "81",
+      "questionText": "You need to implement authentication for ResearchDB1. The solution must meet the security and compliance requirements.",
+      "options": [
+        "A. CREATE LOGIN and the FROM WINDOWS clause",
+        "B. CREATE USER and the FROM CERTIFICATE clause",
+        "C. CREATE USER and the FROM LOGIN clause",
+        "D. CREATE USER and the ASYMMETRIC KEY clause",
+        "E. CREATE USER and the FROM EXTERNAL PROVIDER clause"
+      ],
+      "correctAnswer": "General Purpose",
+      "images": []
+    },
+    {
+      "number": "82",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0001100001.png"
+      ]
+    },
+    {
+      "number": "83",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0001300001.jpg"
+      ]
+    },
+    {
+      "number": "84",
+      "questionText": "You need to design a data retention solution for the Twitter feed data records. The solution must meet the customer sentiment analytics requirements.",
+      "options": [
+        "A. time-based retention",
+        "B. change feed",
+        "C. lifecycle management",
+        "D. soft delete"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "85",
+      "questionText": "You need to implement the surrogate key for the retail store table. The solution must meet the sales transaction dataset requirements.",
+      "options": [
+        "A. a table that has a FOREIGN KEY constraint",
+        "B. a table the has an IDENTITY property",
+        "C. a user-defined SEQUENCE object",
+        "D. a system-versioned temporal table"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "86",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0002000001.png"
+      ]
+    },
+    {
+      "number": "87",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "Configure the Manage Backups settings for ResearchSrv01.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0008400001.png"
+      ]
+    },
+    {
+      "number": "88",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0008600001.png"
+      ]
+    },
+    {
+      "number": "89",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Update the connection strings of SalesSQLDb1App1.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0009300001.png"
+      ]
+    },
+    {
+      "number": "90",
+      "questionText": "You need to recommend a solution to ensure that the customers can create the database objects. The solution must meet the business goals.",
+      "options": [
+        "A. For each customer, grant the customer ddl_admin to the existing schema.",
+        "B. For each customer, create an additional schema and grant the customer ddl_admin to the new schema.",
+        "C. For each customer, create an additional schema and grant the customer db_writer to the new schema.",
+        "D. For each customer, grant the customer db_writer to the existing schema."
+      ],
+      "correctAnswer": "failover groups",
+      "images": []
+    },
+    {
+      "number": "91",
+      "questionText": "You are evaluating the business goals.",
+      "options": [
+        "A. dynamic data masking",
+        "B. Conditional Access in Azure",
+        "C. service principals",
+        "D. row-level security (RLS)"
+      ],
+      "correctAnswer": "CREATE USER and the FROM EXTERNAL PROVIDER clause",
+      "images": []
+    },
+    {
+      "number": "92",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0013400001.png"
+      ]
+    },
+    {
+      "number": "93",
+      "questionText": "Based on the PaaS prototype, which Azure SQL Database compute tier should you use?",
+      "options": [
+        "A. Business Critical 4-vCore",
+        "B. Hyperscale",
+        "C. General Purpose v-vCore",
+        "D. Serverless"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "94",
+      "questionText": "Which audit log destination should you use to meet the monitoring requirements?",
+      "options": [
+        "A. Azure Storage",
+        "B. Azure Event Hubs",
+        "C. Azure Log Analytics"
+      ],
+      "correctAnswer": "lifecycle management",
+      "images": []
+    },
+    {
+      "number": "95",
+      "questionText": "You have a new Azure SQL database. The database contains a column that stores confidential information.",
+      "options": [
+        "A. Turn on auditing and write audit logs to an Azure Storage account.",
+        "B. Add extended properties to the column.",
+        "C. Turn on auditing and write audit logs to an Event Hub",
+        "D. Apply sensitivity labels named Highly Confidential to the column.",
+        "E. Turn on Azure Defender for SQL"
+      ],
+      "correctAnswer": "a table the has an IDENTITY property",
+      "images": []
+    },
+    {
+      "number": "96",
+      "questionText": "You are developing an application that uses Azure Data Lake Storage Gen 2.",
+      "options": [
+        "A. role assignments",
+        "B. account keys",
+        "C. shared access signatures (SAS)",
+        "D. Azure Active Directory (Azure AD) identities"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "97",
+      "questionText": "You are designing an enterprise data warehouse in Azure Synapse Analytics that will contain a table named Customers. Customers will contain credit card information.",
+      "options": [
+        "A. row-level security",
+        "B. data masking",
+        "C. Always Encrypted",
+        "D. column-level security"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "98",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0011400001.png"
+      ]
+    },
+    {
+      "number": "99",
+      "questionText": "You have a data warehouse in Azure Synapse Analytics.",
+      "options": [
+        "A. Transparent Data Encryption (TDE)",
+        "B. Advanced Data Security for this database",
+        "C. Always Encrypted for all columns",
+        "D. Secure transfer required"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "100",
+      "questionText": "You are designing a security model for an Azure Synapse Analytics dedicated SQL pool that will support multiple companies.",
+      "options": [
+        "A. a column encryption key",
+        "B. asymmetric keys",
+        "C. a function",
+        "D. a custom role-based access control (RBAC) role",
+        "E. a security policy"
+      ],
+      "correctAnswer": "For each customer, create an additional schema and grant the customer ddl_admin to the new schema.",
+      "images": []
+    },
+    {
+      "number": "101",
+      "questionText": "You have an Azure subscription that contains an Azure Data Factory version 2 (V2) data factory named df1. DF1 contains a linked service.",
+      "options": [
+        "A. Disable purge protection on vault1.",
+        "B. Remove the linked service from df1.",
+        "C. Create a self-hosted integration runtime.",
+        "D. Disable soft delete on vault1."
+      ],
+      "correctAnswer": "row-level security (RLS)",
+      "images": []
+    },
+    {
+      "number": "102",
+      "questionText": "You have an Azure subscription that contains a server named Server1. Server1 hosts two Azure SQL databases named DB1 and DB2.",
+      "options": [
+        "A. a contained database user for App1 on DB2",
+        "B. a login for App1 on Server1",
+        "C. a contained database user from an external provider for App1 on DB2",
+        "D. a contained database user from a Windows login for App1 on DB2"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "103",
+      "questionText": "You create five Azure SQL Database instances on the same logical server.",
+      "options": [
+        "A. Create User1 in the master database.",
+        "B. Assign User1 the db_datareader role for the master database.",
+        "C. Assign User1 the db_datareader role for the databases that User1 creates.",
+        "D. Grant SELECT on sys.databases to public in the master database."
+      ],
+      "correctAnswer": "Serverless",
+      "images": []
+    },
+    {
+      "number": "104",
+      "questionText": "You have an Azure virtual machine named VM1 on a virtual network named VNet1. Outbound traffic from VM1 to the internet is blocked.",
+      "options": [
+        "A. a VPN gateway",
+        "B. a service endpoint",
+        "C. a private endpoint",
+        "D. an ExpressRoute gateway"
+      ],
+      "correctAnswer": "Azure Log Analytics",
+      "images": []
+    },
+    {
+      "number": "105",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Turn on auditing and write audit logs to an Azure Storage account.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0012100001.jpg"
+      ]
+    },
+    {
+      "number": "106",
+      "questionText": "You have an Azure virtual machine named VM1 on a virtual network named VNet1. Outbound traffic from VM1 to the internet is blocked.",
+      "options": [
+        "A. a VPN gateway",
+        "B. a service endpoint",
+        "C. a private link",
+        "D. an ExpressRoute gateway"
+      ],
+      "correctAnswer": "shared access signatures (SAS)",
+      "images": []
+    },
+    {
+      "number": "107",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "column-level security",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0012300001.jpg"
+      ]
+    },
+    {
+      "number": "108",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0012600001.jpg",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0012700001.jpg"
+      ]
+    },
+    {
+      "number": "109",
+      "questionText": "You have an Azure subscription that contains a logical SQL server named Server1. The master database of Server1 contains a user named User1.",
+      "options": [
+        "A. db_owner",
+        "B. dbmanager",
+        "C. dbo",
+        "D. db_ddladmin"
+      ],
+      "correctAnswer": "Transparent Data Encryption (TDE)",
+      "images": []
+    },
+    {
+      "number": "110",
+      "questionText": "You have an on-premises Microsoft SQL Server 2019 instance named SQL1 that hosts a database named db1. You have an Azure subscription that contains an",
+      "options": [
+        "A. Generate a shared access signature (SAS).",
+        "B. Create an access policy.",
+        "C. Rotate the storage keys.",
+        "D. Enable infrastructure encryption."
+      ],
+      "correctAnswer": "a function",
+      "images": []
+    },
+    {
+      "number": "111",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Assign the database user the db_owner role.",
+        "B. Create a contained database user.",
+        "C. Create a login and an associated database user.",
+        "D. Assign the database user the db_ddladmin role."
+      ],
+      "correctAnswer": "Disable soft delete on vault1.",
+      "images": []
+    },
+    {
+      "number": "112",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "a contained database user for App1 on DB2",
+      "images": [
+        "https://img.examtopics.com/dp-300/image220.png"
+      ]
+    },
+    {
+      "number": "113",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "Create User1 in the master database.",
+      "images": [
+        "https://img.examtopics.com/dp-300/image222.png"
+      ]
+    },
+    {
+      "number": "114",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "a private endpoint",
+      "images": [
+        "https://img.examtopics.com/dp-300/image224.png"
+      ]
+    },
+    {
+      "number": "115",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image226.png"
+      ]
+    },
+    {
+      "number": "116",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "a private link",
+      "images": [
+        "https://img.examtopics.com/dp-300/image228.png"
+      ]
+    },
+    {
+      "number": "117",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0009800001.png"
+      ]
+    },
+    {
+      "number": "118",
+      "questionText": "You have an instance of SQL Server on Azure Virtual Machines named VM1.",
+      "options": [
+        "A. Increase scheduling priority",
+        "B. Log on as a service",
+        "C. Profile system performance",
+        "D. Log on as a batch job"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "119",
+      "questionText": "You have an Azure subscription that contains an instance of SQL Server on an Azure virtual machine named SQLVM1 and a user named User1. SQLVM1 hosts a database named DB1.",
+      "options": [
+        "A. db_owner",
+        "B. SQLAgentReaderRole",
+        "C. SQLAgentUserRole",
+        "D. SQLAgentOperatorRole"
+      ],
+      "correctAnswer": "dbmanager",
+      "images": []
+    },
+    {
+      "number": "120",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Generate a shared access signature (SAS).",
+      "images": [
+        "https://img.examtopics.com/dp-300/image230.png"
+      ]
+    },
+    {
+      "number": "121",
+      "questionText": "Your on-premises network contains a server that hosts a 60-TB database named DB1. The network has a 10-Mbps internet connection.",
+      "options": [
+        "A. Azure Migrate",
+        "B. Azure Data Box",
+        "C. Azure Database Migration Service",
+        "D. Data Migration Assistant (DMA)"
+      ],
+      "correctAnswer": "Create a contained database user.",
+      "images": []
+    },
+    {
+      "number": "122",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image232.png",
+        "https://img.examtopics.com/dp-300/image233.png"
+      ]
+    },
+    {
+      "number": "123",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Always Encrypted with secure enclaves",
+        "B. Always Encrypted",
+        "C. column-level encryption",
+        "D. Transparent Data Encryption (TDE)"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "124",
+      "questionText": "You have an instance of SQL Server on Azure Virtual Machines.",
+      "options": [
+        "A. sysadmin",
+        "B. SQLAgentUserRole",
+        "C. SQLAgentReaderRole",
+        "D. SQLAgentOperatorRole"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "125",
+      "questionText": "You have an Azure SQL database named DB1. DB1 has a table named Table1 that contains the following columns.",
+      "options": [
+        "A. Column1",
+        "B. Column2",
+        "C. Column3",
+        "D. Column4",
+        "E. Column5"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image265.png"
+      ]
+    },
+    {
+      "number": "126",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image266.png"
+      ]
+    },
+    {
+      "number": "127",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image283.png"
+      ]
+    },
+    {
+      "number": "128",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Log on as a batch job",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0010000001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0010100001.png"
+      ]
+    },
+    {
+      "number": "129",
+      "questionText": "You have an Azure subscription.",
+      "options": [
+        "A. Deny public access.",
+        "B. Create a private endpoint.",
+        "C. Create a database-level firewall rule.",
+        "D. Create a network security group (NSG).",
+        "E. Create a server-level firewall rule."
+      ],
+      "correctAnswer": "SQLAgentUserRole",
+      "images": []
+    },
+    {
+      "number": "130",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image285.png"
+      ]
+    },
+    {
+      "number": "131",
+      "questionText": "You have an Azure subscription that contains an instance of SQL Server on an Azure virtual machine named VM1 and an Azure Active Directory Domain Services (Azure AD DS) domain that contains two users named User1 and User 2.",
+      "options": [
+        "A. SQLAgentUserRole",
+        "B. SQLAgentReaderRole",
+        "C. SQLAgentOperatorRole",
+        "D. sysadmin"
+      ],
+      "correctAnswer": "Azure Data Box",
+      "images": []
+    },
+    {
+      "number": "132",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image293.png"
+      ]
+    },
+    {
+      "number": "133",
+      "questionText": "You have an Azure subscription that contains the resources shown in the following table.",
+      "options": [
+        "A. 1",
+        "B. 2",
+        "C. 3",
+        "D. 4"
+      ],
+      "correctAnswer": "Always Encrypted with secure enclaves",
+      "images": [
+        "https://img.examtopics.com/dp-300/image311.png"
+      ]
+    },
+    {
+      "number": "134",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "sysadmin",
+      "images": []
+    },
+    {
+      "number": "135",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "Column4",
+      "images": []
+    },
+    {
+      "number": "136",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "137",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "138",
+      "questionText": "Case study -",
+      "options": [
+        "A. Configure Microsoft Entra authentication for the logical server that hosts DB3.",
+        "B. Configure a private endpoint for connectivity to DB3.",
+        "C. Create database-scoped credentials in DB3.",
+        "D. Create a database that has database-scoped credentials."
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png"
+      ]
+    },
+    {
+      "number": "139",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "Create a database-level firewall rule.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0010300001.png"
+      ]
+    },
+    {
+      "number": "140",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png",
+        "https://img.examtopics.com/dp-300/image316.png"
+      ]
+    },
+    {
+      "number": "141",
+      "questionText": "Case study -",
+      "options": [
+        "A. a public endpoint via a database-level firewall rule",
+        "B. a Point-to-Site (P2S) VPN",
+        "C. a public endpoint via a server-level firewall rule",
+        "D. a private endpoint"
+      ],
+      "correctAnswer": "sysadmin",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png"
+      ]
+    },
+    {
+      "number": "142",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image341.png"
+      ]
+    },
+    {
+      "number": "143",
+      "questionText": "You have an Azure subscription that contains an Azure SQL database named DB1.",
+      "options": [
+        "A. a system-assigned managed identity",
+        "B. Azure SQL sign-in credentials",
+        "C. database-scoped credentials",
+        "D. a user-assigned managed identity"
+      ],
+      "correctAnswer": "2",
+      "images": []
+    },
+    {
+      "number": "144",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image353.png"
+      ]
+    },
+    {
+      "number": "145",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image355.png"
+      ]
+    },
+    {
+      "number": "146",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image355.png"
+      ]
+    },
+    {
+      "number": "147",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0010600001.jpg"
+      ]
+    },
+    {
+      "number": "148",
+      "questionText": "You have 40 Azure SQL databases, each for a different customer. All the databases reside on the same Azure SQL Database server.",
+      "options": [
+        "A. Implement row-level security (RLS).",
+        "B. Create users in each database.",
+        "C. Configure the database firewall.",
+        "D. Configure the server firewall.",
+        "E. Create logins in the master database.",
+        "F. Implement Always Encrypted."
+      ],
+      "correctAnswer": "Create database-scoped credentials in DB3.",
+      "images": []
+    },
+    {
+      "number": "149",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0011000001.png"
+      ]
+    },
+    {
+      "number": "150",
+      "questionText": "You have an Azure virtual machine named VM1 on a virtual network named VNet1. Outbound traffic from VM1 to the internet is blocked.",
+      "options": [
+        "A. a VPN gateway",
+        "B. a service endpoint",
+        "C. a private link",
+        "D. an ExpressRoute gateway"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "151",
+      "questionText": "Which windowing function should you use to perform the streaming aggregation of the sales data?",
+      "options": [
+        "A. Sliding",
+        "B. Hopping",
+        "C. Session",
+        "D. Tumbling"
+      ],
+      "correctAnswer": "a private endpoint",
+      "images": []
+    },
+    {
+      "number": "152",
+      "questionText": "Which counter should you monitor for real-time processing to meet the technical requirements?",
+      "options": [
+        "A. SU% Utilization",
+        "B. CPU% utilization",
+        "C. Concurrent users",
+        "D. Data Conversion Errors"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "153",
+      "questionText": "You need to identify the cause of the performance issues on SalesSQLDb1.",
+      "options": [
+        "A. sys.dm_pdw_nodes_tran_locks",
+        "B. sys.dm_exec_compute_node_errors",
+        "C. sys.dm_exec_requests",
+        "D. sys.dm_cdc_errors",
+        "E. sys.dm_pdw_nodes_os_wait_stats",
+        "F. sys.dm_tran_locks"
+      ],
+      "correctAnswer": "a user-assigned managed identity",
+      "images": []
+    },
+    {
+      "number": "154",
+      "questionText": "You have an Azure SQL database named sqldb1.",
+      "options": [
+        "A. Double the value of Data Flush interval",
+        "B. Decrease by half the value of Data Flush Interval",
+        "C. Double the value of Statistics Collection Interval",
+        "D. Decrease by half the value of Statistics Collection interval"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "155",
+      "questionText": "A company plans to use Apache Spark analytics to analyze intrusion detection data.",
+      "options": [
+        "A. Azure Data Lake Storage",
+        "B. Azure Databricks",
+        "C. Azure HDInsight",
+        "D. Azure Data Factory"
+      ],
+      "correctAnswer": "No",
+      "images": []
+    },
+    {
+      "number": "156",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "No",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0015700001.png"
+      ]
+    },
+    {
+      "number": "157",
+      "questionText": "You have an Azure data solution that contains an enterprise data warehouse in Azure Synapse Analytics named DW1.",
+      "options": [
+        "A. Assign a smaller resource class to the automated data load queries.",
+        "B. Create sampled statistics to every column in each table of DW1.",
+        "C. Assign a larger resource class to the automated data load queries.",
+        "D. Hash distribute the large fact tables in DW1 before performing the automated data loads."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "158",
+      "questionText": "You are monitoring an Azure Stream Analytics job.",
+      "options": [
+        "A. Remove any named consumer groups from the connection and use $default.",
+        "B. Change the compatibility level of the Stream Analytics job.",
+        "C. Create an additional output stream for the existing input stream.",
+        "D. Increase the number of streaming units (SUs)."
+      ],
+      "correctAnswer": "Create users in each database.",
+      "images": []
+    },
+    {
+      "number": "159",
+      "questionText": "You have an Azure Stream Analytics job.",
+      "options": [
+        "A. Late Input Events",
+        "B. Out of order Events",
+        "C. Backlogged Input Events",
+        "D. Watermark Delay",
+        "E. Function Events"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "160",
+      "questionText": "You have an Azure Databricks resource.",
+      "options": [
+        "A. clusters",
+        "B. jobs",
+        "C. DBFS",
+        "D. SSH",
+        "E. workspace"
+      ],
+      "correctAnswer": "a private link",
+      "images": []
+    },
+    {
+      "number": "161",
+      "questionText": "Your company uses Azure Stream Analytics to monitor devices.",
+      "options": [
+        "A. Input Deserialization Errors",
+        "B. Late Input Events",
+        "C. Early Input Events",
+        "D. Watermark delay"
+      ],
+      "correctAnswer": "Tumbling",
+      "images": []
+    },
+    {
+      "number": "162",
+      "questionText": "You manage an enterprise data warehouse in Azure Synapse Analytics.",
+      "options": [
+        "A. Local tempdb percentage",
+        "B. DWU percentage",
+        "C. Data Warehouse Units (DWU) used",
+        "D. Cache hit percentage"
+      ],
+      "correctAnswer": "CPU% utilization",
+      "images": []
+    },
+    {
+      "number": "163",
+      "questionText": "You have an Azure Synapse Analytics dedicated SQL pool named Pool1 and a database named DB1. DB1 contains a fact table named Table.",
+      "options": [
+        "A. Connect to Pool1 and query sys.dm_pdw_nodes_db_partition_stats.",
+        "B. Connect to the built-in pool and run DBCC CHECKALLOC.",
+        "C. Connect to Pool1 and run DBCC CHECKALLOC.",
+        "D. Connect to the built-in pool and query sys.dm_pdw_nodes_db_partition_stats."
+      ],
+      "correctAnswer": "sys.dm_exec_requests",
+      "images": []
+    },
+    {
+      "number": "164",
+      "questionText": "You have an Azure Synapse Analytics dedicated SQL pool.",
+      "options": [
+        "A. The table contains less than 10,000 rows.",
+        "B. All distributions contain data.",
+        "C. The table uses round-robin distribution",
+        "D. The table is skewed."
+      ],
+      "correctAnswer": "Decrease by half the value of Data Flush Interval",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0016400001.png"
+      ]
+    },
+    {
+      "number": "165",
+      "questionText": "You have SQL Server 2019 on an Azure virtual machine that runs Windows Server 2019. The virtual machine has 4 vCPUs and 28 GB of memory.",
+      "options": [
+        "A. 2",
+        "B. 4",
+        "C. 8",
+        "D. 64"
+      ],
+      "correctAnswer": "Azure Databricks",
+      "images": []
+    },
+    {
+      "number": "166",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0016500001.png"
+      ]
+    },
+    {
+      "number": "167",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "Assign a larger resource class to the automated data load queries.",
+      "images": []
+    },
+    {
+      "number": "168",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "Increase the number of streaming units (SUs).",
+      "images": []
+    },
+    {
+      "number": "169",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "Backlogged Input Events",
+      "images": []
+    },
+    {
+      "number": "170",
+      "questionText": "You have an Azure SQL database named db1 on a server named server1.",
+      "options": [
+        "A. Connect to db1 and run the sp_configure command.",
+        "B. Connect to the master database of server1 and run the sp_configure command.",
+        "C. Configure the extended properties of db1.",
+        "D. Modify the database scoped configuration of db1."
+      ],
+      "correctAnswer": "clusters",
+      "images": []
+    },
+    {
+      "number": "171",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "Watermark delay",
+      "images": []
+    },
+    {
+      "number": "172",
+      "questionText": "You have SQL Server on an Azure virtual machine.",
+      "options": [
+        "A. Attach two mirrored 4-TB SSDs.",
+        "B. Attach a stripe set that contains four 1-TB SSDs.",
+        "C. Attach a RAID-5 array that contains five 1-TB SSDs.",
+        "D. Attach a single 4-TB SSD."
+      ],
+      "correctAnswer": "Cache hit percentage",
+      "images": []
+    },
+    {
+      "number": "173",
+      "questionText": "You have an Azure SQL database named db1 on a server named server1.",
+      "options": [
+        "A. Run the DBCC SQLPERF command.",
+        "B. Run the DBCC DBREINDEX command.",
+        "C. Modify the automatic tuning settings for db1.",
+        "D. Modify the Query Store settings for db1."
+      ],
+      "correctAnswer": "Connect to Pool1 and query sys.dm_pdw_nodes_db_partition_stats.",
+      "images": []
+    },
+    {
+      "number": "174",
+      "questionText": "You have an Azure SQL managed instance named SQL1 and two Azure web apps named App1 and App2.",
+      "options": [
+        "A. Enable query optimizer fixes.",
+        "B. Enable Resource Governor.",
+        "C. Enable parameter sniffing.",
+        "D. Create a workload group.",
+        "E. Configure In-memory OLTP.",
+        "F. Run the Database Engine Tuning Advisor.",
+        "G. Reduce the Max Degree of Parallelism value."
+      ],
+      "correctAnswer": "The table is skewed.",
+      "images": []
+    },
+    {
+      "number": "175",
+      "questionText": "You have an Azure SQL database named db1 on a server named server1.",
+      "options": [
+        "A. Implement memory-optimized tables.",
+        "B. Run the DBCC FLUSHPROCINDB command.",
+        "C. Replace the sequential index keys with nonsequential keys.",
+        "D. Run the DBCC DBREINDEX command."
+      ],
+      "correctAnswer": "8",
+      "images": []
+    },
+    {
+      "number": "176",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0014800001.png"
+      ]
+    },
+    {
+      "number": "177",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "No",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0017400001.jpg"
+      ]
+    },
+    {
+      "number": "178",
+      "questionText": "You have SQL Server 2019 on an Azure virtual machine that runs Windows Server 2019. The virtual machine has 4 vCPUs and 28 GB of memory.",
+      "options": [
+        "A. 2",
+        "B. 4",
+        "C. 8",
+        "D. 64"
+      ],
+      "correctAnswer": "No",
+      "images": []
+    },
+    {
+      "number": "179",
+      "questionText": "You receive numerous alerts from Azure Monitor for an Azure SQL Database instance.",
+      "options": [
+        "A. Set Threshold Sensitivity to High",
+        "B. Set the Alert logic threshold to Dynamic",
+        "C. Set the Alert logic threshold to Static",
+        "D. Set Threshold Sensitivity to Low",
+        "E. Set Force Plan to On"
+      ],
+      "correctAnswer": "Yes",
+      "images": []
+    },
+    {
+      "number": "180",
+      "questionText": "You have an Azure SQL database named sqldb1.",
+      "options": [
+        "A. DBCC SHRINKDATABASE",
+        "B. sp_clean_db_free_space",
+        "C. sp_clean_db_file_free_space",
+        "D. DBCC SHRINKFILE"
+      ],
+      "correctAnswer": "Modify the database scoped configuration of db1.",
+      "images": []
+    },
+    {
+      "number": "181",
+      "questionText": "You have an Azure SQL Database server named sqlsrv1 that hosts 10 Azure SQL databases.",
+      "options": [
+        "A. Run Query Store-based queries",
+        "B. Review information provided by SQL Server Profiler-based traces",
+        "C. Review information provided by Query Performance Insight",
+        "D. Run dynamic management view-based queries"
+      ],
+      "correctAnswer": "Yes",
+      "images": []
+    },
+    {
+      "number": "182",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "Attach a stripe set that contains four 1-TB SSDs.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0018000001.jpg"
+      ]
+    },
+    {
+      "number": "183",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Modify the automatic tuning settings for db1.",
+      "images": [
+        "https://img.examtopics.com/dp-300/image235.png"
+      ]
+    },
+    {
+      "number": "184",
+      "questionText": "You have an Azure SQL managed instance named MI1.",
+      "options": [
+        "A. Use The REST API to call the patch operation and modify the AutomaticTuningServerMode property.",
+        "B. From the Azure portal, configure automatic tuning.",
+        "C. Use Transact-SQL to enable the FORCE_LAST_GOOD_PLAN option."
+      ],
+      "correctAnswer": "Enable Resource Governor.",
+      "images": []
+    },
+    {
+      "number": "185",
+      "questionText": "You have an Azure subscription that contains an Azure SQL database named db1.",
+      "options": [
+        "A. a storage account",
+        "B. a virtual machine",
+        "C. an Azure logic app",
+        "D. an Azure function",
+        "E. a Log Analytics workspace"
+      ],
+      "correctAnswer": "Implement memory-optimized tables.",
+      "images": []
+    },
+    {
+      "number": "186",
+      "questionText": "You have an Azure subscription that contains the resources shown in the following table.",
+      "options": [
+        "A. Enable automatic tuning for db1.",
+        "B. Increase the number of vCores allocated to db1.",
+        "C. Decrease the auto-pause delay for db1.",
+        "D. Disable auto-pause delay for db1."
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image237.png"
+      ]
+    },
+    {
+      "number": "187",
+      "questionText": "You have 50 Azure SQL databases.",
+      "options": [
+        "A. Create a diagnostic setting for the activity log that has the Security log enabled.",
+        "B. For the database, create a diagnostic setting that has the InstanceAndAppAdvanced metric enabled.",
+        "C. Create an alert rule that uses a Metric signal type.",
+        "D. Create an alert rule that uses an Activity Log signal type."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "188",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "8",
+      "images": [
+        "https://img.examtopics.com/dp-300/image238.png",
+        "https://img.examtopics.com/dp-300/image239.png"
+      ]
+    },
+    {
+      "number": "189",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "Set the Alert logic threshold to Dynamic",
+      "images": [
+        "https://img.examtopics.com/dp-300/image241.png",
+        "https://img.examtopics.com/dp-300/image242.png"
+      ]
+    },
+    {
+      "number": "190",
+      "questionText": "You have the following resources:",
+      "options": [
+        "A. database audits",
+        "B. Microsoft Defender",
+        "C. SQL insights",
+        "D. Azure SQL Auditing"
+      ],
+      "correctAnswer": "DBCC SHRINKDATABASE",
+      "images": []
+    },
+    {
+      "number": "191",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Run dynamic management view-based queries",
+      "images": [
+        "https://img.examtopics.com/dp-300/image244.png"
+      ]
+    },
+    {
+      "number": "192",
+      "questionText": "You have an Azure subscription that contains an Azure SQL managed instance named SQLMI1 and a Log Analytics workspace named Workspace1.",
+      "options": [
+        "A. Create a private endpoint connection on SQLMI1.",
+        "B. Configure Azure SQL Analytics to use Workspace1.",
+        "C. Modify the Compute + storage settings for SQLMI1.",
+        "D. Modify the diagnostic settings for SQLMI1."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "193",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image268.png"
+      ]
+    },
+    {
+      "number": "194",
+      "questionText": "You have an Azure SQL database named DB1 in the General Purpose service tier.",
+      "options": [
+        "A. Change Service tier to Business Critical.",
+        "B. Increase the number of vCores.",
+        "C. Perform a checkpoint operation.",
+        "D. Change Recovery model to Simple."
+      ],
+      "correctAnswer": "Use Transact-SQL to enable the FORCE_LAST_GOOD_PLAN option.",
+      "images": [
+        "https://img.examtopics.com/dp-300/image270.png"
+      ]
+    },
+    {
+      "number": "195",
+      "questionText": "You have an Azure SQL database named DB1 that contains a nonclustered index named index1.",
+      "options": [
+        "A. Sys.dm_exec_query_plan_stats",
+        "B. Sys.dm_db_index_physical_stats",
+        "C. Sys.dm_db_index_operational_stats",
+        "D. Sys.dm_db_index_useage_stats"
+      ],
+      "correctAnswer": "a virtual machine",
+      "images": []
+    },
+    {
+      "number": "196",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Disable auto-pause delay for db1.",
+      "images": [
+        "https://img.examtopics.com/dp-300/image271.png"
+      ]
+    },
+    {
+      "number": "197",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Create an alert rule that uses an Activity Log signal type.",
+      "images": [
+        "https://img.examtopics.com/dp-300/image287.png"
+      ]
+    },
+    {
+      "number": "198",
+      "questionText": "You have several Azure SQL databases on the same Azure SQL Database server in a resource group named ResourceGroup1.",
+      "options": [
+        "A. Resource Groups",
+        "B. SQL Servers",
+        "C. SQL Databases",
+        "D. SQL Virtual Machines"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "199",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. sys.dm_db_index_usage_stats",
+        "B. DBCC CHECKALLOC",
+        "C. DBCC SHOWCONTIG",
+        "D. sts.dm_db_index_physical_stats"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "200",
+      "questionText": "You have an Azure SQL managed instance named SQLMI1 that has the following settings:",
+      "options": [
+        "A. Enable the Query Store.",
+        "B. Change vCores to 8.",
+        "C. Change Hardware generation to Premium-series.",
+        "D. Change Service tier to Business Critical."
+      ],
+      "correctAnswer": "Microsoft Defender",
+      "images": []
+    },
+    {
+      "number": "201",
+      "questionText": "You have five instances of SQL Server on Azure Virtual Machines.",
+      "options": [
+        "A. Azure Monitor",
+        "B. Log Analytics",
+        "C. SQL Insights",
+        "D. Azure SQL Analytics"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "202",
+      "questionText": "You have an instance of SQL Server on Azure Virtual Machines named SQL1.",
+      "options": [
+        "A. Modify the Set Session Event Filters settings.",
+        "B. Add a target.",
+        "C. Add an action.",
+        "D. Modify the Specify Session Data Storage settings."
+      ],
+      "correctAnswer": "Modify the diagnostic settings for SQLMI1.",
+      "images": []
+    },
+    {
+      "number": "203",
+      "questionText": "You have an Azure subscription that contains the following resources:",
+      "options": [
+        "A. Log Analytics",
+        "B. Azure SQL Analytics",
+        "C. Query Performance Insight",
+        "D. SQL Insights"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "204",
+      "questionText": "Case study -",
+      "options": [
+        "A. Run the sp_addarticle stored procedure.",
+        "B. Run the ALTER TABLE statement and specify the ENABLE CHANGE_TRACKING Clause.",
+        "C. Run the ALTER DATABASE statement and specify the SET CHANGE_TRACKING = ON Clause.",
+        "D. Run the sys.sp_cdc_enable_db stored procedure."
+      ],
+      "correctAnswer": "Perform a checkpoint operation.",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png"
+      ]
+    },
+    {
+      "number": "205",
+      "questionText": "You have SQL Server 2019 on an Azure virtual machine that runs Windows Server 2019. The virtual machine has 4 vCPUs and 28 GB of memory.",
+      "options": [
+        "A. 2",
+        "B. 4",
+        "C. 8",
+        "D. 64"
+      ],
+      "correctAnswer": "Sys.dm_db_index_operational_stats",
+      "images": []
+    },
+    {
+      "number": "206",
+      "questionText": "Case study -",
+      "options": [
+        "A. vertical scaling",
+        "B. a custom resource pool",
+        "C. Resource Governor",
+        "D. horizontal scaling"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png"
+      ]
+    },
+    {
+      "number": "207",
+      "questionText": "Case study -",
+      "options": [
+        "A. a SQL Server filegroup",
+        "B. an Azure SQL database",
+        "C. an Azure Files share",
+        "D. an Azure Blob Storage container"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png"
+      ]
+    },
+    {
+      "number": "208",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "SQL Databases",
+      "images": [
+        "https://img.examtopics.com/dp-300/image343.png"
+      ]
+    },
+    {
+      "number": "209",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "sts.dm_db_index_physical_stats",
+      "images": [
+        "https://img.examtopics.com/dp-300/image345.png"
+      ]
+    },
+    {
+      "number": "210",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Change Hardware generation to Premium-series.",
+      "images": [
+        "https://img.examtopics.com/dp-300/image356.png"
+      ]
+    },
+    {
+      "number": "211",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Azure Monitor",
+      "images": [
+        "https://img.examtopics.com/dp-300/image358.png",
+        "https://img.examtopics.com/dp-300/image359.png"
+      ]
+    },
+    {
+      "number": "212",
+      "questionText": "You have SQL Server on an Azure virtual machine that contains a database named DB1. DB1 contains a table named CustomerPII.",
+      "options": [
+        "A. server audit specification",
+        "B. SQL Server audit",
+        "C. database audit specification",
+        "D. a server principal"
+      ],
+      "correctAnswer": "Add a target.",
+      "images": []
+    },
+    {
+      "number": "213",
+      "questionText": "You have an Azure virtual machine based on a custom image named VM1.",
+      "options": [
+        "A. Enable a system-assigned managed identity for VM1",
+        "B. Register the Azure subscription to the Microsoft.Sql resource provider",
+        "C. Install an Azure virtual machine Desired State Configuration (DSC) extension on VM1",
+        "D. Register the Azure subscription to the Microsoft.SqlVirtualMachine resource provider"
+      ],
+      "correctAnswer": "SQL Insights",
+      "images": []
+    },
+    {
+      "number": "214",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Run the sys.sp_cdc_enable_db stored procedure.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0015400001.png"
+      ]
+    },
+    {
+      "number": "215",
+      "questionText": "You have SQL Server on an Azure virtual machine that contains a database named DB1.",
+      "options": [
+        "A. Enable Last_Query_Plan_Stats in the master database",
+        "B. Enable Lightweight_Query_Profiling in DB1",
+        "C. Enable Last_Query_Plan_Stats in DB1",
+        "D. Enable Lightweight_Query_Profiling in the master database",
+        "E. Enable PARAMETER_SNIFFING in DB1"
+      ],
+      "correctAnswer": "8",
+      "images": []
+    },
+    {
+      "number": "216",
+      "questionText": "You are designing a dimension table in an Azure Synapse Analytics dedicated SQL pool.",
+      "options": [
+        "A. an IDENTITY column",
+        "B. a GUID column",
+        "C. a sequence object"
+      ],
+      "correctAnswer": "vertical scaling",
+      "images": []
+    },
+    {
+      "number": "217",
+      "questionText": "You are designing a star schema for a dataset that contains records of online orders. Each record includes an order date, an order due date, and an order ship date.",
+      "options": [
+        "A. Create a date dimension table that has a DateTime key.",
+        "B. Create a date dimension table that has an integer key in the format of YYYYMMDD.",
+        "C. Use built-in SQL functions to extract date attributes.",
+        "D. Use integer columns for the date fields.",
+        "E. Use DateTime columns for the date fields."
+      ],
+      "correctAnswer": "an Azure Blob Storage container",
+      "images": []
+    },
+    {
+      "number": "218",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0020200001.jpg"
+      ]
+    },
+    {
+      "number": "219",
+      "questionText": "You have an Azure Data Factory pipeline that is triggered hourly.",
+      "options": [
+        "A. From 06:00 to 07:00 on January 10, 2021, there was no data in wwi/BIKES/CARBON.",
+        "B. The parameter used to generate year=2021/month=01/day=10/hour=06 was incorrect.",
+        "C. From 06:00 to 07:00 on January 10, 2021, the file format of data in wwi/BIKES/CARBON was incorrect.",
+        "D. The pipeline was triggered too early."
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0020400001.png"
+      ]
+    },
+    {
+      "number": "220",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0020500001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0020500002.png"
+      ]
+    },
+    {
+      "number": "221",
+      "questionText": "You have an Azure SQL managed instance.",
+      "options": [
+        "A. Generate an estimated execution plan.",
+        "B. Generate an actual execution plan.",
+        "C. Run sys.dm_exec_query_plan_stats.",
+        "D. Generate Live Query Statistics."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "222",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "SQL Server audit",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0020800001.png"
+      ]
+    },
+    {
+      "number": "223",
+      "questionText": "You have an Azure SQL Database managed instance.",
+      "options": [
+        "A. SQL Profiler",
+        "B. Extended Events",
+        "C. Query Store",
+        "D. dynamic management views"
+      ],
+      "correctAnswer": "Register the Azure subscription to the Microsoft.SqlVirtualMachine resource provider",
+      "images": []
+    },
+    {
+      "number": "224",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Run the SET SHOWPLAN_ALL Transact-SQL statement.",
+        "B. For DB1, set QUERY_CAPTURE_MODE of Query Store to All.",
+        "C. Run the SET FORCEPLAN Transact-SQL statement.",
+        "D. Enable Query Store for DB1."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "225",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Enable Lightweight_Query_Profiling in DB1",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0021200001.jpg",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0021200002.png"
+      ]
+    },
+    {
+      "number": "226",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "an IDENTITY column",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0018900001.jpg"
+      ]
+    },
+    {
+      "number": "227",
+      "questionText": "You have an instance of SQL Server on Azure Virtual Machines that has a database named DB1.",
+      "options": [
+        "A. SERIALIZABLE",
+        "B. SNAPSHOT",
+        "C. READ UNCOMMITTED",
+        "D. READ COMMITTED"
+      ],
+      "correctAnswer": "Create a date dimension table that has an integer key in the format of YYYYMMDD.",
+      "images": []
+    },
+    {
+      "number": "228",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0021500001.jpg",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0021600001.jpg"
+      ]
+    },
+    {
+      "number": "229",
+      "questionText": "A data engineer creates a table to store employee information for a new application. All employee names are in the US English alphabet. All addresses are locations in the United States. The data engineer uses the following statement to create the table.",
+      "options": [
+        "A. Change Salary to the money data type.",
+        "B. Change PhoneNumber to the float data type.",
+        "C. Change LastHireDate to the datetime2(7) data type.",
+        "D. Change PhoneNumber to the bigint data type.",
+        "E. Change LastHireDate to the date data type."
+      ],
+      "correctAnswer": "The parameter used to generate year=2021/month=01/day=10/hour=06 was incorrect.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0021700001.png"
+      ]
+    },
+    {
+      "number": "230",
+      "questionText": "You have an Azure SQL database.",
+      "options": [
+        "A. Live Query Statistics",
+        "B. an estimated execution plan",
+        "C. an actual execution plan",
+        "D. Client Statistics"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "231",
+      "questionText": "You have a version-8.0 Azure Database for MySQL database.",
+      "options": [
+        "A. Query Store",
+        "B. Metrics",
+        "C. Query Performance Insight",
+        "D. Alerts"
+      ],
+      "correctAnswer": "Run sys.dm_exec_query_plan_stats.",
+      "images": []
+    },
+    {
+      "number": "232",
+      "questionText": "You have an Azure subscription that contains an Azure SQL database. The database contains a table named table1.",
+      "options": [
+        "A. ROW_MODE_MEMORY_GRANT_FEEDBACK",
+        "B. BATCH_MODE_MEMORY_GRANT_FEEDBACK",
+        "C. BATCH_MODE_ADAPTIVE_JOINS",
+        "D. BATCH_MODE_ON_ROWSTORE"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image246.png"
+      ]
+    },
+    {
+      "number": "233",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "Query Store",
+      "images": [
+        "https://img.examtopics.com/dp-300/image247.png"
+      ]
+    },
+    {
+      "number": "234",
+      "questionText": "You have a Microsoft SQL Server 2019 database named DB1 and an Azure SQL managed instance named SQLMI1.",
+      "options": [
+        "A. log to table",
+        "B. email notifications",
+        "C. schedules",
+        "D. output files"
+      ],
+      "correctAnswer": "Run the SET SHOWPLAN_ALL Transact-SQL statement.",
+      "images": []
+    },
+    {
+      "number": "235",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image273.png"
+      ]
+    },
+    {
+      "number": "236",
+      "questionText": "You have an Azure SQL managed instance.",
+      "options": [
+        "A. EXECUTE msdb.dbo.sysmail_add_profile_sp @profile_name = ‘sysadmin_dbmail_profile’;",
+        "B. EXECUTE msdb.dbo.sysmail_add_profile_sp @profile_name = ‘application_dbmail_profile’;",
+        "C. EXECUTE msdb.dbo.sysmail_add_profile_sp @profile_name = ‘AzureManagedInstance_dbmail_profile’;",
+        "D. EXECUTE msdb.dbo.sysmail_add_profile_sp @profile_name = ‘sys_dbmail_profile’;"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "237",
+      "questionText": "You deploy a database to an Azure SQL Database managed instance.",
+      "options": [
+        "A. PARAMETERIZATION to FORCED",
+        "B. PARAMETERIZATION to SIMPLE",
+        "C. Delayed Durability to Forced",
+        "D. READ_COMMITTED_SNAPSHOT to ON"
+      ],
+      "correctAnswer": "SNAPSHOT",
+      "images": []
+    },
+    {
+      "number": "238",
+      "questionText": "You have an Azure SQL database.",
+      "options": [
+        "A. LEGACY_CARDINALITY_ESTIMATION",
+        "B. QUERY_OPTIMIZER_HOTFIXES",
+        "C. OPTIMIZE_FOR_AD_HOC_WORKLOADS",
+        "D. ACCELERATED_PLAN_FORCING"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0019200004.png"
+      ]
+    },
+    {
+      "number": "239",
+      "questionText": "You have SQL Server on an Azure virtual machine that contains a database named DB1.",
+      "options": [
+        "A. Force the query execution plan for plan 1221065.",
+        "B. Run the DBCC FREEPROCCACHE command.",
+        "C. Force the query execution plan for plan 1220917.",
+        "D. Disable parameter sniffing."
+      ],
+      "correctAnswer": "Change Salary to the money data type.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0019400001.jpg"
+      ]
+    },
+    {
+      "number": "240",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "an actual execution plan",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0019500001.jpg",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0019600001.png"
+      ]
+    },
+    {
+      "number": "241",
+      "questionText": "You have an Azure SQL database named DB1. You run a query while connected to DB1.",
+      "options": [
+        "A. For DB1, set QUERY_CAPTURE_MODE of Query Store to All.",
+        "B. Run the SET SHOWPLAN_ALL Transact-SQL statement.",
+        "C. Save the actual execution plan.",
+        "D. Enable Query Store for DB1."
+      ],
+      "correctAnswer": "Query Performance Insight",
+      "images": []
+    },
+    {
+      "number": "242",
+      "questionText": "You have an Azure SQL database.",
+      "options": [
+        "A. Performance Recommendations in the Azure portal",
+        "B. Extended Events in Microsoft SQL Server Management Studio (SSMS)",
+        "C. Query Store in Microsoft SQL Server Management Studio (SSMS)",
+        "D. Query Performance Insight in the Azure portal"
+      ],
+      "correctAnswer": "BATCH_MODE_ON_ROWSTORE",
+      "images": []
+    },
+    {
+      "number": "243",
+      "questionText": "You have an Azure SQL database. The database contains a table that uses a columnstore index and is accessed infrequently.",
+      "options": [
+        "A. Queries that use the index will consume more disk I/O.",
+        "B. Queries that use the index will retrieve fewer data pages.",
+        "C. The index will consume more disk space.",
+        "D. The index will consume more memory.",
+        "E. Queries that use the index will consume more CPU resources."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "244",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "output files",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0023200003.png"
+      ]
+    },
+    {
+      "number": "245",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0024200001.jpg"
+      ]
+    },
+    {
+      "number": "246",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "EXECUTE msdb.dbo.sysmail_add_profile_sp @profile_name = ‘AzureManagedInstance_dbmail_profile’;",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0024400001.jpg"
+      ]
+    },
+    {
+      "number": "247",
+      "questionText": "You have an Azure SQL managed instance named SQLMI1 that hosts 10 databases.",
+      "options": [
+        "A. From the Diagnostic settings of each database, select Send to Log Analytics.",
+        "B. From the Diagnostic settings of each database, select Stream to an event hub.",
+        "C. From the Diagnostic settings of SQLMI1, select Send to Log Analytics.",
+        "D. From the Diagnostic settings of SQLMI1, select Stream to an event hub."
+      ],
+      "correctAnswer": "READ_COMMITTED_SNAPSHOT to ON",
+      "images": []
+    },
+    {
+      "number": "248",
+      "questionText": "You have an Azure SQL managed instance that hosts multiple databases.",
+      "options": [
+        "A. Azure SQL Analytics alerts based on metrics",
+        "B. SQL Health Check alerts based on diagnostics logs",
+        "C. SQL Health Check alerts based on metrics",
+        "D. Azure SQL Analytics alerts based on diagnostics logs"
+      ],
+      "correctAnswer": "OPTIMIZE_FOR_AD_HOC_WORKLOADS",
+      "images": []
+    },
+    {
+      "number": "249",
+      "questionText": "You have an Azure SQL managed instance.",
+      "options": [
+        "A. Use the Agent XPs option.",
+        "B. Enable the SQL Server Agent.",
+        "C. Run the sp_configure command.",
+        "D. Run the sp_set_agent_properties command."
+      ],
+      "correctAnswer": "Force the query execution plan for plan 1221065.",
+      "images": []
+    },
+    {
+      "number": "250",
+      "questionText": "You have four Azure subscriptions. Each subscription contains multiple Azure SQL databases.",
+      "options": [
+        "A. an Azure Automation runbook",
+        "B. a SQL Agent job",
+        "C. Azure SQL Analytics",
+        "D. automatic tuning in Azure SQL Database"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "251",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "Save the actual execution plan.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0024800001.png"
+      ]
+    },
+    {
+      "number": "252",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "Query Store in Microsoft SQL Server Management Studio (SSMS)",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0025000001.jpg"
+      ]
+    },
+    {
+      "number": "253",
+      "questionText": "You have an Azure SQL Database managed instance named SQLMI1. A Microsoft SQL Server Agent job runs on SQLMI1.",
+      "options": [
+        "A. From SQL Server Configuration Manager (SSCM), enable SQL Server Agent",
+        "B. From SQL Server Management Studio (SSMS), run sp_set_sqlagent_properties",
+        "C. From SQL Server Management Studio (SSMS), create a Database Mail profile",
+        "D. From the Azure portal, create an Azure Monitor action group that has an Email/SMS/Push/Voice action"
+      ],
+      "correctAnswer": "Queries that use the index will retrieve fewer data pages.",
+      "images": []
+    },
+    {
+      "number": "254",
+      "questionText": "You need to trigger an Azure Data Factory pipeline when a file arrives in an Azure Data Lake Storage Gen2 container.",
+      "options": [
+        "A. Microsoft.EventHub",
+        "B. Microsoft.EventGrid",
+        "C. Microsoft.Sql",
+        "D. Microsoft.Automation"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "255",
+      "questionText": "You have the following Azure Data Factory pipelines:",
+      "options": [
+        "A. Add a schedule trigger to all four pipelines.",
+        "B. Add an event trigger to all four pipelines.",
+        "C. Create a parent pipeline that contains the four pipelines and use an event trigger.",
+        "D. Create a parent pipeline that contains the four pipelines and use a schedule trigger."
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0023300003.png"
+      ]
+    },
+    {
+      "number": "256",
+      "questionText": "You deploy an instance of SQL Server on Azure Virtual Machines named VM1.",
+      "options": [
+        "A. a local Windows account",
+        "B. a user-assigned managed identity in Azure AD",
+        "C. a system-assigned managed identity in Azure AD",
+        "D. an Elastic Job agent"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "257",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "From the Diagnostic settings of each database, select Send to Log Analytics.",
+      "images": [
+        "https://img.examtopics.com/dp-300/image249.png"
+      ]
+    },
+    {
+      "number": "258",
+      "questionText": "You have an Azure AD tenant and a logical Microsoft SQL server named SQL1 that hosts several Azure SQL databases.",
+      "options": [
+        "A. From the Azure Active Directory admin center create a service principal.",
+        "B. From the Azure Active Directory admin center, create a user-assigned managed identity for SQL1.",
+        "C. On SQL1, create a SQL user in the databases.",
+        "D. On SQL1, create a SQL login.",
+        "E. From the Azure Active Directory admin center, create an external identity."
+      ],
+      "correctAnswer": "Azure SQL Analytics alerts based on diagnostics logs",
+      "images": []
+    },
+    {
+      "number": "259",
+      "questionText": "You have an Azure subscription.",
+      "options": [
+        "A. full",
+        "B. lightweight",
+        "C. NoAgent"
+      ],
+      "correctAnswer": "Run the sp_configure command.",
+      "images": []
+    },
+    {
+      "number": "260",
+      "questionText": "You have an Azure subscription that contains 20 Azure SQL databases.",
+      "options": [
+        "A. an Azure function",
+        "B. a SQL Server Agent Job",
+        "C. an elastic job",
+        "D. Azure Automation"
+      ],
+      "correctAnswer": "an Azure Automation runbook",
+      "images": []
+    },
+    {
+      "number": "261",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image289.png"
+      ]
+    },
+    {
+      "number": "262",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image295.png"
+      ]
+    },
+    {
+      "number": "263",
+      "questionText": "You manage 100 Azure SQL managed instances located across 10 Azure regions.",
+      "options": [
+        "A. From the Azure portal, create a service health alert.",
+        "B. From the Azure portal, create an Azure Advisor operational excellence alert.",
+        "C. From the Azure portal, configure an activity log alert.",
+        "D. From Microsoft SQL Server Management Studio (SSMS), configure a SQL Server agent job."
+      ],
+      "correctAnswer": "From SQL Server Management Studio (SSMS), create a Database Mail profile",
+      "images": []
+    },
+    {
+      "number": "264",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Microsoft.EventGrid",
+      "images": [
+        "https://img.examtopics.com/dp-300/image322.png"
+      ]
+    },
+    {
+      "number": "265",
+      "questionText": "You have two Azure virtual machines named Server1 and Server2 that run Windows Server 2022 and are joined to an Active Directory Domain Services (AD DS) domain named contoso.com.",
+      "options": [
+        "A. On Server2, grant the contoso\\sqlproxy account the Impersonate a client after authentication user right.",
+        "B. On Server2, grant the contoso\\sqlproxy account the Access this computer from the network user right.",
+        "C. On Server2, create a proxy account.",
+        "D. On Server1, set the AllowDownloadedJobsToMatchProxyName registry entry to 1.",
+        "E. On Server2, set the AllowDownloadedJobsToMatchProxyName registry entry to 1."
+      ],
+      "correctAnswer": "Create a parent pipeline that contains the four pipelines and use a schedule trigger.",
+      "images": []
+    },
+    {
+      "number": "266",
+      "questionText": "You have an Azure Data Factory pipeline that performs an incremental load of source data to an Azure Data Lake Storage Gen2 account.",
+      "options": [
+        "A. tumbling window",
+        "B. on-demand",
+        "C. event",
+        "D. schedule"
+      ],
+      "correctAnswer": "a system-assigned managed identity in Azure AD",
+      "images": []
+    },
+    {
+      "number": "267",
+      "questionText": "You have an Azure subscription. The subscription contains an instance of SQL Server on Azure Virtual Machines named SQL1 and an Azure Automation account named account1.",
+      "options": [
+        "A. Start/Stop VM",
+        "B. Change tracking",
+        "C. Update management",
+        "D. State configuration (DSC)"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "268",
+      "questionText": "You have 25 Azure SQL databases.",
+      "options": [
+        "A. elastic jobs",
+        "B. an Azure Automation runbook",
+        "C. Azure Functions",
+        "D. Azure Logic Apps"
+      ],
+      "correctAnswer": "From the Azure Active Directory admin center create a service principal.",
+      "images": []
+    },
+    {
+      "number": "269",
+      "questionText": "You have an Azure subscription that contains a SQL Server on Azure Virtual Machines instance named SQLVM1. SQLVM1 has the following configurations:",
+      "options": [
+        "A. Install the Azure Monitor Agent.",
+        "B. Uninstall the SQL Server IaaS Agent extension.",
+        "C. Install the Log Analytics agent.",
+        "D. Set Automated patching to Disable."
+      ],
+      "correctAnswer": "full",
+      "images": []
+    },
+    {
+      "number": "270",
+      "questionText": "You have an Azure Data Factory that contains 10 pipelines.",
+      "options": [
+        "A. an annotation",
+        "B. a resource tag",
+        "C. a run group ID",
+        "D. a user property",
+        "E. a correlation ID"
+      ],
+      "correctAnswer": "an elastic job",
+      "images": []
+    },
+    {
+      "number": "271",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0023600001.jpg",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0023600002.jpg",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0023600008.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0023700001.png"
+      ]
+    },
+    {
+      "number": "272",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "273",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "From the Azure portal, create a service health alert.",
+      "images": []
+    },
+    {
+      "number": "274",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "275",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "On Server2, create a proxy account.",
+      "images": []
+    },
+    {
+      "number": "276",
+      "questionText": "You plan to move two 100-GB databases to Azure.",
+      "options": [
+        "A. An Azure SQL Database elastic pool",
+        "B. SQL Server on Azure virtual machines",
+        "C. an Azure SQL Database managed instance",
+        "D. Azure SQL databases"
+      ],
+      "correctAnswer": "tumbling window",
+      "images": []
+    },
+    {
+      "number": "277",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "State configuration (DSC)",
+      "images": []
+    },
+    {
+      "number": "278",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "elastic jobs",
+      "images": []
+    },
+    {
+      "number": "279",
+      "questionText": "You plan to move two 100-GB databases to Azure.",
+      "options": [
+        "A. two Azure SQL Databases in an elastic pool",
+        "B. two databases hosted in SQL Server on an Azure virtual machine",
+        "C. two databases in an Azure SQL Managed instance",
+        "D. two single Azure SQL databases"
+      ],
+      "correctAnswer": "Set Automated patching to Disable.",
+      "images": []
+    },
+    {
+      "number": "280",
+      "questionText": "You have an on-premises app named App1 that stores data in an on-premises Microsoft SQL Server 2019 database named DB1.",
+      "options": [
+        "A. Azure SQL Managed instance",
+        "B. Azure SQL Database single database",
+        "C. Azure Database for PostgreSQL",
+        "D. SQL Server on Azure virtual machines"
+      ],
+      "correctAnswer": "an annotation",
+      "images": []
+    },
+    {
+      "number": "281",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "282",
+      "questionText": "You have an Azure subscription that uses a domain named contoso.com.",
+      "options": [
+        "A. Configure the primary endpoint as TCP://DBServer1.contoso.com:445, configure the secondary endpoint as TCP://DBServer2.contoso.com:445, and set the availability mode to Asynchronous.",
+        "B. Configure the primary endpoint as TCP://DBServer1.contoso.com:445, configure the secondary endpoint as TCP://DBServer2.contoso.com:445, and set the availability mode to Synchronous.",
+        "C. Configure the primary endpoint as TCP://DBServer1.contoso.com:5022, configure the secondary endpoint as TCP://DBServer2.contoso.com:5022, and set the availability mode to Asynchronous.",
+        "D. Configure the primary endpoint as TCP://DBServer1.contoso.com:5022, configure the secondary endpoint as TCP://DBServer2.contoso.com:5022, and set the availability mode to Synchronous."
+      ],
+      "correctAnswer": "No",
+      "images": []
+    },
+    {
+      "number": "283",
+      "questionText": "You have an on-premises multi-tier application named App1 that includes a web tier, an application tier, and a Microsoft SQL Server tier. All the tiers run on Hyper-",
+      "options": [
+        "A. Azure Backup",
+        "B. Azure Information Protection",
+        "C. Windows Server Failover Cluster",
+        "D. Azure Site Recovery"
+      ],
+      "correctAnswer": "Yes",
+      "images": []
+    },
+    {
+      "number": "284",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Yes",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0028000001.png"
+      ]
+    },
+    {
+      "number": "285",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "No",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0028300001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0028400011.jpg"
+      ]
+    },
+    {
+      "number": "286",
+      "questionText": "You have a new Azure subscription.",
+      "options": [
+        "A. From the properties of DB1, configure geo-replication.",
+        "B. From the properties of Server1, add a failover group.",
+        "C. Create a new Azure SQL Database server named Server2.",
+        "D. From the properties of Server1, configure retention for DB1.",
+        "E. Create a new Azure SQL Database instance named DB2."
+      ],
+      "correctAnswer": "An Azure SQL Database elastic pool",
+      "images": []
+    },
+    {
+      "number": "287",
+      "questionText": "You have 10 Azure virtual machines that have SQL Server installed.",
+      "options": [
+        "A. Automated Backup in the SQL virtual machine settings",
+        "B. Azure Backup",
+        "C. Azure Site Recovery",
+        "D. SQL Server Agent jobs"
+      ],
+      "correctAnswer": "Yes",
+      "images": []
+    },
+    {
+      "number": "288",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "No",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0028800001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0028800002.jpg"
+      ]
+    },
+    {
+      "number": "289",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "two Azure SQL Databases in an elastic pool",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0029000001.jpg"
+      ]
+    },
+    {
+      "number": "290",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "Azure SQL Database single database",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0029100001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0029200001.jpg"
+      ]
+    },
+    {
+      "number": "291",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Yes",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0029500001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0029500002.jpg"
+      ]
+    },
+    {
+      "number": "292",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "Configure the primary endpoint as TCP://DBServer1.contoso.com:5022, configure the secondary endpoint as TCP://DBServer2.contoso.com:5022, and set the availability mode to Asynchronous.",
+      "images": []
+    },
+    {
+      "number": "293",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "Azure Site Recovery",
+      "images": []
+    },
+    {
+      "number": "294",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "295",
+      "questionText": "You have an Always On availability group deployed to Azure virtual machines. The availability group contains a database named DB1 and has two nodes named",
+      "options": [
+        "A. BACKUP DATABASE DB1 TO URL='https://mystorageaccount.blob.core.windows.net/mycontainer/DB1.bak' with (Differential, STATS=5, COMPRESSION);",
+        "B. BACKUP DATABASE DB1 TO URL='https://mystorageaccount.blob.core.windows.net/mycontainer/DB1.bak' with (COPY_ONLY, STATS=5, COMPRESSION);",
+        "C. BACKUP DATABASE DB1 TO URL='https://mystorageaccount.blob.core.windows.net/mycontainer/DB1.bak' with (File_Snapshot, STATS=5, COMPRESSION);",
+        "D. BACKUP DATABASE DB1 TO URL='https://mystorageaccount.blob.core.windows.net/mycontainer/DB1.bak' with (NoInit, STATS=5, COMPRESSION);"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "296",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "From the properties of Server1, add a failover group.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0029900001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0030000001.jpg"
+      ]
+    },
+    {
+      "number": "297",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Azure Backup",
+      "images": [
+        "https://img.examtopics.com/dp-300/image251.png",
+        "https://img.examtopics.com/dp-300/image252.png"
+      ]
+    },
+    {
+      "number": "298",
+      "questionText": "You need to recommend an availability strategy for an Azure SQL database. The strategy must meet the following requirements:",
+      "options": [
+        "A. failover groups",
+        "B. transactional replication",
+        "C. Availability Zones",
+        "D. geo-replication"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "299",
+      "questionText": "You have an Azure subscription that contains an Azure SQL database named SQL1.",
+      "options": [
+        "A. log shipping",
+        "B. active geo-replication",
+        "C. Microsoft SQL Server failover clusters",
+        "D. auto-failover groups"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "300",
+      "questionText": "You have an Azure SOI database named SQLDb1 that contains the resources shown in the following table.",
+      "options": [
+        "A. the COMPRESS() function",
+        "B. columnstore archive compression",
+        "C. row compression",
+        "D. columnstore compression"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image254.png"
+      ]
+    },
+    {
+      "number": "301",
+      "questionText": "You have an Azure subscription that contains two instances of SQL Server on Azure Virtual Machines named VM1 and VM2. Both instances run Microsoft SQL Server 2019 CU8.",
+      "options": [
+        "A. node majority with a cloud witness",
+        "B. node majority with no witness",
+        "C. node majority with a file share witness",
+        "D. node majority with a disk witness"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "302",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Azure SQL Database Premium",
+        "B. Azure SQL Database serverless",
+        "C. Azure SQL Database Basic",
+        "D. Azure SQL Database Hyperscale"
+      ],
+      "correctAnswer": "Yes",
+      "images": []
+    },
+    {
+      "number": "303",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Azure SQL Database Business Critical",
+        "B. Azure SQL Database Standard",
+        "C. Azure SQL Database managed instance General Purpose",
+        "D. Azure SQL Database Hyperscale"
+      ],
+      "correctAnswer": "No",
+      "images": []
+    },
+    {
+      "number": "304",
+      "questionText": "You plan to deploy two instances of SQL Server on Azure virtual machines in a highly available configuration that will use an Always On availability group.",
+      "options": [
+        "A. Create two proximity groups and two availability sets. Deploy each virtual machine to a unique availability set. Add one virtual machine to each proximity group.",
+        "B. Create a proximity group and an availability set. Deploy each virtual machine to the availability set. Add both virtual machines to the proximity group.",
+        "C. Create a proximity group and two availability sets. Deploy each virtual machine to a unique availability set. Add both virtual machines to the proximity group.",
+        "D. Create two proximity groups and a single availability set. Deploy both virtual machines to the availability set. Add one virtual machine to each proximity group."
+      ],
+      "correctAnswer": "No",
+      "images": []
+    },
+    {
+      "number": "305",
+      "questionText": "You have a single availability set that contains two SQL Server on Azure Virtual Machines instances.",
+      "options": [
+        "A. an Azure Standard Load Balancer",
+        "B. a virtual network name (VNN) resource",
+        "C. a Basic Azure Load Balancer",
+        "D. a distributed network name (DNN) resource"
+      ],
+      "correctAnswer": "BACKUP DATABASE DB1 TO URL='https://mystorageaccount.blob.core.windows.net/mycontainer/DB1.bak' with (COPY_ONLY, STATS=5, COMPRESSION);",
+      "images": []
+    },
+    {
+      "number": "306",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image255.png"
+      ]
+    },
+    {
+      "number": "307",
+      "questionText": "You have an Azure subscription that contains two Azure SQL managed instances named SQLMI1 and SQLMI2. SQLMI1 contains a database named DB1 and a user named User1.",
+      "options": [
+        "A. Azure CLI",
+        "B. Transact-SQL",
+        "C. the Azure portal",
+        "D. Azure PowerShell"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "308",
+      "questionText": "You deploy an instance of SQL Server on Azure Virtual Machines: named SQL1 that hosts multiple databases.",
+      "options": [
+        "A. log",
+        "B. full",
+        "C. differential",
+        "D. tail-log"
+      ],
+      "correctAnswer": "failover groups",
+      "images": []
+    },
+    {
+      "number": "309",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "active geo-replication",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0026800001.png"
+      ]
+    },
+    {
+      "number": "310",
+      "questionText": "You have an Azure SQL database named SQL1.",
+      "options": [
+        "A. Azure Site Recovery",
+        "B. active geo-replication",
+        "C. availability groups",
+        "D. auto-failover groups"
+      ],
+      "correctAnswer": "the COMPRESS() function",
+      "images": []
+    },
+    {
+      "number": "311",
+      "questionText": "You need to recommend a disaster recovery solution for an on-premises Microsoft SQL Server database. The solution must meet the following requirements:",
+      "options": [
+        "A. database mirroring on an instance of SQL Server on Azure Virtual Machines",
+        "B. availability groups for SQL Server on Azure Virtual Machines",
+        "C. an Azure SQL Managed Instance link",
+        "D. transactional replication to an Azure SQL Managed Instance"
+      ],
+      "correctAnswer": "node majority with a disk witness",
+      "images": []
+    },
+    {
+      "number": "312",
+      "questionText": "You have an Azure subscription.",
+      "options": [
+        "A. Connect each virtual machine to a different subnet on a virtual network. Deploy a basic Azure load balancer.",
+        "B. Connect each virtual machine to a different subnet on a single virtual network.",
+        "C. Connect each virtual machine to a single subnet on a single virtual network.",
+        "D. Connect each virtual machine to a single subnet on a virtual network. Deploy a standard Azure load balancer."
+      ],
+      "correctAnswer": "Azure SQL Database Premium",
+      "images": []
+    },
+    {
+      "number": "313",
+      "questionText": "You have an Azure SQL database.",
+      "options": [
+        "A. Azure Site Recovery",
+        "B. active geo-replication",
+        "C. auto-failover groups",
+        "D. Azure Backup"
+      ],
+      "correctAnswer": "Azure SQL Database Business Critical",
+      "images": []
+    },
+    {
+      "number": "314",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Azure SQL Database managed instance General Purpose",
+        "B. Azure SQL Database Hyperscale",
+        "C. Azure SQL Database Premium",
+        "D. Azure SQL Database managed instance Business Critical"
+      ],
+      "correctAnswer": "Create a proximity group and an availability set. Deploy each virtual machine to the availability set. Add both virtual machines to the proximity group.",
+      "images": []
+    },
+    {
+      "number": "315",
+      "questionText": "You are modifying an existing disaster recovery solution for an Azure SQL managed instance that contains a failover group named FG1.",
+      "options": [
+        "A. an availability group",
+        "B. a secondary managed instance",
+        "C. a failover policy",
+        "D. a grace period"
+      ],
+      "correctAnswer": "a distributed network name (DNN) resource",
+      "images": []
+    },
+    {
+      "number": "316",
+      "questionText": "You have an Azure subscription that contains three instances of SQL Server on Azure Virtual Machines.",
+      "options": [
+        "A. native Microsoft SQL Server backup",
+        "B. Azure Site Recovery",
+        "C. Recovery Services vaults",
+        "D. Azure Backup"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "317",
+      "questionText": "You have an instance of SQL Server on Azure Virtual Machines named VM1.",
+      "options": [
+        "A. active geo-replication",
+        "B. auto-failover groups",
+        "C. Azure Site Recovery",
+        "D. a failover cluster instance (FCI)"
+      ],
+      "correctAnswer": "the Azure portal",
+      "images": []
+    },
+    {
+      "number": "318",
+      "questionText": "You plan to deploy an Azure SQL managed instance.",
+      "options": [
+        "A. locally-redundant storage (LRS)",
+        "B. zone-redundant storage (ZRS)",
+        "C. geo-zone-redundant storage (GZRS)",
+        "D. geo-redundant storage (GRS)"
+      ],
+      "correctAnswer": "full",
+      "images": []
+    },
+    {
+      "number": "319",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Azure SQL Database Premium",
+        "B. Azure SQL Database Basic",
+        "C. Azure SQL Database managed instance General Purpose",
+        "D. Azure SQL Database Hyperscale"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "320",
+      "questionText": "You are building a database backup solution for a SQL Server database hosted on an Azure virtual machine.",
+      "options": [
+        "A. locally-redundant storage (LRS)",
+        "B. read-access geo-redundant storage (RA-GRS)",
+        "C. zone-redundant storage (ZRS)",
+        "D. geo-redundant storage (GRS)"
+      ],
+      "correctAnswer": "auto-failover groups",
+      "images": []
+    },
+    {
+      "number": "321",
+      "questionText": "You have an Azure subscription that contains two instances of SQL Server on Azure Virtual Machines named VM1 and VM2. Both instances run Microsoft SQL Server 2019 CU8.",
+      "options": [
+        "A. Deploy VM1 and VM2 to a single proximity placement group.",
+        "B. Deploy VM1 and VM2 to different proximity placement groups in the same Azure region.",
+        "C. Connect VM1 and VM2 to a single subnet.",
+        "D. Connect VM1 and VM2 to different subnets on a single virtual network."
+      ],
+      "correctAnswer": "transactional replication to an Azure SQL Managed Instance",
+      "images": []
+    },
+    {
+      "number": "322",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Connect each virtual machine to a single subnet on a single virtual network.",
+      "images": [
+        "https://img.examtopics.com/dp-300/image297.png"
+      ]
+    },
+    {
+      "number": "323",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Azure SQL Database Premium",
+        "B. Azure SQL Database serverless",
+        "C. Azure SQL Database managed instance General Purpose",
+        "D. Azure SQL Database Hyperscale"
+      ],
+      "correctAnswer": "auto-failover groups",
+      "images": []
+    },
+    {
+      "number": "324",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Azure SQL Database managed instance Business Critical",
+      "images": [
+        "https://img.examtopics.com/dp-300/image326.png"
+      ]
+    },
+    {
+      "number": "325",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "a grace period",
+      "images": [
+        "https://img.examtopics.com/dp-300/image328.png"
+      ]
+    },
+    {
+      "number": "326",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "Azure Site Recovery",
+      "images": []
+    },
+    {
+      "number": "327",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "Azure Site Recovery",
+      "images": []
+    },
+    {
+      "number": "328",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "geo-redundant storage (GRS)",
+      "images": []
+    },
+    {
+      "number": "329",
+      "questionText": "SIMULATION",
+      "options": [],
+      "correctAnswer": "Azure SQL Database Premium",
+      "images": []
+    },
+    {
+      "number": "330",
+      "questionText": "Case study -",
+      "options": [
+        "A. differential",
+        "B. transaction log",
+        "C. long-term retention (LTR)",
+        "D. point-in-time restore (PITR)"
+      ],
+      "correctAnswer": "geo-redundant storage (GRS)",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png"
+      ]
+    },
+    {
+      "number": "331",
+      "questionText": "You have SQL Server on Azure virtual machines in an availability group.",
+      "options": [
+        "A. Restore with Recovery",
+        "B. Restore with Norecovery",
+        "C. Restore with Standby"
+      ],
+      "correctAnswer": "Connect VM1 and VM2 to different subnets on a single virtual network.",
+      "images": []
+    },
+    {
+      "number": "332",
+      "questionText": "Case study -",
+      "options": [
+        "A. Enable database firewall rules.",
+        "B. Create database-scoped credentials.",
+        "C. Configure connection strings that reference the read-write listener.",
+        "D. Configure virtual network service endpoints."
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png"
+      ]
+    },
+    {
+      "number": "333",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "Azure SQL Database Premium",
+      "images": [
+        "https://img.examtopics.com/dp-300/image306.png",
+        "https://img.examtopics.com/dp-300/image334.png",
+        "https://img.examtopics.com/dp-300/image335.png"
+      ]
+    },
+    {
+      "number": "334",
+      "questionText": "You have an Azure virtual machine named Server1 that runs Windows Server 2022. Server1 contains an instance of Microsoft SQL Server 2022 named SQL1 and a database named DB1.",
+      "options": [
+        "A. Create a symmetric key in DB1.",
+        "B. Enable virtualization-based security (VBS) on Server1.",
+        "C. Create a certificate in DB1.",
+        "D. Create a certificate in the master database of SQL1."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "335",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image347.png"
+      ]
+    },
+    {
+      "number": "336",
+      "questionText": "You have an Azure subscription. The subscription contains three virtual machines that run Red Hat Enterprise Linux (RHEL).",
+      "options": [
+        "A. Create the FCI disk and network resources.",
+        "B. Install a named SQL Server instance.",
+        "C. Install the cluster resource manager and the FCI resource agent.",
+        "D. Install the default SQL Server instance."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "337",
+      "questionText": "You are planning disaster recovery for the failover group of an Azure SQL Database managed instance.",
+      "options": [
+        "A. In the event of a datacenter or Azure regional outage, the databases will fail over automatically.",
+        "B. In the event of an outage, the databases in the primary instance will fail over immediately.",
+        "C. In the event of an outage, you can selectively fail over individual databases.",
+        "D. In the event of an outage, you can set a different grace period to fail over each database.",
+        "E. In the event of an outage, the minimum delay for the databases to fail over in the primary instance will be one hour."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "338",
+      "questionText": "You have an Azure SQL database named DB1.",
+      "options": [
+        "A. Azure SQL Database Premium",
+        "B. Azure SQL Database serverless",
+        "C. Azure SQL Database Basic",
+        "D. Azure SQL Database Standard"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "339",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution.",
+      "options": [
+        "A. Yes",
+        "B. No"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "340",
+      "questionText": "You have an Azure SQL database named DB3.",
+      "options": [
+        "A. GRANT SHOWPLAN TO DevUser",
+        "B. GRANT VIEW DEFINITION TO DevUser",
+        "C. GRANT VIEW DATABASE STATE TO DevUser",
+        "D. GRANT SELECT TO DevUser"
+      ],
+      "correctAnswer": "long-term retention (LTR)",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0030600001.jpg"
+      ]
+    },
+    {
+      "number": "341",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Restore with Norecovery",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0032400001.jpg"
+      ]
+    },
+    {
+      "number": "342",
+      "questionText": "You have an Azure SQL database named DB1 that contains a private certificate named Sales. The private key for Sales is encrypted with a password.",
+      "options": [
+        "A. ALTER CERTIFICATE Sales WITH PRIVATE KEY (DECRYPTION BY PASSWORD = ' EWYx9Xk+$#');",
+        "B. ALTER CERTIFICATE Sales WITH PRIVATE KEY (ENCRYPTION BY PASSWORD = ' 6YY9YcD!pV');",
+        "C. ALTER CERTIFICATE Sales WITH PRIVATE KEY (DECRYPTION BY PASSWORD = 'Mb^68K&*w%'), ENCRYPTION BY PASSWORD = ' 6YY9YcD!pV');",
+        "D. ALTER CERTIFICATE Sales WITH PRIVATE KEY (FILE = 'D:\\importkeys\\SalesNew, (DECRYPTION BY PASSWORD = ' Mb^68K&*w%');"
+      ],
+      "correctAnswer": "Configure connection strings that reference the read-write listener.",
+      "images": []
+    },
+    {
+      "number": "343",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0032600003.png"
+      ]
+    },
+    {
+      "number": "344",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "Create a certificate in the master database of SQL1.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0032800001.jpg"
+      ]
+    },
+    {
+      "number": "345",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0033000001.jpg"
+      ]
+    },
+    {
+      "number": "346",
+      "questionText": "You have an Azure subscription that contains 50 instances of SQL Server on Azure Virtual Machines. The instances host 500 Azure SQL databases.",
+      "options": [
+        "A. an Azure Automation runbook",
+        "B. an Azure Policy initiative",
+        "C. an Azure Policy assignment",
+        "D. an Azure Automation account",
+        "E. an Azure Policy definition"
+      ],
+      "correctAnswer": "Install the cluster resource manager and the FCI resource agent.",
+      "images": []
+    },
+    {
+      "number": "347",
+      "questionText": "You have an instance of SQL Server on Azure Virtual Machine named SQL1.",
+      "options": [
+        "A. Azure Event Hubs",
+        "B. a Log Analytics workspace",
+        "C. Azure SQL Database",
+        "D. an Azure Blob storage container"
+      ],
+      "correctAnswer": "In the event of a datacenter or Azure regional outage, the databases will fail over automatically.",
+      "images": []
+    },
+    {
+      "number": "348",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "Azure SQL Database Premium",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0033400001.jpg"
+      ]
+    },
+    {
+      "number": "349",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "Yes",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0033500001.jpg"
+      ]
+    },
+    {
+      "number": "350",
+      "questionText": "You have an Azure subscription that contains the resources shown in the following table.",
+      "options": [
+        "A. a site-to-site VPN",
+        "B. virtual network peering",
+        "C. private endpoints",
+        "D. service endpoints"
+      ],
+      "correctAnswer": "GRANT VIEW DATABASE STATE TO DevUser",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0033500003.jpg"
+      ]
+    },
+    {
+      "number": "351",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0030800001.jpg"
+      ]
+    },
+    {
+      "number": "352",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "ALTER CERTIFICATE Sales WITH PRIVATE KEY (DECRYPTION BY PASSWORD = 'Mb^68K&*w%'), ENCRYPTION BY PASSWORD = ' 6YY9YcD!pV');",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0033700001.jpg",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0033800001.jpg"
+      ]
+    },
+    {
+      "number": "353",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image257.png"
+      ]
+    },
+    {
+      "number": "354",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-300/image275.png"
+      ]
+    },
+    {
+      "number": "355",
+      "questionText": "You have an Azure virtual machine named VM1 that runs Windows Server 2022 and hosts a Microsoft SQL Server 2019 instance named SQL1.",
+      "options": [
+        "A. sp_addremotelogin",
+        "B. xp_instance_regwrite",
+        "C. sp_change_users_login",
+        "D. xp_grant_login"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "356",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "an Azure Policy assignment",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0031100001.jpg"
+      ]
+    },
+    {
+      "number": "357",
+      "questionText": "You have the following Transact-SQL query.",
+      "options": [
+        "A. ColumnA",
+        "B. ColumnB",
+        "C. ColumnC",
+        "D. ColumnD"
+      ],
+      "correctAnswer": "a Log Analytics workspace",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0031300001.png"
+      ]
+    },
+    {
+      "number": "358",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0031400001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04275/0031500001.jpg"
+      ]
+    },
+    {
+      "number": "359",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0031700001.jpg"
+      ]
+    },
+    {
+      "number": "360",
+      "questionText": "You plan to perform batch processing in Azure Databricks once daily.",
+      "options": [
+        "A. automated",
+        "B. interactive",
+        "C. High Concurrency"
+      ],
+      "correctAnswer": "private endpoints",
+      "images": []
+    },
+    {
+      "number": "361",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0032000003.jpg"
+      ]
+    },
+    {
+      "number": "362",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04275/0032200001.png"
+      ]
+    },
+    {
+      "number": "363",
+      "questionText": "What should you use to migrate the PostgreSQL database?",
+      "options": [
+        "A. Azure Data Box",
+        "B. AzCopy",
+        "C. Azure Database Migration Service",
+        "D. Azure Site Recovery"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "364",
+      "questionText": "You need to implement a solution to notify the administrators. The solution must meet the monitoring requirements.",
+      "options": [
+        "A. Create an Azure Monitor alert rule that has a static threshold and assign the alert rule to an action group.",
+        "B. Add a diagnostic setting that logs QueryStoreRuntimeStatistics and streams to an Azure event hub.",
+        "C. Add a diagnostic setting that logs Timeouts and streams to an Azure event hub.",
+        "D. Create an Azure Monitor alert rule that has a dynamic threshold and assign the alert rule to an action group."
+      ],
+      "correctAnswer": "",
+      "images": []
+    }
+  ]
+}
