@@ -2944,19 +2944,32 @@ function FinancieroPanel() {
     } finally { setFinCargarUploading(false); }
   }
 
-  // Comparación baseline vs Q1 2026
-  const [compRes, setCompRes]     = useState<FinComparacionResponse | null>(null);
-  const [compLoaded, setCompLoaded] = useState(false);
+  // Comparación — filtros
+  const [cmpBaseFrom, setCmpBaseFrom] = useState("");
+  const [cmpBaseTo,   setCmpBaseTo]   = useState("");
+  const [cmpYear,     setCmpYear]     = useState("");
+  const [cmpQuarters, setCmpQuarters] = useState<string[]>([]);
+  function toggleQ(q: string) {
+    setCmpQuarters(prev => prev.includes(q) ? prev.filter(x => x !== q) : [...prev, q]);
+  }
+
+  const [compRes, setCompRes]       = useState<FinComparacionResponse | null>(null);
 
   async function loadComparacion() {
-    if (compLoaded) return;
-    reset(); setLoading(true);
+    reset(); setLoading(true); setCompRes(null);
     try {
-      const r = await fetch("/api/cmmi/financiero/comparacion");
+      const qs = new URLSearchParams();
+      if (cmpBaseFrom) qs.set("base_year_from", cmpBaseFrom);
+      if (cmpBaseTo)   qs.set("base_year_to",   cmpBaseTo);
+      if (cmpYear && cmpQuarters.length > 0) {
+        qs.set("quarters", cmpQuarters.map(q => `${cmpYear}${q}`).join(","));
+      } else if (cmpYear) {
+        qs.set("quarters", ["Q1","Q2","Q3","Q4"].map(q => `${cmpYear}${q}`).join(","));
+      }
+      const r = await fetch(`/api/cmmi/financiero/comparacion?${qs}`);
       const json = await r.json();
       if (!r.ok) { if (json.localOnly) { setNotice(json.error); return; } throw new Error(json.detail ?? json.error ?? `Error ${r.status}`); }
       setCompRes(json as FinComparacionResponse);
-      setCompLoaded(true);
     } catch (e) { setError(e instanceof Error ? e.message : "Error al cargar comparación."); }
     finally { setLoading(false); }
   }
@@ -2964,12 +2977,16 @@ function FinancieroPanel() {
   // Líneas base desde Excel (source picker — calcula en tiempo real sin persistir)
   const [finLbMsg, setFinLbMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [finLbUploading, setFinLbUploading] = useState(false);
+  const [lbYearFrom, setLbYearFrom] = useState("");
+  const [lbYearTo,   setLbYearTo]   = useState("");
 
   async function handleFinLineasBase(file: File) {
     setFinLbUploading(true); setFinLbMsg(null);
     try {
       const form = new FormData();
       form.append("file", file, file.name);
+      if (lbYearFrom) form.append("year_from", lbYearFrom);
+      if (lbYearTo)   form.append("year_to",   lbYearTo);
       const r = await fetch("/api/cmmi/financiero/lineas-base-excel", { method: "POST", body: form });
       const json = await r.json();
       if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
@@ -3002,10 +3019,10 @@ function FinancieroPanel() {
     } finally { setLoading(false); }
   }
 
-  async function loadLineasBase() {
+  async function loadLineasBase(qs = "") {
     reset(); setLoading(true); setLbRes(null);
     try {
-      const r = await fetch("/api/cmmi/financiero/lineas-base");
+      const r = await fetch(`/api/cmmi/financiero/lineas-base${qs ? `?${qs}` : ""}`);
       const json = await r.json();
       if (!r.ok) {
         if (json.localOnly) { setNotice(json.error); return; }
@@ -3094,7 +3111,7 @@ function FinancieroPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id); reset(); if (id === "datos") loadFinInfo(); if (id === "comparacion") loadComparacion(); }}
+            onClick={() => { setTab(id); reset(); if (id === "datos") loadFinInfo(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -3207,14 +3224,31 @@ function FinancieroPanel() {
         <div className="space-y-5">
           {!lbLoaded && (
             <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-5">
+              {/* Rango de años para la línea base */}
+              <div className="flex items-center gap-3 bg-black/20 rounded-lg px-4 py-3">
+                <p className="text-xs text-slate-400 shrink-0">Período de la línea base:</p>
+                <input type="number" placeholder="Desde (ej. 2023)" value={lbYearFrom}
+                  onChange={e => setLbYearFrom(e.target.value)}
+                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
+                <span className="text-slate-600 text-xs">→</span>
+                <input type="number" placeholder="Hasta (ej. 2025)" value={lbYearTo}
+                  onChange={e => setLbYearTo(e.target.value)}
+                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
+                <p className="text-xs text-slate-600 ml-auto">Vacío = todos los datos</p>
+              </div>
               {/* Opción 1: datos existentes */}
               <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-300">Desde datos históricos</p>
+                <p className="text-sm font-semibold text-slate-300">Desde datos históricos del servidor</p>
                 <p className="text-xs text-slate-500">
-                  Calcula líneas base (SPC) y reglas de Nelson sobre los proyectos terminados ya cargados en el servidor.
+                  Calcula líneas base (SPC) y reglas de Nelson sobre los proyectos ya cargados.
                 </p>
                 <button
-                  onClick={loadLineasBase}
+                  onClick={() => {
+                    const qs = new URLSearchParams();
+                    if (lbYearFrom) qs.set("year_from", lbYearFrom);
+                    if (lbYearTo)   qs.set("year_to",   lbYearTo);
+                    loadLineasBase(qs.toString());
+                  }}
                   disabled={loading}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
                 >
@@ -3232,7 +3266,7 @@ function FinancieroPanel() {
               <div className="space-y-2">
                 <p className="text-sm font-semibold text-slate-300">Desde un nuevo archivo Excel</p>
                 <p className="text-xs text-slate-500">
-                  Calcula CL, σ, UCL, LCL y reglas de Nelson en tiempo real sin persistir los datos en el servidor.
+                  Calcula CL, σ, UCL, LCL en tiempo real aplicando el rango de años definido arriba.
                 </p>
                 <FinancieroSourcePicker
                   onFile={handleFinLineasBase}
@@ -3293,14 +3327,55 @@ function FinancieroPanel() {
       {/* ── COMPARACIÓN ────────────────────────────────────────── */}
       {tab === "comparacion" && (
         <div className="space-y-5">
+          {/* Controles de filtro */}
+          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Configurar comparación</p>
+            {/* Línea base */}
+            <div className="space-y-1.5">
+              <p className="text-xs text-slate-400">Período de la línea base</p>
+              <div className="flex items-center gap-2">
+                <input type="number" placeholder="Desde (ej. 2023)" value={cmpBaseFrom}
+                  onChange={e => setCmpBaseFrom(e.target.value)}
+                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
+                <span className="text-slate-600 text-xs">→</span>
+                <input type="number" placeholder="Hasta (ej. 2025)" value={cmpBaseTo}
+                  onChange={e => setCmpBaseTo(e.target.value)}
+                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
+                <p className="text-xs text-slate-600 ml-2">Vacío = todos los datos</p>
+              </div>
+            </div>
+            {/* Período a medir */}
+            <div className="space-y-1.5">
+              <p className="text-xs text-slate-400">Período a medir (Utilidad / Profit)</p>
+              <div className="flex items-center gap-3 flex-wrap">
+                <input type="number" placeholder="Año (ej. 2026)" value={cmpYear}
+                  onChange={e => { setCmpYear(e.target.value); setCmpQuarters([]); }}
+                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
+                {cmpYear && (
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs text-slate-500">Trimestres:</p>
+                    {["Q1","Q2","Q3","Q4"].map(q => (
+                      <button key={q} onClick={() => toggleQ(q)}
+                        className={`px-3 py-1 rounded-lg text-xs font-semibold border transition-colors ${
+                          cmpQuarters.includes(q)
+                            ? "bg-indigo-600 border-indigo-500 text-white"
+                            : "bg-white/[0.03] border-white/[0.08] text-slate-400 hover:border-indigo-500/40"
+                        }`}>{q}</button>
+                    ))}
+                    {cmpQuarters.length === 0 && <p className="text-xs text-slate-600">(todos)</p>}
+                  </div>
+                )}
+              </div>
+            </div>
+            <button onClick={loadComparacion} disabled={loading}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
+              {loading ? <Clock size={15} className="animate-spin" /> : <Activity size={15} />}
+              {loading ? "Calculando…" : "Calcular comparación"}
+            </button>
+          </div>
           {notice && <LocalOnlyNotice message={notice} />}
           {error && <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400"><AlertCircle size={16} className="shrink-0 mt-0.5" />{error}</div>}
           {loading && <p className="text-xs text-slate-500 animate-pulse">Calculando comparación…</p>}
-          {!compRes && !loading && !error && !notice && (
-            <button onClick={loadComparacion} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors">
-              <Activity size={15} /> Calcular comparación
-            </button>
-          )}
           {compRes && (() => {
             const sem: Record<string, string> = {
               VERDE:    "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",

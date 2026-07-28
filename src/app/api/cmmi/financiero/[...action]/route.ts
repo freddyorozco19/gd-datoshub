@@ -45,7 +45,7 @@ function unreachable(err: unknown) {
 }
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   ctx: { params: Promise<{ action: string[] }> },
 ) {
   const { action } = await ctx.params;
@@ -53,7 +53,14 @@ export async function GET(
   if (!ALLOWED_GET.has(path))
     return Response.json({ error: `Acción no válida: ${path}` }, { status: 404 });
   if (IS_HOSTED) return localOnly();
-  try { return await proxy("GET", path); } catch (e) { return unreachable(e); }
+  // Reenviar query params al microservicio (year_from, year_to, quarters, etc.)
+  const qs = req.nextUrl.searchParams.toString();
+  const upstream = `${CMMI_API_URL}/financiero/${path}${qs ? `?${qs}` : ""}`;
+  try {
+    const res  = await fetch(upstream);
+    const text = await res.text();
+    return new Response(text, { status: res.status, headers: { "Content-Type": res.headers.get("Content-Type") ?? "application/json" } });
+  } catch (e) { return unreachable(e); }
 }
 
 export async function POST(

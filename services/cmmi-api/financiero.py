@@ -201,7 +201,32 @@ _load()
 
 # ── API pública ────────────────────────────────────────────────────────
 
-def lineas_base() -> dict:
+def lineas_base(year_from: int | None = None, year_to: int | None = None) -> dict:
+    if _df is None:
+        raise RuntimeError("Datos de Financiero no disponibles.")
+    df_filt = _df.copy()
+    if "Fecha de finalización" in df_filt.columns:
+        fechas = pd.to_datetime(df_filt["Fecha de finalización"], errors="coerce")
+        if year_from is not None:
+            df_filt = df_filt[fechas.dt.year >= year_from]
+        if year_to is not None:
+            df_filt = df_filt[fechas.dt.year <= year_to]
+    if df_filt.empty:
+        raise RuntimeError("Sin datos en el rango de años indicado.")
+    # Recalcular líneas base sobre el subconjunto filtrado
+    g_block = _stats_block(df_filt["Utilidad del proyecto"].values)
+    counts = df_filt["Cat"].value_counts()
+    cats_validas = counts[counts >= N_MIN].index.tolist()
+    por_cat = {cat: _stats_block(df_filt[df_filt["Cat"] == cat]["Utilidad del proyecto"].values)
+               for cat in cats_validas}
+    return {
+        "global": g_block,
+        "por_categoria": por_cat,
+        "categorias_disponibles": cats_validas,
+    }
+
+def _lineas_base_legacy() -> dict:
+    """Compatibilidad: retorna líneas base pre-calculadas (sin filtro)."""
     if _lb_global is None:
         raise RuntimeError("Datos de Financiero no disponibles.")
     return {
@@ -327,28 +352,58 @@ def info_financiero() -> dict:
     }
 
 
-def comparacion(meta_delta: float = 0.008) -> dict:
-    """Compara utilidad media histórica (baseline) vs período reciente (2026)."""
+def comparacion(
+    meta_delta:      float                       = 0.008,
+    base_year_from:  int | None                  = None,
+    base_year_to:    int | None                  = None,
+    compare_quarters: list[tuple[int, int]] | None = None,
+) -> dict:
+    """Compara utilidad media de la línea base vs período seleccionado."""
     if _df is None:
         raise RuntimeError("Datos no disponibles.")
 
     df = _df.copy()
-    tiene_fecha = df["Fecha de finalización"].notna().any()
+    tiene_fecha = "Fecha de finalización" in df.columns and df["Fecha de finalización"].notna().any()
 
     if tiene_fecha:
-        df_base   = df[df["Fecha de finalización"].dt.year < 2026]
-        df_q1     = df[(df["Fecha de finalización"].dt.year == 2026) &
-                       (df["Fecha de finalización"].dt.quarter == 1)]
-        df_actual = df_q1 if len(df_q1) > 0 else df[df["Fecha de finalización"].dt.year == 2026]
-        periodo_label = "Q1 2026" if len(df_q1) > 0 else "2026"
+        fechas = pd.to_datetime(df["Fecha de finalización"], errors="coerce")
+        df["_year"]    = fechas.dt.year
+        df["_quarter"] = fechas.dt.quarter
+
+        # ── Baseline ──────────────────────────────────────────────────────
+        if base_year_from is not None or base_year_to is not None:
+            mask_base = pd.Series(True, index=df.index)
+            if base_year_from is not None:
+                mask_base &= df["_year"] >= base_year_from
+            if base_year_to is not None:
+                mask_base &= df["_year"] <= base_year_to
+            df_base = df[mask_base]
+            base_label = f"{base_year_from or '?'}–{base_year_to or '?'}"
+        else:
+            df_base    = df
+            base_label = "Histórico completo"
+
+        # ── Período a comparar ────────────────────────────────────────────
+        if compare_quarters:
+            mask_cmp = pd.Series(False, index=df.index)
+            for (y, q) in compare_quarters:
+                mask_cmp |= (df["_year"] == y) & (df["_quarter"] == q)
+            df_actual = df[mask_cmp]
+            periodo_label = ", ".join(f"{y}Q{q}" for y, q in compare_quarters)
+        else:
+            # Fallback: el año más reciente con datos
+            max_year = int(df["_year"].max()) if df["_year"].notna().any() else None
+            df_actual = df[df["_year"] == max_year] if max_year else df.iloc[int(len(df) * 0.8):]
+            periodo_label = str(max_year) if max_year else "Período reciente"
     else:
         n = len(df)
-        df_base   = df.iloc[:int(n * 0.8)]
-        df_actual = df.iloc[int(n * 0.8):]
-        periodo_label = "Período reciente (20% más nuevo)"
+        df_base    = df.iloc[:int(n * 0.8)]
+        df_actual  = df.iloc[int(n * 0.8):]
+        base_label    = "Histórico (80%)"
+        periodo_label = "Período reciente (20%)"
 
     if len(df_base) == 0 or len(df_actual) == 0:
-        raise RuntimeError("No hay suficientes datos para comparar períodos.")
+        raise RuntimeError("No hay suficientes datos para comparar con los filtros indicados.")
 
     media_base   = float(df_base["Utilidad del proyecto"].mean())
     media_actual = float(df_actual["Utilidad del proyecto"].mean())
@@ -358,9 +413,9 @@ def comparacion(meta_delta: float = 0.008) -> dict:
 
     proyectos = []
     for _, row in df_actual.iterrows():
-        fecha = row["Fecha de finalización"]
+        fecha = row.get("Fecha de finalización")
         proyectos.append({
-            "categoria":   str(row["Cat"]),
+            "categoria":    str(row["Cat"]),
             "utilidad_pct": f"{row['Utilidad del proyecto']:.1%}",
             "utilidad_v":   round(float(row["Utilidad del proyecto"]), 4),
             "fecha": fecha.strftime("%Y-%m") if pd.notna(fecha) else None,
@@ -368,7 +423,7 @@ def comparacion(meta_delta: float = 0.008) -> dict:
 
     return {
         "baseline": {
-            "label":     "Histórico (antes de 2026)",
+            "label":     base_label,
             "media":     round(media_base, 4),
             "media_pct": f"{media_base:.1%}",
             "n":         int(len(df_base)),

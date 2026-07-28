@@ -249,36 +249,70 @@ def financiero_cargar(file: UploadFile = File(...)) -> dict:
 
 
 @app.get("/financiero/lineas-base")
-def financiero_lineas_base() -> dict:
+def financiero_lineas_base(
+    year_from: Optional[int] = None,
+    year_to:   Optional[int] = None,
+) -> dict:
     """Líneas base globales y por categoría (SPC + Nelson) desde datos históricos."""
     try:
-        return fin.lineas_base()
+        return fin.lineas_base(year_from=year_from, year_to=year_to)
     except RuntimeError as e:
         raise HTTPException(503, str(e))
 
 
 @app.get("/financiero/comparacion")
-def financiero_comparacion(meta: float = 0.008) -> dict:
-    """Compara utilidad media histórica (baseline) vs Q1 2026."""
+def financiero_comparacion(
+    meta:           float         = 0.008,
+    base_year_from: Optional[int] = None,
+    base_year_to:   Optional[int] = None,
+    quarters:       Optional[str] = None,   # ej. "2026Q1,2026Q2"
+) -> dict:
+    """Compara utilidad media histórica (baseline) vs período seleccionado."""
+    # Parsear quarters: "2026Q1,2026Q2" → [(2026,1),(2026,2)]
+    parsed_quarters: list[tuple[int, int]] = []
+    if quarters:
+        for tok in quarters.split(","):
+            tok = tok.strip()
+            if "Q" in tok:
+                y, q = tok.split("Q", 1)
+                try:
+                    parsed_quarters.append((int(y), int(q)))
+                except ValueError:
+                    pass
     try:
-        return fin.comparacion(meta_delta=meta)
+        return fin.comparacion(
+            meta_delta=meta,
+            base_year_from=base_year_from,
+            base_year_to=base_year_to,
+            compare_quarters=parsed_quarters or None,
+        )
     except RuntimeError as e:
         raise HTTPException(503, str(e))
 
 
 @app.post("/financiero/lineas-base-excel")
-def financiero_lineas_base_excel(file: UploadFile = File(...)) -> dict:
+def financiero_lineas_base_excel(
+    file:      UploadFile    = File(...),
+    year_from: Optional[int] = Form(None),
+    year_to:   Optional[int] = Form(None),
+) -> dict:
     """Calcula líneas base (SPC + Nelson) desde un Excel subido sin persistirlo."""
     try:
         data = file.file.read()
-        import io, numpy as np, pandas as pd
-        from scipy.stats import shapiro
+        import io
         df = pd.read_excel(io.BytesIO(data))
         requeridas = {"Utilidad del proyecto", "Categoría de proyecto"}
         faltantes = requeridas - set(df.columns)
         if faltantes:
             raise HTTPException(400, f"Columnas faltantes: {faltantes}")
         df = df.dropna(subset=["Utilidad del proyecto"])
+        # Filtro por año si hay columna de fecha
+        if "Fecha de finalización" in df.columns:
+            fechas = pd.to_datetime(df["Fecha de finalización"], errors="coerce")
+            if year_from is not None:
+                df = df[fechas.dt.year >= year_from]
+            if year_to is not None:
+                df = df[fechas.dt.year <= year_to]
         df["Cat"] = df["Categoría de proyecto"].apply(fin._norm)
         g_block = fin._stats_block(df["Utilidad del proyecto"].values)
         counts = df["Cat"].value_counts()
