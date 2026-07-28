@@ -3267,22 +3267,6 @@ function FinancieroPanel() {
                 {loading ? "Cargando…" : "Cargar líneas base"}
               </button>
             </div>
-            {/* Divider */}
-            <div className="flex items-center gap-3">
-              <div className="flex-1 border-t border-white/[0.07]" />
-              <span className="text-xs text-slate-600">o</span>
-              <div className="flex-1 border-t border-white/[0.07]" />
-            </div>
-            {/* Opción 2: nuevo Excel */}
-            <div className="space-y-2">
-              <p className="text-sm font-semibold text-slate-300">Desde un nuevo archivo Excel</p>
-              <p className="text-xs text-slate-500">Calcula CL, σ, UCL, LCL en tiempo real aplicando el rango de años definido arriba.</p>
-              <FinancieroSourcePicker
-                onFile={handleFinLineasBase}
-                uploading={finLbUploading}
-                msg={finLbMsg}
-              />
-            </div>
           </div>
 
           {notice && <LocalOnlyNotice message={notice} />}
