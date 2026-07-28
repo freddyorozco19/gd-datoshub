@@ -3222,60 +3222,55 @@ function FinancieroPanel() {
       {/* ── LÍNEAS BASE ────────────────────────────────────────── */}
       {tab === "lineas-base" && (
         <div className="space-y-5">
-          {!lbLoaded && (
-            <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-5">
-              {/* Rango de años para la línea base */}
-              <div className="flex items-center gap-3 bg-black/20 rounded-lg px-4 py-3">
-                <p className="text-xs text-slate-400 shrink-0">Período de la línea base:</p>
-                <input type="number" placeholder="Desde (ej. 2023)" value={lbYearFrom}
-                  onChange={e => setLbYearFrom(e.target.value)}
-                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
-                <span className="text-slate-600 text-xs">→</span>
-                <input type="number" placeholder="Hasta (ej. 2025)" value={lbYearTo}
-                  onChange={e => setLbYearTo(e.target.value)}
-                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
-                <p className="text-xs text-slate-600 ml-auto">Vacío = todos los datos</p>
-              </div>
-              {/* Opción 1: datos existentes */}
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-300">Desde datos históricos del servidor</p>
-                <p className="text-xs text-slate-500">
-                  Calcula líneas base (SPC) y reglas de Nelson sobre los proyectos ya cargados.
-                </p>
-                <button
-                  onClick={() => {
-                    const qs = new URLSearchParams();
-                    if (lbYearFrom) qs.set("year_from", lbYearFrom);
-                    if (lbYearTo)   qs.set("year_to",   lbYearTo);
-                    loadLineasBase(qs.toString());
-                  }}
-                  disabled={loading}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-                >
-                  {loading ? <Clock size={15} className="animate-spin" /> : <PieChart size={15} />}
-                  {loading ? "Cargando…" : "Cargar líneas base"}
-                </button>
-              </div>
-              {/* Divider */}
-              <div className="flex items-center gap-3">
-                <div className="flex-1 border-t border-white/[0.07]" />
-                <span className="text-xs text-slate-600">o</span>
-                <div className="flex-1 border-t border-white/[0.07]" />
-              </div>
-              {/* Opción 2: nuevo Excel */}
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-300">Desde un nuevo archivo Excel</p>
-                <p className="text-xs text-slate-500">
-                  Calcula CL, σ, UCL, LCL en tiempo real aplicando el rango de años definido arriba.
-                </p>
-                <FinancieroSourcePicker
-                  onFile={handleFinLineasBase}
-                  uploading={finLbUploading}
-                  msg={finLbMsg}
-                />
-              </div>
+          {/* Rango de años — siempre visible */}
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-5">
+            <div className="flex items-center gap-3 bg-black/20 rounded-lg px-4 py-3 flex-wrap">
+              <p className="text-xs text-slate-400 shrink-0">Período de la línea base:</p>
+              <input type="number" placeholder="Desde (ej. 2023)" value={lbYearFrom}
+                onChange={e => setLbYearFrom(e.target.value)}
+                className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
+              <span className="text-slate-600 text-xs">→</span>
+              <input type="number" placeholder="Hasta (ej. 2025)" value={lbYearTo}
+                onChange={e => setLbYearTo(e.target.value)}
+                className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
+              <p className="text-xs text-slate-600 ml-auto">Vacío = todos los datos</p>
             </div>
-          )}
+            {/* Opción 1: datos existentes */}
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-slate-300">Desde datos históricos del servidor</p>
+              <p className="text-xs text-slate-500">Calcula líneas base (SPC) y reglas de Nelson sobre los proyectos ya cargados.</p>
+              <button
+                onClick={() => {
+                  const qs = new URLSearchParams();
+                  if (lbYearFrom) qs.set("year_from", lbYearFrom);
+                  if (lbYearTo)   qs.set("year_to",   lbYearTo);
+                  setLbLoaded(false); setLbRes(null);
+                  loadLineasBase(qs.toString());
+                }}
+                disabled={loading}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+              >
+                {loading ? <Clock size={15} className="animate-spin" /> : <PieChart size={15} />}
+                {loading ? "Cargando…" : "Cargar líneas base"}
+              </button>
+            </div>
+            {/* Divider */}
+            <div className="flex items-center gap-3">
+              <div className="flex-1 border-t border-white/[0.07]" />
+              <span className="text-xs text-slate-600">o</span>
+              <div className="flex-1 border-t border-white/[0.07]" />
+            </div>
+            {/* Opción 2: nuevo Excel */}
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-slate-300">Desde un nuevo archivo Excel</p>
+              <p className="text-xs text-slate-500">Calcula CL, σ, UCL, LCL en tiempo real aplicando el rango de años definido arriba.</p>
+              <FinancieroSourcePicker
+                onFile={handleFinLineasBase}
+                uploading={finLbUploading}
+                msg={finLbMsg}
+              />
+            </div>
+          </div>
 
           {notice && <LocalOnlyNotice message={notice} />}
           {error && (
