@@ -3329,45 +3329,27 @@ function FinancieroPanel() {
         <div className="space-y-5">
           {/* Controles de filtro */}
           <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Configurar comparación</p>
-            {/* Línea base */}
-            <div className="space-y-1.5">
-              <p className="text-xs text-slate-400">Período de la línea base</p>
-              <div className="flex items-center gap-2">
-                <input type="number" placeholder="Desde (ej. 2023)" value={cmpBaseFrom}
-                  onChange={e => setCmpBaseFrom(e.target.value)}
-                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
-                <span className="text-slate-600 text-xs">→</span>
-                <input type="number" placeholder="Hasta (ej. 2025)" value={cmpBaseTo}
-                  onChange={e => setCmpBaseTo(e.target.value)}
-                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
-                <p className="text-xs text-slate-600 ml-2">Vacío = todos los datos</p>
-              </div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Período a medir (Utilidad / Profit)</p>
+            <div className="flex items-center gap-3 flex-wrap">
+              <input type="number" placeholder="Año (ej. 2026)" value={cmpYear}
+                onChange={e => { setCmpYear(e.target.value); setCmpQuarters([]); }}
+                className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
+              {cmpYear && (
+                <div className="flex items-center gap-2">
+                  <p className="text-xs text-slate-500">Trimestres:</p>
+                  {["Q1","Q2","Q3","Q4"].map(q => (
+                    <button key={q} onClick={() => toggleQ(q)}
+                      className={`px-3 py-1 rounded-lg text-xs font-semibold border transition-colors ${
+                        cmpQuarters.includes(q)
+                          ? "bg-indigo-600 border-indigo-500 text-white"
+                          : "bg-white/[0.03] border-white/[0.08] text-slate-400 hover:border-indigo-500/40"
+                      }`}>{q}</button>
+                  ))}
+                  {cmpQuarters.length === 0 && <p className="text-xs text-slate-600">(todos)</p>}
+                </div>
+              )}
             </div>
-            {/* Período a medir */}
-            <div className="space-y-1.5">
-              <p className="text-xs text-slate-400">Período a medir (Utilidad / Profit)</p>
-              <div className="flex items-center gap-3 flex-wrap">
-                <input type="number" placeholder="Año (ej. 2026)" value={cmpYear}
-                  onChange={e => { setCmpYear(e.target.value); setCmpQuarters([]); }}
-                  className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50" />
-                {cmpYear && (
-                  <div className="flex items-center gap-2">
-                    <p className="text-xs text-slate-500">Trimestres:</p>
-                    {["Q1","Q2","Q3","Q4"].map(q => (
-                      <button key={q} onClick={() => toggleQ(q)}
-                        className={`px-3 py-1 rounded-lg text-xs font-semibold border transition-colors ${
-                          cmpQuarters.includes(q)
-                            ? "bg-indigo-600 border-indigo-500 text-white"
-                            : "bg-white/[0.03] border-white/[0.08] text-slate-400 hover:border-indigo-500/40"
-                        }`}>{q}</button>
-                    ))}
-                    {cmpQuarters.length === 0 && <p className="text-xs text-slate-600">(todos)</p>}
-                  </div>
-                )}
-              </div>
-            </div>
-            <button onClick={loadComparacion} disabled={loading}
+            <button onClick={loadComparacion} disabled={loading || !cmpYear}
               className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors">
               {loading ? <Clock size={15} className="animate-spin" /> : <Activity size={15} />}
               {loading ? "Calculando…" : "Calcular comparación"}
