@@ -206,11 +206,12 @@ def lineas_base(year_from: int | None = None, year_to: int | None = None) -> dic
         raise RuntimeError("Datos de Financiero no disponibles.")
     df_filt = _df.copy()
     if "Fecha de finalización" in df_filt.columns:
-        fechas = pd.to_datetime(df_filt["Fecha de finalización"], errors="coerce")
+        df_filt["_year_tmp"] = pd.to_datetime(df_filt["Fecha de finalización"], errors="coerce").dt.year
         if year_from is not None:
-            df_filt = df_filt[fechas.dt.year >= year_from]
+            df_filt = df_filt[df_filt["_year_tmp"] >= year_from]
         if year_to is not None:
-            df_filt = df_filt[fechas.dt.year <= year_to]
+            df_filt = df_filt[df_filt["_year_tmp"] <= year_to]
+        df_filt = df_filt.drop(columns=["_year_tmp"])
     if df_filt.empty:
         raise RuntimeError("Sin datos en el rango de años indicado.")
     # Recalcular líneas base sobre el subconjunto filtrado

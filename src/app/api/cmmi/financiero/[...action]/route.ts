@@ -57,7 +57,7 @@ export async function GET(
   const qs = req.nextUrl.searchParams.toString();
   const upstream = `${CMMI_API_URL}/financiero/${path}${qs ? `?${qs}` : ""}`;
   try {
-    const res  = await fetch(upstream);
+    const res  = await fetch(upstream, { cache: "no-store" });
     const text = await res.text();
     return new Response(text, { status: res.status, headers: { "Content-Type": res.headers.get("Content-Type") ?? "application/json" } });
   } catch (e) { return unreachable(e); }

@@ -3035,7 +3035,7 @@ function FinancieroPanel() {
   async function loadLineasBase(qs = "") {
     reset(); setLoading(true); setLbRes(null);
     try {
-      const r = await fetch(`/api/cmmi/financiero/lineas-base${qs ? `?${qs}` : ""}`);
+      const r = await fetch(`/api/cmmi/financiero/lineas-base${qs ? `?${qs}` : ""}`, { cache: "no-store" });
       const json = await r.json();
       if (!r.ok) {
         if (json.localOnly) { setNotice(json.error); return; }
