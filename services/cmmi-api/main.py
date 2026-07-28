@@ -292,46 +292,52 @@ def financiero_comparacion(
 
 @app.post("/financiero/lineas-base-excel")
 def financiero_lineas_base_excel(
-    file:      UploadFile    = File(...),
-    year_from: Optional[int] = Form(None),
-    year_to:   Optional[int] = Form(None),
+    file:      Optional[UploadFile] = File(None),
+    year_from: Optional[int]        = Form(None),
+    year_to:   Optional[int]        = Form(None),
 ) -> dict:
-    """Calcula líneas base (SPC + Nelson) desde un Excel subido sin persistirlo."""
+    """Líneas base desde Excel subido (file) o desde _df en memoria (sin file)."""
     try:
-        data = file.file.read()
-        import io
-        df = pd.read_excel(io.BytesIO(data))
-        df = fin._fix_cols(df)   # normaliza nombres de columna (NFC + strip)
-        requeridas = {"Utilidad del proyecto", "Categoría de proyecto"}
-        faltantes = requeridas - set(df.columns)
-        if faltantes:
-            raise HTTPException(400, f"Columnas faltantes: {faltantes}")
-        df = df.dropna(subset=["Utilidad del proyecto"])
+        if file is not None:
+            import io
+            data = file.file.read()
+            df = pd.read_excel(io.BytesIO(data))
+            df = fin._fix_cols(df)
+            requeridas = {"Utilidad del proyecto", "Categoría de proyecto"}
+            faltantes = requeridas - set(df.columns)
+            if faltantes:
+                raise HTTPException(400, f"Columnas faltantes: {faltantes}")
+            df = df.dropna(subset=["Utilidad del proyecto"])
+            df["Cat"] = df["Categoría de proyecto"].apply(fin._norm)
+        else:
+            if fin._df is None:
+                raise HTTPException(503, "Datos de Financiero no disponibles.")
+            df = fin._df.copy()
+
         # Filtro por año — búsqueda insensible a mayúsculas/minúsculas
         fecha_col = next((c for c in df.columns if "finaliz" in c.lower()), None)
         if fecha_col:
             fechas = pd.to_datetime(df[fecha_col], errors="coerce")
+            mask = pd.Series([True] * len(df), index=df.index)
             if year_from is not None:
-                df = df[fechas.dt.year >= year_from]
+                mask &= fechas.dt.year >= year_from
             if year_to is not None:
-                df = df[fechas.dt.year <= year_to]
-        df["Cat"] = df["Categoría de proyecto"].apply(fin._norm)
+                mask &= fechas.dt.year <= year_to
+            df = df[mask]
+
+        if df.empty:
+            raise HTTPException(400, "Sin datos en el rango de años indicado.")
+
         g_block = fin._stats_block(df["Utilidad del proyecto"].values)
         counts = df["Cat"].value_counts()
         cats_validas = counts[counts >= fin.N_MIN].index.tolist()
-        por_cat = {}
-        for cat in cats_validas:
-            sub = df[df["Cat"] == cat]
-            por_cat[cat] = fin._stats_block(sub["Utilidad del proyecto"].values)
-        return {
-            "global": g_block,
-            "por_categoria": por_cat,
-            "categorias_disponibles": cats_validas,
-        }
+        por_cat = {cat: fin._stats_block(df[df["Cat"] == cat]["Utilidad del proyecto"].values)
+                   for cat in cats_validas}
+        return {"global": g_block, "por_categoria": por_cat, "categorias_disponibles": cats_validas}
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(500, f"Error al procesar el archivo: {e}")
+        raise HTTPException(500, f"Error al procesar: {e}")
 
 
 @app.post("/financiero/predecir")
