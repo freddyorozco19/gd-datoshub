@@ -14,7 +14,8 @@ from pathlib import Path
 from typing import Annotated
 
 import pandas as pd
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -116,9 +117,19 @@ def comercial_rf_predict_one(body: PredictOneInput) -> dict:
 
 
 @app.post("/comercial/spc")
-def comercial_spc(file: UploadFile = File(...)) -> dict:
+def comercial_spc(
+    file: UploadFile = File(...),
+    year_from: Optional[int] = Form(None),
+    year_to:   Optional[int] = Form(None),
+) -> dict:
     """SPC — Carta de Control P (v2 altA, Win Rate competitivo, base Fase 2)."""
     df, meta = _leer_excel(file)
+    if "Fecha Final" in df.columns:
+        fechas = pd.to_datetime(df["Fecha Final"], errors="coerce")
+        if year_from is not None:
+            df = df[fechas.dt.year >= year_from]
+        if year_to is not None:
+            df = df[fechas.dt.year <= year_to]
     out = execute(
         "spc_baseline_altA.py", df,
         images={

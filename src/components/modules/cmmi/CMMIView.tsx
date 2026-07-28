@@ -563,12 +563,16 @@ function SpcRunner({ file, onBaseline }: { file: File; onBaseline?: (b: SpcBasel
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [yearFrom, setYearFrom] = useState("");
+  const [yearTo,   setYearTo]   = useState("");
 
   async function run() {
     setError(null); setNotice(null); setLoading(true); setRes(null);
     try {
       const fd = new FormData();
       fd.append("file", file, file.name);
+      if (yearFrom) fd.append("year_from", yearFrom);
+      if (yearTo)   fd.append("year_to",   yearTo);
       const r = await fetch("/api/cmmi/comercial/spc", { method: "POST", body: fd });
       const json = await r.json();
       if (!r.ok) {
@@ -594,6 +598,22 @@ function SpcRunner({ file, onBaseline }: { file: File; onBaseline?: (b: SpcBasel
         desc="Línea base de desempeño del Win Rate competitivo por trimestre, con límites de control variables y reglas de Nelson."
         loading={loading} done={!!res} onRun={run} runLabel="Ejecutar línea base"
       />
+      {/* Rango de años para la línea base */}
+      <div className="flex items-center gap-3 bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3">
+        <p className="text-xs text-slate-400 shrink-0">Período de la línea base:</p>
+        <input
+          type="number" placeholder="Desde (ej. 2023)" value={yearFrom}
+          onChange={e => setYearFrom(e.target.value)}
+          className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50"
+        />
+        <span className="text-slate-600 text-xs">→</span>
+        <input
+          type="number" placeholder="Hasta (ej. 2025)" value={yearTo}
+          onChange={e => setYearTo(e.target.value)}
+          className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50"
+        />
+        <p className="text-xs text-slate-600 ml-auto">Deja vacío para usar todos los datos</p>
+      </div>
       {notice && <LocalOnlyNotice message={notice} />}
       {error && (
         <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
@@ -1024,36 +1044,26 @@ function ModeloRfPanel() {
 }
 
 /* ── Comparación Win Rate vs Línea Base ────────────────────────────── */
-function ComparacionWinRate({ baseline }: { baseline: SpcBaseline | null }) {
-  const [periodoData, setPeriodoData] = useState<ParseResult | null>(null);
-  const [loadingFile, setLoadingFile] = useState(false);
-  const [fileError, setFileError]     = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  async function handleFile(file: File) {
-    setLoadingFile(true); setFileError(null);
-    try {
-      const buf = await file.arrayBuffer();
-      const result = parseComercialWorkbook(buf, file.name);
-      if (!result.rowCount) throw new Error("No se encontraron oportunidades en el archivo.");
-      setPeriodoData(result);
-    } catch (e) {
-      setFileError(e instanceof Error ? e.message : "No se pudo leer el archivo.");
-    } finally { setLoadingFile(false); }
-  }
+function ComparacionWinRate({ baseline, parsedData }: { baseline: SpcBaseline | null; parsedData: ParseResult | null }) {
+  const [yearFrom, setYearFrom] = useState("");
+  const [yearTo,   setYearTo]   = useState("");
 
   const puntos = useMemo(() => {
-    if (!periodoData) return [];
-    const records = periodoData.records;
+    if (!parsedData) return [];
+    const yFrom = yearFrom ? parseInt(yearFrom) : null;
+    const yTo   = yearTo   ? parseInt(yearTo)   : null;
     const byTrim: Record<string, { ganadas: number; perdidas: number }> = {};
-    for (const r of records) {
+    for (const r of parsedData.records) {
       const fecha = r.fechaCierre || r.fechaFinal || r.cierrePrevisto;
       if (!fecha) continue;
       const d = new Date(fecha);
       if (isNaN(d.getTime())) continue;
+      const yr = d.getFullYear();
+      if (yFrom !== null && yr < yFrom) continue;
+      if (yTo   !== null && yr > yTo)   continue;
       const g = r.ganado.toUpperCase();
       if (!g.startsWith("GANAD") && !g.startsWith("PERDID")) continue;
-      const key = `${d.getFullYear()}-Q${Math.ceil((d.getMonth() + 1) / 3)}`;
+      const key = `${yr}-Q${Math.ceil((d.getMonth() + 1) / 3)}`;
       if (!byTrim[key]) byTrim[key] = { ganadas: 0, perdidas: 0 };
       if (g.startsWith("GANAD"))  byTrim[key].ganadas++;
       if (g.startsWith("PERDID")) byTrim[key].perdidas++;
@@ -1065,7 +1075,7 @@ function ComparacionWinRate({ baseline }: { baseline: SpcBaseline | null }) {
         const wr    = total ? ganadas / total : 0;
         return { trim, ganadas, perdidas, total, wr };
       });
-  }, [periodoData]);
+  }, [parsedData, yearFrom, yearTo]);
 
   if (!baseline) {
     return (
@@ -1073,8 +1083,17 @@ function ComparacionWinRate({ baseline }: { baseline: SpcBaseline | null }) {
         <AlertCircle size={22} className="text-amber-400 mx-auto" />
         <p className="text-sm font-semibold text-amber-300">Línea base no establecida</p>
         <p className="text-xs text-amber-400/80">
-          Primero ve a la pestaña <span className="font-semibold">SPC · Carta P (PPB)</span> y ejecuta la línea base con el Excel histórico (2023–2025). Los límites CL/UCL/LCL se guardan automáticamente.
+          Primero ve a <span className="font-semibold">SPC · Carta P (PPB)</span>, define el período de la línea base (ej. 2023–2025) y ejecútala. Los límites CL/UCL/LCL se guardan automáticamente.
         </p>
+      </div>
+    );
+  }
+
+  if (!parsedData) {
+    return (
+      <div className="bg-white/[0.03] border border-white/[0.07] rounded-xl px-5 py-6 text-center space-y-2">
+        <Upload size={20} className="text-slate-500 mx-auto" />
+        <p className="text-sm text-slate-400">Carga un Excel en la pestaña <span className="font-semibold text-slate-300">Datos</span> para poder comparar períodos.</p>
       </div>
     );
   }
@@ -1085,7 +1104,7 @@ function ComparacionWinRate({ baseline }: { baseline: SpcBaseline | null }) {
     <div className="space-y-5">
       {/* Línea base fija */}
       <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-5 space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-widest text-blue-400">Línea base establecida</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-blue-400">Línea base establecida (fija)</p>
         <div className="grid grid-cols-3 gap-3 text-center">
           {[
             { label: "LCL  (−3σ)", val: fmtPct(baseline.lcl), cls: "text-rose-400" },
@@ -1101,24 +1120,21 @@ function ComparacionWinRate({ baseline }: { baseline: SpcBaseline | null }) {
         <p className="text-xs text-slate-500">σ̄ = {(baseline.sigma * 100).toFixed(3)}%</p>
       </div>
 
-      {/* Carga del período actual */}
-      <div className="space-y-2">
-        <p className="text-xs font-medium text-slate-400">Excel del período a medir (ej. 2026)</p>
-        <div
-          onClick={() => inputRef.current?.click()}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) handleFile(f); }}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl border border-dashed border-white/[0.12] bg-white/[0.02] hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-colors cursor-pointer"
-        >
-          <Upload size={16} className="text-slate-500 shrink-0" />
-          <span className="text-xs text-slate-400">
-            {loadingFile ? "Leyendo archivo…" : periodoData ? `✓ ${periodoData.fileName} · ${periodoData.rowCount} oportunidades` : "Arrastra o haz clic para cargar Excel 2026"}
-          </span>
-          {loadingFile && <Clock size={14} className="animate-spin text-indigo-400 ml-auto" />}
-        </div>
-        <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
-          onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }} />
-        {fileError && <p className="text-xs text-rose-400">✗ {fileError}</p>}
+      {/* Filtro de período a medir */}
+      <div className="flex items-center gap-3 bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3">
+        <p className="text-xs text-slate-400 shrink-0">Período a comparar:</p>
+        <input
+          type="number" placeholder="Desde (ej. 2026)" value={yearFrom}
+          onChange={e => setYearFrom(e.target.value)}
+          className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50"
+        />
+        <span className="text-slate-600 text-xs">→</span>
+        <input
+          type="number" placeholder="Hasta (ej. 2026)" value={yearTo}
+          onChange={e => setYearTo(e.target.value)}
+          className="w-36 bg-black/30 border border-white/[0.08] rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50"
+        />
+        <p className="text-xs text-slate-600 ml-auto">Archivo: {parsedData.fileName} · {parsedData.rowCount} oportunidades</p>
       </div>
 
       {/* Tabla de puntos vs línea base */}
@@ -1163,10 +1179,9 @@ function ComparacionWinRate({ baseline }: { baseline: SpcBaseline | null }) {
               </tbody>
             </table>
           </div>
-          {/* Resumen */}
           {(() => {
-            const totalG = puntos.reduce((s, p) => s + p.ganadas, 0);
-            const totalP = puntos.reduce((s, p) => s + p.perdidas, 0);
+            const totalG  = puntos.reduce((s, p) => s + p.ganadas, 0);
+            const totalP  = puntos.reduce((s, p) => s + p.perdidas, 0);
             const wrTotal = totalG + totalP ? totalG / (totalG + totalP) : 0;
             const delta   = wrTotal - baseline.cl;
             const cls     = wrTotal > baseline.ucl ? "text-sky-400" : wrTotal < baseline.lcl ? "text-rose-400" : "text-emerald-400";
@@ -1188,8 +1203,10 @@ function ComparacionWinRate({ baseline }: { baseline: SpcBaseline | null }) {
         </div>
       )}
 
-      {periodoData && puntos.length === 0 && (
-        <p className="text-sm text-slate-500 text-center py-4">No se encontraron oportunidades Ganadas/Perdidas con fecha de cierre válida en el archivo.</p>
+      {parsedData && puntos.length === 0 && (
+        <p className="text-sm text-slate-500 text-center py-4">
+          {yearFrom || yearTo ? "Sin oportunidades Ganadas/Perdidas en ese rango de fechas." : "Define el período a comparar con los filtros de año de arriba."}
+        </p>
       )}
     </div>
   );
@@ -1337,7 +1354,7 @@ function ComercialPanel() {
       </div>
 
       {tab === "spc"             && rawFile && <SpcRunner file={rawFile} onBaseline={setSpcBaseline} />}
-      {tab === "comparacion-spc" && <ComparacionWinRate baseline={spcBaseline} />}
+      {tab === "comparacion-spc" && <ComparacionWinRate baseline={spcBaseline} parsedData={data} />}
       {tab === "rf"              && rawFile && <RfRunner  file={rawFile} />}
       {tab === "predictor"       && <PredictorOportunidad />}
       {tab === "modelo-rf"       && <ModeloRfPanel />}
