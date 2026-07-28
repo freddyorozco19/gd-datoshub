@@ -2923,6 +2923,7 @@ function FinancieroPanel() {
   // Cargar datos (source picker — persiste modelo)
   const [finCargarMsg, setFinCargarMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [finCargarUploading, setFinCargarUploading] = useState(false);
+  const [finRawFile, setFinRawFile] = useState<File | null>(null); // archivo cargado, para filtrar líneas base
 
   async function handleFinCargar(file: File) {
     setFinCargarUploading(true); setFinCargarMsg(null);
@@ -2935,10 +2936,10 @@ function FinancieroPanel() {
       try { json = JSON.parse(raw); } catch { throw new Error(`Respuesta inválida del servidor: ${raw.slice(0, 300)}`); }
       if (!r.ok) throw new Error((json.detail ?? json.error ?? `Error ${r.status}`) as string);
       setFinCargarMsg({ ok: true, text: `✓ ${file.name} cargado — modelo actualizado.` });
+      setFinRawFile(file);
       setFinListo(true);
       setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false); setCompRes(null);
       void loadFinInfo(true);
-      void loadLineasBase();
     } catch (e) {
       setFinCargarMsg({ ok: false, text: e instanceof Error ? e.message : "Error al cargar." });
     } finally { setFinCargarUploading(false); }
@@ -2981,17 +2982,37 @@ function FinancieroPanel() {
   const [lbYearTo,   setLbYearTo]   = useState("");
 
   // Auto-recalcular líneas base al cambiar el rango de años (debounce 600ms)
+  // Si hay archivo cargado, POST a /lineas-base-excel (filtra directo desde el archivo).
+  // Si no hay archivo, GET a /lineas-base (usa _df en memoria del servidor).
   useEffect(() => {
-    const t = setTimeout(() => {
-      const qs = new URLSearchParams();
-      if (lbYearFrom) qs.set("year_from", lbYearFrom);
-      if (lbYearTo)   qs.set("year_to",   lbYearTo);
+    const t = setTimeout(async () => {
       setLbRes(null);
-      loadLineasBase(qs.toString());
+      if (finRawFile) {
+        // POST con el archivo y los filtros de año
+        setLoading(true);
+        try {
+          const form = new FormData();
+          form.append("file", finRawFile, finRawFile.name);
+          if (lbYearFrom) form.append("year_from", lbYearFrom);
+          if (lbYearTo)   form.append("year_to",   lbYearTo);
+          const r = await fetch("/api/cmmi/financiero/lineas-base-excel", { method: "POST", body: form });
+          const json = await r.json();
+          if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+          setLbRes(json as LineasBaseResponse);
+          setLbLoaded(true);
+        } catch (e) {
+          setError(e instanceof Error ? e.message : "Error al calcular líneas base.");
+        } finally { setLoading(false); }
+      } else {
+        const qs = new URLSearchParams();
+        if (lbYearFrom) qs.set("year_from", lbYearFrom);
+        if (lbYearTo)   qs.set("year_to",   lbYearTo);
+        loadLineasBase(qs.toString());
+      }
     }, 600);
     return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lbYearFrom, lbYearTo]);
+  }, [lbYearFrom, lbYearTo, finRawFile]);
 
   async function handleFinLineasBase(file: File) {
     setFinLbUploading(true); setFinLbMsg(null);
