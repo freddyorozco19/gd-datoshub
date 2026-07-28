@@ -2980,6 +2980,19 @@ function FinancieroPanel() {
   const [lbYearFrom, setLbYearFrom] = useState("");
   const [lbYearTo,   setLbYearTo]   = useState("");
 
+  // Auto-recalcular líneas base al cambiar el rango de años (debounce 600ms)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const qs = new URLSearchParams();
+      if (lbYearFrom) qs.set("year_from", lbYearFrom);
+      if (lbYearTo)   qs.set("year_to",   lbYearTo);
+      setLbRes(null);
+      loadLineasBase(qs.toString());
+    }, 600);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lbYearFrom, lbYearTo]);
+
   async function handleFinLineasBase(file: File) {
     setFinLbUploading(true); setFinLbMsg(null);
     try {
