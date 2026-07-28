@@ -301,14 +301,16 @@ def financiero_lineas_base_excel(
         data = file.file.read()
         import io
         df = pd.read_excel(io.BytesIO(data))
+        df = fin._fix_cols(df)   # normaliza nombres de columna (NFC + strip)
         requeridas = {"Utilidad del proyecto", "Categoría de proyecto"}
         faltantes = requeridas - set(df.columns)
         if faltantes:
             raise HTTPException(400, f"Columnas faltantes: {faltantes}")
         df = df.dropna(subset=["Utilidad del proyecto"])
-        # Filtro por año si hay columna de fecha
-        if "Fecha de finalización" in df.columns:
-            fechas = pd.to_datetime(df["Fecha de finalización"], errors="coerce")
+        # Filtro por año — búsqueda insensible a mayúsculas/minúsculas
+        fecha_col = next((c for c in df.columns if "finaliz" in c.lower()), None)
+        if fecha_col:
+            fechas = pd.to_datetime(df[fecha_col], errors="coerce")
             if year_from is not None:
                 df = df[fechas.dt.year >= year_from]
             if year_to is not None:

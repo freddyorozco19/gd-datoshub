@@ -205,8 +205,9 @@ def lineas_base(year_from: int | None = None, year_to: int | None = None) -> dic
     if _df is None:
         raise RuntimeError("Datos de Financiero no disponibles.")
     df_filt = _df.copy()
-    if "Fecha de finalización" in df_filt.columns:
-        df_filt["_year_tmp"] = pd.to_datetime(df_filt["Fecha de finalización"], errors="coerce").dt.year
+    _fecha_col = next((c for c in df_filt.columns if "finaliz" in c.lower()), None)
+    if _fecha_col:
+        df_filt["_year_tmp"] = pd.to_datetime(df_filt[_fecha_col], errors="coerce").dt.year
         if year_from is not None:
             df_filt = df_filt[df_filt["_year_tmp"] >= year_from]
         if year_to is not None:
