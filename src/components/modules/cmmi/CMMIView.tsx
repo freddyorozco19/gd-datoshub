@@ -558,7 +558,7 @@ function LocalOnlyNotice({ message }: { message: string }) {
 }
 
 /** SPC Carta de Control P */
-function SpcRunner({ file }: { file: File }) {
+function SpcRunner({ file, onBaseline }: { file: File; onBaseline?: (b: SpcBaseline) => void }) {
   const [res, setRes] = useState<SpcResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -575,7 +575,12 @@ function SpcRunner({ file }: { file: File }) {
         if (json.localOnly) { setNotice(json.error as string); return; }
         throw new Error(json.error || `Error ${r.status}`);
       }
-      setRes(json as SpcResponse);
+      const spc = json as SpcResponse;
+      setRes(spc);
+      const r2 = spc.stats.resumen;
+      if (onBaseline && r2 && typeof r2.p_bar === "number") {
+        onBaseline({ cl: r2.p_bar as number, ucl: r2.UCL_mean as number, lcl: r2.LCL_mean as number, sigma: r2.sigma_bar as number });
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Falló la ejecución del modelo SPC.");
     } finally { setLoading(false); }
@@ -707,7 +712,9 @@ function RfRunner({ file }: { file: File }) {
   );
 }
 
-type ComercialTab = "datos" | "spc" | "rf" | "predictor" | "modelo-rf" | "marco";
+type ComercialTab = "datos" | "spc" | "rf" | "predictor" | "modelo-rf" | "marco" | "comparacion-spc";
+
+interface SpcBaseline { cl: number; ucl: number; lcl: number; sigma: number; }
 
 /* ── Vista COMERCIAL ───────────────────────────────────────────────── */
 function PredictorOportunidad() {
@@ -1016,12 +1023,185 @@ function ModeloRfPanel() {
   );
 }
 
+/* ── Comparación Win Rate vs Línea Base ────────────────────────────── */
+function ComparacionWinRate({ baseline }: { baseline: SpcBaseline | null }) {
+  const [periodoData, setPeriodoData] = useState<ParseResult | null>(null);
+  const [loadingFile, setLoadingFile] = useState(false);
+  const [fileError, setFileError]     = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  async function handleFile(file: File) {
+    setLoadingFile(true); setFileError(null);
+    try {
+      const buf = await file.arrayBuffer();
+      const result = parseComercialWorkbook(buf, file.name);
+      if (!result.rowCount) throw new Error("No se encontraron oportunidades en el archivo.");
+      setPeriodoData(result);
+    } catch (e) {
+      setFileError(e instanceof Error ? e.message : "No se pudo leer el archivo.");
+    } finally { setLoadingFile(false); }
+  }
+
+  const puntos = useMemo(() => {
+    if (!periodoData) return [];
+    const records = periodoData.records;
+    const byTrim: Record<string, { ganadas: number; perdidas: number }> = {};
+    for (const r of records) {
+      const fecha = r.fechaCierre || r.fechaFinal || r.cierrePrevisto;
+      if (!fecha) continue;
+      const d = new Date(fecha);
+      if (isNaN(d.getTime())) continue;
+      const g = r.ganado.toUpperCase();
+      if (!g.startsWith("GANAD") && !g.startsWith("PERDID")) continue;
+      const key = `${d.getFullYear()}-Q${Math.ceil((d.getMonth() + 1) / 3)}`;
+      if (!byTrim[key]) byTrim[key] = { ganadas: 0, perdidas: 0 };
+      if (g.startsWith("GANAD"))  byTrim[key].ganadas++;
+      if (g.startsWith("PERDID")) byTrim[key].perdidas++;
+    }
+    return Object.entries(byTrim)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([trim, { ganadas, perdidas }]) => {
+        const total = ganadas + perdidas;
+        const wr    = total ? ganadas / total : 0;
+        return { trim, ganadas, perdidas, total, wr };
+      });
+  }, [periodoData]);
+
+  if (!baseline) {
+    return (
+      <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl px-5 py-6 text-center space-y-2">
+        <AlertCircle size={22} className="text-amber-400 mx-auto" />
+        <p className="text-sm font-semibold text-amber-300">Línea base no establecida</p>
+        <p className="text-xs text-amber-400/80">
+          Primero ve a la pestaña <span className="font-semibold">SPC · Carta P (PPB)</span> y ejecuta la línea base con el Excel histórico (2023–2025). Los límites CL/UCL/LCL se guardan automáticamente.
+        </p>
+      </div>
+    );
+  }
+
+  const fmtPct = (v: number) => `${(v * 100).toFixed(1)}%`;
+
+  return (
+    <div className="space-y-5">
+      {/* Línea base fija */}
+      <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-5 space-y-3">
+        <p className="text-xs font-semibold uppercase tracking-widest text-blue-400">Línea base establecida</p>
+        <div className="grid grid-cols-3 gap-3 text-center">
+          {[
+            { label: "LCL  (−3σ)", val: fmtPct(baseline.lcl), cls: "text-rose-400" },
+            { label: "CL  (p̄)",   val: fmtPct(baseline.cl),  cls: "text-emerald-400" },
+            { label: "UCL  (+3σ)", val: fmtPct(baseline.ucl), cls: "text-sky-400" },
+          ].map(({ label, val, cls }) => (
+            <div key={label} className="bg-black/20 rounded-lg py-3">
+              <p className={`text-2xl font-bold tabular-nums ${cls}`}>{val}</p>
+              <p className="text-xs text-slate-500 mt-1">{label}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-slate-500">σ̄ = {(baseline.sigma * 100).toFixed(3)}%</p>
+      </div>
+
+      {/* Carga del período actual */}
+      <div className="space-y-2">
+        <p className="text-xs font-medium text-slate-400">Excel del período a medir (ej. 2026)</p>
+        <div
+          onClick={() => inputRef.current?.click()}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) handleFile(f); }}
+          className="flex items-center gap-3 px-4 py-3 rounded-xl border border-dashed border-white/[0.12] bg-white/[0.02] hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-colors cursor-pointer"
+        >
+          <Upload size={16} className="text-slate-500 shrink-0" />
+          <span className="text-xs text-slate-400">
+            {loadingFile ? "Leyendo archivo…" : periodoData ? `✓ ${periodoData.fileName} · ${periodoData.rowCount} oportunidades` : "Arrastra o haz clic para cargar Excel 2026"}
+          </span>
+          {loadingFile && <Clock size={14} className="animate-spin text-indigo-400 ml-auto" />}
+        </div>
+        <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
+          onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }} />
+        {fileError && <p className="text-xs text-rose-400">✗ {fileError}</p>}
+      </div>
+
+      {/* Tabla de puntos vs línea base */}
+      {puntos.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-sm font-semibold text-slate-200">Win Rate por trimestre vs línea base</p>
+          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/[0.07] text-left">
+                  {["Trimestre", "Ganadas", "Perdidas", "Total", "Win Rate", "vs CL", "Estado"].map(h => (
+                    <th key={h} className="px-4 py-2.5 text-xs font-semibold text-slate-400">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {puntos.map(({ trim, ganadas, perdidas, total, wr }) => {
+                  const sobre = wr > baseline.ucl;
+                  const bajo  = wr < baseline.lcl;
+                  const delta = wr - baseline.cl;
+                  const estado = sobre ? "▲ SOBRE UCL" : bajo ? "▼ BAJO LCL" : "EN CONTROL";
+                  const cls    = sobre ? "text-sky-400" : bajo ? "text-rose-400" : "text-emerald-400";
+                  const sem    = sobre ? "bg-sky-500/10 border-sky-500/20 text-sky-400"
+                               : bajo  ? "bg-rose-500/10 border-rose-500/20 text-rose-400"
+                               :         "bg-emerald-500/10 border-emerald-500/20 text-emerald-400";
+                  return (
+                    <tr key={trim} className="border-b border-white/[0.04] hover:bg-white/[0.02]">
+                      <td className="px-4 py-3 font-mono text-slate-200">{trim}</td>
+                      <td className="px-4 py-3 text-emerald-400 text-center">{ganadas}</td>
+                      <td className="px-4 py-3 text-rose-400 text-center">{perdidas}</td>
+                      <td className="px-4 py-3 text-slate-400 text-center">{total}</td>
+                      <td className={`px-4 py-3 font-bold text-center ${cls}`}>{fmtPct(wr)}</td>
+                      <td className={`px-4 py-3 text-center tabular-nums ${delta >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                        {delta >= 0 ? "+" : ""}{fmtPct(delta)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${sem}`}>{estado}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {/* Resumen */}
+          {(() => {
+            const totalG = puntos.reduce((s, p) => s + p.ganadas, 0);
+            const totalP = puntos.reduce((s, p) => s + p.perdidas, 0);
+            const wrTotal = totalG + totalP ? totalG / (totalG + totalP) : 0;
+            const delta   = wrTotal - baseline.cl;
+            const cls     = wrTotal > baseline.ucl ? "text-sky-400" : wrTotal < baseline.lcl ? "text-rose-400" : "text-emerald-400";
+            return (
+              <div className={`rounded-xl border p-4 flex items-center justify-between gap-4 ${wrTotal < baseline.lcl ? "bg-rose-500/10 border-rose-500/20" : "bg-emerald-500/10 border-emerald-500/20"}`}>
+                <div>
+                  <p className="text-xs text-slate-400 mb-1">Win Rate acumulado del período</p>
+                  <p className={`text-4xl font-bold tabular-nums ${cls}`}>{fmtPct(wrTotal)}</p>
+                  <p className="text-xs text-slate-400 mt-1">{totalG} ganadas de {totalG + totalP} · vs CL {delta >= 0 ? "+" : ""}{fmtPct(delta)}</p>
+                </div>
+                <div className="text-right text-xs text-slate-500 space-y-1">
+                  <p>CL  <span className="text-slate-300 font-mono">{fmtPct(baseline.cl)}</span></p>
+                  <p>UCL <span className="text-slate-300 font-mono">{fmtPct(baseline.ucl)}</span></p>
+                  <p>LCL <span className="text-slate-300 font-mono">{fmtPct(baseline.lcl)}</span></p>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      )}
+
+      {periodoData && puntos.length === 0 && (
+        <p className="text-sm text-slate-500 text-center py-4">No se encontraron oportunidades Ganadas/Perdidas con fecha de cierre válida en el archivo.</p>
+      )}
+    </div>
+  );
+}
+
 function ComercialPanel() {
   const [data, setData] = useState<ParseResult | null>(null);
   const [rawFile, setRawFile] = useState<File | null>(null);
   const [tab, setTab] = useState<ComercialTab>("datos");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [spcBaseline, setSpcBaseline] = useState<SpcBaseline | null>(null);
   const [search, setSearch] = useState("");
   const [fLinea, setFLinea] = useState("");
   const [fSegmento, setFSegmento] = useState("");
@@ -1110,12 +1290,13 @@ function ComercialPanel() {
   }
 
   const tabs: { id: ComercialTab; label: string; icon: typeof Table2 }[] = [
-    { id: "datos",      label: "Datos",               icon: Table2     },
-    { id: "spc",        label: "SPC · Carta P (PPB)", icon: Activity   },
-    { id: "rf",         label: "Random Forest (PPM)", icon: Cpu        },
-    { id: "predictor",  label: "Predecir",             icon: TrendingUp },
-    { id: "modelo-rf",  label: "Modelo RF",            icon: PieChart   },
-    { id: "marco",      label: "Marco de medición",   icon: ShieldCheck },
+    { id: "datos",           label: "Datos",               icon: Table2     },
+    { id: "spc",             label: "SPC · Carta P (PPB)", icon: Activity   },
+    { id: "comparacion-spc", label: "Comparación Win Rate", icon: LineChart  },
+    { id: "rf",              label: "Random Forest (PPM)", icon: Cpu        },
+    { id: "predictor",       label: "Predecir",             icon: TrendingUp },
+    { id: "modelo-rf",       label: "Modelo RF",            icon: PieChart   },
+    { id: "marco",           label: "Marco de medición",   icon: ShieldCheck },
   ];
 
   return (
@@ -1155,11 +1336,12 @@ function ComercialPanel() {
         })}
       </div>
 
-      {tab === "spc"       && rawFile && <SpcRunner file={rawFile} />}
-      {tab === "rf"        && rawFile && <RfRunner  file={rawFile} />}
-      {tab === "predictor" && <PredictorOportunidad />}
-      {tab === "modelo-rf" && <ModeloRfPanel />}
-      {tab === "marco"     && <MarcoMedicion area="comercial" />}
+      {tab === "spc"             && rawFile && <SpcRunner file={rawFile} onBaseline={setSpcBaseline} />}
+      {tab === "comparacion-spc" && <ComparacionWinRate baseline={spcBaseline} />}
+      {tab === "rf"              && rawFile && <RfRunner  file={rawFile} />}
+      {tab === "predictor"       && <PredictorOportunidad />}
+      {tab === "modelo-rf"       && <ModeloRfPanel />}
+      {tab === "marco"           && <MarcoMedicion area="comercial" />}
 
       {tab === "datos" && (
       <>
