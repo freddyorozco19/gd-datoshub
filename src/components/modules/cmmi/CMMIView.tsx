@@ -2936,7 +2936,7 @@ function FinancieroPanel() {
       if (!r.ok) throw new Error((json.detail ?? json.error ?? `Error ${r.status}`) as string);
       setFinCargarMsg({ ok: true, text: `✓ ${file.name} cargado — modelo actualizado.` });
       setFinListo(true);
-      setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false); setCompRes(null); setCompLoaded(false);
+      setPRes(null); setLbRes(null); setLbLoaded(false); setFinInfo(null); setFinInfoLoaded(false); setCompRes(null);
       void loadFinInfo(true);
       void loadLineasBase();
     } catch (e) {
