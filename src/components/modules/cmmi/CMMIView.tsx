@@ -2975,62 +2975,55 @@ function FinancieroPanel() {
     finally { setLoading(false); }
   }
 
-  // Líneas base desde Excel (source picker — calcula en tiempo real sin persistir)
-  const [finLbMsg, setFinLbMsg] = useState<{ ok: boolean; text: string } | null>(null);
-  const [finLbUploading, setFinLbUploading] = useState(false);
   const [lbYearFrom, setLbYearFrom] = useState("");
   const [lbYearTo,   setLbYearTo]   = useState("");
+  const [lbLoading,  setLbLoading]  = useState(false);
 
-  // Auto-recalcular líneas base al cambiar el rango de años (debounce 600ms)
-  // Si hay archivo cargado, POST a /lineas-base-excel (filtra directo desde el archivo).
-  // Si no hay archivo, GET a /lineas-base (usa _df en memoria del servidor).
-  useEffect(() => {
-    const t = setTimeout(async () => {
-      setLbRes(null);
-      if (finRawFile) {
-        // POST con el archivo y los filtros de año
-        setLoading(true);
-        try {
-          const form = new FormData();
-          form.append("file", finRawFile, finRawFile.name);
-          if (lbYearFrom) form.append("year_from", lbYearFrom);
-          if (lbYearTo)   form.append("year_to",   lbYearTo);
-          const r = await fetch("/api/cmmi/financiero/lineas-base-excel", { method: "POST", body: form });
-          const json = await r.json();
-          if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
-          setLbRes(json as LineasBaseResponse);
-          setLbLoaded(true);
-        } catch (e) {
-          setError(e instanceof Error ? e.message : "Error al calcular líneas base.");
-        } finally { setLoading(false); }
+
+  // Función unificada: siempre usa POST con el archivo si está disponible.
+  // Así el filtro por año se aplica directo sobre el Excel, sin depender del _df en memoria.
+  async function computeLineasBase(yearFrom: string, yearTo: string, file?: File | null) {
+    const src = file ?? finRawFile;
+    setLbRes(null); setError(null); setLbLoading(true);
+    try {
+      if (src) {
+        const form = new FormData();
+        form.append("file", src, src.name);
+        if (yearFrom) form.append("year_from", yearFrom);
+        if (yearTo)   form.append("year_to",   yearTo);
+        const r = await fetch("/api/cmmi/financiero/lineas-base-excel", { method: "POST", body: form });
+        const json = await r.json();
+        if (!r.ok) {
+          if (json.localOnly) { setNotice(json.error as string); return; }
+          throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+        }
+        setLbRes(json as LineasBaseResponse);
+        setLbLoaded(true);
       } else {
+        // Fallback: GET con query params (requiere microservicio local)
         const qs = new URLSearchParams();
-        if (lbYearFrom) qs.set("year_from", lbYearFrom);
-        if (lbYearTo)   qs.set("year_to",   lbYearTo);
-        loadLineasBase(qs.toString());
+        if (yearFrom) qs.set("year_from", yearFrom);
+        if (yearTo)   qs.set("year_to",   yearTo);
+        const r = await fetch(`/api/cmmi/financiero/lineas-base?${qs}`, { cache: "no-store" });
+        const json = await r.json();
+        if (!r.ok) {
+          if (json.localOnly) { setNotice(json.error as string); return; }
+          throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
+        }
+        setLbRes(json as LineasBaseResponse);
+        setLbLoaded(true);
       }
-    }, 600);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al calcular líneas base.");
+    } finally { setLbLoading(false); }
+  }
+
+  // Auto-recalcular con debounce 600ms al cambiar años o archivo
+  useEffect(() => {
+    const t = setTimeout(() => computeLineasBase(lbYearFrom, lbYearTo), 600);
     return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lbYearFrom, lbYearTo, finRawFile]);
-
-  async function handleFinLineasBase(file: File) {
-    setFinLbUploading(true); setFinLbMsg(null);
-    try {
-      const form = new FormData();
-      form.append("file", file, file.name);
-      if (lbYearFrom) form.append("year_from", lbYearFrom);
-      if (lbYearTo)   form.append("year_to",   lbYearTo);
-      const r = await fetch("/api/cmmi/financiero/lineas-base-excel", { method: "POST", body: form });
-      const json = await r.json();
-      if (!r.ok) throw new Error(json.detail ?? json.error ?? `Error ${r.status}`);
-      setLbRes(json as LineasBaseResponse);
-      setLbLoaded(true);
-      setFinLbMsg({ ok: true, text: `✓ Líneas base calculadas desde ${file.name}.` });
-    } catch (e) {
-      setFinLbMsg({ ok: false, text: e instanceof Error ? e.message : "Error al procesar." });
-    } finally { setFinLbUploading(false); }
-  }
 
   function reset() { setError(null); setNotice(null); }
 
@@ -3274,18 +3267,12 @@ function FinancieroPanel() {
               <p className="text-sm font-semibold text-slate-300">Desde datos históricos del servidor</p>
               <p className="text-xs text-slate-500">Calcula líneas base (SPC) y reglas de Nelson sobre los proyectos ya cargados.</p>
               <button
-                onClick={() => {
-                  const qs = new URLSearchParams();
-                  if (lbYearFrom) qs.set("year_from", lbYearFrom);
-                  if (lbYearTo)   qs.set("year_to",   lbYearTo);
-                  setLbLoaded(false); setLbRes(null);
-                  loadLineasBase(qs.toString());
-                }}
-                disabled={loading}
+                onClick={() => computeLineasBase(lbYearFrom, lbYearTo)}
+                disabled={lbLoading}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
               >
-                {loading ? <Clock size={15} className="animate-spin" /> : <PieChart size={15} />}
-                {loading ? "Cargando…" : "Cargar líneas base"}
+                {lbLoading ? <Clock size={15} className="animate-spin" /> : <PieChart size={15} />}
+                {lbLoading ? "Calculando…" : "Calcular líneas base"}
               </button>
             </div>
           </div>
