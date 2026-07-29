@@ -2455,15 +2455,21 @@ function CpiLbPanel({ data }: { data: any }) {
   return (
     <div className="space-y-4">
       {/* Selectores */}
-      <div className="flex flex-wrap gap-3">
-        <select value={scope} onChange={e => setScope(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none cmmi-select">
-          {scopes.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-        <div className="flex gap-1 bg-white/[0.04] border border-white/[0.08] rounded-xl p-1">
+      <div className="space-y-2">
+        {/* Scope */}
+        <div className="flex flex-wrap gap-1 bg-white/[0.04] border border-white/[0.08] rounded-xl p-1 w-fit">
+          {scopes.map(s => (
+            <button key={s} onClick={() => setScope(s)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${scope === s ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-slate-200"}`}>
+              {s === "GLOBAL" ? "🌐 Global" : s}
+            </button>
+          ))}
+        </div>
+        {/* Indicador */}
+        <div className="flex gap-1 bg-white/[0.04] border border-white/[0.08] rounded-xl p-1 w-fit">
           {indicators.map(i => (
             <button key={i} onClick={() => setInd(i)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${ind === i ? "bg-blue-600 text-white" : "text-slate-400 hover:text-slate-200"}`}>
+              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${ind === i ? "bg-blue-600 text-white" : "text-slate-400 hover:text-slate-200"}`}>
               {i}
             </button>
           ))}
