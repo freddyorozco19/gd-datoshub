@@ -1751,7 +1751,7 @@ function DatosOrigenPanel({ datos }: { datos: DatosOrigen }) {
   );
 }
 
-type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "reentrenar" | "modelos" | "dataset" | "marco";
+type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "cpi" | "reentrenar" | "modelos" | "dataset" | "marco";
 
 function ProyectosPanel() {
   const [proyListo, setProyListo]         = useState(false);
@@ -1884,6 +1884,58 @@ function ProyectosPanel() {
   const [lbSpiLoading, setLbSpiLoading] = useState(false);
   const [lbSpiError, setLbSpiError] = useState<string | null>(null);
 
+  // ── Estado CPI ───────────────────────────────────────────────────────
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [lbCpi, setLbCpi] = useState<any | null>(null);
+  const [lbCpiLoading, setLbCpiLoading] = useState(false);
+  const [lbCpiError, setLbCpiError] = useState<string | null>(null);
+  const [cpiPredRes, setCpiPredRes] = useState<Record<string, unknown> | null>(null);
+  const [cpiPredLoading, setCpiPredLoading] = useState(false);
+  const [cpiPredError, setCpiPredError] = useState<string | null>(null);
+  const [cpiPort, setCpiPort]   = useState("");
+  const [cpiLider, setCpiLider] = useState("");
+  const [cpiDur, setCpiDur]     = useState("");
+  const [cpiPres, setCpiPres]   = useState("");
+  const [cpiM1, setCpiM1]       = useState("");
+  const [spiM1, setSpiM1]       = useState("");
+  const [vaM1, setVaM1]         = useState("");
+
+  async function loadLbCpi() {
+    if (lbCpi) return;
+    setLbCpiLoading(true); setLbCpiError(null);
+    try {
+      const r = await fetch("/api/cmmi/proyectos/cpi/lineas-base");
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.detail ?? j.error ?? `Error ${r.status}`);
+      setLbCpi(j);
+    } catch (e) {
+      setLbCpiError(e instanceof Error ? e.message : "Error al cargar líneas base CPI.");
+    } finally { setLbCpiLoading(false); }
+  }
+
+  async function predecirCpi() {
+    setCpiPredRes(null); setCpiPredError(null); setCpiPredLoading(true);
+    try {
+      const body = {
+        portafolio: cpiPort, lider: cpiLider,
+        duracion_meses: parseFloat(cpiDur),
+        presupuesto: cpiPres ? parseFloat(cpiPres) : null,
+        cpi_m1: parseFloat(cpiM1), spi_m1: parseFloat(spiM1), va_m1: parseFloat(vaM1),
+      };
+      const r = await fetch("/api/cmmi/proyectos/cpi/predecir", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+      });
+      const j = await r.json();
+      if (!r.ok) {
+        if (j.localOnly) { setLbCpiError(j.error as string); return; }
+        throw new Error(j.detail ?? j.error ?? `Error ${r.status}`);
+      }
+      setCpiPredRes(j as Record<string, unknown>);
+    } catch (e) {
+      setCpiPredError(e instanceof Error ? e.message : "Error al predecir CPI.");
+    } finally { setCpiPredLoading(false); }
+  }
+
   async function loadLbSpi() {
     if (lbSpi) return;
     setLbSpiLoading(true); setLbSpiError(null);
@@ -1900,7 +1952,8 @@ function ProyectosPanel() {
   const tabs: { id: ProyTab; label: string; icon: typeof Activity }[] = [
     { id: "kickoff",     label: "Kickoff",            icon: BarChart2   },
     { id: "seguimiento", label: "Seguimiento",         icon: CalendarCheck },
-    { id: "lineas-base", label: "Líneas base",         icon: PieChart    },
+    { id: "lineas-base", label: "Líneas base SPI",    icon: PieChart    },
+    { id: "cpi",         label: "CPI",                icon: TrendingUp  },
     { id: "reentrenar",  label: "Reentrenar",          icon: Database    },
     { id: "modelos",     label: "Modelos PKL",         icon: PieChart    },
     { id: "dataset",     label: "Dataset",             icon: Database    },
@@ -1947,7 +2000,7 @@ function ProyectosPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos" || id === "dataset") loadInfo(); if (id === "lineas-base") loadLbSpi(); }}
+            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos" || id === "dataset") loadInfo(); if (id === "lineas-base") loadLbSpi(); if (id === "cpi") loadLbCpi(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -2232,7 +2285,245 @@ function ProyectosPanel() {
         );
       })()}
 
+      {/* ── PESTAÑA CPI ─────────────────────────────────────────────── */}
+      {tab === "cpi" && (
+        <div className="space-y-6">
+          {/* Encabezado */}
+          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4">
+            <p className="text-sm font-semibold text-slate-200 mb-1">CPI — Cost Performance Index</p>
+            <p className="text-xs text-slate-500">
+              Líneas base SPC por decil de avance (global y por portafolio) + predictor de riesgo de costo al primer mes.
+              El modelo logístico predice P(CPI_min &lt; 0.80) — AUC 0.883, Recall 77.8%, umbral 0.35.
+            </p>
+          </div>
+
+          {/* Error/loading LB */}
+          {lbCpiLoading && (
+            <div className="flex items-center gap-2 text-sm text-slate-400 px-1">
+              <Clock size={14} className="animate-spin" /> Cargando líneas base CPI…
+            </div>
+          )}
+          {lbCpiError && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {lbCpiError}
+            </div>
+          )}
+
+          {/* Líneas Base Panel */}
+          {lbCpi && <CpiLbPanel data={lbCpi} />}
+
+          {/* Predictor */}
+          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-5 space-y-4">
+            <p className="text-sm font-semibold text-slate-200">Predictor de riesgo CPI (mes 1)</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {/* Portafolio */}
+              <div className="space-y-1">
+                <p className="text-xs text-slate-500 uppercase tracking-wider">Portafolio</p>
+                <select value={cpiPort} onChange={e => setCpiPort(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none cmmi-select">
+                  <option value="">— seleccionar —</option>
+                  {(lbCpi?.metadata?.portafolios ?? ["TI", "CONSULTORÍA", "DATOS Y SISTEMAS DE INFORMACIÓN"]).map((p: string) => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </select>
+              </div>
+              {/* Líder */}
+              <div className="space-y-1 col-span-2 sm:col-span-1">
+                <p className="text-xs text-slate-500 uppercase tracking-wider">Líder de proyecto</p>
+                <input value={cpiLider} onChange={e => setCpiLider(e.target.value)}
+                  placeholder="Nombre del líder"
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none" />
+              </div>
+              {/* Duración */}
+              <div className="space-y-1">
+                <p className="text-xs text-slate-500 uppercase tracking-wider">Duración (meses)</p>
+                <input type="number" min="1" value={cpiDur} onChange={e => setCpiDur(e.target.value)}
+                  placeholder="ej. 12"
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none" />
+              </div>
+              {/* Presupuesto */}
+              <div className="space-y-1">
+                <p className="text-xs text-slate-500 uppercase tracking-wider">Presupuesto COP <span className="normal-case text-slate-600">(opcional)</span></p>
+                <input type="number" min="0" value={cpiPres} onChange={e => setCpiPres(e.target.value)}
+                  placeholder="ej. 500000000"
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none" />
+              </div>
+              {/* CPI mes 1 */}
+              <div className="space-y-1">
+                <p className="text-xs text-slate-500 uppercase tracking-wider">CPI mes 1</p>
+                <input type="number" step="0.01" value={cpiM1} onChange={e => setCpiM1(e.target.value)}
+                  placeholder="ej. 0.95"
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none" />
+              </div>
+              {/* SPI mes 1 */}
+              <div className="space-y-1">
+                <p className="text-xs text-slate-500 uppercase tracking-wider">SPI mes 1</p>
+                <input type="number" step="0.01" value={spiM1} onChange={e => setSpiM1(e.target.value)}
+                  placeholder="ej. 0.90"
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none" />
+              </div>
+              {/* VA mes 1 */}
+              <div className="space-y-1">
+                <p className="text-xs text-slate-500 uppercase tracking-wider">Variación Avance mes 1</p>
+                <input type="number" step="0.01" value={vaM1} onChange={e => setVaM1(e.target.value)}
+                  placeholder="ej. -0.05"
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none" />
+              </div>
+            </div>
+            <button
+              onClick={predecirCpi}
+              disabled={cpiPredLoading || !cpiPort || !cpiLider || !cpiDur || !cpiM1 || !spiM1 || !vaM1}
+              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-semibold text-white transition-colors flex items-center gap-2">
+              {cpiPredLoading ? <><Clock size={14} className="animate-spin" /> Calculando…</> : "Predecir riesgo CPI"}
+            </button>
+            {cpiPredError && (
+              <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+                <AlertCircle size={16} className="shrink-0 mt-0.5" /> {cpiPredError}
+              </div>
+            )}
+            {cpiPredRes && <CpiPredResult res={cpiPredRes} />}
+          </div>
+        </div>
+      )}
+
       {tab === "marco" && <MarcoMedicion area="proyectos" />}
+    </div>
+  );
+}
+
+/* ── CPI Líneas Base Panel ─────────────────────────────────────────── */
+const BIN_LABELS_CPI = ["0-10%","10-20%","20-30%","30-40%","40-50%","50-60%","60-70%","70-80%","80-90%","90-100%"];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function CpiLbPanel({ data }: { data: any }) {
+  const [scope, setScope] = useState<string>("GLOBAL");
+  const [ind, setInd]     = useState<string>("CPI");
+  const portafolios: string[] = data?.metadata?.portafolios ?? [];
+  const scopes = ["GLOBAL", ...portafolios];
+  const indicators: string[] = data?.metadata?.indicadores ?? ["SPI", "CPI", "VA"];
+
+  const scopeData = scope === "GLOBAL" ? data?.global : data?.por_portafolio?.[scope];
+  const indData   = scopeData?.[ind];
+  const glb       = indData?.global;
+  const fases     = indData?.por_fase ?? {};
+  const nelson    = indData?.nelson ?? {};
+
+  const SEM_CLS: Record<string, string> = {
+    CONTROLADO: "text-emerald-400", MARGINAL: "text-amber-400",
+    "NO CONTROLADO": "text-rose-400", "INSUFICIENTE (n<9)": "text-slate-500",
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Selectores */}
+      <div className="flex flex-wrap gap-3">
+        <select value={scope} onChange={e => setScope(e.target.value)}
+          className="px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none cmmi-select">
+          {scopes.map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+        <div className="flex gap-1 bg-white/[0.04] border border-white/[0.08] rounded-xl p-1">
+          {indicators.map(i => (
+            <button key={i} onClick={() => setInd(i)}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${ind === i ? "bg-blue-600 text-white" : "text-slate-400 hover:text-slate-200"}`}>
+              {i}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Global stats */}
+      {glb && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            { label: "CL (Media)", val: glb.CL?.toFixed(4) },
+            { label: "UCL (+3σ)", val: glb.UCL?.toFixed(4) },
+            { label: "LCL (−3σ)", val: glb.LCL?.toFixed(4) },
+            { label: "σ",         val: glb.std?.toFixed(4)  },
+            { label: "CV%",       val: glb.CV != null ? `${glb.CV.toFixed(1)}%` : "—" },
+            { label: "Mediana",   val: glb.median?.toFixed(4) },
+            { label: "N obs",     val: String(glb.n ?? "—") },
+            { label: "Nelson",    val: nelson.veredicto ?? "—", cls: SEM_CLS[nelson.veredicto] ?? "text-slate-300" },
+          ].map(({ label, val, cls }) => (
+            <div key={label} className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-center">
+              <p className="text-[10px] uppercase tracking-wider text-slate-500 mb-1">{label}</p>
+              <p className={`text-base font-bold tabular-nums ${cls ?? "text-slate-200"}`}>{val ?? "—"}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Tabla por decil */}
+      {Object.keys(fases).length > 0 && (
+        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-black/30 border-b border-white/[0.07] text-left">
+                  {["Fase", "N", "CL", "UCL", "LCL", "σ", "CV%", "Mediana"].map(h => (
+                    <th key={h} className="px-3 py-2.5 text-xs font-semibold text-slate-400 whitespace-nowrap">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {BIN_LABELS_CPI.map((lbl, i) => {
+                  const f = fases[lbl];
+                  if (!f || f.n === 0) return null;
+                  return (
+                    <tr key={lbl} className={`border-b border-white/[0.04] ${i % 2 === 0 ? "" : "bg-white/[0.02]"}`}>
+                      <td className="px-3 py-2 text-slate-400 whitespace-nowrap">{lbl}</td>
+                      <td className="px-3 py-2 text-slate-300 text-center tabular-nums">{f.n}</td>
+                      <td className="px-3 py-2 text-blue-300 text-center tabular-nums font-medium">{f.CL?.toFixed(4) ?? "—"}</td>
+                      <td className="px-3 py-2 text-amber-400 text-center tabular-nums">{f.UCL?.toFixed(4) ?? "—"}</td>
+                      <td className="px-3 py-2 text-rose-400 text-center tabular-nums">{f.LCL?.toFixed(4) ?? "—"}</td>
+                      <td className="px-3 py-2 text-slate-400 text-center tabular-nums">{f.std?.toFixed(4) ?? "—"}</td>
+                      <td className="px-3 py-2 text-slate-400 text-center tabular-nums">{f.CV != null ? `${f.CV.toFixed(1)}%` : "—"}</td>
+                      <td className="px-3 py-2 text-slate-300 text-center tabular-nums">{f.median?.toFixed(4) ?? "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Nelson */}
+      {nelson.veredicto && (
+        <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 flex flex-wrap items-center gap-4">
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-slate-500 mb-0.5">Veredicto Nelson</p>
+            <p className={`text-sm font-bold ${SEM_CLS[nelson.veredicto] ?? "text-slate-200"}`}>{nelson.veredicto}</p>
+          </div>
+          <div className="text-xs text-slate-500">
+            R1={nelson.R1} · R2={nelson.R2} · R3={nelson.R3} · R4={nelson.R4} · R6={nelson.R6}
+            {nelson.reglas_activas?.length > 0 && <span className="ml-2 text-amber-400">Activas: {nelson.reglas_activas.join(", ")}</span>}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── CPI Predictor Result ───────────────────────────────────────────── */
+function CpiPredResult({ res }: { res: Record<string, unknown> }) {
+  const SEM: Record<string, { bg: string; text: string; dot: string }> = {
+    VERDE:    { bg: "bg-emerald-500/10", text: "text-emerald-400", dot: "bg-emerald-400" },
+    AMARILLO: { bg: "bg-amber-500/10",   text: "text-amber-400",   dot: "bg-amber-400"   },
+    ROJO:     { bg: "bg-rose-500/10",    text: "text-rose-400",    dot: "bg-rose-400"    },
+  };
+  const sem   = String(res.semaforo ?? "GRIS");
+  const style = SEM[sem] ?? { bg: "bg-slate-500/10", text: "text-slate-400", dot: "bg-slate-400" };
+
+  return (
+    <div className={`rounded-xl border ${style.bg} border-white/[0.08] px-5 py-4 space-y-3`}>
+      <div className="flex items-center gap-3">
+        <span className={`w-3 h-3 rounded-full flex-shrink-0 ${style.dot}`} />
+        <p className={`text-2xl font-bold tabular-nums ${style.text}`}>{String(res.probabilidad_pct ?? "—")}</p>
+        <span className={`text-sm font-semibold ${style.text}`}>— Riesgo {String(res.nivel_riesgo ?? "—")}</span>
+      </div>
+      <p className="text-xs text-slate-400">{String(res.accion_sugerida ?? "")}</p>
+      {!!res.nota_cpi_m1 && <p className="text-xs text-slate-500">{String(res.nota_cpi_m1)}</p>}
+      {!!res.vs_historico && <p className="text-xs text-slate-500">Riesgo predicho {String(res.vs_historico)}.</p>}
     </div>
   );
 }

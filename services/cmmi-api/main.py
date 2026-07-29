@@ -25,6 +25,7 @@ import proyectos as proy
 import financiero as fin
 import datos as dat
 import comercial as com
+import cpi
 
 app = FastAPI(title="CMMI Models API", version="1.0.0")
 
@@ -60,6 +61,23 @@ class KickoffInput(BaseModel):
     lider:          str
     duracion_meses: float = Field(..., gt=0)
     presupuesto:    float | None = None
+
+class CpiPredecirInput(BaseModel):
+    portafolio:      str
+    lider:           str
+    duracion_meses:  float = Field(..., gt=0)
+    presupuesto:     float | None = None
+    cpi_m1:          float
+    spi_m1:          float
+    va_m1:           float
+
+class CpiDiagnosticoInput(BaseModel):
+    portafolio:  str
+    mes_rel:     float = Field(..., ge=0.0, le=1.0)
+    spi:         float
+    cpi:         float
+    va:          float
+    proyecto_id: str = "N/A"
 
 class SeguimientoInput(BaseModel):
     portafolio:    str
@@ -217,6 +235,46 @@ def proyectos_seguimiento(body: SeguimientoInput) -> dict:
             body.portafolio, body.lider, body.mes_rel,
             body.spi_lag1, body.vra_lag1,
             body.spi_lag2, body.spi_observado,
+        )
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
+# ── PROYECTOS CPI ─────────────────────────────────────────────────────
+@app.get("/proyectos/cpi/info")
+def proyectos_cpi_info() -> dict:
+    """Metadatos del modelo CPI y estado de las líneas base."""
+    return cpi.info_cpi()
+
+
+@app.get("/proyectos/cpi/lineas-base")
+def proyectos_cpi_lineas_base() -> dict:
+    """Líneas base CPI (+ SPI, VA) por portafolio y decil de avance."""
+    try:
+        return cpi.lineas_base_cpi()
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
+@app.post("/proyectos/cpi/diagnostico")
+def proyectos_cpi_diagnostico(body: CpiDiagnosticoInput) -> dict:
+    """Diagnóstico SPC en tiempo real: semáforo por SPI, CPI y VA."""
+    try:
+        return cpi.diagnostico(
+            body.portafolio, body.mes_rel,
+            body.spi, body.cpi, body.va, body.proyecto_id,
+        )
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
+@app.post("/proyectos/cpi/predecir")
+def proyectos_cpi_predecir(body: CpiPredecirInput) -> dict:
+    """Predicción de riesgo de costo (P(CPI_min < 0.80)) con nivel BAJO/MODERADO/ALTO."""
+    try:
+        return cpi.predecir_cpi(
+            body.portafolio, body.lider, body.duracion_meses,
+            body.presupuesto, body.cpi_m1, body.spi_m1, body.va_m1,
         )
     except RuntimeError as e:
         raise HTTPException(503, str(e))

@@ -1,0 +1,1559 @@
+{
+  "metadata": {
+    "n_obs": 107,
+    "n_proyectos": 29,
+    "portafolios": [
+      "DATOS Y SISTEMAS DE INFORMACIÓN",
+      "CONSULTORÍA",
+      "TI"
+    ],
+    "cpi_cap": 5.0,
+    "bin_labels": [
+      "0-10%",
+      "10-20%",
+      "20-30%",
+      "30-40%",
+      "40-50%",
+      "50-60%",
+      "60-70%",
+      "70-80%",
+      "80-90%",
+      "90-100%"
+    ],
+    "indicadores": [
+      "SPI",
+      "CPI",
+      "VA"
+    ]
+  },
+  "global": {
+    "n_proyectos": 29,
+    "n_obs": 107,
+    "SPI": {
+      "etiqueta": "SPI — Schedule Performance Index",
+      "global": {
+        "n": 107,
+        "CL": 0.973636,
+        "UCL": 1.770089,
+        "LCL": 0.177184,
+        "std": 0.265484,
+        "CV": 27.27,
+        "median": 1.0
+      },
+      "por_fase": {
+        "0-10%": {
+          "n": 16,
+          "CL": 0.953571,
+          "UCL": 1.409149,
+          "LCL": 0.497994,
+          "std": 0.151859,
+          "CV": 15.93,
+          "median": 1.0,
+          "outliers": 1
+        },
+        "10-20%": {
+          "n": 6,
+          "CL": 0.916667,
+          "UCL": 1.529039,
+          "LCL": 0.304294,
+          "std": 0.204124,
+          "CV": 22.27,
+          "median": 1.0,
+          "outliers": 0
+        },
+        "20-30%": {
+          "n": 5,
+          "CL": 0.978462,
+          "UCL": 1.122946,
+          "LCL": 0.833977,
+          "std": 0.048161,
+          "CV": 4.92,
+          "median": 1.0,
+          "outliers": 0
+        },
+        "30-40%": {
+          "n": 16,
+          "CL": 0.908333,
+          "UCL": 1.466007,
+          "LCL": 0.35066,
+          "std": 0.185891,
+          "CV": 20.47,
+          "median": 1.0,
+          "outliers": 1
+        },
+        "40-50%": {
+          "n": 0,
+          "CL": null,
+          "UCL": null,
+          "LCL": null,
+          "std": null,
+          "CV": null,
+          "median": null,
+          "outliers": 0
+        },
+        "50-60%": {
+          "n": 9,
+          "CL": 0.944444,
+          "UCL": 1.444444,
+          "LCL": 0.444444,
+          "std": 0.166667,
+          "CV": 17.65,
+          "median": 1.0,
+          "outliers": 0
+        },
+        "60-70%": {
+          "n": 8,
+          "CL": 0.91131,
+          "UCL": 1.263308,
+          "LCL": 0.559311,
+          "std": 0.117333,
+          "CV": 12.88,
+          "median": 0.95,
+          "outliers": 0
+        },
+        "70-80%": {
+          "n": 7,
+          "CL": 0.991071,
+          "UCL": 1.06194,
+          "LCL": 0.920203,
+          "std": 0.023623,
+          "CV": 2.38,
+          "median": 1.0,
+          "outliers": 0
+        },
+        "80-90%": {
+          "n": 0,
+          "CL": null,
+          "UCL": null,
+          "LCL": null,
+          "std": null,
+          "CV": null,
+          "median": null,
+          "outliers": 0
+        },
+        "90-100%": {
+          "n": 40,
+          "CL": 1.031708,
+          "UCL": 2.188352,
+          "LCL": 0.0,
+          "std": 0.385548,
+          "CV": 37.37,
+          "median": 1.0,
+          "outliers": 1
+        }
+      },
+      "nelson": {
+        "R1": 1,
+        "R2": 4,
+        "R3": 0,
+        "R4": 0,
+        "R6": 0,
+        "reglas_activas": [
+          "R1",
+          "R2"
+        ],
+        "veredicto": "NO CONTROLADO",
+        "n": 107
+      }
+    },
+    "CPI": {
+      "etiqueta": "CPI — Cost Performance Index (techo 5.0)",
+      "global": {
+        "n": 107,
+        "CL": 2.145934,
+        "UCL": 7.470022,
+        "LCL": -3.178154,
+        "std": 1.774696,
+        "CV": 82.7,
+        "median": 1.121555
+      },
+      "por_fase": {
+        "0-10%": {
+          "n": 16,
+          "CL": 1.651602,
+          "UCL": 6.700656,
+          "LCL": -3.397452,
+          "std": 1.683018,
+          "CV": 101.9,
+          "median": 1.0,
+          "outliers": 0
+        },
+        "10-20%": {
+          "n": 6,
+          "CL": 3.021255,
+          "UCL": 9.525574,
+          "LCL": -3.483063,
+          "std": 2.168106,
+          "CV": 71.76,
+          "median": 3.063766,
+          "outliers": 0
+        },
+        "20-30%": {
+          "n": 5,
+          "CL": 0.91195,
+          "UCL": 1.510678,
+          "LCL": 0.313223,
+          "std": 0.199576,
+          "CV": 21.88,
+          "median": 1.0,
+          "outliers": 0
+        },
+        "30-40%": {
+          "n": 16,
+          "CL": 1.824751,
+          "UCL": 7.25169,
+          "LCL": -3.602188,
+          "std": 1.80898,
+          "CV": 99.14,
+          "median": 1.0,
+          "outliers": 0
+        },
+        "40-50%": {
+          "n": 0,
+          "CL": null,
+          "UCL": null,
+          "LCL": null,
+          "std": null,
+          "CV": null,
+          "median": null,
+          "outliers": 0
+        },
+        "50-60%": {
+          "n": 9,
+          "CL": 2.585811,
+          "UCL": 8.73092,
+          "LCL": -3.559297,
+          "std": 2.048369,
+          "CV": 79.22,
+          "median": 1.620554,
+          "outliers": 0
+        },
+        "60-70%": {
+          "n": 8,
+          "CL": 1.782658,
+          "UCL": 7.05665,
+          "LCL": -3.491333,
+          "std": 1.757997,
+          "CV": 98.62,
+          "median": 1.192035,
+          "outliers": 0
+        },
+        "70-80%": {
+          "n": 7,
+          "CL": 2.394631,
+          "UCL": 8.095542,
+          "LCL": -3.30628,
+          "std": 1.900304,
+          "CV": 79.36,
+          "median": 1.639813,
+          "outliers": 0
+        },
+        "80-90%": {
+          "n": 0,
+          "CL": null,
+          "UCL": null,
+          "LCL": null,
+          "std": null,
+          "CV": null,
+          "median": null,
+          "outliers": 0
+        },
+        "90-100%": {
+          "n": 40,
+          "CL": 2.42525,
+          "UCL": 7.635275,
+          "LCL": -2.784775,
+          "std": 1.736675,
+          "CV": 71.61,
+          "median": 1.519457,
+          "outliers": 0
+        }
+      },
+      "nelson": {
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "R4": 0,
+        "R6": 7,
+        "reglas_activas": [
+          "R6"
+        ],
+        "veredicto": "MARGINAL",
+        "n": 107
+      }
+    },
+    "VA": {
+      "etiqueta": "Variación de Avance (puntos porcentuales)",
+      "global": {
+        "n": 107,
+        "CL": -0.024831,
+        "UCL": 0.239603,
+        "LCL": -0.289266,
+        "std": 0.088145,
+        "CV": 354.97,
+        "median": 0.0
+      },
+      "por_fase": {
+        "0-10%": {
+          "n": 16,
+          "CL": -0.005,
+          "UCL": 0.037426,
+          "LCL": -0.047426,
+          "std": 0.014142,
+          "CV": 282.84,
+          "median": 0.0,
+          "outliers": 1
+        },
+        "10-20%": {
+          "n": 6,
+          "CL": -0.041667,
+          "UCL": 0.26452,
+          "LCL": -0.347853,
+          "std": 0.102062,
+          "CV": 244.95,
+          "median": 0.0,
+          "outliers": 0
+        },
+        "20-30%": {
+          "n": 5,
+          "CL": -0.014,
+          "UCL": 0.079915,
+          "LCL": -0.107915,
+          "std": 0.031305,
+          "CV": 223.61,
+          "median": 0.0,
+          "outliers": 0
+        },
+        "30-40%": {
+          "n": 16,
+          "CL": -0.029375,
+          "UCL": 0.162083,
+          "LCL": -0.220833,
+          "std": 0.063819,
+          "CV": 217.26,
+          "median": 0.0,
+          "outliers": 1
+        },
+        "40-50%": {
+          "n": 0,
+          "CL": null,
+          "UCL": null,
+          "LCL": null,
+          "std": null,
+          "CV": null,
+          "median": null,
+          "outliers": 0
+        },
+        "50-60%": {
+          "n": 9,
+          "CL": -0.055556,
+          "UCL": 0.444444,
+          "LCL": -0.555556,
+          "std": 0.166667,
+          "CV": 300.0,
+          "median": 0.0,
+          "outliers": 0
+        },
+        "60-70%": {
+          "n": 8,
+          "CL": -0.03125,
+          "UCL": 0.080354,
+          "LCL": -0.142854,
+          "std": 0.037201,
+          "CV": 119.04,
+          "median": -0.025,
+          "outliers": 0
+        },
+        "70-80%": {
+          "n": 7,
+          "CL": -0.004286,
+          "UCL": 0.029731,
+          "LCL": -0.038303,
+          "std": 0.011339,
+          "CV": 264.58,
+          "median": 0.0,
+          "outliers": 0
+        },
+        "80-90%": {
+          "n": 0,
+          "CL": null,
+          "UCL": null,
+          "LCL": null,
+          "std": null,
+          "CV": null,
+          "median": null,
+          "outliers": 0
+        },
+        "90-100%": {
+          "n": 40,
+          "CL": -0.025174,
+          "UCL": 0.297112,
+          "LCL": -0.34746,
+          "std": 0.107429,
+          "CV": 426.74,
+          "median": 0.0,
+          "outliers": 1
+        }
+      },
+      "nelson": {
+        "R1": 4,
+        "R2": 4,
+        "R3": 0,
+        "R4": 0,
+        "R6": 0,
+        "reglas_activas": [
+          "R1",
+          "R2"
+        ],
+        "veredicto": "NO CONTROLADO",
+        "n": 107
+      }
+    }
+  },
+  "por_portafolio": {
+    "DATOS Y SISTEMAS DE INFORMACIÓN": {
+      "n_proyectos": 10,
+      "n_obs": 46,
+      "SPI": {
+        "etiqueta": "SPI — Schedule Performance Index",
+        "global": {
+          "n": 46,
+          "CL": 0.988771,
+          "UCL": 1.166636,
+          "LCL": 0.810905,
+          "std": 0.059288,
+          "CV": 6.0,
+          "median": 1.0
+        },
+        "por_fase": {
+          "0-10%": {
+            "n": 9,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "10-20%": {
+            "n": 3,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "20-30%": {
+            "n": 1,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "30-40%": {
+            "n": 8,
+            "CL": 0.947917,
+            "UCL": 1.24485,
+            "LCL": 0.650983,
+            "std": 0.098978,
+            "CV": 10.44,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "40-50%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "50-60%": {
+            "n": 4,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "60-70%": {
+            "n": 4,
+            "CL": 0.939286,
+            "UCL": 1.156057,
+            "LCL": 0.722514,
+            "std": 0.072257,
+            "CV": 7.69,
+            "median": 0.95,
+            "outliers": 0
+          },
+          "70-80%": {
+            "n": 4,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "80-90%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "90-100%": {
+            "n": 13,
+            "CL": 1.010998,
+            "UCL": 1.187893,
+            "LCL": 0.834103,
+            "std": 0.058965,
+            "CV": 5.83,
+            "median": 1.0,
+            "outliers": 0
+          }
+        },
+        "nelson": {
+          "R1": 1,
+          "R2": 7,
+          "R3": 0,
+          "R4": 0,
+          "R6": 0,
+          "reglas_activas": [
+            "R1",
+            "R2"
+          ],
+          "veredicto": "NO CONTROLADO",
+          "n": 46
+        }
+      },
+      "CPI": {
+        "etiqueta": "CPI — Cost Performance Index (techo 5.0)",
+        "global": {
+          "n": 46,
+          "CL": 2.617613,
+          "UCL": 7.900642,
+          "LCL": -2.665416,
+          "std": 1.76101,
+          "CV": 67.28,
+          "median": 2.034222
+        },
+        "por_fase": {
+          "0-10%": {
+            "n": 9,
+            "CL": 1.888889,
+            "UCL": 7.180392,
+            "LCL": -3.402614,
+            "std": 1.763834,
+            "CV": 93.38,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "10-20%": {
+            "n": 3,
+            "CL": 5.0,
+            "UCL": 5.0,
+            "LCL": 5.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 5.0,
+            "outliers": 0
+          },
+          "20-30%": {
+            "n": 1,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "30-40%": {
+            "n": 8,
+            "CL": 2.468976,
+            "UCL": 8.126517,
+            "LCL": -3.188565,
+            "std": 1.885847,
+            "CV": 76.38,
+            "median": 2.50453,
+            "outliers": 0
+          },
+          "40-50%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "50-60%": {
+            "n": 4,
+            "CL": 3.828729,
+            "UCL": 8.615537,
+            "LCL": -0.958078,
+            "std": 1.595603,
+            "CV": 41.67,
+            "median": 4.347182,
+            "outliers": 0
+          },
+          "60-70%": {
+            "n": 4,
+            "CL": 1.670666,
+            "UCL": 6.550889,
+            "LCL": -3.209557,
+            "std": 1.626741,
+            "CV": 97.37,
+            "median": 1.149458,
+            "outliers": 0
+          },
+          "70-80%": {
+            "n": 4,
+            "CL": 3.5647,
+            "UCL": 8.679307,
+            "LCL": -1.549906,
+            "std": 1.704869,
+            "CV": 47.83,
+            "median": 3.809494,
+            "outliers": 0
+          },
+          "80-90%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "90-100%": {
+            "n": 13,
+            "CL": 2.415539,
+            "UCL": 6.940376,
+            "LCL": -2.109297,
+            "std": 1.508279,
+            "CV": 62.44,
+            "median": 1.930289,
+            "outliers": 0
+          }
+        },
+        "nelson": {
+          "R1": 0,
+          "R2": 0,
+          "R3": 1,
+          "R4": 0,
+          "R6": 1,
+          "reglas_activas": [
+            "R3",
+            "R6"
+          ],
+          "veredicto": "MARGINAL",
+          "n": 46
+        }
+      },
+      "VA": {
+        "etiqueta": "Variación de Avance (puntos porcentuales)",
+        "global": {
+          "n": 46,
+          "CL": -0.00558,
+          "UCL": 0.06529,
+          "LCL": -0.076449,
+          "std": 0.023623,
+          "CV": 423.38,
+          "median": 0.0
+        },
+        "por_fase": {
+          "0-10%": {
+            "n": 9,
+            "CL": 0.0,
+            "UCL": 0.0,
+            "LCL": 0.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "10-20%": {
+            "n": 3,
+            "CL": 0.0,
+            "UCL": 0.0,
+            "LCL": 0.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "20-30%": {
+            "n": 1,
+            "CL": 0.0,
+            "UCL": 0.0,
+            "LCL": 0.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "30-40%": {
+            "n": 8,
+            "CL": -0.0125,
+            "UCL": 0.056937,
+            "LCL": -0.081937,
+            "std": 0.023146,
+            "CV": 185.16,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "40-50%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "50-60%": {
+            "n": 4,
+            "CL": 0.0,
+            "UCL": 0.0,
+            "LCL": 0.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "60-70%": {
+            "n": 4,
+            "CL": -0.025,
+            "UCL": 0.061603,
+            "LCL": -0.111603,
+            "std": 0.028868,
+            "CV": 115.47,
+            "median": -0.025,
+            "outliers": 0
+          },
+          "70-80%": {
+            "n": 4,
+            "CL": 0.0,
+            "UCL": 0.0,
+            "LCL": 0.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "80-90%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "90-100%": {
+            "n": 13,
+            "CL": -0.004359,
+            "UCL": 0.106199,
+            "LCL": -0.114917,
+            "std": 0.036853,
+            "CV": 845.44,
+            "median": 0.0,
+            "outliers": 1
+          }
+        },
+        "nelson": {
+          "R1": 1,
+          "R2": 7,
+          "R3": 0,
+          "R4": 0,
+          "R6": 0,
+          "reglas_activas": [
+            "R1",
+            "R2"
+          ],
+          "veredicto": "NO CONTROLADO",
+          "n": 46
+        }
+      }
+    },
+    "CONSULTORÍA": {
+      "n_proyectos": 7,
+      "n_obs": 25,
+      "SPI": {
+        "etiqueta": "SPI — Schedule Performance Index",
+        "global": {
+          "n": 25,
+          "CL": 0.944645,
+          "UCL": 1.243504,
+          "LCL": 0.645785,
+          "std": 0.09962,
+          "CV": 10.55,
+          "median": 1.0
+        },
+        "por_fase": {
+          "0-10%": {
+            "n": 3,
+            "CL": 0.952381,
+            "UCL": 1.199817,
+            "LCL": 0.704945,
+            "std": 0.082479,
+            "CV": 8.66,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "10-20%": {
+            "n": 1,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "20-30%": {
+            "n": 2,
+            "CL": 0.946154,
+            "UCL": 1.174604,
+            "LCL": 0.717704,
+            "std": 0.07615,
+            "CV": 8.05,
+            "median": 0.946154,
+            "outliers": 0
+          },
+          "30-40%": {
+            "n": 4,
+            "CL": 0.975,
+            "UCL": 1.125,
+            "LCL": 0.825,
+            "std": 0.05,
+            "CV": 5.13,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "40-50%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "50-60%": {
+            "n": 1,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "60-70%": {
+            "n": 2,
+            "CL": 0.933333,
+            "UCL": 1.216176,
+            "LCL": 0.650491,
+            "std": 0.094281,
+            "CV": 10.1,
+            "median": 0.933333,
+            "outliers": 0
+          },
+          "70-80%": {
+            "n": 1,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "80-90%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "90-100%": {
+            "n": 11,
+            "CL": 0.918182,
+            "UCL": 1.322196,
+            "LCL": 0.514168,
+            "std": 0.134671,
+            "CV": 14.67,
+            "median": 1.0,
+            "outliers": 0
+          }
+        },
+        "nelson": {
+          "R1": 0,
+          "R2": 0,
+          "R3": 0,
+          "R4": 0,
+          "R6": 0,
+          "reglas_activas": [],
+          "veredicto": "CONTROLADO",
+          "n": 25
+        }
+      },
+      "CPI": {
+        "etiqueta": "CPI — Cost Performance Index (techo 5.0)",
+        "global": {
+          "n": 25,
+          "CL": 1.7606,
+          "UCL": 6.788135,
+          "LCL": -3.266934,
+          "std": 1.675845,
+          "CV": 95.19,
+          "median": 1.0
+        },
+        "por_fase": {
+          "0-10%": {
+            "n": 3,
+            "CL": 0.689143,
+            "UCL": 2.304403,
+            "LCL": -0.926116,
+            "std": 0.53842,
+            "CV": 78.13,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "10-20%": {
+            "n": 1,
+            "CL": 1.127533,
+            "UCL": 1.127533,
+            "LCL": 1.127533,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.127533,
+            "outliers": 0
+          },
+          "20-30%": {
+            "n": 2,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "30-40%": {
+            "n": 4,
+            "CL": 1.56827,
+            "UCL": 8.46016,
+            "LCL": -5.32362,
+            "std": 2.297297,
+            "CV": 146.49,
+            "median": 0.571695,
+            "outliers": 0
+          },
+          "40-50%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "50-60%": {
+            "n": 1,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "60-70%": {
+            "n": 2,
+            "CL": 2.597267,
+            "UCL": 12.791199,
+            "LCL": -7.596664,
+            "std": 3.397977,
+            "CV": 130.83,
+            "median": 2.597267,
+            "outliers": 0
+          },
+          "70-80%": {
+            "n": 1,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "80-90%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "90-100%": {
+            "n": 11,
+            "CL": 2.304766,
+            "UCL": 7.367575,
+            "LCL": -2.758042,
+            "std": 1.687603,
+            "CV": 73.22,
+            "median": 1.286795,
+            "outliers": 0
+          }
+        },
+        "nelson": {
+          "R1": 0,
+          "R2": 0,
+          "R3": 0,
+          "R4": 0,
+          "R6": 0,
+          "reglas_activas": [],
+          "veredicto": "CONTROLADO",
+          "n": 25
+        }
+      },
+      "VA": {
+        "etiqueta": "Variación de Avance (puntos porcentuales)",
+        "global": {
+          "n": 25,
+          "CL": -0.0484,
+          "UCL": 0.234842,
+          "LCL": -0.331642,
+          "std": 0.094414,
+          "CV": 195.07,
+          "median": 0.0
+        },
+        "por_fase": {
+          "0-10%": {
+            "n": 3,
+            "CL": -0.016667,
+            "UCL": 0.069936,
+            "LCL": -0.103269,
+            "std": 0.028868,
+            "CV": 173.21,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "10-20%": {
+            "n": 1,
+            "CL": 0.0,
+            "UCL": 0.0,
+            "LCL": 0.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "20-30%": {
+            "n": 2,
+            "CL": -0.035,
+            "UCL": 0.113492,
+            "LCL": -0.183492,
+            "std": 0.049497,
+            "CV": 141.42,
+            "median": -0.035,
+            "outliers": 0
+          },
+          "30-40%": {
+            "n": 4,
+            "CL": -0.0125,
+            "UCL": 0.0625,
+            "LCL": -0.0875,
+            "std": 0.025,
+            "CV": 200.0,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "40-50%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "50-60%": {
+            "n": 1,
+            "CL": 0.0,
+            "UCL": 0.0,
+            "LCL": 0.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "60-70%": {
+            "n": 2,
+            "CL": -0.05,
+            "UCL": 0.162132,
+            "LCL": -0.262132,
+            "std": 0.070711,
+            "CV": 141.42,
+            "median": -0.05,
+            "outliers": 0
+          },
+          "70-80%": {
+            "n": 1,
+            "CL": 0.0,
+            "UCL": 0.0,
+            "LCL": 0.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "80-90%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "90-100%": {
+            "n": 11,
+            "CL": -0.085455,
+            "UCL": 0.308304,
+            "LCL": -0.479213,
+            "std": 0.131253,
+            "CV": 153.59,
+            "median": 0.0,
+            "outliers": 0
+          }
+        },
+        "nelson": {
+          "R1": 0,
+          "R2": 0,
+          "R3": 0,
+          "R4": 0,
+          "R6": 0,
+          "reglas_activas": [],
+          "veredicto": "CONTROLADO",
+          "n": 25
+        }
+      }
+    },
+    "TI": {
+      "n_proyectos": 12,
+      "n_obs": 36,
+      "SPI": {
+        "etiqueta": "SPI — Schedule Performance Index",
+        "global": {
+          "n": 36,
+          "CL": 0.974431,
+          "UCL": 2.3202,
+          "LCL": 0.0,
+          "std": 0.44859,
+          "CV": 46.04,
+          "median": 1.0
+        },
+        "por_fase": {
+          "0-10%": {
+            "n": 4,
+            "CL": 0.85,
+            "UCL": 1.75,
+            "LCL": 0.0,
+            "std": 0.3,
+            "CV": 35.29,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "10-20%": {
+            "n": 2,
+            "CL": 0.75,
+            "UCL": 1.81066,
+            "LCL": 0.0,
+            "std": 0.353553,
+            "CV": 47.14,
+            "median": 0.75,
+            "outliers": 0
+          },
+          "20-30%": {
+            "n": 2,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "30-40%": {
+            "n": 4,
+            "CL": 0.7625,
+            "UCL": 1.752765,
+            "LCL": 0.0,
+            "std": 0.330088,
+            "CV": 43.29,
+            "median": 0.875,
+            "outliers": 0
+          },
+          "40-50%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "50-60%": {
+            "n": 4,
+            "CL": 0.875,
+            "UCL": 1.625,
+            "LCL": 0.125,
+            "std": 0.25,
+            "CV": 28.57,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "60-70%": {
+            "n": 2,
+            "CL": 0.833333,
+            "UCL": 1.54044,
+            "LCL": 0.126227,
+            "std": 0.235702,
+            "CV": 28.28,
+            "median": 0.833333,
+            "outliers": 0
+          },
+          "70-80%": {
+            "n": 2,
+            "CL": 0.96875,
+            "UCL": 1.101333,
+            "LCL": 0.836167,
+            "std": 0.044194,
+            "CV": 4.56,
+            "median": 0.96875,
+            "outliers": 0
+          },
+          "80-90%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "90-100%": {
+            "n": 16,
+            "CL": 1.126584,
+            "UCL": 2.906941,
+            "LCL": 0.0,
+            "std": 0.593452,
+            "CV": 52.68,
+            "median": 1.0,
+            "outliers": 1
+          }
+        },
+        "nelson": {
+          "R1": 1,
+          "R2": 0,
+          "R3": 0,
+          "R4": 0,
+          "R6": 0,
+          "reglas_activas": [
+            "R1"
+          ],
+          "veredicto": "MARGINAL",
+          "n": 36
+        }
+      },
+      "CPI": {
+        "etiqueta": "CPI — Cost Performance Index (techo 5.0)",
+        "global": {
+          "n": 36,
+          "CL": 1.810825,
+          "UCL": 7.102794,
+          "LCL": -3.481143,
+          "std": 1.76399,
+          "CV": 97.41,
+          "median": 1.0
+        },
+        "por_fase": {
+          "0-10%": {
+            "n": 4,
+            "CL": 1.839549,
+            "UCL": 8.225285,
+            "LCL": -4.546186,
+            "std": 2.128578,
+            "CV": 115.71,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "10-20%": {
+            "n": 2,
+            "CL": 1.0,
+            "UCL": 1.0,
+            "LCL": 1.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "20-30%": {
+            "n": 2,
+            "CL": 0.779876,
+            "UCL": 1.734124,
+            "LCL": -0.174372,
+            "std": 0.318083,
+            "CV": 40.79,
+            "median": 0.779876,
+            "outliers": 0
+          },
+          "30-40%": {
+            "n": 4,
+            "CL": 0.792781,
+            "UCL": 2.036093,
+            "LCL": -0.450531,
+            "std": 0.414437,
+            "CV": 52.28,
+            "median": 1.0,
+            "outliers": 0
+          },
+          "40-50%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "50-60%": {
+            "n": 4,
+            "CL": 1.739346,
+            "UCL": 8.304825,
+            "LCL": -4.826133,
+            "std": 2.188493,
+            "CV": 125.82,
+            "median": 0.768788,
+            "outliers": 0
+          },
+          "60-70%": {
+            "n": 2,
+            "CL": 1.192035,
+            "UCL": 2.006769,
+            "LCL": 0.3773,
+            "std": 0.271578,
+            "CV": 22.78,
+            "median": 1.192035,
+            "outliers": 0
+          },
+          "70-80%": {
+            "n": 2,
+            "CL": 0.751808,
+            "UCL": 1.825999,
+            "LCL": -0.322384,
+            "std": 0.358064,
+            "CV": 47.63,
+            "median": 0.751808,
+            "outliers": 0
+          },
+          "80-90%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "90-100%": {
+            "n": 16,
+            "CL": 2.515973,
+            "UCL": 8.59318,
+            "LCL": -3.561234,
+            "std": 2.025736,
+            "CV": 80.51,
+            "median": 1.063175,
+            "outliers": 0
+          }
+        },
+        "nelson": {
+          "R1": 0,
+          "R2": 4,
+          "R3": 0,
+          "R4": 0,
+          "R6": 1,
+          "reglas_activas": [
+            "R2",
+            "R6"
+          ],
+          "veredicto": "NO CONTROLADO",
+          "n": 36
+        }
+      },
+      "VA": {
+        "etiqueta": "Variación de Avance (puntos porcentuales)",
+        "global": {
+          "n": 36,
+          "CL": -0.033064,
+          "UCL": 0.343397,
+          "LCL": -0.409525,
+          "std": 0.125487,
+          "CV": 379.53,
+          "median": 0.0
+        },
+        "por_fase": {
+          "0-10%": {
+            "n": 4,
+            "CL": -0.0075,
+            "UCL": 0.0375,
+            "LCL": -0.0525,
+            "std": 0.015,
+            "CV": 200.0,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "10-20%": {
+            "n": 2,
+            "CL": -0.125,
+            "UCL": 0.40533,
+            "LCL": -0.65533,
+            "std": 0.176777,
+            "CV": 141.42,
+            "median": -0.125,
+            "outliers": 0
+          },
+          "20-30%": {
+            "n": 2,
+            "CL": 0.0,
+            "UCL": 0.0,
+            "LCL": 0.0,
+            "std": 0.0,
+            "CV": null,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "30-40%": {
+            "n": 4,
+            "CL": -0.08,
+            "UCL": 0.274119,
+            "LCL": -0.434119,
+            "std": 0.11804,
+            "CV": 147.55,
+            "median": -0.035,
+            "outliers": 0
+          },
+          "40-50%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "50-60%": {
+            "n": 4,
+            "CL": -0.125,
+            "UCL": 0.625,
+            "LCL": -0.875,
+            "std": 0.25,
+            "CV": 200.0,
+            "median": 0.0,
+            "outliers": 0
+          },
+          "60-70%": {
+            "n": 2,
+            "CL": -0.025,
+            "UCL": 0.081066,
+            "LCL": -0.131066,
+            "std": 0.035355,
+            "CV": 141.42,
+            "median": -0.025,
+            "outliers": 0
+          },
+          "70-80%": {
+            "n": 2,
+            "CL": -0.015,
+            "UCL": 0.04864,
+            "LCL": -0.07864,
+            "std": 0.021213,
+            "CV": 141.42,
+            "median": -0.015,
+            "outliers": 0
+          },
+          "80-90%": {
+            "n": 0,
+            "CL": null,
+            "UCL": null,
+            "LCL": null,
+            "std": null,
+            "CV": null,
+            "median": null,
+            "outliers": 0
+          },
+          "90-100%": {
+            "n": 16,
+            "CL": -0.000644,
+            "UCL": 0.351174,
+            "LCL": -0.352462,
+            "std": 0.117273,
+            "CV": 18217.13,
+            "median": 0.0,
+            "outliers": 0
+          }
+        },
+        "nelson": {
+          "R1": 2,
+          "R2": 0,
+          "R3": 0,
+          "R4": 0,
+          "R6": 0,
+          "reglas_activas": [
+            "R1"
+          ],
+          "veredicto": "MARGINAL",
+          "n": 36
+        }
+      }
+    }
+  }
+}
