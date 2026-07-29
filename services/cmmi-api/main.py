@@ -268,6 +268,19 @@ def proyectos_cpi_diagnostico(body: CpiDiagnosticoInput) -> dict:
         raise HTTPException(503, str(e))
 
 
+@app.post("/proyectos/cpi/lineas-base-excel")
+def proyectos_cpi_lineas_base_excel(file: UploadFile = File(...)) -> dict:
+    """Calcula líneas base CPI/SPI/VA por decil desde un Excel subido (sin persistir)."""
+    if not file.filename or not file.filename.lower().endswith((".xlsx", ".xls")):
+        raise HTTPException(400, "Se requiere un archivo .xlsx/.xls")
+    try:
+        return cpi.lineas_base_desde_excel(file.file.read())
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    except Exception as e:
+        raise HTTPException(500, f"Error al procesar el archivo: {e}")
+
+
 @app.post("/proyectos/cpi/predecir")
 def proyectos_cpi_predecir(body: CpiPredecirInput) -> dict:
     """Predicción de riesgo de costo (P(CPI_min < 0.80)) con nivel BAJO/MODERADO/ALTO."""

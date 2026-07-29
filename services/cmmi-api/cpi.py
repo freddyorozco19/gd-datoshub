@@ -12,6 +12,7 @@ import warnings
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 
 warnings.filterwarnings("ignore")
 
@@ -225,6 +226,129 @@ def predecir_cpi(portafolio: str, lider: str, duracion_meses: float,
         "portafolios_disponibles": list(port_map.keys()),
         "lideres_disponibles":     list(lider_map.keys()),
     }
+
+
+def _stats_por_bin(df: "pd.DataFrame", col: str, lcl_min: float | None = None) -> dict:
+    bins: dict = {}
+    for lbl in BIN_LABELS:
+        vals = df.loc[df["_bin"] == lbl, col].dropna()
+        n = len(vals)
+        if n == 0:
+            bins[lbl] = {"n": 0, "CL": None, "UCL": None, "LCL": None,
+                         "std": None, "CV": None, "median": None, "outliers": 0}
+            continue
+        cl  = float(vals.mean())
+        std = float(vals.std()) if n > 1 else 0.0
+        ucl = cl + 3 * std
+        lcl = cl - 3 * std
+        if lcl_min is not None:
+            lcl = max(lcl_min, lcl)
+        cv  = (std / abs(cl) * 100) if cl != 0 else None
+        out = int(((vals > ucl) | (vals < lcl)).sum())
+        bins[lbl] = {"n": n, "CL": round(cl, 6), "UCL": round(ucl, 6),
+                     "LCL": round(lcl, 6), "std": round(std, 6),
+                     "CV": round(cv, 2) if cv is not None else None,
+                     "median": round(float(vals.median()), 6), "outliers": out}
+    return bins
+
+
+def _stats_globales(serie: "pd.Series") -> dict:
+    mu  = float(serie.mean())
+    sig = float(serie.std())
+    cv  = (sig / abs(mu) * 100) if mu != 0 else None
+    return {"n": int(len(serie)), "CL": round(mu, 6),
+            "UCL": round(mu + 3 * sig, 6), "LCL": round(mu - 3 * sig, 6),
+            "std": round(sig, 6),
+            "CV": round(cv, 2) if cv is not None else None,
+            "median": round(float(serie.median()), 6)}
+
+
+def _nelson_rules(series: "pd.Series") -> dict:
+    s = series.dropna().values
+    n = len(s)
+    if n < 9:
+        return {"R1": 0, "R2": 0, "R3": 0, "R4": 0, "R6": 0,
+                "reglas_activas": [], "veredicto": "INSUFICIENTE (n<9)", "n": n}
+    mu = s.mean(); sigma = s.std()
+    above = (s > mu).astype(int)
+    r1 = int(np.sum((s > mu + 3 * sigma) | (s < mu - 3 * sigma)))
+    r2 = sum(1 for i in range(n - 8)
+             if above[i:i+9].sum() == 9 or (1 - above[i:i+9]).sum() == 9)
+    r3 = sum(1 for i in range(n - 5)
+             if all(s[i+j] < s[i+j+1] for j in range(5))
+             or all(s[i+j] > s[i+j+1] for j in range(5)))
+    r4 = 0
+    if n >= 14:
+        diffs = np.diff(s)
+        for i in range(len(diffs) - 12):
+            if all(diffs[i+j] * diffs[i+j+1] < 0 for j in range(12)):
+                r4 += 1
+    r6 = sum(1 for i in range(n - 4)
+             if ((s[i:i+5] > mu + sigma) | (s[i:i+5] < mu - sigma)).sum() >= 4)
+    activas = [k for k, v in {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R6": r6}.items() if v > 0]
+    veredicto = ("CONTROLADO" if not activas
+                 else "MARGINAL" if len(activas) <= 2 and r2 == 0
+                 else "NO CONTROLADO")
+    return {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R6": r6,
+            "reglas_activas": activas, "veredicto": veredicto, "n": n}
+
+
+def _calcular_scope(sub: "pd.DataFrame") -> dict:
+    COLS = {
+        "SPI":  {"col": "SPI",     "lcl_min": 0.0},
+        "CPI":  {"col": "CPI_cap", "lcl_min": None},
+        "VA":   {"col": "VA",      "lcl_min": None},
+    }
+    data: dict = {"n_proyectos": int(sub["ProjectId"].nunique()), "n_obs": int(len(sub))}
+    for ind_key, cfg in COLS.items():
+        col    = cfg["col"]
+        serie  = sub[col].dropna()
+        glb    = _stats_globales(serie)
+        if cfg["lcl_min"] is not None:
+            glb["LCL"] = max(cfg["lcl_min"], glb["LCL"])
+        bins   = _stats_por_bin(sub, col, lcl_min=cfg["lcl_min"])
+        nelson = _nelson_rules(sub.sort_values("mes_rel")[col].dropna().reset_index(drop=True))
+        data[ind_key] = {"global": glb, "por_fase": bins, "nelson": nelson}
+    return data
+
+
+_COLUMNAS_REQUERIDAS = [
+    "Mes Relativo", "SPI (Schedule Performance Index)",
+    "CPI (Cost Performance Index)", "Variación Avance",
+    "Portafolio", "ProjectId",
+]
+
+
+def lineas_base_desde_excel(raw_bytes: bytes) -> dict:
+    df = pd.read_excel(pd.io.common.BytesIO(raw_bytes))
+    faltantes = [c for c in _COLUMNAS_REQUERIDAS if c not in df.columns]
+    if faltantes:
+        raise ValueError(f"Columnas faltantes: {faltantes}")
+    df = df.rename(columns={
+        "Mes Relativo":                        "mes_rel",
+        "SPI (Schedule Performance Index)":    "SPI",
+        "CPI (Cost Performance Index)":        "CPI",
+        "Variación Avance":                    "VA",
+        "Portafolio":                          "portafolio",
+    })
+    df["CPI_cap"] = df["CPI"].clip(upper=CPI_CAP)
+    df["_bin"] = pd.cut(df["mes_rel"], bins=10,
+                        labels=BIN_LABELS, include_lowest=True)
+    lb: dict = {
+        "metadata": {
+            "n_obs":        int(len(df)),
+            "n_proyectos":  int(df["ProjectId"].nunique()),
+            "portafolios":  list(df["portafolio"].unique()),
+            "cpi_cap":      CPI_CAP,
+            "bin_labels":   BIN_LABELS,
+            "indicadores":  ["SPI", "CPI", "VA"],
+        },
+        "global":          _calcular_scope(df),
+        "por_portafolio":  {},
+    }
+    for port in df["portafolio"].unique():
+        lb["por_portafolio"][port] = _calcular_scope(df[df["portafolio"] == port])
+    return lb
 
 
 def info_cpi() -> dict:

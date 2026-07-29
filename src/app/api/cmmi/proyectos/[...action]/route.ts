@@ -4,7 +4,7 @@ const CMMI_API_URL = process.env.CMMI_API_URL ?? "http://127.0.0.1:8008";
 const IS_HOSTED    = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 
 const ALLOWED_POST   = new Set(["kickoff", "seguimiento", "cpi/predecir", "cpi/diagnostico"]);
-const ALLOWED_UPLOAD = new Set(["reentrenar"]);
+const ALLOWED_UPLOAD = new Set(["reentrenar", "cpi/lineas-base-excel"]);
 const ALLOWED_GET    = new Set(["info", "lineas-base", "cpi/info", "cpi/lineas-base"]);
 
 export const maxDuration = 120;

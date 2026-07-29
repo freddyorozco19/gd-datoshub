@@ -1889,6 +1889,7 @@ function ProyectosPanel() {
   const [lbCpi, setLbCpi] = useState<any | null>(null);
   const [lbCpiLoading, setLbCpiLoading] = useState(false);
   const [lbCpiError, setLbCpiError] = useState<string | null>(null);
+  const [cpiExcelLoaded, setCpiExcelLoaded] = useState(false);
   const [cpiPredRes, setCpiPredRes] = useState<Record<string, unknown> | null>(null);
   const [cpiPredLoading, setCpiPredLoading] = useState(false);
   const [cpiPredError, setCpiPredError] = useState<string | null>(null);
@@ -1910,6 +1911,24 @@ function ProyectosPanel() {
       setLbCpi(j);
     } catch (e) {
       setLbCpiError(e instanceof Error ? e.message : "Error al cargar líneas base CPI.");
+    } finally { setLbCpiLoading(false); }
+  }
+
+  async function handleCpiExcel(file: File) {
+    setLbCpi(null); setLbCpiError(null); setLbCpiLoading(true); setCpiExcelLoaded(false);
+    try {
+      const form = new FormData();
+      form.append("file", file, file.name);
+      const r = await fetch("/api/cmmi/proyectos/cpi/lineas-base-excel", { method: "POST", body: form });
+      const j = await r.json();
+      if (!r.ok) {
+        if (j.localOnly) { setLbCpiError(j.error as string); return; }
+        throw new Error(j.detail ?? j.error ?? `Error ${r.status}`);
+      }
+      setLbCpi(j);
+      setCpiExcelLoaded(true);
+    } catch (e) {
+      setLbCpiError(e instanceof Error ? e.message : "Error al procesar el Excel CPI.");
     } finally { setLbCpiLoading(false); }
   }
 
@@ -2297,10 +2316,30 @@ function ProyectosPanel() {
             </p>
           </div>
 
+          {/* Picker de Excel */}
+          {!cpiExcelLoaded && (
+            <ProyectosSourcePicker
+              onFile={handleCpiExcel}
+              uploading={lbCpiLoading}
+              msg={null}
+            />
+          )}
+          {cpiExcelLoaded && lbCpi && (
+            <div className="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-3">
+              <p className="text-sm text-emerald-400">
+                {`✅ Excel cargado — ${(lbCpi as Record<string,Record<string,unknown>>).metadata?.n_proyectos ?? "?"} proyectos · ${(lbCpi as Record<string,Record<string,unknown>>).metadata?.n_obs ?? "?"} obs`}
+              </p>
+              <button onClick={() => { setLbCpi(null); setCpiExcelLoaded(false); setCpiPredRes(null); }}
+                className="text-xs text-slate-500 hover:text-slate-300 transition-colors">
+                Cambiar Excel
+              </button>
+            </div>
+          )}
+
           {/* Error/loading LB */}
           {lbCpiLoading && (
             <div className="flex items-center gap-2 text-sm text-slate-400 px-1">
-              <Clock size={14} className="animate-spin" /> Cargando líneas base CPI…
+              <Clock size={14} className="animate-spin" /> Calculando líneas base CPI…
             </div>
           )}
           {lbCpiError && (
