@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ShieldCheck, Upload, FileSpreadsheet, X, Search,
   DollarSign, Trophy, TrendingDown, Clock, Layers, AlertCircle,
   Table2, Activity, Cpu, Play, Maximize2, Filter,
   BarChart2, CalendarCheck, TrendingUp, PieChart, Database, LineChart,
+  Folder, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 import {
@@ -2877,43 +2878,118 @@ function SeguimientoExcelPicker({ onAutoFill }: {
 const GH_PROYECTOS_API  = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Proyectos";
 const GH_FINANCIERA_API = "https://api.github.com/repos/FreddyOrozcoGrowData/CMMI-Hub/contents/data/Financiera";
 
+type GhEntry = { name: string; download_url: string | null; size: number; type: "file" | "dir"; url: string };
+
+function GhFileBrowser({ apiUrl, label, onFile, uploading, downloading, setDownloading, setError }: {
+  apiUrl: string; label: string;
+  onFile: (f: File) => void; uploading: boolean;
+  downloading: string | null;
+  setDownloading: (v: string | null) => void;
+  setError: (v: string | null) => void;
+}) {
+  const [stack, setStack]     = useState<{ url: string; label: string }[]>([{ url: apiUrl, label }]);
+  const [entries, setEntries] = useState<GhEntry[]>([]);
+  const [loading, setLoading] = useState(false);
+  const ghIcon = <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.1 3.3 9.42 7.88 10.95.58.1.79-.25.79-.55v-2.02c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.02 11.02 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.13v3.17c0 .3.2.66.8.55A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>;
+
+  const current = stack[stack.length - 1];
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true); setError(null);
+    fetch(current.url)
+      .then(r => r.json())
+      .then((j: GhEntry[]) => { if (!cancelled) setEntries(Array.isArray(j) ? j : []); })
+      .catch(() => { if (!cancelled) setError("No se pudo conectar con GitHub."); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [current.url]);
+
+  async function pickFile(f: GhEntry) {
+    if (!f.download_url) return;
+    setDownloading(f.name);
+    try {
+      const res = await fetch(f.download_url);
+      const blob = await res.blob();
+      onFile(new File([blob], f.name, { type: blob.type }));
+    } catch {
+      setError(`No se pudo descargar ${f.name}.`);
+    } finally { setDownloading(null); }
+  }
+
+  const dirs  = entries.filter(e => e.type === "dir");
+  const files = entries.filter(e => e.type === "file" && e.name.endsWith(".xlsx"));
+  const breadcrumb = stack.map(s => s.label);
+
+  return (
+    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
+      {/* Breadcrumb */}
+      <div className="px-4 py-2.5 border-b border-white/[0.06] flex items-center gap-1 flex-wrap text-xs text-slate-500">
+        {ghIcon}
+        {stack.map((s, i) => (
+          <span key={i} className="flex items-center gap-1">
+            {i > 0 && <span className="text-slate-700">/</span>}
+            {i < stack.length - 1
+              ? <button onClick={() => setStack(stack.slice(0, i + 1))} className="text-indigo-400 hover:text-indigo-300 transition-colors">{s.label}</button>
+              : <span className="text-slate-300 font-medium">{s.label}</span>}
+          </span>
+        ))}
+      </div>
+
+      {/* Botón volver */}
+      {stack.length > 1 && (
+        <button onClick={() => setStack(stack.slice(0, -1))}
+          className="w-full flex items-center gap-2 px-4 py-2.5 border-b border-white/[0.05] hover:bg-white/[0.04] text-xs text-slate-500 hover:text-slate-300 transition-colors text-left">
+          <ChevronLeft size={14} /> Volver a {breadcrumb[breadcrumb.length - 2]}
+        </button>
+      )}
+
+      {loading && <p className="px-4 py-6 text-sm text-slate-500 text-center">Cargando…</p>}
+
+      {/* Carpetas */}
+      {!loading && dirs.map(d => (
+        <button key={d.name} onClick={() => setStack([...stack, { url: d.url, label: d.name }])}
+          className="w-full flex items-center gap-3 px-4 py-3 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left">
+          <Folder size={15} className="text-amber-400 shrink-0" />
+          <span className="text-sm text-slate-200">{d.name}</span>
+          <ChevronRight size={14} className="ml-auto text-slate-600" />
+        </button>
+      ))}
+
+      {/* Archivos xlsx */}
+      {!loading && files.map(f => (
+        <button key={f.name} onClick={() => pickFile(f)} disabled={uploading || !!downloading}
+          className="w-full flex items-center justify-between px-4 py-3 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left disabled:opacity-60">
+          <div className="flex items-center gap-3">
+            <FileSpreadsheet size={15} className="text-indigo-400 shrink-0" />
+            <span className="text-sm text-slate-200">{f.name}</span>
+          </div>
+          <div className="flex items-center gap-3 text-xs text-slate-500">
+            <span>{(f.size / 1024).toFixed(0)} KB</span>
+            {downloading === f.name
+              ? <Clock size={14} className="animate-spin text-indigo-400" />
+              : <span className="text-indigo-400 font-medium">Usar este</span>}
+          </div>
+        </button>
+      ))}
+
+      {!loading && dirs.length === 0 && files.length === 0 && (
+        <p className="px-4 py-6 text-sm text-slate-500 text-center">No hay carpetas ni archivos .xlsx aquí.</p>
+      )}
+    </div>
+  );
+}
+
 function ProyectosSourcePicker({ onFile, uploading, msg }: {
   onFile: (f: File) => void;
   uploading: boolean;
   msg: { ok: boolean; text: string } | null;
 }) {
   const [mode, setMode]           = useState<"upload" | "github">("github");
-  const [ghFiles, setGhFiles]     = useState<GhFile[]>([]);
-  const [ghLoading, setGhLoading] = useState(false);
   const [ghError, setGhError]     = useState<string | null>(null);
   const [downloading, setDownloading] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [drag, setDrag]           = useState(false);
-
-  async function loadGhFiles() {
-    if (ghFiles.length) return;
-    setGhLoading(true); setGhError(null);
-    try {
-      const r = await fetch(GH_PROYECTOS_API);
-      const j: { name: string; download_url: string; size: number; type: string }[] = await r.json();
-      setGhFiles(j.filter(f => f.type === "file" && f.name.endsWith(".xlsx")));
-    } catch {
-      setGhError("No se pudo conectar con GitHub.");
-    } finally { setGhLoading(false); }
-  }
-
-  async function pickGhFile(f: GhFile) {
-    setDownloading(f.name);
-    try {
-      const res  = await fetch(f.download_url);
-      const blob = await res.blob();
-      onFile(new File([blob], f.name, { type: blob.type }));
-    } catch {
-      setGhError(`No se pudo descargar ${f.name}.`);
-    } finally { setDownloading(null); }
-  }
-
-  useState(() => { loadGhFiles(); });
 
   const btnBase   = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors";
   const btnActive = `${btnBase} bg-indigo-600 text-white`;
@@ -2926,7 +3002,7 @@ function ProyectosSourcePicker({ onFile, uploading, msg }: {
         <button onClick={() => setMode("upload")} className={mode === "upload" ? btnActive : btnIdle}>
           <Upload size={15} /> Subir archivo
         </button>
-        <button onClick={() => { setMode("github"); loadGhFiles(); }} className={mode === "github" ? btnActive : btnIdle}>
+        <button onClick={() => setMode("github")} className={mode === "github" ? btnActive : btnIdle}>
           {ghIcon} Desde GitHub
         </button>
       </div>
@@ -2944,7 +3020,7 @@ function ProyectosSourcePicker({ onFile, uploading, msg }: {
           <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400">
             {uploading ? <Clock size={26} className="animate-spin" /> : <Upload size={26} />}
           </div>
-          <p className="text-sm font-semibold text-slate-300">{uploading ? "Reentrenando modelos…" : "Arrastra el Excel histórico de proyectos aquí"}</p>
+          <p className="text-sm font-semibold text-slate-300">{uploading ? "Procesando…" : "Arrastra el Excel aquí"}</p>
           <p className="text-xs text-slate-500">o haz clic para seleccionar · .xlsx / .xls</p>
           <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
             onChange={(e) => { const f = e.target.files?.[0]; if (f) onFile(f); e.target.value = ""; }} />
@@ -2952,30 +3028,20 @@ function ProyectosSourcePicker({ onFile, uploading, msg }: {
       )}
 
       {mode === "github" && (
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
-          <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2 text-xs text-slate-500">
-            {ghIcon} FreddyOrozcoGrowData/CMMI-Hub · data/Proyectos
-          </div>
-          {ghLoading && <p className="px-4 py-6 text-sm text-slate-500 text-center">Cargando archivos…</p>}
-          {ghError  && <p className="px-4 py-4 text-sm text-rose-400">{ghError}</p>}
-          {!ghLoading && ghFiles.map((f) => (
-            <button key={f.name} onClick={() => pickGhFile(f)} disabled={uploading || !!downloading}
-              className="w-full flex items-center justify-between px-4 py-3 border-b border-white/[0.05] hover:bg-white/[0.04] transition-colors text-left disabled:opacity-60">
-              <div className="flex items-center gap-3">
-                <FileSpreadsheet size={16} className="text-indigo-400 shrink-0" />
-                <span className="text-sm text-slate-200">{f.name}</span>
-              </div>
-              <div className="flex items-center gap-3 text-xs text-slate-500">
-                <span>{(f.size / 1024).toFixed(0)} KB</span>
-                {downloading === f.name || (uploading && downloading === f.name)
-                  ? <Clock size={14} className="animate-spin text-indigo-400" />
-                  : <span className="text-indigo-400 font-medium">Usar este</span>}
-              </div>
-            </button>
-          ))}
-          {!ghLoading && ghFiles.length === 0 && !ghError && (
-            <p className="px-4 py-6 text-sm text-slate-500 text-center">No hay archivos .xlsx en el repositorio.</p>
-          )}
+        <GhFileBrowser
+          apiUrl={GH_PROYECTOS_API}
+          label="data/Proyectos"
+          onFile={onFile}
+          uploading={uploading}
+          downloading={downloading}
+          setDownloading={setDownloading}
+          setError={setGhError}
+        />
+      )}
+
+      {ghError && (
+        <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+          <AlertCircle size={16} className="shrink-0 mt-0.5" /> {ghError}
         </div>
       )}
 
