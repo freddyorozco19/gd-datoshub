@@ -51,13 +51,22 @@ export default function UsuariosView() {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg transition-colors ${
+            className={`relative flex items-center gap-1.5 px-4 h-full text-xs font-medium transition-colors ${
               active
-                ? "bg-blue-500/15 text-blue-400 border border-blue-500/25"
-                : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.05] border border-transparent"
+                ? "text-blue-400"
+                : "text-slate-500 hover:text-slate-300"
             }`}
           >
-            <Icon size={13} /> {label}
+            <Icon size={13} />
+            {label}
+            {/* Underline indicator pegado al borde inferior */}
+            <span
+              className="absolute bottom-0 left-0 right-0 h-[2px] rounded-t-full transition-all"
+              style={{
+                background: active ? "rgba(96,165,250,1)" : "transparent",
+                boxShadow: active ? "0 0 8px rgba(96,165,250,0.6)" : "none",
+              }}
+            />
           </button>
         );
       })}
