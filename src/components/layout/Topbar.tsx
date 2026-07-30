@@ -15,7 +15,7 @@ const ROUTE_META: Record<string, { label: string; parent?: string }> = {
   "/repositorios":    { label: "Repositorios",    parent: "Análisis"  },
   "/cmmi":            { label: "CMMI",            parent: "Análisis"  },
   "/certificaciones": { label: "Certificaciones", parent: "Análisis"  },
-  "/usuarios":        { label: "Usuarios",        parent: "Admin"     },
+  "/usuarios":        { label: "Usuarios"                            },
 };
 
 interface TopbarProps {
