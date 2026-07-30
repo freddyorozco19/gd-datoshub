@@ -66,10 +66,10 @@ const mockSources = [
 ];
 
 const mockRepos = [
-  { id: "1", name: "Dataset Fútbol Colombiano 2025", type: "dataset",  description: "Eventos Opta F24, jugadores, estadísticas",           tags: ["opta", "f24", "fútbol"],        owner: "Freddy Orozco" },
-  { id: "2", name: "Pipeline ETL Betplay",           type: "pipeline", description: "Transformación y carga de datos Betplay → BigQuery",  tags: ["etl", "bigquery", "betplay"],   owner: "Equipo Datos"  },
-  { id: "3", name: "Modelo Predicción Resultados",   type: "modelo",   description: "ML model scikit-learn para predicción de partidos",   tags: ["ml", "sklearn", "predicción"],  owner: "Freddy Orozco" },
-  { id: "4", name: "Reporte Ejecutivo May 2026",     type: "reporte",  description: "Informe mensual de resultados comerciales",           tags: ["comercial", "mensual"],         owner: "GrowData"      },
+  { id: "1", name: "Listado Certificaciones",  type: "listado",    description: "Registro consolidado de certificaciones activas, vencidas y en proceso por colaborador.", tags: ["certificaciones", "personal", "vigencia"],  owner: "GrowData"      },
+  { id: "2", name: "Artifact Tools",           type: "herramienta", description: "Catálogo de herramientas y artefactos tecnológicos empleados en los proyectos de la organización.", tags: ["herramientas", "tecnología", "artefactos"], owner: "Equipo TI"     },
+  { id: "3", name: "Consolidado Roles",        type: "roles",      description: "Matriz de roles, responsabilidades y perfiles de acceso por área y proyecto.",              tags: ["roles", "permisos", "accesos"],             owner: "Freddy Orozco" },
+  { id: "4", name: "Proveedores",              type: "proveedor",  description: "Directorio de proveedores, servicios contratados, contactos y estado de relación comercial.", tags: ["proveedores", "contratos", "comercial"],    owner: "GrowData"      },
 ];
 
 const leadsByStage = [
@@ -241,11 +241,10 @@ function ReportesView() {
 
 function RepositoriosView() {
   const TYPE_COLORS: Record<string, string> = {
-    dataset:   "bg-blue-500/10 text-blue-400",
-    documento: "bg-amber-500/10 text-amber-400",
-    reporte:   "bg-violet-500/10 text-violet-400",
-    pipeline:  "bg-cyan-500/10 text-cyan-400",
-    modelo:    "bg-emerald-500/10 text-emerald-400",
+    listado:     "bg-blue-500/10 text-blue-400",
+    herramienta: "bg-cyan-500/10 text-cyan-400",
+    roles:       "bg-violet-500/10 text-violet-400",
+    proveedor:   "bg-amber-500/10 text-amber-400",
   };
   return (
     <div className="flex flex-col h-full overflow-auto">
