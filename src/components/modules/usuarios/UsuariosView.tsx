@@ -98,22 +98,43 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
     }
   }
 
+  const roles: { value: "user" | "admin"; label: string; desc: string; icon: React.ReactNode }[] = [
+    { value: "user",  label: "Usuario",        desc: "Acceso de lectura y análisis",        icon: <UserIcon size={15} /> },
+    { value: "admin", label: "Administrador",  desc: "Gestión completa de usuarios y datos", icon: <Shield size={15} /> },
+  ];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-white/[0.06] backdrop-blur-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md" onClick={onClose}>
+      {/* Liquid glass card */}
+      <div
+        onClick={e => e.stopPropagation()}
+        className="w-full max-w-md rounded-3xl overflow-hidden shadow-2xl"
+        style={{
+          background: "linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%)",
+          backdropFilter: "blur(40px) saturate(180%)",
+          WebkitBackdropFilter: "blur(40px) saturate(180%)",
+          border: "1px solid rgba(255,255,255,0.14)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15)",
+        }}
+      >
+        {/* Highlight stripe top */}
+        <div className="h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)" }} />
+
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-              <UserPlus size={15} className="text-blue-400" />
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.25), rgba(99,102,241,0.15))", border: "1px solid rgba(99,102,241,0.25)", boxShadow: "0 2px 8px rgba(59,130,246,0.2)" }}>
+              <UserPlus size={16} className="text-blue-300" />
             </div>
             <div>
               <h3 className="text-sm font-semibold text-white leading-none">Invitar usuario</h3>
-              <p className="text-[10px] text-slate-500 mt-0.5">Se enviará un correo de invitación</p>
+              <p className="text-[10px] text-slate-400 mt-0.5">Se enviará un correo de invitación</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-600 hover:text-slate-300 transition-colors">
-            <X size={16} />
+          <button onClick={onClose}
+            className="w-7 h-7 rounded-full flex items-center justify-center transition-colors hover:bg-white/10 text-slate-500 hover:text-slate-200">
+            <X size={15} />
           </button>
         </div>
 
@@ -121,60 +142,97 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
         <div className="px-6 py-5">
           {done ? (
             <div className="flex flex-col items-center gap-3 py-4 text-center">
-              <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ background: "linear-gradient(135deg, rgba(16,185,129,0.2), rgba(5,150,105,0.1))", border: "1px solid rgba(16,185,129,0.25)" }}>
                 <Mail size={22} className="text-emerald-400" />
               </div>
               <div>
                 <p className="text-sm font-semibold text-white">Invitación enviada</p>
-                <p className="text-xs text-slate-500 mt-1">
-                  <span className="text-slate-300">{email}</span> recibirá un correo con un link para activar su cuenta.
+                <p className="text-xs text-slate-400 mt-1">
+                  <span className="text-slate-200">{email}</span> recibirá un correo con el link para activar su cuenta.
                 </p>
               </div>
-              <button onClick={onClose} className="mt-2 px-5 py-2 rounded-lg bg-white/[0.06] hover:bg-white/[0.1] text-sm text-slate-300 transition-colors">
+              <button onClick={onClose}
+                className="mt-2 px-5 py-2 rounded-xl text-sm text-slate-300 transition-colors hover:text-white"
+                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}>
                 Cerrar
               </button>
             </div>
           ) : (
             <form onSubmit={submit} className="space-y-4">
+              {/* Email */}
               <div>
-                <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Correo electrónico</label>
+                <label className="block text-[10px] text-slate-400 uppercase tracking-widest mb-2">Correo electrónico</label>
                 <input
-                  type="email"
-                  required
-                  autoFocus
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  type="email" required autoFocus
+                  value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="usuario@empresa.com"
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors"
+                  className="w-full rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none transition-all"
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.09)",
+                    boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)",
+                  }}
+                  onFocus={e => { e.currentTarget.style.border = "1px solid rgba(99,102,241,0.5)"; e.currentTarget.style.boxShadow = "inset 0 1px 2px rgba(0,0,0,0.2), 0 0 0 3px rgba(99,102,241,0.08)"; }}
+                  onBlur={e =>  { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.09)"; e.currentTarget.style.boxShadow = "inset 0 1px 2px rgba(0,0,0,0.2)"; }}
                 />
               </div>
+
+              {/* Rol — cards */}
               <div>
-                <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Rol</label>
-                <select
-                  value={role}
-                  onChange={e => setRole(e.target.value as "user" | "admin")}
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors"
-                >
-                  <option value="user">Usuario</option>
-                  <option value="admin">Administrador</option>
-                </select>
+                <label className="block text-[10px] text-slate-400 uppercase tracking-widest mb-2">Rol</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {roles.map(r => {
+                    const active = role === r.value;
+                    return (
+                      <button type="button" key={r.value} onClick={() => setRole(r.value)}
+                        className="relative flex flex-col items-start gap-1.5 rounded-xl px-4 py-3 text-left transition-all"
+                        style={{
+                          background: active
+                            ? "linear-gradient(135deg, rgba(99,102,241,0.25), rgba(59,130,246,0.15))"
+                            : "rgba(255,255,255,0.04)",
+                          border: active
+                            ? "1px solid rgba(99,102,241,0.45)"
+                            : "1px solid rgba(255,255,255,0.07)",
+                          boxShadow: active ? "0 0 0 3px rgba(99,102,241,0.1), inset 0 1px 0 rgba(255,255,255,0.08)" : "none",
+                        }}>
+                        {/* Check */}
+                        {active && (
+                          <span className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full flex items-center justify-center"
+                            style={{ background: "rgba(99,102,241,0.8)" }}>
+                            <svg viewBox="0 0 10 10" className="w-2.5 h-2.5" fill="none" stroke="white" strokeWidth="1.8">
+                              <polyline points="1.5,5 4,7.5 8.5,2.5" />
+                            </svg>
+                          </span>
+                        )}
+                        <span className={active ? "text-indigo-300" : "text-slate-400"}>{r.icon}</span>
+                        <span className={`text-sm font-medium leading-none ${active ? "text-white" : "text-slate-300"}`}>{r.label}</span>
+                        <span className="text-[10px] text-slate-500 leading-tight">{r.desc}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {error && (
-                <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2.5 text-xs text-rose-400">
+                <div className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-xs text-rose-400"
+                  style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
                   <AlertCircle size={14} className="shrink-0 mt-0.5" /> {error}
                 </div>
               )}
 
-              <div className="flex items-center justify-end gap-3 pt-1">
-                <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-slate-200 transition-colors">
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <button type="button" onClick={onClose}
+                  className="px-4 py-2 rounded-xl text-sm text-slate-400 hover:text-slate-200 transition-colors">
                   Cancelar
                 </button>
-                <button
-                  type="submit"
-                  disabled={loading || !email}
-                  className="flex items-center gap-2 px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium disabled:opacity-60 transition-colors"
-                >
+                <button type="submit" disabled={loading || !email}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm text-white font-medium disabled:opacity-50 transition-all"
+                  style={{
+                    background: "linear-gradient(135deg, #4f46e5, #3b82f6)",
+                    boxShadow: "0 2px 12px rgba(79,70,229,0.35), inset 0 1px 0 rgba(255,255,255,0.12)",
+                    border: "1px solid rgba(99,102,241,0.4)",
+                  }}>
                   {loading ? <Loader2 size={14} className="animate-spin" /> : <Mail size={14} />}
                   Enviar invitación
                 </button>
@@ -182,6 +240,9 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
             </form>
           )}
         </div>
+
+        {/* Highlight stripe bottom */}
+        <div className="h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)" }} />
       </div>
     </div>
   );
