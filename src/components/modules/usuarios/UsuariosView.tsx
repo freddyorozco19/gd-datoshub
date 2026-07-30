@@ -325,27 +325,83 @@ function DeleteUserModal({
   );
 }
 
+function generatePassword(): string {
+  const upper  = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const lower  = "abcdefghjkmnpqrstuvwxyz";
+  const digits = "23456789";
+  const special = "!@#$%^&*";
+  const all = upper + lower + digits + special;
+  const rand = (s: string) => s[Math.floor(Math.random() * s.length)];
+  const base = [rand(upper), rand(lower), rand(digits), rand(special),
+    ...Array.from({ length: 8 }, () => rand(all))];
+  return base.sort(() => Math.random() - 0.5).join("");
+}
+
+function PasswordStrength({ password }: { password: string }) {
+  const rules = [
+    { label: "Mínimo 10 caracteres",          ok: password.length >= 10 },
+    { label: "Al menos una mayúscula",         ok: /[A-Z]/.test(password) },
+    { label: "Al menos una minúscula",         ok: /[a-z]/.test(password) },
+    { label: "Al menos un número",             ok: /[0-9]/.test(password) },
+    { label: "Al menos un carácter especial",  ok: /[^A-Za-z0-9]/.test(password) },
+  ];
+  const passed = rules.filter(r => r.ok).length;
+  const pct    = (passed / rules.length) * 100;
+  const color  = passed <= 2 ? "#ef4444" : passed <= 3 ? "#f59e0b" : passed === 4 ? "#3b82f6" : "#10b981";
+  const label  = passed <= 2 ? "Débil" : passed <= 3 ? "Regular" : passed === 4 ? "Buena" : "Fuerte";
+
+  if (!password) return null;
+  return (
+    <div className="space-y-2">
+      {/* Barra */}
+      <div className="flex items-center gap-2">
+        <div className="flex-1 h-1 rounded-full bg-white/[0.06] overflow-hidden">
+          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${pct}%`, background: color }} />
+        </div>
+        <span className="text-[10px] font-medium tabular-nums" style={{ color }}>{label}</span>
+      </div>
+      {/* Checklist */}
+      <div className="grid grid-cols-2 gap-x-3 gap-y-1">
+        {rules.map(r => (
+          <div key={r.label} className="flex items-center gap-1.5">
+            <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${r.ok ? "bg-emerald-500/20" : "bg-white/[0.04]"}`}>
+              {r.ok
+                ? <svg viewBox="0 0 10 10" className="w-2 h-2" fill="none" stroke="#10b981" strokeWidth="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>
+                : <span className="w-1 h-1 rounded-full bg-white/20" />}
+            </span>
+            <span className={`text-[10px] leading-tight ${r.ok ? "text-slate-400" : "text-slate-600"}`}>{r.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => void }) {
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState(false);
+  const [confirm, setConfirm]   = useState("");
+  const [showPw, setShowPw]     = useState(false);
+  const [showCf, setShowCf]     = useState(false);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState<string | null>(null);
+  const [done, setDone]         = useState(false);
+
+  const rules = [
+    password.length >= 10,
+    /[A-Z]/.test(password),
+    /[a-z]/.test(password),
+    /[0-9]/.test(password),
+    /[^A-Za-z0-9]/.test(password),
+  ];
+  const allRules  = rules.every(Boolean);
+  const matches   = password === confirm && confirm.length > 0;
+  const canSubmit = allRules && matches && !loading;
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
-
-    if (password.length < 8) {
-      setError("La contraseña debe tener al menos 8 caracteres.");
-      return;
-    }
-    if (password !== confirm) {
-      setError("Las contraseñas no coinciden.");
-      return;
-    }
-
-    setLoading(true);
+    if (!allRules) { setError("La contraseña no cumple todos los requisitos."); return; }
+    if (!matches)  { setError("Las contraseñas no coinciden."); return; }
+    setError(null); setLoading(true);
     try {
       const res = await fetch("/api/admin/users/reset-password", {
         method: "POST",
@@ -362,72 +418,106 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
     }
   }
 
+  function applyGenerated() {
+    const p = generatePassword();
+    setPassword(p); setConfirm(p); setShowPw(true); setShowCf(true);
+  }
+
+  const inputCls = "w-full rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none transition-all pr-10"
+  const inputStyle = { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)" };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-white/[0.06] backdrop-blur-2xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-              <KeyRound size={15} className="text-amber-400" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md" onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} className="w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
+        style={{ background: "linear-gradient(135deg,rgba(255,255,255,0.10) 0%,rgba(255,255,255,0.04) 100%)", backdropFilter: "blur(40px) saturate(180%)", WebkitBackdropFilter: "blur(40px) saturate(180%)", border: "1px solid rgba(255,255,255,0.14)", boxShadow: "0 8px 32px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.12)" }}>
+        <div className="h-px w-full" style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)" }} />
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg,rgba(245,158,11,0.25),rgba(234,88,12,0.15))", border: "1px solid rgba(245,158,11,0.3)", boxShadow: "0 2px 8px rgba(245,158,11,0.2)" }}>
+              <KeyRound size={16} className="text-amber-300" />
             </div>
             <div>
               <h3 className="text-sm font-semibold text-white leading-none">Cambiar contraseña</h3>
-              <p className="text-[10px] text-slate-500 mt-0.5 truncate max-w-[200px]">{user.email}</p>
+              <p className="text-[10px] text-slate-400 mt-0.5 truncate max-w-[190px]">{user.email}</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-600 hover:text-slate-300 transition-colors">
-            <X size={16} />
+          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/10 text-slate-500 hover:text-slate-200 transition-colors">
+            <X size={15} />
           </button>
         </div>
 
         <div className="px-6 py-5">
           {done ? (
-            <div className="flex flex-col items-center gap-2 py-4 text-center">
-              <CheckCircle2 size={28} className="text-emerald-500" />
-              <p className="text-sm text-slate-300">Contraseña actualizada correctamente.</p>
-              <button onClick={onClose} className="mt-2 px-5 py-2 rounded-lg bg-white/[0.06] hover:bg-white/[0.1] text-sm text-slate-300 transition-colors">
+            <div className="flex flex-col items-center gap-3 py-4 text-center">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.25)" }}>
+                <CheckCircle2 size={24} className="text-emerald-400" />
+              </div>
+              <p className="text-sm font-semibold text-white">Contraseña actualizada</p>
+              <p className="text-xs text-slate-400">Los cambios se aplicarán en el próximo inicio de sesión.</p>
+              <button onClick={onClose} className="mt-1 px-5 py-2 rounded-xl text-sm text-slate-300 hover:text-white transition-colors" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}>
                 Cerrar
               </button>
             </div>
           ) : (
             <form onSubmit={submit} className="space-y-4">
-              <div>
-                <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Nueva contraseña</label>
-                <input
-                  type="password"
-                  autoFocus
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Mínimo 8 caracteres"
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-amber-500/50 transition-colors"
-                />
+              {/* Botón generar */}
+              <button type="button" onClick={applyGenerated}
+                className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-medium text-amber-300 transition-all hover:text-amber-200"
+                style={{ background: "rgba(245,158,11,0.08)", border: "1px dashed rgba(245,158,11,0.3)" }}>
+                <svg viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd"/></svg>
+                Generar contraseña segura
+              </button>
+
+              {/* Nueva contraseña */}
+              <div className="space-y-1.5">
+                <label className="block text-[10px] text-slate-400 uppercase tracking-widest">Nueva contraseña</label>
+                <div className="relative">
+                  <input type={showPw ? "text" : "password"} autoFocus value={password}
+                    onChange={e => setPassword(e.target.value)} placeholder="Mínimo 10 caracteres"
+                    className={inputCls} style={inputStyle} />
+                  <button type="button" onClick={() => setShowPw(v => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors text-xs">
+                    {showPw ? "Ocultar" : "Ver"}
+                  </button>
+                </div>
+                <PasswordStrength password={password} />
               </div>
-              <div>
-                <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Confirmar contraseña</label>
-                <input
-                  type="password"
-                  value={confirm}
-                  onChange={(e) => setConfirm(e.target.value)}
-                  placeholder="Repite la contraseña"
-                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-amber-500/50 transition-colors"
-                />
+
+              {/* Confirmar */}
+              <div className="space-y-1.5">
+                <label className="block text-[10px] text-slate-400 uppercase tracking-widest">Confirmar contraseña</label>
+                <div className="relative">
+                  <input type={showCf ? "text" : "password"} value={confirm}
+                    onChange={e => setConfirm(e.target.value)} placeholder="Repite la contraseña"
+                    className={inputCls} style={{ ...inputStyle, borderColor: confirm ? (matches ? "rgba(16,185,129,0.4)" : "rgba(239,68,68,0.4)") : "rgba(255,255,255,0.09)" }} />
+                  <button type="button" onClick={() => setShowCf(v => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors text-xs">
+                    {showCf ? "Ocultar" : "Ver"}
+                  </button>
+                </div>
+                {confirm && (
+                  <p className={`text-[10px] ${matches ? "text-emerald-400" : "text-rose-400"}`}>
+                    {matches ? "✓ Las contraseñas coinciden" : "✗ Las contraseñas no coinciden"}
+                  </p>
+                )}
               </div>
 
               {error && (
-                <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-3 py-2.5 text-xs text-rose-400">
+                <div className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-xs text-rose-400" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
                   <AlertCircle size={14} className="shrink-0 mt-0.5" /> {error}
                 </div>
               )}
 
-              <div className="flex items-center justify-end gap-3 pt-1">
-                <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-slate-200 transition-colors">
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-sm text-slate-400 hover:text-slate-200 transition-colors">
                   Cancelar
                 </button>
-                <button
-                  type="submit"
-                  disabled={loading || !password}
-                  className="flex items-center gap-2 px-5 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-sm text-white font-medium disabled:opacity-60 transition-colors"
-                >
+                <button type="submit" disabled={!canSubmit}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm text-white font-medium disabled:opacity-40 transition-all"
+                  style={{ background: "linear-gradient(135deg,#d97706,#b45309)", boxShadow: canSubmit ? "0 2px 12px rgba(217,119,6,0.35),inset 0 1px 0 rgba(255,255,255,0.12)" : "none", border: "1px solid rgba(245,158,11,0.4)" }}>
                   {loading ? <Loader2 size={14} className="animate-spin" /> : <KeyRound size={14} />}
                   Cambiar contraseña
                 </button>
