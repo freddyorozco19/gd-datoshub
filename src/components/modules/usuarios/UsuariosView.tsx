@@ -38,33 +38,36 @@ type Tab = "usuarios" | "trazabilidad";
 export default function UsuariosView() {
   const [tab, setTab] = useState<Tab>("usuarios");
 
+  const tabItems: { id: Tab; label: string; icon: typeof Users }[] = [
+    { id: "usuarios",     label: "Usuarios",     icon: Users   },
+    { id: "trazabilidad", label: "Trazabilidad", icon: History },
+  ];
+
+  const topbarTabs = (
+    <>
+      {tabItems.map(({ id, label, icon: Icon }) => {
+        const active = id === tab;
+        return (
+          <button
+            key={id}
+            onClick={() => setTab(id)}
+            className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg transition-colors ${
+              active
+                ? "bg-blue-500/15 text-blue-400 border border-blue-500/25"
+                : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.05] border border-transparent"
+            }`}
+          >
+            <Icon size={13} /> {label}
+          </button>
+        );
+      })}
+    </>
+  );
+
   return (
     <div className="flex flex-col h-full overflow-auto">
-      <Topbar title="Usuarios" subtitle="Gestión de cuentas, roles y trazabilidad de accesos · solo administradores" />
+      <Topbar title="Usuarios" subtitle="Gestión de cuentas, roles y trazabilidad de accesos · solo administradores" tabs={topbarTabs} />
       <main className="flex-1 p-6 space-y-5">
-        {/* Sub-navegación */}
-        <div className="flex items-center gap-1.5 border-b border-white/[0.07]">
-          {([
-            { id: "usuarios" as Tab,     label: "Usuarios",     icon: Users   },
-            { id: "trazabilidad" as Tab, label: "Trazabilidad", icon: History },
-          ]).map(({ id, label, icon: Icon }) => {
-            const active = id === tab;
-            return (
-              <button
-                key={id}
-                onClick={() => setTab(id)}
-                className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
-                  active
-                    ? "border-blue-500 text-blue-400"
-                    : "border-transparent text-slate-500 hover:text-slate-300 hover:border-white/20"
-                }`}
-              >
-                <Icon size={15} /> {label}
-              </button>
-            );
-          })}
-        </div>
-
         {tab === "usuarios" ? <UsuariosPanel /> : <TrazabilidadPanel />}
       </main>
     </div>
