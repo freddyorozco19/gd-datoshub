@@ -1858,16 +1858,7 @@ export default function CertificacionesView() {
         {/* Page header */}
         {view !== 'providers' && (
         <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <div className="mb-2">
-              <Breadcrumb
-                provider={selectedProvider ?? undefined}
-                exam={selectedExam ?? undefined}
-                onGoRoot={goRoot}
-                onGoProvider={goProvider}
-              />
-            </div>
-          </div>
+          <div></div>
           <button
             onClick={view === 'viewer' ? goProvider : goRoot}
             className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
