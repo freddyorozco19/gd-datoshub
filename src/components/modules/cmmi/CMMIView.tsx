@@ -2695,7 +2695,7 @@ function CpiCerradosPanel({ data }: { data: any }) {
                 <Tooltip
                   cursor={{ strokeDasharray: "3 3" }}
                   contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }}
-                  formatter={(v: number) => [v.toFixed(4), ind]}
+                  formatter={(v) => [typeof v === "number" ? v.toFixed(4) : v, ind]}
                   labelFormatter={(l) => `Proyecto ${l}`}
                 />
                 <ReferenceLine y={glb.UCL} stroke="#f87171" strokeDasharray="4 2" label={{ value: "UCL", position: "right", fontSize: 10, fill: "#f87171" }} />
@@ -2722,7 +2722,7 @@ function CpiCerradosPanel({ data }: { data: any }) {
                 <YAxis tick={{ fontSize: 10, fill: "#64748b" }} allowDecimals={false} width={28} />
                 <Tooltip
                   contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }}
-                  formatter={(v: number) => [v, "proyectos"]}
+                  formatter={(v) => [v, "proyectos"]}
                   labelFormatter={(l) => `Desde ${l}`}
                 />
                 <Bar dataKey="count" radius={[4, 4, 0, 0]}>
