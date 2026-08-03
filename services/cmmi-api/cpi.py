@@ -29,6 +29,11 @@ _lb_path = PROJ_DIR / "lineas_base_cpi.json"
 if _lb_path.exists():
     _lb = json.loads(_lb_path.read_text(encoding="utf-8"))
 
+_lb_cerrados: dict | None = None
+_lb_cerrados_path = PROJ_DIR / "lineas_base_cpi_cerrados.json"
+if _lb_cerrados_path.exists():
+    _lb_cerrados = json.loads(_lb_cerrados_path.read_text(encoding="utf-8"))
+
 _modelo: dict | None = None
 _modelo_path = PROJ_DIR / "modelo_CPI_params.pkl"
 if _modelo_path.exists():
@@ -112,6 +117,12 @@ def lineas_base_cpi() -> dict:
     if _lb is None:
         raise RuntimeError("Líneas base CPI no disponibles.")
     return _lb
+
+
+def lineas_base_cpi_cerrados() -> dict:
+    if _lb_cerrados is None:
+        raise RuntimeError("Líneas base CPI Cerrados no disponibles.")
+    return _lb_cerrados
 
 
 def diagnostico(portafolio: str, mes_rel: float,

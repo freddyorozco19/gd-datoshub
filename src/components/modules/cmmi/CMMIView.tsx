@@ -1752,7 +1752,7 @@ function DatosOrigenPanel({ datos }: { datos: DatosOrigen }) {
   );
 }
 
-type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "cpi" | "reentrenar" | "modelos" | "dataset" | "marco";
+type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "cpi" | "cpi-cerrados" | "reentrenar" | "modelos" | "dataset" | "marco";
 
 function ProyectosPanel() {
   const [proyListo, setProyListo]         = useState(false);
@@ -1888,6 +1888,10 @@ function ProyectosPanel() {
   // ── Estado CPI ───────────────────────────────────────────────────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [lbCpi, setLbCpi] = useState<any | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [lbCpiCerrados, setLbCpiCerrados] = useState<any | null>(null);
+  const [lbCpiCerradosLoading, setLbCpiCerradosLoading] = useState(false);
+  const [lbCpiCerradosError, setLbCpiCerradosError] = useState<string | null>(null);
   const [lbCpiLoading, setLbCpiLoading] = useState(false);
   const [lbCpiError, setLbCpiError] = useState<string | null>(null);
   const [cpiExcelLoaded, setCpiExcelLoaded] = useState(false);
@@ -1956,6 +1960,19 @@ function ProyectosPanel() {
     } finally { setCpiPredLoading(false); }
   }
 
+  async function loadLbCpiCerrados() {
+    if (lbCpiCerrados) return;
+    setLbCpiCerradosLoading(true); setLbCpiCerradosError(null);
+    try {
+      const r = await fetch("/api/cmmi/proyectos/cpi/lineas-base-cerrados");
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.detail ?? j.error ?? `Error ${r.status}`);
+      setLbCpiCerrados(j);
+    } catch (e) {
+      setLbCpiCerradosError(e instanceof Error ? e.message : "Error al cargar líneas base CPI Cerrados.");
+    } finally { setLbCpiCerradosLoading(false); }
+  }
+
   async function loadLbSpi() {
     if (lbSpi) return;
     setLbSpiLoading(true); setLbSpiError(null);
@@ -1973,8 +1990,9 @@ function ProyectosPanel() {
     { id: "kickoff",     label: "Kickoff",            icon: BarChart2   },
     { id: "seguimiento", label: "Seguimiento",         icon: CalendarCheck },
     { id: "lineas-base", label: "Líneas base SPI",    icon: PieChart    },
-    { id: "cpi",         label: "CPI",                icon: TrendingUp  },
-    { id: "reentrenar",  label: "Reentrenar",          icon: Database    },
+    { id: "cpi",          label: "CPI",                icon: TrendingUp  },
+    { id: "cpi-cerrados", label: "CPI · Cerrados",     icon: TrendingUp  },
+    { id: "reentrenar",   label: "Reentrenar",          icon: Database    },
     { id: "modelos",     label: "Modelos PKL",         icon: PieChart    },
     { id: "dataset",     label: "Dataset",             icon: Database    },
     { id: "marco",       label: "Marco de medición",   icon: ShieldCheck },
@@ -2020,7 +2038,7 @@ function ProyectosPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos" || id === "dataset") loadInfo(); if (id === "lineas-base") loadLbSpi(); if (id === "cpi") loadLbCpi(); }}
+            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos" || id === "dataset") loadInfo(); if (id === "lineas-base") loadLbSpi(); if (id === "cpi") loadLbCpi(); if (id === "cpi-cerrados") loadLbCpiCerrados(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -2426,6 +2444,22 @@ function ProyectosPanel() {
         </div>
       )}
 
+      {tab === "cpi-cerrados" && (
+        <div className="space-y-4">
+          {lbCpiCerradosLoading && (
+            <div className="flex items-center gap-2 text-sm text-slate-400 px-1">
+              <Clock size={14} className="animate-spin" /> Cargando líneas base CPI · Cerrados…
+            </div>
+          )}
+          {lbCpiCerradosError && (
+            <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" /> {lbCpiCerradosError}
+            </div>
+          )}
+          {lbCpiCerrados && <CpiCerradosPanel data={lbCpiCerrados} />}
+        </div>
+      )}
+
       {tab === "marco" && <MarcoMedicion area="proyectos" />}
     </div>
   );
@@ -2544,6 +2578,99 @@ function CpiLbPanel({ data }: { data: any }) {
             R1={nelson.R1} · R2={nelson.R2} · R3={nelson.R3} · R4={nelson.R4} · R6={nelson.R6}
             {nelson.reglas_activas?.length > 0 && <span className="ml-2 text-amber-400">Activas: {nelson.reglas_activas.join(", ")}</span>}
           </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── CPI Cerrados Panel ─────────────────────────────────────────────── */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function CpiCerradosPanel({ data }: { data: any }) {
+  const [ind, setInd] = useState<string>("CPI");
+  const indicators = ["CPI", "SPI", "VA"];
+  const indData = data?.global?.[ind];
+  const glb     = indData?.global;
+  const nelson  = indData?.nelson ?? {};
+  const meta    = data?.metadata ?? {};
+
+  const VER_CLS: Record<string, string> = {
+    CONTROLADO:      "text-emerald-400",
+    MARGINAL:        "text-amber-400",
+    "NO CONTROLADO": "text-rose-400",
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Metadata */}
+      <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+        <span className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.07]">
+          {meta.n_proyectos ?? "?"} proyectos cerrados
+        </span>
+        <span className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.07]">
+          CPI techo {meta.cpi_cap ?? 5}
+        </span>
+        <span className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.07]">
+          {meta.nota ?? "Estado al cierre"}
+        </span>
+      </div>
+
+      {/* Selector indicador */}
+      <div className="flex gap-2">
+        {indicators.map(i => (
+          <button key={i} onClick={() => setInd(i)}
+            className={`px-4 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+              ind === i
+                ? "bg-blue-500/20 border-blue-500/40 text-blue-300"
+                : "bg-white/[0.04] border-white/[0.07] text-slate-400 hover:text-slate-200"
+            }`}>{i}</button>
+        ))}
+      </div>
+
+      {/* Stats globales */}
+      {glb && (
+        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4 space-y-3">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Estadísticas globales al cierre</p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
+            {[
+              { label: "CL",      val: glb.CL?.toFixed(4) },
+              { label: "UCL",     val: glb.UCL?.toFixed(4) },
+              { label: "LCL",     val: glb.LCL?.toFixed(4) },
+              { label: "σ",       val: glb.std?.toFixed(4) },
+              { label: "CV%",     val: glb.CV != null ? `${glb.CV}%` : "—" },
+              { label: "Mediana", val: glb.median?.toFixed(4) },
+              { label: "N",       val: glb.n },
+            ].map(({ label, val }) => (
+              <div key={label} className="bg-white/[0.03] rounded-lg px-3 py-2.5 text-center border border-white/[0.05]">
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider">{label}</p>
+                <p className="text-sm font-semibold text-slate-200 mt-1">{val ?? "—"}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Nelson */}
+      {nelson.veredicto && (
+        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4 space-y-2">
+          <div className="flex items-center gap-3">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Nelson Rules</p>
+            <span className={`text-xs font-bold ${VER_CLS[nelson.veredicto] ?? "text-slate-300"}`}>
+              {nelson.veredicto}
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2 text-xs text-slate-500">
+            {["R1","R2","R3","R6"].map(r => (
+              <span key={r} className={`px-2 py-0.5 rounded border ${
+                (nelson[r] ?? 0) > 0
+                  ? "border-rose-500/40 bg-rose-500/10 text-rose-400"
+                  : "border-white/[0.06] bg-white/[0.02] text-slate-600"
+              }`}>{r}: {nelson[r] ?? 0}</span>
+            ))}
+          </div>
+          {(nelson.reglas_activas?.length ?? 0) > 0 && (
+            <p className="text-xs text-amber-400">⚠ Reglas activas: {nelson.reglas_activas.join(", ")}</p>
+          )}
         </div>
       )}
     </div>

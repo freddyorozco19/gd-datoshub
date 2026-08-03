@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "n_proyectos": 34,
+    "n_obs": 34,
+    "cpi_cap": 5.0,
+    "fuente": "Proyectos Cerrados",
+    "nota": "Una observacion por proyecto (estado al cierre)"
+  },
+  "global": {
+    "CPI": {
+      "global": {
+        "n": 34,
+        "CL": 3.339947,
+        "UCL": 9.71612,
+        "LCL": -3.036225,
+        "std": 2.125391,
+        "CV": 63.64,
+        "median": 5.0
+      },
+      "nelson": {
+        "R1": 0,
+        "R2": 6,
+        "R3": 0,
+        "R6": 4,
+        "reglas_activas": [
+          "R2",
+          "R6"
+        ],
+        "veredicto": "NO CONTROLADO",
+        "n": 34
+      }
+    },
+    "SPI": {
+      "global": {
+        "n": 34,
+        "CL": 0.991471,
+        "UCL": 1.089208,
+        "LCL": 0.893733,
+        "std": 0.032579,
+        "CV": 3.29,
+        "median": 1.0
+      },
+      "nelson": {
+        "R1": 1,
+        "R2": 0,
+        "R3": 0,
+        "R6": 0,
+        "reglas_activas": [
+          "R1"
+        ],
+        "veredicto": "MARGINAL",
+        "n": 34
+      }
+    },
+    "VA": {
+      "global": {
+        "n": 34,
+        "CL": -0.008529,
+        "UCL": 0.089208,
+        "LCL": -0.106267,
+        "std": 0.032579,
+        "CV": 381.96,
+        "median": 0.0
+      },
+      "nelson": {
+        "R1": 1,
+        "R2": 0,
+        "R3": 0,
+        "R6": 0,
+        "reglas_activas": [
+          "R1"
+        ],
+        "veredicto": "MARGINAL",
+        "n": 34
+      }
+    }
+  }
+}

@@ -256,6 +256,15 @@ def proyectos_cpi_lineas_base() -> dict:
         raise HTTPException(503, str(e))
 
 
+@app.get("/proyectos/cpi/lineas-base-cerrados")
+def proyectos_cpi_lineas_base_cerrados() -> dict:
+    """Líneas base CPI (+ SPI, VA) de proyectos cerrados — una obs. por proyecto al cierre."""
+    try:
+        return cpi.lineas_base_cpi_cerrados()
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+
+
 @app.post("/proyectos/cpi/diagnostico")
 def proyectos_cpi_diagnostico(body: CpiDiagnosticoInput) -> dict:
     """Diagnóstico SPC en tiempo real: semáforo por SPI, CPI y VA."""
