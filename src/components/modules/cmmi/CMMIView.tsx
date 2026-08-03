@@ -2687,23 +2687,23 @@ function CpiCerradosPanel({ data }: { data: any }) {
               Gráfica de control — {ind} por proyecto
             </p>
             <ResponsiveContainer width="100%" height={220}>
-              <ScatterChart margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <ScatterChart margin={{ top: 10, right: 32, bottom: 10, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
                 <XAxis dataKey="x" type="number" domain={[1, valores.length]}
-                  tick={{ fontSize: 10, fill: "#64748b" }} label={{ value: "Proyecto #", position: "insideBottom", offset: -4, fontSize: 10, fill: "#64748b" }} />
-                <YAxis dataKey="y" type="number" tick={{ fontSize: 10, fill: "#64748b" }} width={48} />
+                  tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
+                <YAxis dataKey="y" type="number" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} width={44} />
                 <Tooltip
-                  cursor={{ strokeDasharray: "3 3" }}
-                  contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }}
+                  cursor={{ stroke: "rgba(255,255,255,0.06)" }}
+                  contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid rgba(255,255,255,0.08)", background: "#111120", color: "#e2e8f0" }}
                   formatter={(v) => [typeof v === "number" ? v.toFixed(4) : v, ind]}
                   labelFormatter={(l) => `Proyecto ${l}`}
                 />
-                <ReferenceLine y={glb.UCL} stroke="#f87171" strokeDasharray="4 2" label={{ value: "UCL", position: "right", fontSize: 10, fill: "#f87171" }} />
-                <ReferenceLine y={glb.CL}  stroke="#60a5fa" strokeDasharray="4 2" label={{ value: "CL",  position: "right", fontSize: 10, fill: "#60a5fa" }} />
-                <ReferenceLine y={glb.LCL} stroke="#f87171" strokeDasharray="4 2" label={{ value: "LCL", position: "right", fontSize: 10, fill: "#f87171" }} />
-                <Scatter data={scatterData} fill="#818cf8">
+                <ReferenceLine y={glb.UCL} stroke="#f87171" strokeDasharray="4 2" strokeWidth={1.5} label={{ value: "UCL", position: "right", fontSize: 10, fill: "#f87171" }} />
+                <ReferenceLine y={glb.CL}  stroke="#60a5fa" strokeDasharray="4 2" strokeWidth={1.5} label={{ value: "CL",  position: "right", fontSize: 10, fill: "#60a5fa" }} />
+                <ReferenceLine y={glb.LCL} stroke="#f87171" strokeDasharray="4 2" strokeWidth={1.5} label={{ value: "LCL", position: "right", fontSize: 10, fill: "#f87171" }} />
+                <Scatter data={scatterData} fill="#6366f1">
                   {scatterData.map((d, i) => (
-                    <Cell key={i} fill={d.y > glb.UCL || d.y < glb.LCL ? "#f87171" : "#818cf8"} />
+                    <Cell key={i} fill={d.y > glb.UCL || d.y < glb.LCL ? "#f87171" : "#6366f1"} />
                   ))}
                 </Scatter>
               </ScatterChart>
@@ -2716,23 +2716,20 @@ function CpiCerradosPanel({ data }: { data: any }) {
               Distribución — {ind} al cierre
             </p>
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={histData} margin={{ top: 10, right: 10, bottom: 20, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="label" tick={{ fontSize: 9, fill: "#64748b" }} angle={-35} textAnchor="end" interval={0} />
-                <YAxis tick={{ fontSize: 10, fill: "#64748b" }} allowDecimals={false} width={28} />
+              <BarChart data={histData} barSize={28} margin={{ top: 10, right: 10, bottom: 24, left: 0 }}>
+                <XAxis dataKey="label" tick={{ fontSize: 10, fill: "#64748b" }} angle={-30} textAnchor="end" interval={0} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: "#64748b" }} allowDecimals={false} width={28} axisLine={false} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }}
+                  contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid rgba(255,255,255,0.08)", background: "#111120", color: "#e2e8f0" }}
+                  cursor={{ fill: "rgba(255,255,255,0.03)" }}
                   formatter={(v) => [v, "proyectos"]}
                   labelFormatter={(l) => `Desde ${l}`}
                 />
                 <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                   {histData.map((d, i) => (
-                    <Cell key={i} fill={
-                      d.from >= glb.LCL && d.to <= glb.UCL ? "#818cf8" : "#f87171"
-                    } />
+                    <Cell key={i} fill={d.from >= glb.LCL && d.to <= glb.UCL ? "#6366f1" : "#f87171"} />
                   ))}
                 </Bar>
-                <ReferenceLine x={glb.CL?.toFixed(2)} stroke="#60a5fa" strokeDasharray="3 2" />
               </BarChart>
             </ResponsiveContainer>
           </div>
