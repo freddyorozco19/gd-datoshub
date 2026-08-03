@@ -436,8 +436,8 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
         <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg,rgba(245,158,11,0.25),rgba(234,88,12,0.15))", border: "1px solid rgba(245,158,11,0.3)", boxShadow: "0 2px 8px rgba(245,158,11,0.2)" }}>
-              <KeyRound size={16} className="text-amber-300" />
+              style={{ background: "linear-gradient(135deg,rgba(59,130,246,0.25),rgba(99,102,241,0.15))", border: "1px solid rgba(59,130,246,0.3)", boxShadow: "0 2px 8px rgba(59,130,246,0.2)" }}>
+              <KeyRound size={16} className="text-blue-300" />
             </div>
             <div>
               <h3 className="text-sm font-semibold text-white leading-none">Cambiar contraseña</h3>
@@ -465,8 +465,8 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
             <form onSubmit={submit} className="space-y-4">
               {/* Botón generar */}
               <button type="button" onClick={applyGenerated}
-                className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-medium text-amber-300 transition-all hover:text-amber-200"
-                style={{ background: "rgba(245,158,11,0.08)", border: "1px dashed rgba(245,158,11,0.3)" }}>
+                className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-medium text-blue-300 transition-all hover:text-blue-200"
+                style={{ background: "rgba(59,130,246,0.08)", border: "1px dashed rgba(59,130,246,0.3)" }}>
                 <svg viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd"/></svg>
                 Generar contraseña segura
               </button>
@@ -517,7 +517,7 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
                 </button>
                 <button type="submit" disabled={!canSubmit}
                   className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm text-white font-medium disabled:opacity-40 transition-all"
-                  style={{ background: "linear-gradient(135deg,#d97706,#b45309)", boxShadow: canSubmit ? "0 2px 12px rgba(217,119,6,0.35),inset 0 1px 0 rgba(255,255,255,0.12)" : "none", border: "1px solid rgba(245,158,11,0.4)" }}>
+                  style={{ background: "linear-gradient(135deg,#2563eb,#4f46e5)", boxShadow: canSubmit ? "0 2px 12px rgba(37,99,235,0.35),inset 0 1px 0 rgba(255,255,255,0.12)" : "none", border: "1px solid rgba(59,130,246,0.4)" }}>
                   {loading ? <Loader2 size={14} className="animate-spin" /> : <KeyRound size={14} />}
                   Cambiar contraseña
                 </button>
