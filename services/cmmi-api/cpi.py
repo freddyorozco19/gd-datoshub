@@ -129,8 +129,48 @@ def lineas_base_cpi_cerrados() -> dict:
     if _lb_cerrados is None:
         raise RuntimeError("Líneas base CPI Cerrados no disponibles.")
     result = dict(_lb_cerrados)
-    result["images"] = _graficas_cerrados(_lb_cerrados)
+    result["señales"] = _señales_cerrados(_lb_cerrados)
+    result["images"]  = _graficas_cerrados(_lb_cerrados)
     return result
+
+
+def _señales_cerrados(lb: dict) -> list[dict]:
+    """Genera tabla de señales Nelson detectadas por indicador."""
+    señales: list[dict] = []
+    for ind in ["CPI", "SPI", "VA"]:
+        ind_data = lb["global"].get(ind, {})
+        vals     = ind_data.get("valores", [])
+        glb      = ind_data.get("global", {})
+        if not vals or not glb:
+            continue
+        s     = np.array(vals, dtype=float)
+        n     = len(s)
+        mu    = glb["CL"]
+        sigma = glb["std"]
+        above = (s > mu).astype(int)
+
+        # R1: punto fuera de ±3σ
+        for i, v in enumerate(s):
+            if v > mu + 3 * sigma:
+                señales.append({"regla": "R1", "ind": ind, "idx": i + 1, "valor": round(float(v), 4), "desc": f"Sobre UCL (+3σ)"})
+            elif v < mu - 3 * sigma:
+                señales.append({"regla": "R1", "ind": ind, "idx": i + 1, "valor": round(float(v), 4), "desc": f"Bajo LCL (-3σ)"})
+
+        # R2: 9+ consecutivos mismo lado
+        for i in range(n - 8):
+            if above[i:i+9].sum() == 9:
+                señales.append({"regla": "R2", "ind": ind, "idx": i + 9, "valor": round(float(s[i+8]), 4), "desc": "9+ consec. sobre CL"})
+            elif (1 - above[i:i+9]).sum() == 9:
+                señales.append({"regla": "R2", "ind": ind, "idx": i + 9, "valor": round(float(s[i+8]), 4), "desc": "9+ consec. bajo CL"})
+
+        # R6: 4 de 5 puntos fuera de ±1σ
+        for i in range(n - 4):
+            seg = s[i:i+5]
+            if ((seg > mu + sigma) | (seg < mu - sigma)).sum() >= 4:
+                señales.append({"regla": "R6", "ind": ind, "idx": i + 5, "valor": round(float(s[i+4]), 4), "desc": "4 de 5 fuera de ±1σ"})
+
+    señales.sort(key=lambda x: (x["regla"], x["ind"], x["idx"]))
+    return señales
 
 
 def _fig_to_b64(fig: "plt.Figure") -> str:
