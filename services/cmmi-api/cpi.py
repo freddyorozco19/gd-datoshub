@@ -6,11 +6,17 @@ Expone funciones puras para la API FastAPI.
 """
 from __future__ import annotations
 
+import base64
+import io
 import json
 import pickle
 import warnings
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 import numpy as np
 import pandas as pd
 
@@ -122,7 +128,112 @@ def lineas_base_cpi() -> dict:
 def lineas_base_cpi_cerrados() -> dict:
     if _lb_cerrados is None:
         raise RuntimeError("Líneas base CPI Cerrados no disponibles.")
-    return _lb_cerrados
+    result = dict(_lb_cerrados)
+    result["images"] = _graficas_cerrados(_lb_cerrados)
+    return result
+
+
+def _fig_to_b64(fig: "plt.Figure") -> str:
+    buf = io.BytesIO()
+    fig.savefig(buf, dpi=120, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+    return base64.b64encode(buf.getvalue()).decode("ascii")
+
+
+def _graficas_cerrados(lb: dict) -> dict:
+    GRAY   = "#374151"
+    LIGHT  = "#9CA3AF"
+    INDIGO = "#4F46E5"
+    RED    = "#EF4444"
+    BLUE   = "#3B82F6"
+    BG     = "white"
+
+    indicadores = ["CPI", "SPI", "VA"]
+    etiquetas   = {"CPI": f"CPI (techo {lb['metadata']['cpi_cap']})", "SPI": "SPI", "VA": "Variación Alcance"}
+
+    # ── 1. Gráfica de control (scatter con bandas) ────────────────────
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5), facecolor=BG)
+    fig.suptitle("Gráfica de Control — Proyectos Cerrados (estado al cierre)",
+                 fontsize=13, fontweight="bold", color=GRAY, y=1.01)
+
+    for ax, ind in zip(axes, indicadores):
+        glb    = lb["global"][ind]["global"]
+        vals   = lb["global"][ind]["valores"]
+        cl, ucl, lcl = glb["CL"], glb["UCL"], glb["LCL"]
+        xs = list(range(1, len(vals) + 1))
+        colores = [RED if (v > ucl or v < lcl) else INDIGO for v in vals]
+
+        ax.axhline(cl,  color=BLUE,  lw=1.5, ls="--", label=f"CL={cl:.3f}")
+        ax.axhline(ucl, color=RED,   lw=1,   ls=":",  label=f"UCL={ucl:.3f}")
+        ax.axhline(lcl, color=RED,   lw=1,   ls=":",  label=f"LCL={lcl:.3f}")
+        ax.fill_between([0, len(vals)+1], lcl, ucl, color=INDIGO, alpha=0.06)
+        ax.scatter(xs, vals, c=colores, s=55, zorder=5, edgecolors="white", linewidths=0.5)
+        ax.plot(xs, vals, color=INDIGO, lw=1, alpha=0.4, zorder=4)
+
+        ax.set_title(etiquetas[ind], fontsize=11, fontweight="bold", color=GRAY, pad=8)
+        ax.set_xlabel("Proyecto #", fontsize=9, color=LIGHT)
+        ax.set_ylabel(ind, fontsize=9, color=LIGHT)
+        ax.tick_params(colors=LIGHT, labelsize=8)
+        ax.spines[["top","right"]].set_visible(False)
+        ax.spines[["left","bottom"]].set_color("#E5E7EB")
+        ax.set_facecolor(BG)
+        ax.set_xlim(0, len(vals)+1)
+        ax.legend(fontsize=7.5, framealpha=0.7, loc="upper right")
+
+        fuera = sum(1 for v in vals if v > ucl or v < lcl)
+        ax.text(0.02, 0.03, f"{fuera} punt. fuera de control",
+                transform=ax.transAxes, fontsize=8, color=RED if fuera else LIGHT)
+
+    fig.tight_layout()
+    img_control = _fig_to_b64(fig)
+
+    # ── 2. Histograma de distribución ────────────────────────────────
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5), facecolor=BG)
+    fig.suptitle("Distribución de Indicadores al Cierre — Proyectos Cerrados",
+                 fontsize=13, fontweight="bold", color=GRAY, y=1.01)
+
+    for ax, ind in zip(axes, indicadores):
+        glb  = lb["global"][ind]["global"]
+        vals = lb["global"][ind]["valores"]
+        cl, ucl, lcl = glb["CL"], glb["UCL"], glb["LCL"]
+        mn, mx = min(vals), max(vals)
+        bins = 8
+        w = (mx - mn) / bins or 1e-9
+        edges = [mn + i * w for i in range(bins + 1)]
+
+        counts = [0] * bins
+        for v in vals:
+            idx = min(int((v - mn) / w), bins - 1)
+            counts[idx] += 1
+
+        centers = [(edges[i] + edges[i+1]) / 2 for i in range(bins)]
+        colors  = [INDIGO if (edges[i] >= lcl and edges[i+1] <= ucl) else RED for i in range(bins)]
+
+        bars = ax.bar(centers, counts, width=w * 0.85, color=colors, edgecolor="white", linewidth=0.6)
+        ax.axvline(cl,  color=BLUE, lw=1.5, ls="--", label=f"CL={cl:.3f}")
+        ax.axvline(ucl, color=RED,  lw=1,   ls=":",  label=f"UCL={ucl:.3f}")
+        ax.axvline(lcl, color=RED,  lw=1,   ls=":",  label=f"LCL={lcl:.3f}")
+
+        for bar, cnt in zip(bars, counts):
+            if cnt:
+                ax.text(bar.get_x() + bar.get_width()/2, cnt + 0.1, str(cnt),
+                        ha="center", va="bottom", fontsize=8, color=GRAY)
+
+        ax.set_title(etiquetas[ind], fontsize=11, fontweight="bold", color=GRAY, pad=8)
+        ax.set_xlabel(ind, fontsize=9, color=LIGHT)
+        ax.set_ylabel("N proyectos", fontsize=9, color=LIGHT)
+        ax.tick_params(colors=LIGHT, labelsize=8)
+        ax.xaxis.set_major_formatter(mticker.FormatStrFormatter("%.2f"))
+        ax.spines[["top","right"]].set_visible(False)
+        ax.spines[["left","bottom"]].set_color("#E5E7EB")
+        ax.set_facecolor(BG)
+        ax.legend(fontsize=7.5, framealpha=0.7, loc="upper right")
+        ax.set_xlim(mn - w * 0.5, mx + w * 0.5)
+
+    fig.tight_layout()
+    img_hist = _fig_to_b64(fig)
+
+    return {"control_chart": img_control, "histograma": img_hist}
 
 
 def diagnostico(portafolio: str, mes_rel: float,

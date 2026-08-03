@@ -24,10 +24,6 @@ import {
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 import * as XLSX from "xlsx";
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ReferenceLine,
-  ScatterChart, Scatter, CartesianGrid, ResponsiveContainer, Cell,
-} from "recharts";
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 const fmtCOP = (v: number): string =>
@@ -2591,13 +2587,8 @@ function CpiLbPanel({ data }: { data: any }) {
 /* ── CPI Cerrados Panel ─────────────────────────────────────────────── */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CpiCerradosPanel({ data }: { data: any }) {
-  const [ind, setInd] = useState<string>("CPI");
-  const indicators = ["CPI", "SPI", "VA"];
-  const indData = data?.global?.[ind];
-  const glb     = indData?.global;
-  const nelson  = indData?.nelson ?? {};
-  const meta    = data?.metadata ?? {};
-  const valores: number[] = indData?.valores ?? [];
+  const meta   = data?.metadata ?? {};
+  const images = data?.images ?? {};
 
   const VER_CLS: Record<string, string> = {
     CONTROLADO:      "text-emerald-400",
@@ -2605,27 +2596,7 @@ function CpiCerradosPanel({ data }: { data: any }) {
     "NO CONTROLADO": "text-rose-400",
   };
 
-  /* ── Datos gráfica de puntos (control chart) ── */
-  const scatterData = valores.map((v, i) => ({ x: i + 1, y: v }));
-
-  /* ── Histograma: 8 bins entre min y max ── */
-  const histData = useMemo(() => {
-    if (!valores.length) return [];
-    const mn = Math.min(...valores), mx = Math.max(...valores);
-    const bins = 8;
-    const w = (mx - mn) / bins || 1;
-    const counts = Array.from({ length: bins }, (_, i) => ({
-      label: `${(mn + i * w).toFixed(2)}`,
-      count: 0,
-      from: mn + i * w,
-      to: mn + (i + 1) * w,
-    }));
-    valores.forEach(v => {
-      const idx = Math.min(Math.floor((v - mn) / w), bins - 1);
-      counts[idx].count++;
-    });
-    return counts;
-  }, [valores]);
+  const indicators = ["CPI", "SPI", "VA"];
 
   return (
     <div className="space-y-4">
@@ -2642,123 +2613,50 @@ function CpiCerradosPanel({ data }: { data: any }) {
         </span>
       </div>
 
-      {/* Selector indicador */}
-      <div className="flex gap-2">
-        {indicators.map(i => (
-          <button key={i} onClick={() => setInd(i)}
-            className={`px-4 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-              ind === i
-                ? "bg-blue-500/20 border-blue-500/40 text-blue-300"
-                : "bg-white/[0.04] border-white/[0.07] text-slate-400 hover:text-slate-200"
-            }`}>{i}</button>
-        ))}
-      </div>
-
-      {/* Stats globales */}
-      {glb && (
-        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4 space-y-3">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Estadísticas globales al cierre</p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
-            {[
-              { label: "CL",      val: glb.CL?.toFixed(4) },
-              { label: "UCL",     val: glb.UCL?.toFixed(4) },
-              { label: "LCL",     val: glb.LCL?.toFixed(4) },
-              { label: "σ",       val: glb.std?.toFixed(4) },
-              { label: "CV%",     val: glb.CV != null ? `${glb.CV}%` : "—" },
-              { label: "Mediana", val: glb.median?.toFixed(4) },
-              { label: "N",       val: glb.n },
-            ].map(({ label, val }) => (
-              <div key={label} className="bg-white/[0.03] rounded-lg px-3 py-2.5 text-center border border-white/[0.05]">
-                <p className="text-[10px] text-slate-500 uppercase tracking-wider">{label}</p>
-                <p className="text-sm font-semibold text-slate-200 mt-1">{val ?? "—"}</p>
-              </div>
-            ))}
+      {/* Stats globales por indicador */}
+      {indicators.map(ind => {
+        const glb    = data?.global?.[ind]?.global;
+        const nelson = data?.global?.[ind]?.nelson ?? {};
+        if (!glb) return null;
+        return (
+          <div key={ind} className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4 space-y-3">
+            <div className="flex items-center gap-3">
+              <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">{ind}</p>
+              {nelson.veredicto && (
+                <span className={`text-xs font-bold ${VER_CLS[nelson.veredicto] ?? "text-slate-300"}`}>
+                  {nelson.veredicto}
+                </span>
+              )}
+              {(nelson.reglas_activas?.length ?? 0) > 0 && (
+                <span className="text-xs text-amber-400">⚠ {nelson.reglas_activas.join(", ")}</span>
+              )}
+            </div>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
+              {([
+                { label: "CL",      val: glb.CL?.toFixed(4) },
+                { label: "UCL",     val: glb.UCL?.toFixed(4) },
+                { label: "LCL",     val: glb.LCL?.toFixed(4) },
+                { label: "σ",       val: glb.std?.toFixed(4) },
+                { label: "CV%",     val: glb.CV != null ? `${glb.CV}%` : "—" },
+                { label: "Mediana", val: glb.median?.toFixed(4) },
+                { label: "N",       val: glb.n },
+              ] as { label: string; val: string | number | undefined }[]).map(({ label, val }) => (
+                <div key={label} className="bg-white/[0.03] rounded-lg px-3 py-2.5 text-center border border-white/[0.05]">
+                  <p className="text-[10px] text-slate-500 uppercase tracking-wider">{label}</p>
+                  <p className="text-sm font-semibold text-slate-200 mt-1">{val ?? "—"}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        );
+      })}
+
+      {/* Gráficas matplotlib */}
+      {images.control_chart && (
+        <ModelImage b64={images.control_chart} title="Gráfica de Control — Proyectos Cerrados" />
       )}
-
-      {/* Gráficas lado a lado */}
-      {glb && valores.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-          {/* 1 — Control chart: puntos con bandas CL/UCL/LCL */}
-          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4 space-y-2">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Gráfica de control — {ind} por proyecto
-            </p>
-            <ResponsiveContainer width="100%" height={220}>
-              <ScatterChart margin={{ top: 10, right: 32, bottom: 10, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="x" type="number" domain={[1, valores.length]}
-                  tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
-                <YAxis dataKey="y" type="number" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} width={44} />
-                <Tooltip
-                  cursor={{ stroke: "rgba(255,255,255,0.06)" }}
-                  contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid rgba(255,255,255,0.08)", background: "#111120", color: "#e2e8f0" }}
-                  formatter={(v) => [typeof v === "number" ? v.toFixed(4) : v, ind]}
-                  labelFormatter={(l) => `Proyecto ${l}`}
-                />
-                <ReferenceLine y={glb.UCL} stroke="#f87171" strokeDasharray="4 2" strokeWidth={1.5} label={{ value: "UCL", position: "right", fontSize: 10, fill: "#f87171" }} />
-                <ReferenceLine y={glb.CL}  stroke="#60a5fa" strokeDasharray="4 2" strokeWidth={1.5} label={{ value: "CL",  position: "right", fontSize: 10, fill: "#60a5fa" }} />
-                <ReferenceLine y={glb.LCL} stroke="#f87171" strokeDasharray="4 2" strokeWidth={1.5} label={{ value: "LCL", position: "right", fontSize: 10, fill: "#f87171" }} />
-                <Scatter data={scatterData} fill="#6366f1">
-                  {scatterData.map((d, i) => (
-                    <Cell key={i} fill={d.y > glb.UCL || d.y < glb.LCL ? "#f87171" : "#6366f1"} />
-                  ))}
-                </Scatter>
-              </ScatterChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* 2 — Histograma */}
-          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4 space-y-2">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Distribución — {ind} al cierre
-            </p>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={histData} barSize={28} margin={{ top: 10, right: 10, bottom: 24, left: 0 }}>
-                <XAxis dataKey="label" tick={{ fontSize: 10, fill: "#64748b" }} angle={-30} textAnchor="end" interval={0} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: "#64748b" }} allowDecimals={false} width={28} axisLine={false} tickLine={false} />
-                <Tooltip
-                  contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid rgba(255,255,255,0.08)", background: "#111120", color: "#e2e8f0" }}
-                  cursor={{ fill: "rgba(255,255,255,0.03)" }}
-                  formatter={(v) => [v, "proyectos"]}
-                  labelFormatter={(l) => `Desde ${l}`}
-                />
-                <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                  {histData.map((d, i) => (
-                    <Cell key={i} fill={d.from >= glb.LCL && d.to <= glb.UCL ? "#6366f1" : "#f87171"} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-        </div>
-      )}
-
-      {/* Nelson */}
-      {nelson.veredicto && (
-        <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4 space-y-2">
-          <div className="flex items-center gap-3">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Nelson Rules</p>
-            <span className={`text-xs font-bold ${VER_CLS[nelson.veredicto] ?? "text-slate-300"}`}>
-              {nelson.veredicto}
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-2 text-xs text-slate-500">
-            {["R1","R2","R3","R6"].map(r => (
-              <span key={r} className={`px-2 py-0.5 rounded border ${
-                (nelson[r] ?? 0) > 0
-                  ? "border-rose-500/40 bg-rose-500/10 text-rose-400"
-                  : "border-white/[0.06] bg-white/[0.02] text-slate-600"
-              }`}>{r}: {nelson[r] ?? 0}</span>
-            ))}
-          </div>
-          {(nelson.reglas_activas?.length ?? 0) > 0 && (
-            <p className="text-xs text-amber-400">⚠ Reglas activas: {nelson.reglas_activas.join(", ")}</p>
-          )}
-        </div>
+      {images.histograma && (
+        <ModelImage b64={images.histograma} title="Distribución de Indicadores al Cierre" />
       )}
     </div>
   );
