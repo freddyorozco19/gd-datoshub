@@ -24,6 +24,10 @@ import {
 } from "@/lib/cmmi/types";
 import { parseComercialWorkbook } from "@/lib/cmmi/parseComercial";
 import * as XLSX from "xlsx";
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ReferenceLine,
+  ScatterChart, Scatter, CartesianGrid, ResponsiveContainer, Cell,
+} from "recharts";
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 const fmtCOP = (v: number): string =>
@@ -2593,12 +2597,35 @@ function CpiCerradosPanel({ data }: { data: any }) {
   const glb     = indData?.global;
   const nelson  = indData?.nelson ?? {};
   const meta    = data?.metadata ?? {};
+  const valores: number[] = indData?.valores ?? [];
 
   const VER_CLS: Record<string, string> = {
     CONTROLADO:      "text-emerald-400",
     MARGINAL:        "text-amber-400",
     "NO CONTROLADO": "text-rose-400",
   };
+
+  /* ── Datos gráfica de puntos (control chart) ── */
+  const scatterData = valores.map((v, i) => ({ x: i + 1, y: v }));
+
+  /* ── Histograma: 8 bins entre min y max ── */
+  const histData = useMemo(() => {
+    if (!valores.length) return [];
+    const mn = Math.min(...valores), mx = Math.max(...valores);
+    const bins = 8;
+    const w = (mx - mn) / bins || 1;
+    const counts = Array.from({ length: bins }, (_, i) => ({
+      label: `${(mn + i * w).toFixed(2)}`,
+      count: 0,
+      from: mn + i * w,
+      to: mn + (i + 1) * w,
+    }));
+    valores.forEach(v => {
+      const idx = Math.min(Math.floor((v - mn) / w), bins - 1);
+      counts[idx].count++;
+    });
+    return counts;
+  }, [valores]);
 
   return (
     <div className="space-y-4">
@@ -2647,6 +2674,69 @@ function CpiCerradosPanel({ data }: { data: any }) {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Gráficas lado a lado */}
+      {glb && valores.length > 0 && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+          {/* 1 — Control chart: puntos con bandas CL/UCL/LCL */}
+          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4 space-y-2">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              Gráfica de control — {ind} por proyecto
+            </p>
+            <ResponsiveContainer width="100%" height={220}>
+              <ScatterChart margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="x" type="number" domain={[1, valores.length]}
+                  tick={{ fontSize: 10, fill: "#64748b" }} label={{ value: "Proyecto #", position: "insideBottom", offset: -4, fontSize: 10, fill: "#64748b" }} />
+                <YAxis dataKey="y" type="number" tick={{ fontSize: 10, fill: "#64748b" }} width={48} />
+                <Tooltip
+                  cursor={{ strokeDasharray: "3 3" }}
+                  contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }}
+                  formatter={(v: number) => [v.toFixed(4), ind]}
+                  labelFormatter={(l) => `Proyecto ${l}`}
+                />
+                <ReferenceLine y={glb.UCL} stroke="#f87171" strokeDasharray="4 2" label={{ value: "UCL", position: "right", fontSize: 10, fill: "#f87171" }} />
+                <ReferenceLine y={glb.CL}  stroke="#60a5fa" strokeDasharray="4 2" label={{ value: "CL",  position: "right", fontSize: 10, fill: "#60a5fa" }} />
+                <ReferenceLine y={glb.LCL} stroke="#f87171" strokeDasharray="4 2" label={{ value: "LCL", position: "right", fontSize: 10, fill: "#f87171" }} />
+                <Scatter data={scatterData} fill="#818cf8">
+                  {scatterData.map((d, i) => (
+                    <Cell key={i} fill={d.y > glb.UCL || d.y < glb.LCL ? "#f87171" : "#818cf8"} />
+                  ))}
+                </Scatter>
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* 2 — Histograma */}
+          <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4 space-y-2">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              Distribución — {ind} al cierre
+            </p>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={histData} margin={{ top: 10, right: 10, bottom: 20, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="label" tick={{ fontSize: 9, fill: "#64748b" }} angle={-35} textAnchor="end" interval={0} />
+                <YAxis tick={{ fontSize: 10, fill: "#64748b" }} allowDecimals={false} width={28} />
+                <Tooltip
+                  contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }}
+                  formatter={(v: number) => [v, "proyectos"]}
+                  labelFormatter={(l) => `Desde ${l}`}
+                />
+                <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                  {histData.map((d, i) => (
+                    <Cell key={i} fill={
+                      d.from >= glb.LCL && d.to <= glb.UCL ? "#818cf8" : "#f87171"
+                    } />
+                  ))}
+                </Bar>
+                <ReferenceLine x={glb.CL?.toFixed(2)} stroke="#60a5fa" strokeDasharray="3 2" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
         </div>
       )}
 
