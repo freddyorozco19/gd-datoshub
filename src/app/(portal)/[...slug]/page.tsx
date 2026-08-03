@@ -61,7 +61,7 @@ const mockMeetings = [
 const mockSources = [
   { id: "1", name: "ODOO CRM API",           type: "api",      status: "activa",   last_sync: "2026-05-28T12:00:00", description: "Leads y oportunidades desde ODOO"          },
   { id: "2", name: "BigQuery - DWH Principal",type: "bigquery", status: "activa",   last_sync: "2026-05-28T11:30:00", description: "Data warehouse principal GrowData"          },
-  { id: "3", name: "Dataset Betplay 2025",    type: "csv",      status: "inactiva", last_sync: "2026-04-15T08:00:00", description: "Datos históricos de eventos deportivos"     },
+  { id: "3", name: "SECOP II - Procesos de Contratación", type: "api", status: "activa", last_sync: "2026-05-28T09:00:00", description: "Consulta de procesos de contratación pública desde SECOP II" },
   { id: "4", name: "Webhook SIGID",           type: "webhook",  status: "error",    last_sync: "2026-05-20T16:00:00", description: "Notificaciones de licitaciones públicas"    },
 ];
 
