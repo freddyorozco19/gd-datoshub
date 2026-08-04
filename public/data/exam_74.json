@@ -1,0 +1,3202 @@
+{
+  "examId": 74,
+  "examTitle": "DP-900: Azure Data Fundamentals",
+  "totalQuestions": 303,
+  "scrapedAt": "2026-08-04T20:39:43.924Z",
+  "questions": [
+    {
+      "number": "1",
+      "questionText": "HOTSPOT -",
+      "options": [
+        "B. Descriptive analytics"
+      ],
+      "correctAnswer": "B. Descriptive analytics",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0000200001.png"
+      ]
+    },
+    {
+      "number": "2",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0001800001.jpg"
+      ]
+    },
+    {
+      "number": "3",
+      "questionText": "Which T-SQL statement should be used to instruct a database management system to use an index instead of performing a full table scan?",
+      "options": [
+        "A. SELECT",
+        "B. WHERE",
+        "C. JOIN"
+      ],
+      "correctAnswer": "A. SELECT",
+      "images": []
+    },
+    {
+      "number": "4",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0011700001.png"
+      ]
+    },
+    {
+      "number": "5",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0011800001.png"
+      ]
+    },
+    {
+      "number": "6",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0012200001.png"
+      ]
+    },
+    {
+      "number": "7",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0012300001.png"
+      ]
+    },
+    {
+      "number": "8",
+      "questionText": "Which Azure service provides the highest compatibility for databases migrated from Microsoft SQL Server 2019 Enterprise edition?",
+      "options": [
+        "A. Azure SQL Database",
+        "B. Azure Database for MySQL",
+        "C. Azure SQL Managed Instance",
+        "D. an Azure SQL Database elastic pool"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "9",
+      "questionText": "Which setting can only be configured during the creation of an Azure Cosmos DB account?",
+      "options": [
+        "A. geo-redundancy",
+        "B. multi-region writes",
+        "C. production or non-production account type",
+        "D. API"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "10",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0012500001.jpg"
+      ]
+    },
+    {
+      "number": "11",
+      "questionText": "You have an Azure Cosmos DB account that uses the Core (SQL) API.",
+      "options": [
+        "A. the throughput",
+        "B. the read region",
+        "C. the partition key",
+        "D. the API"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "12",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "C.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0001900001.jpg"
+      ]
+    },
+    {
+      "number": "13",
+      "questionText": "Your company is designing a data store that will contain student data. The data has the following format.",
+      "options": [
+        "A. graph",
+        "B. key/value",
+        "C. object",
+        "D. columnar"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0012700001.png"
+      ]
+    },
+    {
+      "number": "14",
+      "questionText": "Which storage solution supports role-based access control (RBAC) at the file and folder level?",
+      "options": [
+        "A. Azure Disk Storage",
+        "B. Azure Data Lake Storage",
+        "C. Azure Blob storage",
+        "D. Azure Queue storage"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "15",
+      "questionText": "You need to store data in Azure Blob storage for seven years to meet your company's compliance requirements. The retrieval time of the data is unimportant. The solution must minimize storage costs.",
+      "options": [
+        "A. Archive",
+        "B. Hot",
+        "C. Cool"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "16",
+      "questionText": "Which type of non-relational data store supports a flexible schema, stores data as JSON files, and stores the all the data for an entity in the same document?",
+      "options": [
+        "A. document",
+        "B. columnar",
+        "C. graph",
+        "D. time series",
+        "A. Document DB"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "17",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0012900001.png"
+      ]
+    },
+    {
+      "number": "18",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0013000002.png"
+      ]
+    },
+    {
+      "number": "19",
+      "questionText": "HOTSPOT -",
+      "options": [
+        "A. Read the link provided. Yeah, there is Gremlin language, but JSON and SQL are used, too.",
+        "D. Gremlin API is the correct answer"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0013100002.png"
+      ]
+    },
+    {
+      "number": "20",
+      "questionText": "When provisioning an Azure Cosmos DB account, which feature provides redundancy within an Azure region?",
+      "options": [
+        "A. multi-master replication",
+        "B. Availability Zones",
+        "C. the strong consistency level",
+        "D. automatic failover"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "21",
+      "questionText": "What is a benefit of the Azure Cosmos DB Table API as compared to Azure Table storage?",
+      "options": [
+        "A. provides resiliency if an Azure region fails",
+        "B. supports partitioning",
+        "C. provides a higher storage capacity",
+        "D. supports a multi-master model"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "22",
+      "questionText": "Your company needs to design a database that shows how changes in network traffic in one area of a network affect network traffic in other areas of the network.",
+      "options": [
+        "A. graph",
+        "B. key/value",
+        "C. document",
+        "D. columnar"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "23",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0002000001.jpg"
+      ]
+    },
+    {
+      "number": "24",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0013400001.jpg"
+      ]
+    },
+    {
+      "number": "25",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0013600001.png"
+      ]
+    },
+    {
+      "number": "26",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0013700001.png"
+      ]
+    },
+    {
+      "number": "27",
+      "questionText": "You need to store data by using Azure Table storage.",
+      "options": [
+        "A. an Azure Cosmos DB instance",
+        "B. a storage account",
+        "C. a blob container",
+        "D. a table"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "28",
+      "questionText": "You need to recommend a data store service that meets the following requirements:",
+      "options": [
+        "A. Azure Files",
+        "B. Azure Blob storage",
+        "C. Azure Table storage",
+        "D. Azure Cosmos DB"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "29",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0014000001.jpg"
+      ]
+    },
+    {
+      "number": "30",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0014200001.jpg"
+      ]
+    },
+    {
+      "number": "31",
+      "questionText": "Your company needs to design a database that illustrates the relationships between utilization levels of individual network devices across a local area network.",
+      "options": [
+        "A. graph",
+        "B. key/value",
+        "C. document",
+        "D. columnar"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "32",
+      "questionText": "You manage an application that stores data in a shared folder on a Windows server.",
+      "options": [
+        "A. queue",
+        "B. blob",
+        "C. file",
+        "D. table",
+        "C. see https://docs.microsoft.com/en-us/azure/storage/files/storage-files-migration-overview. It refers to the same scenario. \"For an app that currently runs on an on-premises server, storing files in an Azure file share might be a good choice. You can move the app to Azure and use Azure file shares as shared storage. \""
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "33",
+      "questionText": "Your company is designing a database that will contain session data for a website. The data will include notifications, personalization attributes, and products that are added to a shopping cart.",
+      "options": [
+        "A. key/value",
+        "B. graph",
+        "C. columnar",
+        "D. document",
+        "A. its a better choice as they focus on lowest latency and also they mentioned shopping cart, which is very close to the data used in product recommendation , that is example of Key/value data store answer should be A."
+      ],
+      "correctAnswer": "C. \"provide the lowest latency to retrieve the data\"",
+      "images": []
+    },
+    {
+      "number": "34",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0002200001.png"
+      ]
+    },
+    {
+      "number": "35",
+      "questionText": "You have an application that runs on Windows and requires access to a mapped drive.",
+      "options": [
+        "A. Azure Files",
+        "B. Azure Blob storage",
+        "C. Azure Cosmos DB",
+        "D. Azure Table storage"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "36",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0014600001.jpg"
+      ]
+    },
+    {
+      "number": "37",
+      "questionText": "Your company is designing an application that will write a high volume of JSON data and will have an application-defined schema.",
+      "options": [
+        "A. columnar",
+        "B. key/value",
+        "C. document",
+        "D. graph",
+        "C. Document."
+      ],
+      "correctAnswer": "B. Key/Value store.",
+      "images": []
+    },
+    {
+      "number": "38",
+      "questionText": "You need to recommend a non-relational data store that is optimized for storing and retrieving text files, videos, audio streams, and virtual disk images. The data store must store data, some metadata, and a unique ID for each file.",
+      "options": [
+        "A. key/value",
+        "B. columnar",
+        "C. object",
+        "D. document"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "39",
+      "questionText": "Your company is designing a data store for internet-connected temperature sensors.",
+      "options": [
+        "A. relational",
+        "B. time series",
+        "C. graph",
+        "D. columnar"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "40",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0014900001.png"
+      ]
+    },
+    {
+      "number": "41",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0015100001.png"
+      ]
+    },
+    {
+      "number": "42",
+      "questionText": "At which two levels can you set the throughput for an Azure Cosmos DB account? Each correct answer presents a complete solution.",
+      "options": [
+        "A. database",
+        "B. item",
+        "C. container",
+        "D. partition"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "43",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0015200001.png"
+      ]
+    },
+    {
+      "number": "44",
+      "questionText": "What is a characteristic of non-relational data?",
+      "options": [
+        "A. no indexes",
+        "B. self-describing entities",
+        "C. a well-defined schema",
+        "D. no unique key values"
+      ],
+      "correctAnswer": "B. self-describing entities",
+      "images": []
+    },
+    {
+      "number": "45",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0002400001.jpg"
+      ]
+    },
+    {
+      "number": "46",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0015400001.png"
+      ]
+    },
+    {
+      "number": "47",
+      "questionText": "You need to gather real-time telemetry data from a mobile application.",
+      "options": [
+        "A. Online Transaction Processing (OLTP)",
+        "B. batch",
+        "C. massively parallel processing (MPP)",
+        "D. streaming"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "48",
+      "questionText": "You have a dedicated SQL pool in Azure Synapse Analytics that is only used actively every night for eight hours.",
+      "options": [
+        "A. Scale down the data warehouse units (DWUs).",
+        "B. Pause the pool.",
+        "C. Create a user-defined restore point.",
+        "D. Delete the pool"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "49",
+      "questionText": "Which Azure Data Factory component initiates the execution of a pipeline?",
+      "options": [
+        "A. a control flow",
+        "B. a trigger",
+        "C. a parameter",
+        "D. an activity"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "50",
+      "questionText": "Your company has a reporting solution that has paginated reports. The reports query a dimensional model in a data warehouse.",
+      "options": [
+        "A. stream processing",
+        "B. batch processing",
+        "C. Online Analytical Processing (OLAP)",
+        "D. Online Transaction Processing (OLTP)"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "51",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0015700001.jpg"
+      ]
+    },
+    {
+      "number": "52",
+      "questionText": "What are three characteristics of an Online Transaction Processing (OLTP) workload? Each correct answer presents a complete solution.",
+      "options": [
+        "A. denormalized data",
+        "B. heavy writes and moderate reads",
+        "C. light writes and heavy reads",
+        "D. schema on write",
+        "E. schema on read",
+        "F. normalized data"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "53",
+      "questionText": "Which two activities can be performed entirely by using the Microsoft Power BI service without relying on Power BI Desktop? Each correct answer presents a complete solution.",
+      "options": [
+        "A. report and dashboard creation",
+        "B. report sharing and distribution",
+        "C. data modeling",
+        "D. data acquisition and preparation"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "54",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0015900001.png"
+      ]
+    },
+    {
+      "number": "55",
+      "questionText": "You need to develop a solution to provide data to executives. The solution must provide an interactive graphical interface, depict various key performance indicators, and support data exploration by using drill down.",
+      "options": [
+        "A. a view",
+        "B. a report",
+        "C. a dataflow",
+        "D. Microsoft Power Apps"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "56",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0002500001.png"
+      ]
+    },
+    {
+      "number": "57",
+      "questionText": "Which two Azure services can be used to provision Apache Spark clusters? Each correct answer presents a complete solution.",
+      "options": [
+        "A. Azure Time Series Insights",
+        "B. Azure HDInsight",
+        "C. Azure Databricks",
+        "D. Azure Log Analytics"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "58",
+      "questionText": "You have a quality assurance application that reads data from a data warehouse.",
+      "options": [
+        "A. Online Transaction Processing (OLTP)",
+        "B. batch processing",
+        "C. Online Analytical Processing (OLAP)",
+        "D. stream processing",
+        "C. Online Analytical Processing (OLAP) -- As per Chat GPT",
+        "C. OLAP"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "59",
+      "questionText": "Which three objects can be added to a Microsoft Power BI dashboard? Each correct answer presents a complete solution.",
+      "options": [
+        "A. a report page",
+        "B. a Microsoft PowerPoint slide",
+        "C. a visualization from a report",
+        "D. a dataflow",
+        "E. a text box"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "60",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0016300001.png"
+      ]
+    },
+    {
+      "number": "61",
+      "questionText": "Which Azure Data Factory component provides the compute environment for activities?",
+      "options": [
+        "A. SSIS packages",
+        "B. an integration runtime",
+        "C. a control flow",
+        "D. a pipeline"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "62",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0016500001.jpg"
+      ]
+    },
+    {
+      "number": "63",
+      "questionText": "What are two uses of data visualization? Each correct answer presents a complete solution.",
+      "options": [
+        "A. Represent trends and patterns over time",
+        "B. Implement machine learning to predict future values",
+        "C. Communicate the significance of data",
+        "D. Enforce business logic across reports"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "64",
+      "questionText": "You need to use Transact-SQL to query files in Azure Data Lake Storage Gen 2 from an Azure Synapse Analytics data warehouse.",
+      "options": [
+        "A. Azure Functions",
+        "B. Microsoft SQL Server Integration Services (SSIS)",
+        "C. PolyBase",
+        "D. Azure Data Factory"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "65",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0016700001.png"
+      ]
+    },
+    {
+      "number": "66",
+      "questionText": "What are three characteristics of an Online Transaction Processing (OLTP) workload? Each correct answer presents a complete solution.",
+      "options": [
+        "A. denormalized data",
+        "B. heavy writes and moderate reads",
+        "C. light writes and heavy reads",
+        "D. schema defined in a database",
+        "E. schema defined when reading unstructured data from a database",
+        "F. normalized data"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "67",
+      "questionText": "You need to create an Azure Storage account.",
+      "options": [
+        "A. zone-redundant storage (ZRS)",
+        "B. read-access geo-redundant storage (RA-GRS)",
+        "C. locally-redundant storage (LRS)",
+        "D. geo-redundant storage (GRS)"
+      ],
+      "correctAnswer": "A. Incorrect. ZRS replicates data across availability zones within the same region, providing high availability within that region but does not replicate data outside the region.",
+      "images": []
+    },
+    {
+      "number": "68",
+      "questionText": "What is the primary purpose of a data warehouse?",
+      "options": [
+        "A. to provide answers to complex queries that rely on data from multiple sources",
+        "B. to provide transformation services between source and target data stores",
+        "C. to provide read-only storage of relational and non-relational historical data",
+        "D. to provide storage for transactional line-of-business (LOB) applications"
+      ],
+      "correctAnswer": "C.",
+      "images": []
+    },
+    {
+      "number": "69",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0017000001.jpg"
+      ]
+    },
+    {
+      "number": "70",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0017100001.jpg"
+      ]
+    },
+    {
+      "number": "71",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0017200001.jpg"
+      ]
+    },
+    {
+      "number": "72",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0017300005.jpg"
+      ]
+    },
+    {
+      "number": "73",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0017500001.jpg"
+      ]
+    },
+    {
+      "number": "74",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0017600001.jpg"
+      ]
+    },
+    {
+      "number": "75",
+      "questionText": "What should you use to build a Microsoft Power BI paginated report?",
+      "options": [
+        "A. Charticulator",
+        "B. Power BI Desktop",
+        "C. the Power BI service",
+        "D. Power BI Report Builder"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "76",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0017800001.png"
+      ]
+    },
+    {
+      "number": "77",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0018000001.jpg"
+      ]
+    },
+    {
+      "number": "78",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0002700003.jpg"
+      ]
+    },
+    {
+      "number": "79",
+      "questionText": "Which scenario is an example of a streaming workload?",
+      "options": [
+        "A. sending transactions that are older than a month to an archive",
+        "B. sending transactions daily from point of sale (POS) devices",
+        "C. sending telemetry data from edge devices",
+        "D. sending cloud infrastructure metadata every 30 minutes"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "80",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0018200001.png"
+      ]
+    },
+    {
+      "number": "81",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0018300001.png"
+      ]
+    },
+    {
+      "number": "82",
+      "questionText": "A bar chart showing year-to-date sales by region is an example of which type of analytics?",
+      "options": [
+        "A. predictive",
+        "B. prescriptive",
+        "C. descriptive",
+        "D. diagnostic"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "83",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0018400001.jpg"
+      ]
+    },
+    {
+      "number": "84",
+      "questionText": "You need to perform hybrid transactional and analytical processing (HTAP) queries against Azure Cosmos DB data sources by using Azure Synapse Analytics.",
+      "options": [
+        "A. Synapse pipelines",
+        "B. a Synapse SQL pool",
+        "C. Synapse Link",
+        "D. Synapse Studio"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "85",
+      "questionText": "You need to create a visualization of running sales totals per quarter as shown in the following exhibit.",
+      "options": [
+        "A. a waterfall chart",
+        "B. a ribbon chart",
+        "C. a bar chart",
+        "D. a decomposition tree"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0018600001.png"
+      ]
+    },
+    {
+      "number": "86",
+      "questionText": "You have the following two tables of customer data.",
+      "options": [
+        "A. structured",
+        "B. non-relational",
+        "C. semi-structured",
+        "D. unstructured"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0018800002.jpg",
+        "https://www.examtopics.com/assets/media/exam-media/04277/0018900001.jpg"
+      ]
+    },
+    {
+      "number": "87",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0019000001.png"
+      ]
+    },
+    {
+      "number": "88",
+      "questionText": "Which statement is an example of Data Manipulation Language (DML)?",
+      "options": [
+        "A. REVOKE",
+        "B. DISABLE",
+        "C. INSERT",
+        "D. GRANT"
+      ],
+      "correctAnswer": "A. Incorrect. REVOKE is a Data Control Language (DCL) command used to remove user permissions.",
+      "images": []
+    },
+    {
+      "number": "89",
+      "questionText": "Which Azure Blob Storage feature enables you to sync a Blob Storage account to an external cache?",
+      "options": [
+        "A. the Hot access tier",
+        "B. change feed",
+        "C. snapshots",
+        "D. versioning"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "90",
+      "questionText": "You have an on-premises Microsoft SQL Server database.",
+      "options": [
+        "A. Azure SQL Database single database",
+        "B. an Azure SQL Database elastic pool",
+        "C. Azure SQL Managed instance",
+        "D. SQL Server on Azure virtual machines"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "91",
+      "questionText": "Which two features distinguish Delta Lake from Azure Data Lake Storage? Each correct answer presents a complete solution.",
+      "options": [
+        "A. support for batch data",
+        "B. schema enforcement",
+        "C. support for an Apache Spark runtime",
+        "D. transactional consistency",
+        "E. support for streaming data"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "92",
+      "questionText": "What is a function of a modern data warehouse?",
+      "options": [
+        "A. supports batch processing only",
+        "B. supports real-time and batch processing",
+        "C. provides built-in or native online analytical processing",
+        "D. stores raw data only"
+      ],
+      "correctAnswer": "C. provides built-in or native online analytical processing",
+      "images": []
+    },
+    {
+      "number": "93",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0019600001.png"
+      ]
+    },
+    {
+      "number": "94",
+      "questionText": "What can be used with native notebook support to query and visualize data by using a web-based interface?",
+      "options": [
+        "A. Azure Databricks",
+        "B. pgAdmin",
+        "C. Microsoft Power BI"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "95",
+      "questionText": "You have data saved in the following format.",
+      "options": [
+        "A. XML",
+        "B. HTML",
+        "C. YAML",
+        "D. JSON"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0019800001.png"
+      ]
+    },
+    {
+      "number": "96",
+      "questionText": "You have a SQL query that combines customer data and order data. The query includes calculated columns.",
+      "options": [
+        "A. an index",
+        "B. a view",
+        "C. a scalar function",
+        "D. a table"
+      ],
+      "correctAnswer": "A. Incorrect. An index is used to improve the speed of data retrieval and does not store a query or combine tables.",
+      "images": []
+    },
+    {
+      "number": "97",
+      "questionText": "You have data saved in the following format.",
+      "options": [
+        "A. JSON",
+        "B. YAML",
+        "C. HTML",
+        "D. XML"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0019900001.png"
+      ]
+    },
+    {
+      "number": "98",
+      "questionText": "Which database transaction property ensures that transactional changes to a database are preserved during unexpected operating system restarts?",
+      "options": [
+        "A. consistency",
+        "B. atomicity",
+        "C. durability",
+        "D. isolation"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "99",
+      "questionText": "Which database transaction property ensures that individual transactions are executed only once and either succeed in their entirety or roll back?",
+      "options": [
+        "A. atomicity",
+        "B. durability",
+        "C. isolation",
+        "D. consistency"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "100",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0020200001.jpg"
+      ]
+    },
+    {
+      "number": "101",
+      "questionText": "Which Azure Storage service implements the key/value model?",
+      "options": [
+        "A. Azure Queue",
+        "B. Azure Files",
+        "C. Azure Table",
+        "D. Azure Blob"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "102",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0020400001.jpg"
+      ]
+    },
+    {
+      "number": "103",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0000300001.png"
+      ]
+    },
+    {
+      "number": "104",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0003100001.jpg"
+      ]
+    },
+    {
+      "number": "105",
+      "questionText": "You plan to deploy an app. The app requires a nonrelational data service that will provide latency guarantees of less than 10-ms for reads and writes.",
+      "options": [
+        "A. Azure Blob storage",
+        "B. Azure Files",
+        "C. Azure Table storage",
+        "D. Azure Cosmos DB"
+      ],
+      "correctAnswer": "D. Azure Cosmos DB",
+      "images": []
+    },
+    {
+      "number": "106",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0020700001.jpg"
+      ]
+    },
+    {
+      "number": "107",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0020900001.jpg"
+      ]
+    },
+    {
+      "number": "108",
+      "questionText": "You have data saved in the following format.",
+      "options": [
+        "A. YAML",
+        "B. CSV",
+        "C. JSON",
+        "D. HTML"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021000001.png"
+      ]
+    },
+    {
+      "number": "109",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021000002.jpg"
+      ]
+    },
+    {
+      "number": "110",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021100002.jpg"
+      ]
+    },
+    {
+      "number": "111",
+      "questionText": "What is required to provision Azure Data Lake Storage in an Azure Storage account?",
+      "options": [
+        "A. Versioning must be disabled.",
+        "B. Hierarchical namespace must be disabled.",
+        "C. Versioning must be enabled.",
+        "D. Hierarchical namespace must be enabled."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "112",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021300001.jpg"
+      ]
+    },
+    {
+      "number": "113",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021400001.jpg"
+      ]
+    },
+    {
+      "number": "114",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021400003.png"
+      ]
+    },
+    {
+      "number": "115",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0003200001.png"
+      ]
+    },
+    {
+      "number": "116",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021600001.png"
+      ]
+    },
+    {
+      "number": "117",
+      "questionText": "What is used to define a query in a stream processing jobs in Azure Stream Analytics?",
+      "options": [
+        "A. YAML",
+        "B. KQL",
+        "C. SQL",
+        "D. XML",
+        "C. https://learn.microsoft.com/en-us/azure/stream-analytics/stream-analytics-introduction#programmer-productivity"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "118",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021700001.png"
+      ]
+    },
+    {
+      "number": "119",
+      "questionText": "HOTSPOT -",
+      "options": [
+        "B. Semi-Structured"
+      ],
+      "correctAnswer": "B. Semi-Structured",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021800001.jpg"
+      ]
+    },
+    {
+      "number": "120",
+      "questionText": "In a fully normalized database, how is data read and written for a single entity?",
+      "options": [
+        "A. Data is read from multiple tables and written to multiple tables.",
+        "B. Data is read from a single table and written to a single table.",
+        "C. Data is read from a single table and written to multiple tables.",
+        "D. Data is read from multiple tables and written to a single table.",
+        "D. as per Bing AI",
+        "A. Data is read from multiple tables and written to multiple tables."
+      ],
+      "correctAnswer": "B. Data is read from a single table and written to a single table.",
+      "images": []
+    },
+    {
+      "number": "121",
+      "questionText": "What is a primary characteristic of a relational database?",
+      "options": [
+        "A. a flexible data structure",
+        "B. data is queried and manipulated by using a variant of the SQL language",
+        "C. a lack of dependencies between tables",
+        "D. a large amount of duplicate data",
+        "B. data is queried and manipulated by using a variant of the SQL language"
+      ],
+      "correctAnswer": "B. Data is queried and manipulated by using a variant of the SQL language.",
+      "images": []
+    },
+    {
+      "number": "122",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0021900001.jpg"
+      ]
+    },
+    {
+      "number": "123",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image130.png"
+      ]
+    },
+    {
+      "number": "124",
+      "questionText": "What is a characteristic of a non-relational database?",
+      "options": [
+        "A. full support for Transact-SQL",
+        "B. a fixed schema",
+        "C. self-describing entities"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "125",
+      "questionText": "What should you use to automatically delete blobs from Azure Blob Storage?",
+      "options": [
+        "A. archive storage",
+        "B. the change feed",
+        "C. soft delete",
+        "D. a lifecycle management policy"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "126",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0003300001.png"
+      ]
+    },
+    {
+      "number": "127",
+      "questionText": "In Azure Table storage, each row in a table must be uniquely identified by which two components? Each correct answer presents part of the solution.",
+      "options": [
+        "A. a partition key",
+        "B. a range",
+        "C. a row key",
+        "D. a timestamp"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "128",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0022100001.jpg"
+      ]
+    },
+    {
+      "number": "129",
+      "questionText": "You need to store event log data that is semi-structured and received as the logs occur.",
+      "options": [
+        "A. Azure Table storage",
+        "B. Azure Queue storage",
+        "C. Azure Files",
+        "A. Azure Table storage - passed exam today with sore 1000 - and this question appeared (A was my answer)"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "130",
+      "questionText": "Which Azure Cosmos DB API should you use for a graph database?",
+      "options": [
+        "A. Table",
+        "B. Cassandra",
+        "C. Core (SQL)",
+        "D. Gremlin"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "131",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0022300001.jpg"
+      ]
+    },
+    {
+      "number": "132",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0022400001.jpg"
+      ]
+    },
+    {
+      "number": "133",
+      "questionText": "A bank has a system that manages financial transactions.",
+      "options": [
+        "A. atomicity",
+        "B. durability",
+        "C. consistency",
+        "D. isolation"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "134",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image1.png"
+      ]
+    },
+    {
+      "number": "135",
+      "questionText": "A data engineer is responsible for which task?",
+      "options": [
+        "A. Explore data to identify trends.",
+        "B. Implement policies, tools, and processes for backup and recovery plans.",
+        "C. Design and build analytical models.",
+        "D. Design and implement data stores for analytical workloads."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "136",
+      "questionText": "What are two characteristics of real-time data processing? Each correct answer presents a complete solution.",
+      "options": [
+        "A. Data is processed periodically",
+        "B. Low latency is expected",
+        "C. High latency is acceptable",
+        "D. Data is processed as it is created"
+      ],
+      "correctAnswer": "B. Low latency is expected, Real-time data processing involves near-instantaneous processing, requiring low latency to ensure timely results.",
+      "images": []
+    },
+    {
+      "number": "137",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image7.png"
+      ]
+    },
+    {
+      "number": "138",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image9.png"
+      ]
+    },
+    {
+      "number": "139",
+      "questionText": "Which file format has defined names and data types for each column and uses compressed columnar storage?",
+      "options": [
+        "A. HTML",
+        "B. CSV",
+        "C. Apache Parquet",
+        "D. JSON"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "140",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image15.png"
+      ]
+    },
+    {
+      "number": "141",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image17.png"
+      ]
+    },
+    {
+      "number": "142",
+      "questionText": "A retail point of sale (POS) system is an example of which type of solution?",
+      "options": [
+        "A. a data warehouse",
+        "B. online analytical processing (OLAP)",
+        "C. extract, transform, and load (ETL)",
+        "D. online transaction processing (OLTP)",
+        "D. online transaction processing (OLTP)"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "143",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image19.png"
+      ]
+    },
+    {
+      "number": "144",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0003500001.jpg"
+      ]
+    },
+    {
+      "number": "145",
+      "questionText": "You have structured data in tabular format.",
+      "options": [
+        "A. a column",
+        "B. a table",
+        "C. a cell",
+        "D. a row"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "146",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image21.png"
+      ]
+    },
+    {
+      "number": "147",
+      "questionText": "Which Azure SQL offering provides near-100 percent compatibility with on-premises Microsoft SQL Server instances, while providing automated updates. backups, and maintenance tasks?",
+      "options": [
+        "A. Azure SQL Managed Instance",
+        "B. SQL Server on Azure Virtual Machines",
+        "C. Azure SQL Database",
+        "D. Azure SQL Edge"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "148",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image23.png"
+      ]
+    },
+    {
+      "number": "149",
+      "questionText": "HOTSPOT",
+      "options": [
+        "C. a target data store powerful enough to transform data"
+      ],
+      "correctAnswer": "C. a target data store powerful enough to transform data",
+      "images": [
+        "https://img.examtopics.com/dp-900/image25.png"
+      ]
+    },
+    {
+      "number": "150",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image27.png"
+      ]
+    },
+    {
+      "number": "151",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image29.png"
+      ]
+    },
+    {
+      "number": "152",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image31.png"
+      ]
+    },
+    {
+      "number": "153",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image33.png"
+      ]
+    },
+    {
+      "number": "154",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image35.png"
+      ]
+    },
+    {
+      "number": "155",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0003700001.jpg"
+      ]
+    },
+    {
+      "number": "156",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image37.png"
+      ]
+    },
+    {
+      "number": "157",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image39.png"
+      ]
+    },
+    {
+      "number": "158",
+      "questionText": "Which type of Azure resource supports the serverless configuration of an Azure SQL database?",
+      "options": [
+        "A. SQL Server on Azure Virtual Machines",
+        "B. an Azure SQL Database elastic pool",
+        "C. a single database in Azure SQL Database",
+        "D. Azure SQL Managed Instance"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "159",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image41.png"
+      ]
+    },
+    {
+      "number": "160",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "A. KQL",
+      "images": [
+        "https://img.examtopics.com/dp-900/image43.png"
+      ]
+    },
+    {
+      "number": "161",
+      "questionText": "Which Azure Cosmos DB API should you use for a graph database?",
+      "options": [
+        "A. Table",
+        "B. Cassandra",
+        "C. NoSQL",
+        "D. Gremlin"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "162",
+      "questionText": "What is a difference between structured data and semi-structured data?",
+      "options": [
+        "A. Structured data has a fixed schema and semi-structured data has a flexible schema.",
+        "B. Only Structured data supports entities.",
+        "C. Structured data has a flexible schema and semi-structured data has a fixed schema.",
+        "D. Only Structured data supports attributes."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "163",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image47.png"
+      ]
+    },
+    {
+      "number": "164",
+      "questionText": "A bank needs to ensure that after an account transfer transaction completes, the revised account balances persists even if the database system hosting the transaction becomes temporarily unavailable.",
+      "options": [
+        "A. durability",
+        "B. isolation",
+        "C. atomicity",
+        "D. consistency"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "165",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0003800001.jpg"
+      ]
+    },
+    {
+      "number": "166",
+      "questionText": "Which statement is an example of Data Manipulation Language (DML)?",
+      "options": [
+        "A. INSERT",
+        "B. ALTER",
+        "C. DROP",
+        "D. CREATE"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "167",
+      "questionText": "Which language is used to define queries in Azure Synapse Data Explorer?",
+      "options": [
+        "A. Bash",
+        "B. PowerShell",
+        "C. KQL",
+        "D. SQL"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "168",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image49.png"
+      ]
+    },
+    {
+      "number": "169",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image51.png"
+      ]
+    },
+    {
+      "number": "170",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image53.png"
+      ]
+    },
+    {
+      "number": "171",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image55.png"
+      ]
+    },
+    {
+      "number": "172",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image57.png"
+      ]
+    },
+    {
+      "number": "173",
+      "questionText": "Which Azure Cosmos DB API should you use for a graph database?",
+      "options": [
+        "A. Azure Cosmos DB for Table",
+        "B. Azure Cosmos DB for Apache Cassandra",
+        "C. Azure Cosmos DB for NoSQL",
+        "D. Azure Cosmos DB for Apache Gremlin"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "174",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image59.png"
+      ]
+    },
+    {
+      "number": "175",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image61.png"
+      ]
+    },
+    {
+      "number": "176",
+      "questionText": "Your company recently reported sales from the third quarter.",
+      "options": [
+        "A. predictive",
+        "B. prescriptive",
+        "C. descriptive",
+        "D. diagnostic"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0004100001.png"
+      ]
+    },
+    {
+      "number": "177",
+      "questionText": "A bank needs to ensure that a transaction involving debiting funds from a source account and crediting the same funds to a destination account must complete both actions. If either action falls to complete, the other action must fail.",
+      "options": [
+        "A. consistency",
+        "B. durability",
+        "C. atomicity",
+        "D. isolation"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "178",
+      "questionText": "Blob rehydration occurs in Azure Blob storage when a blob moves between which access tiers?",
+      "options": [
+        "A. Hot to Cool",
+        "B. Hot to Archive",
+        "C. Cool to Archive",
+        "D. Archive to Cool"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "179",
+      "questionText": "Which activity is most common for transactional workloads?",
+      "options": [
+        "A. recording small units of work events in real time",
+        "B. aggregating massive amounts of data",
+        "C. producing complex reports",
+        "D. performing self-service data exploration"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "180",
+      "questionText": "You have a banking application that transfers money in to and out of accounts.",
+      "options": [
+        "A. online transaction processing (OLTP)",
+        "B. online analytical processing (OLAP)",
+        "C. extract, transform and load (ETL)",
+        "D. a data warehouse"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "181",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image63.png"
+      ]
+    },
+    {
+      "number": "182",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image65.png"
+      ]
+    },
+    {
+      "number": "183",
+      "questionText": "You need to accept and store large quantities of IoT streaming data.",
+      "options": [
+        "A. Azure Database for PostgreSQL",
+        "B. Azure Database for MariaDB",
+        "C. Azure Cache for Redis",
+        "D. Azure Cosmos DB"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "184",
+      "questionText": "DRAG DROP",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image69.png"
+      ]
+    },
+    {
+      "number": "185",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image71.png"
+      ]
+    },
+    {
+      "number": "186",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image73.png"
+      ]
+    },
+    {
+      "number": "187",
+      "questionText": "Which statement is an example of Data Manipulation Language (DML)?",
+      "options": [
+        "A. REVOKE",
+        "B. DISABLE",
+        "C. CREATE",
+        "D. UPDATE"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "188",
+      "questionText": "SELECT, INSERT, and UPDATE are examples of which type of SQL statement?",
+      "options": [
+        "A. Data Definition Language (DDL)",
+        "B. Data Control Language (DCL)",
+        "C. Data Manipulation Language (DML)"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "189",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image75.png"
+      ]
+    },
+    {
+      "number": "190",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image77.png"
+      ]
+    },
+    {
+      "number": "191",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image79.png"
+      ]
+    },
+    {
+      "number": "192",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image81.png"
+      ]
+    },
+    {
+      "number": "193",
+      "questionText": "How is raw data stored in a data lakehouse?",
+      "options": [
+        "A. as tables",
+        "B. as queues",
+        "C. as files",
+        "D. as disks"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "194",
+      "questionText": "In an analytical data model, which type of table contains entities that are used to aggregate numeric values, where each entity is represented by a row with a unique key value?",
+      "options": [
+        "A. bridge",
+        "B. dimension",
+        "C. fact"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "195",
+      "questionText": "In a fully denormalized database, how is data read and written for a single entity?",
+      "options": [
+        "A. Data is read from a single table and written to a single table.",
+        "B. Data is read from multiple tables and written to a single table.",
+        "C. Data is read from a single table and written to multiple tables.",
+        "D. Data is read from multiple tables and written to multiple tables."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "196",
+      "questionText": "What is the typical latency for read operations against media files stored in the Cool access tier of Azure Blob Storage?",
+      "options": [
+        "A. a few milliseconds",
+        "B. a few seconds",
+        "C. a few minutes",
+        "D. a few hours"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "197",
+      "questionText": "Which three services support Apache Spark? Each correct answer presents a complete solution.",
+      "options": [
+        "A. Azure Data Explorer",
+        "B. Azure Synapse Analytics",
+        "C. Azure Databricks",
+        "D. Azure Stream Analytics",
+        "E. Azure HDInsight"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "198",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image83.png"
+      ]
+    },
+    {
+      "number": "199",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image110.png"
+      ]
+    },
+    {
+      "number": "200",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image85.png"
+      ]
+    },
+    {
+      "number": "201",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image112.png"
+      ]
+    },
+    {
+      "number": "202",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image87.png"
+      ]
+    },
+    {
+      "number": "203",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0004300001.jpg"
+      ]
+    },
+    {
+      "number": "204",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image89.png"
+      ]
+    },
+    {
+      "number": "205",
+      "questionText": "You have data in a tabular format as shown in the following table.",
+      "options": [
+        "A. unstructured data",
+        "B. semi-structured data",
+        "C. document",
+        "D. structured data"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image114.png"
+      ]
+    },
+    {
+      "number": "206",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image91.png"
+      ]
+    },
+    {
+      "number": "207",
+      "questionText": "What can you use to create data ingestion pipelines?",
+      "options": [
+        "A. Azure HDInsight",
+        "B. Azure SQL Database",
+        "C. Azure Data Factory",
+        "D. Azure Cosmos DB"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "208",
+      "questionText": "Which service is optimized for IoT scenarios that involve streaming time series data?",
+      "options": [
+        "A. SQL Server on Azure Virtual Machines",
+        "B. Azure SQL Managed Instance",
+        "C. Azure SQL Database",
+        "D. Azure SQL Edge"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "209",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image93.png"
+      ]
+    },
+    {
+      "number": "210",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image115.png"
+      ]
+    },
+    {
+      "number": "211",
+      "questionText": "GRANT, REVOKE, and DENY are examples of which type of SQL statement?",
+      "options": [
+        "A. Data Definition language (DDL)",
+        "B. Data Control Language (DCL)",
+        "C. Data Manipulation Language (DML)"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "212",
+      "questionText": "Which statement is an example of Data Definition Language (DDL)?",
+      "options": [
+        "A. SELECT",
+        "B. INSERT",
+        "C. CREATE",
+        "D. MERGE"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "213",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image95.png"
+      ]
+    },
+    {
+      "number": "214",
+      "questionText": "What is the responsibility of a database administrator?",
+      "options": [
+        "A. applying data cleaning routines",
+        "B. creating data visualizations",
+        "C. managing data integration processes",
+        "D. storing backup copies of data"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "215",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image117.png"
+      ]
+    },
+    {
+      "number": "216",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image97.png"
+      ]
+    },
+    {
+      "number": "217",
+      "questionText": "You have the following T-SQL statement.",
+      "options": [
+        "A. to update data in the Customer table",
+        "B. to match data in the Customer table to data in the Order table",
+        "C. to define an alias for the Customer table",
+        "D. to update data in the Order table"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "218",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image99.png"
+      ]
+    },
+    {
+      "number": "219",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image119.png"
+      ]
+    },
+    {
+      "number": "220",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image101.png"
+      ]
+    },
+    {
+      "number": "221",
+      "questionText": "Structured data where each row represents a single data entity uses which type of schema?",
+      "options": [
+        "A. XML",
+        "B. tabular",
+        "C. blob",
+        "D. JSON"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "222",
+      "questionText": "You have an Azure SQL database that contains tables for customers and orders.",
+      "options": [
+        "A. INDEX",
+        "B. EXISTS",
+        "C. JOIN",
+        "D. ORDERBY",
+        "E. SELECT"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "223",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0000400001.jpg"
+      ]
+    },
+    {
+      "number": "224",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0004500001.jpg"
+      ]
+    },
+    {
+      "number": "225",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image103.png"
+      ]
+    },
+    {
+      "number": "226",
+      "questionText": "You have a database that stores data in the format shown in the following table.",
+      "options": [
+        "A. column family",
+        "B. relational",
+        "C. key-value",
+        "D. document"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image123.png"
+      ]
+    },
+    {
+      "number": "227",
+      "questionText": "You need to implement an Azure platform as a service (PaaS) service that will host a relational database. The solution must support built-in autoscaling.",
+      "options": [
+        "A. Azure SQL Database",
+        "B. SQL Server on Azure Virtual Machines",
+        "C. Azure SQL Managed Instance",
+        "D. Azure SQL Edge",
+        "A. There is no direct auto-scaling of Azure SQL Managed Instance. For auto-scaling the Azure SQL Managed Instance we can use the PowerShell scripts.",
+        "A. Azure SQL Database is correct answer. PaaS + Relational DBaaS = Azure SQL Database."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "228",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image124.png"
+      ]
+    },
+    {
+      "number": "229",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image105.png"
+      ]
+    },
+    {
+      "number": "230",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image126.png"
+      ]
+    },
+    {
+      "number": "231",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image107.png"
+      ]
+    },
+    {
+      "number": "232",
+      "questionText": "HOTSPOT",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image128.png"
+      ]
+    },
+    {
+      "number": "233",
+      "questionText": "You have the following data.",
+      "options": [
+        "A. unstructured",
+        "B. semi-structured",
+        "C. structured"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://img.examtopics.com/dp-900/image109.png"
+      ]
+    },
+    {
+      "number": "234",
+      "questionText": "You need to create an Azure resource to store data in Azure Table storage.",
+      "options": [
+        "A. az storage share create",
+        "B. az storage account create",
+        "C. az cosmosdb create",
+        "D. az storage container create"
+      ],
+      "correctAnswer": "B. Create an account",
+      "images": []
+    },
+    {
+      "number": "235",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0004800001.png"
+      ]
+    },
+    {
+      "number": "236",
+      "questionText": "You need to modify a view in a relational database by adding a new column.",
+      "options": [
+        "A. MERGE",
+        "B. ALTER",
+        "C. INSERT",
+        "D. UPDATE"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "237",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0005000001.png"
+      ]
+    },
+    {
+      "number": "238",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0005200001.png"
+      ]
+    },
+    {
+      "number": "239",
+      "questionText": "Which Azure storage solution provides native support for POSIX-compliant access control lists (ACLs)?",
+      "options": [
+        "A. Azure Table storage",
+        "B. Azure Data Lake Storage",
+        "C. Azure Queue storage",
+        "D. Azure Files"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "240",
+      "questionText": "HOTSPOT -",
+      "options": [
+        "C. Relational data is stored in a structured format that represents data in tables consisting of rows and columns. Each row represents a record, and each column represents an attribute of the data."
+      ],
+      "correctAnswer": "C. Relational data is stored in a structured format that represents data in tables consisting of rows and columns. Each row represents a record, and each column represents an attribute of the data.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0005500001.png"
+      ]
+    },
+    {
+      "number": "241",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0000500001.png"
+      ]
+    },
+    {
+      "number": "242",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "A.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0005700001.png"
+      ]
+    },
+    {
+      "number": "243",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0005800001.png"
+      ]
+    },
+    {
+      "number": "244",
+      "questionText": "Which type of database is Azure Database for PostgreSQL?",
+      "options": [
+        "A. Platform as a service (PaaS)",
+        "B. Infrastructure as a service (IaaS)",
+        "C. Microsoft SQL Server",
+        "D. on-premises"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "245",
+      "questionText": "Which storage solution supports access control lists (ACLs) at the file and folder level?",
+      "options": [
+        "A. Azure Data Lake Storage",
+        "B. Azure Queue storage",
+        "C. Azure Blob storage",
+        "D. Azure Cosmos DB"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "246",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0006200001.png"
+      ]
+    },
+    {
+      "number": "247",
+      "questionText": "What is a characteristic of batch processing?",
+      "options": [
+        "A. The data ingested during batch processing must be processed as soon as the data is received.",
+        "B. Large datasets must be split into batches of less than 1 GB before the data can be processed.",
+        "C. There is a noticeable time delay between ingesting data and obtaining the data processing results.",
+        "D. Batch processing can only process data that is structured."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "248",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0006400001.png"
+      ]
+    },
+    {
+      "number": "249",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0006500010.jpg"
+      ]
+    },
+    {
+      "number": "250",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0000700001.png"
+      ]
+    },
+    {
+      "number": "251",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0006700001.png"
+      ]
+    },
+    {
+      "number": "252",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0006800001.png"
+      ]
+    },
+    {
+      "number": "253",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0007000001.png"
+      ]
+    },
+    {
+      "number": "254",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0007100001.png"
+      ]
+    },
+    {
+      "number": "255",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0007200001.png"
+      ]
+    },
+    {
+      "number": "256",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "B. Semi-structured.",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0007300001.png"
+      ]
+    },
+    {
+      "number": "257",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0007400001.png"
+      ]
+    },
+    {
+      "number": "258",
+      "questionText": "Which property of a transactional workload guarantees that each transaction is treated as a single unit that either succeeds completely or fails completely?",
+      "options": [
+        "A. atomicity",
+        "B. isolation",
+        "C. durability",
+        "D. consistency"
+      ],
+      "correctAnswer": "A.",
+      "images": []
+    },
+    {
+      "number": "259",
+      "questionText": "You have a data store that has the structure shown in the following exhibit.",
+      "options": [
+        "A. key/value",
+        "B. object data",
+        "C. graph",
+        "D. time series"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0007600001.png"
+      ]
+    },
+    {
+      "number": "260",
+      "questionText": "Which type of database contains nodes and edges?",
+      "options": [
+        "A. graph",
+        "B. key/value",
+        "C. columnar",
+        "D. time series"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "261",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0000800001.jpg"
+      ]
+    },
+    {
+      "number": "262",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0007800001.png"
+      ]
+    },
+    {
+      "number": "263",
+      "questionText": "You have an inventory management database that contains the following table.",
+      "options": [
+        "A. INSERT",
+        "B. MERGE",
+        "C. UPDATE",
+        "D. CREATE"
+      ],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0008000001.png"
+      ]
+    },
+    {
+      "number": "264",
+      "questionText": "Your company needs to implement a relational database in Azure. The solution must minimize ongoing maintenance.",
+      "options": [
+        "A. Azure HDInsight",
+        "B. Azure SQL Database",
+        "C. Azure Cosmos DB",
+        "D. SQL Server on Azure Virtual Machines"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "265",
+      "questionText": "You are writing a set of SQL queries that administrators will use to troubleshoot an Azure SQL database.",
+      "options": [
+        "A. Microsoft SQL Server Management Studio (SSMS)",
+        "B. Azure Data Studio",
+        "C. Azure CLI",
+        "D. Azure PowerShell",
+        "B. Azure Data Studio is a cross-platform database tool that allows you to embed documents and query results into a SQL notebook. It supports Azure SQL databases, SQL Server, and other databases. It also has built-in support for SQL Notebooks, which allows you to mix markdown, code, and results in a single notebook. This makes it a great tool for creating documentation and troubleshooting guides for administrators to use when working with Azure SQL databases."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "266",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0008200001.png"
+      ]
+    },
+    {
+      "number": "267",
+      "questionText": "You have an e-commerce application that reads and writes data to an Azure SQL database.",
+      "options": [
+        "A. stream processing",
+        "B. batch processing",
+        "C. Online Analytical Processing (OLAP)",
+        "D. Online Transaction Processing (OLTP)"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "268",
+      "questionText": "When can you use an Azure Resource Manager template?",
+      "options": [
+        "A. to automate the creation of an interdependent group of Azure resources in a repeatable way",
+        "B. to apply Azure policies for multi-tenant deployments",
+        "C. to provision Azure subscriptions",
+        "D. to control which services and feature administrators and developers can deploy from the Azure portal"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "269",
+      "questionText": "You have an Azure SQL database that you access directly from the Internet.",
+      "options": [
+        "A. role-based access control (RBAC)",
+        "B. Dynamic Host Configuration Protocol (DHCP)",
+        "C. Domain Name Service (DNS)",
+        "D. a database-level firewall"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "270",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0008400001.png"
+      ]
+    },
+    {
+      "number": "271",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0001000001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04277/0001100001.png"
+      ]
+    },
+    {
+      "number": "272",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0008600001.jpg"
+      ]
+    },
+    {
+      "number": "273",
+      "questionText": "Which command-line tool can you use to query Azure SQL databases?",
+      "options": [
+        "A. sqlcmd",
+        "B. bcp",
+        "C. azdata",
+        "D. Azure CLI",
+        "A. sqlcmd is the right answer.",
+        "D. Azure CLI is the correct answer.. Configuration of azure SQL Database [a cloud database]",
+        "A. sqlcmd https://docs.microsoft.com/en-us/learn/modules/query-relational-data/3-sql-database"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "274",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0008800001.jpg"
+      ]
+    },
+    {
+      "number": "275",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0009000001.png"
+      ]
+    },
+    {
+      "number": "276",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0009200001.png"
+      ]
+    },
+    {
+      "number": "277",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0009300001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04277/0009300002.png"
+      ]
+    },
+    {
+      "number": "278",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0009500001.jpg"
+      ]
+    },
+    {
+      "number": "279",
+      "questionText": "Which statement is an example of Data Definition Language (DDL)?",
+      "options": [
+        "A. SELECT",
+        "B. JOIN",
+        "C. UPDATE",
+        "D. CREATE"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "280",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0009700001.jpg"
+      ]
+    },
+    {
+      "number": "281",
+      "questionText": "You are deploying a software as a service (SaaS) application that requires a relational database for Online Transaction Processing (OLTP).",
+      "options": [
+        "A. Azure Cosmos DB",
+        "B. Azure HDInsight",
+        "C. Azure SQL Database",
+        "D. Azure Synapse Analytics"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "282",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0001300001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04277/0001400001.png"
+      ]
+    },
+    {
+      "number": "283",
+      "questionText": "What are two benefits of platform as a service (PaaS) relational database offerings in Azure, such as Azure SQL Database? Each correct answer presents a complete solution.",
+      "options": [
+        "A. access to the latest features",
+        "B. complete control over backup and restore processes",
+        "C. in-database machine learning services",
+        "D. reduced administrative effort for managing the server infrastructure"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "284",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0010000001.jpg"
+      ]
+    },
+    {
+      "number": "285",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0010100001.png",
+        "https://www.examtopics.com/assets/media/exam-media/04277/0010100002.png",
+        "https://www.examtopics.com/assets/media/exam-media/04277/0010200001.png"
+      ]
+    },
+    {
+      "number": "286",
+      "questionText": "When you create an Azure SQL database, which account can always connect to the database?",
+      "options": [
+        "A. the Azure Active Directory (Azure AD) account that created the database",
+        "B. the server admin login account of the logical server",
+        "C. the Azure Active Directory (Azure AD) administrator account",
+        "D. the sa account",
+        "B. Verified in AZ portal.",
+        "B. the server admin login account of the logical server can always connect to the database. This account is also known as the \"server-level principal login\" and it is created automatically when you create a new Azure SQL server. This account has the highest level of permissions and can be used to perform all management tasks on the server and the databases it contains."
+      ],
+      "correctAnswer": "B. the server admin login account of the logical server",
+      "images": []
+    },
+    {
+      "number": "287",
+      "questionText": "Which statement is an example of Data Definition Language (DDL)?",
+      "options": [
+        "A. SELECT",
+        "B. INSERT",
+        "C. DELETE",
+        "D. DROP"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "288",
+      "questionText": "A team of developers has computers that run Windows 10 and Ubuntu Desktop.",
+      "options": [
+        "A. sqlcmd",
+        "B. Microsoft SQL Server Management Studio (SSMS)",
+        "C. Azure Data Studio",
+        "D. Azure Data Explorer"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "289",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0010500001.png"
+      ]
+    },
+    {
+      "number": "290",
+      "questionText": "You need to ensure that users use multi-factor authentication (MFA) when connecting to an Azure SQL database.",
+      "options": [
+        "A. service principal authentication",
+        "B. Azure Active Directory (Azure AD) authentication",
+        "C. SQL authentication",
+        "D. certificate authentication",
+        "B. Other authentication types, such as service principal authentication, SQL authentication and certificate authentication, don't allow the use of MFA."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "291",
+      "questionText": "What is a benefit of hosting a database on Azure SQL managed instance as compared to an Azure SQL database?",
+      "options": [
+        "A. built-in high availability",
+        "B. native support for cross-database queries and transactions",
+        "C. system-initiated automatic backups",
+        "D. support for encryption at rest"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "292",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0010700001.png"
+      ]
+    },
+    {
+      "number": "293",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0001700001.png"
+      ]
+    },
+    {
+      "number": "294",
+      "questionText": "You need to design and model a database by using a graphical tool that supports project-oriented offline database development.",
+      "options": [
+        "A. Microsoft SQL Server Data Tools (SSDT)",
+        "B. Microsoft SQL Server Management Studio (SSMS)",
+        "C. Azure Databricks",
+        "D. Azure Data Studio"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "295",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0010800001.png"
+      ]
+    },
+    {
+      "number": "296",
+      "questionText": "You have a transactional application that stores data in an Azure SQL managed instance.",
+      "options": [
+        "A. You need to generate reports without affecting the transactional workload.",
+        "B. You need to audit the transactional application.",
+        "C. You need to implement high availability in the event of a regional outage.",
+        "D. You need to improve the recovery point objective (RPO)."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "297",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0011000001.png"
+      ]
+    },
+    {
+      "number": "298",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0011100001.png"
+      ]
+    },
+    {
+      "number": "299",
+      "questionText": "HOTSPOT -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0011200001.png"
+      ]
+    },
+    {
+      "number": "300",
+      "questionText": "You need to query a table named Products in an Azure SQL database.",
+      "options": [
+        "A. You must be assigned the Reader role for the resource group that contains the database.",
+        "B. You must have SELECT access to the Products table.",
+        "C. You must have a user in the database.",
+        "D. You must be assigned the Contributor role for the resource group that contains the database.",
+        "E. Your IP address must be allowed to connect to the database."
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "301",
+      "questionText": "Which clause should you use in a SELECT statement to combine rows in one table with rows in another table?",
+      "options": [
+        "A. SET",
+        "B. VALUES",
+        "C. KEY",
+        "D. JOIN"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "302",
+      "questionText": "Your company needs to ensure that an Azure virtual machine can connect to Azure SQL databases without exposing the databases to the internet.",
+      "options": [
+        "A. Azure Application Gateway",
+        "B. Azure Traffic Manager",
+        "C. Azure DNS",
+        "D. Azure Private Link"
+      ],
+      "correctAnswer": "",
+      "images": []
+    },
+    {
+      "number": "303",
+      "questionText": "DRAG DROP -",
+      "options": [],
+      "correctAnswer": "",
+      "images": [
+        "https://www.examtopics.com/assets/media/exam-media/04277/0011400001.png"
+      ]
+    }
+  ]
+}

@@ -68,6 +68,7 @@ const PROVIDERS: ProviderConfig[] = [
       { id: 'az-801', code: 'AZ-801', name: 'Windows Server Hybrid Adv. Services',      level: 'Associate'   },
       { id: 'az-900', code: 'AZ-900', name: 'Azure Fundamentals',         dataFile: '/data/exam_63.json', questions: 472, level: 'Fundamental',  examTopicsPath: 'microsoft/az-900' },
       { id: 'dp-300', code: 'DP-300', name: 'Azure Database Administrator', dataFile: '/data/exam_69.json', questions: 354, level: 'Associate',   examTopicsPath: 'microsoft/dp-300' },
+      { id: 'dp-900', code: 'DP-900', name: 'Azure Data Fundamentals',      dataFile: '/data/exam_74.json', questions: 303, level: 'Fundamental', examTopicsPath: 'microsoft/dp-900' },
     ],
   },
   {
