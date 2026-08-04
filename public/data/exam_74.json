@@ -2,7 +2,7 @@
   "examId": 74,
   "examTitle": "DP-900: Azure Data Fundamentals",
   "totalQuestions": 303,
-  "scrapedAt": "2026-08-04T20:39:43.924Z",
+  "scrapedAt": "2026-08-04T21:01:04.913Z",
   "questions": [
     {
       "number": "1",
@@ -80,7 +80,7 @@
         "C. Azure SQL Managed Instance",
         "D. an Azure SQL Database elastic pool"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Azure SQL Managed Instance",
       "images": []
     },
     {
@@ -92,7 +92,7 @@
         "C. production or non-production account type",
         "D. API"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. API",
       "images": []
     },
     {
@@ -113,7 +113,7 @@
         "C. the partition key",
         "D. the API"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. the throughput",
       "images": []
     },
     {
@@ -134,7 +134,7 @@
         "C. object",
         "D. columnar"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. columnar",
       "images": [
         "https://www.examtopics.com/assets/media/exam-media/04277/0012700001.png"
       ]
@@ -148,7 +148,7 @@
         "C. Azure Blob storage",
         "D. Azure Queue storage"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Azure Data Lake Storage",
       "images": []
     },
     {
@@ -159,7 +159,7 @@
         "B. Hot",
         "C. Cool"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Archive",
       "images": []
     },
     {
@@ -172,7 +172,7 @@
         "D. time series",
         "A. Document DB"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. document",
       "images": []
     },
     {
@@ -214,7 +214,7 @@
         "C. the strong consistency level",
         "D. automatic failover"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Availability Zones",
       "images": []
     },
     {
@@ -226,7 +226,7 @@
         "C. provides a higher storage capacity",
         "D. supports a multi-master model"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. supports a multi-master model",
       "images": []
     },
     {
@@ -238,7 +238,7 @@
         "C. document",
         "D. columnar"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. graph",
       "images": []
     },
     {
@@ -286,7 +286,7 @@
         "C. a blob container",
         "D. a table"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. a storage account",
       "images": []
     },
     {
@@ -298,7 +298,7 @@
         "C. Azure Table storage",
         "D. Azure Cosmos DB"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Azure Cosmos DB",
       "images": []
     },
     {
@@ -328,7 +328,7 @@
         "C. document",
         "D. columnar"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. graph",
       "images": []
     },
     {
@@ -341,7 +341,7 @@
         "D. table",
         "C. see https://docs.microsoft.com/en-us/azure/storage/files/storage-files-migration-overview. It refers to the same scenario. \"For an app that currently runs on an on-premises server, storing files in an Azure file share might be a good choice. You can move the app to Azure and use Azure file shares as shared storage. \""
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. file",
       "images": []
     },
     {
@@ -375,7 +375,7 @@
         "C. Azure Cosmos DB",
         "D. Azure Table storage"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Azure Files",
       "images": []
     },
     {
@@ -409,7 +409,7 @@
         "C. object",
         "D. document"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. object",
       "images": []
     },
     {
@@ -421,7 +421,7 @@
         "C. graph",
         "D. columnar"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. time series",
       "images": []
     },
     {
@@ -451,7 +451,7 @@
         "C. container",
         "D. partition"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. database",
       "images": []
     },
     {
@@ -502,7 +502,7 @@
         "C. massively parallel processing (MPP)",
         "D. streaming"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. streaming",
       "images": []
     },
     {
@@ -514,7 +514,7 @@
         "C. Create a user-defined restore point.",
         "D. Delete the pool"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Pause the pool.",
       "images": []
     },
     {
@@ -526,7 +526,7 @@
         "C. a parameter",
         "D. an activity"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. a trigger",
       "images": []
     },
     {
@@ -538,7 +538,7 @@
         "C. Online Analytical Processing (OLAP)",
         "D. Online Transaction Processing (OLTP)"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Online Analytical Processing (OLAP)",
       "images": []
     },
     {
@@ -561,7 +561,7 @@
         "E. schema on read",
         "F. normalized data"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. heavy writes and moderate reads",
       "images": []
     },
     {
@@ -573,7 +573,7 @@
         "C. data modeling",
         "D. data acquisition and preparation"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. report and dashboard creation",
       "images": []
     },
     {
@@ -594,7 +594,7 @@
         "C. a dataflow",
         "D. Microsoft Power Apps"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. a report",
       "images": []
     },
     {
@@ -615,7 +615,7 @@
         "C. Azure Databricks",
         "D. Azure Log Analytics"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Azure HDInsight",
       "images": []
     },
     {
@@ -629,7 +629,7 @@
         "C. Online Analytical Processing (OLAP) -- As per Chat GPT",
         "C. OLAP"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Online Analytical Processing (OLAP)",
       "images": []
     },
     {
@@ -642,7 +642,7 @@
         "D. a dataflow",
         "E. a text box"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. a report page",
       "images": []
     },
     {
@@ -663,7 +663,7 @@
         "C. a control flow",
         "D. a pipeline"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. an integration runtime",
       "images": []
     },
     {
@@ -684,7 +684,7 @@
         "C. Communicate the significance of data",
         "D. Enforce business logic across reports"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Represent trends and patterns over time",
       "images": []
     },
     {
@@ -696,7 +696,7 @@
         "C. PolyBase",
         "D. Azure Data Factory"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. PolyBase",
       "images": []
     },
     {
@@ -719,7 +719,7 @@
         "E. schema defined when reading unstructured data from a database",
         "F. normalized data"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. heavy writes and moderate reads",
       "images": []
     },
     {
@@ -809,7 +809,7 @@
         "C. the Power BI service",
         "D. Power BI Report Builder"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Power BI Report Builder",
       "images": []
     },
     {
@@ -848,7 +848,7 @@
         "C. sending telemetry data from edge devices",
         "D. sending cloud infrastructure metadata every 30 minutes"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. sending telemetry data from edge devices",
       "images": []
     },
     {
@@ -878,7 +878,7 @@
         "C. descriptive",
         "D. diagnostic"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. descriptive",
       "images": []
     },
     {
@@ -899,7 +899,7 @@
         "C. Synapse Link",
         "D. Synapse Studio"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Synapse Link",
       "images": []
     },
     {
@@ -911,7 +911,7 @@
         "C. a bar chart",
         "D. a decomposition tree"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. a waterfall chart",
       "images": [
         "https://www.examtopics.com/assets/media/exam-media/04277/0018600001.png"
       ]
@@ -925,7 +925,7 @@
         "C. semi-structured",
         "D. unstructured"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. structured",
       "images": [
         "https://www.examtopics.com/assets/media/exam-media/04277/0018800002.jpg",
         "https://www.examtopics.com/assets/media/exam-media/04277/0018900001.jpg"
@@ -961,7 +961,7 @@
         "C. snapshots",
         "D. versioning"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. change feed",
       "images": []
     },
     {
@@ -973,7 +973,7 @@
         "C. Azure SQL Managed instance",
         "D. SQL Server on Azure virtual machines"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Azure SQL Managed instance",
       "images": []
     },
     {
@@ -986,7 +986,7 @@
         "D. transactional consistency",
         "E. support for streaming data"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. schema enforcement",
       "images": []
     },
     {
@@ -1018,7 +1018,7 @@
         "B. pgAdmin",
         "C. Microsoft Power BI"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Azure Databricks",
       "images": []
     },
     {
@@ -1030,7 +1030,7 @@
         "C. YAML",
         "D. JSON"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. JSON",
       "images": [
         "https://www.examtopics.com/assets/media/exam-media/04277/0019800001.png"
       ]
@@ -1056,7 +1056,7 @@
         "C. HTML",
         "D. XML"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. XML",
       "images": [
         "https://www.examtopics.com/assets/media/exam-media/04277/0019900001.png"
       ]
@@ -1070,7 +1070,7 @@
         "C. durability",
         "D. isolation"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. durability",
       "images": []
     },
     {
@@ -1082,7 +1082,7 @@
         "C. isolation",
         "D. consistency"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. atomicity",
       "images": []
     },
     {
@@ -1103,7 +1103,7 @@
         "C. Azure Table",
         "D. Azure Blob"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Azure Table",
       "images": []
     },
     {
@@ -1172,7 +1172,7 @@
         "C. JSON",
         "D. HTML"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. CSV",
       "images": [
         "https://www.examtopics.com/assets/media/exam-media/04277/0021000001.png"
       ]
@@ -1204,7 +1204,7 @@
         "C. Versioning must be enabled.",
         "D. Hierarchical namespace must be enabled."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Hierarchical namespace must be enabled.",
       "images": []
     },
     {
@@ -1262,7 +1262,7 @@
         "D. XML",
         "C. https://learn.microsoft.com/en-us/azure/stream-analytics/stream-analytics-introduction#programmer-productivity"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. SQL",
       "images": []
     },
     {
@@ -1338,7 +1338,7 @@
         "B. a fixed schema",
         "C. self-describing entities"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. self-describing entities",
       "images": []
     },
     {
@@ -1350,7 +1350,7 @@
         "C. soft delete",
         "D. a lifecycle management policy"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. a lifecycle management policy",
       "images": []
     },
     {
@@ -1371,7 +1371,7 @@
         "C. a row key",
         "D. a timestamp"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. a partition key",
       "images": []
     },
     {
@@ -1392,7 +1392,7 @@
         "C. Azure Files",
         "A. Azure Table storage - passed exam today with sore 1000 - and this question appeared (A was my answer)"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Azure Table storage",
       "images": []
     },
     {
@@ -1404,7 +1404,7 @@
         "C. Core (SQL)",
         "D. Gremlin"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Gremlin",
       "images": []
     },
     {
@@ -1434,7 +1434,7 @@
         "C. consistency",
         "D. isolation"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. isolation",
       "images": []
     },
     {
@@ -1455,7 +1455,7 @@
         "C. Design and build analytical models.",
         "D. Design and implement data stores for analytical workloads."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Design and implement data stores for analytical workloads.",
       "images": []
     },
     {
@@ -1497,7 +1497,7 @@
         "C. Apache Parquet",
         "D. JSON"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Apache Parquet",
       "images": []
     },
     {
@@ -1528,7 +1528,7 @@
         "D. online transaction processing (OLTP)",
         "D. online transaction processing (OLTP)"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. online transaction processing (OLTP)",
       "images": []
     },
     {
@@ -1558,7 +1558,7 @@
         "C. a cell",
         "D. a row"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. a row",
       "images": []
     },
     {
@@ -1579,7 +1579,7 @@
         "C. Azure SQL Database",
         "D. Azure SQL Edge"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Azure SQL Managed Instance",
       "images": []
     },
     {
@@ -1683,7 +1683,7 @@
         "C. a single database in Azure SQL Database",
         "D. Azure SQL Managed Instance"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. a single database in Azure SQL Database",
       "images": []
     },
     {
@@ -1713,7 +1713,7 @@
         "C. NoSQL",
         "D. Gremlin"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Gremlin",
       "images": []
     },
     {
@@ -1725,7 +1725,7 @@
         "C. Structured data has a flexible schema and semi-structured data has a fixed schema.",
         "D. Only Structured data supports attributes."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Structured data has a fixed schema and semi-structured data has a flexible schema.",
       "images": []
     },
     {
@@ -1746,7 +1746,7 @@
         "C. atomicity",
         "D. consistency"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. durability",
       "images": []
     },
     {
@@ -1767,7 +1767,7 @@
         "C. DROP",
         "D. CREATE"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. INSERT",
       "images": []
     },
     {
@@ -1779,7 +1779,7 @@
         "C. KQL",
         "D. SQL"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. KQL",
       "images": []
     },
     {
@@ -1836,7 +1836,7 @@
         "C. Azure Cosmos DB for NoSQL",
         "D. Azure Cosmos DB for Apache Gremlin"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Azure Cosmos DB for Apache Gremlin",
       "images": []
     },
     {
@@ -1866,7 +1866,7 @@
         "C. descriptive",
         "D. diagnostic"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. predictive",
       "images": [
         "https://www.examtopics.com/assets/media/exam-media/04277/0004100001.png"
       ]
@@ -1880,7 +1880,7 @@
         "C. atomicity",
         "D. isolation"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. atomicity",
       "images": []
     },
     {
@@ -1892,7 +1892,7 @@
         "C. Cool to Archive",
         "D. Archive to Cool"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Archive to Cool",
       "images": []
     },
     {
@@ -1904,7 +1904,7 @@
         "C. producing complex reports",
         "D. performing self-service data exploration"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. recording small units of work events in real time",
       "images": []
     },
     {
@@ -1916,7 +1916,7 @@
         "C. extract, transform and load (ETL)",
         "D. a data warehouse"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. online transaction processing (OLTP)",
       "images": []
     },
     {
@@ -1946,7 +1946,7 @@
         "C. Azure Cache for Redis",
         "D. Azure Cosmos DB"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Azure Cosmos DB",
       "images": []
     },
     {
@@ -1985,7 +1985,7 @@
         "C. CREATE",
         "D. UPDATE"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. UPDATE",
       "images": []
     },
     {
@@ -1996,7 +1996,7 @@
         "B. Data Control Language (DCL)",
         "C. Data Manipulation Language (DML)"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Data Manipulation Language (DML)",
       "images": []
     },
     {
@@ -2044,7 +2044,7 @@
         "C. as files",
         "D. as disks"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. as files",
       "images": []
     },
     {
@@ -2055,7 +2055,7 @@
         "B. dimension",
         "C. fact"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. fact",
       "images": []
     },
     {
@@ -2067,7 +2067,7 @@
         "C. Data is read from a single table and written to multiple tables.",
         "D. Data is read from multiple tables and written to multiple tables."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Data is read from a single table and written to a single table.",
       "images": []
     },
     {
@@ -2079,7 +2079,7 @@
         "C. a few minutes",
         "D. a few hours"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. a few milliseconds",
       "images": []
     },
     {
@@ -2092,7 +2092,7 @@
         "D. Azure Stream Analytics",
         "E. Azure HDInsight"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Azure Synapse Analytics",
       "images": []
     },
     {
@@ -2167,7 +2167,7 @@
         "C. document",
         "D. structured data"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. structured data",
       "images": [
         "https://img.examtopics.com/dp-900/image114.png"
       ]
@@ -2190,7 +2190,7 @@
         "C. Azure Data Factory",
         "D. Azure Cosmos DB"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Azure Data Factory",
       "images": []
     },
     {
@@ -2202,7 +2202,7 @@
         "C. Azure SQL Database",
         "D. Azure SQL Edge"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Azure SQL Edge",
       "images": []
     },
     {
@@ -2231,7 +2231,7 @@
         "B. Data Control Language (DCL)",
         "C. Data Manipulation Language (DML)"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Data Control Language (DCL)",
       "images": []
     },
     {
@@ -2243,7 +2243,7 @@
         "C. CREATE",
         "D. MERGE"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. CREATE",
       "images": []
     },
     {
@@ -2264,7 +2264,7 @@
         "C. managing data integration processes",
         "D. storing backup copies of data"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. storing backup copies of data",
       "images": []
     },
     {
@@ -2294,7 +2294,7 @@
         "C. to define an alias for the Customer table",
         "D. to update data in the Order table"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. to match data in the Customer table to data in the Order table",
       "images": []
     },
     {
@@ -2333,7 +2333,7 @@
         "C. blob",
         "D. JSON"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. tabular",
       "images": []
     },
     {
@@ -2346,7 +2346,7 @@
         "D. ORDERBY",
         "E. SELECT"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. JOIN",
       "images": []
     },
     {
@@ -2385,7 +2385,7 @@
         "C. key-value",
         "D. document"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. column family",
       "images": [
         "https://img.examtopics.com/dp-900/image123.png"
       ]
@@ -2401,7 +2401,7 @@
         "A. There is no direct auto-scaling of Azure SQL Managed Instance. For auto-scaling the Azure SQL Managed Instance we can use the PowerShell scripts.",
         "A. Azure SQL Database is correct answer. PaaS + Relational DBaaS = Azure SQL Database."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Azure SQL Database",
       "images": []
     },
     {
@@ -2457,7 +2457,7 @@
         "B. semi-structured",
         "C. structured"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. semi-structured",
       "images": [
         "https://img.examtopics.com/dp-900/image109.png"
       ]
@@ -2492,7 +2492,7 @@
         "C. INSERT",
         "D. UPDATE"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. ALTER",
       "images": []
     },
     {
@@ -2522,7 +2522,7 @@
         "C. Azure Queue storage",
         "D. Azure Files"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Azure Data Lake Storage",
       "images": []
     },
     {
@@ -2572,7 +2572,7 @@
         "C. Microsoft SQL Server",
         "D. on-premises"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Platform as a service (PaaS)",
       "images": []
     },
     {
@@ -2584,7 +2584,7 @@
         "C. Azure Blob storage",
         "D. Azure Cosmos DB"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Azure Data Lake Storage",
       "images": []
     },
     {
@@ -2605,7 +2605,7 @@
         "C. There is a noticeable time delay between ingesting data and obtaining the data processing results.",
         "D. Batch processing can only process data that is structured."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. There is a noticeable time delay between ingesting data and obtaining the data processing results.",
       "images": []
     },
     {
@@ -2719,7 +2719,7 @@
         "C. graph",
         "D. time series"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. graph",
       "images": [
         "https://www.examtopics.com/assets/media/exam-media/04277/0007600001.png"
       ]
@@ -2733,7 +2733,7 @@
         "C. columnar",
         "D. time series"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. graph",
       "images": []
     },
     {
@@ -2763,7 +2763,7 @@
         "C. UPDATE",
         "D. CREATE"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. UPDATE",
       "images": [
         "https://www.examtopics.com/assets/media/exam-media/04277/0008000001.png"
       ]
@@ -2777,7 +2777,7 @@
         "C. Azure Cosmos DB",
         "D. SQL Server on Azure Virtual Machines"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Azure SQL Database",
       "images": []
     },
     {
@@ -2790,7 +2790,7 @@
         "D. Azure PowerShell",
         "B. Azure Data Studio is a cross-platform database tool that allows you to embed documents and query results into a SQL notebook. It supports Azure SQL databases, SQL Server, and other databases. It also has built-in support for SQL Notebooks, which allows you to mix markdown, code, and results in a single notebook. This makes it a great tool for creating documentation and troubleshooting guides for administrators to use when working with Azure SQL databases."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Azure Data Studio",
       "images": []
     },
     {
@@ -2811,7 +2811,7 @@
         "C. Online Analytical Processing (OLAP)",
         "D. Online Transaction Processing (OLTP)"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Online Transaction Processing (OLTP)",
       "images": []
     },
     {
@@ -2823,7 +2823,7 @@
         "C. to provision Azure subscriptions",
         "D. to control which services and feature administrators and developers can deploy from the Azure portal"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. to automate the creation of an interdependent group of Azure resources in a repeatable way",
       "images": []
     },
     {
@@ -2835,7 +2835,7 @@
         "C. Domain Name Service (DNS)",
         "D. a database-level firewall"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. a database-level firewall",
       "images": []
     },
     {
@@ -2878,7 +2878,7 @@
         "D. Azure CLI is the correct answer.. Configuration of azure SQL Database [a cloud database]",
         "A. sqlcmd https://docs.microsoft.com/en-us/learn/modules/query-relational-data/3-sql-database"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. sqlcmd",
       "images": []
     },
     {
@@ -2936,7 +2936,7 @@
         "C. UPDATE",
         "D. CREATE"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. CREATE",
       "images": []
     },
     {
@@ -2957,7 +2957,7 @@
         "C. Azure SQL Database",
         "D. Azure Synapse Analytics"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Azure SQL Database",
       "images": []
     },
     {
@@ -2979,7 +2979,7 @@
         "C. in-database machine learning services",
         "D. reduced administrative effort for managing the server infrastructure"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. access to the latest features",
       "images": []
     },
     {
@@ -3025,7 +3025,7 @@
         "C. DELETE",
         "D. DROP"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. DROP",
       "images": []
     },
     {
@@ -3037,7 +3037,7 @@
         "C. Azure Data Studio",
         "D. Azure Data Explorer"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C. Azure Data Studio",
       "images": []
     },
     {
@@ -3059,7 +3059,7 @@
         "D. certificate authentication",
         "B. Other authentication types, such as service principal authentication, SQL authentication and certificate authentication, don't allow the use of MFA."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. Azure Active Directory (Azure AD) authentication",
       "images": []
     },
     {
@@ -3071,7 +3071,7 @@
         "C. system-initiated automatic backups",
         "D. support for encryption at rest"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. native support for cross-database queries and transactions",
       "images": []
     },
     {
@@ -3101,7 +3101,7 @@
         "C. Azure Databricks",
         "D. Azure Data Studio"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. Microsoft SQL Server Data Tools (SSDT)",
       "images": []
     },
     {
@@ -3122,7 +3122,7 @@
         "C. You need to implement high availability in the event of a regional outage.",
         "D. You need to improve the recovery point objective (RPO)."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A. You need to generate reports without affecting the transactional workload.",
       "images": []
     },
     {
@@ -3162,7 +3162,7 @@
         "D. You must be assigned the Contributor role for the resource group that contains the database.",
         "E. Your IP address must be allowed to connect to the database."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B. You must have SELECT access to the Products table.",
       "images": []
     },
     {
@@ -3174,7 +3174,7 @@
         "C. KEY",
         "D. JOIN"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. JOIN",
       "images": []
     },
     {
@@ -3186,7 +3186,7 @@
         "C. Azure DNS",
         "D. Azure Private Link"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D. Azure Private Link",
       "images": []
     },
     {
