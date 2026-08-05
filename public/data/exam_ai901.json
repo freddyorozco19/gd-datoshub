@@ -1,7 +1,7 @@
 {
   "examId": 901,
   "examTitle": "AI-901: Microsoft Azure AI",
-  "totalQuestions": 10,
+  "totalQuestions": 20,
   "scrapedAt": "2026-08-04T00:00:00.000Z",
   "questions": [
     {
@@ -92,6 +92,139 @@
       "options": ["A. key phrase extraction", "B. language detection", "C. named entity recognition", "D. sentiment analysis"],
       "correctAnswer": "D. sentiment analysis",
       "explanation": "Sentiment analysis provides sentiment labels — negative, neutral, and positive — based on a confidence score from text analysis. This makes it suitable for understanding user sentiment in product reviews. Named entity recognition, key phrase extraction, and language detection cannot perform sentiment analysis for product reviews.",
+      "images": []
+    },
+    {
+      "number": "11",
+      "questionText": "Which two artificial intelligence (AI) workload scenarios are examples of natural language processing (NLP)? Each correct answer presents a complete solution.",
+      "translation": "¿Cuáles dos escenarios de carga de trabajo de inteligencia artificial (IA) son ejemplos de procesamiento de lenguaje natural (NLP)? Cada respuesta correcta presenta una solución completa.",
+      "options": [
+        "A. extracting handwritten text from online images",
+        "B. generating tags and descriptions for images",
+        "C. monitoring network traffic for sudden spikes",
+        "D. performing sentiment analysis on social media data",
+        "E. translating text between different languages from product reviews"
+      ],
+      "correctAnswer": "D. performing sentiment analysis on social media data, E. translating text between different languages from product reviews",
+      "explanation": "Translating text between different languages from product reviews is an NLP workload that uses the Azure Translator in Foundry Tools service. It can provide text translation of supported languages in real time. Performing sentiment analysis on social media data is an NLP workload that uses the sentiment analysis feature of the Azure AI Service for Language, providing sentiment labels such as negative, neutral, and positive for text-based sentences and documents.",
+      "images": []
+    },
+    {
+      "number": "12",
+      "questionText": "Which principle of responsible artificial intelligence (AI) defines the framework of governance and organization principles that meet ethical and legal standards of AI solutions?",
+      "translation": "¿Qué principio de la inteligencia artificial (IA) responsable define el marco de gobernanza y principios organizacionales que cumplen con los estándares éticos y legales de las soluciones de IA?",
+      "options": ["A. accountability", "B. fairness", "C. inclusiveness", "D. transparency"],
+      "correctAnswer": "A. accountability",
+      "explanation": "Accountability defines the framework of governance and organizational principles, which are meant to ensure that AI solutions meet ethical and legal standards that are clearly defined. The other answer choices do not define the framework of governance and organization principles, but provide guidance regarding the ethical and legal aspects of the corresponding standards.",
+      "images": []
+    },
+    {
+      "number": "13",
+      "questionText": "Which computer vision service provides bounding coordinates as part of its output?",
+      "translation": "¿Qué servicio de visión por computadora proporciona coordenadas de delimitación (bounding box) como parte de su salida?",
+      "options": ["A. image analysis", "B. image classification", "C. object detection", "D. semantic segmentation"],
+      "correctAnswer": "C. object detection",
+      "explanation": "Object detection generates bounding boxes that identify the locations of different types of objects in an image, including the bounding box coordinates designating the location of the object. Semantic segmentation classifies individual pixels in an image. Image classification classifies images based on their contents. Image analysis extracts information from the image to label it with tags or captions.",
+      "images": []
+    },
+    {
+      "number": "14",
+      "questionText": "As per the NIST AI Risk Management Framework, what is the first stage to consider when developing a responsible generative AI solution?",
+      "translation": "Según el Marco de Gestión de Riesgos de IA del NIST, ¿cuál es la primera etapa a considerar al desarrollar una solución de IA generativa responsable?",
+      "options": [
+        "A. Identify potential harms.",
+        "B. Measure the presence of potential harms.",
+        "C. Mitigate potential harms.",
+        "D. Operate the solution."
+      ],
+      "correctAnswer": "A. Identify potential harms.",
+      "explanation": "Identifying potential harms is the first stage when planning a responsible generative AI solution. After identifying harms, you measure their presence, then mitigate them, and finally operate the solution with ongoing monitoring.",
+      "images": []
+    },
+    {
+      "number": "15",
+      "questionText": "A bank is developing a new artificial intelligence (AI) system to support the process of accepting or rejecting mortgage applications.\n\nWhich two issues should be considered as part of the responsible AI principle of fairness to avoid biased decision making? Each correct answer presents part of the solution.",
+      "translation": "Un banco está desarrollando un nuevo sistema de inteligencia artificial (IA) para apoyar el proceso de aceptar o rechazar solicitudes de hipoteca.\n\n¿Cuáles dos aspectos deben considerarse como parte del principio de equidad de la IA responsable para evitar decisiones sesgadas? Cada respuesta correcta presenta parte de la solución.",
+      "options": [
+        "A. credit utilization",
+        "B. current salary",
+        "C. ethnicity",
+        "D. gender",
+        "E. payment history"
+      ],
+      "correctAnswer": "C. ethnicity, D. gender",
+      "explanation": "The AI system must be designed to ensure that biased decision making is avoided and not based on factors such as ethnicity and gender. The system will consider salary, payment history, and credit utilization as standard financial metrics — these are legitimate factors for mortgage decisions and do not introduce bias.",
+      "images": []
+    },
+    {
+      "number": "16",
+      "questionText": "Which three values are returned by the language detection feature of the Azure Language in Foundry Tools service in Azure?",
+      "translation": "¿Cuáles tres valores devuelve la característica de detección de idioma del servicio Azure Language en Foundry Tools?",
+      "options": [
+        "A. Bounding box coordinates",
+        "B. ISO 6391 Code",
+        "C. Language Name",
+        "D. Score",
+        "E. Wikipedia URL"
+      ],
+      "correctAnswer": "B. ISO 6391 Code, C. Language Name, D. Score",
+      "explanation": "Language Name, ISO 6391 Code, and Score are the three values returned by the language detection feature of the Azure Language service. Bounding box coordinates are returned by the Azure Vision in Foundry Tools services, not the language service. Wikipedia URL is a potential value returned by entity linking in entity recognition, not language detection.",
+      "images": []
+    },
+    {
+      "number": "17",
+      "questionText": "What can be used for an attendance system that can scan handwritten signatures?",
+      "translation": "¿Qué se puede utilizar para un sistema de asistencia que pueda escanear firmas escritas a mano?",
+      "options": [
+        "A. face detection",
+        "B. image classification",
+        "C. object detection",
+        "D. optical character recognition (OCR)"
+      ],
+      "correctAnswer": "D. optical character recognition (OCR)",
+      "explanation": "OCR is used to extract text and handwriting from images. In this case, it can be used to extract signatures for attendance purposes. Face detection can detect and verify human faces, not text, from images. Object detection can detect multiple objects in an image using bounding box coordinates but is not used to extract handwritten text. Image classification is concerned with the primary contents of an image.",
+      "images": []
+    },
+    {
+      "number": "18",
+      "questionText": "Which computer vision solution provides the ability to identify a person's age based on a photograph?",
+      "translation": "¿Qué solución de visión por computadora ofrece la capacidad de identificar la edad de una persona a partir de una fotografía?",
+      "options": [
+        "A. facial detection",
+        "B. image classification",
+        "C. object detection",
+        "D. semantic segmentation"
+      ],
+      "correctAnswer": "A. facial detection",
+      "explanation": "Facial detection provides the ability to detect and analyze human faces in an image, including identifying a person's age based on a photograph. Image classification classifies images based on their contents. Object detection generates bounding boxes identifying the locations of objects in an image. Semantic segmentation classifies individual pixels in an image.",
+      "images": []
+    },
+    {
+      "number": "19",
+      "questionText": "Which natural language processing (NLP) technique assigns values to words such as plant and flower, so that they are considered closer to each other than a word such as airplane?",
+      "translation": "¿Qué técnica de procesamiento de lenguaje natural (NLP) asigna valores a palabras como 'planta' y 'flor', de modo que se consideren más cercanas entre sí que una palabra como 'avión'?",
+      "options": [
+        "A. frequency analysis",
+        "B. lemmatization",
+        "C. N-grams",
+        "D. vectorization"
+      ],
+      "correctAnswer": "D. vectorization",
+      "explanation": "Vectorization captures semantic relationships between words by assigning them to locations in n-dimensional space, so semantically similar words (like plant and flower) are positioned closer together. Lemmatization (also known as stemming) normalizes words before counting them. Frequency analysis counts how often a word appears in a text. N-grams extend frequency analysis to include multi-term phrases.",
+      "images": []
+    },
+    {
+      "number": "20",
+      "questionText": "Which additional piece of information is included with each phrase returned by an image description task of the Azure Vision in Foundry Tools?",
+      "translation": "¿Qué información adicional se incluye con cada frase devuelta por una tarea de descripción de imagen de Azure Vision en Foundry Tools?",
+      "options": [
+        "A. bounding box coordinates",
+        "B. confidence score",
+        "C. endpoint",
+        "D. key"
+      ],
+      "correctAnswer": "B. confidence score",
+      "explanation": "Each phrase returned by an image description task of the Azure Vision in Foundry Tools includes the confidence score, which indicates how certain the model is about the description. An endpoint and a key must be provided to access the service but are not returned per phrase. Bounding box coordinates are returned by services such as object detection, but not image description.",
       "images": []
     }
   ]
