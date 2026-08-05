@@ -1175,6 +1175,219 @@ function ExamResults({
   )
 }
 
+// ─── Búsqueda semántica (TF-IDF + cosine similarity) ────────────────────────
+
+const STOP_WORDS = new Set([
+  // English
+  'a','an','the','and','or','but','in','on','at','to','for','of','with','by',
+  'from','is','are','was','were','be','been','being','have','has','had','do',
+  'does','did','will','would','could','should','may','might','can','this',
+  'that','these','those','it','its','you','your','we','our','they','their',
+  'he','she','his','her','what','which','who','how','when','where','not','no',
+  'if','then','than','so','as','up','out','about','into','through','each',
+  'all','both','more','most','other','some','such','only','same','also','need',
+  'use','used','using','must','want','include','including','select','choose',
+  'correct','answer','question','statement','following','each','per','true',
+  // Spanish
+  'un','una','el','la','los','las','de','del','en','al','y','o','pero','que',
+  'se','con','por','para','como','más','no','si','es','son','era','fue','ser',
+  'estar','tener','hacer','puede','debe','tiene','tienen','cada','todo','todos',
+  'este','esta','estos','estas','cual','qué','cómo','cuál','su','sus','lo',
+  'le','les','nos','también','solo','mismo','selecciona','elige','correcta',
+  'respuesta','pregunta','declaración','siguiente','siguiente','verdadera',
+])
+
+function tokenize(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-záéíóúñüàèìòù0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length > 2 && !STOP_WORDS.has(w))
+}
+
+function buildDocVectors(questions: Question[], idf: Map<string, number>): Map<string, number>[] {
+  return questions.map(q => {
+    const text = [q.questionText ?? '', q.translation ?? '', ...(q.options ?? []), q.correctAnswer ?? ''].join(' ')
+    return tfidfVec(tokenize(text), idf)
+  })
+}
+
+function computeIDF(questions: Question[]): Map<string, number> {
+  const n = questions.length
+  const df = new Map<string, number>()
+  questions.forEach(q => {
+    const text = [q.questionText ?? '', q.translation ?? '', ...(q.options ?? []), q.correctAnswer ?? ''].join(' ')
+    const seen = new Set(tokenize(text))
+    seen.forEach(term => df.set(term, (df.get(term) ?? 0) + 1))
+  })
+  const idf = new Map<string, number>()
+  df.forEach((count, term) => idf.set(term, Math.log((n + 1) / (count + 1)) + 1))
+  return idf
+}
+
+function tfidfVec(tokens: string[], idf: Map<string, number>): Map<string, number> {
+  const tf = new Map<string, number>()
+  tokens.forEach(t => tf.set(t, (tf.get(t) ?? 0) + 1))
+  const vec = new Map<string, number>()
+  tf.forEach((count, term) => {
+    vec.set(term, (count / (tokens.length || 1)) * (idf.get(term) ?? Math.log(2)))
+  })
+  return vec
+}
+
+function cosineSim(a: Map<string, number>, b: Map<string, number>): number {
+  let dot = 0, magA = 0, magB = 0
+  a.forEach((v, t) => { dot += v * (b.get(t) ?? 0); magA += v * v })
+  b.forEach(v => { magB += v * v })
+  if (!magA || !magB) return 0
+  return dot / (Math.sqrt(magA) * Math.sqrt(magB))
+}
+
+function SemanticSearchPanel({ questions }: { questions: Question[] }) {
+  const [query,    setQuery]    = useState('')
+  const [results,  setResults]  = useState<{ q: Question; score: number }[]>([])
+  const [searched, setSearched] = useState(false)
+  const [expanded, setExpanded] = useState<string | null>(null)
+
+  const idf  = useMemo(() => computeIDF(questions), [questions])
+  const vecs = useMemo(() => buildDocVectors(questions, idf), [questions, idf])
+
+  const runSearch = () => {
+    const q = query.trim()
+    if (!q) return
+    const qVec = tfidfVec(tokenize(q), idf)
+    const scored = questions.map((question, i) => ({ q: question, score: cosineSim(qVec, vecs[i]) }))
+    scored.sort((a, b) => b.score - a.score)
+    setResults(scored.slice(0, 8))
+    setSearched(true)
+    setExpanded(null)
+  }
+
+  const reset = () => { setQuery(''); setResults([]); setSearched(false); setExpanded(null) }
+
+  return (
+    <div className="bg-white/[0.04] backdrop-blur-xl border border-amber-500/20 rounded-xl overflow-hidden">
+      <div className="px-4 py-3 border-b border-border/50 flex items-center gap-2.5">
+        <Search size={14} className="text-amber-400" />
+        <span className="text-sm font-semibold text-amber-300">Buscar duplicado semántico</span>
+        <span className="ml-auto text-[10px] text-slate-600 font-mono">TF-IDF · cosine similarity</span>
+      </div>
+
+      <div className="px-4 py-4 space-y-3">
+        <textarea
+          value={query}
+          onChange={e => { setQuery(e.target.value); setSearched(false) }}
+          onKeyDown={e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) runSearch() }}
+          placeholder="Pega aquí el texto de la nueva pregunta (inglés o español)…"
+          rows={3}
+          className="w-full bg-white/[0.04] border border-border rounded-lg px-3 py-2.5 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/60 transition-colors resize-none"
+        />
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={runSearch}
+            disabled={!query.trim()}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600/20 border border-amber-500/40 text-amber-300 text-sm font-semibold hover:bg-amber-600/30 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <Search size={13} />
+            Analizar similitud
+          </button>
+          {searched && (
+            <button onClick={reset} className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors px-2 py-1">
+              ✕ Limpiar
+            </button>
+          )}
+          <span className="ml-auto text-[10px] text-slate-600">Ctrl+Enter para buscar</span>
+        </div>
+
+        {searched && (
+          <div className="space-y-2 pt-1">
+            <p className="text-[11px] text-slate-500 font-semibold uppercase tracking-wide">
+              Top {results.length} más similares de {questions.length} preguntas
+            </p>
+            {results.map(({ q, score }) => {
+              const pct  = Math.round(score * 100)
+              const high = pct >= 55
+              const mid  = pct >= 30 && !high
+              const isOpen = expanded === q.number
+              return (
+                <div
+                  key={q.number}
+                  className={`rounded-xl border transition-all overflow-hidden ${
+                    high ? 'border-red-600/50 bg-red-950/20'
+                    : mid ? 'border-amber-700/40 bg-amber-950/10'
+                    :        'border-slate-700/40 bg-slate-900/30'
+                  }`}
+                >
+                  <button
+                    onClick={() => setExpanded(isOpen ? null : q.number)}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-white/[0.03] transition-colors"
+                  >
+                    <span className={`shrink-0 text-xs font-bold w-12 text-right tabular-nums ${
+                      high ? 'text-red-400' : mid ? 'text-amber-400' : 'text-slate-500'
+                    }`}>
+                      {pct}%
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-[10px] font-mono text-slate-600">#{q.number}</span>
+                        {high && <span className="text-[9px] font-bold text-red-400 bg-red-900/30 border border-red-700/40 px-1.5 py-0.5 rounded-full">⚠ POSIBLE DUPLICADO</span>}
+                        {mid  && <span className="text-[9px] font-bold text-amber-400 bg-amber-900/30 border border-amber-700/40 px-1.5 py-0.5 rounded-full">SIMILAR</span>}
+                      </div>
+                      <p className="text-xs text-slate-300 truncate leading-relaxed">
+                        {q.questionText?.split('\n')[0]?.slice(0, 120)}
+                        {(q.questionText?.split('\n')[0]?.length ?? 0) > 120 ? '…' : ''}
+                      </p>
+                    </div>
+                    <div className={`shrink-0 w-14 h-1.5 rounded-full bg-slate-800 overflow-hidden`}>
+                      <div
+                        className={`h-full rounded-full transition-all ${high ? 'bg-red-500' : mid ? 'bg-amber-500' : 'bg-slate-600'}`}
+                        style={{ width: `${Math.min(pct, 100)}%` }}
+                      />
+                    </div>
+                    {isOpen
+                      ? <ChevronUp   size={13} className="shrink-0 text-slate-500" />
+                      : <ChevronDown size={13} className="shrink-0 text-slate-500" />
+                    }
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-3 pb-3 pt-0 border-t border-white/[0.05] space-y-2">
+                      <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap mt-2">
+                        {q.questionText}
+                      </p>
+                      {q.translation && (
+                        <p className="text-xs text-slate-500 leading-relaxed italic border-l-2 border-slate-700 pl-2">
+                          {q.translation?.split('\n')[0]}
+                        </p>
+                      )}
+                      {q.options && q.options.length > 0 && (
+                        <div className="space-y-0.5">
+                          {q.options.map((opt, i) => (
+                            <p key={i} className={`text-[11px] px-2 py-1 rounded ${isCorrectOpt(opt, q.correctAnswer) ? 'text-emerald-400 bg-emerald-900/20' : 'text-slate-500'}`}>
+                              {opt}
+                            </p>
+                          ))}
+                        </div>
+                      )}
+                      {q.correctAnswer && (
+                        <p className="text-[11px] text-emerald-400 font-medium">✓ {q.correctAnswer}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+            {results.length > 0 && results[0].score < 0.05 && (
+              <p className="text-xs text-slate-500 text-center py-2">Sin coincidencias significativas — la pregunta parece nueva.</p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ─── Level 3: Exam viewer ────────────────────────────────────────────────────
 
 const PER_PAGE = 25
@@ -1191,7 +1404,8 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
   const [showTagPanel, setShowTagPanel] = useState(false)
   const [tagSearch,    setTagSearch]    = useState('')
 
-  const [showExamCfg, setShowExamCfg] = useState(false)
+  const [showExamCfg,        setShowExamCfg]        = useState(false)
+  const [showSemanticSearch, setShowSemanticSearch] = useState(false)
   const [examSession, setExamSession] = useState<{
     questions: Question[]; config: ExamModeCfg; startMs: number
   } | null>(null)
@@ -1354,7 +1568,23 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
           <Play size={18} />
           <span className="text-[11px] font-semibold leading-tight text-center">Modo<br/>Examen</span>
         </button>
+
+        <button
+          onClick={() => setShowSemanticSearch(v => !v)}
+          className={`flex flex-col items-center justify-center gap-1.5 px-4 py-3 rounded-xl border transition-all min-w-[90px] ${
+            showSemanticSearch
+              ? 'border-amber-500/50 bg-amber-500/10 text-amber-300'
+              : 'border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 hover:border-amber-500/40 text-amber-500'
+          }`}
+        >
+          <Search size={18} />
+          <span className="text-[11px] font-semibold leading-tight text-center">Buscar<br/>duplicado</span>
+        </button>
       </div>
+
+      {showSemanticSearch && (
+        <SemanticSearchPanel questions={data.questions} />
+      )}
 
       <div className="flex gap-3 flex-wrap">
         <div className="relative flex-1 min-w-48">
