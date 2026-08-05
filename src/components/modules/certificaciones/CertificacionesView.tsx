@@ -46,6 +46,7 @@ const PROVIDERS: ProviderConfig[] = [
       { id: 'ai-100', code: 'AI-100', name: 'Designing/Implementing Azure AI Solution', level: 'Associate'   },
       { id: 'ai-102', code: 'AI-102', name: 'Azure AI Engineer',                        level: 'Associate'   },
       { id: 'ai-900', code: 'AI-900', name: 'Azure AI Fundamentals',                    level: 'Fundamental' },
+      { id: 'ai-901', code: 'AI-901', name: 'Microsoft Azure AI',                       dataFile: '/data/exam_ai901.json', questions: 10, level: 'Fundamental' },
       { id: 'az-100', code: 'AZ-100', name: 'Azure Infrastructure and Deployment',      level: 'Associate'   },
       { id: 'az-103', code: 'AZ-103', name: 'Azure Administrator',                      level: 'Associate'   },
       { id: 'az-104', code: 'AZ-104', name: 'Azure Administrator',                      level: 'Associate'   },
@@ -137,6 +138,8 @@ const PROVIDERS: ProviderConfig[] = [
 interface Question {
   number: string
   questionText?: string
+  translation?: string
+  explanation?: string
   options?: string[]
   correctAnswer?: string
   images?: string[]
@@ -451,6 +454,7 @@ function QuestionCard({
   const [selected,    setSelected]    = useState<number | null>(null)
   const [verified,    setVerified]    = useState(false)
   const [showAns,     setShowAns]     = useState(false)
+  const [showExpl,    setShowExpl]    = useState(false)
   const [xlat,        setXlat]        = useState<{ text: string; opts: string[]; ans: string } | null>(null)
   const [xlatLoading, setXlatLoading] = useState(false)
   const [xlatError,   setXlatError]   = useState(false)
@@ -472,7 +476,7 @@ function QuestionCard({
     setSelected(prev => prev === i ? null : i)
   }
 
-  const reset = () => { setSelected(null); setVerified(false); setShowAns(false) }
+  const reset = () => { setSelected(null); setVerified(false); setShowAns(false); setShowExpl(false) }
 
   const translate = async () => {
     if (xlat || xlatLoading) { setXlat(null); return }
@@ -626,6 +630,13 @@ function QuestionCard({
             <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">{shown.questionText}</p>
           )}
 
+          {q.translation && !xlat && !es && (
+            <div className="border-l-2 border-slate-700 pl-3 -mt-1">
+              <p className="text-[10px] text-slate-600 font-semibold uppercase tracking-wide mb-0.5">Traducción</p>
+              <p className="text-sm text-slate-500 leading-relaxed whitespace-pre-wrap italic">{q.translation}</p>
+            </div>
+          )}
+
           {shown.images?.map((src, i) => (
             <img key={i} src={src} alt="" className="max-w-full rounded-lg border border-border"
               onError={e => (e.currentTarget.style.display = 'none')} />
@@ -712,8 +723,30 @@ function QuestionCard({
 
           {(showAns || verified) && hasAnswer && (
             <div className="bg-emerald-900/15 border border-emerald-700/40 rounded-lg px-3 py-2.5">
-              <p className="text-[11px] text-emerald-500 font-semibold uppercase tracking-wide mb-1">Respuesta correcta</p>
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-[11px] text-emerald-500 font-semibold uppercase tracking-wide">Respuesta correcta</p>
+                {q.explanation && (
+                  <button
+                    type="button"
+                    title={showExpl ? 'Ocultar explicación' : 'Ver explicación'}
+                    onClick={() => setShowExpl(v => !v)}
+                    className={`w-5 h-5 rounded-full border text-[10px] font-bold flex items-center justify-center transition-colors ${
+                      showExpl
+                        ? 'bg-blue-500/30 border-blue-400/60 text-blue-200'
+                        : 'bg-slate-800 border-slate-600 text-slate-400 hover:border-blue-400/60 hover:text-blue-300'
+                    }`}
+                  >
+                    i
+                  </button>
+                )}
+              </div>
               <p className="text-sm text-emerald-300 leading-relaxed">{shown.correctAnswer}</p>
+              {showExpl && q.explanation && (
+                <div className="mt-2 pt-2 border-t border-emerald-800/40">
+                  <p className="text-[10px] text-blue-500 font-semibold uppercase tracking-wide mb-1">Explicación</p>
+                  <p className="text-xs text-blue-300 leading-relaxed">{q.explanation}</p>
+                </div>
+              )}
             </div>
           )}
 

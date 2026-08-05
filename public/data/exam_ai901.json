@@ -1,0 +1,98 @@
+{
+  "examId": 901,
+  "examTitle": "AI-901: Microsoft Azure AI",
+  "totalQuestions": 10,
+  "scrapedAt": "2026-08-04T00:00:00.000Z",
+  "questions": [
+    {
+      "number": "1",
+      "questionText": "Which two types of files can be imported to generate a knowledge base for use with a Microsoft Foundry Agent? Each correct answer presents a complete solution.",
+      "translation": "¿Cuáles dos tipos de archivos se pueden importar para generar una base de conocimiento para usarla con un Microsoft Foundry Agent? Cada respuesta correcta presenta una solución completa.",
+      "options": ["A. CSV", "B. DOC", "C. MP4", "D. PDF", "E. ZIP"],
+      "correctAnswer": "B. DOC, D. PDF",
+      "explanation": "DOC files and PDF files (both structured and unstructured) can be imported to generate a knowledge base for use with Azure AI Bot Service. ZIP files must first be extracted before they can be imported. MP4 files and CSV files are not supported to generate question-and-answer pairs for use with Azure AI Bot Service.",
+      "images": []
+    },
+    {
+      "number": "2",
+      "questionText": "Select the answer that correctly completes the sentence.\n\n[Answer choice] can search, classify, and compare sources of text for similarity.",
+      "translation": "Selecciona la respuesta que completa correctamente la oración.\n\n[Opción de respuesta] puede buscar, clasificar y comparar fuentes de texto por similitud.",
+      "options": ["A. Data grounding", "B. Embeddings", "C. Machine learning", "D. System messages"],
+      "correctAnswer": "B. Embeddings",
+      "explanation": "Embeddings is an Azure OpenAI model that converts text into numerical vectors for analysis. Embeddings can be used to search, classify, and compare sources of text for similarity.",
+      "images": []
+    },
+    {
+      "number": "3",
+      "questionText": "Which two capabilities are examples of a GPT model? Each correct answer presents a complete solution.",
+      "translation": "¿Cuáles dos capacidades son ejemplos de un modelo GPT? Cada respuesta correcta presenta una solución completa.",
+      "options": ["A. Create natural language.", "B. Detect specific dialects of a language.", "C. Generate closed captions in real-time from a video.", "D. Synthesize speech.", "E. Understand natural language."],
+      "correctAnswer": "A. Create natural language., E. Understand natural language.",
+      "explanation": "Azure OpenAI natural language models can take in natural language and generate responses. GPT models are excellent at both understanding and creating natural language. Detecting dialects, generating captions, and synthesizing speech are capabilities of other Azure AI services.",
+      "images": []
+    },
+    {
+      "number": "4",
+      "questionText": "Which Azure Language in Foundry Tools feature allows you to analyze written articles to extract information and concepts, such as people and locations, for classification purposes?",
+      "translation": "¿Qué característica de Azure Language en Foundry Tools te permite analizar artículos escritos para extraer información y conceptos, como personas y lugares, con fines de clasificación?",
+      "options": ["A. Azure AI Content Moderator", "B. key phrase extraction", "C. named entity recognition", "D. Personally Identifiable Information (PII) detection"],
+      "correctAnswer": "C. named entity recognition",
+      "explanation": "Named entity recognition can identify and categorize entities in unstructured text, such as people, places, organizations, and quantities, and is suitable to support the development of an article recommendation system. Key phrase extraction, Content Moderator, and the PII feature are not suited to entity recognition tasks to build a recommender system.",
+      "images": []
+    },
+    {
+      "number": "5",
+      "questionText": "What are two capabilities of generative AI models? Each correct answer presents a complete solution.",
+      "translation": "¿Cuáles son dos capacidades de los modelos de IA generativa? Cada respuesta correcta presenta una solución completa.",
+      "options": ["A. generating new content based on training data", "B. identifying objects in images", "C. classifying data into predefined categories, such as spam and non-spam email messages", "D. detecting patterns in structured datasets for predictive analysis", "E. summarizing text and generating translations"],
+      "correctAnswer": "A. generating new content based on training data, E. summarizing text and generating translations",
+      "explanation": "Generative AI models can generate new content (text, images, code) based on patterns learned from training data, and can summarize and translate text. Identifying objects in images is a computer vision task. Classifying data into predefined categories and detecting patterns for predictive analysis are traditional machine learning tasks, not generative AI.",
+      "images": []
+    },
+    {
+      "number": "6",
+      "questionText": "Which artificial intelligence (AI) workload scenario is an example of natural language processing (NLP)?",
+      "translation": "¿Cuál escenario de carga de trabajo de inteligencia artificial (IA) es un ejemplo de procesamiento de lenguaje natural (NLP)?",
+      "options": ["A. extracting key phrases from a business insights report", "B. identifying objects in landscape images", "C. monitoring for sudden increases in quantity of failed sign-in attempts", "D. predicting whether customers are likely to buy a product based on previous purchases"],
+      "correctAnswer": "A. extracting key phrases from a business insights report",
+      "explanation": "Extracting key phrases from text to identify the main terms is an NLP workload. Predicting whether customers are likely to buy a product based on previous purchases requires a machine learning model. Monitoring for sudden increases in failed sign-in attempts is an anomaly detection workload. Identifying objects in landscape images is a computer vision workload.",
+      "images": []
+    },
+    {
+      "number": "7",
+      "questionText": "Which generative AI model is used to generate images based on natural language prompts?",
+      "translation": "¿Qué modelo de IA generativa se usa para generar imágenes basadas en indicaciones de lenguaje natural?",
+      "options": ["A. DALL-E", "B. Embeddings", "C. GPT-3.5", "D. GPT-4", "E. Whisper"],
+      "correctAnswer": "A. DALL-E",
+      "explanation": "DALL-E is a model that can generate images from natural language prompts. GPT-4 and GPT-3.5 can understand and generate natural language and code, but not images. Embeddings converts text into numerical vectors to facilitate text similarity. Whisper can transcribe and translate speech to text.",
+      "images": []
+    },
+    {
+      "number": "8",
+      "questionText": "You are exploring solutions to improve the document search and indexing service for employees.\n\nYou need an artificial intelligence (AI) search solution that will include searching text in various types of documents, such as images.\n\nWhich type of AI workload is this?",
+      "translation": "Estás explorando soluciones para mejorar el servicio de búsqueda e indexación de documentos para empleados.\n\nNecesitas una solución de búsqueda con inteligencia artificial (IA) que incluya la búsqueda de texto en varios tipos de documentos, como imágenes.\n\n¿Qué tipo de carga de trabajo de IA es esta?",
+      "options": ["A. anomaly detection / semantic segmentation", "B. computer vision", "C. conversational AI", "D. data mining"],
+      "correctAnswer": "D. data mining",
+      "explanation": "Data mining workloads primarily focus on the searching and indexing of data. Computer vision can extract information from images but is not a search and indexing solution. Conversational AI is part of NLP and facilitates chatbot creation. Semantic segmentation classifies individual pixels in images. Anomaly detection finds outliers in data such as unusual credit card activity — it is not used for searching and indexing.",
+      "images": []
+    },
+    {
+      "number": "9",
+      "questionText": "Which principle of responsible artificial intelligence (AI) ensures that an AI system meets any legal and ethical standards it must abide by?",
+      "translation": "¿Qué principio de la inteligencia artificial (IA) responsable garantiza que un sistema de IA cumpla con los estándares legales y éticos que debe seguir?",
+      "options": ["A. accountability", "B. fairness", "C. inclusiveness", "D. privacy and security"],
+      "correctAnswer": "A. accountability",
+      "explanation": "The accountability principle ensures that AI systems are designed to meet any ethical and legal standards that are applicable. The privacy and security principle states that AI systems must be designed to protect personal and/or sensitive data. The inclusiveness principle states that AI systems must empower people in a positive and engaging way. The fairness principle ensures that users of AI systems are treated fairly.",
+      "images": []
+    },
+    {
+      "number": "10",
+      "questionText": "Which Azure AI Service for Language feature can be used to analyze online user reviews to identify whether users view a product positively or negatively?",
+      "translation": "¿Qué característica de Azure AI Service para idioma puede usarse para analizar reseñas de usuarios en línea e identificar si ven un producto de forma positiva o negativa?",
+      "options": ["A. key phrase extraction", "B. language detection", "C. named entity recognition", "D. sentiment analysis"],
+      "correctAnswer": "D. sentiment analysis",
+      "explanation": "Sentiment analysis provides sentiment labels — negative, neutral, and positive — based on a confidence score from text analysis. This makes it suitable for understanding user sentiment in product reviews. Named entity recognition, key phrase extraction, and language detection cannot perform sentiment analysis for product reviews.",
+      "images": []
+    }
+  ]
+}
