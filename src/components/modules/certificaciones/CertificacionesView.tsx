@@ -454,10 +454,13 @@ function QuestionCard({
   const [selected,    setSelected]    = useState<number | null>(null)
   const [verified,    setVerified]    = useState(false)
   const [showAns,     setShowAns]     = useState(false)
-  const [showExpl,    setShowExpl]    = useState(false)
-  const [xlat,        setXlat]        = useState<{ text: string; opts: string[]; ans: string } | null>(null)
-  const [xlatLoading, setXlatLoading] = useState(false)
-  const [xlatError,   setXlatError]   = useState(false)
+  const [showExpl,      setShowExpl]      = useState(false)
+  const [explEs,        setExplEs]        = useState(false)
+  const [explEsText,    setExplEsText]    = useState<string | null>(null)
+  const [explEsLoading, setExplEsLoading] = useState(false)
+  const [xlat,          setXlat]          = useState<{ text: string; opts: string[]; ans: string } | null>(null)
+  const [xlatLoading,   setXlatLoading]   = useState(false)
+  const [xlatError,     setXlatError]     = useState(false)
 
   const shown = es && qEs ? qEs
               : xlat      ? { ...q, questionText: xlat.text, options: xlat.opts, correctAnswer: xlat.ans }
@@ -476,7 +479,28 @@ function QuestionCard({
     setSelected(prev => prev === i ? null : i)
   }
 
-  const reset = () => { setSelected(null); setVerified(false); setShowAns(false); setShowExpl(false) }
+  const reset = () => { setSelected(null); setVerified(false); setShowAns(false); setShowExpl(false); setExplEs(false) }
+
+  const toggleExplEs = async () => {
+    if (explEs) { setExplEs(false); return }
+    if (explEsText) { setExplEs(true); return }
+    if (!q.explanation) return
+    setExplEsLoading(true)
+    try {
+      const r = await fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(q.explanation)}&langpair=en|es`,
+        { signal: AbortSignal.timeout(10000) }
+      )
+      const d = await r.json()
+      setExplEsText((d.responseData?.translatedText as string) || q.explanation)
+      setExplEs(true)
+    } catch {
+      setExplEs(true)
+      setExplEsText(q.explanation)
+    } finally {
+      setExplEsLoading(false)
+    }
+  }
 
   const translate = async () => {
     if (xlat || xlatLoading) { setXlat(null); return }
@@ -743,8 +767,25 @@ function QuestionCard({
               <p className="text-sm text-emerald-300 leading-relaxed">{shown.correctAnswer}</p>
               {showExpl && q.explanation && (
                 <div className="mt-2 pt-2 border-t border-emerald-800/40">
-                  <p className="text-[10px] text-blue-500 font-semibold uppercase tracking-wide mb-1">Explicación</p>
-                  <p className="text-xs text-blue-300 leading-relaxed">{q.explanation}</p>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <p className="text-[10px] text-blue-500 font-semibold uppercase tracking-wide">Explicación</p>
+                    <button
+                      type="button"
+                      onClick={toggleExplEs}
+                      disabled={explEsLoading}
+                      title={explEs ? 'Ver en inglés' : 'Ver en español'}
+                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded border transition-colors disabled:opacity-50 ${
+                        explEs
+                          ? 'bg-amber-900/50 border-amber-600/60 text-amber-300'
+                          : 'bg-slate-800 border-slate-600 text-slate-400 hover:border-amber-500/60 hover:text-amber-300'
+                      }`}
+                    >
+                      {explEsLoading ? '…' : explEs ? '🇪🇸' : '🇺🇸'}
+                    </button>
+                  </div>
+                  <p className="text-xs text-blue-300 leading-relaxed">
+                    {explEs && explEsText ? explEsText : q.explanation}
+                  </p>
                 </div>
               )}
             </div>
