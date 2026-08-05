@@ -1,7 +1,7 @@
 {
   "examId": 901,
   "examTitle": "AI-901: Microsoft Azure AI",
-  "totalQuestions": 20,
+  "totalQuestions": 30,
   "scrapedAt": "2026-08-04T00:00:00.000Z",
   "questions": [
     {
@@ -225,6 +225,137 @@
       ],
       "correctAnswer": "B. confidence score",
       "explanation": "Each phrase returned by an image description task of the Azure Vision in Foundry Tools includes the confidence score, which indicates how certain the model is about the description. An endpoint and a key must be provided to access the service but are not returned per phrase. Bounding box coordinates are returned by services such as object detection, but not image description.",
+      "images": []
+    },
+    {
+      "number": "21",
+      "questionText": "You are using a generative AI solution.\n\nYou need to ensure that users understand the purpose of the solution and the potential impact of its outputs.\n\nWhich responsible AI risk should you identify and mitigate?",
+      "translation": "Estás utilizando una solución de IA generativa.\n\nNecesitas garantizar que los usuarios entiendan el propósito de la solución y el impacto potencial de sus resultados.\n\n¿Qué riesgo de IA responsable debes identificar y mitigar?",
+      "options": [
+        "A. adversarial vulnerability",
+        "B. bias or unfair outcomes",
+        "C. lack of accessibility",
+        "D. lack of transparency"
+      ],
+      "correctAnswer": "D. lack of transparency",
+      "explanation": "Lack of transparency is correct because ensuring that users understand the purpose of a generative AI solution and the potential impact of its outputs is a core aspect of the transparency principle of responsible AI. Transparency focuses on making it clear to users how and why an AI system is used and what its outputs represent. Adversarial vulnerability relates to security and robustness, bias or unfair outcomes relate to fairness, and lack of accessibility relates to inclusiveness.",
+      "images": []
+    },
+    {
+      "number": "22",
+      "questionText": "Select the answer that correctly completes the sentence.\n\nTo refine a prompt for an image-generation model in Microsoft Foundry, [Answer choice] helps guide the generated image.",
+      "translation": "Selecciona la respuesta que completa correctamente la oración.\n\nPara refinar un prompt para un modelo de generación de imágenes en Microsoft Foundry, [Opción de respuesta] ayuda a guiar la imagen generada.",
+      "options": [
+        "A. a simple list of objects in the scene",
+        "B. extracted labels from image analysis",
+        "C. the model deployment name and image size",
+        "D. visual details about the subject, setting, and style"
+      ],
+      "correctAnswer": "D. visual details about the subject, setting, and style",
+      "explanation": "Visual details about the subject, setting, and style help the image-generation model produce an output that matches the intended appearance. A simple list of objects gives limited guidance, extracted labels from image analysis describe existing images rather than guiding new ones, and the model deployment name and image size are configuration details rather than prompt details.",
+      "images": []
+    },
+    {
+      "number": "23",
+      "questionText": "You have a Python app that submits product demonstration videos to Azure Content Understanding in Foundry Tools.\n\nYou need to update the app to read built-in audiovisual elements that include:\n• speaker-attributed speech segments with start and end times\n• timestamps for representative visual frames\n\nWhich two elements should the app read? Each correct answer presents part of the solution.\n\nNOTE: Each correct selection is worth one point.",
+      "translation": "Tienes una aplicación Python que envía videos de demostración de productos a Azure Content Understanding en Foundry Tools.\n\nNecesitas actualizar la aplicación para leer elementos audiovisuales integrados que incluyen:\n• segmentos de voz atribuidos a oradores con tiempos de inicio y fin\n• marcas de tiempo para fotogramas visuales representativos\n\n¿Cuáles dos elementos debe leer la aplicación? Cada respuesta correcta presenta parte de la solución.",
+      "options": [
+        "A. The transcriptPhrases array",
+        "B. The keyFrameTimesMs array",
+        "C. The fields object",
+        "D. The cameraShotTimesMs array",
+        "E. The width and height properties"
+      ],
+      "correctAnswer": "A. The transcriptPhrases array, B. The keyFrameTimesMs array",
+      "explanation": "The keyFrameTimesMs array provides timestamps for representative key frames selected from the video, and the transcriptPhrases array provides speaker-attributed speech segments with start and end times. The cameraShotTimesMs array identifies camera shot changes rather than representative key frames, the fields object contains extracted schema fields, and the width and height properties describe video dimensions rather than time-based speech or visual moments.",
+      "images": []
+    },
+    {
+      "number": "24",
+      "questionText": "Select the answer that correctly completes the sentence.\n\nAfter creating an AIProjectClient, a Python chat app should [Answer choice] before sending prompts to a deployed model.",
+      "translation": "Selecciona la respuesta que completa correctamente la oración.\n\nDespués de crear un AIProjectClient, una aplicación de chat en Python debe [Opción de respuesta] antes de enviar prompts a un modelo desplegado.",
+      "options": [
+        "A. call get_openai_client()",
+        "B. send prompts by using deployments operations",
+        "C. create a client from the deployment name only",
+        "D. use the deployment URL as the project endpoint"
+      ],
+      "correctAnswer": "A. call get_openai_client()",
+      "explanation": "Calling get_openai_client() is correct because it obtains the authenticated OpenAI-compatible client used to send model requests through the Foundry project. A deployment name alone does not provide the client endpoint and authentication, deployments operations are for working with deployed model metadata rather than sending chat prompts, and AIProjectClient uses the Foundry project endpoint rather than a model deployment URL.",
+      "images": []
+    },
+    {
+      "number": "25",
+      "questionText": "You have a Microsoft Foundry project that analyzes product images.\n\nYou need Azure Content Understanding in Foundry Tools to provide:\n• descriptive text that can be indexed for image search\n• a structured product category value\n\nWhich two actions should you perform? Each correct answer presents part of the solution.\n\nNOTE: Each correct selection is worth one point.",
+      "translation": "Tienes un proyecto de Microsoft Foundry que analiza imágenes de productos.\n\nNecesitas que Azure Content Understanding en Foundry Tools proporcione:\n• texto descriptivo que se pueda indexar para búsqueda de imágenes\n• un valor estructurado de categoría de producto\n\n¿Cuáles dos acciones debes realizar? Cada respuesta correcta presenta parte de la solución.",
+      "options": [
+        "A. Add a schema field that uses classify for the product category",
+        "B. Map source locations to the search index content field",
+        "C. Map the Markdown output to the search index content field",
+        "D. Configure Azure AI Content Safety image moderation categories"
+      ],
+      "correctAnswer": "A. Add a schema field that uses classify for the product category, C. Map the Markdown output to the search index content field",
+      "explanation": "Adding a schema field that uses classify returns a structured category value for downstream classification, and mapping the Markdown output provides descriptive content that can be indexed for image search. Azure AI Content Safety image moderation categories are used to detect potentially harmful content, and source locations identify where content came from rather than providing searchable descriptive text.",
+      "images": []
+    },
+    {
+      "number": "26",
+      "questionText": "You have a Python app that stores generated replies in a variable named response_text.\n\nYou need to use Azure Speech in Foundry Tools to synthesize response_text by using the en-US-Ava:DragonHDLatestNeural voice and play the audio on the default speaker.\n\nWhich configuration should the app use?",
+      "translation": "Tienes una aplicación Python que almacena respuestas generadas en una variable llamada response_text.\n\nNecesitas usar Azure Speech en Foundry Tools para sintetizar response_text con la voz en-US-Ava:DragonHDLatestNeural y reproducir el audio en el altavoz predeterminado.\n\n¿Qué configuración debe usar la aplicación?",
+      "options": [
+        "A. speech_synthesis_language and file output",
+        "B. speech_synthesis_language and default speaker output",
+        "C. speech_synthesis_voice_name and default speaker output",
+        "D. speech_synthesis_voice_name and file output"
+      ],
+      "correctAnswer": "C. speech_synthesis_voice_name and default speaker output",
+      "explanation": "The app should configure speech_synthesis_voice_name to use the required voice and default speaker output to play the synthesized audio locally. Setting only the synthesis language does not select the required specific voice, and file output writes the audio to a file instead of playing it through the default speaker.",
+      "images": []
+    },
+    {
+      "number": "27",
+      "questionText": "For each of the following statements, select Yes if the statement is true. Otherwise, select No.\n\n1. Foundry Tools can be used to discover, configure, and add tools to an agent.\n2. Built-in tools require you to host external code before they can be added to an agent.\n3. In the Foundry portal, selecting a model defines how an agent should behave when responding to users.",
+      "translation": "Para cada una de las siguientes afirmaciones, selecciona Sí si la afirmación es verdadera. De lo contrario, selecciona No.\n\n1. Foundry Tools se puede usar para descubrir, configurar y agregar herramientas a un agente.\n2. Las herramientas integradas requieren que aloje código externo antes de poder agregarlas a un agente.\n3. En el portal de Foundry, seleccionar un modelo define cómo debe comportarse un agente al responder a los usuarios.",
+      "options": [],
+      "correctAnswer": "1. Yes — 2. No — 3. No",
+      "explanation": "Foundry Tools is used to discover and configure tools for agents (statement 1 is true). Built-in tools are preconfigured capabilities that can be enabled for an agent without hosting external code (statement 2 is false). Selecting a model does not define the agent's behavior — instructions define behavior, while the model provides the underlying generation capability (statement 3 is false).",
+      "images": []
+    },
+    {
+      "number": "28",
+      "questionText": "For each of the following statements, select Yes if the statement is true. Otherwise, select No.\n\n1. Image generation models in Microsoft Foundry can create images from natural-language descriptions.\n2. Image generation models in Microsoft Foundry retrieve generated images from a curated image catalog.\n3. The Microsoft Foundry model catalog can be filtered by inference task to help find text-to-image models.",
+      "translation": "Para cada una de las siguientes afirmaciones, selecciona Sí si la afirmación es verdadera. De lo contrario, selecciona No.\n\n1. Los modelos de generación de imágenes en Microsoft Foundry pueden crear imágenes a partir de descripciones en lenguaje natural.\n2. Los modelos de generación de imágenes en Microsoft Foundry recuperan imágenes de un catálogo de imágenes curado.\n3. El catálogo de modelos de Microsoft Foundry se puede filtrar por tarea de inferencia para encontrar modelos de texto a imagen.",
+      "options": [],
+      "correctAnswer": "1. Yes — 2. No — 3. Yes",
+      "explanation": "Image generation models can create images from natural-language prompts (statement 1 is true). They generate new images rather than retrieve completed images from a curated catalog (statement 2 is false). The Microsoft Foundry model catalog supports filtering by inference task, which helps find models for tasks such as text-to-image generation (statement 3 is true).",
+      "images": []
+    },
+    {
+      "number": "29",
+      "questionText": "Select the answer that correctly completes the sentence.\n\nIn Microsoft Foundry, a system message is used to [Answer choice]",
+      "translation": "Selecciona la respuesta que completa correctamente la oración.\n\nEn Microsoft Foundry, un mensaje del sistema se usa para [Opción de respuesta]",
+      "options": [
+        "A. replace safety controls.",
+        "B. change model training data.",
+        "C. guide role, style, and boundaries.",
+        "D. evaluate responses after generation."
+      ],
+      "correctAnswer": "C. guide role, style, and boundaries.",
+      "explanation": "A system message is used to guide the model's role, response style, and behavioral boundaries for a generative AI app. It does not change model training data, evaluate responses after generation, or replace safety controls — those are separate mechanisms.",
+      "images": []
+    },
+    {
+      "number": "30",
+      "questionText": "Select the answer that correctly completes the sentence.\n\nIn Microsoft Foundry, an app that accepts spoken input and an image requires a deployed [Answer choice]",
+      "translation": "Selecciona la respuesta que completa correctamente la oración.\n\nEn Microsoft Foundry, una aplicación que acepta entrada de voz e imagen requiere un [Opción de respuesta] desplegado.",
+      "options": [
+        "A. Prompt Shield.",
+        "B. embedding model.",
+        "C. multimodal model.",
+        "D. image generation model."
+      ],
+      "correctAnswer": "C. multimodal model.",
+      "explanation": "A deployed multimodal model is correct because the app must process more than one input type — including speech and image content — and generate a response. An embedding model creates vector representations, an image generation model creates images from prompts, and Prompt Shield helps detect prompt injection attacks rather than processing multimodal input.",
       "images": []
     }
   ]
