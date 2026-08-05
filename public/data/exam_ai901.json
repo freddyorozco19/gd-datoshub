@@ -1,7 +1,7 @@
 {
   "examId": 901,
   "examTitle": "AI-901: Microsoft Azure AI",
-  "totalQuestions": 40,
+  "totalQuestions": 50,
   "scrapedAt": "2026-08-04T00:00:00.000Z",
   "questions": [
     {
@@ -481,6 +481,141 @@
       "options": [],
       "correctAnswer": "1. No — 2. Yes — 3. No",
       "explanation": "An AudioConfig object identifies the audio input source, while SpeechConfig stores the connection information for Azure Speech in Foundry Tools. The recognize_once_async() method is for single-utterance recognition, not long-running multi-utterance recognition. Calling .get() on the asynchronous recognition operation returns the recognition result for the spoken utterance.",
+      "images": []
+    },
+    {
+      "number": "41",
+      "questionText": "For each of the following statements, select Yes if the statement is true. Otherwise, select No.\n\n1. A user prompt can include an example to guide the model toward a desired style.\n2. A user prompt can specify the intended audience to help tailor the response tone and technical depth.\n3. A user prompt for structured output should omit requested formats such as bullet points, tables, or numbered lists.",
+      "translation": "Para cada una de las siguientes afirmaciones, selecciona Sí si la afirmación es verdadera. De lo contrario, selecciona No.\n\n1. Un prompt de usuario puede incluir un ejemplo para guiar al modelo hacia un estilo deseado.\n2. Un prompt de usuario puede especificar la audiencia prevista para ayudar a adaptar el tono de respuesta y la profundidad técnica.\n3. Un prompt de usuario para salida estructurada debe omitir los formatos solicitados como viñetas, tablas o listas numeradas.",
+      "options": [],
+      "correctAnswer": "1. Yes — 2. Yes — 3. No",
+      "explanation": "A user prompt can specify the intended audience to help the model tailor tone and technical depth, so the second statement is true. A prompt can include an example to guide the model toward the expected style or pattern, so the first statement is also true. A prompt for structured output should include the desired format rather than omit it, so the third statement is false.",
+      "images": []
+    },
+    {
+      "number": "42",
+      "questionText": "You have scanned supplier forms that contain document fields and pricing tables.\n\nYou need Azure Content Understanding in Foundry Tools to return structured JSON for the fields and repeated table rows.\n\nWhich analyzer capability should you configure?",
+      "translation": "Tienes formularios de proveedores escaneados que contienen campos de documentos y tablas de precios.\n\nNecesitas que Azure Content Understanding en Foundry Tools devuelva JSON estructurado para los campos y las filas de tabla repetidas.\n\n¿Qué capacidad del analizador debes configurar?",
+      "options": [
+        "A. Classification",
+        "B. Content extraction",
+        "C. Markdown output",
+        "D. Field extraction"
+      ],
+      "correctAnswer": "D. Field extraction",
+      "explanation": "Field extraction is correct because it returns structured values for fields and repeated rows. Classification categorizes documents, content extraction returns text and layout, and Markdown output structures extracted content for reading or search rather than returning schema-defined field and line-item values.",
+      "images": []
+    },
+    {
+      "number": "43",
+      "questionText": "You have a Python app that uses a Microsoft Foundry project containing an existing prompt agent named faq-agent.\n\nYou need to configure the app to send a user message to the existing agent.\n\nWhat should you do?",
+      "translation": "Tienes una aplicación Python que usa un proyecto de Microsoft Foundry que contiene un agente de prompt existente llamado faq-agent.\n\nNecesitas configurar la aplicación para enviar un mensaje de usuario al agente existente.\n\n¿Qué debes hacer?",
+      "options": [
+        "A. Create an ephemeral agent in the app",
+        "B. Call responses.create() with model set to faq-agent",
+        "C. Generate embeddings for the user message",
+        "D. Call responses.create() with an agent_reference"
+      ],
+      "correctAnswer": "D. Call responses.create() with an agent_reference",
+      "explanation": "Calling responses.create() with an agent_reference is correct because it sends the user message to the existing agent definition in the Foundry project. Setting model to the agent name treats the agent as a model deployment, creating an ephemeral agent defines a new in-app agent instead of using the existing Foundry agent, and generating embeddings does not submit a message to an agent or display an agent response.",
+      "images": []
+    },
+    {
+      "number": "44",
+      "questionText": "Select the answer that correctly completes the sentence.\n\nAzure Content Understanding in Foundry Tools uses a schema to [Answer choice] for document analysis.",
+      "translation": "Selecciona la respuesta que completa correctamente la oración.\n\nAzure Content Understanding en Foundry Tools usa un esquema para [Opción de respuesta] en el análisis de documentos.",
+      "options": [
+        "A. assign confidence scores to recognized text",
+        "B. capture text and layout from pages",
+        "C. define fields for extracted values",
+        "D. normalize files into supported formats"
+      ],
+      "correctAnswer": "C. define fields for extracted values",
+      "explanation": "Defining fields for extracted values is correct because a Content Understanding schema specifies the structured information to extract from unstructured documents. Capturing text and layout is part of document analysis, confidence scores indicate extraction certainty, and file normalization is not the purpose of the schema.",
+      "images": []
+    },
+    {
+      "number": "45",
+      "questionText": "You have a Microsoft Foundry project that contains an image-generation model.\n\nYou need an app to create a new product image by using an existing PNG image and a text prompt.\n\nWhich capability should the app use?",
+      "translation": "Tienes un proyecto de Microsoft Foundry que contiene un modelo de generación de imágenes.\n\nNecesitas una aplicación para crear una nueva imagen de producto usando una imagen PNG existente y un prompt de texto.\n\n¿Qué capacidad debe usar la aplicación?",
+      "options": [
+        "A. Text-to-image generation",
+        "B. Image-to-image editing",
+        "C. Object detection",
+        "D. Text embedding"
+      ],
+      "correctAnswer": "B. Image-to-image editing",
+      "explanation": "Image-to-image editing is correct because the app starts with an existing image and uses a text prompt to create a new image based on it. Object detection identifies objects in an image, text embedding creates vector representations of text, and text-to-image generation creates an image from a prompt without using an existing image as the source.",
+      "images": []
+    },
+    {
+      "number": "46",
+      "questionText": "You have a Python chat app that uses an OpenAI-compatible client from a Microsoft Foundry project.\n\nYou need to send a single prompt by using the unified model invocation API.\n\nWhich method should the app call?",
+      "translation": "Tienes una aplicación de chat Python que usa un cliente compatible con OpenAI de un proyecto de Microsoft Foundry.\n\nNecesitas enviar un único prompt usando la API unificada de invocación de modelos.\n\n¿Qué método debe llamar la aplicación?",
+      "options": [
+        "A. chat.completions.create()",
+        "B. responses.create()",
+        "C. deployments.get()",
+        "D. models.list()"
+      ],
+      "correctAnswer": "B. responses.create()",
+      "explanation": "The app should call responses.create() because it uses the Responses API to send a prompt and receive model output through an OpenAI-compatible client. chat.completions.create() uses the Chat Completions API instead, deployments.get() retrieves deployment metadata, and models.list() lists available models rather than sending a prompt.",
+      "images": []
+    },
+    {
+      "number": "47",
+      "questionText": "Select the answer that correctly completes the sentence.\n\nIn Microsoft Foundry, generating a natural-language description of an uploaded image in the chat playground requires a deployed [Answer choice]",
+      "translation": "Selecciona la respuesta que completa correctamente la oración.\n\nEn Microsoft Foundry, generar una descripción en lenguaje natural de una imagen cargada en el chat playground requiere un [Opción de respuesta] desplegado.",
+      "options": [
+        "A. multimodal model.",
+        "B. speech-to-text model.",
+        "C. text-embedding model.",
+        "D. image-generation model."
+      ],
+      "correctAnswer": "A. multimodal model.",
+      "explanation": "A deployed multimodal model is correct because it can process image input and generate a natural-language response about the visual content. An image-generation model creates or edits images, a speech-to-text model transcribes audio, and a text-embedding model creates vector representations rather than image descriptions.",
+      "images": []
+    },
+    {
+      "number": "48",
+      "questionText": "You have a Microsoft Foundry project that contains a deployed audio-capable Azure OpenAI model.\n\nYou need a Python app to send a recorded WAV question and receive both text and WAV audio output.\n\nWhat should the app do?",
+      "translation": "Tienes un proyecto de Microsoft Foundry que contiene un modelo de Azure OpenAI con capacidad de audio desplegado.\n\nNecesitas una aplicación Python para enviar una pregunta WAV grabada y recibir tanto salida de texto como salida de audio WAV.\n\n¿Qué debe hacer la aplicación?",
+      "options": [
+        "A. Send the WAV file as input_audio and request only the text modality",
+        "B. Pass the WAV file name as input_audio and request text and audio modalities",
+        "C. Base64-encode the WAV file as input_audio and request text and audio modalities",
+        "D. Send the WAV file content as a text message and request text and audio modalities"
+      ],
+      "correctAnswer": "C. Base64-encode the WAV file as input_audio and request text and audio modalities",
+      "explanation": "The app should base64-encode the WAV file as input_audio and request both text and audio modalities because the model must process spoken input and return both text and WAV audio output. Passing only the file name does not send the audio data, sending encoded audio as a text message does not identify it as audio input, and requesting only the text modality does not return an audio response.",
+      "images": []
+    },
+    {
+      "number": "49",
+      "questionText": "Select the answer that correctly completes the sentence.\n\nKey phrase extraction in Azure Language in Foundry Tools [Answer choice]",
+      "translation": "Selecciona la respuesta que completa correctamente la oración.\n\nLa extracción de frases clave en Azure Language en Foundry Tools [Opción de respuesta]",
+      "options": [
+        "A. detects the language of text.",
+        "B. identifies known entities with links.",
+        "C. identifies the main concepts in text.",
+        "D. identifies whether text is positive or negative."
+      ],
+      "correctAnswer": "C. identifies the main concepts in text.",
+      "explanation": "Key phrase extraction identifies the main concepts in text, which helps surface important words and phrases from unstructured content. Detecting the language of text is language detection, identifying known entities with links is entity linking, and identifying whether text is positive or negative is sentiment analysis.",
+      "images": []
+    },
+    {
+      "number": "50",
+      "questionText": "You have a Python app that processes customer support messages by using Azure Language in Foundry Tools.\n\nYou need to extract people, locations, and organizations from each message, including the matching text and category.\n\nWhich client method should the app call?",
+      "translation": "Tienes una aplicación Python que procesa mensajes de soporte al cliente usando Azure Language en Foundry Tools.\n\nNecesitas extraer personas, ubicaciones y organizaciones de cada mensaje, incluyendo el texto coincidente y la categoría.\n\n¿Qué método del cliente debe llamar la aplicación?",
+      "options": [
+        "A. recognize_entities(documents=documents)",
+        "B. analyze_sentiment(documents=documents)",
+        "C. recognize_linked_entities(documents=documents)",
+        "D. extract_key_phrases(documents=documents)"
+      ],
+      "correctAnswer": "A. recognize_entities(documents=documents)",
+      "explanation": "The app should call recognize_entities because named entity recognition extracts entities from unstructured text and returns entity text with categories such as person, location, and organization. analyze_sentiment returns sentiment, extract_key_phrases returns important terms, and recognize_linked_entities identifies entities that can be linked to known knowledge-base entries rather than returning standard named entity categories.",
       "images": []
     }
   ]
