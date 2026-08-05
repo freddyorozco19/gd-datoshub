@@ -1,7 +1,7 @@
 {
   "examId": 901,
   "examTitle": "AI-901: Microsoft Azure AI",
-  "totalQuestions": 30,
+  "totalQuestions": 40,
   "scrapedAt": "2026-08-04T00:00:00.000Z",
   "questions": [
     {
@@ -356,6 +356,131 @@
       ],
       "correctAnswer": "C. multimodal model.",
       "explanation": "A deployed multimodal model is correct because the app must process more than one input type — including speech and image content — and generate a response. An embedding model creates vector representations, an image generation model creates images from prompts, and Prompt Shield helps detect prompt injection attacks rather than processing multimodal input.",
+      "images": []
+    },
+    {
+      "number": "31",
+      "questionText": "For each of the following statements, select Yes if the statement is true. Otherwise, select No.\n\n1. Language detection in Azure Language in Foundry Tools redacts personally identifiable information from submitted text.\n2. Language detection in Azure Language in Foundry Tools identifies sentiment in submitted text and returns confidence scores.\n3. Language detection in Azure Language in Foundry Tools identifies the primary language of submitted text and returns a confidence score.",
+      "translation": "Para cada una de las siguientes afirmaciones, selecciona Sí si la afirmación es verdadera. De lo contrario, selecciona No.\n\n1. La detección de idioma en Azure Language en Foundry Tools redacta información de identificación personal del texto enviado.\n2. La detección de idioma en Azure Language en Foundry Tools identifica el sentimiento del texto enviado y devuelve puntuaciones de confianza.\n3. La detección de idioma en Azure Language en Foundry Tools identifica el idioma principal del texto enviado y devuelve una puntuación de confianza.",
+      "options": [],
+      "correctAnswer": "1. No — 2. No — 3. Yes",
+      "explanation": "Language detection identifies the primary language of submitted text and returns a confidence score, so the third statement is true. Identifying sentiment is a sentiment analysis capability, and redacting personally identifiable information is a PII detection capability — neither is a function of language detection.",
+      "images": []
+    },
+    {
+      "number": "32",
+      "questionText": "You have a Python app that uses the OpenAI Responses API in Microsoft Foundry with a deployed multimodal model.\n\nUsers provide two HTTPS image URLs.\n\nYou need the app to return a text comparison of the two images in a single request.\n\nWhat should the request include?",
+      "translation": "Tienes una aplicación Python que usa la API de Respuestas de OpenAI en Microsoft Foundry con un modelo multimodal desplegado.\n\nLos usuarios proporcionan dos URLs de imágenes HTTPS.\n\nNecesitas que la aplicación devuelva una comparación de texto de las dos imágenes en una sola solicitud.\n\n¿Qué debe incluir la solicitud?",
+      "options": [
+        "A. Each image URL sent to an image-generation endpoint",
+        "B. A text instruction and each image URL as an input_image content part",
+        "C. Each image URL as an image_url content part in Chat Completions format",
+        "D. A text instruction and each image URL combined into one input_text value"
+      ],
+      "correctAnswer": "B. A text instruction and each image URL as an input_image content part",
+      "explanation": "The request should include a text instruction and each image URL as an input_image content part because the model must receive both images as visual input and return a text comparison. Combining image URLs into text does not provide the images as visual input, Chat Completions format does not match the Responses API content-part names, and an image-generation endpoint creates images rather than comparing existing images.",
+      "images": []
+    },
+    {
+      "number": "33",
+      "questionText": "You have a Microsoft Foundry project that contains a deployed image-generation model.\n\nYou need a Python web app to create a 1024 x 1024 image from a user's natural-language prompt and display the image in a browser.\n\nWhich request pattern should the app use?",
+      "translation": "Tienes un proyecto de Microsoft Foundry que contiene un modelo de generación de imágenes desplegado.\n\nNecesitas una aplicación web Python para crear una imagen de 1024 x 1024 a partir de un prompt en lenguaje natural del usuario y mostrarla en un navegador.\n\n¿Qué patrón de solicitud debe usar la aplicación?",
+      "options": [
+        "A. Send the prompt to the image embeddings endpoint and render the returned vectors",
+        "B. Send the prompt to the image generations endpoint and decode the returned image data",
+        "C. Send the prompt to the image generations endpoint and return the raw HTTP response body",
+        "D. Send the prompt to the image edits endpoint and upload an existing source image"
+      ],
+      "correctAnswer": "B. Send the prompt to the image generations endpoint and decode the returned image data",
+      "explanation": "Sending the prompt to the image generations endpoint and decoding the returned image data is correct because the app must create a new image from a natural-language prompt and display the generated image. The image edits endpoint is used when starting from an existing image, the raw HTTP response body is not the generated image bytes returned by the image-generation response, and embeddings return vector representations rather than displayable images.",
+      "images": []
+    },
+    {
+      "number": "34",
+      "questionText": "You have a Microsoft Foundry resource and recordings of customer support calls. Each recording contains an agent and a customer.\n\nYou need Azure Content Understanding in Foundry Tools to return agent/customer-attributed transcripts, summaries, and sentiment insights with minimal analyzer configuration.\n\nWhich analyzer should you use?",
+      "translation": "Tienes un recurso de Microsoft Foundry y grabaciones de llamadas de soporte al cliente. Cada grabación contiene un agente y un cliente.\n\nNecesitas que Azure Content Understanding en Foundry Tools devuelva transcripciones atribuidas por agente/cliente, resúmenes e información de sentimiento con una configuración mínima del analizador.\n\n¿Qué analizador debes usar?",
+      "options": [
+        "A. prebuilt-audioSearch",
+        "B. a customized prebuilt-audioSearch analyzer",
+        "C. prebuilt-callCenter",
+        "D. a custom audio analyzer"
+      ],
+      "correctAnswer": "C. prebuilt-callCenter",
+      "explanation": "The prebuilt-callCenter analyzer is correct because it is designed for post-call analysis and returns conversation transcripts with speaker role detection, call summaries, and call sentiment with minimal configuration. prebuilt-audioSearch is optimized for search and retrieval scenarios, a custom audio analyzer would require more configuration, and customizing prebuilt-audioSearch would not minimize analyzer configuration.",
+      "images": []
+    },
+    {
+      "number": "35",
+      "questionText": "You have a Microsoft Foundry project.\n\nYou need to deploy an Azure OpenAI model for a chat app and apply guardrails.\n\nWhich deployment option should you use?",
+      "translation": "Tienes un proyecto de Microsoft Foundry.\n\nNecesitas desplegar un modelo de Azure OpenAI para una aplicación de chat y aplicar controles de seguridad (guardrails).\n\n¿Qué opción de despliegue debes usar?",
+      "options": [
+        "A. Provisioned deployment type",
+        "B. Managed compute deployment",
+        "C. Standard deployment in Foundry resources",
+        "D. Instant access"
+      ],
+      "correctAnswer": "C. Standard deployment in Foundry resources",
+      "explanation": "Standard deployment in Foundry resources is correct because the scenario uses an Azure OpenAI model and requires an actual deployment that can be governed with guardrails. Instant access does not create a deployment, managed compute deployment is intended for partner and community models, and provisioned deployment type is a throughput-related deployment type rather than the deployment option being selected.",
+      "images": []
+    },
+    {
+      "number": "36",
+      "questionText": "You have a Python app that collects short customer feedback comments.\n\nYou need to write a sentiment label and positive, neutral, and negative confidence scores for each comment. The solution must avoid training a custom model.\n\nWhich Azure Language in Foundry Tools feature should the app call?",
+      "translation": "Tienes una aplicación Python que recopila comentarios cortos de retroalimentación de clientes.\n\nNecesitas registrar una etiqueta de sentimiento y puntuaciones de confianza positivas, neutrales y negativas para cada comentario. La solución debe evitar entrenar un modelo personalizado.\n\n¿Qué función de Azure Language en Foundry Tools debe llamar la aplicación?",
+      "options": [
+        "A. Sentiment analysis",
+        "B. PII detection",
+        "C. Key phrase extraction",
+        "D. Language detection"
+      ],
+      "correctAnswer": "A. Sentiment analysis",
+      "explanation": "Sentiment analysis is correct because it returns sentiment labels and confidence scores for positive, neutral, and negative sentiment from text. Key phrase extraction identifies important terms, language detection identifies the language of the text, and PII detection identifies sensitive personal information — none of these return sentiment labels or confidence scores.",
+      "images": []
+    },
+    {
+      "number": "37",
+      "questionText": "For each of the following statements, select Yes if the statement is true. Otherwise, select No.\n\n1. The OpenAI Responses API in Microsoft Foundry supports a single request that includes both text input and image input.\n2. Images sent to a vision-enabled model by using the OpenAI Responses API can be provided as publicly accessible URLs, but not as base64-encoded image data.\n3. Application code that uses a deployed Foundry model with the OpenAI Python SDK passes the base model name instead of the deployment name as the model value.",
+      "translation": "Para cada una de las siguientes afirmaciones, selecciona Sí si la afirmación es verdadera. De lo contrario, selecciona No.\n\n1. La API de Respuestas de OpenAI en Microsoft Foundry admite una sola solicitud que incluye tanto entrada de texto como entrada de imagen.\n2. Las imágenes enviadas a un modelo habilitado para visión mediante la API de Respuestas de OpenAI se pueden proporcionar como URLs de acceso público, pero no como datos de imagen codificados en base64.\n3. El código de aplicación que usa un modelo Foundry desplegado con el SDK de Python de OpenAI pasa el nombre del modelo base en lugar del nombre del despliegue como valor del model.",
+      "options": [],
+      "correctAnswer": "1. Yes — 2. No — 3. No",
+      "explanation": "The OpenAI Responses API in Microsoft Foundry supports requests that include both text input and image input, so the first statement is true. Images can be provided by URL or as base64-encoded data, so the second statement is false. The model value should be the deployment name in the Foundry project rather than the base model name, so the third statement is false.",
+      "images": []
+    },
+    {
+      "number": "38",
+      "questionText": "You have a Microsoft Foundry project that receives images of retail store shelves.\n\nYou need to extract product brands, product counts, and shelf condition from each image as structured fields with confidence values.\n\nWhat should you create?",
+      "translation": "Tienes un proyecto de Microsoft Foundry que recibe imágenes de estantes de tiendas minoristas.\n\nNecesitas extraer marcas de productos, conteos de productos y condición del estante de cada imagen como campos estructurados con valores de confianza.\n\n¿Qué debes crear?",
+      "options": [
+        "A. An Azure Content Understanding image analyzer with a field schema",
+        "B. An Azure AI Content Safety image moderation configuration",
+        "C. An Azure Vision in Foundry Tools Image Analysis request that uses OCR",
+        "D. An Azure Content Understanding document analyzer with a field schema"
+      ],
+      "correctAnswer": "A. An Azure Content Understanding image analyzer with a field schema",
+      "explanation": "An Azure Content Understanding image analyzer with a field schema is correct because it can extract structured values from still images for downstream processing. Azure AI Content Safety image moderation flags potentially harmful content, a document analyzer is for document inputs rather than retail shelf images, and Azure Vision in Foundry Tools Image Analysis with OCR extracts visible text but does not return the required custom structured fields for brands, counts, and shelf condition.",
+      "images": []
+    },
+    {
+      "number": "39",
+      "questionText": "You have a Microsoft Foundry project that contains a deployed Azure OpenAI model.\n\nYou need to submit prompts and review generated responses without writing code.\n\nWhich portal feature should you use?",
+      "translation": "Tienes un proyecto de Microsoft Foundry que contiene un modelo de Azure OpenAI desplegado.\n\nNecesitas enviar prompts y revisar las respuestas generadas sin escribir código.\n\n¿Qué función del portal debes usar?",
+      "options": [
+        "A. Chat playground",
+        "B. Monitoring metrics",
+        "C. Model catalog",
+        "D. Models + endpoints"
+      ],
+      "correctAnswer": "A. Chat playground",
+      "explanation": "The Chat playground is correct because it lets you submit prompts to a deployed model and review generated responses in the Foundry portal without writing code. The model catalog is used to find and select models, Models + endpoints is used to manage model deployments and endpoints, and monitoring metrics are used to review operational data rather than interactively test prompts.",
+      "images": []
+    },
+    {
+      "number": "40",
+      "questionText": "For each of the following statements, select Yes if the statement is true. Otherwise, select No.\n\n1. The recognize_once_async() method is used for long-running, multi-utterance speech recognition.\n2. The recognize_once_async().get() call returns the recognition result for a single spoken utterance.\n3. An AudioConfig object stores the endpoint or region and key used to connect to Azure Speech in Foundry Tools.",
+      "translation": "Para cada una de las siguientes afirmaciones, selecciona Sí si la afirmación es verdadera. De lo contrario, selecciona No.\n\n1. El método recognize_once_async() se usa para el reconocimiento de voz de múltiples expresiones de larga duración.\n2. La llamada recognize_once_async().get() devuelve el resultado del reconocimiento para una sola expresión hablada.\n3. Un objeto AudioConfig almacena el endpoint o la región y la clave usados para conectarse a Azure Speech en Foundry Tools.",
+      "options": [],
+      "correctAnswer": "1. No — 2. Yes — 3. No",
+      "explanation": "An AudioConfig object identifies the audio input source, while SpeechConfig stores the connection information for Azure Speech in Foundry Tools. The recognize_once_async() method is for single-utterance recognition, not long-running multi-utterance recognition. Calling .get() on the asynchronous recognition operation returns the recognition result for the spoken utterance.",
       "images": []
     }
   ]

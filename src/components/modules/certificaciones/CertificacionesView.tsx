@@ -46,7 +46,7 @@ const PROVIDERS: ProviderConfig[] = [
       { id: 'ai-100', code: 'AI-100', name: 'Designing/Implementing Azure AI Solution', level: 'Associate'   },
       { id: 'ai-102', code: 'AI-102', name: 'Azure AI Engineer',                        level: 'Associate'   },
       { id: 'ai-900', code: 'AI-900', name: 'Azure AI Fundamentals',                    level: 'Fundamental' },
-      { id: 'ai-901', code: 'AI-901', name: 'Microsoft Azure AI',                       dataFile: '/data/exam_ai901.json', questions: 30, level: 'Fundamental' },
+      { id: 'ai-901', code: 'AI-901', name: 'Microsoft Azure AI',                       dataFile: '/data/exam_ai901.json', questions: 40, level: 'Fundamental' },
       { id: 'az-100', code: 'AZ-100', name: 'Azure Infrastructure and Deployment',      level: 'Associate'   },
       { id: 'az-103', code: 'AZ-103', name: 'Azure Administrator',                      level: 'Associate'   },
       { id: 'az-104', code: 'AZ-104', name: 'Azure Administrator',                      level: 'Associate'   },
