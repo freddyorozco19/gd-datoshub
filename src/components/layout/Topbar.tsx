@@ -13,7 +13,7 @@ const ROUTE_META: Record<string, { label: string; parent?: string }> = {
   "/integraciones":   { label: "Integraciones",   parent: "Sistemas"  },
   "/reportes":        { label: "Reportes",        parent: "Análisis"  },
   "/repositorios":    { label: "Repositorios",    parent: "Análisis"  },
-  "/cmmi":            { label: "CMMI",            parent: "Análisis"  },
+  "/cmmi":            { label: "CMMI" },
   "/certificaciones": { label: "Certificaciones", parent: "Análisis"  },
   "/usuarios":        { label: "Usuarios"                            },
 };

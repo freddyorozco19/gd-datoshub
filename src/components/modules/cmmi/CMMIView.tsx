@@ -4463,35 +4463,39 @@ export default function CMMIView() {
   const [vertical, setVertical] = useState<Vertical>("comercial");
   const active = VERTICALES.find((v) => v.id === vertical)!;
 
+  const topbarTabs = (
+    <>
+      {VERTICALES.map((v) => {
+        const isActive = v.id === vertical;
+        return (
+          <button
+            key={v.id}
+            onClick={() => setVertical(v.id)}
+            className={`relative flex items-center gap-1.5 px-4 h-full text-xs font-medium transition-colors ${
+              isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
+            }`}
+          >
+            {v.label}
+            {!v.enabled && (
+              <span className="text-[9px] px-1 py-0.5 rounded bg-white/[0.06] text-slate-600">pronto</span>
+            )}
+            <span
+              className="absolute bottom-0 left-0 right-0 h-[2px] rounded-t-full transition-all"
+              style={{
+                background: isActive ? "rgba(96,165,250,1)" : "transparent",
+                boxShadow: isActive ? "0 0 8px rgba(96,165,250,0.6)" : "none",
+              }}
+            />
+          </button>
+        );
+      })}
+    </>
+  );
+
   return (
     <div className="flex flex-col h-full overflow-auto">
-      <Topbar title="CMMI" subtitle="Gestión y registro por vertical · Comercial, Financiero, PMO, Datos" />
+      <Topbar title="CMMI" tabs={topbarTabs} />
       <main className="flex-1 p-6 space-y-5">
-        {/* Pills de verticales */}
-        <div className="flex items-center gap-2 flex-wrap">
-          {VERTICALES.map((v) => {
-            const isActive = v.id === vertical;
-            return (
-              <button
-                key={v.id}
-                onClick={() => setVertical(v.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-blue-600 text-white"
-                    : "bg-white/[0.04] text-slate-400 border border-white/[0.07] hover:bg-white/[0.08] hover:text-slate-200"
-                }`}
-              >
-                {v.label}
-                {!v.enabled && (
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${isActive ? "bg-blue-500 text-blue-100" : "bg-white/[0.06] text-slate-500"}`}>
-                    pronto
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-
         {active.id === "comercial"  && active.enabled ? <ComercialPanel />   :
          active.id === "proyectos"  && active.enabled ? <ProyectosPanel />   :
          active.id === "financiero" && active.enabled ? <FinancieroPanel />  :
