@@ -37,7 +37,9 @@ export async function POST(req: NextRequest) {
 
   const res = await adminFetch(`/users/${id}`, {
     method: "PUT",
-    body: JSON.stringify({ password }),
+    // email_confirm:true fuerza la confirmación del email aunque el usuario nunca
+    // haya hecho clic en el link de invitación, permitiendo el login inmediato.
+    body: JSON.stringify({ password, email_confirm: true }),
   });
 
   if (!res.ok) {
