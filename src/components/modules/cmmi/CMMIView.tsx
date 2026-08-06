@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import {
+  ScatterChart, Scatter, XAxis, YAxis, CartesianGrid,
+  Tooltip, ReferenceLine, ResponsiveContainer, Legend,
+} from "recharts";
 import {
   ShieldCheck, Upload, FileSpreadsheet, X, Search,
   DollarSign, Trophy, TrendingDown, Clock, Layers, AlertCircle,
@@ -2476,12 +2480,11 @@ function CpiLbPanel({ data }: { data: any }) {
   const scopes = ["GLOBAL", ...portafolios];
   const indicators: string[] = data?.metadata?.indicadores ?? ["SPI", "CPI", "VA"];
 
-  const scopeData  = scope === "GLOBAL" ? data?.global : data?.por_portafolio?.[scope];
-  const indData    = scopeData?.[ind];
-  const glb        = indData?.global;
-  const fases      = indData?.por_fase ?? {};
-  const nelson     = indData?.nelson ?? {};
-  const chartB64   = data?.images?.[scope] ?? null;
+  const scopeData = scope === "GLOBAL" ? data?.global : data?.por_portafolio?.[scope];
+  const indData   = scopeData?.[ind];
+  const glb       = indData?.global;
+  const fases     = indData?.por_fase ?? {};
+  const nelson    = indData?.nelson ?? {};
 
   const SEM_CLS: Record<string, string> = {
     CONTROLADO: "text-emerald-400", MARGINAL: "text-amber-400",
@@ -2582,10 +2585,115 @@ function CpiLbPanel({ data }: { data: any }) {
         </div>
       )}
 
-      {/* Carta de control */}
-      {chartB64 && (
-        <ModelImage b64={chartB64} title={`Carta de Control Individual — ${scope === "GLOBAL" ? "Global" : scope}`} />
-      )}
+      {/* Carta de control interactiva */}
+      <CpiCartaControl scopeData={scopeData} ind={ind} scope={scope} cpiCap={data?.metadata?.cpi_cap ?? 5} />
+    </div>
+  );
+}
+
+/* ── Carta de control interactiva recharts ─────────────────────────── */
+const PORT_COLORS_MAP: Record<string, string> = {
+  "DATOS Y SISTEMAS DE INFORMACIÓN": "#6366F1",
+  "CONSULTORÍA": "#10B981",
+  "TI": "#F59E0B",
+};
+const DEFAULT_COLOR = "#818CF8";
+
+function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
+  scopeData: any; ind: string; scope: string; cpiCap: number;
+}) {
+  const indData = scopeData?.[ind];
+  const glb     = indData?.global;
+  const valores: { x: number; y: number; project_id: string; portafolio: string }[] =
+    indData?.valores ?? [];
+
+  if (!glb || valores.length === 0) return null;
+
+  const { CL, UCL, LCL } = glb;
+
+  // Agrupar por portafolio para series de color distinto
+  const byPort = useMemo(() => {
+    const map: Record<string, typeof valores> = {};
+    for (const v of valores) {
+      const key = v.portafolio || "Sin portafolio";
+      (map[key] = map[key] ?? []).push(v);
+    }
+    return map;
+  }, [valores]);
+
+  const isGlobal = scope === "GLOBAL";
+  const label    = ind === "CPI" ? `CPI (techo ${cpiCap})` : ind;
+
+  const CustomDot = (props: any) => {
+    const { cx, cy, payload } = props;
+    const fuera = payload.y > UCL || payload.y < LCL;
+    const color = isGlobal
+      ? (PORT_COLORS_MAP[payload.portafolio] ?? DEFAULT_COLOR)
+      : (fuera ? "#EF4444" : "#6366F1");
+    return <circle cx={cx} cy={cy} r={5} fill={color} stroke="white" strokeWidth={0.8} />;
+  };
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (!active || !payload?.length) return null;
+    const d = payload[0].payload;
+    const fuera = d.y > UCL || d.y < LCL;
+    return (
+      <div className="bg-[#0d1117] border border-white/10 rounded-lg px-3 py-2 text-xs shadow-xl">
+        <p className="font-semibold text-slate-200 mb-1">{d.project_id}</p>
+        <p className="text-slate-400">Portafolio: <span className="text-slate-200">{d.portafolio || "—"}</span></p>
+        <p className="text-slate-400">Mes relativo: <span className="text-slate-200">{(d.x * 100).toFixed(0)}%</span></p>
+        <p className="text-slate-400">{label}: <span className={fuera ? "text-rose-400 font-bold" : "text-emerald-400 font-bold"}>{d.y.toFixed(4)}</span></p>
+        {fuera && <p className="text-rose-400 mt-1">⚠ Fuera de control</p>}
+      </div>
+    );
+  };
+
+  return (
+    <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-4">
+      <p className="text-xs font-semibold text-slate-300 mb-3 uppercase tracking-wider">
+        Carta de Control Individual — {scope === "GLOBAL" ? "Global" : scope} · {label}
+      </p>
+      <ResponsiveContainer width="100%" height={320}>
+        <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+          <XAxis
+            dataKey="x" type="number" domain={[0, 1]}
+            tickFormatter={(v) => `${(v * 100).toFixed(0)}%`}
+            label={{ value: "Mes Relativo", position: "insideBottom", offset: -10, fill: "#6B7280", fontSize: 11 }}
+            tick={{ fill: "#6B7280", fontSize: 10 }} tickLine={false}
+          />
+          <YAxis
+            dataKey="y" type="number"
+            label={{ value: label, angle: -90, position: "insideLeft", offset: 10, fill: "#6B7280", fontSize: 11 }}
+            tick={{ fill: "#6B7280", fontSize: 10 }} tickLine={false}
+          />
+          <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.1)" }} />
+          <ReferenceLine y={CL}  stroke="#3B82F6" strokeDasharray="6 3" strokeWidth={1.5}
+            label={{ value: `CL=${CL.toFixed(4)}`, position: "right", fill: "#3B82F6", fontSize: 10 }} />
+          <ReferenceLine y={UCL} stroke="#EF4444" strokeDasharray="4 2" strokeWidth={1}
+            label={{ value: `UCL=${UCL.toFixed(4)}`, position: "right", fill: "#EF4444", fontSize: 10 }} />
+          <ReferenceLine y={LCL} stroke="#EF4444" strokeDasharray="4 2" strokeWidth={1}
+            label={{ value: `LCL=${LCL.toFixed(4)}`, position: "right", fill: "#EF4444", fontSize: 10 }} />
+          {isGlobal
+            ? Object.entries(byPort).map(([port, pts]) => (
+                <Scatter key={port} name={port} data={pts}
+                  fill={PORT_COLORS_MAP[port] ?? DEFAULT_COLOR} shape={<CustomDot />} />
+              ))
+            : <Scatter name={scope} data={valores} fill="#6366F1" shape={<CustomDot />} />
+          }
+          {isGlobal && (
+            <Legend
+              formatter={(v) => <span style={{ color: "#9CA3AF", fontSize: 11 }}>{v}</span>}
+              iconType="circle" iconSize={8}
+            />
+          )}
+        </ScatterChart>
+      </ResponsiveContainer>
+      <div className="flex gap-4 mt-2 text-[10px] text-slate-500">
+        <span className="flex items-center gap-1"><span className="inline-block w-6 border-t-2 border-dashed border-blue-500" /> CL (Media)</span>
+        <span className="flex items-center gap-1"><span className="inline-block w-6 border-t-2 border-dashed border-rose-500" /> UCL / LCL (±3σ)</span>
+        <span className="flex items-center gap-1"><span className="inline-block w-2.5 h-2.5 rounded-full bg-rose-500" /> Fuera de control</span>
+      </div>
     </div>
   );
 }

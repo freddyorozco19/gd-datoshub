@@ -455,7 +455,7 @@ def _nelson_rules(series: "pd.Series") -> dict:
             "reglas_activas": activas, "veredicto": veredicto, "n": n}
 
 
-def _calcular_scope(sub: "pd.DataFrame") -> dict:
+def _calcular_scope(sub: "pd.DataFrame", include_valores: bool = False) -> dict:
     COLS = {
         "SPI":  {"col": "SPI",     "lcl_min": 0.0},
         "CPI":  {"col": "CPI_cap", "lcl_min": None},
@@ -464,13 +464,25 @@ def _calcular_scope(sub: "pd.DataFrame") -> dict:
     data: dict = {"n_proyectos": int(sub["ProjectId"].nunique()), "n_obs": int(len(sub))}
     for ind_key, cfg in COLS.items():
         col    = cfg["col"]
-        serie  = sub[col].dropna()
+        sorted_sub = sub.sort_values("mes_rel").dropna(subset=[col])
+        serie  = sorted_sub[col]
         glb    = _stats_globales(serie)
         if cfg["lcl_min"] is not None:
             glb["LCL"] = max(cfg["lcl_min"], glb["LCL"])
         bins   = _stats_por_bin(sub, col, lcl_min=cfg["lcl_min"])
-        nelson = _nelson_rules(sub.sort_values("mes_rel")[col].dropna().reset_index(drop=True))
-        data[ind_key] = {"global": glb, "por_fase": bins, "nelson": nelson}
+        nelson = _nelson_rules(serie.reset_index(drop=True))
+        entry: dict = {"global": glb, "por_fase": bins, "nelson": nelson}
+        if include_valores:
+            entry["valores"] = [
+                {
+                    "x":          round(float(r["mes_rel"]), 4),
+                    "y":          round(float(r[col]), 4),
+                    "project_id": str(r["ProjectId"]),
+                    "portafolio": str(r.get("portafolio", "")),
+                }
+                for _, r in sorted_sub.iterrows()
+            ]
+        data[ind_key] = entry
     return data
 
 
@@ -580,16 +592,12 @@ def lineas_base_desde_excel(raw_bytes: bytes) -> dict:
             "bin_labels":   BIN_LABELS,
             "indicadores":  ["SPI", "CPI", "VA"],
         },
-        "global":          _calcular_scope(df),
-        "por_portafolio":  {},
-        "images": {
-            "GLOBAL": _carta_control_scope(df, "Global", CPI_CAP),
-        },
+        "global":         _calcular_scope(df, include_valores=True),
+        "por_portafolio": {},
     }
     for port in portafolios:
         sub = df[df["portafolio"] == port]
-        lb["por_portafolio"][port] = _calcular_scope(sub)
-        lb["images"][port] = _carta_control_scope(sub, port, CPI_CAP)
+        lb["por_portafolio"][port] = _calcular_scope(sub, include_valores=True)
     return lb
 
 
