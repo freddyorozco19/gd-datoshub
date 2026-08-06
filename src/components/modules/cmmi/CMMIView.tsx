@@ -2648,11 +2648,11 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
     const color = fuera ? "#EF4444"
       : isGlobal ? (PORT_COLORS_MAP[payload.portafolio] ?? DEFAULT_DOT_COLOR)
       : DEFAULT_DOT_COLOR;
-    const r = fuera ? 6 : 5;
+    const r = fuera ? 3.5 : 2.5;
     return (
       <g>
-        {fuera && <circle cx={cx} cy={cy} r={r + 4} fill="#EF4444" opacity={0.18} />}
-        <circle cx={cx} cy={cy} r={r} fill={color} stroke={fuera ? "#fff" : "rgba(0,0,0,0.4)"} strokeWidth={fuera ? 1.2 : 0.6} />
+        {fuera && <circle cx={cx} cy={cy} r={r + 3} fill="#EF4444" opacity={0.15} />}
+        <circle cx={cx} cy={cy} r={r} fill={color} fillOpacity={fuera ? 1 : 0.85} stroke={fuera ? "#fff" : "rgba(0,0,0,0.3)"} strokeWidth={fuera ? 0.8 : 0.4} />
       </g>
     );
   }, [isGlobal]);
