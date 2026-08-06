@@ -2690,20 +2690,58 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
 
   const fmt = (v: number) => v.toFixed(3);
 
-  const [brushRange, setBrushRange] = useState<[number, number]>([0, Math.min(chartData.length - 1, 59)]);
-  const windowSize = brushRange[1] - brushRange[0];
+  // ── Zoom fluido via rueda + drag ──────────────────────────────────
+  const N       = chartData.length;
+  const domRef  = useRef<[number, number]>([1, N]);
+  const [xDomain, setXDomain] = useState<[number, number]>([1, N]);
+  const dragging = useRef<{ startX: number; domStart: [number,number] } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isZoomed = xDomain[0] !== 1 || xDomain[1] !== N;
 
-  const zoomIn = () => {
-    const mid   = Math.round((brushRange[0] + brushRange[1]) / 2);
-    const half  = Math.max(4, Math.round(windowSize / 4));
-    setBrushRange([Math.max(0, mid - half), Math.min(chartData.length - 1, mid + half)]);
+  const clampDomain = (lo: number, hi: number): [number, number] => {
+    const w = Math.max(4, hi - lo);
+    lo = Math.max(1, lo);
+    hi = Math.min(N, lo + w);
+    lo = Math.max(1, hi - w);
+    return [Math.round(lo), Math.round(hi)];
   };
-  const zoomOut = () => {
-    const mid   = Math.round((brushRange[0] + brushRange[1]) / 2);
-    const half  = Math.round(windowSize);
-    setBrushRange([Math.max(0, mid - half), Math.min(chartData.length - 1, mid + half)]);
-  };
-  const zoomReset = () => setBrushRange([0, chartData.length - 1]);
+
+  const onWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const [lo, hi]  = domRef.current;
+    const w         = hi - lo;
+    const rect      = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+    const ratio     = (e.clientX - rect.left) / rect.width;
+    const factor    = e.deltaY < 0 ? 0.75 : 1.33;
+    const newW      = Math.max(4, Math.min(N, w * factor));
+    const pivot     = lo + ratio * w;
+    const newLo     = pivot - ratio * newW;
+    const d         = clampDomain(newLo, newLo + newW);
+    domRef.current  = d;
+    setXDomain(d);
+  }, [N]);
+
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    dragging.current = { startX: e.clientX, domStart: [...domRef.current] as [number,number] };
+  }, []);
+
+  const onMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!dragging.current || !containerRef.current) return;
+    const rect  = containerRef.current.getBoundingClientRect();
+    const [lo, hi] = dragging.current.domStart;
+    const w     = hi - lo;
+    const pxW   = rect.width;
+    const dIdx  = ((dragging.current.startX - e.clientX) / pxW) * w;
+    const d     = clampDomain(lo + dIdx, hi + dIdx);
+    domRef.current = d;
+    setXDomain(d);
+  }, []);
+
+  const onMouseUp = useCallback(() => { dragging.current = null; }, []);
+
+  const visibleData = useMemo(() =>
+    chartData.filter(d => d.idx >= xDomain[0] && d.idx <= xDomain[1]),
+  [chartData, xDomain]);
 
   return (
     <div style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden" }}>
@@ -2715,41 +2753,36 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
           </p>
           <p style={{ color: "#475569", fontSize: 11, margin: "3px 0 0" }}>
             {scope === "GLOBAL" ? "Global" : scope} · {chartData.length} observaciones
-            {windowSize < chartData.length - 1 && <span style={{ color: "#6366F1", marginLeft: 6 }}>· zoom {brushRange[0]+1}–{brushRange[1]+1}</span>}
+            {isZoomed
+              ? <span style={{ color: "#6366F1", marginLeft: 6 }}>· mostrando {xDomain[0]}–{xDomain[1]} · <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => { domRef.current=[1,N]; setXDomain([1,N]); }}>reset</span></span>
+              : <span style={{ color: "#374151", marginLeft: 6 }}>· scroll para zoom · arrastra para mover</span>
+            }
           </p>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {/* Botones zoom */}
-          {[
-            { title: "Zoom in",   icon: "＋", action: zoomIn  },
-            { title: "Zoom out",  icon: "－", action: zoomOut },
-            { title: "Reset zoom",icon: "⤢",  action: zoomReset },
-          ].map(({ title, icon, action }) => (
-            <button key={title} title={title} onClick={action} style={{
-              width: 28, height: 28, borderRadius: 6, border: "1px solid rgba(255,255,255,0.1)",
-              background: "rgba(255,255,255,0.04)", color: "#94A3B8", fontSize: 14, cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1,
-              transition: "background 0.15s",
-            }}
-              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
-              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
-            >{icon}</button>
-          ))}
-          <span style={{
-            fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
-            background: bajo_ctrl ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
-            border: `1px solid ${bajo_ctrl ? "rgba(34,197,94,0.3)" : "rgba(239,68,68,0.3)"}`,
-            color: bajo_ctrl ? "#4ADE80" : "#F87171",
-          }}>
-            {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
-          </span>
-        </div>
+        <span style={{
+          fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
+          background: bajo_ctrl ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
+          border: `1px solid ${bajo_ctrl ? "rgba(34,197,94,0.3)" : "rgba(239,68,68,0.3)"}`,
+          color: bajo_ctrl ? "#4ADE80" : "#F87171",
+        }}>
+          {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
+        </span>
       </div>
 
+      {/* Área del gráfico con zoom wheel+drag */}
+      <div
+        ref={containerRef}
+        onWheel={onWheel}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseUp}
+        style={{ cursor: dragging.current ? "grabbing" : "crosshair", userSelect: "none" }}
+      >
       <ResponsiveContainer width="100%" height={360}>
-        <ComposedChart data={chartData} margin={{ top: 8, right: 114, bottom: 44, left: 8 }}>
+        <ComposedChart data={visibleData} margin={{ top: 8, right: 114, bottom: 44, left: 8 }}>
 
-          {/* Zonas sombreadas — de afuera hacia adentro */}
+          {/* Zonas sombreadas */}
           <ReferenceArea y1={UCL}  y2={yMax} fill={OOC_COLOR}    ifOverflow="extendDomain" />
           <ReferenceArea y1={yMin} y2={LCL}  fill={OOC_COLOR}    ifOverflow="extendDomain" />
           <ReferenceArea y1={s2u}  y2={UCL}  fill={ZONE_C_COLOR} ifOverflow="extendDomain" />
@@ -2762,7 +2795,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
 
           <XAxis
             dataKey="idx" type="number"
-            domain={[0, chartData.length + 1]}
+            domain={[xDomain[0] - 0.5, xDomain[1] + 0.5]}
             tick={{ fill: "#6B7280", fontSize: 10, fontWeight: 300 }}
             tickLine={false} axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
             label={{ value: "Proyectos (orden cronológico)", position: "insideBottom", offset: -30,
@@ -2780,7 +2813,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
 
           <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.08)", strokeWidth: 1, strokeDasharray: "3 3" }} />
 
-          {/* Líneas sigma — más finas */}
+          {/* Líneas sigma */}
           <ReferenceLine y={UCL} stroke="#EF4444" strokeDasharray="5 4" strokeWidth={0.8}
             label={{ value: `+3σ = ${fmt(UCL)}`, position: "right", fill: "#EF4444", fontSize: 9.5, dx: 6 }} />
           <ReferenceLine y={s2u} stroke="#F97316" strokeDasharray="4 4" strokeWidth={0.7}
@@ -2796,7 +2829,6 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
           <ReferenceLine y={LCL} stroke="#EF4444" strokeDasharray="5 4" strokeWidth={0.8}
             label={{ value: `-3σ = ${fmt(LCL)}`, position: "right", fill: "#EF4444", fontSize: 9.5, dx: 6 }} />
 
-          {/* Línea conectora */}
           <Line
             type="linear" dataKey="y"
             stroke="#38BDF8" strokeWidth={1.2}
@@ -2804,23 +2836,9 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
             isAnimationActive={false}
           />
 
-          {/* Brush = zoom horizontal */}
-          <Brush
-            dataKey="idx" height={20} stroke="rgba(255,255,255,0.07)"
-            fill="#0a0c12" travellerWidth={5}
-            startIndex={brushRange[0]} endIndex={brushRange[1]}
-            onChange={(range: any) => {
-              if (range?.startIndex != null && range?.endIndex != null)
-                setBrushRange([range.startIndex, range.endIndex]);
-            }}
-          >
-            <ComposedChart>
-              <Line type="linear" dataKey="y" stroke="#38BDF8" strokeWidth={0.6} dot={false} />
-            </ComposedChart>
-          </Brush>
-
         </ComposedChart>
       </ResponsiveContainer>
+      </div>
 
       {/* Leyenda zonas */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px", marginTop: 6, paddingTop: 10, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
