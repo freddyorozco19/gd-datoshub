@@ -1727,7 +1727,7 @@ export default function CMMIView() {
   return (
     <div className="flex flex-col h-full overflow-auto">
       <Topbar title="CMMI" subtitle="Gestión y registro por vertical · Comercial, Financiero, PMO, Datos" />
-      <main className="flex-1 p-6 space-y-5">
+      <main className="flex-1 px-6 pb-6 space-y-5">
         {/* Pills de verticales */}
         <div className="flex items-center gap-2 flex-wrap">
           {VERTICALES.map((v) => {
