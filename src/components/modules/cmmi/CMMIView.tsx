@@ -4495,7 +4495,7 @@ export default function CMMIView() {
   return (
     <div className="flex flex-col h-full overflow-auto">
       <Topbar title="CMMI" tabs={topbarTabs} />
-      <main className="flex-1 p-6 space-y-5">
+      <main className="flex-1 px-6 pb-6">
         {active.id === "comercial"  && active.enabled ? <ComercialPanel />   :
          active.id === "proyectos"  && active.enabled ? <ProyectosPanel />   :
          active.id === "financiero" && active.enabled ? <FinancieroPanel />  :
