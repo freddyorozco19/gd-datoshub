@@ -2586,7 +2586,7 @@ function CpiLbPanel({ data }: { data: any }) {
       )}
 
       {/* Carta de control interactiva */}
-      <CpiCartaControl scopeData={scopeData} ind={ind} scope={scope} cpiCap={data?.metadata?.cpi_cap ?? 5} />
+      <CpiCartaControl scopeData={scopeData} ind={ind} scope={scope} cpiCap={data?.metadata?.cpi_cap ?? 5} metadata={data?.metadata} />
     </div>
   );
 }
@@ -2605,8 +2605,8 @@ const ZONE_B_COLOR = "rgba(234,179,8,0.13)";   // ±2σ  — amarillo
 const ZONE_C_COLOR = "rgba(249,115,22,0.13)";  // ±3σ  — naranja
 const OOC_COLOR    = "rgba(239,68,68,0.15)";   // fuera de control — rojo
 
-function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
-  scopeData: any; ind: string; scope: string; cpiCap: number;
+function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
+  scopeData: any; ind: string; scope: string; cpiCap: number; metadata?: any;
 }) {
   const indData = scopeData?.[ind];
   const glb     = indData?.global;
@@ -2690,13 +2690,29 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
 
   const fmt = (v: number) => v.toFixed(3);
 
+  const fechaRango = metadata?.fecha_inicio && metadata?.fecha_fin
+    ? `${metadata.fecha_inicio} – ${metadata.fecha_fin}` : null;
+
   // ── Zoom fluido via rueda + drag ──────────────────────────────────
   const N       = chartData.length;
   const domRef  = useRef<[number, number]>([1, N]);
   const [xDomain, setXDomain] = useState<[number, number]>([1, N]);
   const dragging = useRef<{ startX: number; domStart: [number,number] } | null>(null);
+  const chartWrapRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isZoomed = xDomain[0] !== 1 || xDomain[1] !== N;
+
+  const exportPng = useCallback(async () => {
+    if (!chartWrapRef.current) return;
+    const { default: html2canvas } = await import("html2canvas");
+    const canvas = await html2canvas(chartWrapRef.current, {
+      backgroundColor: "#0d1117", scale: 2, useCORS: true, logging: false,
+    });
+    const link = document.createElement("a");
+    link.download = `ichart-${ind}-${scope.replace(/\s+/g, "_")}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }, [ind, scope]);
 
   const clampDomain = (lo: number, hi: number): [number, number] => {
     const w = Math.max(4, hi - lo);
@@ -2744,29 +2760,49 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
   [chartData, xDomain]);
 
   return (
-    <div style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden" }}>
+    <div ref={chartWrapRef} style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden" }}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
         <div>
           <p style={{ color: "#E2E8F0", fontSize: 13, fontWeight: 700, margin: 0 }}>
-            I-Chart — {yLabel} por proyecto (orden cronológico)
+            {ind} por proyecto
+            {fechaRango && (
+              <span style={{ color: "#475569", fontWeight: 400, fontSize: 12, marginLeft: 8 }}>{fechaRango}</span>
+            )}
           </p>
           <p style={{ color: "#475569", fontSize: 11, margin: "3px 0 0" }}>
             {scope === "GLOBAL" ? "Global" : scope} · {chartData.length} observaciones
             {isZoomed
-              ? <span style={{ color: "#6366F1", marginLeft: 6 }}>· mostrando {xDomain[0]}–{xDomain[1]} · <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => { domRef.current=[1,N]; setXDomain([1,N]); }}>reset</span></span>
-              : <span style={{ color: "#374151", marginLeft: 6 }}>· scroll para zoom · arrastra para mover</span>
+              ? <span style={{ color: "#6366F1", marginLeft: 6 }}>· vista {xDomain[0]}–{xDomain[1]} · <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => { domRef.current=[1,N]; setXDomain([1,N]); }}>reset</span></span>
+              : <span style={{ color: "#2d3748", marginLeft: 6 }}>· scroll para zoom · arrastra para mover</span>
             }
           </p>
         </div>
-        <span style={{
-          fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
-          background: bajo_ctrl ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
-          border: `1px solid ${bajo_ctrl ? "rgba(34,197,94,0.3)" : "rgba(239,68,68,0.3)"}`,
-          color: bajo_ctrl ? "#4ADE80" : "#F87171",
-        }}>
-          {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {/* Exportar PNG */}
+          <button onClick={exportPng} title="Exportar PNG" style={{
+            display: "flex", alignItems: "center", gap: 5,
+            padding: "4px 10px", borderRadius: 6, cursor: "pointer", fontSize: 11,
+            border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)",
+            color: "#94A3B8", transition: "all 0.15s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background="rgba(99,102,241,0.15)"; e.currentTarget.style.color="#a5b4fc"; }}
+            onMouseLeave={e => { e.currentTarget.style.background="rgba(255,255,255,0.04)"; e.currentTarget.style.color="#94A3B8"; }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            PNG
+          </button>
+          <span style={{
+            fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
+            background: bajo_ctrl ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
+            border: `1px solid ${bajo_ctrl ? "rgba(34,197,94,0.3)" : "rgba(239,68,68,0.3)"}`,
+            color: bajo_ctrl ? "#4ADE80" : "#F87171",
+          }}>
+            {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
+          </span>
+        </div>
       </div>
 
       {/* Área del gráfico con zoom wheel+drag */}
@@ -2814,20 +2850,20 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
           <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.08)", strokeWidth: 1, strokeDasharray: "3 3" }} />
 
           {/* Líneas sigma */}
-          <ReferenceLine y={UCL} stroke="#EF4444" strokeDasharray="5 4" strokeWidth={0.8}
-            label={{ value: `+3σ = ${fmt(UCL)}`, position: "right", fill: "#EF4444", fontSize: 9.5, dx: 6 }} />
-          <ReferenceLine y={s2u} stroke="#F97316" strokeDasharray="4 4" strokeWidth={0.7}
-            label={{ value: `+2σ = ${fmt(s2u)}`, position: "right", fill: "#F97316", fontSize: 9.5, dx: 6 }} />
-          <ReferenceLine y={s1u} stroke="#22C55E" strokeDasharray="4 4" strokeWidth={0.7}
-            label={{ value: `+1σ = ${fmt(s1u)}`, position: "right", fill: "#22C55E", fontSize: 9.5, dx: 6 }} />
-          <ReferenceLine y={CL} stroke="rgba(255,255,255,0.7)" strokeWidth={0.9}
-            label={{ value: `CL = ${fmt(CL)}`, position: "right", fill: "#CBD5E1", fontSize: 9.5, dx: 6 }} />
-          <ReferenceLine y={s1l} stroke="#22C55E" strokeDasharray="4 4" strokeWidth={0.7}
-            label={{ value: `-1σ = ${fmt(s1l)}`, position: "right", fill: "#22C55E", fontSize: 9.5, dx: 6 }} />
-          <ReferenceLine y={s2l} stroke="#F97316" strokeDasharray="4 4" strokeWidth={0.7}
-            label={{ value: `-2σ = ${fmt(s2l)}`, position: "right", fill: "#F97316", fontSize: 9.5, dx: 6 }} />
-          <ReferenceLine y={LCL} stroke="#EF4444" strokeDasharray="5 4" strokeWidth={0.8}
-            label={{ value: `-3σ = ${fmt(LCL)}`, position: "right", fill: "#EF4444", fontSize: 9.5, dx: 6 }} />
+          <ReferenceLine y={UCL} stroke="rgba(239,68,68,0.55)" strokeDasharray="6 5" strokeWidth={0.5}
+            label={{ value: `+3σ = ${fmt(UCL)}`, position: "right", fill: "#EF4444", fontSize: 9, dx: 6 }} />
+          <ReferenceLine y={s2u} stroke="rgba(249,115,22,0.50)" strokeDasharray="5 5" strokeWidth={0.5}
+            label={{ value: `+2σ = ${fmt(s2u)}`, position: "right", fill: "#F97316", fontSize: 9, dx: 6 }} />
+          <ReferenceLine y={s1u} stroke="rgba(34,197,94,0.45)" strokeDasharray="5 5" strokeWidth={0.5}
+            label={{ value: `+1σ = ${fmt(s1u)}`, position: "right", fill: "#22C55E", fontSize: 9, dx: 6 }} />
+          <ReferenceLine y={CL} stroke="rgba(255,255,255,0.45)" strokeWidth={0.6}
+            label={{ value: `CL = ${fmt(CL)}`, position: "right", fill: "#94A3B8", fontSize: 9, dx: 6 }} />
+          <ReferenceLine y={s1l} stroke="rgba(34,197,94,0.45)" strokeDasharray="5 5" strokeWidth={0.5}
+            label={{ value: `-1σ = ${fmt(s1l)}`, position: "right", fill: "#22C55E", fontSize: 9, dx: 6 }} />
+          <ReferenceLine y={s2l} stroke="rgba(249,115,22,0.50)" strokeDasharray="5 5" strokeWidth={0.5}
+            label={{ value: `-2σ = ${fmt(s2l)}`, position: "right", fill: "#F97316", fontSize: 9, dx: 6 }} />
+          <ReferenceLine y={LCL} stroke="rgba(239,68,68,0.55)" strokeDasharray="6 5" strokeWidth={0.5}
+            label={{ value: `-3σ = ${fmt(LCL)}`, position: "right", fill: "#EF4444", fontSize: 9, dx: 6 }} />
 
           <Line
             type="linear" dataKey="y"

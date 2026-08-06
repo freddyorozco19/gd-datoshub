@@ -583,6 +583,15 @@ def lineas_base_desde_excel(raw_bytes: bytes) -> dict:
     df["_bin"] = pd.cut(df["mes_rel"], bins=10,
                         labels=BIN_LABELS, include_lowest=True)
     portafolios = list(df["portafolio"].dropna().unique())
+
+    # Rango de fechas solo desde columna Inicio
+    fecha_min = fecha_max = None
+    if "Inicio" in df.columns:
+        parsed = pd.to_datetime(df["Inicio"], errors="coerce").dropna()
+        if not parsed.empty:
+            fecha_min = parsed.min()
+            fecha_max = parsed.max()
+
     lb: dict = {
         "metadata": {
             "n_obs":        int(len(df)),
@@ -591,6 +600,8 @@ def lineas_base_desde_excel(raw_bytes: bytes) -> dict:
             "cpi_cap":      CPI_CAP,
             "bin_labels":   BIN_LABELS,
             "indicadores":  ["SPI", "CPI", "VA"],
+            "fecha_inicio": fecha_min.strftime("%b %Y") if fecha_min is not None else None,
+            "fecha_fin":    fecha_max.strftime("%b %Y") if fecha_max is not None else None,
         },
         "global":         _calcular_scope(df, include_valores=True),
         "por_portafolio": {},
