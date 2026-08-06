@@ -2732,7 +2732,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
             label={{ value: "Observaciones (ordenadas por Mes Relativo)", position: "insideBottom", offset: -14, fill: "#6B7280", fontSize: 11 }}
           />
           <YAxis
-            domain={[yMin, yMax]}
+            domain={[yMin ?? "auto", yMax ?? "auto"] as [number | "auto", number | "auto"]}
             tick={{ fill: "#6B7280", fontSize: 10 }}
             tickLine={false} axisLine={{ stroke: "rgba(255,255,255,0.08)" }}
             tickFormatter={(v: number) => v.toFixed(2)}
