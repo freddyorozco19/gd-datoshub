@@ -2476,11 +2476,12 @@ function CpiLbPanel({ data }: { data: any }) {
   const scopes = ["GLOBAL", ...portafolios];
   const indicators: string[] = data?.metadata?.indicadores ?? ["SPI", "CPI", "VA"];
 
-  const scopeData = scope === "GLOBAL" ? data?.global : data?.por_portafolio?.[scope];
-  const indData   = scopeData?.[ind];
-  const glb       = indData?.global;
-  const fases     = indData?.por_fase ?? {};
-  const nelson    = indData?.nelson ?? {};
+  const scopeData  = scope === "GLOBAL" ? data?.global : data?.por_portafolio?.[scope];
+  const indData    = scopeData?.[ind];
+  const glb        = indData?.global;
+  const fases      = indData?.por_fase ?? {};
+  const nelson     = indData?.nelson ?? {};
+  const chartB64   = data?.images?.[scope] ?? null;
 
   const SEM_CLS: Record<string, string> = {
     CONTROLADO: "text-emerald-400", MARGINAL: "text-amber-400",
@@ -2579,6 +2580,11 @@ function CpiLbPanel({ data }: { data: any }) {
             {nelson.reglas_activas?.length > 0 && <span className="ml-2 text-amber-400">Activas: {nelson.reglas_activas.join(", ")}</span>}
           </div>
         </div>
+      )}
+
+      {/* Carta de control */}
+      {chartB64 && (
+        <ModelImage b64={chartB64} title={`Carta de Control Individual — ${scope === "GLOBAL" ? "Global" : scope}`} />
       )}
     </div>
   );

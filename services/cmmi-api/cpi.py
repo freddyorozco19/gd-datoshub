@@ -481,6 +481,76 @@ _COLUMNAS_REQUERIDAS = [
 ]
 
 
+def _carta_control_scope(df_scope: "pd.DataFrame", scope_label: str, cpi_cap: float) -> str:
+    """Genera carta de control individual (3 subplots: SPI, CPI, VA) para un scope dado."""
+    GRAY   = "#374151"
+    LIGHT  = "#9CA3AF"
+    INDIGO = "#4F46E5"
+    RED    = "#EF4444"
+    BLUE   = "#3B82F6"
+    PORT_COLORS = {"DATOS Y SISTEMAS DE INFORMACIÓN": "#6366F1", "CONSULTORÍA": "#10B981", "TI": "#F59E0B"}
+
+    col_map = {"SPI": "SPI", "CPI": "CPI_cap", "VA": "VA"}
+    etiquetas = {"SPI": "SPI", "CPI": f"CPI (techo {cpi_cap})", "VA": "Variación Alcance"}
+
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5), facecolor="white")
+    fig.suptitle(f"Carta de Control Individual — {scope_label} (Mar-Jul 2026)",
+                 fontsize=13, fontweight="bold", color=GRAY, y=1.01)
+
+    for ax, ind in zip(axes, ["SPI", "CPI", "VA"]):
+        col   = col_map[ind]
+        serie = df_scope.sort_values("mes_rel")[col].dropna().reset_index(drop=True)
+        if len(serie) < 2:
+            ax.set_title(etiquetas[ind], fontsize=11, fontweight="bold", color=GRAY)
+            ax.text(0.5, 0.5, "Sin datos suficientes", transform=ax.transAxes,
+                    ha="center", va="center", color=LIGHT, fontsize=10)
+            continue
+
+        cl  = float(serie.mean())
+        std = float(serie.std(ddof=1))
+        ucl = cl + 3 * std
+        lcl = cl - 3 * std
+        xs  = list(range(1, len(serie) + 1))
+
+        # Color por portafolio si hay columna, si no azul uniforme
+        if "portafolio" in df_scope.columns and df_scope["portafolio"].nunique() > 1:
+            portafolios_serie = df_scope.sort_values("mes_rel").dropna(subset=[col])["portafolio"].reset_index(drop=True)
+            colores = [PORT_COLORS.get(p, INDIGO) for p in portafolios_serie]
+        else:
+            colores = [RED if (v > ucl or v < lcl) else INDIGO for v in serie]
+
+        ax.axhline(cl,  color=BLUE, lw=1.5, ls="--", label=f"CL={cl:.4f}")
+        ax.axhline(ucl, color=RED,  lw=1,   ls=":",  label=f"UCL={ucl:.4f}")
+        ax.axhline(lcl, color=RED,  lw=1,   ls=":",  label=f"LCL={lcl:.4f}")
+        ax.fill_between([0, len(serie)+1], lcl, ucl, color=INDIGO, alpha=0.06)
+        ax.scatter(xs, serie, c=colores, s=45, zorder=5, edgecolors="white", linewidths=0.5)
+        ax.plot(xs, serie, color=INDIGO, lw=0.8, alpha=0.35, zorder=4)
+
+        fuera = int(((serie > ucl) | (serie < lcl)).sum())
+        ax.text(0.02, 0.03, f"{fuera} punt. fuera de control",
+                transform=ax.transAxes, fontsize=8, color=RED if fuera else LIGHT)
+
+        ax.set_title(etiquetas[ind], fontsize=11, fontweight="bold", color=GRAY, pad=8)
+        ax.set_xlabel("Observaciones ordenadas por Mes Relativo", fontsize=9, color=LIGHT)
+        ax.set_ylabel(f"{ind} (cap {cpi_cap})" if ind == "CPI" else ind, fontsize=9, color=LIGHT)
+        ax.tick_params(colors=LIGHT, labelsize=8)
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.spines[["left", "bottom"]].set_color("#E5E7EB")
+        ax.set_facecolor("white")
+        ax.set_xlim(0, len(serie) + 1)
+        ax.legend(fontsize=7.5, framealpha=0.7, loc="upper right")
+
+    # Leyenda de portafolios en global
+    if "portafolio" in df_scope.columns and df_scope["portafolio"].nunique() > 1:
+        handles = [plt.Line2D([0], [0], marker="o", color="w", markerfacecolor=PORT_COLORS.get(p, INDIGO),
+                              markersize=8, label=p) for p in df_scope["portafolio"].unique()]
+        fig.legend(handles=handles, loc="lower center", ncol=len(handles),
+                   fontsize=8, framealpha=0.7, bbox_to_anchor=(0.5, -0.05))
+
+    fig.tight_layout()
+    return _fig_to_b64(fig)
+
+
 def lineas_base_desde_excel(raw_bytes: bytes) -> dict:
     df = pd.read_excel(pd.io.common.BytesIO(raw_bytes))
     faltantes = [c for c in _COLUMNAS_REQUERIDAS if c not in df.columns]
@@ -500,20 +570,26 @@ def lineas_base_desde_excel(raw_bytes: bytes) -> dict:
     df["CPI_cap"] = df["CPI"].clip(upper=CPI_CAP)
     df["_bin"] = pd.cut(df["mes_rel"], bins=10,
                         labels=BIN_LABELS, include_lowest=True)
+    portafolios = list(df["portafolio"].dropna().unique())
     lb: dict = {
         "metadata": {
             "n_obs":        int(len(df)),
             "n_proyectos":  int(df["ProjectId"].nunique()),
-            "portafolios":  list(df["portafolio"].unique()),
+            "portafolios":  portafolios,
             "cpi_cap":      CPI_CAP,
             "bin_labels":   BIN_LABELS,
             "indicadores":  ["SPI", "CPI", "VA"],
         },
         "global":          _calcular_scope(df),
         "por_portafolio":  {},
+        "images": {
+            "GLOBAL": _carta_control_scope(df, "Global", CPI_CAP),
+        },
     }
-    for port in df["portafolio"].unique():
-        lb["por_portafolio"][port] = _calcular_scope(df[df["portafolio"] == port])
+    for port in portafolios:
+        sub = df[df["portafolio"] == port]
+        lb["por_portafolio"][port] = _calcular_scope(sub)
+        lb["images"][port] = _carta_control_scope(sub, port, CPI_CAP)
     return lb
 
 
