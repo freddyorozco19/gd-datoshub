@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
-  ScatterChart, Scatter, XAxis, YAxis, CartesianGrid,
-  Tooltip, ReferenceLine, ResponsiveContainer, Legend,
+  ComposedChart, Line, Scatter, XAxis, YAxis, CartesianGrid,
+  Tooltip, ReferenceLine, ResponsiveContainer, Legend, ReferenceArea,
 } from "recharts";
 import {
   ShieldCheck, Upload, FileSpreadsheet, X, Search,
@@ -2593,106 +2593,203 @@ function CpiLbPanel({ data }: { data: any }) {
 
 /* ── Carta de control interactiva recharts ─────────────────────────── */
 const PORT_COLORS_MAP: Record<string, string> = {
-  "DATOS Y SISTEMAS DE INFORMACIÓN": "#6366F1",
-  "CONSULTORÍA": "#10B981",
-  "TI": "#F59E0B",
+  "DATOS Y SISTEMAS DE INFORMACIÓN": "#818CF8",
+  "CONSULTORÍA":                     "#34D399",
+  "TI":                              "#FBBF24",
 };
-const DEFAULT_COLOR = "#818CF8";
+const DEFAULT_DOT_COLOR = "#818CF8";
 
 function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
   scopeData: any; ind: string; scope: string; cpiCap: number;
 }) {
   const indData = scopeData?.[ind];
   const glb     = indData?.global;
-  const valores: { x: number; y: number; project_id: string; portafolio: string }[] =
+  const rawVals: { x: number; y: number; project_id: string; portafolio: string }[] =
     indData?.valores ?? [];
 
-  if (!glb || valores.length === 0) return null;
-
-  const { CL, UCL, LCL } = glb;
-
-  // Agrupar por portafolio para series de color distinto
-  const byPort = useMemo(() => {
-    const map: Record<string, typeof valores> = {};
-    for (const v of valores) {
-      const key = v.portafolio || "Sin portafolio";
-      (map[key] = map[key] ?? []).push(v);
-    }
-    return map;
-  }, [valores]);
-
+  const { CL, UCL, LCL } = glb ?? {};
   const isGlobal = scope === "GLOBAL";
-  const label    = ind === "CPI" ? `CPI (techo ${cpiCap})` : ind;
+  const yLabel   = ind === "CPI" ? `CPI (techo ${cpiCap})` : ind;
 
-  const CustomDot = (props: any) => {
+  // Enriquecer con índice secuencial e info de control
+  const chartData = useMemo(() =>
+    rawVals.map((v, i) => ({
+      ...v,
+      idx:   i + 1,
+      fuera: glb ? (v.y > UCL || v.y < LCL) : false,
+    })), [rawVals, UCL, LCL, glb]);
+
+  // Paleta de puntos
+  const dotColor = useCallback((d: typeof chartData[number]) => {
+    if (isGlobal) return PORT_COLORS_MAP[d.portafolio] ?? DEFAULT_DOT_COLOR;
+    return d.fuera ? "#EF4444" : "#6366F1";
+  }, [isGlobal]);
+
+  const yMin = useMemo(() => {
+    if (!glb) return undefined;
+    const minVal = Math.min(...chartData.map(d => d.y));
+    return Math.floor(Math.min(minVal, LCL) * 10) / 10 - 0.2;
+  }, [chartData, LCL, glb]);
+
+  const yMax = useMemo(() => {
+    if (!glb) return undefined;
+    const maxVal = Math.max(...chartData.map(d => d.y));
+    return Math.ceil(Math.max(maxVal, UCL) * 10) / 10 + 0.2;
+  }, [chartData, UCL, glb]);
+
+  const CustomDot = useCallback((props: any) => {
     const { cx, cy, payload } = props;
-    const fuera = payload.y > UCL || payload.y < LCL;
-    const color = isGlobal
-      ? (PORT_COLORS_MAP[payload.portafolio] ?? DEFAULT_COLOR)
-      : (fuera ? "#EF4444" : "#6366F1");
-    return <circle cx={cx} cy={cy} r={5} fill={color} stroke="white" strokeWidth={0.8} />;
-  };
-
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (!active || !payload?.length) return null;
-    const d = payload[0].payload;
-    const fuera = d.y > UCL || d.y < LCL;
+    if (cx == null || cy == null) return null;
+    const color = dotColor(payload);
+    const r     = payload.fuera ? 6 : 4.5;
     return (
-      <div className="bg-[#0d1117] border border-white/10 rounded-lg px-3 py-2 text-xs shadow-xl">
-        <p className="font-semibold text-slate-200 mb-1">{d.project_id}</p>
-        <p className="text-slate-400">Portafolio: <span className="text-slate-200">{d.portafolio || "—"}</span></p>
-        <p className="text-slate-400">Mes relativo: <span className="text-slate-200">{(d.x * 100).toFixed(0)}%</span></p>
-        <p className="text-slate-400">{label}: <span className={fuera ? "text-rose-400 font-bold" : "text-emerald-400 font-bold"}>{d.y.toFixed(4)}</span></p>
-        {fuera && <p className="text-rose-400 mt-1">⚠ Fuera de control</p>}
+      <g>
+        {payload.fuera && <circle cx={cx} cy={cy} r={r + 3} fill={color} opacity={0.2} />}
+        <circle cx={cx} cy={cy} r={r} fill={color} stroke="rgba(255,255,255,0.6)" strokeWidth={0.8} />
+      </g>
+    );
+  }, [dotColor]);
+
+  const CustomTooltip = useCallback(({ active, payload }: any) => {
+    if (!active || !payload?.length) return null;
+    const d = payload[0]?.payload ?? payload.find((p: any) => p.payload?.project_id)?.payload;
+    if (!d) return null;
+    return (
+      <div style={{
+        background: "rgba(10,12,20,0.96)", border: "1px solid rgba(255,255,255,0.12)",
+        borderRadius: 10, padding: "10px 14px", fontSize: 12, boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+      }}>
+        <p style={{ color: "#E2E8F0", fontWeight: 700, marginBottom: 6 }}>
+          #{d.idx} · {d.project_id}
+        </p>
+        <p style={{ color: "#94A3B8", marginBottom: 2 }}>
+          Portafolio: <span style={{ color: PORT_COLORS_MAP[d.portafolio] ?? "#818CF8" }}>{d.portafolio || "—"}</span>
+        </p>
+        <p style={{ color: "#94A3B8", marginBottom: 2 }}>
+          Mes relativo: <span style={{ color: "#CBD5E1" }}>{(d.x * 100).toFixed(0)}%</span>
+        </p>
+        <p style={{ color: "#94A3B8" }}>
+          {yLabel}:{" "}
+          <span style={{ color: d.fuera ? "#F87171" : "#34D399", fontWeight: 700 }}>
+            {d.y.toFixed(4)}
+          </span>
+        </p>
+        {d.fuera && (
+          <p style={{ color: "#F87171", marginTop: 6, fontSize: 11 }}>⚠ Fuera de control (±3σ)</p>
+        )}
       </div>
     );
-  };
+  }, [yLabel]);
+
+  if (!glb || chartData.length === 0) return null;
+
+  // Portafolios únicos para leyenda manual
+  const ports = useMemo(() =>
+    [...new Set(chartData.map(d => d.portafolio).filter(Boolean))], [chartData]);
+
+  const fueraCount = chartData.filter(d => d.fuera).length;
 
   return (
-    <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-4">
-      <p className="text-xs font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-        Carta de Control Individual — {scope === "GLOBAL" ? "Global" : scope} · {label}
-      </p>
-      <ResponsiveContainer width="100%" height={320}>
-        <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+    <div style={{
+      background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)",
+      borderRadius: 14, padding: "20px 20px 14px",
+    }}>
+      {/* Header */}
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <p className="text-sm font-semibold text-slate-200">
+            Carta de Control Individual
+            <span className="ml-2 text-slate-500 font-normal">—</span>
+            <span className="ml-2 text-blue-400">{scope === "GLOBAL" ? "Global" : scope}</span>
+            <span className="mx-2 text-slate-600">·</span>
+            <span className="text-indigo-300">{yLabel}</span>
+          </p>
+          <p className="text-xs text-slate-500 mt-0.5">{chartData.length} observaciones ordenadas por Mes Relativo</p>
+        </div>
+        {fueraCount > 0 && (
+          <span className="text-xs px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 shrink-0">
+            {fueraCount} fuera de control
+          </span>
+        )}
+      </div>
+
+      <ResponsiveContainer width="100%" height={340}>
+        <ComposedChart data={chartData} margin={{ top: 12, right: 80, bottom: 28, left: 10 }}>
+          <defs>
+            <linearGradient id="bandGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#6366F1" stopOpacity={0.07} />
+              <stop offset="100%" stopColor="#6366F1" stopOpacity={0.02} />
+            </linearGradient>
+          </defs>
+
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+
           <XAxis
-            dataKey="x" type="number" domain={[0, 1]}
-            tickFormatter={(v) => `${(v * 100).toFixed(0)}%`}
-            label={{ value: "Mes Relativo", position: "insideBottom", offset: -10, fill: "#6B7280", fontSize: 11 }}
-            tick={{ fill: "#6B7280", fontSize: 10 }} tickLine={false}
+            dataKey="idx" type="number"
+            domain={[0, chartData.length + 1]}
+            tick={{ fill: "#6B7280", fontSize: 10 }}
+            tickLine={false} axisLine={{ stroke: "rgba(255,255,255,0.08)" }}
+            label={{ value: "Observaciones (ordenadas por Mes Relativo)", position: "insideBottom", offset: -14, fill: "#6B7280", fontSize: 11 }}
           />
           <YAxis
-            dataKey="y" type="number"
-            label={{ value: label, angle: -90, position: "insideLeft", offset: 10, fill: "#6B7280", fontSize: 11 }}
-            tick={{ fill: "#6B7280", fontSize: 10 }} tickLine={false}
+            domain={[yMin, yMax]}
+            tick={{ fill: "#6B7280", fontSize: 10 }}
+            tickLine={false} axisLine={{ stroke: "rgba(255,255,255,0.08)" }}
+            tickFormatter={(v: number) => v.toFixed(2)}
+            label={{ value: yLabel, angle: -90, position: "insideLeft", offset: 14, fill: "#6B7280", fontSize: 11, dy: 40 }}
+            width={52}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.1)" }} />
-          <ReferenceLine y={CL}  stroke="#3B82F6" strokeDasharray="6 3" strokeWidth={1.5}
-            label={{ value: `CL=${CL.toFixed(4)}`, position: "right", fill: "#3B82F6", fontSize: 10 }} />
-          <ReferenceLine y={UCL} stroke="#EF4444" strokeDasharray="4 2" strokeWidth={1}
-            label={{ value: `UCL=${UCL.toFixed(4)}`, position: "right", fill: "#EF4444", fontSize: 10 }} />
-          <ReferenceLine y={LCL} stroke="#EF4444" strokeDasharray="4 2" strokeWidth={1}
-            label={{ value: `LCL=${LCL.toFixed(4)}`, position: "right", fill: "#EF4444", fontSize: 10 }} />
-          {isGlobal
-            ? Object.entries(byPort).map(([port, pts]) => (
-                <Scatter key={port} name={port} data={pts}
-                  fill={PORT_COLORS_MAP[port] ?? DEFAULT_COLOR} shape={<CustomDot />} />
-              ))
-            : <Scatter name={scope} data={valores} fill="#6366F1" shape={<CustomDot />} />
-          }
-          {isGlobal && (
-            <Legend
-              formatter={(v) => <span style={{ color: "#9CA3AF", fontSize: 11 }}>{v}</span>}
-              iconType="circle" iconSize={8}
-            />
-          )}
-        </ScatterChart>
+
+          <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.08)", strokeWidth: 1 }} />
+
+          {/* Banda de control UCL-LCL */}
+          <ReferenceArea y1={LCL} y2={UCL} fill="url(#bandGrad)" ifOverflow="extendDomain" />
+
+          {/* Líneas de referencia */}
+          <ReferenceLine y={UCL} stroke="#EF4444" strokeDasharray="6 3" strokeWidth={1.2}
+            label={{ value: `UCL ${UCL.toFixed(3)}`, position: "right", fill: "#EF4444", fontSize: 10, dx: 4 }} />
+          <ReferenceLine y={CL} stroke="#3B82F6" strokeDasharray="8 4" strokeWidth={1.8}
+            label={{ value: `CL ${CL.toFixed(3)}`, position: "right", fill: "#60A5FA", fontSize: 10, dx: 4 }} />
+          <ReferenceLine y={LCL} stroke="#EF4444" strokeDasharray="6 3" strokeWidth={1.2}
+            label={{ value: `LCL ${LCL.toFixed(3)}`, position: "right", fill: "#EF4444", fontSize: 10, dx: 4 }} />
+
+          {/* Línea conectora */}
+          <Line
+            type="monotone" dataKey="y"
+            stroke="rgba(99,102,241,0.35)" strokeWidth={1.2}
+            dot={<CustomDot />} activeDot={false}
+            isAnimationActive={false}
+          />
+
+          {/* Scatter invisible solo para activar tooltip rico */}
+          <Scatter dataKey="y" fill="transparent" />
+        </ComposedChart>
       </ResponsiveContainer>
-      <div className="flex gap-4 mt-2 text-[10px] text-slate-500">
-        <span className="flex items-center gap-1"><span className="inline-block w-6 border-t-2 border-dashed border-blue-500" /> CL (Media)</span>
-        <span className="flex items-center gap-1"><span className="inline-block w-6 border-t-2 border-dashed border-rose-500" /> UCL / LCL (±3σ)</span>
-        <span className="flex items-center gap-1"><span className="inline-block w-2.5 h-2.5 rounded-full bg-rose-500" /> Fuera de control</span>
+
+      {/* Leyenda manual */}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-3 pt-3 border-t border-white/[0.06]">
+        <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
+          <span className="inline-block w-7 border-t-[1.5px] border-dashed border-blue-400" />
+          CL (media = {CL.toFixed(3)})
+        </span>
+        <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
+          <span className="inline-block w-7 border-t border-dashed border-rose-400" />
+          UCL / LCL (±3σ)
+        </span>
+        {isGlobal
+          ? ports.map(p => (
+              <span key={p} className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ background: PORT_COLORS_MAP[p] ?? DEFAULT_DOT_COLOR }} />
+                {p}
+              </span>
+            ))
+          : (
+            <span className="flex items-center gap-1.5 text-[11px] text-rose-400">
+              <span className="w-2.5 h-2.5 rounded-full inline-block bg-rose-500" />
+              Fuera de control
+            </span>
+          )
+        }
       </div>
     </div>
   );
