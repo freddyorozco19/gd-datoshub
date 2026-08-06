@@ -493,6 +493,10 @@ def lineas_base_desde_excel(raw_bytes: bytes) -> dict:
         "Variación Avance":                    "VA",
         "Portafolio":                          "portafolio",
     })
+    # Columnas numéricas pueden llegar como object si el Excel tiene texto ("No se realizó gasto…")
+    for _col in ("CPI", "SPI", "VA", "mes_rel"):
+        if _col in df.columns:
+            df[_col] = pd.to_numeric(df[_col], errors="coerce")
     df["CPI_cap"] = df["CPI"].clip(upper=CPI_CAP)
     df["_bin"] = pd.cut(df["mes_rel"], bins=10,
                         labels=BIN_LABELS, include_lowest=True)
