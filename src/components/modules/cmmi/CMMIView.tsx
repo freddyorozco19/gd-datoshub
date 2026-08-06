@@ -1994,7 +1994,7 @@ function ProyectosPanel() {
     { id: "kickoff",     label: "Kickoff",            icon: BarChart2   },
     { id: "seguimiento", label: "Seguimiento",         icon: CalendarCheck },
     { id: "lineas-base", label: "Líneas base SPI",    icon: PieChart    },
-    { id: "cpi",          label: "CPI",                icon: TrendingUp  },
+    { id: "cpi",          label: "Línea Base CPI",     icon: TrendingUp  },
     { id: "cpi-cerrados", label: "CPI · Cerrados",     icon: TrendingUp  },
     { id: "reentrenar",   label: "Reentrenar",          icon: Database    },
     { id: "modelos",     label: "Modelos PKL",         icon: PieChart    },
@@ -2690,6 +2690,21 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
 
   const fmt = (v: number) => v.toFixed(3);
 
+  const [brushRange, setBrushRange] = useState<[number, number]>([0, Math.min(chartData.length - 1, 59)]);
+  const windowSize = brushRange[1] - brushRange[0];
+
+  const zoomIn = () => {
+    const mid   = Math.round((brushRange[0] + brushRange[1]) / 2);
+    const half  = Math.max(4, Math.round(windowSize / 4));
+    setBrushRange([Math.max(0, mid - half), Math.min(chartData.length - 1, mid + half)]);
+  };
+  const zoomOut = () => {
+    const mid   = Math.round((brushRange[0] + brushRange[1]) / 2);
+    const half  = Math.round(windowSize);
+    setBrushRange([Math.max(0, mid - half), Math.min(chartData.length - 1, mid + half)]);
+  };
+  const zoomReset = () => setBrushRange([0, chartData.length - 1]);
+
   return (
     <div style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden" }}>
       {/* Header */}
@@ -2700,20 +2715,39 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
           </p>
           <p style={{ color: "#475569", fontSize: 11, margin: "3px 0 0" }}>
             {scope === "GLOBAL" ? "Global" : scope} · {chartData.length} observaciones
+            {windowSize < chartData.length - 1 && <span style={{ color: "#6366F1", marginLeft: 6 }}>· zoom {brushRange[0]+1}–{brushRange[1]+1}</span>}
           </p>
         </div>
-        <span style={{
-          fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
-          background: bajo_ctrl ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
-          border: `1px solid ${bajo_ctrl ? "rgba(34,197,94,0.3)" : "rgba(239,68,68,0.3)"}`,
-          color: bajo_ctrl ? "#4ADE80" : "#F87171",
-        }}>
-          {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {/* Botones zoom */}
+          {[
+            { title: "Zoom in",   icon: "＋", action: zoomIn  },
+            { title: "Zoom out",  icon: "－", action: zoomOut },
+            { title: "Reset zoom",icon: "⤢",  action: zoomReset },
+          ].map(({ title, icon, action }) => (
+            <button key={title} title={title} onClick={action} style={{
+              width: 28, height: 28, borderRadius: 6, border: "1px solid rgba(255,255,255,0.1)",
+              background: "rgba(255,255,255,0.04)", color: "#94A3B8", fontSize: 14, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1,
+              transition: "background 0.15s",
+            }}
+              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
+            >{icon}</button>
+          ))}
+          <span style={{
+            fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
+            background: bajo_ctrl ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
+            border: `1px solid ${bajo_ctrl ? "rgba(34,197,94,0.3)" : "rgba(239,68,68,0.3)"}`,
+            color: bajo_ctrl ? "#4ADE80" : "#F87171",
+          }}>
+            {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
+          </span>
+        </div>
       </div>
 
       <ResponsiveContainer width="100%" height={360}>
-        <ComposedChart data={chartData} margin={{ top: 8, right: 110, bottom: 40, left: 8 }}>
+        <ComposedChart data={chartData} margin={{ top: 8, right: 114, bottom: 44, left: 8 }}>
 
           {/* Zonas sombreadas — de afuera hacia adentro */}
           <ReferenceArea y1={UCL}  y2={yMax} fill={OOC_COLOR}    ifOverflow="extendDomain" />
@@ -2724,57 +2758,64 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap }: {
           <ReferenceArea y1={s2l}  y2={s1l}  fill={ZONE_B_COLOR} ifOverflow="extendDomain" />
           <ReferenceArea y1={s1l}  y2={s1u}  fill={ZONE_A_COLOR} ifOverflow="extendDomain" />
 
-          <CartesianGrid strokeDasharray="2 4" stroke="rgba(255,255,255,0.04)" vertical={false} />
+          <CartesianGrid strokeDasharray="2 6" stroke="rgba(255,255,255,0.03)" vertical={false} />
 
           <XAxis
             dataKey="idx" type="number"
             domain={[0, chartData.length + 1]}
-            tick={{ fill: "#4B5563", fontSize: 10 }}
+            tick={{ fill: "#6B7280", fontSize: 10, fontWeight: 300 }}
             tickLine={false} axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
-            label={{ value: "Proyectos (orden cronológico)", position: "insideBottom", offset: -28, fill: "#4B5563", fontSize: 11 }}
+            label={{ value: "Proyectos (orden cronológico)", position: "insideBottom", offset: -30,
+              style: { fill: "#e2e8f0", fontSize: 11, fontWeight: 300 } }}
           />
           <YAxis
             domain={[yMin, yMax] as [number, number]}
-            tick={{ fill: "#4B5563", fontSize: 10 }}
+            tick={{ fill: "#6B7280", fontSize: 10, fontWeight: 300 }}
             tickLine={false} axisLine={false}
             tickFormatter={(v: number) => v.toFixed(2)}
             width={46}
+            label={{ value: yLabel, angle: -90, position: "insideLeft", offset: 14,
+              style: { fill: "#e2e8f0", fontSize: 11, fontWeight: 300 }, dy: 50 }}
           />
 
-          <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.1)", strokeWidth: 1, strokeDasharray: "3 2" }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.08)", strokeWidth: 1, strokeDasharray: "3 3" }} />
 
-          {/* Líneas sigma */}
-          <ReferenceLine y={UCL} stroke="#EF4444" strokeDasharray="6 3" strokeWidth={1.4}
-            label={{ value: `+3σ = ${fmt(UCL)}`, position: "right", fill: "#EF4444", fontSize: 10, dx: 6 }} />
-          <ReferenceLine y={s2u} stroke="#F97316" strokeDasharray="4 3" strokeWidth={1}
-            label={{ value: `+2σ = ${fmt(s2u)}`, position: "right", fill: "#F97316", fontSize: 10, dx: 6 }} />
-          <ReferenceLine y={s1u} stroke="#22C55E" strokeDasharray="4 3" strokeWidth={1}
-            label={{ value: `+1σ = ${fmt(s1u)}`, position: "right", fill: "#22C55E", fontSize: 10, dx: 6 }} />
-          <ReferenceLine y={CL} stroke="#ffffff" strokeWidth={1.8}
-            label={{ value: `CL = ${fmt(CL)}`, position: "right", fill: "#CBD5E1", fontSize: 10, dx: 6 }} />
-          <ReferenceLine y={s1l} stroke="#22C55E" strokeDasharray="4 3" strokeWidth={1}
-            label={{ value: `-1σ = ${fmt(s1l)}`, position: "right", fill: "#22C55E", fontSize: 10, dx: 6 }} />
-          <ReferenceLine y={s2l} stroke="#F97316" strokeDasharray="4 3" strokeWidth={1}
-            label={{ value: `-2σ = ${fmt(s2l)}`, position: "right", fill: "#F97316", fontSize: 10, dx: 6 }} />
-          <ReferenceLine y={LCL} stroke="#EF4444" strokeDasharray="6 3" strokeWidth={1.4}
-            label={{ value: `-3σ = ${fmt(LCL)}`, position: "right", fill: "#EF4444", fontSize: 10, dx: 6 }} />
+          {/* Líneas sigma — más finas */}
+          <ReferenceLine y={UCL} stroke="#EF4444" strokeDasharray="5 4" strokeWidth={0.8}
+            label={{ value: `+3σ = ${fmt(UCL)}`, position: "right", fill: "#EF4444", fontSize: 9.5, dx: 6 }} />
+          <ReferenceLine y={s2u} stroke="#F97316" strokeDasharray="4 4" strokeWidth={0.7}
+            label={{ value: `+2σ = ${fmt(s2u)}`, position: "right", fill: "#F97316", fontSize: 9.5, dx: 6 }} />
+          <ReferenceLine y={s1u} stroke="#22C55E" strokeDasharray="4 4" strokeWidth={0.7}
+            label={{ value: `+1σ = ${fmt(s1u)}`, position: "right", fill: "#22C55E", fontSize: 9.5, dx: 6 }} />
+          <ReferenceLine y={CL} stroke="rgba(255,255,255,0.7)" strokeWidth={0.9}
+            label={{ value: `CL = ${fmt(CL)}`, position: "right", fill: "#CBD5E1", fontSize: 9.5, dx: 6 }} />
+          <ReferenceLine y={s1l} stroke="#22C55E" strokeDasharray="4 4" strokeWidth={0.7}
+            label={{ value: `-1σ = ${fmt(s1l)}`, position: "right", fill: "#22C55E", fontSize: 9.5, dx: 6 }} />
+          <ReferenceLine y={s2l} stroke="#F97316" strokeDasharray="4 4" strokeWidth={0.7}
+            label={{ value: `-2σ = ${fmt(s2l)}`, position: "right", fill: "#F97316", fontSize: 9.5, dx: 6 }} />
+          <ReferenceLine y={LCL} stroke="#EF4444" strokeDasharray="5 4" strokeWidth={0.8}
+            label={{ value: `-3σ = ${fmt(LCL)}`, position: "right", fill: "#EF4444", fontSize: 9.5, dx: 6 }} />
 
           {/* Línea conectora */}
           <Line
             type="linear" dataKey="y"
-            stroke="#38BDF8" strokeWidth={1.4}
+            stroke="#38BDF8" strokeWidth={1.2}
             dot={<CustomDot />} activeDot={false}
             isAnimationActive={false}
           />
 
           {/* Brush = zoom horizontal */}
           <Brush
-            dataKey="idx" height={22} stroke="rgba(255,255,255,0.08)"
-            fill="#0d1117" travellerWidth={6}
-            startIndex={0} endIndex={Math.min(chartData.length - 1, 59)}
+            dataKey="idx" height={20} stroke="rgba(255,255,255,0.07)"
+            fill="#0a0c12" travellerWidth={5}
+            startIndex={brushRange[0]} endIndex={brushRange[1]}
+            onChange={(range: any) => {
+              if (range?.startIndex != null && range?.endIndex != null)
+                setBrushRange([range.startIndex, range.endIndex]);
+            }}
           >
             <ComposedChart>
-              <Line type="linear" dataKey="y" stroke="#38BDF8" strokeWidth={0.8} dot={false} />
+              <Line type="linear" dataKey="y" stroke="#38BDF8" strokeWidth={0.6} dot={false} />
             </ComposedChart>
           </Brush>
 
