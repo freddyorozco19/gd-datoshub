@@ -4689,6 +4689,34 @@ function FinancieroOrigenPanel({ info }: { info: FinancieroInfoResponse }) {
   const utilColor = (v: number) =>
     v >= 0.20 ? "text-emerald-400" : v >= 0.05 ? "text-amber-400" : "text-rose-400";
 
+  type SortCol = "codigo" | "categoria" | "fecha" | "utilidad_v" | "monto_mm";
+  const [sortCol, setSortCol] = useState<SortCol | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  function handleSort(col: SortCol) {
+    if (sortCol === col) {
+      setSortDir(d => d === "asc" ? "desc" : "asc");
+    } else {
+      setSortCol(col);
+      setSortDir("asc");
+    }
+  }
+
+  const proyectosSorted = [...(info.proyectos ?? [])].sort((a, b) => {
+    if (!sortCol) return 0;
+    const va = a[sortCol] ?? "";
+    const vb = b[sortCol] ?? "";
+    const cmp = typeof va === "number" && typeof vb === "number"
+      ? va - vb
+      : String(va).localeCompare(String(vb));
+    return sortDir === "asc" ? cmp : -cmp;
+  });
+
+  function SortIcon({ col }: { col: SortCol }) {
+    if (sortCol !== col) return <span className="text-slate-600 ml-1">⇅</span>;
+    return <span className="text-blue-400 ml-1">{sortDir === "asc" ? "↑" : "↓"}</span>;
+  }
+
   const cats = Object.entries(info.por_categoria ?? {});
 
   return (
@@ -4740,13 +4768,25 @@ function FinancieroOrigenPanel({ info }: { info: FinancieroInfoResponse }) {
         <table className="w-full text-[11px]">
           <thead>
             <tr className="border-b border-white/[0.06]">
-              {["Código", "Categoría", "Fecha cierre", "Utilidad", "Monto (M COP)"].map(h => (
-                <th key={h} className="px-3 py-2 text-left text-slate-500 font-medium whitespace-nowrap">{h}</th>
+              {([
+                ["Código",        "codigo"     ],
+                ["Categoría",     "categoria"  ],
+                ["Fecha cierre",  "fecha"      ],
+                ["Utilidad",      "utilidad_v" ],
+                ["Monto (M COP)", "monto_mm"   ],
+              ] as [string, SortCol][]).map(([label, col]) => (
+                <th
+                  key={col}
+                  onClick={() => handleSort(col)}
+                  className="px-3 py-2 text-left text-slate-500 font-medium whitespace-nowrap cursor-pointer select-none hover:text-slate-300 transition-colors"
+                >
+                  {label}<SortIcon col={col} />
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {(info.proyectos ?? []).map((p: FinancieroInfoProyecto, i: number) => (
+            {proyectosSorted.map((p: FinancieroInfoProyecto, i: number) => (
               <tr key={i} className="border-b border-white/[0.04] hover:bg-white/[0.03]">
                 <td className="px-3 py-1.5 font-mono text-slate-400">{p.codigo}</td>
                 <td className="px-3 py-1.5 text-slate-300">{p.categoria}</td>
