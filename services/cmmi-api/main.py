@@ -408,11 +408,17 @@ def financiero_lineas_base_excel(
         if df.empty:
             raise HTTPException(400, "Sin datos en el rango de años indicado.")
 
+        df = df.reset_index(drop=True)
         g_block = fin._stats_block(df["Utilidad del proyecto"].values)
+        g_block["puntos"] = fin._puntos(df)
         counts = df["Cat"].value_counts()
         cats_validas = counts[counts >= fin.N_MIN].index.tolist()
-        por_cat = {cat: fin._stats_block(df[df["Cat"] == cat]["Utilidad del proyecto"].values)
-                   for cat in cats_validas}
+        por_cat = {}
+        for cat in cats_validas:
+            sub = df[df["Cat"] == cat].reset_index(drop=True)
+            blk = fin._stats_block(sub["Utilidad del proyecto"].values)
+            blk["puntos"] = fin._puntos(sub)
+            por_cat[cat] = blk
         return {"global": g_block, "por_categoria": por_cat, "categorias_disponibles": cats_validas}
     except HTTPException:
         raise
