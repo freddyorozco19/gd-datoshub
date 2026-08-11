@@ -167,10 +167,15 @@ export interface KickoffResponse {
 /* ── FINANCIERO · Tipos de respuesta ───────────────────────────────── */
 export type NelsonSummary = Record<string, number>;
 
+export interface FinPunto {
+  idx: number; codigo: string; categoria: string; fecha: string | null; utilidad: number;
+}
+
 export interface LineaBaseBloque {
   n: number; mean: number; std: number; cv: number;
   ucl: number; lcl: number; u1p: number; u1n: number; u2p: number; u2n: number;
   sw_p: number; nelson: NelsonSummary; bajo_control: boolean; riesgo: "Bajo" | "Medio" | "Alto";
+  puntos?: FinPunto[];
 }
 
 export interface LineasBaseResponse {

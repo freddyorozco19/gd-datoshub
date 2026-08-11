@@ -201,6 +201,20 @@ _load()
 
 # ── API pública ────────────────────────────────────────────────────────
 
+def _puntos(df: pd.DataFrame) -> list[dict]:
+    """Retorna lista de puntos individuales ordenados cronológicamente."""
+    pts = []
+    for i, (_, row) in enumerate(df.iterrows()):
+        fecha = row.get("Fecha de finalización")
+        pts.append({
+            "idx":      i + 1,
+            "codigo":   str(row.get("Código de proyecto", f"P{i+1}"))[:12],
+            "categoria": str(row.get("Cat", "")),
+            "fecha":    str(fecha.date()) if pd.notna(fecha) else None,
+            "utilidad": round(float(row["Utilidad del proyecto"]), 6),
+        })
+    return pts
+
 def lineas_base(year_from: int | None = None, year_to: int | None = None) -> dict:
     if _df is None:
         raise RuntimeError("Datos de Financiero no disponibles.")
@@ -215,12 +229,18 @@ def lineas_base(year_from: int | None = None, year_to: int | None = None) -> dic
         df_filt = df_filt.drop(columns=["_year_tmp"])
     if df_filt.empty:
         raise RuntimeError("Sin datos en el rango de años indicado.")
+    df_filt = df_filt.reset_index(drop=True)
     # Recalcular líneas base sobre el subconjunto filtrado
     g_block = _stats_block(df_filt["Utilidad del proyecto"].values)
+    g_block["puntos"] = _puntos(df_filt)
     counts = df_filt["Cat"].value_counts()
     cats_validas = counts[counts >= N_MIN].index.tolist()
-    por_cat = {cat: _stats_block(df_filt[df_filt["Cat"] == cat]["Utilidad del proyecto"].values)
-               for cat in cats_validas}
+    por_cat = {}
+    for cat in cats_validas:
+        sub = df_filt[df_filt["Cat"] == cat].reset_index(drop=True)
+        blk = _stats_block(sub["Utilidad del proyecto"].values)
+        blk["puntos"] = _puntos(sub)
+        por_cat[cat] = blk
     return {
         "global": g_block,
         "por_categoria": por_cat,

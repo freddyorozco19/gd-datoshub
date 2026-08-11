@@ -4160,6 +4160,11 @@ function FinancieroPanel() {
                   ))}
                 </div>
               </div>
+
+              {/* Carta de control interactiva */}
+              {lbRes.global.puntos && lbRes.global.puntos.length > 0 && (
+                <FinCartaControl lbRes={lbRes} />
+              )}
             </div>
           )}
         </div>
@@ -4680,6 +4685,299 @@ function DatosHistoricoPanel({ info }: { info: DatosInfoResponse }) {
             ))}
           </tbody>
         </table>
+      </div>
+    </div>
+  );
+}
+
+/* ── Carta de Control I — Utilidad Financiero ───────────────────────── */
+function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
+  const CAT_COLORS: Record<string, string> = {
+    "Arquitectura Empresarial": "#818CF8",
+    "Infraestructura":          "#38BDF8",
+    "Analítica / IA":           "#34D399",
+    "Desarrollo":               "#FBBF24",
+    "Ciberseguridad":           "#F472B6",
+    "Servicios gestionados":    "#FB923C",
+    "Infra + Servicios gestionados": "#A78BFA",
+    "Infra + Servicios + Ciber":     "#60A5FA",
+    "Procesos":                 "#4ADE80",
+    "Migración":                "#FCD34D",
+    "Gobierno de Datos":        "#F87171",
+    "Sostenibilidad":           "#6EE7B7",
+    "Transformación Digital":   "#C4B5FD",
+  };
+  const DEFAULT_COLOR = "#64748B";
+
+  const [catSel, setCatSel] = useState<string>("GLOBAL");
+  const cats = ["GLOBAL", ...lbRes.categorias_disponibles];
+
+  const bloque = catSel === "GLOBAL" ? lbRes.global : lbRes.por_categoria[catSel];
+  const rawPuntos = bloque?.puntos ?? [];
+
+  const { mean: CL, ucl: UCL, lcl: LCL, std } = bloque ?? {};
+  const σ = std ?? (UCL - CL) / 3;
+
+  const chartData = useMemo(() =>
+    rawPuntos.map((p, i) => ({
+      ...p, idx: i + 1,
+      fuera: p.utilidad > UCL || p.utilidad < LCL,
+      zona:  Math.abs(p.utilidad - CL) <= σ   ? "A"
+           : Math.abs(p.utilidad - CL) <= 2*σ ? "B"
+           : Math.abs(p.utilidad - CL) <= 3*σ ? "C" : "OOC",
+    })),
+  [rawPuntos, UCL, LCL, CL, σ]);
+
+  const N   = chartData.length;
+  const yPad = σ * 0.5;
+  const yMin = Math.min(...chartData.map(d => d.utilidad), LCL) - yPad;
+  const yMax = Math.max(...chartData.map(d => d.utilidad), UCL) + yPad;
+  const fueraCount = chartData.filter(d => d.fuera).length;
+  const bajo_ctrl  = fueraCount === 0;
+
+  const domRef  = useRef<[number, number]>([1, N]);
+  const [xDomain, setXDomain] = useState<[number, number]>([1, N]);
+  const dragging = useRef<{ startX: number; domStart: [number, number] } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const chartWrapRef = useRef<HTMLDivElement>(null);
+  const isZoomed = xDomain[0] !== 1 || xDomain[1] !== N;
+
+  useEffect(() => {
+    domRef.current = [1, N];
+    setXDomain([1, N]);
+  }, [catSel, N]);
+
+  const clampDomain = (lo: number, hi: number): [number, number] => {
+    const w = Math.max(4, hi - lo);
+    lo = Math.max(1, lo);
+    hi = Math.min(N, lo + w);
+    lo = Math.max(1, hi - w);
+    return [Math.round(lo), Math.round(hi)];
+  };
+
+  const onWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const [lo, hi] = domRef.current;
+    const w = hi - lo;
+    const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    const factor = e.deltaY < 0 ? 0.75 : 1.33;
+    const newW = Math.max(4, Math.min(N, w * factor));
+    const pivot = lo + ratio * w;
+    const d = clampDomain(pivot - ratio * newW, pivot - ratio * newW + newW);
+    domRef.current = d;
+    setXDomain(d);
+  }, [N]);
+
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    dragging.current = { startX: e.clientX, domStart: [...domRef.current] as [number, number] };
+  }, []);
+
+  const onMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!dragging.current || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const [lo, hi] = dragging.current.domStart;
+    const w = hi - lo;
+    const dIdx = ((dragging.current.startX - e.clientX) / rect.width) * w;
+    const d = clampDomain(lo + dIdx, hi + dIdx);
+    domRef.current = d;
+    setXDomain(d);
+  }, []);
+
+  const onMouseUp = useCallback(() => { dragging.current = null; }, []);
+
+  const visibleData = useMemo(() =>
+    chartData.filter(d => d.idx >= xDomain[0] && d.idx <= xDomain[1]),
+  [chartData, xDomain]);
+
+  const exportPng = useCallback(async () => {
+    if (!chartWrapRef.current) return;
+    const { default: html2canvas } = await import("html2canvas");
+    const canvas = await html2canvas(chartWrapRef.current, {
+      backgroundColor: "#0d1117", scale: 2, useCORS: true, logging: false,
+    });
+    const link = document.createElement("a");
+    link.download = `ichart-utilidad-${catSel.replace(/\s+/g, "_")}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }, [catSel]);
+
+  const s1u = CL + σ;   const s1l = CL - σ;
+  const s2u = CL + 2*σ; const s2l = CL - 2*σ;
+  const fmt = (v: number) => `${(v * 100).toFixed(1)}%`;
+
+  const CustomDot = useCallback((props: any) => {
+    const { cx, cy, payload } = props;
+    if (cx == null || cy == null) return null;
+    const fuera = payload.fuera;
+    const color = fuera ? "#EF4444" : (CAT_COLORS[payload.categoria] ?? DEFAULT_COLOR);
+    const r = fuera ? 3.5 : 2.5;
+    return (
+      <g>
+        {fuera && <circle cx={cx} cy={cy} r={r + 3} fill="#EF4444" opacity={0.15} />}
+        <circle cx={cx} cy={cy} r={r} fill={color} fillOpacity={fuera ? 1 : 0.85}
+          stroke={fuera ? "#fff" : "rgba(0,0,0,0.3)"} strokeWidth={fuera ? 0.8 : 0.4} />
+      </g>
+    );
+  }, [catSel]);
+
+  const CustomTooltip = useCallback(({ active, payload }: any) => {
+    if (!active || !payload?.length) return null;
+    const d = payload[0]?.payload;
+    if (!d) return null;
+    return (
+      <div style={{
+        background: "#0A0C14", border: "1px solid rgba(255,255,255,0.14)",
+        borderRadius: 10, padding: "10px 14px", fontSize: 12,
+        boxShadow: "0 12px 40px rgba(0,0,0,0.7)", minWidth: 200,
+      }}>
+        <p style={{ color: "#F1F5F9", fontWeight: 700, marginBottom: 6, fontSize: 13 }}>
+          #{d.idx} · {d.codigo}
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3px 12px" }}>
+          <span style={{ color: "#64748B" }}>Categoría</span>
+          <span style={{ color: CAT_COLORS[d.categoria] ?? "#94A3B8" }}>{d.categoria || "—"}</span>
+          <span style={{ color: "#64748B" }}>Fecha</span>
+          <span style={{ color: "#CBD5E1" }}>{d.fecha ?? "—"}</span>
+          <span style={{ color: "#64748B" }}>Utilidad</span>
+          <span style={{ color: d.fuera ? "#F87171" : "#34D399", fontWeight: 700 }}>{fmt(d.utilidad)}</span>
+          <span style={{ color: "#64748B" }}>Zona</span>
+          <span style={{ color: d.zona === "OOC" ? "#F87171" : d.zona === "A" ? "#34D399" : d.zona === "B" ? "#FBBF24" : "#FB923C" }}>
+            {d.zona === "OOC" ? "Fuera de control" : `Zona ${d.zona} (±${d.zona === "A" ? 1 : d.zona === "B" ? 2 : 3}σ)`}
+          </span>
+        </div>
+        {d.fuera && <p style={{ color: "#F87171", marginTop: 8, fontSize: 11, borderTop: "1px solid rgba(239,68,68,0.2)", paddingTop: 6 }}>⚠ Punto fuera de límites de control (±3σ)</p>}
+      </div>
+    );
+  }, []);
+
+  if (!bloque || N === 0) return null;
+
+  return (
+    <div ref={chartWrapRef} style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden" }}>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
+        <div>
+          <p style={{ color: "#E2E8F0", fontSize: 13, fontWeight: 700, margin: 0 }}>
+            Carta de Control I — Utilidad por proyecto
+            <span style={{ color: "#475569", fontWeight: 400, fontSize: 12, marginLeft: 8 }}>{catSel}</span>
+          </p>
+          <p style={{ color: "#475569", fontSize: 11, margin: "3px 0 0" }}>
+            {N} proyectos · CL = {fmt(CL)}
+            {isZoomed
+              ? <span style={{ color: "#6366F1", marginLeft: 6 }}>· vista {xDomain[0]}–{xDomain[1]} · <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => { domRef.current=[1,N]; setXDomain([1,N]); }}>reset</span></span>
+              : <span style={{ color: "#2d3748", marginLeft: 6 }}>· scroll para zoom · arrastra para mover</span>
+            }
+          </p>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          {/* Selector de categoría */}
+          <select
+            value={catSel}
+            onChange={e => setCatSel(e.target.value)}
+            style={{
+              background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 6, color: "#94A3B8", fontSize: 11, padding: "4px 8px", cursor: "pointer",
+            }}
+          >
+            {cats.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+          <button onClick={exportPng} title="Exportar PNG" style={{
+            display: "flex", alignItems: "center", gap: 5,
+            padding: "4px 10px", borderRadius: 6, cursor: "pointer", fontSize: 11,
+            border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "#94A3B8",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background="rgba(99,102,241,0.15)"; e.currentTarget.style.color="#a5b4fc"; }}
+            onMouseLeave={e => { e.currentTarget.style.background="rgba(255,255,255,0.04)"; e.currentTarget.style.color="#94A3B8"; }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            PNG
+          </button>
+          <span style={{
+            fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
+            background: bajo_ctrl ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
+            border: `1px solid ${bajo_ctrl ? "rgba(34,197,94,0.3)" : "rgba(239,68,68,0.3)"}`,
+            color: bajo_ctrl ? "#4ADE80" : "#F87171",
+          }}>
+            {bajo_ctrl ? "BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
+          </span>
+        </div>
+      </div>
+
+      {/* Gráfico */}
+      <div
+        ref={containerRef}
+        onWheel={onWheel}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseUp}
+        style={{ cursor: "crosshair", userSelect: "none" }}
+      >
+        <ResponsiveContainer width="100%" height={360}>
+          <ComposedChart data={visibleData} margin={{ top: 8, right: 114, bottom: 44, left: 8 }}>
+            <ReferenceArea y1={UCL}  y2={yMax} fill={OOC_COLOR}    ifOverflow="extendDomain" />
+            <ReferenceArea y1={yMin} y2={LCL}  fill={OOC_COLOR}    ifOverflow="extendDomain" />
+            <ReferenceArea y1={s2u}  y2={UCL}  fill={ZONE_C_COLOR} ifOverflow="extendDomain" />
+            <ReferenceArea y1={LCL}  y2={s2l}  fill={ZONE_C_COLOR} ifOverflow="extendDomain" />
+            <ReferenceArea y1={s1u}  y2={s2u}  fill={ZONE_B_COLOR} ifOverflow="extendDomain" />
+            <ReferenceArea y1={s2l}  y2={s1l}  fill={ZONE_B_COLOR} ifOverflow="extendDomain" />
+            <ReferenceArea y1={s1l}  y2={s1u}  fill={ZONE_A_COLOR} ifOverflow="extendDomain" />
+            <CartesianGrid strokeDasharray="2 6" stroke="rgba(255,255,255,0.03)" vertical={false} />
+            <XAxis
+              dataKey="idx" type="number"
+              domain={[xDomain[0] - 0.5, xDomain[1] + 0.5]}
+              tick={{ fill: "#6B7280", fontSize: 10 }} tickLine={false}
+              axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
+              label={{ value: "Proyectos (orden cronológico)", position: "insideBottom", offset: -30,
+                style: { fill: "#e2e8f0", fontSize: 11, fontWeight: 300 } }}
+            />
+            <YAxis
+              domain={[yMin, yMax] as [number | "auto", number | "auto"]}
+              tick={{ fill: "#6B7280", fontSize: 10 }} tickLine={false} axisLine={false}
+              tickFormatter={(v: number) => `${(v * 100).toFixed(0)}%`}
+              width={46}
+              label={{ value: "Utilidad (%)", angle: -90, position: "insideLeft", offset: 14,
+                style: { fill: "#e2e8f0", fontSize: 11, fontWeight: 300 }, dy: 40 }}
+            />
+            <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.08)", strokeWidth: 1, strokeDasharray: "3 3" }} />
+            <ReferenceLine y={UCL} stroke="rgba(239,68,68,0.55)"    strokeDasharray="6 5" strokeWidth={0.5} label={{ value: `+3σ = ${fmt(UCL)}`, position: "right", fill: "#EF4444", fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={s2u} stroke="rgba(249,115,22,0.50)"   strokeDasharray="5 5" strokeWidth={0.5} label={{ value: `+2σ = ${fmt(s2u)}`, position: "right", fill: "#F97316", fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={s1u} stroke="rgba(34,197,94,0.45)"    strokeDasharray="5 5" strokeWidth={0.5} label={{ value: `+1σ = ${fmt(s1u)}`, position: "right", fill: "#22C55E", fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={CL}  stroke="rgba(255,255,255,0.45)"  strokeWidth={0.6}                        label={{ value: `CL = ${fmt(CL)}`,   position: "right", fill: "#94A3B8", fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={s1l} stroke="rgba(34,197,94,0.45)"    strokeDasharray="5 5" strokeWidth={0.5} label={{ value: `-1σ = ${fmt(s1l)}`, position: "right", fill: "#22C55E", fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={s2l} stroke="rgba(249,115,22,0.50)"   strokeDasharray="5 5" strokeWidth={0.5} label={{ value: `-2σ = ${fmt(s2l)}`, position: "right", fill: "#F97316", fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={LCL} stroke="rgba(239,68,68,0.55)"    strokeDasharray="6 5" strokeWidth={0.5} label={{ value: `-3σ = ${fmt(LCL)}`, position: "right", fill: "#EF4444", fontSize: 9, dx: 6 }} />
+            <Line type="linear" dataKey="utilidad" stroke="#38BDF8" strokeWidth={1.2}
+              dot={<CustomDot />} activeDot={false} isAnimationActive={false} />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Leyenda zonas */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px", marginTop: 6, paddingTop: 10, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+        {[
+          { label: "Zona A ±1σ", color: "#22C55E", bg: ZONE_A_COLOR },
+          { label: "Zona B ±2σ", color: "#F97316", bg: ZONE_B_COLOR },
+          { label: "Zona C ±3σ", color: "#EF4444", bg: ZONE_C_COLOR },
+          { label: "Fuera de control", color: "#F87171", dot: true },
+        ].map(({ label, color, bg, dot }) => (
+          <span key={label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#64748B" }}>
+            {dot
+              ? <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#EF4444", display: "inline-block" }} />
+              : <span style={{ width: 28, height: 10, borderRadius: 3, background: bg, border: `1px solid ${color}40`, display: "inline-block" }} />
+            }
+            {label}
+          </span>
+        ))}
+        {catSel === "GLOBAL" && lbRes.categorias_disponibles.map(cat => (
+          <span key={cat} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#64748B" }}>
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: CAT_COLORS[cat] ?? DEFAULT_COLOR, display: "inline-block" }} />
+            {cat}
+          </span>
+        ))}
       </div>
     </div>
   );
