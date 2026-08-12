@@ -1292,23 +1292,7 @@ function ComercialPanel() {
   const hasFilters = !!(search || fLinea || fSegmento || fEstado);
 
   if (!data) {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center gap-1.5 border-b border-white/[0.07] pb-0">
-          <button onClick={() => setTab("datos")}
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${tab !== "predictor" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500 hover:text-slate-300"}`}>
-            <Table2 size={15} /> Análisis histórico
-          </button>
-          <button onClick={() => setTab("predictor")}
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${tab === "predictor" ? "border-blue-500 text-blue-400" : "border-transparent text-slate-500 hover:text-slate-300"}`}>
-            <Cpu size={15} /> Predecir oportunidad
-          </button>
-        </div>
-        {tab === "predictor"
-          ? <PredictorOportunidad />
-          : <ComercialSourcePicker onFile={handleFile} loading={loading} error={error} />}
-      </div>
-    );
+    return <ComercialSourcePicker onFile={handleFile} loading={loading} error={error} />;
   }
 
   const tabs: { id: ComercialTab; label: string; icon: typeof Table2 }[] = [
