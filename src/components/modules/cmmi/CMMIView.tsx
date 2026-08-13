@@ -2831,24 +2831,26 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
             }
           </p>
         </div>
-        <div style={{ display: "table-cell", verticalAlign: "middle", textAlign: "right", whiteSpace: "nowrap", width: 1 }}>
-          <button
-            onClick={() => setWhiteMode(m => !m)}
-            title={whiteMode ? "Modo oscuro" : "Modo claro (publicación)"}
-            style={{
-              display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
-              cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
-              color: th.btnColor, whiteSpace: "nowrap", marginRight: 6,
-            }}
-          >{whiteMode ? "🌙 Oscuro" : "☀ Claro"}</button>
-          <button onClick={exportPng} style={{
-            display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
-            cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
-            color: th.btnColor, whiteSpace: "nowrap", marginRight: 6,
-          }}>↓ PNG</button>
+        <div style={{ display: "table-cell", verticalAlign: "middle", textAlign: "right", width: 1 }}>
+          {([
+            { label: whiteMode ? "🌙 Oscuro" : "☀ Claro", onClick: () => setWhiteMode(m => !m), extra: { marginRight: 6 } },
+            { label: "↓ PNG", onClick: exportPng, extra: { marginRight: 6 } },
+          ] as { label: string; onClick: () => void; extra: React.CSSProperties }[]).map(btn => (
+            <button key={btn.label} onClick={btn.onClick} style={{
+              display: "inline-block", verticalAlign: "middle",
+              height: 26, lineHeight: "24px",
+              paddingLeft: 10, paddingRight: 10, paddingTop: 0, paddingBottom: 0,
+              borderRadius: 6, cursor: "pointer", fontSize: 11,
+              border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+              whiteSpace: "nowrap", boxSizing: "border-box", ...btn.extra,
+            }}>{btn.label}</button>
+          ))}
           <span style={{
-            display: "inline-block", fontSize: 11, fontWeight: 700, lineHeight: "22px",
-            padding: "0 12px", borderRadius: 6, whiteSpace: "nowrap",
+            display: "inline-block", verticalAlign: "middle",
+            height: 26, lineHeight: "24px",
+            paddingLeft: 12, paddingRight: 12, paddingTop: 0, paddingBottom: 0,
+            borderRadius: 6, fontSize: 11, fontWeight: 700,
+            whiteSpace: "nowrap", boxSizing: "border-box" as const,
             background: bajo_ctrl
               ? (whiteMode ? "rgba(22,163,74,0.08)"  : "rgba(34,197,94,0.12)")
               : (whiteMode ? "rgba(220,38,38,0.08)"  : "rgba(239,68,68,0.12)"),
@@ -5039,34 +5041,38 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
             }
           </p>
         </div>
-        <div style={{ display: "table-cell", verticalAlign: "middle", textAlign: "right", whiteSpace: "nowrap", width: 1 }}>
-          <button
-            onClick={() => setWhiteMode(m => !m)}
-            style={{
-              display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
-              cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
-              color: th.btnColor, whiteSpace: "nowrap", marginRight: 6,
-            }}
-          >{whiteMode ? "🌙 Oscuro" : "☀ Claro"}</button>
-          <select
-            value={catSel}
-            onChange={e => setCatSel(e.target.value)}
-            style={{
-              display: "inline-block", background: th.selectBg, border: th.selectBorder,
-              borderRadius: 6, color: th.selectColor, fontSize: 11, padding: "4px 8px",
-              cursor: "pointer", marginRight: 6,
-            }}
-          >
+        <div style={{ display: "table-cell", verticalAlign: "middle", textAlign: "right", width: 1 }}>
+          <button onClick={() => setWhiteMode(m => !m)} style={{
+            display: "inline-block", verticalAlign: "middle",
+            height: 26, lineHeight: "24px",
+            paddingLeft: 10, paddingRight: 10, paddingTop: 0, paddingBottom: 0,
+            borderRadius: 6, cursor: "pointer", fontSize: 11,
+            border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+            whiteSpace: "nowrap", boxSizing: "border-box" as const, marginRight: 6,
+          }}>{whiteMode ? "🌙 Oscuro" : "☀ Claro"}</button>
+          <select value={catSel} onChange={e => setCatSel(e.target.value)} style={{
+            display: "inline-block", verticalAlign: "middle",
+            height: 26, paddingLeft: 6, paddingRight: 6, paddingTop: 0, paddingBottom: 0,
+            borderRadius: 6, cursor: "pointer", fontSize: 11,
+            background: th.selectBg, border: th.selectBorder, color: th.selectColor,
+            boxSizing: "border-box" as const, marginRight: 6,
+          }}>
             {cats.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
           <button onClick={exportPng} style={{
-            display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
-            cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
-            color: th.btnColor, whiteSpace: "nowrap", marginRight: 6,
+            display: "inline-block", verticalAlign: "middle",
+            height: 26, lineHeight: "24px",
+            paddingLeft: 10, paddingRight: 10, paddingTop: 0, paddingBottom: 0,
+            borderRadius: 6, cursor: "pointer", fontSize: 11,
+            border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+            whiteSpace: "nowrap", boxSizing: "border-box" as const, marginRight: 6,
           }}>↓ PNG</button>
           <span style={{
-            display: "inline-block", fontSize: 11, fontWeight: 700, lineHeight: "22px",
-            padding: "0 12px", borderRadius: 6, whiteSpace: "nowrap",
+            display: "inline-block", verticalAlign: "middle",
+            height: 26, lineHeight: "24px",
+            paddingLeft: 12, paddingRight: 12, paddingTop: 0, paddingBottom: 0,
+            borderRadius: 6, fontSize: 11, fontWeight: 700,
+            whiteSpace: "nowrap", boxSizing: "border-box" as const,
             background: bajo_ctrl
               ? (whiteMode ? "rgba(22,163,74,0.08)" : "rgba(34,197,94,0.12)")
               : (whiteMode ? "rgba(220,38,38,0.08)"  : "rgba(239,68,68,0.12)"),
