@@ -2814,19 +2814,34 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
 
   return (
     <div ref={chartWrapRef} style={{ background: th.bg, border: th.border, borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden", transition: "background 0.2s, border-color 0.2s" }}>
-      {/* Header — layout con float para compatibilidad html2canvas */}
-      <div style={{ marginBottom: 14, overflow: "hidden" }}>
-        <div style={{ float: "right", textAlign: "right" }}>
+      {/* Header — tabla para compatibilidad total con html2canvas */}
+      <div style={{ display: "table", width: "100%", marginBottom: 14 }}>
+        <div style={{ display: "table-cell", verticalAlign: "middle" }}>
+          <p style={{ color: th.titleColor, fontSize: 13, fontWeight: 700, margin: 0 }}>
+            Carta de Control — {ind}
+            {fechaRango && (
+              <span style={{ color: th.subtitleColor, fontWeight: 400, fontSize: 12, marginLeft: 8 }}>{fechaRango}</span>
+            )}
+          </p>
+          <p style={{ color: th.subtitleColor, fontSize: 11, margin: "3px 0 0" }}>
+            {scope === "GLOBAL" ? "Global" : scope} · {chartData.length} observaciones
+            {isZoomed
+              ? <span style={{ color: th.zoomColor, marginLeft: 6 }}>· vista {xDomain[0]}–{xDomain[1]} · <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => { domRef.current=[1,N]; setXDomain([1,N]); }}>reset</span></span>
+              : <span style={{ color: whiteMode ? "#94A3B8" : "#2d3748", marginLeft: 6 }}>· scroll para zoom · arrastra para mover</span>
+            }
+          </p>
+        </div>
+        <div style={{ display: "table-cell", verticalAlign: "middle", textAlign: "right", whiteSpace: "nowrap", width: 1 }}>
           <button
             onClick={() => setWhiteMode(m => !m)}
             title={whiteMode ? "Modo oscuro" : "Modo claro (publicación)"}
             style={{
               display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
               cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
-              color: th.btnColor, transition: "all 0.15s", whiteSpace: "nowrap", marginRight: 6,
+              color: th.btnColor, whiteSpace: "nowrap", marginRight: 6,
             }}
           >{whiteMode ? "🌙 Oscuro" : "☀ Claro"}</button>
-          <button onClick={exportPng} title="Exportar PNG" style={{
+          <button onClick={exportPng} style={{
             display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
             cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
             color: th.btnColor, whiteSpace: "nowrap", marginRight: 6,
@@ -2846,21 +2861,6 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
           }}>
             {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
           </span>
-        </div>
-        <div style={{ overflow: "hidden" }}>
-          <p style={{ color: th.titleColor, fontSize: 13, fontWeight: 700, margin: 0 }}>
-            Carta de Control — {ind}
-            {fechaRango && (
-              <span style={{ color: th.subtitleColor, fontWeight: 400, fontSize: 12, marginLeft: 8 }}>{fechaRango}</span>
-            )}
-          </p>
-          <p style={{ color: th.subtitleColor, fontSize: 11, margin: "3px 0 0" }}>
-            {scope === "GLOBAL" ? "Global" : scope} · {chartData.length} observaciones
-            {isZoomed
-              ? <span style={{ color: th.zoomColor, marginLeft: 6 }}>· vista {xDomain[0]}–{xDomain[1]} · <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => { domRef.current=[1,N]; setXDomain([1,N]); }}>reset</span></span>
-              : <span style={{ color: whiteMode ? "#94A3B8" : "#2d3748", marginLeft: 6 }}>· scroll para zoom · arrastra para mover</span>
-            }
-          </p>
         </div>
       </div>
 
@@ -5024,9 +5024,9 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
 
   return (
     <div ref={chartWrapRef} style={{ background: th.bg, border: th.border, borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden", transition: "background 0.2s, border-color 0.2s" }}>
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
-        <div>
+      {/* Header — tabla para compatibilidad total con html2canvas */}
+      <div style={{ display: "table", width: "100%", marginBottom: 14 }}>
+        <div style={{ display: "table-cell", verticalAlign: "middle" }}>
           <p style={{ color: th.titleColor, fontSize: 13, fontWeight: 700, margin: 0 }}>
             Carta de Control I — Utilidad por proyecto
             <span style={{ color: th.subtitleColor, fontWeight: 400, fontSize: 12, marginLeft: 8 }}>{catSel}</span>
@@ -5039,37 +5039,34 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
             }
           </p>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+        <div style={{ display: "table-cell", verticalAlign: "middle", textAlign: "right", whiteSpace: "nowrap", width: 1 }}>
           <button
             onClick={() => setWhiteMode(m => !m)}
-            title={whiteMode ? "Modo oscuro" : "Modo claro (publicación)"}
             style={{
-              lineHeight: "22px", padding: "0 10px", borderRadius: 6, cursor: "pointer",
-              fontSize: 11, border: th.btnBorder, background: th.btnBg, color: th.btnColor,
-              transition: "all 0.15s", whiteSpace: "nowrap",
+              display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
+              cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
+              color: th.btnColor, whiteSpace: "nowrap", marginRight: 6,
             }}
-          >
-            {whiteMode ? "🌙 Oscuro" : "☀ Claro"}
-          </button>
+          >{whiteMode ? "🌙 Oscuro" : "☀ Claro"}</button>
           <select
             value={catSel}
             onChange={e => setCatSel(e.target.value)}
             style={{
-              background: th.selectBg, border: th.selectBorder,
-              borderRadius: 6, color: th.selectColor, fontSize: 11, padding: "4px 8px", cursor: "pointer",
+              display: "inline-block", background: th.selectBg, border: th.selectBorder,
+              borderRadius: 6, color: th.selectColor, fontSize: 11, padding: "4px 8px",
+              cursor: "pointer", marginRight: 6,
             }}
           >
             {cats.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
-          <button onClick={exportPng} title="Exportar PNG" style={{
-            lineHeight: "22px", padding: "0 10px", borderRadius: 6, cursor: "pointer",
-            fontSize: 11, border: th.btnBorder, background: th.btnBg, color: th.btnColor,
-            whiteSpace: "nowrap",
-          }}>
-            ↓ PNG
-          </button>
+          <button onClick={exportPng} style={{
+            display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
+            cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
+            color: th.btnColor, whiteSpace: "nowrap", marginRight: 6,
+          }}>↓ PNG</button>
           <span style={{
-            fontSize: 11, fontWeight: 700, lineHeight: "22px", padding: "0 12px", borderRadius: 6,
+            display: "inline-block", fontSize: 11, fontWeight: 700, lineHeight: "22px",
+            padding: "0 12px", borderRadius: 6, whiteSpace: "nowrap",
             background: bajo_ctrl
               ? (whiteMode ? "rgba(22,163,74,0.08)" : "rgba(34,197,94,0.12)")
               : (whiteMode ? "rgba(220,38,38,0.08)"  : "rgba(239,68,68,0.12)"),
@@ -5079,7 +5076,6 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
             color: bajo_ctrl
               ? (whiteMode ? "#16A34A" : "#4ADE80")
               : (whiteMode ? "#DC2626"  : "#F87171"),
-            whiteSpace: "nowrap",
           }}>
             {bajo_ctrl ? "BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
           </span>
