@@ -4960,9 +4960,9 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     // Legend
     ctx.font = "11px system-ui,sans-serif";
     const legItems = [
-      { label: "Zona A ±1σ", rect: true,  fill: th.zoneA, stroke: whiteMode ? "#16A34A" : "#22C55E" },
-      { label: "Zona B ±2σ", rect: true,  fill: th.zoneB, stroke: whiteMode ? "#EA580C" : "#F97316" },
-      { label: "Zona C ±3σ", rect: true,  fill: th.zoneC, stroke: whiteMode ? "#DC2626" : "#EF4444" },
+      { label: "Zona A ±1σ", rect: true,  fill: whiteMode ? "rgba(34,197,94,0.14)"  : "rgba(34,197,94,0.14)",  stroke: whiteMode ? "#16A34A" : "#22C55E" },
+      { label: "Zona B ±2σ", rect: true,  fill: whiteMode ? "rgba(234,179,8,0.14)"  : "rgba(234,179,8,0.14)",  stroke: whiteMode ? "#EA580C" : "#F97316" },
+      { label: "Zona C ±3σ", rect: true,  fill: whiteMode ? "rgba(249,115,22,0.14)" : "rgba(249,115,22,0.14)", stroke: whiteMode ? "#DC2626" : "#EF4444" },
       { label: "Fuera de control", rect: false, fill: whiteMode ? "#DC2626" : "#EF4444", stroke: "" },
     ];
     let lx = PAD; const ly = HDR + svgH + 12;
@@ -4978,7 +4978,7 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     const a = document.createElement("a");
     a.download = `ichart-utilidad-${catSel.replace(/\s+/g, "_")}.png`;
     a.href = cv.toDataURL("image/png"); a.click();
-  }, [catSel, whiteMode, chartData.length, bajo_ctrl, fueraCount, th]);
+  }, [catSel, whiteMode, chartData.length, bajo_ctrl, fueraCount]);
 
   const s1u = CL + σ;   const s1l = CL - σ;
   const s2u = CL + 2*σ; const s2l = CL - 2*σ;
