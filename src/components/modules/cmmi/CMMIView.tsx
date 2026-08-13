@@ -2643,14 +2643,14 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
     btnBorder:    "1px solid #CBD5E1",
     btnColor:     "#475569",
     cursorStroke: "rgba(0,0,0,0.12)",
-    zoneOoc:  "rgba(239,68,68,0.08)",
-    zoneC:    "rgba(249,115,22,0.07)",
-    zoneB:    "rgba(234,179,8,0.07)",
-    zoneA:    "rgba(34,197,94,0.08)",
+    zoneOoc:  "rgba(239,68,68,0.18)",
+    zoneC:    "rgba(249,115,22,0.14)",
+    zoneB:    "rgba(234,179,8,0.14)",
+    zoneA:    "rgba(34,197,94,0.14)",
     clStroke:    "#1E293B", clWidth: 1.2,
     s1Stroke:    "#16A34A", s2Stroke: "#EA580C", s3Stroke: "#DC2626",
     clLabelFill: "#0F172A", s1LabelFill: "#16A34A", s2LabelFill: "#EA580C", s3LabelFill: "#DC2626",
-    lineStroke:  "#1D4ED8",
+    lineStroke:  "#3B82F6",
     tooltipBg:   "#FFFFFF", tooltipBorder: "1px solid #E2E8F0",
     tooltipShadow:"0 8px 24px rgba(0,0,0,0.12)",
     tooltipTitle: "#0F172A", tooltipMuted: "#94A3B8", tooltipDate: "#334155",
@@ -2937,7 +2937,8 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
 
           <Line
             type="linear" dataKey="y"
-            stroke={th.lineStroke} strokeWidth={whiteMode ? 1.4 : 1.2}
+            stroke={th.lineStroke} strokeWidth={whiteMode ? 0.9 : 1.2}
+            strokeOpacity={whiteMode ? 0.7 : 1}
             dot={<CustomDot />} activeDot={false}
             isAnimationActive={false}
           />
@@ -4903,11 +4904,11 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     btnBorder:    "1px solid #CBD5E1",
     btnColor:     "#475569",
     cursorStroke: "rgba(0,0,0,0.12)",
-    // zona fills — very light, matching the image style
-    zoneOoc:  "rgba(239,68,68,0.08)",
-    zoneC:    "rgba(249,115,22,0.07)",
-    zoneB:    "rgba(234,179,8,0.07)",
-    zoneA:    "rgba(34,197,94,0.08)",
+    // zona fills — matching the image style
+    zoneOoc:  "rgba(239,68,68,0.18)",
+    zoneC:    "rgba(249,115,22,0.14)",
+    zoneB:    "rgba(234,179,8,0.14)",
+    zoneA:    "rgba(34,197,94,0.14)",
     // reference lines
     clStroke:    "#1E293B",
     clWidth:     1.2,
@@ -4918,7 +4919,7 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     s1LabelFill: "#16A34A",
     s2LabelFill: "#EA580C",
     s3LabelFill: "#DC2626",
-    lineStroke:  "#1D4ED8",
+    lineStroke:  "#3B82F6",
     tooltipBg:   "#FFFFFF",
     tooltipBorder:"1px solid #E2E8F0",
     tooltipShadow:"0 8px 24px rgba(0,0,0,0.12)",
@@ -5153,7 +5154,7 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
             <ReferenceLine y={s1l} stroke={th.s1Stroke} strokeDasharray={whiteMode ? "3 4" : "5 5"} strokeWidth={whiteMode ? 0.8 : 0.5} label={{ value: `-1σ = ${fmt(s1l)}`, position: "right", fill: th.s1LabelFill, fontSize: 9, dx: 6 }} />
             <ReferenceLine y={s2l} stroke={th.s2Stroke} strokeDasharray="5 5" strokeWidth={whiteMode ? 0.8 : 0.5} label={{ value: `-2σ = ${fmt(s2l)}`, position: "right", fill: th.s2LabelFill, fontSize: 9, dx: 6 }} />
             <ReferenceLine y={LCL} stroke={th.s3Stroke} strokeDasharray="6 5" strokeWidth={whiteMode ? 1 : 0.5} label={{ value: `LCL = ${fmt(LCL)}`, position: "right", fill: th.s3LabelFill, fontSize: 9, dx: 6, fontWeight: whiteMode ? 600 : 400 }} />
-            <Line type="linear" dataKey="utilidad" stroke={th.lineStroke} strokeWidth={whiteMode ? 1.4 : 1.2}
+            <Line type="linear" dataKey="utilidad" stroke={th.lineStroke} strokeWidth={whiteMode ? 0.9 : 1.2} strokeOpacity={whiteMode ? 0.7 : 1}
               dot={<CustomDot />} activeDot={false} isAnimationActive={false} />
           </ComposedChart>
         </ResponsiveContainer>
