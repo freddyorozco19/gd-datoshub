@@ -2814,9 +2814,40 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
 
   return (
     <div ref={chartWrapRef} style={{ background: th.bg, border: th.border, borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden", transition: "background 0.2s, border-color 0.2s" }}>
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
-        <div>
+      {/* Header — layout con float para compatibilidad html2canvas */}
+      <div style={{ marginBottom: 14, overflow: "hidden" }}>
+        <div style={{ float: "right", textAlign: "right" }}>
+          <button
+            onClick={() => setWhiteMode(m => !m)}
+            title={whiteMode ? "Modo oscuro" : "Modo claro (publicación)"}
+            style={{
+              display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
+              cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
+              color: th.btnColor, transition: "all 0.15s", whiteSpace: "nowrap", marginRight: 6,
+            }}
+          >{whiteMode ? "🌙 Oscuro" : "☀ Claro"}</button>
+          <button onClick={exportPng} title="Exportar PNG" style={{
+            display: "inline-block", lineHeight: "22px", padding: "0 10px", borderRadius: 6,
+            cursor: "pointer", fontSize: 11, border: th.btnBorder, background: th.btnBg,
+            color: th.btnColor, whiteSpace: "nowrap", marginRight: 6,
+          }}>↓ PNG</button>
+          <span style={{
+            display: "inline-block", fontSize: 11, fontWeight: 700, lineHeight: "22px",
+            padding: "0 12px", borderRadius: 6, whiteSpace: "nowrap",
+            background: bajo_ctrl
+              ? (whiteMode ? "rgba(22,163,74,0.08)"  : "rgba(34,197,94,0.12)")
+              : (whiteMode ? "rgba(220,38,38,0.08)"  : "rgba(239,68,68,0.12)"),
+            border: `1px solid ${bajo_ctrl
+              ? (whiteMode ? "rgba(22,163,74,0.3)"   : "rgba(34,197,94,0.3)")
+              : (whiteMode ? "rgba(220,38,38,0.3)"   : "rgba(239,68,68,0.3)")}`,
+            color: bajo_ctrl
+              ? (whiteMode ? "#16A34A" : "#4ADE80")
+              : (whiteMode ? "#DC2626"  : "#F87171"),
+          }}>
+            {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
+          </span>
+        </div>
+        <div style={{ overflow: "hidden" }}>
           <p style={{ color: th.titleColor, fontSize: 13, fontWeight: 700, margin: 0 }}>
             Carta de Control — {ind}
             {fechaRango && (
@@ -2830,41 +2861,6 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
               : <span style={{ color: whiteMode ? "#94A3B8" : "#2d3748", marginLeft: 6 }}>· scroll para zoom · arrastra para mover</span>
             }
           </p>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          <button
-            onClick={() => setWhiteMode(m => !m)}
-            title={whiteMode ? "Modo oscuro" : "Modo claro (publicación)"}
-            style={{
-              lineHeight: "22px", padding: "0 10px", borderRadius: 6, cursor: "pointer",
-              fontSize: 11, border: th.btnBorder, background: th.btnBg, color: th.btnColor,
-              transition: "all 0.15s", whiteSpace: "nowrap",
-            }}
-          >
-            {whiteMode ? "🌙 Oscuro" : "☀ Claro"}
-          </button>
-          <button onClick={exportPng} title="Exportar PNG" style={{
-            lineHeight: "22px", padding: "0 10px", borderRadius: 6, cursor: "pointer",
-            fontSize: 11, border: th.btnBorder, background: th.btnBg, color: th.btnColor,
-            transition: "all 0.15s", whiteSpace: "nowrap",
-          }}>
-            ↓ PNG
-          </button>
-          <span style={{
-            fontSize: 11, fontWeight: 700, lineHeight: "22px", padding: "0 12px", borderRadius: 6,
-            background: bajo_ctrl
-              ? (whiteMode ? "rgba(22,163,74,0.08)"  : "rgba(34,197,94,0.12)")
-              : (whiteMode ? "rgba(220,38,38,0.08)"  : "rgba(239,68,68,0.12)"),
-            border: `1px solid ${bajo_ctrl
-              ? (whiteMode ? "rgba(22,163,74,0.3)"   : "rgba(34,197,94,0.3)")
-              : (whiteMode ? "rgba(220,38,38,0.3)"   : "rgba(239,68,68,0.3)")}`,
-            color: bajo_ctrl
-              ? (whiteMode ? "#16A34A" : "#4ADE80")
-              : (whiteMode ? "#DC2626"  : "#F87171"),
-            whiteSpace: "nowrap",
-          }}>
-            {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
-          </span>
         </div>
       </div>
 
@@ -2906,7 +2902,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
             tickFormatter={(v: number) => v.toFixed(2)}
             width={46}
             label={{ value: yLabel, angle: -90, position: "insideLeft", offset: 14,
-              style: { fill: th.axisLabelFill, fontSize: 12, fontWeight: 700, textAnchor: "middle" }, dy: 50 }}
+              style: { fill: th.axisLabelFill, fontSize: 12, fontWeight: 700, textAnchor: "middle" }, dy: 0 }}
           />
 
           <Tooltip content={<CustomTooltip />} cursor={{ stroke: th.cursorStroke, strokeWidth: 1, strokeDasharray: "3 3" }} />
@@ -2928,8 +2924,8 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
 
           <Line
             type="linear" dataKey="y"
-            stroke={th.lineStroke} strokeWidth={whiteMode ? 0.9 : 1.2}
-            strokeOpacity={whiteMode ? 0.7 : 1}
+            stroke={th.lineStroke} strokeWidth={whiteMode ? 1.9 : 2.2}
+            strokeOpacity={whiteMode ? 0.65 : 1}
             dot={<CustomDot />} activeDot={false}
             isAnimationActive={false}
           />
