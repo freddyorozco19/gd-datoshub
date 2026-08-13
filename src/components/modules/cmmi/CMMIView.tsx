@@ -2818,7 +2818,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
         <div>
           <p style={{ color: th.titleColor, fontSize: 13, fontWeight: 700, margin: 0 }}>
-            {ind} por proyecto
+            Carta de Control — {ind}
             {fechaRango && (
               <span style={{ color: th.subtitleColor, fontWeight: 400, fontSize: 12, marginLeft: 8 }}>{fechaRango}</span>
             )}
@@ -2831,37 +2831,27 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
             }
           </p>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {/* Toggle modo claro/oscuro */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <button
             onClick={() => setWhiteMode(m => !m)}
             title={whiteMode ? "Modo oscuro" : "Modo claro (publicación)"}
             style={{
-              display: "flex", alignItems: "center", gap: 5,
-              padding: "4px 10px", borderRadius: 6, cursor: "pointer", fontSize: 11,
-              border: th.btnBorder, background: th.btnBg, color: th.btnColor,
-              transition: "all 0.15s",
+              lineHeight: "22px", padding: "0 10px", borderRadius: 6, cursor: "pointer",
+              fontSize: 11, border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+              transition: "all 0.15s", whiteSpace: "nowrap",
             }}
           >
-            {whiteMode
-              ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-              : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            }
-            {whiteMode ? "Oscuro" : "Claro"}
+            {whiteMode ? "🌙 Oscuro" : "☀ Claro"}
           </button>
-          {/* Exportar PNG */}
           <button onClick={exportPng} title="Exportar PNG" style={{
-            display: "flex", alignItems: "center", gap: 5,
-            padding: "4px 10px", borderRadius: 6, cursor: "pointer", fontSize: 11,
-            border: th.btnBorder, background: th.btnBg, color: th.btnColor, transition: "all 0.15s",
+            lineHeight: "22px", padding: "0 10px", borderRadius: 6, cursor: "pointer",
+            fontSize: 11, border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+            transition: "all 0.15s", whiteSpace: "nowrap",
           }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            PNG
+            ↓ PNG
           </button>
           <span style={{
-            fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
+            fontSize: 11, fontWeight: 700, lineHeight: "22px", padding: "0 12px", borderRadius: 6,
             background: bajo_ctrl
               ? (whiteMode ? "rgba(22,163,74,0.08)"  : "rgba(34,197,94,0.12)")
               : (whiteMode ? "rgba(220,38,38,0.08)"  : "rgba(239,68,68,0.12)"),
@@ -2871,6 +2861,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
             color: bajo_ctrl
               ? (whiteMode ? "#16A34A" : "#4ADE80")
               : (whiteMode ? "#DC2626"  : "#F87171"),
+            whiteSpace: "nowrap",
           }}>
             {bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
           </span>
@@ -2915,7 +2906,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
             tickFormatter={(v: number) => v.toFixed(2)}
             width={46}
             label={{ value: yLabel, angle: -90, position: "insideLeft", offset: 14,
-              style: { fill: th.axisLabelFill, fontSize: 11, fontWeight: 300 }, dy: 50 }}
+              style: { fill: th.axisLabelFill, fontSize: 12, fontWeight: 700, textAnchor: "middle" }, dy: 50 }}
           />
 
           <Tooltip content={<CustomTooltip />} cursor={{ stroke: th.cursorStroke, strokeWidth: 1, strokeDasharray: "3 3" }} />
@@ -5053,24 +5044,17 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
           </p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          {/* Toggle modo blanco/oscuro */}
           <button
             onClick={() => setWhiteMode(m => !m)}
             title={whiteMode ? "Modo oscuro" : "Modo claro (publicación)"}
             style={{
-              display: "flex", alignItems: "center", gap: 5,
-              padding: "4px 10px", borderRadius: 6, cursor: "pointer", fontSize: 11,
-              border: th.btnBorder, background: th.btnBg, color: th.btnColor,
-              transition: "all 0.15s",
+              lineHeight: "22px", padding: "0 10px", borderRadius: 6, cursor: "pointer",
+              fontSize: 11, border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+              transition: "all 0.15s", whiteSpace: "nowrap",
             }}
           >
-            {whiteMode
-              ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-              : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            }
-            {whiteMode ? "Oscuro" : "Claro"}
+            {whiteMode ? "🌙 Oscuro" : "☀ Claro"}
           </button>
-          {/* Selector de categoría */}
           <select
             value={catSel}
             onChange={e => setCatSel(e.target.value)}
@@ -5082,17 +5066,14 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
             {cats.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
           <button onClick={exportPng} title="Exportar PNG" style={{
-            display: "flex", alignItems: "center", gap: 5,
-            padding: "4px 10px", borderRadius: 6, cursor: "pointer", fontSize: 11,
-            border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+            lineHeight: "22px", padding: "0 10px", borderRadius: 6, cursor: "pointer",
+            fontSize: 11, border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+            whiteSpace: "nowrap",
           }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            PNG
+            ↓ PNG
           </button>
           <span style={{
-            fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
+            fontSize: 11, fontWeight: 700, lineHeight: "22px", padding: "0 12px", borderRadius: 6,
             background: bajo_ctrl
               ? (whiteMode ? "rgba(22,163,74,0.08)" : "rgba(34,197,94,0.12)")
               : (whiteMode ? "rgba(220,38,38,0.08)"  : "rgba(239,68,68,0.12)"),
@@ -5102,6 +5083,7 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
             color: bajo_ctrl
               ? (whiteMode ? "#16A34A" : "#4ADE80")
               : (whiteMode ? "#DC2626"  : "#F87171"),
+            whiteSpace: "nowrap",
           }}>
             {bajo_ctrl ? "BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
           </span>
