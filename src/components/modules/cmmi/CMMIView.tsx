@@ -2756,16 +2756,74 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
   const isZoomed = xDomain[0] !== 1 || xDomain[1] !== N;
 
   const exportPng = useCallback(async () => {
-    if (!chartWrapRef.current) return;
-    const { default: html2canvas } = await import("html2canvas");
-    const canvas = await html2canvas(chartWrapRef.current, {
-      backgroundColor: whiteMode ? "#FFFFFF" : "#0d1117", scale: 2, useCORS: true, logging: false,
-    });
-    const link = document.createElement("a");
-    link.download = `ichart-${ind}-${scope.replace(/\s+/g, "_")}.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  }, [ind, scope, whiteMode]);
+    const svgEl = containerRef.current?.querySelector("svg");
+    if (!svgEl) return;
+    const SC = 2;
+    const bg      = whiteMode ? "#FFFFFF" : "#0d1117";
+    const clrMain = whiteMode ? "#0F172A"  : "#E2E8F0";
+    const clrSub  = whiteMode ? "#64748B"  : "#475569";
+    const okClr   = whiteMode ? "#16A34A"  : "#4ADE80";
+    const errClr  = whiteMode ? "#DC2626"  : "#F87171";
+    const okBg    = whiteMode ? "rgba(22,163,74,0.10)"  : "rgba(34,197,94,0.15)";
+    const errBg   = whiteMode ? "rgba(220,38,38,0.10)" : "rgba(239,68,68,0.15)";
+    const svgW = svgEl.getBoundingClientRect().width  || svgEl.clientWidth;
+    const svgH = svgEl.getBoundingClientRect().height || svgEl.clientHeight;
+    const PAD = 20, HDR = 54, LEG = 32;
+    const TW = svgW + PAD * 2, TH = HDR + svgH + LEG + PAD;
+    const cv = document.createElement("canvas");
+    cv.width = TW * SC; cv.height = TH * SC;
+    const ctx = cv.getContext("2d")!;
+    ctx.scale(SC, SC);
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, TW, TH);
+    // Title
+    ctx.fillStyle = clrMain; ctx.font = "bold 13px system-ui,sans-serif";
+    const titleStr = `Carta de Control — ${ind}`;
+    ctx.fillText(titleStr, PAD, PAD + 14);
+    if (fechaRango) {
+      ctx.fillStyle = clrSub; ctx.font = "12px system-ui,sans-serif";
+      ctx.fillText(fechaRango, PAD + ctx.measureText(titleStr).width + 8, PAD + 14);
+    }
+    ctx.fillStyle = clrSub; ctx.font = "11px system-ui,sans-serif";
+    ctx.fillText(`${scope === "GLOBAL" ? "Global" : scope} · ${chartData.length} observaciones`, PAD, PAD + 32);
+    // Status badge
+    const badgeText = bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`;
+    ctx.font = "bold 10px system-ui,sans-serif";
+    const bW = ctx.measureText(badgeText).width + 24, bH = 22;
+    const bX = TW - bW - PAD, bY = PAD + 4;
+    ctx.fillStyle = bajo_ctrl ? okBg : errBg;
+    ctx.beginPath(); (ctx as any).roundRect?.(bX, bY, bW, bH, 6) ?? ctx.rect(bX, bY, bW, bH); ctx.fill();
+    ctx.strokeStyle = bajo_ctrl ? (whiteMode ? "rgba(22,163,74,0.4)" : "rgba(34,197,94,0.4)") : (whiteMode ? "rgba(220,38,38,0.4)" : "rgba(239,68,68,0.4)");
+    ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = bajo_ctrl ? okClr : errClr;
+    ctx.fillText(badgeText, bX + 12, bY + 15);
+    // Chart SVG
+    const svgClone = svgEl.cloneNode(true) as SVGSVGElement;
+    svgClone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    const blob = new Blob([new XMLSerializer().serializeToString(svgClone)], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    await new Promise<void>(res => { const img = new Image(); img.onload = () => { ctx.drawImage(img, PAD, HDR, svgW, svgH); URL.revokeObjectURL(url); res(); }; img.src = url; });
+    // Legend
+    ctx.font = "11px system-ui,sans-serif";
+    const legItems = [
+      { label: "Zona A ±1σ", rect: true,  fill: th.zoneA, stroke: whiteMode ? "#16A34A" : "#22C55E" },
+      { label: "Zona B ±2σ", rect: true,  fill: th.zoneB, stroke: whiteMode ? "#EA580C" : "#F97316" },
+      { label: "Zona C ±3σ", rect: true,  fill: th.zoneC, stroke: whiteMode ? "#DC2626" : "#EF4444" },
+      { label: "Fuera de control", rect: false, fill: whiteMode ? "#DC2626" : "#EF4444", stroke: "" },
+    ];
+    let lx = PAD; const ly = HDR + svgH + 12;
+    for (const it of legItems) {
+      if (it.rect) {
+        ctx.fillStyle = it.fill; ctx.strokeStyle = it.stroke + "60"; ctx.lineWidth = 1;
+        ctx.fillRect(lx, ly, 24, 10); ctx.strokeRect(lx, ly, 24, 10); lx += 30;
+      } else {
+        ctx.fillStyle = it.fill; ctx.beginPath(); ctx.arc(lx + 5, ly + 5, 5, 0, Math.PI * 2); ctx.fill(); lx += 14;
+      }
+      ctx.fillStyle = clrSub; ctx.fillText(it.label, lx, ly + 10); lx += ctx.measureText(it.label).width + 14;
+    }
+    const a = document.createElement("a");
+    a.download = `ichart-${ind}-${scope.replace(/\s+/g, "_")}.png`;
+    a.href = cv.toDataURL("image/png"); a.click();
+  }, [ind, scope, whiteMode, chartData.length, bajo_ctrl, fueraCount, fechaRango, th]);
 
   const clampDomain = (lo: number, hi: number): [number, number] => {
     const w = Math.max(4, hi - lo);
@@ -4858,16 +4916,69 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
   [chartData, xDomain]);
 
   const exportPng = useCallback(async () => {
-    if (!chartWrapRef.current) return;
-    const { default: html2canvas } = await import("html2canvas");
-    const canvas = await html2canvas(chartWrapRef.current, {
-      backgroundColor: whiteMode ? "#FFFFFF" : "#0d1117", scale: 2, useCORS: true, logging: false,
-    });
-    const link = document.createElement("a");
-    link.download = `ichart-utilidad-${catSel.replace(/\s+/g, "_")}.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  }, [catSel, whiteMode]);
+    const svgEl = containerRef.current?.querySelector("svg");
+    if (!svgEl) return;
+    const SC = 2;
+    const bg      = whiteMode ? "#FFFFFF" : "#0d1117";
+    const clrMain = whiteMode ? "#0F172A"  : "#E2E8F0";
+    const clrSub  = whiteMode ? "#64748B"  : "#475569";
+    const okClr   = whiteMode ? "#16A34A"  : "#4ADE80";
+    const errClr  = whiteMode ? "#DC2626"  : "#F87171";
+    const okBg    = whiteMode ? "rgba(22,163,74,0.10)"  : "rgba(34,197,94,0.15)";
+    const errBg   = whiteMode ? "rgba(220,38,38,0.10)" : "rgba(239,68,68,0.15)";
+    const svgW = svgEl.getBoundingClientRect().width  || svgEl.clientWidth;
+    const svgH = svgEl.getBoundingClientRect().height || svgEl.clientHeight;
+    const PAD = 20, HDR = 54, LEG = 32;
+    const TW = svgW + PAD * 2, TH = HDR + svgH + LEG + PAD;
+    const cv = document.createElement("canvas");
+    cv.width = TW * SC; cv.height = TH * SC;
+    const ctx = cv.getContext("2d")!;
+    ctx.scale(SC, SC);
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, TW, TH);
+    // Title
+    ctx.fillStyle = clrMain; ctx.font = "bold 13px system-ui,sans-serif";
+    ctx.fillText("Carta de Control — Utilidad", PAD, PAD + 14);
+    ctx.fillStyle = clrSub; ctx.font = "11px system-ui,sans-serif";
+    ctx.fillText(`${catSel === "GLOBAL" ? "Global" : catSel} · ${chartData.length} observaciones`, PAD, PAD + 32);
+    // Status badge
+    const badgeText = bajo_ctrl ? "BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`;
+    ctx.font = "bold 10px system-ui,sans-serif";
+    const bW = ctx.measureText(badgeText).width + 24, bH = 22;
+    const bX = TW - bW - PAD, bY = PAD + 4;
+    ctx.fillStyle = bajo_ctrl ? okBg : errBg;
+    ctx.beginPath(); (ctx as any).roundRect?.(bX, bY, bW, bH, 6) ?? ctx.rect(bX, bY, bW, bH); ctx.fill();
+    ctx.strokeStyle = bajo_ctrl ? (whiteMode ? "rgba(22,163,74,0.4)" : "rgba(34,197,94,0.4)") : (whiteMode ? "rgba(220,38,38,0.4)" : "rgba(239,68,68,0.4)");
+    ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = bajo_ctrl ? okClr : errClr;
+    ctx.fillText(badgeText, bX + 12, bY + 15);
+    // Chart SVG
+    const svgClone = svgEl.cloneNode(true) as SVGSVGElement;
+    svgClone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    const blob = new Blob([new XMLSerializer().serializeToString(svgClone)], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    await new Promise<void>(res => { const img = new Image(); img.onload = () => { ctx.drawImage(img, PAD, HDR, svgW, svgH); URL.revokeObjectURL(url); res(); }; img.src = url; });
+    // Legend
+    ctx.font = "11px system-ui,sans-serif";
+    const legItems = [
+      { label: "Zona A ±1σ", rect: true,  fill: th.zoneA, stroke: whiteMode ? "#16A34A" : "#22C55E" },
+      { label: "Zona B ±2σ", rect: true,  fill: th.zoneB, stroke: whiteMode ? "#EA580C" : "#F97316" },
+      { label: "Zona C ±3σ", rect: true,  fill: th.zoneC, stroke: whiteMode ? "#DC2626" : "#EF4444" },
+      { label: "Fuera de control", rect: false, fill: whiteMode ? "#DC2626" : "#EF4444", stroke: "" },
+    ];
+    let lx = PAD; const ly = HDR + svgH + 12;
+    for (const it of legItems) {
+      if (it.rect) {
+        ctx.fillStyle = it.fill; ctx.strokeStyle = it.stroke + "60"; ctx.lineWidth = 1;
+        ctx.fillRect(lx, ly, 24, 10); ctx.strokeRect(lx, ly, 24, 10); lx += 30;
+      } else {
+        ctx.fillStyle = it.fill; ctx.beginPath(); ctx.arc(lx + 5, ly + 5, 5, 0, Math.PI * 2); ctx.fill(); lx += 14;
+      }
+      ctx.fillStyle = clrSub; ctx.fillText(it.label, lx, ly + 10); lx += ctx.measureText(it.label).width + 14;
+    }
+    const a = document.createElement("a");
+    a.download = `ichart-utilidad-${catSel.replace(/\s+/g, "_")}.png`;
+    a.href = cv.toDataURL("image/png"); a.click();
+  }, [catSel, whiteMode, chartData.length, bajo_ctrl, fueraCount, th]);
 
   const s1u = CL + σ;   const s1l = CL - σ;
   const s2u = CL + 2*σ; const s2l = CL - 2*σ;
