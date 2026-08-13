@@ -2687,14 +2687,20 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
     if (cx == null || cy == null) return null;
     const fuera = payload.fuera;
     if (whiteMode) {
-      const r = fuera ? 4 : 3;
+      const portColor = isGlobal
+        ? (PORT_COLORS_MAP[payload.portafolio] ?? "#64748B")
+        : "#3B82F6";
+      // Oscurecer el color para que sea visible sobre blanco
+      const borderColor = fuera ? "#DC2626" : portColor;
+      const r = fuera ? 3 : 2;
       return (
         <g>
-          {fuera && <circle cx={cx} cy={cy} r={r + 4} fill="#DC2626" opacity={0.12} />}
+          {fuera && <circle cx={cx} cy={cy} r={r + 3} fill="#DC2626" opacity={0.10} />}
           <circle cx={cx} cy={cy} r={r}
             fill={fuera ? "#DC2626" : "#FFFFFF"}
-            stroke={fuera ? "#DC2626" : "#1D4ED8"}
-            strokeWidth={fuera ? 1.2 : 1.4} />
+            stroke={borderColor}
+            strokeWidth={fuera ? 1.0 : 0.9}
+            fillOpacity={fuera ? 1 : 0.9} />
         </g>
       );
     }
