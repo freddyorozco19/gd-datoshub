@@ -2776,19 +2776,19 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
     ctx.scale(SC, SC);
     ctx.fillStyle = bg; ctx.fillRect(0, 0, TW, TH);
     // Title — línea 1
-    ctx.fillStyle = clrMain; ctx.font = "bold 15px system-ui,sans-serif";
-    ctx.fillText(`Carta de Control — ${ind}`, PAD, PAD + 16);
+    ctx.fillStyle = clrMain; ctx.font = "bold 17px system-ui,sans-serif";
+    ctx.fillText(`Carta de Control — ${ind}`, PAD, PAD + 18);
     // Fecha — línea 2
     if (fechaRango) {
-      ctx.fillStyle = clrSub; ctx.font = "12px system-ui,sans-serif";
-      ctx.fillText(fechaRango, PAD, PAD + 34);
+      ctx.fillStyle = clrSub; ctx.font = "14px system-ui,sans-serif";
+      ctx.fillText(fechaRango, PAD, PAD + 38);
     }
     // Subtítulo — línea 3
-    ctx.fillStyle = clrSub; ctx.font = "12px system-ui,sans-serif";
-    ctx.fillText(`${scope === "GLOBAL" ? "Global" : scope} · ${chartData.length} observaciones`, PAD, PAD + 52);
+    ctx.fillStyle = clrSub; ctx.font = "14px system-ui,sans-serif";
+    ctx.fillText(`${scope === "GLOBAL" ? "Global" : scope} · ${chartData.length} observaciones`, PAD, PAD + 56);
     // Status badge
     const badgeText = bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`;
-    ctx.font = "bold 11px system-ui,sans-serif";
+    ctx.font = "bold 13px system-ui,sans-serif";
     const bW = ctx.measureText(badgeText).width + 28, bH = 26;
     const bX = TW - bW - PAD, bY = PAD + 6;
     ctx.fillStyle = bajo_ctrl ? okBg : errBg;
@@ -2804,7 +2804,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
     const url = URL.createObjectURL(blob);
     await new Promise<void>(res => { const img = new Image(); img.onload = () => { ctx.drawImage(img, PAD, HDR, svgW, svgH); URL.revokeObjectURL(url); res(); }; img.src = url; });
     // Legend
-    ctx.font = "11px system-ui,sans-serif";
+    ctx.font = "13px system-ui,sans-serif";
     const legItems = [
       { label: "Zona A ±1σ", rect: true,  fill: th.zoneA, stroke: whiteMode ? "#16A34A" : "#22C55E" },
       { label: "Zona B ±2σ", rect: true,  fill: th.zoneB, stroke: whiteMode ? "#EA580C" : "#F97316" },
@@ -4937,14 +4937,14 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     ctx.scale(SC, SC);
     ctx.fillStyle = bg; ctx.fillRect(0, 0, TW, TH);
     // Title — línea 1
-    ctx.fillStyle = clrMain; ctx.font = "bold 15px system-ui,sans-serif";
-    ctx.fillText("Carta de Control — Utilidad", PAD, PAD + 16);
+    ctx.fillStyle = clrMain; ctx.font = "bold 17px system-ui,sans-serif";
+    ctx.fillText("Carta de Control — Utilidad", PAD, PAD + 18);
     // Subtítulo — línea 2
-    ctx.fillStyle = clrSub; ctx.font = "12px system-ui,sans-serif";
-    ctx.fillText(`${catSel === "GLOBAL" ? "Global" : catSel} · ${chartData.length} observaciones`, PAD, PAD + 36);
+    ctx.fillStyle = clrSub; ctx.font = "14px system-ui,sans-serif";
+    ctx.fillText(`${catSel === "GLOBAL" ? "Global" : catSel} · ${chartData.length} observaciones`, PAD, PAD + 38);
     // Status badge
     const badgeText = bajo_ctrl ? "BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`;
-    ctx.font = "bold 11px system-ui,sans-serif";
+    ctx.font = "bold 13px system-ui,sans-serif";
     const bW = ctx.measureText(badgeText).width + 28, bH = 26;
     const bX = TW - bW - PAD, bY = PAD + 6;
     ctx.fillStyle = bajo_ctrl ? okBg : errBg;
@@ -4960,7 +4960,7 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     const url = URL.createObjectURL(blob);
     await new Promise<void>(res => { const img = new Image(); img.onload = () => { ctx.drawImage(img, PAD, HDR, svgW, svgH); URL.revokeObjectURL(url); res(); }; img.src = url; });
     // Legend
-    ctx.font = "11px system-ui,sans-serif";
+    ctx.font = "13px system-ui,sans-serif";
     const legItems = [
       { label: "Zona A ±1σ", rect: true,  fill: whiteMode ? "rgba(34,197,94,0.14)"  : "rgba(34,197,94,0.14)",  stroke: whiteMode ? "#16A34A" : "#22C55E" },
       { label: "Zona B ±2σ", rect: true,  fill: whiteMode ? "rgba(234,179,8,0.14)"  : "rgba(234,179,8,0.14)",  stroke: whiteMode ? "#EA580C" : "#F97316" },
