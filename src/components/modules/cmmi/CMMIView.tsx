@@ -2768,28 +2768,29 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
     const errBg   = whiteMode ? "rgba(220,38,38,0.10)" : "rgba(239,68,68,0.15)";
     const svgW = svgEl.getBoundingClientRect().width  || svgEl.clientWidth;
     const svgH = svgEl.getBoundingClientRect().height || svgEl.clientHeight;
-    const PAD = 20, HDR = 54, LEG = 32;
+    const PAD = 24, HDR = 72, LEG = 36;
     const TW = svgW + PAD * 2, TH = HDR + svgH + LEG + PAD;
     const cv = document.createElement("canvas");
     cv.width = TW * SC; cv.height = TH * SC;
     const ctx = cv.getContext("2d")!;
     ctx.scale(SC, SC);
     ctx.fillStyle = bg; ctx.fillRect(0, 0, TW, TH);
-    // Title
-    ctx.fillStyle = clrMain; ctx.font = "bold 13px system-ui,sans-serif";
-    const titleStr = `Carta de Control — ${ind}`;
-    ctx.fillText(titleStr, PAD, PAD + 14);
+    // Title — línea 1
+    ctx.fillStyle = clrMain; ctx.font = "bold 15px system-ui,sans-serif";
+    ctx.fillText(`Carta de Control — ${ind}`, PAD, PAD + 16);
+    // Fecha — línea 2
     if (fechaRango) {
       ctx.fillStyle = clrSub; ctx.font = "12px system-ui,sans-serif";
-      ctx.fillText(fechaRango, PAD + ctx.measureText(titleStr).width + 8, PAD + 14);
+      ctx.fillText(fechaRango, PAD, PAD + 34);
     }
-    ctx.fillStyle = clrSub; ctx.font = "11px system-ui,sans-serif";
-    ctx.fillText(`${scope === "GLOBAL" ? "Global" : scope} · ${chartData.length} observaciones`, PAD, PAD + 32);
+    // Subtítulo — línea 3
+    ctx.fillStyle = clrSub; ctx.font = "12px system-ui,sans-serif";
+    ctx.fillText(`${scope === "GLOBAL" ? "Global" : scope} · ${chartData.length} observaciones`, PAD, PAD + 52);
     // Status badge
     const badgeText = bajo_ctrl ? "PROCESO BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`;
-    ctx.font = "bold 10px system-ui,sans-serif";
-    const bW = ctx.measureText(badgeText).width + 24, bH = 22;
-    const bX = TW - bW - PAD, bY = PAD + 4;
+    ctx.font = "bold 11px system-ui,sans-serif";
+    const bW = ctx.measureText(badgeText).width + 28, bH = 26;
+    const bX = TW - bW - PAD, bY = PAD + 6;
     ctx.fillStyle = bajo_ctrl ? okBg : errBg;
     ctx.beginPath(); (ctx as any).roundRect?.(bX, bY, bW, bH, 6) ?? ctx.rect(bX, bY, bW, bH); ctx.fill();
     ctx.strokeStyle = bajo_ctrl ? (whiteMode ? "rgba(22,163,74,0.4)" : "rgba(34,197,94,0.4)") : (whiteMode ? "rgba(220,38,38,0.4)" : "rgba(239,68,68,0.4)");
@@ -4928,23 +4929,24 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     const errBg   = whiteMode ? "rgba(220,38,38,0.10)" : "rgba(239,68,68,0.15)";
     const svgW = svgEl.getBoundingClientRect().width  || svgEl.clientWidth;
     const svgH = svgEl.getBoundingClientRect().height || svgEl.clientHeight;
-    const PAD = 20, HDR = 54, LEG = 32;
+    const PAD = 24, HDR = 72, LEG = 36;
     const TW = svgW + PAD * 2, TH = HDR + svgH + LEG + PAD;
     const cv = document.createElement("canvas");
     cv.width = TW * SC; cv.height = TH * SC;
     const ctx = cv.getContext("2d")!;
     ctx.scale(SC, SC);
     ctx.fillStyle = bg; ctx.fillRect(0, 0, TW, TH);
-    // Title
-    ctx.fillStyle = clrMain; ctx.font = "bold 13px system-ui,sans-serif";
-    ctx.fillText("Carta de Control — Utilidad", PAD, PAD + 14);
-    ctx.fillStyle = clrSub; ctx.font = "11px system-ui,sans-serif";
-    ctx.fillText(`${catSel === "GLOBAL" ? "Global" : catSel} · ${chartData.length} observaciones`, PAD, PAD + 32);
+    // Title — línea 1
+    ctx.fillStyle = clrMain; ctx.font = "bold 15px system-ui,sans-serif";
+    ctx.fillText("Carta de Control — Utilidad", PAD, PAD + 16);
+    // Subtítulo — línea 2
+    ctx.fillStyle = clrSub; ctx.font = "12px system-ui,sans-serif";
+    ctx.fillText(`${catSel === "GLOBAL" ? "Global" : catSel} · ${chartData.length} observaciones`, PAD, PAD + 36);
     // Status badge
     const badgeText = bajo_ctrl ? "BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`;
-    ctx.font = "bold 10px system-ui,sans-serif";
-    const bW = ctx.measureText(badgeText).width + 24, bH = 22;
-    const bX = TW - bW - PAD, bY = PAD + 4;
+    ctx.font = "bold 11px system-ui,sans-serif";
+    const bW = ctx.measureText(badgeText).width + 28, bH = 26;
+    const bX = TW - bW - PAD, bY = PAD + 6;
     ctx.fillStyle = bajo_ctrl ? okBg : errBg;
     ctx.beginPath(); (ctx as any).roundRect?.(bX, bY, bW, bH, 6) ?? ctx.rect(bX, bY, bW, bH); ctx.fill();
     ctx.strokeStyle = bajo_ctrl ? (whiteMode ? "rgba(22,163,74,0.4)" : "rgba(34,197,94,0.4)") : (whiteMode ? "rgba(220,38,38,0.4)" : "rgba(239,68,68,0.4)");
