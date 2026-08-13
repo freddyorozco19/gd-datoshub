@@ -2605,7 +2605,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
   const s2u = CL + 2*σ; const s2l = CL - 2*σ;
 
   const isGlobal = scope === "GLOBAL";
-  const yLabel   = ind === "CPI" ? `CPI (techo ${cpiCap})` : ind;
+  const yLabel   = ind;
   const [whiteMode, setWhiteMode] = useState(false);
 
   const chartData = useMemo(() =>
@@ -2948,31 +2948,31 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
       </div>
 
       {/* Leyenda zonas */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px", marginTop: 6, paddingTop: 10, borderTop: th.legendBorder }}>
+      <div style={{ marginTop: 6, paddingTop: 10, borderTop: th.legendBorder, lineHeight: "20px" }}>
         {[
           { label: "Zona A ±1σ", color: whiteMode ? "#16A34A" : "#22C55E", bg: th.zoneA },
           { label: "Zona B ±2σ", color: whiteMode ? "#EA580C" : "#F97316", bg: th.zoneB },
           { label: "Zona C ±3σ", color: whiteMode ? "#DC2626" : "#EF4444", bg: th.zoneC },
           { label: "Fuera de control", color: whiteMode ? "#DC2626" : "#F87171", dot: true },
         ].map(({ label, color, bg, dot }) => (
-          <span key={label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: th.legendText }}>
+          <span key={label} style={{ display: "inline-block", marginRight: 20, marginBottom: 4, fontSize: 11, color: th.legendText, whiteSpace: "nowrap", verticalAlign: "middle" }}>
             {dot
-              ? <span style={{ width: 10, height: 10, borderRadius: "50%", background: whiteMode ? "#DC2626" : "#EF4444", display: "inline-block" }} />
-              : <span style={{ width: 28, height: 10, borderRadius: 3, background: bg, border: `1px solid ${color}40`, display: "inline-block" }} />
+              ? <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: whiteMode ? "#DC2626" : "#EF4444", verticalAlign: "middle", marginRight: 5 }} />
+              : <span style={{ display: "inline-block", width: 28, height: 10, borderRadius: 3, background: bg, border: `1px solid ${color}40`, verticalAlign: "middle", marginRight: 5 }} />
             }
-            {label}
+            <span style={{ verticalAlign: "middle" }}>{label}</span>
           </span>
         ))}
         {!whiteMode && isGlobal && ports.map(p => (
-          <span key={p} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#64748B" }}>
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: PORT_COLORS_MAP[p] ?? DEFAULT_DOT_COLOR, display: "inline-block" }} />
-            {p}
+          <span key={p} style={{ display: "inline-block", marginRight: 20, marginBottom: 4, fontSize: 11, color: "#64748B", whiteSpace: "nowrap", verticalAlign: "middle" }}>
+            <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: PORT_COLORS_MAP[p] ?? DEFAULT_DOT_COLOR, verticalAlign: "middle", marginRight: 5 }} />
+            <span style={{ verticalAlign: "middle" }}>{p}</span>
           </span>
         ))}
         {whiteMode && (
-          <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: th.legendText }}>
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#FFFFFF", border: "1.5px solid #1D4ED8", display: "inline-block" }} />
-            Punto en control
+          <span style={{ display: "inline-block", marginRight: 20, marginBottom: 4, fontSize: 11, color: th.legendText, whiteSpace: "nowrap", verticalAlign: "middle" }}>
+            <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: PORT_COLORS_MAP[ports[0]] ?? "#3B82F6", verticalAlign: "middle", marginRight: 5 }} />
+            <span style={{ verticalAlign: "middle" }}>Punto en control</span>
           </span>
         )}
       </div>
@@ -5159,33 +5159,33 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
       </div>
 
       {/* Leyenda zonas */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px", marginTop: 6, paddingTop: 10, borderTop: th.legendBorder }}>
+      <div style={{ marginTop: 6, paddingTop: 10, borderTop: th.legendBorder, lineHeight: "20px" }}>
         {[
           { label: "Zona A ±1σ", color: whiteMode ? "#16A34A" : "#22C55E", bg: th.zoneA },
           { label: "Zona B ±2σ", color: whiteMode ? "#EA580C" : "#F97316", bg: th.zoneB },
           { label: "Zona C ±3σ", color: whiteMode ? "#DC2626" : "#EF4444", bg: th.zoneC },
           { label: "Fuera de control", color: whiteMode ? "#DC2626" : "#F87171", dot: true },
         ].map(({ label, color, bg, dot }) => (
-          <span key={label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: th.legendText }}>
+          <span key={label} style={{ display: "inline-block", marginRight: 20, marginBottom: 4, fontSize: 11, color: th.legendText, whiteSpace: "nowrap", verticalAlign: "middle" }}>
             {dot
-              ? <span style={{ width: 10, height: 10, borderRadius: "50%", background: whiteMode ? "#DC2626" : "#EF4444", display: "inline-block" }} />
-              : <span style={{ width: 28, height: 10, borderRadius: 3, background: bg, border: `1px solid ${color}40`, display: "inline-block" }} />
+              ? <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: whiteMode ? "#DC2626" : "#EF4444", verticalAlign: "middle", marginRight: 5 }} />
+              : <span style={{ display: "inline-block", width: 28, height: 10, borderRadius: 3, background: bg, border: `1px solid ${color}40`, verticalAlign: "middle", marginRight: 5 }} />
             }
-            {label}
+            <span style={{ verticalAlign: "middle" }}>{label}</span>
           </span>
         ))}
         {!whiteMode && catSel === "GLOBAL" && lbRes.categorias_disponibles.map(cat => (
-          <span key={cat} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#64748B" }}>
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: CAT_COLORS[cat] ?? DEFAULT_COLOR, display: "inline-block" }} />
-            {cat}
+          <span key={cat} style={{ display: "inline-block", marginRight: 20, marginBottom: 4, fontSize: 11, color: "#64748B", whiteSpace: "nowrap", verticalAlign: "middle" }}>
+            <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: CAT_COLORS[cat] ?? DEFAULT_COLOR, verticalAlign: "middle", marginRight: 5 }} />
+            <span style={{ verticalAlign: "middle" }}>{cat}</span>
           </span>
         ))}
-        {whiteMode && (
-          <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: th.legendText }}>
-            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#FFFFFF", border: "1.5px solid #1D4ED8", display: "inline-block" }} />
-            Punto en control
+        {whiteMode && catSel === "GLOBAL" && lbRes.categorias_disponibles.map(cat => (
+          <span key={cat} style={{ display: "inline-block", marginRight: 20, marginBottom: 4, fontSize: 11, color: th.legendText, whiteSpace: "nowrap", verticalAlign: "middle" }}>
+            <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: CAT_COLORS[cat] ?? DEFAULT_COLOR, verticalAlign: "middle", marginRight: 5 }} />
+            <span style={{ verticalAlign: "middle" }}>{cat}</span>
           </span>
-        )}
+        ))}
       </div>
     </div>
   );
