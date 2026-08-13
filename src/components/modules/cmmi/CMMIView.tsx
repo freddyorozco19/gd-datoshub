@@ -2687,20 +2687,14 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
     if (cx == null || cy == null) return null;
     const fuera = payload.fuera;
     if (whiteMode) {
-      const portColor = isGlobal
-        ? (PORT_COLORS_MAP[payload.portafolio] ?? "#64748B")
+      const portColor = fuera ? "#DC2626"
+        : isGlobal ? (PORT_COLORS_MAP[payload.portafolio] ?? "#64748B")
         : "#3B82F6";
-      // Oscurecer el color para que sea visible sobre blanco
-      const borderColor = fuera ? "#DC2626" : portColor;
-      const r = fuera ? 3 : 2;
+      const r = fuera ? 4.5 : 3.5;
       return (
         <g>
-          {fuera && <circle cx={cx} cy={cy} r={r + 3} fill="#DC2626" opacity={0.10} />}
-          <circle cx={cx} cy={cy} r={r}
-            fill={fuera ? "#DC2626" : "#FFFFFF"}
-            stroke={borderColor}
-            strokeWidth={fuera ? 1.0 : 0.9}
-            fillOpacity={fuera ? 1 : 0.9} />
+          {fuera && <circle cx={cx} cy={cy} r={r + 4} fill="#DC2626" opacity={0.12} />}
+          <circle cx={cx} cy={cy} r={r} fill={portColor} fillOpacity={0.85} stroke="#fff" strokeWidth={0.6} />
         </g>
       );
     }
@@ -2893,7 +2887,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
         onMouseLeave={onMouseUp}
         style={{ cursor: dragging.current ? "grabbing" : "crosshair", userSelect: "none" }}
       >
-      <ResponsiveContainer width="100%" height={360}>
+      <ResponsiveContainer width="100%" height={480}>
         <ComposedChart data={visibleData} margin={{ top: 8, right: 114, bottom: 44, left: 8 }}>
 
           <ReferenceArea y1={UCL}  y2={yMax} fill={th.zoneOoc} ifOverflow="extendDomain" />
@@ -4988,18 +4982,16 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     if (cx == null || cy == null) return null;
     const fuera = payload.fuera;
     if (whiteMode) {
-      // Modo blanco: puntos huecos, OOC rojo sólido con borde
-      const r = fuera ? 4 : 3;
+      const catColor = fuera ? "#DC2626" : (CAT_COLORS[payload.categoria] ?? DEFAULT_COLOR);
+      const r = fuera ? 4.5 : 3.5;
       return (
         <g>
           {fuera && <circle cx={cx} cy={cy} r={r + 4} fill="#DC2626" opacity={0.12} />}
-          <circle cx={cx} cy={cy} r={r}
-            fill={fuera ? "#DC2626" : "#FFFFFF"}
-            stroke={fuera ? "#DC2626" : "#1D4ED8"}
-            strokeWidth={fuera ? 1.2 : 1.4} />
+          <circle cx={cx} cy={cy} r={r} fill={catColor} fillOpacity={0.85} stroke="#fff" strokeWidth={0.6} />
         </g>
       );
     }
+
     const color = fuera ? "#EF4444" : (CAT_COLORS[payload.categoria] ?? DEFAULT_COLOR);
     const r = fuera ? 3.5 : 2.5;
     return (
@@ -5126,7 +5118,7 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
         onMouseLeave={onMouseUp}
         style={{ cursor: "crosshair", userSelect: "none" }}
       >
-        <ResponsiveContainer width="100%" height={360}>
+        <ResponsiveContainer width="100%" height={480}>
           <ComposedChart data={visibleData} margin={{ top: 8, right: 114, bottom: 44, left: 8 }}>
             <ReferenceArea y1={UCL}  y2={yMax} fill={th.zoneOoc} ifOverflow="extendDomain" />
             <ReferenceArea y1={yMin} y2={LCL}  fill={th.zoneOoc} ifOverflow="extendDomain" />
