@@ -4693,7 +4693,8 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
   };
   const DEFAULT_COLOR = "#64748B";
 
-  const [catSel, setCatSel] = useState<string>("GLOBAL");
+  const [catSel, setCatSel]     = useState<string>("GLOBAL");
+  const [whiteMode, setWhiteMode] = useState(false);
   const cats = ["GLOBAL", ...lbRes.categorias_disponibles];
 
   const bloque = catSel === "GLOBAL" ? lbRes.global : lbRes.por_categoria[catSel];
@@ -4778,22 +4779,128 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     if (!chartWrapRef.current) return;
     const { default: html2canvas } = await import("html2canvas");
     const canvas = await html2canvas(chartWrapRef.current, {
-      backgroundColor: "#0d1117", scale: 2, useCORS: true, logging: false,
+      backgroundColor: whiteMode ? "#FFFFFF" : "#0d1117", scale: 2, useCORS: true, logging: false,
     });
     const link = document.createElement("a");
     link.download = `ichart-utilidad-${catSel.replace(/\s+/g, "_")}.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
-  }, [catSel]);
+  }, [catSel, whiteMode]);
 
   const s1u = CL + σ;   const s1l = CL - σ;
   const s2u = CL + 2*σ; const s2l = CL - 2*σ;
   const fmt = (v: number) => `${(v * 100).toFixed(1)}%`;
 
+  // Paletas por modo
+  const th = whiteMode ? {
+    bg:           "#FFFFFF",
+    border:       "1px solid #CBD5E1",
+    titleColor:   "#0F172A",
+    subtitleColor:"#64748B",
+    zoomColor:    "#4F46E5",
+    gridStroke:   "rgba(0,0,0,0.07)",
+    axisTickFill: "#64748B",
+    axisLineStroke:"rgba(0,0,0,0.12)",
+    axisLabelFill:"#334155",
+    legendBorder: "1px solid #E2E8F0",
+    legendText:   "#475569",
+    selectBg:     "#F8FAFC",
+    selectBorder: "1px solid #CBD5E1",
+    selectColor:  "#334155",
+    btnBg:        "#F8FAFC",
+    btnBorder:    "1px solid #CBD5E1",
+    btnColor:     "#475569",
+    cursorStroke: "rgba(0,0,0,0.12)",
+    // zona fills — very light, matching the image style
+    zoneOoc:  "rgba(239,68,68,0.08)",
+    zoneC:    "rgba(249,115,22,0.07)",
+    zoneB:    "rgba(234,179,8,0.07)",
+    zoneA:    "rgba(34,197,94,0.08)",
+    // reference lines
+    clStroke:    "#1E293B",
+    clWidth:     1.2,
+    s1Stroke:    "#16A34A",
+    s2Stroke:    "#EA580C",
+    s3Stroke:    "#DC2626",
+    clLabelFill: "#0F172A",
+    s1LabelFill: "#16A34A",
+    s2LabelFill: "#EA580C",
+    s3LabelFill: "#DC2626",
+    lineStroke:  "#1D4ED8",
+    tooltipBg:   "#FFFFFF",
+    tooltipBorder:"1px solid #E2E8F0",
+    tooltipShadow:"0 8px 24px rgba(0,0,0,0.12)",
+    tooltipTitle: "#0F172A",
+    tooltipMuted: "#94A3B8",
+    tooltipDate:  "#334155",
+    tooltipOOC:   "#DC2626",
+    tooltipOK:    "#16A34A",
+    tooltipWarnBg:"rgba(220,38,38,0.05)",
+    tooltipWarnBorder:"rgba(220,38,38,0.2)",
+    tooltipWarnColor: "#DC2626",
+  } : {
+    bg:           "#0d1117",
+    border:       "1px solid rgba(255,255,255,0.08)",
+    titleColor:   "#E2E8F0",
+    subtitleColor:"#475569",
+    zoomColor:    "#6366F1",
+    gridStroke:   "rgba(255,255,255,0.03)",
+    axisTickFill: "#6B7280",
+    axisLineStroke:"rgba(255,255,255,0.06)",
+    axisLabelFill:"#e2e8f0",
+    legendBorder: "1px solid rgba(255,255,255,0.05)",
+    legendText:   "#64748B",
+    selectBg:     "rgba(255,255,255,0.04)",
+    selectBorder: "1px solid rgba(255,255,255,0.1)",
+    selectColor:  "#94A3B8",
+    btnBg:        "rgba(255,255,255,0.04)",
+    btnBorder:    "1px solid rgba(255,255,255,0.1)",
+    btnColor:     "#94A3B8",
+    cursorStroke: "rgba(255,255,255,0.08)",
+    zoneOoc:  OOC_COLOR,
+    zoneC:    ZONE_C_COLOR,
+    zoneB:    ZONE_B_COLOR,
+    zoneA:    ZONE_A_COLOR,
+    clStroke:    "rgba(255,255,255,0.45)",
+    clWidth:     0.6,
+    s1Stroke:    "rgba(34,197,94,0.45)",
+    s2Stroke:    "rgba(249,115,22,0.50)",
+    s3Stroke:    "rgba(239,68,68,0.55)",
+    clLabelFill: "#94A3B8",
+    s1LabelFill: "#22C55E",
+    s2LabelFill: "#F97316",
+    s3LabelFill: "#EF4444",
+    lineStroke:  "#38BDF8",
+    tooltipBg:   "#0A0C14",
+    tooltipBorder:"1px solid rgba(255,255,255,0.14)",
+    tooltipShadow:"0 12px 40px rgba(0,0,0,0.7)",
+    tooltipTitle: "#F1F5F9",
+    tooltipMuted: "#64748B",
+    tooltipDate:  "#CBD5E1",
+    tooltipOOC:   "#F87171",
+    tooltipOK:    "#34D399",
+    tooltipWarnBg:"rgba(239,68,68,0.1)",
+    tooltipWarnBorder:"rgba(239,68,68,0.2)",
+    tooltipWarnColor: "#F87171",
+  };
+
   const CustomDot = useCallback((props: any) => {
     const { cx, cy, payload } = props;
     if (cx == null || cy == null) return null;
     const fuera = payload.fuera;
+    if (whiteMode) {
+      // Modo blanco: puntos huecos, OOC rojo sólido con borde
+      const r = fuera ? 4 : 3;
+      return (
+        <g>
+          {fuera && <circle cx={cx} cy={cy} r={r + 4} fill="#DC2626" opacity={0.12} />}
+          <circle cx={cx} cy={cy} r={r}
+            fill={fuera ? "#DC2626" : "#FFFFFF"}
+            stroke={fuera ? "#DC2626" : "#1D4ED8"}
+            strokeWidth={fuera ? 1.2 : 1.4} />
+        </g>
+      );
+    }
     const color = fuera ? "#EF4444" : (CAT_COLORS[payload.categoria] ?? DEFAULT_COLOR);
     const r = fuera ? 3.5 : 2.5;
     return (
@@ -4803,7 +4910,7 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
           stroke={fuera ? "#fff" : "rgba(0,0,0,0.3)"} strokeWidth={fuera ? 0.8 : 0.4} />
       </g>
     );
-  }, [catSel]);
+  }, [catSel, whiteMode]);
 
   const CustomTooltip = useCallback(({ active, payload }: any) => {
     if (!active || !payload?.length) return null;
@@ -4811,57 +4918,74 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
     if (!d) return null;
     return (
       <div style={{
-        background: "#0A0C14", border: "1px solid rgba(255,255,255,0.14)",
+        background: th.tooltipBg, border: th.tooltipBorder,
         borderRadius: 10, padding: "10px 14px", fontSize: 12,
-        boxShadow: "0 12px 40px rgba(0,0,0,0.7)", minWidth: 200,
+        boxShadow: th.tooltipShadow, minWidth: 200,
       }}>
-        <p style={{ color: "#F1F5F9", fontWeight: 700, marginBottom: 6, fontSize: 13 }}>
+        <p style={{ color: th.tooltipTitle, fontWeight: 700, marginBottom: 6, fontSize: 13 }}>
           #{d.idx} · {d.codigo}
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3px 12px" }}>
-          <span style={{ color: "#64748B" }}>Categoría</span>
-          <span style={{ color: CAT_COLORS[d.categoria] ?? "#94A3B8" }}>{d.categoria || "—"}</span>
-          <span style={{ color: "#64748B" }}>Fecha</span>
-          <span style={{ color: "#CBD5E1" }}>{d.fecha ?? "—"}</span>
-          <span style={{ color: "#64748B" }}>Utilidad</span>
-          <span style={{ color: d.fuera ? "#F87171" : "#34D399", fontWeight: 700 }}>{fmt(d.utilidad)}</span>
-          <span style={{ color: "#64748B" }}>Zona</span>
-          <span style={{ color: d.zona === "OOC" ? "#F87171" : d.zona === "A" ? "#34D399" : d.zona === "B" ? "#FBBF24" : "#FB923C" }}>
+          <span style={{ color: th.tooltipMuted }}>Categoría</span>
+          <span style={{ color: whiteMode ? "#334155" : (CAT_COLORS[d.categoria] ?? "#94A3B8") }}>{d.categoria || "—"}</span>
+          <span style={{ color: th.tooltipMuted }}>Fecha</span>
+          <span style={{ color: th.tooltipDate }}>{d.fecha ?? "—"}</span>
+          <span style={{ color: th.tooltipMuted }}>Utilidad</span>
+          <span style={{ color: d.fuera ? th.tooltipOOC : th.tooltipOK, fontWeight: 700 }}>{fmt(d.utilidad)}</span>
+          <span style={{ color: th.tooltipMuted }}>Zona</span>
+          <span style={{ color: d.zona === "OOC" ? th.tooltipOOC : d.zona === "A" ? th.tooltipOK : d.zona === "B" ? "#FBBF24" : "#FB923C" }}>
             {d.zona === "OOC" ? "Fuera de control" : `Zona ${d.zona} (±${d.zona === "A" ? 1 : d.zona === "B" ? 2 : 3}σ)`}
           </span>
         </div>
-        {d.fuera && <p style={{ color: "#F87171", marginTop: 8, fontSize: 11, borderTop: "1px solid rgba(239,68,68,0.2)", paddingTop: 6 }}>⚠ Punto fuera de límites de control (±3σ)</p>}
+        {d.fuera && <p style={{ color: th.tooltipWarnColor, marginTop: 8, fontSize: 11, borderTop: `1px solid ${th.tooltipWarnBorder}`, paddingTop: 6, background: th.tooltipWarnBg, borderRadius: 4, padding: "4px 6px" }}>⚠ Punto fuera de límites de control (±3σ)</p>}
       </div>
     );
-  }, []);
+  }, [whiteMode]);
 
   if (!bloque || N === 0) return null;
 
   return (
-    <div ref={chartWrapRef} style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden" }}>
+    <div ref={chartWrapRef} style={{ background: th.bg, border: th.border, borderRadius: 14, padding: "18px 16px 10px", overflow: "hidden", transition: "background 0.2s, border-color 0.2s" }}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
         <div>
-          <p style={{ color: "#E2E8F0", fontSize: 13, fontWeight: 700, margin: 0 }}>
+          <p style={{ color: th.titleColor, fontSize: 13, fontWeight: 700, margin: 0 }}>
             Carta de Control I — Utilidad por proyecto
-            <span style={{ color: "#475569", fontWeight: 400, fontSize: 12, marginLeft: 8 }}>{catSel}</span>
+            <span style={{ color: th.subtitleColor, fontWeight: 400, fontSize: 12, marginLeft: 8 }}>{catSel}</span>
           </p>
-          <p style={{ color: "#475569", fontSize: 11, margin: "3px 0 0" }}>
+          <p style={{ color: th.subtitleColor, fontSize: 11, margin: "3px 0 0" }}>
             {N} proyectos · CL = {fmt(CL)}
             {isZoomed
-              ? <span style={{ color: "#6366F1", marginLeft: 6 }}>· vista {xDomain[0]}–{xDomain[1]} · <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => { domRef.current=[1,N]; setXDomain([1,N]); }}>reset</span></span>
-              : <span style={{ color: "#2d3748", marginLeft: 6 }}>· scroll para zoom · arrastra para mover</span>
+              ? <span style={{ color: th.zoomColor, marginLeft: 6 }}>· vista {xDomain[0]}–{xDomain[1]} · <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => { domRef.current=[1,N]; setXDomain([1,N]); }}>reset</span></span>
+              : <span style={{ color: whiteMode ? "#94A3B8" : "#2d3748", marginLeft: 6 }}>· scroll para zoom · arrastra para mover</span>
             }
           </p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          {/* Toggle modo blanco/oscuro */}
+          <button
+            onClick={() => setWhiteMode(m => !m)}
+            title={whiteMode ? "Modo oscuro" : "Modo claro (publicación)"}
+            style={{
+              display: "flex", alignItems: "center", gap: 5,
+              padding: "4px 10px", borderRadius: 6, cursor: "pointer", fontSize: 11,
+              border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+              transition: "all 0.15s",
+            }}
+          >
+            {whiteMode
+              ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            }
+            {whiteMode ? "Oscuro" : "Claro"}
+          </button>
           {/* Selector de categoría */}
           <select
             value={catSel}
             onChange={e => setCatSel(e.target.value)}
             style={{
-              background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: 6, color: "#94A3B8", fontSize: 11, padding: "4px 8px", cursor: "pointer",
+              background: th.selectBg, border: th.selectBorder,
+              borderRadius: 6, color: th.selectColor, fontSize: 11, padding: "4px 8px", cursor: "pointer",
             }}
           >
             {cats.map(c => <option key={c} value={c}>{c}</option>)}
@@ -4869,11 +4993,8 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
           <button onClick={exportPng} title="Exportar PNG" style={{
             display: "flex", alignItems: "center", gap: 5,
             padding: "4px 10px", borderRadius: 6, cursor: "pointer", fontSize: 11,
-            border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "#94A3B8",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background="rgba(99,102,241,0.15)"; e.currentTarget.style.color="#a5b4fc"; }}
-            onMouseLeave={e => { e.currentTarget.style.background="rgba(255,255,255,0.04)"; e.currentTarget.style.color="#94A3B8"; }}
-          >
+            border: th.btnBorder, background: th.btnBg, color: th.btnColor,
+          }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
@@ -4881,9 +5002,15 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
           </button>
           <span style={{
             fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6,
-            background: bajo_ctrl ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
-            border: `1px solid ${bajo_ctrl ? "rgba(34,197,94,0.3)" : "rgba(239,68,68,0.3)"}`,
-            color: bajo_ctrl ? "#4ADE80" : "#F87171",
+            background: bajo_ctrl
+              ? (whiteMode ? "rgba(22,163,74,0.08)" : "rgba(34,197,94,0.12)")
+              : (whiteMode ? "rgba(220,38,38,0.08)"  : "rgba(239,68,68,0.12)"),
+            border: `1px solid ${bajo_ctrl
+              ? (whiteMode ? "rgba(22,163,74,0.3)"  : "rgba(34,197,94,0.3)")
+              : (whiteMode ? "rgba(220,38,38,0.3)"  : "rgba(239,68,68,0.3)")}`,
+            color: bajo_ctrl
+              ? (whiteMode ? "#16A34A" : "#4ADE80")
+              : (whiteMode ? "#DC2626"  : "#F87171"),
           }}>
             {bajo_ctrl ? "BAJO CONTROL ESTADÍSTICO" : `${fueraCount} PUNTO${fueraCount > 1 ? "S" : ""} FUERA DE CONTROL`}
           </span>
@@ -4902,66 +5029,72 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
       >
         <ResponsiveContainer width="100%" height={360}>
           <ComposedChart data={visibleData} margin={{ top: 8, right: 114, bottom: 44, left: 8 }}>
-            <ReferenceArea y1={UCL}  y2={yMax} fill={OOC_COLOR}    ifOverflow="extendDomain" />
-            <ReferenceArea y1={yMin} y2={LCL}  fill={OOC_COLOR}    ifOverflow="extendDomain" />
-            <ReferenceArea y1={s2u}  y2={UCL}  fill={ZONE_C_COLOR} ifOverflow="extendDomain" />
-            <ReferenceArea y1={LCL}  y2={s2l}  fill={ZONE_C_COLOR} ifOverflow="extendDomain" />
-            <ReferenceArea y1={s1u}  y2={s2u}  fill={ZONE_B_COLOR} ifOverflow="extendDomain" />
-            <ReferenceArea y1={s2l}  y2={s1l}  fill={ZONE_B_COLOR} ifOverflow="extendDomain" />
-            <ReferenceArea y1={s1l}  y2={s1u}  fill={ZONE_A_COLOR} ifOverflow="extendDomain" />
-            <CartesianGrid strokeDasharray="2 6" stroke="rgba(255,255,255,0.03)" vertical={false} />
+            <ReferenceArea y1={UCL}  y2={yMax} fill={th.zoneOoc} ifOverflow="extendDomain" />
+            <ReferenceArea y1={yMin} y2={LCL}  fill={th.zoneOoc} ifOverflow="extendDomain" />
+            <ReferenceArea y1={s2u}  y2={UCL}  fill={th.zoneC}   ifOverflow="extendDomain" />
+            <ReferenceArea y1={LCL}  y2={s2l}  fill={th.zoneC}   ifOverflow="extendDomain" />
+            <ReferenceArea y1={s1u}  y2={s2u}  fill={th.zoneB}   ifOverflow="extendDomain" />
+            <ReferenceArea y1={s2l}  y2={s1l}  fill={th.zoneB}   ifOverflow="extendDomain" />
+            <ReferenceArea y1={s1l}  y2={s1u}  fill={th.zoneA}   ifOverflow="extendDomain" />
+            <CartesianGrid strokeDasharray="2 6" stroke={th.gridStroke} vertical={false} />
             <XAxis
               dataKey="idx" type="number"
               domain={[xDomain[0] - 0.5, xDomain[1] + 0.5]}
-              tick={{ fill: "#6B7280", fontSize: 10 }} tickLine={false}
-              axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
+              tick={{ fill: th.axisTickFill, fontSize: 10 }} tickLine={false}
+              axisLine={{ stroke: th.axisLineStroke }}
               label={{ value: "Proyectos (orden cronológico)", position: "insideBottom", offset: -30,
-                style: { fill: "#e2e8f0", fontSize: 11, fontWeight: 300 } }}
+                style: { fill: th.axisLabelFill, fontSize: 11, fontWeight: 300 } }}
             />
             <YAxis
               domain={[yMin, yMax] as [number | "auto", number | "auto"]}
-              tick={{ fill: "#6B7280", fontSize: 10 }} tickLine={false} axisLine={false}
+              tick={{ fill: th.axisTickFill, fontSize: 10 }} tickLine={false} axisLine={false}
               tickFormatter={(v: number) => `${(v * 100).toFixed(0)}%`}
               width={46}
               label={{ value: "Utilidad (%)", angle: -90, position: "insideLeft", offset: 14,
-                style: { fill: "#e2e8f0", fontSize: 11, fontWeight: 300 }, dy: 40 }}
+                style: { fill: th.axisLabelFill, fontSize: 11, fontWeight: 300 }, dy: 40 }}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.08)", strokeWidth: 1, strokeDasharray: "3 3" }} />
-            <ReferenceLine y={UCL} stroke="rgba(239,68,68,0.55)"    strokeDasharray="6 5" strokeWidth={0.5} label={{ value: `+3σ = ${fmt(UCL)}`, position: "right", fill: "#EF4444", fontSize: 9, dx: 6 }} />
-            <ReferenceLine y={s2u} stroke="rgba(249,115,22,0.50)"   strokeDasharray="5 5" strokeWidth={0.5} label={{ value: `+2σ = ${fmt(s2u)}`, position: "right", fill: "#F97316", fontSize: 9, dx: 6 }} />
-            <ReferenceLine y={s1u} stroke="rgba(34,197,94,0.45)"    strokeDasharray="5 5" strokeWidth={0.5} label={{ value: `+1σ = ${fmt(s1u)}`, position: "right", fill: "#22C55E", fontSize: 9, dx: 6 }} />
-            <ReferenceLine y={CL}  stroke="rgba(255,255,255,0.45)"  strokeWidth={0.6}                        label={{ value: `CL = ${fmt(CL)}`,   position: "right", fill: "#94A3B8", fontSize: 9, dx: 6 }} />
-            <ReferenceLine y={s1l} stroke="rgba(34,197,94,0.45)"    strokeDasharray="5 5" strokeWidth={0.5} label={{ value: `-1σ = ${fmt(s1l)}`, position: "right", fill: "#22C55E", fontSize: 9, dx: 6 }} />
-            <ReferenceLine y={s2l} stroke="rgba(249,115,22,0.50)"   strokeDasharray="5 5" strokeWidth={0.5} label={{ value: `-2σ = ${fmt(s2l)}`, position: "right", fill: "#F97316", fontSize: 9, dx: 6 }} />
-            <ReferenceLine y={LCL} stroke="rgba(239,68,68,0.55)"    strokeDasharray="6 5" strokeWidth={0.5} label={{ value: `-3σ = ${fmt(LCL)}`, position: "right", fill: "#EF4444", fontSize: 9, dx: 6 }} />
-            <Line type="linear" dataKey="utilidad" stroke="#38BDF8" strokeWidth={1.2}
+            <Tooltip content={<CustomTooltip />} cursor={{ stroke: th.cursorStroke, strokeWidth: 1, strokeDasharray: "3 3" }} />
+            <ReferenceLine y={UCL} stroke={th.s3Stroke} strokeDasharray="6 5" strokeWidth={whiteMode ? 1 : 0.5} label={{ value: `UCL = ${fmt(UCL)}`, position: "right", fill: th.s3LabelFill, fontSize: 9, dx: 6, fontWeight: whiteMode ? 600 : 400 }} />
+            <ReferenceLine y={s2u} stroke={th.s2Stroke} strokeDasharray="5 5" strokeWidth={whiteMode ? 0.8 : 0.5} label={{ value: `+2σ = ${fmt(s2u)}`, position: "right", fill: th.s2LabelFill, fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={s1u} stroke={th.s1Stroke} strokeDasharray={whiteMode ? "3 4" : "5 5"} strokeWidth={whiteMode ? 0.8 : 0.5} label={{ value: `+1σ = ${fmt(s1u)}`, position: "right", fill: th.s1LabelFill, fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={CL}  stroke={th.clStroke} strokeWidth={th.clWidth} label={{ value: `CL = ${fmt(CL)}`, position: "right", fill: th.clLabelFill, fontSize: 9, dx: 6, fontWeight: whiteMode ? 700 : 400 }} />
+            <ReferenceLine y={s1l} stroke={th.s1Stroke} strokeDasharray={whiteMode ? "3 4" : "5 5"} strokeWidth={whiteMode ? 0.8 : 0.5} label={{ value: `-1σ = ${fmt(s1l)}`, position: "right", fill: th.s1LabelFill, fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={s2l} stroke={th.s2Stroke} strokeDasharray="5 5" strokeWidth={whiteMode ? 0.8 : 0.5} label={{ value: `-2σ = ${fmt(s2l)}`, position: "right", fill: th.s2LabelFill, fontSize: 9, dx: 6 }} />
+            <ReferenceLine y={LCL} stroke={th.s3Stroke} strokeDasharray="6 5" strokeWidth={whiteMode ? 1 : 0.5} label={{ value: `LCL = ${fmt(LCL)}`, position: "right", fill: th.s3LabelFill, fontSize: 9, dx: 6, fontWeight: whiteMode ? 600 : 400 }} />
+            <Line type="linear" dataKey="utilidad" stroke={th.lineStroke} strokeWidth={whiteMode ? 1.4 : 1.2}
               dot={<CustomDot />} activeDot={false} isAnimationActive={false} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
 
       {/* Leyenda zonas */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px", marginTop: 6, paddingTop: 10, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px", marginTop: 6, paddingTop: 10, borderTop: th.legendBorder }}>
         {[
-          { label: "Zona A ±1σ", color: "#22C55E", bg: ZONE_A_COLOR },
-          { label: "Zona B ±2σ", color: "#F97316", bg: ZONE_B_COLOR },
-          { label: "Zona C ±3σ", color: "#EF4444", bg: ZONE_C_COLOR },
-          { label: "Fuera de control", color: "#F87171", dot: true },
+          { label: "Zona A ±1σ", color: whiteMode ? "#16A34A" : "#22C55E", bg: th.zoneA },
+          { label: "Zona B ±2σ", color: whiteMode ? "#EA580C" : "#F97316", bg: th.zoneB },
+          { label: "Zona C ±3σ", color: whiteMode ? "#DC2626" : "#EF4444", bg: th.zoneC },
+          { label: "Fuera de control", color: whiteMode ? "#DC2626" : "#F87171", dot: true },
         ].map(({ label, color, bg, dot }) => (
-          <span key={label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#64748B" }}>
+          <span key={label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: th.legendText }}>
             {dot
-              ? <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#EF4444", display: "inline-block" }} />
+              ? <span style={{ width: 10, height: 10, borderRadius: "50%", background: whiteMode ? "#DC2626" : "#EF4444", display: "inline-block" }} />
               : <span style={{ width: 28, height: 10, borderRadius: 3, background: bg, border: `1px solid ${color}40`, display: "inline-block" }} />
             }
             {label}
           </span>
         ))}
-        {catSel === "GLOBAL" && lbRes.categorias_disponibles.map(cat => (
+        {!whiteMode && catSel === "GLOBAL" && lbRes.categorias_disponibles.map(cat => (
           <span key={cat} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#64748B" }}>
             <span style={{ width: 10, height: 10, borderRadius: "50%", background: CAT_COLORS[cat] ?? DEFAULT_COLOR, display: "inline-block" }} />
             {cat}
           </span>
         ))}
+        {whiteMode && (
+          <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: th.legendText }}>
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#FFFFFF", border: "1.5px solid #1D4ED8", display: "inline-block" }} />
+            Punto en control
+          </span>
+        )}
       </div>
     </div>
   );
