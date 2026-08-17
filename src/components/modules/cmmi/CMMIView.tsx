@@ -2045,24 +2045,7 @@ function ProyectosPanel() {
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
 
   if (!proyListo) {
-    return (
-      <div className="max-w-xl mx-auto mt-6 space-y-6">
-        <div className="text-center space-y-2">
-          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400 mx-auto">
-            <Database size={26} />
-          </div>
-          <p className="text-lg font-semibold text-slate-200">Cargar dataset de Proyectos</p>
-          <p className="text-sm text-slate-400">
-            Para usar los modelos de predicción SPI debes suministrar el Excel histórico de proyectos.
-            El archivo se usará para entrenar los 4 modelos.
-          </p>
-          <p className="text-xs text-slate-500">
-            Columnas requeridas: <span className="font-mono text-slate-400">ProjectId, Portafolio, ProjectOwnerName, Meses, Presupuesto, Mes Relativo, SPI (Schedule Performance Index), Variación Relativa Avance, Completado Real</span>
-          </p>
-        </div>
-        <ProyectosSourcePicker onFile={handleReentrenar} uploading={reUploading} msg={reMsg} />
-      </div>
-    );
+    return <ProyectosSourcePicker onFile={handleReentrenar} uploading={reUploading} msg={reMsg} />;
   }
 
   return (
