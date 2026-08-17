@@ -1744,16 +1744,14 @@ type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "cpi" | "cpi-cerrados
 
 function ProyectosPanel() {
   const [proyListo, setProyListo]         = useState(false);
-  const [checkingModelos, setCheckingModelos] = useState(true);
   const [tab, setTab]   = useState<ProyTab>("kickoff");
 
-  // Verificar al montar si los modelos ya están disponibles
+  // Verificar al montar si los modelos SPI ya están disponibles (ej. recarga de página)
   useEffect(() => {
     fetch("/api/cmmi/proyectos/info")
       .then(r => r.json())
       .then(j => { if (j?.kickoff?.disponible) setProyListo(true); })
-      .catch(() => {})
-      .finally(() => setCheckingModelos(false));
+      .catch(() => {});
   }, []);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
@@ -2045,14 +2043,6 @@ function ProyectosPanel() {
   const inputCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors";
   const selectCls = "w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#141824] text-sm text-slate-300 focus:outline-none transition-colors cmmi-select";
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
-
-  if (checkingModelos) {
-    return (
-      <div className="flex items-center justify-center gap-2 text-sm text-slate-400 py-16">
-        <Clock size={15} className="animate-spin" /> Verificando modelos…
-      </div>
-    );
-  }
 
   if (!proyListo) {
     return (
