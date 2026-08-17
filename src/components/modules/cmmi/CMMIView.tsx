@@ -1744,6 +1744,7 @@ type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "cpi" | "cpi-cerrados
 
 function ProyectosPanel() {
   const [proyListo, setProyListo]         = useState(false);
+  const [proyFile,  setProyFile]          = useState<File | null>(null);
   const [tab, setTab]   = useState<ProyTab>("kickoff");
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
@@ -2037,7 +2038,7 @@ function ProyectosPanel() {
   const labelCls = "text-xs font-medium text-slate-400 mb-1";
 
   if (!proyListo) {
-    return <ProyectosSourcePicker onFile={handleReentrenar} uploading={reUploading} msg={reMsg} />;
+    return <ProyectosSourcePicker onFile={(f) => { setProyFile(f); setProyListo(true); }} uploading={false} msg={null} />;
   }
 
   return (
@@ -2058,7 +2059,7 @@ function ProyectosPanel() {
           </button>
         ))}
         <button
-          onClick={() => setProyListo(false)}
+          onClick={() => { setProyListo(false); setProyFile(null); setReMsg(null); }}
           className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] transition-colors mb-1"
         >
           <X size={13} /> Cambiar datos
@@ -2241,6 +2242,20 @@ function ProyectosPanel() {
               El Excel debe tener las columnas: <span className="text-slate-400 font-mono">ProjectId, Portafolio, ProjectOwnerName, Meses, Presupuesto, Mes Relativo, SPI (Schedule Performance Index), Variación Relativa Avance, Completado Real</span>
             </p>
           </div>
+          {proyFile && !reMsg && (
+            <div className="flex items-center gap-3 bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3">
+              <FileSpreadsheet size={18} className="text-emerald-400 shrink-0" />
+              <span className="text-sm text-slate-300 flex-1">{proyFile.name}</span>
+              <button
+                onClick={() => handleReentrenar(proyFile)}
+                disabled={reUploading}
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white transition-colors disabled:opacity-50"
+              >
+                {reUploading ? <Clock size={14} className="animate-spin" /> : <Database size={14} />}
+                {reUploading ? "Entrenando…" : "Entrenar modelos SPI"}
+              </button>
+            </div>
+          )}
           <ProyectosSourcePicker onFile={handleReentrenar} uploading={reUploading} msg={reMsg} />
         </div>
       )}
