@@ -616,42 +616,61 @@ _XLSX_PATH = PROJ_DIR / "Indicadores_Proyectos.xlsx"
 
 def lista_proyectos_mes1() -> list[dict]:
     """Devuelve los proyectos con sus datos del primer mes para el selector de la UI."""
-    if not _XLSX_PATH.exists():
+    try:
+        if not _XLSX_PATH.exists():
+            return []
+        df = pd.read_excel(_XLSX_PATH)
+
+        # Normalizar nombres de columna — soporta tanto el raw export como el limpio
+        col_map = {}
+        for c in df.columns:
+            cl = c.strip()
+            if cl in ("ProjectId", "Project ID"):                       col_map[c] = "id"
+            elif cl in ("ProjectName", "Project Name"):                 col_map[c] = "nombre"
+            elif cl in ("ProjectOwnerName", "Líder", "Lider"):         col_map[c] = "lider"
+            elif cl in ("Portafolio",):                                 col_map[c] = "portafolio"
+            elif cl in ("Meses", "Duración", "Duracion"):              col_map[c] = "duracion_meses"
+            elif cl in ("Presupuesto",):                                col_map[c] = "presupuesto"
+            elif cl in ("Mes Relativo", "MesRelativo"):                col_map[c] = "mes_rel"
+            elif "CPI" in cl and "Schedule" not in cl:                 col_map[c] = "CPI"
+            elif "SPI" in cl or "Schedule Performance" in cl:          col_map[c] = "SPI"
+            elif "Variaci" in cl and "Avance" in cl:                   col_map[c] = "VA"
+        df = df.rename(columns=col_map)
+
+        # Necesitamos al menos id y mes_rel
+        if "id" not in df.columns:
+            # fallback: usar primera columna como id
+            df = df.rename(columns={df.columns[0]: "id"})
+        if "mes_rel" not in df.columns:
+            df["mes_rel"] = 0
+
+        df = df.sort_values(["id", "mes_rel"])
+        m1 = df.groupby("id", as_index=False).first()
+
+        for col, default in [("CPI", 1.0), ("SPI", 1.0), ("VA", 0.0)]:
+            if col in m1.columns:
+                m1[col] = pd.to_numeric(m1[col], errors="coerce").clip(upper=CPI_CAP if col == "CPI" else None).fillna(default)
+            else:
+                m1[col] = default
+
+        result = []
+        for _, row in m1.iterrows():
+            pid = str(row.get("id", ""))
+            result.append({
+                "id":             pid,
+                "nombre":         str(row.get("nombre", pid)),
+                "portafolio":     str(row.get("portafolio", "")),
+                "lider":          str(row.get("lider", "")),
+                "duracion_meses": float(row.get("duracion_meses") or 0),
+                "presupuesto":    float(row.get("presupuesto") or 0) or None,
+                "cpi_m1":         round(float(row.get("CPI", 1.0)), 4),
+                "spi_m1":         round(float(row.get("SPI", 1.0)), 4),
+                "va_m1":          round(float(row.get("VA",  0.0)), 4),
+            })
+        return sorted(result, key=lambda x: x["nombre"])
+    except Exception as e:
+        print(f"[cpi] lista_proyectos_mes1 error: {e}")
         return []
-    df = pd.read_excel(_XLSX_PATH)
-    df = df.rename(columns={
-        "Mes Relativo":                       "mes_rel",
-        "CPI (Cost Performance Index)":       "CPI",
-        "SPI (Schedule Performance Index)":   "SPI",
-        "Variación Avance":                   "VA",
-        "Portafolio":                         "portafolio",
-        "ProjectOwnerName":                   "lider",
-        "Meses":                              "duracion_meses",
-        "Presupuesto":                        "presupuesto",
-        "ProjectName":                        "nombre",
-        "ProjectId":                          "id",
-    })
-    df = df.sort_values(["id", "mes_rel"])
-    m1 = df.groupby("id").first().reset_index()
-    m1["CPI"] = m1["CPI"].clip(upper=CPI_CAP).fillna(1.0)
-    m1["SPI"] = m1["SPI"].fillna(1.0)
-    m1["VA"]  = m1["VA"].fillna(0.0)
-    cols = ["id", "nombre", "portafolio", "lider", "duracion_meses", "presupuesto", "CPI", "SPI", "VA"]
-    cols = [c for c in cols if c in m1.columns]
-    result = []
-    for _, row in m1[cols].iterrows():
-        result.append({
-            "id":             str(row.get("id", "")),
-            "nombre":         str(row.get("nombre", row.get("id", ""))),
-            "portafolio":     str(row.get("portafolio", "")),
-            "lider":          str(row.get("lider", "")),
-            "duracion_meses": float(row.get("duracion_meses", 0) or 0),
-            "presupuesto":    float(row.get("presupuesto", 0) or 0) or None,
-            "cpi_m1":         round(float(row.get("CPI", 1.0)), 4),
-            "spi_m1":         round(float(row.get("SPI", 1.0)), 4),
-            "va_m1":          round(float(row.get("VA",  0.0)), 4),
-        })
-    return sorted(result, key=lambda x: x["nombre"])
 
 
 def info_cpi() -> dict:
