@@ -1744,19 +1744,16 @@ type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "cpi" | "cpi-cerrados
 
 function ProyectosPanel() {
   const [proyListo, setProyListo]         = useState(false);
-  const [cpiListo,  setCpiListo]          = useState(false);
   const [checkingModelos, setCheckingModelos] = useState(true);
-  const [tab, setTab]   = useState<ProyTab>("modelo-cpi");
+  const [tab, setTab]   = useState<ProyTab>("kickoff");
 
   // Verificar al montar si los modelos ya están disponibles
   useState(() => {
-    Promise.all([
-      fetch("/api/cmmi/proyectos/info").then(r => r.json()).catch(() => null),
-      fetch("/api/cmmi/proyectos/cpi/info").then(r => r.json()).catch(() => null),
-    ]).then(([jSpi, jCpi]) => {
-      if (jSpi?.kickoff?.disponible) { setProyListo(true); setTab("kickoff"); }
-      if (jCpi?.modelo) setCpiListo(true);
-    }).finally(() => setCheckingModelos(false));
+    fetch("/api/cmmi/proyectos/info")
+      .then(r => r.json())
+      .then(j => { if (j?.kickoff?.disponible) setProyListo(true); })
+      .catch(() => {})
+      .finally(() => setCheckingModelos(false));
   });
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
@@ -2057,7 +2054,7 @@ function ProyectosPanel() {
     );
   }
 
-  if (!proyListo && !cpiListo) {
+  if (!proyListo) {
     return (
       <div className="max-w-xl mx-auto mt-6 space-y-6">
         <div className="text-center space-y-2">
@@ -2103,22 +2100,8 @@ function ProyectosPanel() {
         </button>
       </div>
 
-      {/* ── Aviso cuando solo hay modelo CPI (sin dataset SPI) ───────── */}
-      {!proyListo && (tab === "kickoff" || tab === "seguimiento" || tab === "lineas-base" || tab === "cpi" || tab === "cpi-cerrados" || tab === "reentrenar" || tab === "modelos" || tab === "dataset") && (
-        <div className="flex flex-col items-center gap-3 py-14 text-center">
-          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400">
-            <Database size={22} />
-          </div>
-          <p className="text-sm font-semibold text-slate-200">Esta sección requiere el dataset SPI</p>
-          <p className="text-xs text-slate-400 max-w-sm">
-            Sube el Excel histórico de proyectos para habilitar los modelos de predicción SPI, seguimiento y líneas base.
-          </p>
-          <ProyectosSourcePicker onFile={handleReentrenar} uploading={reUploading} msg={reMsg} />
-        </div>
-      )}
-
       {/* ── KICKOFF ─────────────────────────────────────────────────── */}
-      {proyListo && tab === "kickoff" && (
+      {tab === "kickoff" && (
         <div className="space-y-5">
           <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
             <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
@@ -2182,7 +2165,7 @@ function ProyectosPanel() {
       )}
 
       {/* ── SEGUIMIENTO ─────────────────────────────────────────────── */}
-      {proyListo && tab === "seguimiento" && (
+      {tab === "seguimiento" && (
         <div className="space-y-5">
           <SeguimientoExcelPicker onAutoFill={(v) => {
             if (v.portafolio && PORTAFOLIOS.includes(v.portafolio as typeof PORTAFOLIOS[number])) setSPort(v.portafolio as typeof PORTAFOLIOS[number]);
@@ -2264,7 +2247,7 @@ function ProyectosPanel() {
       )}
 
       {/* ── MODELOS PKL ─────────────────────────────────────────────── */}
-      {proyListo && tab === "modelos" && (
+      {tab === "modelos" && (
         <div className="space-y-4">
           {infoLoading && (
             <div className="flex items-center gap-2 text-sm text-slate-400 py-6 justify-center">
@@ -2279,7 +2262,7 @@ function ProyectosPanel() {
       )}
 
       {/* ── REENTRENAR ──────────────────────────────────────────────── */}
-      {proyListo && tab === "reentrenar" && (
+      {tab === "reentrenar" && (
         <div className="space-y-4">
           <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-4 py-3 text-xs text-slate-400 space-y-1">
             <p className="font-semibold text-slate-300">¿Cuándo reentrenar?</p>
@@ -2298,7 +2281,7 @@ function ProyectosPanel() {
       )}
 
       {/* ── LÍNEAS BASE SPI ─────────────────────────────────────── */}
-      {proyListo && tab === "lineas-base" && (
+      {tab === "lineas-base" && (
         <div className="space-y-4">
           {lbSpiLoading && (
             <div className="flex items-center gap-2 text-sm text-slate-400 px-1">
@@ -2315,7 +2298,7 @@ function ProyectosPanel() {
       )}
 
       {/* ── DATASET ─────────────────────────────────────────────────── */}
-      {proyListo && tab === "dataset" && (() => {
+      {tab === "dataset" && (() => {
         const proyectos = info?.datos_origen?.proyectos ?? [];
         const portafolios = ["Todos", ...Array.from(new Set(proyectos.map(p => p.portafolio))).sort()];
         const filtered = proyectos.filter(p =>
@@ -2385,7 +2368,7 @@ function ProyectosPanel() {
       })()}
 
       {/* ── PESTAÑA CPI ─────────────────────────────────────────────── */}
-      {proyListo && tab === "cpi" && (
+      {tab === "cpi" && (
         <div className="space-y-6">
           {/* Encabezado */}
           <div className="bg-white/[0.04] rounded-xl border border-white/[0.08] px-5 py-4">
@@ -2505,7 +2488,7 @@ function ProyectosPanel() {
         </div>
       )}
 
-      {proyListo && tab === "cpi-cerrados" && (
+      {tab === "cpi-cerrados" && (
         <div className="space-y-4">
           {lbCpiCerradosLoading && (
             <div className="flex items-center gap-2 text-sm text-slate-400 px-1">
