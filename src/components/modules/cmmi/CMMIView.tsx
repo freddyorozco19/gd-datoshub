@@ -1748,13 +1748,13 @@ function ProyectosPanel() {
   const [tab, setTab]   = useState<ProyTab>("kickoff");
 
   // Verificar al montar si los modelos ya están disponibles
-  useState(() => {
+  useEffect(() => {
     fetch("/api/cmmi/proyectos/info")
       .then(r => r.json())
       .then(j => { if (j?.kickoff?.disponible) setProyListo(true); })
       .catch(() => {})
       .finally(() => setCheckingModelos(false));
-  });
+  }, []);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
   const [notice, setNotice]   = useState<string | null>(null);
