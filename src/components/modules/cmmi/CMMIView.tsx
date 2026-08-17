@@ -1740,7 +1740,7 @@ function DatosOrigenPanel({ datos }: { datos: DatosOrigen }) {
   );
 }
 
-type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "cpi" | "cpi-cerrados" | "reentrenar" | "modelos" | "dataset" | "marco";
+type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "cpi" | "cpi-cerrados" | "modelo-cpi" | "reentrenar" | "modelos" | "dataset" | "marco";
 
 function ProyectosPanel() {
   const [proyListo, setProyListo]         = useState(false);
@@ -1771,6 +1771,17 @@ function ProyectosPanel() {
   const [kPres,  setKPres]  = useState("");
   const [kRes,   setKRes]   = useState<KickoffResponse | null>(null);
 
+  // Modelo CPI state
+  const [mcPort,    setMcPort]    = useState<string>("");
+  const [mcLider,   setMcLider]   = useState("");
+  const [mcDur,     setMcDur]     = useState("");
+  const [mcPres,    setMcPres]    = useState("");
+  const [mcCpiM1,   setMcCpiM1]   = useState("");
+  const [mcSpiM1,   setMcSpiM1]   = useState("1.0");
+  const [mcVaM1,    setMcVaM1]    = useState("0.0");
+  const [mcRes,     setMcRes]     = useState<any>(null);
+  const [mcInfo,    setMcInfo]    = useState<any>(null);
+
   // Seguimiento state
   const [sPort,  setSPort]  = useState<string>(PORTAFOLIOS[0]);
   const [sLider, setSLider] = useState("");
@@ -1783,6 +1794,42 @@ function ProyectosPanel() {
 
   function reset() {
     setError(null); setNotice(null);
+  }
+
+  async function loadMcInfo() {
+    if (mcInfo) return;
+    try {
+      const r = await fetch("/api/cmmi/proyectos/cpi/info");
+      const j = await r.json();
+      setMcInfo(j);
+      if (!mcPort && j?.portafolios?.[0]) setMcPort(j.portafolios[0]);
+    } catch {}
+  }
+
+  async function runModeloCpi() {
+    reset(); setLoading(true); setMcRes(null);
+    try {
+      const r = await fetch("/api/cmmi/proyectos/cpi/predecir", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          portafolio:     mcPort,
+          lider:          mcLider.trim() || "Desconocido",
+          duracion_meses: parseFloat(mcDur) || 0,
+          presupuesto:    mcPres ? parseFloat(mcPres) : null,
+          cpi_m1:         parseFloat(mcCpiM1) || 1.0,
+          spi_m1:         parseFloat(mcSpiM1) || 1.0,
+          va_m1:          parseFloat(mcVaM1)  || 0.0,
+        }),
+      });
+      const json = await r.json();
+      if (!r.ok) throw new Error(json?.error ?? "Error al predecir");
+      setMcRes(json);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function runKickoff() {
@@ -1980,6 +2027,7 @@ function ProyectosPanel() {
     { id: "lineas-base", label: "Líneas base SPI",    icon: PieChart    },
     { id: "cpi",          label: "Línea Base CPI",     icon: TrendingUp  },
     { id: "cpi-cerrados", label: "CPI · Cerrados",     icon: TrendingUp  },
+    { id: "modelo-cpi",   label: "Modelo CPI",          icon: Activity    },
     { id: "reentrenar",   label: "Reentrenar",          icon: Database    },
     { id: "modelos",     label: "Modelos PKL",         icon: PieChart    },
     { id: "dataset",     label: "Dataset",             icon: Database    },
@@ -2026,7 +2074,7 @@ function ProyectosPanel() {
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos" || id === "dataset") loadInfo(); if (id === "lineas-base") loadLbSpi(); if (id === "cpi") loadLbCpi(); if (id === "cpi-cerrados") loadLbCpiCerrados(); }}
+            onClick={() => { setTab(id as ProyTab); reset(); if (id === "modelos" || id === "dataset") loadInfo(); if (id === "lineas-base") loadLbSpi(); if (id === "cpi") loadLbCpi(); if (id === "cpi-cerrados") loadLbCpiCerrados(); if (id === "modelo-cpi") loadMcInfo(); }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
               tab === id
                 ? "border-blue-500 text-blue-400"
@@ -2445,6 +2493,143 @@ function ProyectosPanel() {
             </div>
           )}
           {lbCpiCerrados && <CpiCerradosPanel data={lbCpiCerrados} />}
+        </div>
+      )}
+
+      {/* ── MODELO CPI ─────────────────────────────────────────────────── */}
+      {tab === "modelo-cpi" && (
+        <div className="space-y-5">
+          {/* Info del modelo */}
+          {mcInfo && (
+            <div className="flex flex-wrap gap-2 text-xs">
+              {[
+                { label: "AUC-ROC", val: mcInfo.modelo_metricas?.auc },
+                { label: "Recall",  val: mcInfo.modelo_metricas?.recall },
+                { label: "Precisión", val: mcInfo.modelo_metricas?.precision },
+                { label: "N proyectos", val: mcInfo.modelo_metricas?.n_proyectos },
+              ].map(({ label, val }) => (
+                <span key={label} className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.07] text-slate-400">
+                  <span className="text-slate-500">{label}: </span>{val ?? "—"}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-5 space-y-4">
+            <p className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+              <Activity size={16} className="text-blue-400" />
+              Predicción de riesgo de costo — P(CPI_min &lt; 0.80)
+            </p>
+            <p className="text-xs text-slate-500">
+              Regresión Logística · Requiere el primer reporte mensual (CPI mes 1). Si CPI_m1 no está disponible, se imputa con 1.0.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Portafolio */}
+              <div>
+                <p className={labelCls}>Portafolio</p>
+                <select value={mcPort} onChange={e => setMcPort(e.target.value)} className={selectCls}>
+                  {(mcInfo?.portafolios ?? PORTAFOLIOS).map((p: string) => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </select>
+              </div>
+              {/* Líder */}
+              <div>
+                <p className={labelCls}>Líder del proyecto</p>
+                {mcInfo?.lideres?.length > 0 ? (
+                  <select value={mcLider} onChange={e => setMcLider(e.target.value)} className={selectCls}>
+                    <option value="">— Líder desconocido —</option>
+                    {mcInfo.lideres.map((l: string) => <option key={l} value={l}>{l}</option>)}
+                  </select>
+                ) : (
+                  <input value={mcLider} onChange={e => setMcLider(e.target.value)} placeholder="Nombre del líder" className={inputCls} />
+                )}
+              </div>
+              {/* Duración */}
+              <div>
+                <p className={labelCls}>Duración planificada (meses)</p>
+                <input type="number" min="1" value={mcDur} onChange={e => setMcDur(e.target.value)} placeholder="Ej: 8" className={inputCls} />
+              </div>
+              {/* Presupuesto */}
+              <div>
+                <p className={labelCls}>Presupuesto (COP) — opcional</p>
+                <input type="number" min="0" value={mcPres} onChange={e => setMcPres(e.target.value)} placeholder="Ej: 950000000" className={inputCls} />
+              </div>
+              {/* CPI mes 1 */}
+              <div>
+                <p className={labelCls}>CPI mes 1 <span className="text-blue-400 font-medium">(más importante)</span></p>
+                <input type="number" step="0.01" value={mcCpiM1} onChange={e => setMcCpiM1(e.target.value)} placeholder="Ej: 0.75 — si no disponible dejar 1.0" className={inputCls} />
+              </div>
+              {/* SPI mes 1 */}
+              <div>
+                <p className={labelCls}>SPI mes 1</p>
+                <input type="number" step="0.01" value={mcSpiM1} onChange={e => setMcSpiM1(e.target.value)} placeholder="Ej: 1.0" className={inputCls} />
+              </div>
+              {/* VA mes 1 */}
+              <div>
+                <p className={labelCls}>Variación de Avance mes 1</p>
+                <input type="number" step="0.001" value={mcVaM1} onChange={e => setMcVaM1(e.target.value)} placeholder="Ej: 0.0" className={inputCls} />
+              </div>
+            </div>
+
+            <button
+              onClick={runModeloCpi}
+              disabled={loading || !mcPort || !mcDur || mcCpiM1 === ""}
+              className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-sm font-semibold text-white transition-colors"
+            >
+              {loading ? "Calculando…" : "Predecir riesgo de costo"}
+            </button>
+          </div>
+
+          {/* Resultado */}
+          {mcRes && (() => {
+            const sem = mcRes.semaforo as "VERDE" | "AMARILLO" | "ROJO";
+            const semCls = { VERDE: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20", AMARILLO: "text-amber-400 bg-amber-500/10 border-amber-500/20", ROJO: "text-rose-400 bg-rose-500/10 border-rose-500/20" }[sem] ?? "text-slate-300 bg-white/[0.04] border-white/[0.08]";
+            const semLabel = { VERDE: "RIESGO BAJO", AMARILLO: "RIESGO MODERADO", ROJO: "RIESGO ALTO" }[sem] ?? sem;
+            return (
+              <div className="space-y-3">
+                {/* Semáforo principal */}
+                <div className={`rounded-xl border px-6 py-5 ${semCls}`}>
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wider opacity-70">Nivel de riesgo</p>
+                      <p className="text-2xl font-bold mt-0.5">{semLabel}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs font-semibold uppercase tracking-wider opacity-70">P(CPI_min &lt; 0.80)</p>
+                      <p className="text-3xl font-bold mt-0.5">{mcRes.probabilidad_pct}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Detalle */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 space-y-1">
+                    <p className="text-[10px] uppercase tracking-wider text-slate-500">CPI mes 1</p>
+                    <p className="text-sm text-slate-300">{mcRes.nota_cpi_m1}</p>
+                  </div>
+                  <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 space-y-1">
+                    <p className="text-[10px] uppercase tracking-wider text-slate-500">Vs. histórico del segmento</p>
+                    <p className="text-sm text-slate-300">{mcRes.vs_historico}</p>
+                  </div>
+                </div>
+
+                {/* Acción sugerida */}
+                <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 space-y-1">
+                  <p className="text-[10px] uppercase tracking-wider text-slate-500">Acción sugerida</p>
+                  <p className="text-sm text-slate-300">{mcRes.accion_sugerida}</p>
+                </div>
+
+                {/* Métricas del modelo */}
+                {mcInfo?.modelo_metricas && (
+                  <div className="text-xs text-slate-600 text-center">
+                    Modelo: Regresión Logística · AUC {mcInfo.modelo_metricas.auc} · Recall {mcInfo.modelo_metricas.recall} · Umbral {mcInfo.modelo_metricas.umbral_alerta} · n={mcInfo.modelo_metricas.n_proyectos} proy.
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
       )}
 
