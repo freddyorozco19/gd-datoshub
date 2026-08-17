@@ -612,6 +612,48 @@ def lineas_base_desde_excel(raw_bytes: bytes) -> dict:
     return lb
 
 
+_XLSX_PATH = PROJ_DIR / "Indicadores_Proyectos.xlsx"
+
+def lista_proyectos_mes1() -> list[dict]:
+    """Devuelve los proyectos con sus datos del primer mes para el selector de la UI."""
+    if not _XLSX_PATH.exists():
+        return []
+    df = pd.read_excel(_XLSX_PATH)
+    df = df.rename(columns={
+        "Mes Relativo":                       "mes_rel",
+        "CPI (Cost Performance Index)":       "CPI",
+        "SPI (Schedule Performance Index)":   "SPI",
+        "Variación Avance":                   "VA",
+        "Portafolio":                         "portafolio",
+        "ProjectOwnerName":                   "lider",
+        "Meses":                              "duracion_meses",
+        "Presupuesto":                        "presupuesto",
+        "ProjectName":                        "nombre",
+        "ProjectId":                          "id",
+    })
+    df = df.sort_values(["id", "mes_rel"])
+    m1 = df.groupby("id").first().reset_index()
+    m1["CPI"] = m1["CPI"].clip(upper=CPI_CAP).fillna(1.0)
+    m1["SPI"] = m1["SPI"].fillna(1.0)
+    m1["VA"]  = m1["VA"].fillna(0.0)
+    cols = ["id", "nombre", "portafolio", "lider", "duracion_meses", "presupuesto", "CPI", "SPI", "VA"]
+    cols = [c for c in cols if c in m1.columns]
+    result = []
+    for _, row in m1[cols].iterrows():
+        result.append({
+            "id":             str(row.get("id", "")),
+            "nombre":         str(row.get("nombre", row.get("id", ""))),
+            "portafolio":     str(row.get("portafolio", "")),
+            "lider":          str(row.get("lider", "")),
+            "duracion_meses": float(row.get("duracion_meses", 0) or 0),
+            "presupuesto":    float(row.get("presupuesto", 0) or 0) or None,
+            "cpi_m1":         round(float(row.get("CPI", 1.0)), 4),
+            "spi_m1":         round(float(row.get("SPI", 1.0)), 4),
+            "va_m1":          round(float(row.get("VA",  0.0)), 4),
+        })
+    return sorted(result, key=lambda x: x["nombre"])
+
+
 def info_cpi() -> dict:
     out: dict = {"lineas_base": _lb is not None, "modelo": _modelo is not None}
     if _modelo:

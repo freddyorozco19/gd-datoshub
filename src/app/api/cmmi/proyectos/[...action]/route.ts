@@ -5,7 +5,7 @@ const IS_HOSTED    = !!process.env.VERCEL && !process.env.CMMI_API_URL;
 
 const ALLOWED_POST   = new Set(["kickoff", "seguimiento", "cpi/predecir", "cpi/diagnostico"]);
 const ALLOWED_UPLOAD = new Set(["reentrenar", "cpi/lineas-base-excel"]);
-const ALLOWED_GET    = new Set(["info", "lineas-base", "cpi/info", "cpi/lineas-base", "cpi/lineas-base-cerrados"]);
+const ALLOWED_GET    = new Set(["info", "lineas-base", "cpi/info", "cpi/lineas-base", "cpi/lineas-base-cerrados", "cpi/proyectos"]);
 
 export const maxDuration = 120;
 

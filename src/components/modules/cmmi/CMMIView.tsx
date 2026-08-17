@@ -1781,6 +1781,8 @@ function ProyectosPanel() {
   const [mcVaM1,    setMcVaM1]    = useState("0.0");
   const [mcRes,     setMcRes]     = useState<any>(null);
   const [mcInfo,    setMcInfo]    = useState<any>(null);
+  const [mcProyectos, setMcProyectos] = useState<any[]>([]);
+  const [mcProySel,   setMcProySel]   = useState<string>("");
 
   // Seguimiento state
   const [sPort,  setSPort]  = useState<string>(PORTAFOLIOS[0]);
@@ -1799,10 +1801,17 @@ function ProyectosPanel() {
   async function loadMcInfo() {
     if (mcInfo) return;
     try {
-      const r = await fetch("/api/cmmi/proyectos/cpi/info");
-      const j = await r.json();
+      const [rInfo, rProys] = await Promise.all([
+        fetch("/api/cmmi/proyectos/cpi/info"),
+        fetch("/api/cmmi/proyectos/cpi/proyectos"),
+      ]);
+      const j = await rInfo.json();
       setMcInfo(j);
       if (!mcPort && j?.portafolios?.[0]) setMcPort(j.portafolios[0]);
+      if (rProys.ok) {
+        const proys = await rProys.json();
+        setMcProyectos(Array.isArray(proys) ? proys : []);
+      }
     } catch {}
   }
 
@@ -2523,6 +2532,37 @@ function ProyectosPanel() {
             <p className="text-xs text-slate-500">
               Regresión Logística · Requiere el primer reporte mensual (CPI mes 1). Si CPI_m1 no está disponible, se imputa con 1.0.
             </p>
+
+            {/* Selector de proyecto */}
+            {mcProyectos.length > 0 && (
+              <div>
+                <p className={labelCls}>Seleccionar proyecto <span className="text-slate-600">(auto-llena los campos)</span></p>
+                <select
+                  value={mcProySel}
+                  onChange={e => {
+                    const id = e.target.value;
+                    setMcProySel(id);
+                    const p = mcProyectos.find((x: any) => x.id === id);
+                    if (p) {
+                      setMcPort(p.portafolio || "");
+                      setMcLider(p.lider || "");
+                      setMcDur(String(p.duracion_meses || ""));
+                      setMcPres(p.presupuesto ? String(Math.round(p.presupuesto)) : "");
+                      setMcCpiM1(String(p.cpi_m1 ?? ""));
+                      setMcSpiM1(String(p.spi_m1 ?? "1.0"));
+                      setMcVaM1(String(p.va_m1 ?? "0.0"));
+                      setMcRes(null);
+                    }
+                  }}
+                  className={selectCls}
+                >
+                  <option value="">— Seleccionar proyecto o ingresar manualmente —</option>
+                  {mcProyectos.map((p: any) => (
+                    <option key={p.id} value={p.id}>{p.nombre || p.id} · {p.portafolio}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Portafolio */}

@@ -247,6 +247,12 @@ def proyectos_cpi_info() -> dict:
     return cpi.info_cpi()
 
 
+@app.get("/proyectos/cpi/proyectos")
+def proyectos_cpi_lista() -> list:
+    """Lista de proyectos con datos del mes 1 para el selector de la UI."""
+    return cpi.lista_proyectos_mes1()
+
+
 @app.get("/proyectos/cpi/lineas-base")
 def proyectos_cpi_lineas_base() -> dict:
     """Líneas base CPI (+ SPI, VA) por portafolio y decil de avance."""
