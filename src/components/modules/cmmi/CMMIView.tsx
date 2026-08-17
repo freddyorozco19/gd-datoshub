@@ -1745,14 +1745,6 @@ type ProyTab = "kickoff" | "seguimiento" | "lineas-base" | "cpi" | "cpi-cerrados
 function ProyectosPanel() {
   const [proyListo, setProyListo]         = useState(false);
   const [tab, setTab]   = useState<ProyTab>("kickoff");
-
-  // Verificar al montar si los modelos SPI ya están disponibles (ej. recarga de página)
-  useEffect(() => {
-    fetch("/api/cmmi/proyectos/info")
-      .then(r => r.json())
-      .then(j => { if (j?.kickoff?.disponible) setProyListo(true); })
-      .catch(() => {});
-  }, []);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
   const [notice, setNotice]   = useState<string | null>(null);
