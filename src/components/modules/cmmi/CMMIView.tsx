@@ -2534,9 +2534,9 @@ function ProyectosPanel() {
             </p>
 
             {/* Selector de proyecto */}
-            {mcProyectos.length > 0 && (
-              <div>
-                <p className={labelCls}>Seleccionar proyecto <span className="text-slate-600">(auto-llena los campos)</span></p>
+            <div>
+              <p className={labelCls}>Seleccionar proyecto <span className="text-slate-600">(auto-llena los campos)</span></p>
+              {mcProyectos.length > 0 ? (
                 <select
                   value={mcProySel}
                   onChange={e => {
@@ -2561,8 +2561,12 @@ function ProyectosPanel() {
                     <option key={p.id} value={p.id}>{p.nombre || p.id} · {p.portafolio}</option>
                   ))}
                 </select>
-              </div>
-            )}
+              ) : (
+                <div className="w-full px-3 py-2 rounded-lg border border-white/[0.06] bg-white/[0.02] text-xs text-slate-600 italic">
+                  Lista de proyectos disponible solo con el microservicio local — ingresa los datos manualmente
+                </div>
+              )}
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Portafolio */}
