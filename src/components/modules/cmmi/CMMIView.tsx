@@ -1791,18 +1791,69 @@ function ProyectosPanel() {
   async function loadMcInfo() {
     if (mcInfo) return;
     try {
-      const [rInfo, rProys] = await Promise.all([
-        fetch("/api/cmmi/proyectos/cpi/info"),
-        fetch("/api/cmmi/proyectos/cpi/proyectos"),
-      ]);
+      const rInfo = await fetch("/api/cmmi/proyectos/cpi/info");
       const j = await rInfo.json();
       setMcInfo(j);
       if (!mcPort && j?.portafolios?.[0]) setMcPort(j.portafolios[0]);
-      if (rProys.ok) {
-        const proys = await rProys.json();
-        setMcProyectos(Array.isArray(proys) ? proys : []);
-      }
     } catch {}
+
+    // Leer proyectos del Excel cargado en el browser (no requiere microservicio)
+    if (proyFile) {
+      try {
+        const buf  = await proyFile.arrayBuffer();
+        const wb   = XLSX.read(buf, { type: "array" });
+        const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(wb.Sheets[wb.SheetNames[0]], { defval: "" });
+
+        // Mapeo flexible de columnas (igual que en cpi.py)
+        const colMap: Record<string, string> = {};
+        if (rows.length > 0) {
+          for (const c of Object.keys(rows[0])) {
+            const cl = String(c).trim();
+            if (["ProjectId","Project ID"].includes(cl))                       colMap[c] = "id";
+            else if (["ProjectName","Project Name"].includes(cl))              colMap[c] = "nombre";
+            else if (["ProjectOwnerName","Líder","Lider"].includes(cl))        colMap[c] = "lider";
+            else if (cl === "Portafolio")                                      colMap[c] = "portafolio";
+            else if (["Meses","Duración","Duracion"].includes(cl))             colMap[c] = "duracion_meses";
+            else if (cl === "Presupuesto")                                     colMap[c] = "presupuesto";
+            else if (["Mes Relativo","MesRelativo"].includes(cl))              colMap[c] = "mes_rel";
+            else if (cl.includes("CPI") && !cl.includes("Schedule"))          colMap[c] = "CPI";
+            else if (cl.includes("SPI") || cl.includes("Schedule Performance")) colMap[c] = "SPI";
+            else if (cl.includes("Variaci") && cl.includes("Avance"))         colMap[c] = "VA";
+          }
+        }
+
+        // Renombrar columnas y quedarse solo con mes 1 de cada proyecto
+        const renamed = rows.map(r => {
+          const row: Record<string, unknown> = {};
+          for (const [orig, mapped] of Object.entries(colMap)) row[mapped] = r[orig];
+          return row;
+        });
+
+        const byId: Record<string, Record<string, unknown>> = {};
+        for (const r of renamed) {
+          const id = String(r.id ?? "").trim();
+          if (!id) continue;
+          const mes = Number(r.mes_rel ?? 0);
+          if (!byId[id] || mes < Number(byId[id].mes_rel ?? 999)) byId[id] = r;
+        }
+
+        const proys = Object.values(byId).map(r => ({
+          id:             String(r.id ?? ""),
+          nombre:         String(r.nombre ?? r.id ?? ""),
+          lider:          String(r.lider ?? ""),
+          portafolio:     String(r.portafolio ?? ""),
+          duracion_meses: Number(r.duracion_meses ?? 0),
+          presupuesto:    Number(r.presupuesto ?? 0),
+          CPI:            Number(r.CPI ?? 1),
+          SPI:            Number(r.SPI ?? 1),
+          VA:             Number(r.VA ?? 0),
+        }));
+
+        setMcProyectos(proys);
+      } catch (e) {
+        console.error("[loadMcInfo] Error leyendo Excel:", e);
+      }
+    }
   }
 
   async function runModeloCpi() {
@@ -2527,9 +2578,9 @@ function ProyectosPanel() {
                       setMcLider(p.lider || "");
                       setMcDur(String(p.duracion_meses || ""));
                       setMcPres(p.presupuesto ? String(Math.round(p.presupuesto)) : "");
-                      setMcCpiM1(String(p.cpi_m1 ?? ""));
-                      setMcSpiM1(String(p.spi_m1 ?? "1.0"));
-                      setMcVaM1(String(p.va_m1 ?? "0.0"));
+                      setMcCpiM1(String(p.CPI ?? p.cpi_m1 ?? ""));
+                      setMcSpiM1(String(p.SPI ?? p.spi_m1 ?? "1.0"));
+                      setMcVaM1(String(p.VA  ?? p.va_m1  ?? "0.0"));
                       setMcRes(null);
                     }
                   }}
