@@ -4434,14 +4434,29 @@ function FinancieroPanel() {
               {loading ? <Clock size={15} className="animate-spin" /> : <Play size={15} />}
               {loading ? "Calculando…" : "Predecir utilidad"}
             </button>
-            <div className="pt-2 border-t border-white/[0.06]">
-              <p className="text-xs font-semibold text-slate-400 mb-3">Actualizar datos históricos de utilidad</p>
-              <FinancieroSourcePicker
-                onFile={handleFinCargar}
-                uploading={finCargarUploading}
-                msg={finCargarMsg}
-              />
-            </div>
+            {!finCargarMsg?.ok && (
+              <div className="pt-2 border-t border-white/[0.06]">
+                <p className="text-xs font-semibold text-slate-400 mb-3">Actualizar datos históricos de utilidad</p>
+                <FinancieroSourcePicker
+                  onFile={handleFinCargar}
+                  uploading={finCargarUploading}
+                  msg={finCargarMsg}
+                />
+              </div>
+            )}
+            {finCargarMsg?.ok && (
+              <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between">
+                <p className="text-xs text-emerald-400 flex items-center gap-1.5">
+                  <ShieldCheck size={13} /> {finCargarMsg.text}
+                </p>
+                <button
+                  onClick={() => setFinCargarMsg(null)}
+                  className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+                >
+                  Cambiar archivo
+                </button>
+              </div>
+            )}
           </div>
 
           {notice && <LocalOnlyNotice message={notice} />}
