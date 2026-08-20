@@ -1,8 +1,8 @@
 {
   "examId": 45,
   "examTitle": "AZ-104: Microsoft Azure Administrator",
-  "totalQuestions": 601,
-  "scrapedAt": "2026-08-20T17:42:43.156Z",
+  "totalQuestions": 606,
+  "scrapedAt": "2026-08-20T19:24:34.268Z",
   "questions": [
     {
       "number": "1",
@@ -5410,6 +5410,51 @@
       "translation": "",
       "options": [],
       "correctAnswer": "A. On storage2, enable identity-based access for the file shares.",
+      "explanation": "",
+      "images": []
+    },
+    {
+      "number": "426",
+      "questionText": "You have an Azure subscription that contains a Recovery Services vault named Vault1. You need to enable multi-user authorization (MAU) for Vault1. Which resource should you create first? an administrative unit a managed identity a resource guard a custom Azure role",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "C. a resource guard",
+      "explanation": "",
+      "images": []
+    },
+    {
+      "number": "427",
+      "questionText": "Note: This question is part of a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution. After you answer a question in this section, you will NOT be able to return to it. As a result, these questions will not appear in the review screen. You have an app named App1 that is installed on two Azure virtual machines named VM1 and VM2. Connections to App1 are managed by using an Azure Load Balancer. The effective network security configurations for VM2 are shown in the following exhibit. You discover that connections to App1 from 131.107.100.50 over TCP port 443 fail. You verify that the Load Balancer rules are configured correctly. You need to ensure that connections to App1 can be established successfully from 131.107.100.50 over TCP port 443. Solution: You create an inbound security rule that allows any traffic from the AzureLoadBalancer source and has a priority of 150. Does this meet the goal? Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "A. Yes",
+      "explanation": "",
+      "images": []
+    },
+    {
+      "number": "428",
+      "questionText": "You have an Azure subscription that contains the resources shown in the following table. You create a route table named RT1 in the East US Azure region. To which resources can you associate RT1? VNet1 only Subnet1 only VNet1 and NIC1 only Subnet1 and NIC1 only VNet1, Subnet1, and NIC1",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "B. Subnet1 only",
+      "explanation": "",
+      "images": []
+    },
+    {
+      "number": "429",
+      "questionText": "You create an Azure VM named VM1 that runs Windows Server 2019. VM1 is configured as shown in the exhibit. (Click the Exhibit tab.) You need to enable Desired State Configuration for VM1. What should you do first? Connect to VM1. Start VM1. Capture a snapshot of VM1. Configure a DNS name for VM1.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "B. Start VM1.",
+      "explanation": "",
+      "images": []
+    },
+    {
+      "number": "430",
+      "questionText": "HOTSPOT - You have an Azure subscription that contains the virtual networks shown in the following table. The subnets have the IP address spaces shown in the following table. You plan to create a container app named contapp1 in the East US Azure region. You need to create a container app environment named con-env1 that meets the following requirements: • Uses its own virtual network. • Uses its own subnet. • Is connected to the smallest possible subnet. To which virtual networks can you connect con-env1, and which subnet mask should you use? To answer, select the appropriate options in the answer area. NOTE: Each correct selection is worth one point.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "",
       "explanation": "",
       "images": []
     }
