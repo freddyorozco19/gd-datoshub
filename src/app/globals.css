@@ -2,8 +2,46 @@
 
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --color-background: #07070f;
-  --color-foreground: #e2e8f0;
+  --color-background: var(--app-background);
+  --color-foreground: var(--app-foreground);
+  --color-surface: var(--app-surface);
+  --color-border: var(--app-border);
+  --color-primary: #7C3AED;
+}
+
+/* ── Tokens de tema (oscuro por defecto, claro bajo .light) ──────────────
+   El toggle del Topbar agrega/quita la clase "light" en <html>. Los
+   overlays translúcidos (bg-white/[...], border-white/[...], etc.) y los
+   textos slate-100..400 quedan sobreescritos más abajo, con el mismo
+   valor exacto de clase que ya usan los componentes, pero acotado a
+   .dashboard-shell para no afectar las páginas de autenticación.
+─────────────────────────────────────────────────────────────────────── */
+:root {
+  --app-background: #07070f;
+  --app-foreground: #e2e8f0;
+  --app-surface: #0D0D1A;
+  --app-border: #1A1A2E;
+  --app-topbar-bg: rgba(8,8,15,0.85);
+  --app-topbar-border: rgba(255,255,255,0.06);
+  --app-sidebar-header-bg: rgba(8,8,15,0.92);
+  --app-scrollbar-thumb: rgba(255,255,255,0.12);
+  --app-scrollbar-thumb-hover: rgba(255,255,255,0.22);
+  --app-scrollbar-thumb-strong: rgba(255,255,255,0.10);
+  --app-scrollbar-thumb-strong-hover: rgba(255,255,255,0.20);
+}
+
+.light {
+  --app-background: #f8fafc;
+  --app-foreground: #0f172a;
+  --app-surface: #ffffff;
+  --app-border: #e2e8f0;
+  --app-topbar-bg: rgba(255,255,255,0.85);
+  --app-topbar-border: rgba(15,23,42,0.10);
+  --app-sidebar-header-bg: rgba(255,255,255,0.92);
+  --app-scrollbar-thumb: rgba(15,23,42,0.18);
+  --app-scrollbar-thumb-hover: rgba(15,23,42,0.28);
+  --app-scrollbar-thumb-strong: rgba(15,23,42,0.15);
+  --app-scrollbar-thumb-strong-hover: rgba(15,23,42,0.25);
 }
 
 html, body, input, button, select, textarea {
@@ -12,23 +50,14 @@ html, body, input, button, select, textarea {
 }
 
 body {
-  background: #07070f;
-  color: #e2e8f0;
+  background: var(--app-background);
+  color: var(--app-foreground);
   line-height: 1.6;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 * {
   box-sizing: border-box;
-}
-
-/* ── Variables para módulo Certificaciones (tema oscuro) ────────────────
-   Generan utilidades Tailwind: bg-surface, border-border, text-primary,
-   bg-primary, border-primary, ring-offset-surface, etc.
-─────────────────────────────────────────────────────────────────────── */
-@theme {
-  --color-surface: #0D0D1A;
-  --color-border:  #1A1A2E;
-  --color-primary: #7C3AED;
 }
 
 /* Scrollbar utilities para el panel de tags de Certificaciones */
@@ -75,6 +104,9 @@ body {
   height: 1px;
   background: rgba(255,255,255,0.05);
 }
+.light .dashboard-shell .divider {
+  background: rgba(15,23,42,0.08);
+}
 
 /* ── Scrollbar completamente oculto (tabla de Leads) ─────────────────────── */
 .no-scrollbar { scrollbar-width: none !important; -ms-overflow-style: none !important; }
@@ -107,11 +139,20 @@ body {
   border-color: rgba(99, 102, 241, 0.5);
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.12);
 }
+.light .dashboard-shell .cmmi-select option {
+  background-color: #ffffff;
+  color: #1e293b;
+}
+.light .dashboard-shell .cmmi-select option:checked,
+.light .dashboard-shell .cmmi-select option:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
 
-/* ── Scrollbar coherente con el sidebar oscuro ─────────────────────────── */
+/* ── Scrollbar coherente con el sidebar (reacciona al tema) ──────────────── */
 .sidebar-scroll {
   scrollbar-width: thin;                                  /* Firefox */
-  scrollbar-color: rgba(255, 255, 255, 0.12) transparent; /* thumb / track */
+  scrollbar-color: var(--app-scrollbar-thumb) transparent; /* thumb / track */
 }
 .sidebar-scroll::-webkit-scrollbar {
   width: 6px;
@@ -120,20 +161,20 @@ body {
   background: transparent;
 }
 .sidebar-scroll::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: var(--app-scrollbar-thumb);
   border-radius: 9999px;
 }
 .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.22);
+  background-color: var(--app-scrollbar-thumb-hover);
 }
 
-/* ── Scrollbar global coherente con el tema oscuro de la app ─────────────
+/* ── Scrollbar global coherente con el tema de la app ─────────────────────
    Aplica a todas las áreas con overflow (tabla, gráficos, modales) para que
-   las barras no se vean con el estilo claro por defecto del navegador.
+   las barras no se vean con el estilo por defecto del navegador.
 ─────────────────────────────────────────────────────────────────────── */
 * {
   scrollbar-width: thin;                                  /* Firefox */
-  scrollbar-color: rgba(255, 255, 255, 0.12) transparent; /* thumb / track */
+  scrollbar-color: var(--app-scrollbar-thumb) transparent; /* thumb / track */
 }
 *::-webkit-scrollbar {
   width: 8px;
@@ -143,12 +184,65 @@ body {
   background: transparent;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.10);
+  background-color: var(--app-scrollbar-thumb-strong);
   border-radius: 9999px;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.20);
+  background-color: var(--app-scrollbar-thumb-strong-hover);
 }
 *::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MODO CLARO — overrides acotados a .dashboard-shell (Topbar + Sidebar +
+   vistas de módulos). Reescriben, con la MISMA clase exacta que ya usan
+   los componentes, los overlays translúcidos pensados para fondo oscuro
+   (bg-white/[...], border-white/[...]), los fondos sólidos oscuros
+   (bg-[#hex]) y los textos claros (text-slate-100..400), para que se vean
+   correctamente sobre un fondo claro sin tener que tocar cada componente.
+   Las páginas de autenticación (login/set-password) quedan fuera de este
+   scope a propósito.
+═══════════════════════════════════════════════════════════════════════ */
+
+/* Fondos sólidos oscuros → superficies claras */
+.light .dashboard-shell .bg-\[\#07070F\],
+.light .dashboard-shell .bg-\[\#07070f\] { background-color: var(--app-background) !important; }
+.light .dashboard-shell .bg-\[\#0D0D1A\] { background-color: var(--app-surface) !important; }
+.light .dashboard-shell .bg-\[\#0e0e1c\] { background-color: #f1f5f9 !important; }
+.light .dashboard-shell .bg-\[\#15151f\] { background-color: #f1f5f9 !important; }
+
+/* Overlays bg-white/[opacity] → overlays oscuros equivalentes (glass sobre fondo claro) */
+.light .dashboard-shell .bg-white\/\[0\.02\] { background-color: rgb(15 23 42 / 0.03) !important; }
+.light .dashboard-shell .bg-white\/\[0\.03\] { background-color: rgb(15 23 42 / 0.04) !important; }
+.light .dashboard-shell .bg-white\/\[0\.04\] { background-color: rgb(15 23 42 / 0.05) !important; }
+.light .dashboard-shell .bg-white\/\[0\.05\] { background-color: rgb(15 23 42 / 0.06) !important; }
+.light .dashboard-shell .bg-white\/\[0\.06\] { background-color: rgb(15 23 42 / 0.07) !important; }
+.light .dashboard-shell .bg-white\/\[0\.07\] { background-color: rgb(15 23 42 / 0.08) !important; }
+.light .dashboard-shell .bg-white\/\[0\.08\] { background-color: rgb(15 23 42 / 0.09) !important; }
+.light .dashboard-shell .bg-white\/\[0\.1\]  { background-color: rgb(15 23 42 / 0.10) !important; }
+.light .dashboard-shell .bg-white\/\[0\.12\] { background-color: rgb(15 23 42 / 0.12) !important; }
+
+/* Bordes border-white/[opacity] → bordes oscuros sutiles */
+.light .dashboard-shell .border-white\/\[0\.03\] { border-color: rgb(15 23 42 / 0.06) !important; }
+.light .dashboard-shell .border-white\/\[0\.04\] { border-color: rgb(15 23 42 / 0.08) !important; }
+.light .dashboard-shell .border-white\/\[0\.05\] { border-color: rgb(15 23 42 / 0.09) !important; }
+.light .dashboard-shell .border-white\/\[0\.06\] { border-color: rgb(15 23 42 / 0.10) !important; }
+.light .dashboard-shell .border-white\/\[0\.07\] { border-color: rgb(15 23 42 / 0.11) !important; }
+.light .dashboard-shell .border-white\/\[0\.08\] { border-color: rgb(15 23 42 / 0.12) !important; }
+.light .dashboard-shell .border-white\/\[0\.1\]  { border-color: rgb(15 23 42 / 0.14) !important; }
+.light .dashboard-shell .border-white\/\[0\.10\] { border-color: rgb(15 23 42 / 0.14) !important; }
+.light .dashboard-shell .border-white\/\[0\.12\] { border-color: rgb(15 23 42 / 0.16) !important; }
+.light .dashboard-shell .border-white\/\[0\.14\] { border-color: rgb(15 23 42 / 0.18) !important; }
+.light .dashboard-shell .border-white\/\[0\.15\] { border-color: rgb(15 23 42 / 0.20) !important; }
+.light .dashboard-shell .border-white\/\[0\.18\] { border-color: rgb(15 23 42 / 0.24) !important; }
+.light .dashboard-shell .border-white\/\[0\.25\] { border-color: rgb(15 23 42 / 0.30) !important; }
+
+/* Textos claros (pensados para fondo oscuro) → textos oscuros legibles sobre claro */
+.light .dashboard-shell .text-slate-100 { color: #0f172a !important; }
+.light .dashboard-shell .text-slate-200 { color: #1e293b !important; }
+.light .dashboard-shell .text-slate-300 { color: #334155 !important; }
+.light .dashboard-shell .text-slate-400 { color: #475569 !important; }
+.light .dashboard-shell .text-white:not([class*="bg-blue-600"]):not([class*="bg-indigo-600"]):not([class*="bg-teal-600"]):not([class*="bg-rose-600"]):not([class*="bg-amber-600"]):not([class*="bg-emerald-500"]):not([class*="bg-red-600"]):not([class*="bg-primary"]):not([class*="via-blue-800"]) {
+  color: #0f172a !important;
 }

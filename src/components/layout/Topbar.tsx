@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Bell, Search, ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 /* ── Mapa de rutas → breadcrumb (igual que mainFJ-hub ROUTE_META) ─────── */
 const ROUTE_META: Record<string, { label: string; parent?: string }> = {
@@ -33,11 +34,11 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
     <header
       className="sticky top-0 z-30 flex items-center justify-between px-4 md:px-6 shrink-0"
       style={{
-        height: tabs ? "52px" : "52px",
-        background: "rgba(8,8,15,0.88)",
+        height: "52px",
+        background: "var(--app-topbar-bg)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        borderBottom: "1px solid var(--app-topbar-border)",
       }}
     >
       {/* ── Izquierda: título + divisor + tabs ── */}
@@ -58,7 +59,7 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
 
         {/* Divisor vertical — solo si hay tabs */}
         {tabs && (
-          <div className="w-px self-stretch mx-1" style={{ background: "rgba(255,255,255,0.07)" }} />
+          <div className="w-px self-stretch mx-1" style={{ background: "var(--app-topbar-border)" }} />
         )}
 
         {/* Tabs — pegados al borde inferior del header */}
@@ -84,6 +85,9 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
           <Bell className="w-4 h-4" />
           <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-blue-500 rounded-full" />
         </button>
+
+        {/* Theme toggle */}
+        <ThemeToggle />
       </div>
     </header>
   );
