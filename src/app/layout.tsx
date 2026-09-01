@@ -10,12 +10,22 @@ export const metadata: Metadata = {
   icons: { icon: "/growdata-icon.webp" },
 };
 
+const THEME_INIT_SCRIPT = `
+try {
+  var t = localStorage.getItem("theme");
+  if (t === "light") document.documentElement.classList.add("light");
+} catch (e) {}
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`h-full antialiased ${inter.variable}`}>
-      <body className="min-h-full flex flex-col bg-[#07070f]">{children}</body>
+    <html lang="es" className={`h-full antialiased ${inter.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
+      <body className="min-h-full flex flex-col bg-background" suppressHydrationWarning>{children}</body>
     </html>
   );
 }

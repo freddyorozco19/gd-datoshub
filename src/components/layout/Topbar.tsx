@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Bell, Search, ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 /* ── Mapa de rutas → breadcrumb (igual que mainFJ-hub ROUTE_META) ─────── */
 const ROUTE_META: Record<string, { label: string; parent?: string }> = {
@@ -34,7 +35,7 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
       className="sticky top-0 z-30 flex items-center justify-between px-4 md:px-5 border-b border-white/[0.05] shrink-0"
       style={{
         height: "52px",
-        background: "rgba(8,8,15,0.85)",
+        background: "var(--app-topbar-bg)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
       }}
@@ -86,6 +87,9 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
           <Bell className="w-4 h-4" />
           <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-blue-500 rounded-full" />
         </button>
+
+        {/* Theme toggle */}
+        <ThemeToggle />
       </div>
     </header>
   );
