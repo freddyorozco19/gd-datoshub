@@ -216,6 +216,14 @@ body {
 .light .dashboard-shell .bg-\[\#0e0e1c\] { background-color: #f1f5f9 !important; }
 .light .dashboard-shell .bg-\[\#15151f\] { background-color: #f1f5f9 !important; }
 
+/* Tintes de sección bg-black/NN (cabeceras de tabla, inputs, sub-cards) →
+   mismo tinte azulado que el resto del glass, en vez de gris neutro plano.
+   OJO: bg-black/60 en adelante son telones de fondo de modales y se dejan
+   sin tocar (oscuros funcionan igual de bien en cualquier tema). */
+.light .dashboard-shell .bg-black\/20 { background-color: rgb(15 23 42 / 0.10) !important; }
+.light .dashboard-shell .bg-black\/30 { background-color: rgb(15 23 42 / 0.14) !important; }
+.light .dashboard-shell .bg-black\/40 { background-color: rgb(15 23 42 / 0.18) !important; }
+
 /* Overlays bg-white/[opacity] → overlays oscuros equivalentes (glass sobre fondo claro) */
 .light .dashboard-shell .bg-white\/\[0\.02\] { background-color: rgb(15 23 42 / 0.03) !important; }
 .light .dashboard-shell .bg-white\/\[0\.03\] { background-color: rgb(15 23 42 / 0.04) !important; }
