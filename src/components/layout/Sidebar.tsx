@@ -126,7 +126,7 @@ export default function Sidebar() {
         onMouseEnter={() => mode === "hover" && setHovered(true)}
         onMouseLeave={() => mode === "hover" && setHovered(false)}
         style={{ background: "var(--app-sidebar-header-bg)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
-        className={`flex flex-col h-screen text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
+        className={`app-bar flex flex-col h-screen text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
           collapsed ? "w-16" : "w-[220px]"
         } ${mode === "hover" ? `absolute inset-y-0 left-0 z-40 ${overlaying ? "shadow-2xl shadow-black/60" : ""}` : ""}`}
       >

@@ -32,7 +32,7 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
 
   return (
     <header
-      className="sticky top-0 z-30 flex items-center justify-between px-4 md:px-6 shrink-0"
+      className="app-bar sticky top-0 z-30 flex items-center justify-between px-4 md:px-6 shrink-0"
       style={{
         height: "52px",
         background: "var(--app-topbar-bg)",
