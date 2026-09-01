@@ -35,10 +35,13 @@
   --app-foreground: #0f172a;
   --app-surface: #ffffff;
   --app-border: #e2e8f0;
-  /* Topbar y Sidebar comparten el mismo azul sólido en modo claro */
-  --app-topbar-bg: #1e3a8a;
+  /* Topbar y Sidebar comparten el mismo azul oscuro en modo claro,
+     translúcido para el efecto "liquid glass" (backdrop-filter blur ya
+     aplicado inline en Topbar/Sidebar deja ver el fondo claro difuminado
+     detrás, tintado de azul). */
+  --app-topbar-bg: rgba(11,22,56,0.82);
   --app-topbar-border: rgba(255,255,255,0.14);
-  --app-sidebar-header-bg: #1e3a8a;
+  --app-sidebar-header-bg: rgba(11,22,56,0.88);
   --app-scrollbar-thumb: rgba(15,23,42,0.18);
   --app-scrollbar-thumb-hover: rgba(15,23,42,0.28);
   --app-scrollbar-thumb-strong: rgba(15,23,42,0.15);
@@ -286,4 +289,4 @@ body {
 .light .dashboard-shell .app-bar .text-white { color: #ffffff !important; }
 
 /* Popup del usuario en el Sidebar (bg-[#15151f]) — se queda oscuro, no claro */
-.light .dashboard-shell .app-bar .bg-\[\#15151f\] { background-color: #0f2050 !important; }
+.light .dashboard-shell .app-bar .bg-\[\#15151f\] { background-color: #0b1638 !important; }
