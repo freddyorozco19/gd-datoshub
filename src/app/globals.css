@@ -180,6 +180,17 @@ body {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
+/* ── Opciones de los dropdowns de filtro (FilterSelect) ──────────────────
+   hover:* y los colores semánticos (blue-300/blue-500) no responden al
+   toggle de tema (solo se remapean las clases base, no sus variantes), así
+   que se fijan directo por tema en vez de depender de utilities de Tailwind.
+─────────────────────────────────────────────────────────────────────── */
+.filter-option:hover { background-color: rgba(255, 255, 255, 0.06); color: #ffffff; }
+.light .dashboard-shell .filter-option:hover { background-color: rgba(15, 23, 42, 0.06); color: #0f172a; }
+
+.filter-option-selected { background-color: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+.light .dashboard-shell .filter-option-selected { background-color: rgba(37, 99, 235, 0.12); color: #1d4ed8; }
+
 /* ── Slider de rango doble (Desde/Hasta fusionados) ─────────────────────────
    Dos <input type="range"> superpuestos; el track es invisible/no interactivo
    y solo el thumb captura eventos, permitiendo arrastrar cada uno por separado.

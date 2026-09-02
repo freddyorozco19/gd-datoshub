@@ -1130,7 +1130,7 @@ function FilterSelect({
           <div
             ref={panelRef}
             style={{ position: "fixed", top: rect.top, left: rect.left, width: rect.width, backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)" }}
-            className="max-h-64 overflow-auto z-50 rounded-lg border border-white/[0.12] bg-white/[0.08] shadow-2xl shadow-black/40 py-1"
+            className="modal-panel max-h-64 overflow-auto z-50 rounded-lg border border-white/[0.12] shadow-2xl shadow-black/40 py-1"
           >
             {options.map((o) => (
               <button
@@ -1141,7 +1141,7 @@ function FilterSelect({
                   setOpen(false);
                 }}
                 className={`w-full text-left px-3 py-1.5 text-xs transition-colors ${
-                  o === value ? "bg-blue-500/15 text-blue-300" : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                  o === value ? "filter-option-selected" : "filter-option text-slate-300"
                 }`}
               >
                 {filterOptionLabel(o)}
