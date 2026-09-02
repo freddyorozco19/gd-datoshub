@@ -1548,10 +1548,10 @@ export default function LeadsView() {
                       <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
                         {(
                           [
+                            ["id",                 "ID"],
                             ["cliente",            "Cliente"],
                             ["comercial",          "Comercial"],
                             ["linea",              "Línea"],
-                            ["id",                 "ID"],
                             ["preventa",           "Preventa"],
                             ["etapaPreventa",      "Etapa Preventa"],
                             ["fechaCreacion",      "Fecha Creación"],
@@ -1589,12 +1589,12 @@ export default function LeadsView() {
                               isNew ? "bg-emerald-500/10 hover:bg-emerald-500/20" : i % 2 === 1 ? "bg-white/[0.02] hover:bg-blue-500/10" : "hover:bg-blue-500/10"
                             }`}
                           >
+                            <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.id}</td>
                             <td className="px-3 py-3 text-slate-300 max-w-[160px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.comercial || "—"}</td>
                             <td className="px-3 py-3 whitespace-nowrap max-w-[180px]">
                               {lead.linea ? <span className="text-slate-300 truncate inline-block max-w-full align-bottom" title={lead.linea}>{lineaLabel(lead.linea)}</span> : <span className="text-slate-600">—</span>}
                             </td>
-                            <td className="px-3 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">{lead.id}</td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.etapaPreventa || "—"}</td>
                             <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
