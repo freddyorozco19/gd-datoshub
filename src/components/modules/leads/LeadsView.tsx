@@ -968,21 +968,21 @@ function DateRangeSlider({
   const pctTo   = (toIdx / totalDays) * 100;
 
   return (
-    <div className="flex flex-col gap-1.5 shrink-0 w-44">
+    <div className="flex flex-col gap-1.5 shrink-0 w-60">
       <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide text-center">Rango de fecha</label>
 
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2">
         <button
           type="button" ref={btnRef} onClick={toggle}
           title="Configurar rango de fecha"
           className={`shrink-0 p-0.5 rounded transition-colors ${open ? "text-blue-400" : "text-slate-500 hover:text-slate-300"}`}
         >
-          <Calendar size={13} />
+          <Calendar size={14} />
         </button>
 
-        <span className="shrink-0 text-[9px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(fromDate)}</span>
+        <span className="shrink-0 text-[10px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(fromDate)}</span>
 
-        <div className="dual-range relative h-5 flex-1 min-w-[36px] flex items-center">
+        <div className="dual-range relative h-5 flex-1 min-w-[60px] flex items-center">
           <div className="absolute inset-x-0 h-1 rounded-full bg-white/[0.1]" />
           <div
             className="absolute h-1 rounded-full bg-blue-500"
@@ -1000,7 +1000,7 @@ function DateRangeSlider({
           />
         </div>
 
-        <span className="shrink-0 text-[9px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(toDate)}</span>
+        <span className="shrink-0 text-[10px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(toDate)}</span>
       </div>
 
       {open && rect && createPortal(
