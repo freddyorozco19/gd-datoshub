@@ -967,9 +967,23 @@ function DateRangeSlider({
   const pctFrom = (fromIdx / totalDays) * 100;
   const pctTo   = (toIdx / totalDays) * 100;
 
+  const hasCustomRange = !!(from || to);
+
   return (
     <div className="flex flex-col gap-1.5 shrink-0 w-60">
-      <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide text-center">Rango de fecha</label>
+      <div className="flex items-center justify-center gap-1">
+        <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Rango de fecha</label>
+        {hasCustomRange && (
+          <button
+            type="button"
+            onClick={() => onChange("", "")}
+            title="Limpiar rango de fecha"
+            className="text-slate-500 hover:text-rose-400 transition-colors"
+          >
+            <X size={11} />
+          </button>
+        )}
+      </div>
 
       <div className="flex items-center gap-2 h-8">
         <button
@@ -1321,8 +1335,6 @@ export default function LeadsView() {
     if (filters.preventa        !== "ALL") c++;
     if (filters.activo          !== "ALL") c++;
     if (filters.etapa           !== "ALL") c++;
-    if (filters.dateFrom)                  c++;
-    if (filters.dateTo)                    c++;
     if (search.trim())                     c++;
     return c;
   }, [filters, search]);
