@@ -293,6 +293,8 @@ body {
 .light .dashboard-shell .app-bar .text-slate-200 { color: #e2e8f0 !important; }
 .light .dashboard-shell .app-bar .text-slate-300 { color: #cbd5e1 !important; }
 .light .dashboard-shell .app-bar .text-slate-400 { color: #94a3b8 !important; }
+.light .dashboard-shell .app-bar .text-slate-500 { color: #cbd5e1 !important; }
+.light .dashboard-shell .app-bar .text-slate-600 { color: #94a3b8 !important; }
 .light .dashboard-shell .app-bar .text-white { color: #ffffff !important; }
 
 /* Popup del usuario en el Sidebar (bg-[#15151f]) — se queda oscuro, no claro */
