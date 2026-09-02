@@ -48,7 +48,7 @@
   --app-scrollbar-thumb-strong-hover: rgba(15,23,42,0.25);
   /* overlay claro para que el blur de los paneles de los modales lea un
      fondo claro detrás, en vez del casi-negro del tema oscuro */
-  --app-modal-overlay: rgba(226,232,240,0.75);
+  --app-modal-overlay: rgba(100,116,139,0.55);
 }
 
 html, body, input, button, select, textarea {
