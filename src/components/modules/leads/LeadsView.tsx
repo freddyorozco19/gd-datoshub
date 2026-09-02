@@ -283,7 +283,7 @@ function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalPr
       style={{ backgroundColor: "var(--app-modal-overlay)" }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="modal-panel backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
+      <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
         <div className="app-bar modal-header flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div>
             <div className="flex items-center gap-2">
@@ -421,14 +421,14 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
       style={{ backgroundColor: "var(--app-modal-overlay)" }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="modal-panel backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
 
         {/* header */}
         <div className="app-bar modal-header flex items-start justify-between px-6 py-5 border-b border-white/[0.07]">
           <div className="flex-1 min-w-0 pr-4">
-            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">ID {lead.id}</p>
             <h2 className="font-semibold text-slate-100 text-base leading-snug" title={lead.nombre}>{lead.nombre}</h2>
             <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.1] text-slate-300 tracking-wide">ID {lead.id}</span>
               {lead.linea && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">{lead.linea}</span>}
               <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
               {lead.etapa && <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa}</span>}
