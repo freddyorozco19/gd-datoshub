@@ -897,13 +897,49 @@ const idxToDate = (idx: number, minStr: string) => {
 };
 const fmtShortDate = (d: string) => new Date(d).toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/-/g, "/");
 
+/* ── accesos rápidos del popup de fecha ──────────────────────────────── */
+const DATE_PRESETS: { key: string; label: string }[] = [
+  { key: "month",    label: "Mes" },
+  { key: "quarter",  label: "Trimestre" },
+  { key: "semester", label: "Semestre" },
+  { key: "year",     label: "Año" },
+  { key: "all",      label: "Todo" },
+];
+
 /* ── slider de rango de fecha (reemplaza los inputs Desde/Hasta) ──────── */
 function DateRangeSlider({
   min, max, from, to, onChange,
 }: { min: string; max: string; from: string; to: string; onChange: (from: string, to: string) => void }) {
-  const totalDays = Math.max(1, dateToIdx(max, min));
-  const fromIdx = from ? clamp(dateToIdx(from, min), 0, totalDays) : 0;
-  const toIdx   = to   ? clamp(dateToIdx(to, min), 0, totalDays)   : totalDays;
+  const [open, setOpen] = useState(false);
+  const [rect, setRect] = useState<{ top: number; left: number } | null>(null);
+  const btnRef   = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (
+        btnRef.current && !btnRef.current.contains(e.target as Node) &&
+        panelRef.current && !panelRef.current.contains(e.target as Node)
+      ) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [open]);
+
+  function toggle() {
+    if (!open && btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setRect({ top: r.bottom + 6, left: r.left });
+    }
+    setOpen((o) => !o);
+  }
+
+  const totalDays  = Math.max(1, dateToIdx(max, min));
+  const fromDate   = from || min;
+  const toDate     = to   || max;
+  const fromIdx    = clamp(dateToIdx(fromDate, min), 0, totalDays);
+  const toIdx      = clamp(dateToIdx(toDate, min), 0, totalDays);
 
   function handleFrom(v: number) {
     const nextFrom = Math.min(v, toIdx);
@@ -914,34 +950,110 @@ function DateRangeSlider({
     onChange(idxToDate(fromIdx, min), idxToDate(nextTo, min));
   }
 
+  function applyPreset(key: string) {
+    if (key === "all") { onChange(min, max); setOpen(false); return; }
+    const end   = new Date(max);
+    const start = new Date(end);
+    if (key === "month")         start.setMonth(start.getMonth() - 1);
+    else if (key === "quarter")  start.setMonth(start.getMonth() - 3);
+    else if (key === "semester") start.setMonth(start.getMonth() - 6);
+    else if (key === "year")     start.setFullYear(start.getFullYear() - 1);
+    let startStr = start.toISOString().substring(0, 10);
+    if (startStr < min) startStr = min;
+    onChange(startStr, max);
+    setOpen(false);
+  }
+
   const pctFrom = (fromIdx / totalDays) * 100;
   const pctTo   = (toIdx / totalDays) * 100;
 
   return (
-    <div className="flex flex-col gap-1.5 shrink-0 w-48">
-      <div className="flex items-center justify-between gap-2">
-        <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Rango de fecha</label>
-        <span className="text-[10px] text-slate-400 whitespace-nowrap tabular-nums">
-          {fmtShortDate(idxToDate(fromIdx, min))} – {fmtShortDate(idxToDate(toIdx, min))}
-        </span>
+    <div className="flex flex-col gap-1.5 shrink-0 w-72">
+      <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide text-center">Rango de fecha</label>
+
+      <div className="flex items-center gap-2">
+        <button
+          type="button" ref={btnRef} onClick={toggle}
+          title="Configurar rango de fecha"
+          className={`shrink-0 p-0.5 rounded transition-colors ${open ? "text-blue-400" : "text-slate-500 hover:text-slate-300"}`}
+        >
+          <Calendar size={14} />
+        </button>
+
+        <span className="shrink-0 text-[10px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(fromDate)}</span>
+
+        <div className="dual-range relative h-5 flex-1 flex items-center">
+          <div className="absolute inset-x-0 h-1 rounded-full bg-white/[0.1]" />
+          <div
+            className="absolute h-1 rounded-full bg-blue-500"
+            style={{ left: `${pctFrom}%`, right: `${100 - pctTo}%` }}
+          />
+          <input
+            type="range" min={0} max={totalDays} value={fromIdx}
+            onChange={(e) => handleFrom(Number(e.target.value))}
+            className="dual-range-input"
+          />
+          <input
+            type="range" min={0} max={totalDays} value={toIdx}
+            onChange={(e) => handleTo(Number(e.target.value))}
+            className="dual-range-input"
+          />
+        </div>
+
+        <span className="shrink-0 text-[10px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(toDate)}</span>
       </div>
-      <div className="dual-range relative h-5 flex items-center">
-        <div className="absolute inset-x-0 h-1 rounded-full bg-white/[0.1]" />
-        <div
-          className="absolute h-1 rounded-full bg-blue-500"
-          style={{ left: `${pctFrom}%`, right: `${100 - pctTo}%` }}
-        />
-        <input
-          type="range" min={0} max={totalDays} value={fromIdx}
-          onChange={(e) => handleFrom(Number(e.target.value))}
-          className="dual-range-input"
-        />
-        <input
-          type="range" min={0} max={totalDays} value={toIdx}
-          onChange={(e) => handleTo(Number(e.target.value))}
-          className="dual-range-input"
-        />
-      </div>
+
+      {open && rect && createPortal(
+        <div className="dashboard-shell">
+          <div
+            ref={panelRef}
+            style={{
+              position: "fixed", top: rect.top, left: rect.left,
+              backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)",
+            }}
+            className="z-50 w-64 rounded-lg border border-white/[0.12] bg-white/[0.08] shadow-2xl shadow-black/40 p-3 flex flex-col gap-3"
+          >
+            <div>
+              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Rango personalizado</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] text-slate-500">Desde</span>
+                  <input
+                    type="date" value={fromDate} min={min} max={toDate}
+                    onChange={(e) => onChange(e.target.value, toDate)}
+                    className="text-xs rounded-lg px-2 py-1.5 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] text-slate-500">Hasta</span>
+                  <input
+                    type="date" value={toDate} min={fromDate} max={max}
+                    onChange={(e) => onChange(fromDate, e.target.value)}
+                    className="text-xs rounded-lg px-2 py-1.5 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="h-px bg-white/[0.08]" />
+
+            <div>
+              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Accesos rápidos</p>
+              <div className="grid grid-cols-3 gap-1.5">
+                {DATE_PRESETS.map((p) => (
+                  <button
+                    key={p.key} type="button" onClick={() => applyPreset(p.key)}
+                    className="text-[11px] px-2 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.1] hover:bg-white/[0.08] hover:border-white/[0.18] text-slate-300 hover:text-white transition-colors"
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body,
+      )}
     </div>
   );
 }
@@ -1275,17 +1387,14 @@ export default function LeadsView() {
 
             <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
 
-            {/* rango de fechas — slider único */}
-            <div className="flex items-end gap-2 shrink-0">
-              <Calendar size={14} className="text-slate-500 mb-2.5 shrink-0" />
-              <DateRangeSlider
-                min={dateBounds.min}
-                max={dateBounds.max}
-                from={filters.dateFrom}
-                to={filters.dateTo}
-                onChange={(from, to) => setFilters((f) => ({ ...f, dateFrom: from, dateTo: to }))}
-              />
-            </div>
+            {/* rango de fechas — slider único con popup de configuración */}
+            <DateRangeSlider
+              min={dateBounds.min}
+              max={dateBounds.max}
+              from={filters.dateFrom}
+              to={filters.dateTo}
+              onChange={(from, to) => setFilters((f) => ({ ...f, dateFrom: from, dateTo: to }))}
+            />
 
             <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
 
