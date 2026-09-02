@@ -985,7 +985,7 @@ function FilterSelect({
   }
 
   return (
-    <div className="flex flex-col gap-1.5 shrink-0 w-32">
+    <div className="flex flex-col gap-1.5 shrink-0 w-28">
       <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{label}</label>
       <button
         type="button"
@@ -1289,40 +1289,38 @@ export default function LeadsView() {
 
             <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
 
-            {/* búsqueda */}
+            {/* búsqueda + acciones */}
             <div className="flex flex-col gap-1.5 shrink-0">
               <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Buscar</label>
-              <div className="relative">
-                <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Nombre, cliente…"
-                  className="pl-8 pr-3 py-2 text-xs rounded-lg w-44 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 placeholder-slate-600 transition-colors"
-                />
-              </div>
-            </div>
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <input
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Nombre, cliente…"
+                    className="pl-8 pr-3 py-2 text-xs rounded-lg w-44 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 placeholder-slate-600 transition-colors"
+                  />
+                </div>
 
-            {/* botones de acción */}
-            <div className="flex items-end gap-2.5 shrink-0">
-              <button
-                onClick={loadLeads}
-                disabled={loading}
-                title="Sincronizar ODOO"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/[0.1] bg-white/[0.03] text-xs font-medium text-slate-300 hover:bg-white/[0.07] hover:border-white/[0.18] disabled:opacity-50 transition-colors whitespace-nowrap"
-              >
-                <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
-                {loading ? "Cargando…" : "Sincronizar"}
-              </button>
-              <button
-                onClick={exportCSV}
-                disabled={!filtered.length}
-                title="Exportar CSV"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-medium hover:bg-blue-500 disabled:opacity-40 transition-colors whitespace-nowrap"
-              >
-                <Download size={13} />
-                Exportar
-              </button>
+                {/* botones de acción — solo icono */}
+                <button
+                  onClick={loadLeads}
+                  disabled={loading}
+                  title="Sincronizar ODOO"
+                  className="flex items-center justify-center p-2 rounded-lg border border-white/[0.1] bg-white/[0.03] text-slate-300 hover:bg-white/[0.07] hover:border-white/[0.18] disabled:opacity-50 transition-colors shrink-0"
+                >
+                  <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+                </button>
+                <button
+                  onClick={exportCSV}
+                  disabled={!filtered.length}
+                  title="Exportar CSV"
+                  className="flex items-center justify-center p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-500 disabled:opacity-40 transition-colors shrink-0"
+                >
+                  <Download size={14} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
