@@ -886,6 +886,66 @@ interface Filters {
 
 const filterOptionLabel = (o: string) => (o === "ALL" ? "Todos" : o === "true" ? "Activo" : o === "false" ? "Inactivo" : o);
 
+/* ── helpers de fecha para el slider de rango ─────────────────────────── */
+const DAY_MS = 86400000;
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+const dateToIdx = (dateStr: string, minStr: string) => Math.round((new Date(dateStr).getTime() - new Date(minStr).getTime()) / DAY_MS);
+const idxToDate = (idx: number, minStr: string) => {
+  const d = new Date(minStr);
+  d.setDate(d.getDate() + idx);
+  return d.toISOString().substring(0, 10);
+};
+const fmtShortDate = (d: string) => new Date(d).toLocaleDateString("es-CO", { day: "2-digit", month: "short" });
+
+/* ── slider de rango de fecha (reemplaza los inputs Desde/Hasta) ──────── */
+function DateRangeSlider({
+  min, max, from, to, onChange,
+}: { min: string; max: string; from: string; to: string; onChange: (from: string, to: string) => void }) {
+  const totalDays = Math.max(1, dateToIdx(max, min));
+  const fromIdx = from ? clamp(dateToIdx(from, min), 0, totalDays) : 0;
+  const toIdx   = to   ? clamp(dateToIdx(to, min), 0, totalDays)   : totalDays;
+
+  function handleFrom(v: number) {
+    const nextFrom = Math.min(v, toIdx);
+    onChange(idxToDate(nextFrom, min), idxToDate(toIdx, min));
+  }
+  function handleTo(v: number) {
+    const nextTo = Math.max(v, fromIdx);
+    onChange(idxToDate(fromIdx, min), idxToDate(nextTo, min));
+  }
+
+  const pctFrom = (fromIdx / totalDays) * 100;
+  const pctTo   = (toIdx / totalDays) * 100;
+
+  return (
+    <div className="flex flex-col gap-1.5 shrink-0 w-48">
+      <div className="flex items-center justify-between gap-2">
+        <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Rango de fecha</label>
+        <span className="text-[10px] text-slate-400 whitespace-nowrap tabular-nums">
+          {fmtShortDate(idxToDate(fromIdx, min))} – {fmtShortDate(idxToDate(toIdx, min))}
+        </span>
+      </div>
+      <div className="dual-range relative h-5 flex items-center">
+        <div className="absolute inset-x-0 h-1 rounded-full bg-white/[0.1]" />
+        <div
+          className="absolute h-1 rounded-full bg-blue-500"
+          style={{ left: `${pctFrom}%`, right: `${100 - pctTo}%` }}
+        />
+        <input
+          type="range" min={0} max={totalDays} value={fromIdx}
+          onChange={(e) => handleFrom(Number(e.target.value))}
+          className="dual-range-input"
+        />
+        <input
+          type="range" min={0} max={totalDays} value={toIdx}
+          onChange={(e) => handleTo(Number(e.target.value))}
+          className="dual-range-input"
+        />
+      </div>
+    </div>
+  );
+}
+
 /* ── dropdown de filtro (fuera de LeadsView para no perder su estado
    "open" en cada re-render del padre, ej. al sincronizar leads) ────────── */
 function FilterSelect({
@@ -1040,6 +1100,18 @@ export default function LeadsView() {
     activo:          ["ALL", "true", "false"],
   }), [leads]);
 
+  /* límites del slider de fecha — del primer lead cargado a hoy */
+  const dateBounds = useMemo(() => {
+    const today = new Date().toISOString().substring(0, 10);
+    if (!leads.length) {
+      const d = new Date();
+      d.setFullYear(d.getFullYear() - 1);
+      return { min: d.toISOString().substring(0, 10), max: today };
+    }
+    const days = leads.map((l) => l.fechaCreacion.substring(0, 10)).filter(Boolean).sort();
+    return { min: days[0], max: days[days.length - 1] > today ? days[days.length - 1] : today };
+  }, [leads]);
+
   /* datos filtrados */
   const filtered = useMemo(() => {
     let data = [...leads];
@@ -1184,8 +1256,8 @@ export default function LeadsView() {
 
         {/* ── barra de filtros (sin panel envolvente) ── */}
         <div>
-          {/* todo en un solo renglón — scroll horizontal si no cabe */}
-          <div className="flex items-end gap-3.5 overflow-x-auto">
+          {/* todo en filas — sin scroll horizontal, se ajusta con wrap */}
+          <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
             <FilterSelect label="Comercial"   value={filters.comercial}     onChange={(v) => setFilters((f) => ({ ...f, comercial: v }))}     options={opts.comercial} />
             <FilterSelect label="Línea"       value={filters.linea}         onChange={(v) => setFilters((f) => ({ ...f, linea: v }))}         options={opts.linea} />
             <FilterSelect label="Etapa Prev." value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} />
@@ -1203,28 +1275,16 @@ export default function LeadsView() {
 
             <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
 
-            {/* rango de fechas agrupado */}
-            <div className="flex items-end gap-2.5 shrink-0">
+            {/* rango de fechas — slider único */}
+            <div className="flex items-end gap-2 shrink-0">
               <Calendar size={14} className="text-slate-500 mb-2.5 shrink-0" />
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Desde</label>
-                <input
-                  type="date"
-                  value={filters.dateFrom}
-                  onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value }))}
-                  className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors w-32"
-                />
-              </div>
-              <span className="text-slate-500 mb-2.5 text-sm leading-none">→</span>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Hasta</label>
-                <input
-                  type="date"
-                  value={filters.dateTo}
-                  onChange={(e) => setFilters((f) => ({ ...f, dateTo: e.target.value }))}
-                  className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors w-32"
-                />
-              </div>
+              <DateRangeSlider
+                min={dateBounds.min}
+                max={dateBounds.max}
+                from={filters.dateFrom}
+                to={filters.dateTo}
+                onChange={(from, to) => setFilters((f) => ({ ...f, dateFrom: from, dateTo: to }))}
+              />
             </div>
 
             <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
@@ -1242,8 +1302,6 @@ export default function LeadsView() {
                 />
               </div>
             </div>
-
-            <div className="flex-1 min-w-2" />
 
             {/* botones de acción */}
             <div className="flex items-end gap-2.5 shrink-0">

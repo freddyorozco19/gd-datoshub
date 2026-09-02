@@ -152,6 +152,42 @@ body {
   color: #0f172a;
 }
 
+/* ── Slider de rango doble (Desde/Hasta fusionados) ─────────────────────────
+   Dos <input type="range"> superpuestos; el track es invisible/no interactivo
+   y solo el thumb captura eventos, permitiendo arrastrar cada uno por separado.
+─────────────────────────────────────────────────────────────────────── */
+.dual-range-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  pointer-events: none;
+}
+.dual-range-input::-webkit-slider-runnable-track { background: transparent; }
+.dual-range-input::-moz-range-track { background: transparent; }
+.dual-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 2px solid #3b82f6;
+  cursor: pointer;
+}
+.dual-range-input::-moz-range-thumb {
+  pointer-events: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 2px solid #3b82f6;
+  cursor: pointer;
+}
+
 /* ── Scrollbar coherente con el sidebar (reacciona al tema) ──────────────── */
 .sidebar-scroll {
   scrollbar-width: thin;                                  /* Firefox */
