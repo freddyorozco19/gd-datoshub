@@ -76,8 +76,8 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
 
   const modal = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-      style={{ backgroundColor: "rgba(7,7,15,0.85)" }}
+      className="dashboard-shell fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+      style={{ backgroundColor: "var(--app-modal-overlay)" }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="bg-white/[0.06] backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
