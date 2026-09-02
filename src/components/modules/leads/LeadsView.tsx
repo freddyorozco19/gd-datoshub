@@ -884,6 +884,91 @@ interface Filters {
   dateTo:          string;
 }
 
+const filterOptionLabel = (o: string) => (o === "ALL" ? "Todos" : o === "true" ? "Activo" : o === "false" ? "Inactivo" : o);
+
+/* ── dropdown de filtro (fuera de LeadsView para no perder su estado
+   "open" en cada re-render del padre, ej. al sincronizar leads) ────────── */
+function FilterSelect({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+}) {
+  const [open, setOpen] = useState(false);
+  const [rect, setRect] = useState<{ top: number; left: number; width: number } | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (
+        btnRef.current && !btnRef.current.contains(e.target as Node) &&
+        panelRef.current && !panelRef.current.contains(e.target as Node)
+      ) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [open]);
+
+  function toggle() {
+    if (!open && btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setRect({ top: r.bottom + 4, left: r.left, width: r.width });
+    }
+    setOpen((o) => !o);
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5 shrink-0 w-32">
+      <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{label}</label>
+      <button
+        type="button"
+        ref={btnRef}
+        onClick={toggle}
+        className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors cursor-pointer w-full flex items-center justify-between gap-1"
+      >
+        <span className="truncate">{filterOptionLabel(value)}</span>
+        <ChevronDown size={12} className={`shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && rect && createPortal(
+        // .dashboard-shell envuelve el panel para que los overrides de tema
+        // claro (que requieren ese ancestro) sigan aplicando fuera del árbol
+        // normal — el portal lo saca de .dashboard-shell hacia document.body.
+        <div className="dashboard-shell">
+          <div
+            ref={panelRef}
+            style={{ position: "fixed", top: rect.top, left: rect.left, width: rect.width }}
+            className="max-h-64 overflow-auto z-50 rounded-lg border border-white/[0.1] bg-white/[0.06] backdrop-blur-xl shadow-2xl shadow-black/40 py-1"
+          >
+            {options.map((o) => (
+              <button
+                key={o}
+                type="button"
+                onClick={() => {
+                  onChange(o);
+                  setOpen(false);
+                }}
+                className={`w-full text-left px-3 py-1.5 text-xs transition-colors ${
+                  o === value ? "bg-blue-500/15 text-blue-300" : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                }`}
+              >
+                {filterOptionLabel(o)}
+              </button>
+            ))}
+          </div>
+        </div>,
+        document.body
+      )}
+    </div>
+  );
+}
+
 /* ── componente principal ────────────────────────────────────────────── */
 export default function LeadsView() {
   const [leads,     setLeads]     = useState<Lead[]>([]);
@@ -1088,18 +1173,6 @@ export default function LeadsView() {
       ? sort.dir === "asc" ? <ChevronUp size={13} /> : <ChevronDown size={13} />
       : <ChevronDown size={13} className="opacity-20" />;
 
-  const Select = ({ label, field, options }: { label: string; field: keyof Filters; options: string[] }) => (
-    <div className="flex flex-col gap-1.5 shrink-0 w-32">
-      <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{label}</label>
-      <select value={filters[field] as string}
-        onChange={(e) => setFilters((f) => ({ ...f, [field]: e.target.value }))}
-        className="text-xs rounded-lg px-2.5 py-2 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors cursor-pointer w-full">
-        {options.map((o) => (
-          <option key={o} value={o} className="bg-[#0e0e1c]">{o === "ALL" ? "Todos" : o === "true" ? "Activo" : o === "false" ? "Inactivo" : o}</option>
-        ))}
-      </select>
-    </div>
-  );
 
   const newCount = newLeadIds.size;
 
@@ -1113,11 +1186,11 @@ export default function LeadsView() {
         <div>
           {/* todo en un solo renglón — scroll horizontal si no cabe */}
           <div className="flex items-end gap-3.5 overflow-x-auto">
-            <Select label="Comercial"     field="comercial"        options={opts.comercial} />
-            <Select label="Línea"         field="linea"            options={opts.linea} />
-            <Select label="Etapa Prev."   field="etapaPreventa"    options={opts.etapaPreventa} />
-            <Select label="Preventa"      field="preventa"         options={opts.preventa} />
-            <Select label="Activo"        field="activo"           options={opts.activo} />
+            <FilterSelect label="Comercial"   value={filters.comercial}     onChange={(v) => setFilters((f) => ({ ...f, comercial: v }))}     options={opts.comercial} />
+            <FilterSelect label="Línea"       value={filters.linea}         onChange={(v) => setFilters((f) => ({ ...f, linea: v }))}         options={opts.linea} />
+            <FilterSelect label="Etapa Prev." value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} />
+            <FilterSelect label="Preventa"    value={filters.preventa}      onChange={(v) => setFilters((f) => ({ ...f, preventa: v }))}      options={opts.preventa} />
+            <FilterSelect label="Activo"      value={filters.activo}        onChange={(v) => setFilters((f) => ({ ...f, activo: v }))}        options={opts.activo} />
 
             {activeFilterCount > 0 && (
               <button
