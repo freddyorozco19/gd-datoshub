@@ -1592,7 +1592,7 @@ export default function LeadsView() {
                             <td className="px-3 py-3 text-slate-300 max-w-[160px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.comercial || "—"}</td>
                             <td className="px-3 py-3 whitespace-nowrap max-w-[180px]">
-                              {lead.linea ? <span className="text-cyan-400 font-medium truncate inline-block max-w-full align-bottom" title={lead.linea}>{lineaLabel(lead.linea)}</span> : <span className="text-slate-600">—</span>}
+                              {lead.linea ? <span className="text-slate-300 truncate inline-block max-w-full align-bottom" title={lead.linea}>{lineaLabel(lead.linea)}</span> : <span className="text-slate-600">—</span>}
                             </td>
                             <td className="px-3 py-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">{lead.id}</td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
@@ -1603,10 +1603,8 @@ export default function LeadsView() {
                             <td className="px-3 py-3">
                               <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-300"}`}>{lead.ganado}</span>
                             </td>
-                            <td className="px-3 py-3 text-center">
-                              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-400"}`}>
-                                {lead.activo ? "Sí" : "No"}
-                              </span>
+                            <td className="px-3 py-3 text-center text-slate-300">
+                              {lead.activo ? "Sí" : "No"}
                             </td>
                             <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.ultimaModificacion || "—"}</td>
                           </tr>
