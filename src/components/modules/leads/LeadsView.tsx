@@ -7,7 +7,7 @@ import {
   Users, AlertCircle,
   CalendarCheck2, ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight, Eye, X, History,
-  ExternalLink, Sparkles, SlidersHorizontal, Calendar,
+  ExternalLink, Sparkles, Calendar,
   Trophy, Activity,
   Paperclip, FileText, FileImage, File,
 } from "lucide-react";
@@ -1109,39 +1109,24 @@ export default function LeadsView() {
 
       <div className="flex-1 overflow-auto p-5 space-y-4 relative">
 
-        {/* ── barra de filtros ── */}
-        <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] overflow-hidden">
-
-          {/* cabecera de filtros */}
-          <div className="flex items-center justify-between px-4 py-3 bg-black/20 backdrop-blur-md border-b border-white/[0.08]">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-blue-500/10 flex items-center justify-center">
-                <SlidersHorizontal size={12} className="text-blue-400" />
-              </div>
-              <span className="text-xs font-semibold text-slate-300">Filtros</span>
-              {activeFilterCount > 0 && (
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 leading-none">
-                  {activeFilterCount}
-                </span>
-              )}
-            </div>
-            {activeFilterCount > 0 && (
-              <button
-                onClick={clearFilters}
-                className="flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-rose-400 transition-colors"
-              >
-                <X size={11} /> Limpiar todo
-              </button>
-            )}
-          </div>
-
+        {/* ── barra de filtros (sin panel envolvente) ── */}
+        <div>
           {/* todo en un solo renglón — scroll horizontal si no cabe */}
-          <div className="px-4 py-4 flex items-end gap-3.5 overflow-x-auto">
+          <div className="flex items-end gap-3.5 overflow-x-auto">
             <Select label="Comercial"     field="comercial"        options={opts.comercial} />
             <Select label="Línea"         field="linea"            options={opts.linea} />
             <Select label="Etapa Prev."   field="etapaPreventa"    options={opts.etapaPreventa} />
             <Select label="Preventa"      field="preventa"         options={opts.preventa} />
             <Select label="Activo"        field="activo"           options={opts.activo} />
+
+            {activeFilterCount > 0 && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-rose-400 transition-colors mb-2.5 shrink-0"
+              >
+                <X size={11} /> Limpiar todo ({activeFilterCount})
+              </button>
+            )}
 
             <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
 
