@@ -35,13 +35,12 @@
   --app-foreground: #0f172a;
   --app-surface: #ffffff;
   --app-border: #e2e8f0;
-  /* Topbar y Sidebar comparten el mismo azul oscuro en modo claro,
-     translúcido para el efecto "liquid glass" (backdrop-filter blur ya
-     aplicado inline en Topbar/Sidebar deja ver el fondo claro difuminado
-     detrás, tintado de azul). */
-  --app-topbar-bg: rgba(11,22,56,0.82);
-  --app-topbar-border: rgba(255,255,255,0.14);
-  --app-sidebar-header-bg: rgba(11,22,56,0.88);
+  /* Topbar y Sidebar comparten el mismo azul rey en modo claro, con
+     suficiente opacidad para que el azul domine (no se vea grisáceo por
+     el difuminado del fondo claro detrás), conservando algo de glass. */
+  --app-topbar-bg: rgba(30,64,209,0.92);
+  --app-topbar-border: rgba(255,255,255,0.16);
+  --app-sidebar-header-bg: rgba(26,56,190,0.95);
   --app-scrollbar-thumb: rgba(15,23,42,0.18);
   --app-scrollbar-thumb-hover: rgba(15,23,42,0.28);
   --app-scrollbar-thumb-strong: rgba(15,23,42,0.15);
