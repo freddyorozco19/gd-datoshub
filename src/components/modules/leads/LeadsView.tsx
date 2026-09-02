@@ -284,7 +284,7 @@ function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalPr
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="modal-panel backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
+        <div className="app-bar modal-header flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div>
             <div className="flex items-center gap-2">
               <h2 className="font-semibold text-slate-100 capitalize">{headerTitle}</h2>
@@ -424,7 +424,7 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
       <div className="modal-panel backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
 
         {/* header */}
-        <div className="flex items-start justify-between px-6 py-5 border-b border-white/[0.07]">
+        <div className="app-bar modal-header flex items-start justify-between px-6 py-5 border-b border-white/[0.07]">
           <div className="flex-1 min-w-0 pr-4">
             <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">ID {lead.id}</p>
             <h2 className="font-semibold text-slate-100 text-base leading-snug" title={lead.nombre}>{lead.nombre}</h2>

@@ -29,6 +29,8 @@
   --app-scrollbar-thumb-strong: rgba(255,255,255,0.10);
   --app-scrollbar-thumb-strong-hover: rgba(255,255,255,0.20);
   --app-modal-overlay: rgba(7,7,15,0.85);
+  --app-modal-header-from: rgba(10,16,38,0.92);
+  --app-modal-header-to: rgba(29,60,150,0.55);
 }
 
 .light {
@@ -49,6 +51,9 @@
   /* overlay claro para que el blur de los paneles de los modales lea un
      fondo claro detrás, en vez del casi-negro del tema oscuro */
   --app-modal-overlay: rgba(100,116,139,0.55);
+  /* degradé azul rey del topbar para el header de los modales */
+  --app-modal-header-from: rgba(2,12,51,0.95);
+  --app-modal-header-to: rgba(30,64,209,0.8);
 }
 
 html, body, input, button, select, textarea {
@@ -165,6 +170,15 @@ body {
 ─────────────────────────────────────────────────────────────────────── */
 .modal-panel { background-color: rgb(255 255 255 / 0.06); }
 .light .dashboard-shell .modal-panel { background-color: rgba(255, 255, 255, 0.94); }
+
+/* header del modal — mismo azul rey del topbar, en degradé y liquid glass.
+   La clase app-bar revierte los textos/bordes translúcidos a su versión
+   clara-sobre-oscuro, igual que en el Topbar/Sidebar. */
+.modal-header {
+  background: linear-gradient(135deg, var(--app-modal-header-from), var(--app-modal-header-to));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
 
 /* ── Slider de rango doble (Desde/Hasta fusionados) ─────────────────────────
    Dos <input type="range"> superpuestos; el track es invisible/no interactivo

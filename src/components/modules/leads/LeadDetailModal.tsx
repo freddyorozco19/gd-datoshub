@@ -83,7 +83,7 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
       <div className="modal-panel backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
 
         {/* header */}
-        <div className="flex items-start justify-between px-6 py-5 border-b border-white/[0.07]">
+        <div className="app-bar modal-header flex items-start justify-between px-6 py-5 border-b border-white/[0.07]">
           <div className="flex-1 min-w-0 pr-4">
             <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">ID {lead.id}</p>
             <h2 className="font-semibold text-slate-100 text-base leading-snug" title={lead.nombre}>{lead.nombre}</h2>
