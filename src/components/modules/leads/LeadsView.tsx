@@ -895,7 +895,7 @@ const idxToDate = (idx: number, minStr: string) => {
   d.setDate(d.getDate() + idx);
   return d.toISOString().substring(0, 10);
 };
-const fmtShortDate = (d: string) => new Date(d).toLocaleDateString("es-CO", { day: "2-digit", month: "short" });
+const fmtShortDate = (d: string) => new Date(d).toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/-/g, "/");
 
 /* ── slider de rango de fecha (reemplaza los inputs Desde/Hasta) ──────── */
 function DateRangeSlider({
