@@ -943,8 +943,8 @@ function FilterSelect({
         <div className="dashboard-shell">
           <div
             ref={panelRef}
-            style={{ position: "fixed", top: rect.top, left: rect.left, width: rect.width }}
-            className="max-h-64 overflow-auto z-50 rounded-lg border border-white/[0.1] bg-white/[0.06] backdrop-blur-xl shadow-2xl shadow-black/40 py-1"
+            style={{ position: "fixed", top: rect.top, left: rect.left, width: rect.width, backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)" }}
+            className="max-h-64 overflow-auto z-50 rounded-lg border border-white/[0.12] bg-white/[0.08] shadow-2xl shadow-black/40 py-1"
           >
             {options.map((o) => (
               <button
