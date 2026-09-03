@@ -896,7 +896,8 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
   }, {});
   const sorted = Object.entries(byLinea).sort((a, b) => b[1] - a[1]);
   const max    = Math.max(...sorted.map(([, v]) => v), 1);
-  const fmtLabel = new Date(selectedDate + "T12:00:00").toLocaleDateString("es-CO", { weekday: "short", day: "numeric", month: "short" });
+  const [y, m, d] = selectedDate.split("-");
+  const fmtLabel = `${d}/${m}/${y}`;
 
   return (
     <div className="w-56 shrink-0 flex flex-col gap-2">
