@@ -45,9 +45,9 @@ function fileTypeIcon(mimetype: string): { icon: typeof File; colors: string } {
 }
 
 const WON_STYLE: Record<string, string> = {
-  Ganado:        "bg-emerald-500/10 text-emerald-400",
-  Perdido:       "bg-rose-500/10 text-rose-400",
-  "En progreso": "bg-blue-500/10 text-blue-400",
+  Ganado:     "bg-emerald-500/10 text-emerald-400",
+  Perdido:    "bg-rose-500/10 text-rose-400",
+  Pendiente:  "bg-blue-500/10 text-blue-400",
 };
 
 const ETAPA_STYLE: Record<string, string> = {

@@ -119,7 +119,7 @@ function normalize(raw: OdooLead): Lead {
         ? "Ganado"
         : raw.won_status === "lost"
         ? "Perdido"
-        : "En progreso",
+        : "Pendiente",
     adjuntos: 0, // se sobreescribe en fetchLeads
   };
 }
