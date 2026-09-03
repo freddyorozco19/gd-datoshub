@@ -1200,7 +1200,7 @@ function FilterSelect({
 
   return (
     <div className="flex flex-col gap-1.5 shrink-0 w-28">
-      <div className="flex items-center gap-1">
+      <div className="flex items-center justify-center gap-1">
         <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{label}</label>
         {headerAction}
       </div>
