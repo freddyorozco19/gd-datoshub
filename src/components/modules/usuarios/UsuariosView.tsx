@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   Users, Shield, User as UserIcon, Loader2, AlertCircle, RefreshCw, Clock,
   History, Globe, Monitor, CheckCircle2, XCircle, UserPlus, X, Mail, Trash2, KeyRound,
+  ChevronDown,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 
@@ -534,6 +536,82 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
   );
 }
 
+/* ── select con panel liquid glass (reemplaza el <select> nativo, cuyas
+   <option> no pueden recibir backdrop-filter) ────────────────────────── */
+function LiquidSelect({
+  value, options, onChange, disabled, title,
+}: {
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (v: string) => void;
+  disabled?: boolean;
+  title?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [rect, setRect] = useState<{ top: number; left: number; width: number } | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (
+        btnRef.current && !btnRef.current.contains(e.target as Node) &&
+        panelRef.current && !panelRef.current.contains(e.target as Node)
+      ) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [open]);
+
+  function toggle() {
+    if (disabled) return;
+    if (!open && btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setRect({ top: r.bottom + 4, left: r.left, width: r.width });
+    }
+    setOpen((o) => !o);
+  }
+
+  const current = options.find((o) => o.value === value);
+
+  return (
+    <div className="relative shrink-0">
+      <button
+        type="button" ref={btnRef} onClick={toggle} disabled={disabled} title={title}
+        className="px-2.5 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs text-slate-300 hover:border-white/[0.16] focus:outline-none focus:border-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer flex items-center gap-1.5 min-w-[110px] justify-between"
+      >
+        <span className="truncate">{current?.label ?? value}</span>
+        <ChevronDown size={12} className={`shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open && rect && createPortal(
+        <div className="dashboard-shell">
+          <div
+            ref={panelRef}
+            style={{ position: "fixed", top: rect.top, left: rect.left, width: Math.max(rect.width, 140), backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)" }}
+            className="modal-panel max-h-64 overflow-auto z-50 rounded-lg border border-white/[0.12] shadow-2xl shadow-black/40 py-1"
+          >
+            {options.map((o) => (
+              <button
+                key={o.value}
+                type="button"
+                onClick={() => { onChange(o.value); setOpen(false); }}
+                className={`w-full text-left px-3 py-1.5 text-xs transition-colors ${
+                  o.value === value ? "filter-option-selected" : "filter-option text-slate-300"
+                }`}
+              >
+                {o.label}
+              </button>
+            ))}
+          </div>
+        </div>,
+        document.body,
+      )}
+    </div>
+  );
+}
+
 function UsuariosPanel() {
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -707,26 +785,26 @@ function UsuariosPanel() {
                   <td className="px-4 py-3 text-slate-600 text-xs whitespace-nowrap">{fmtDate(u.createdAt)}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <select
+                      <LiquidSelect
                         value={u.role}
                         disabled={savingId === u.id || u.isSelf}
-                        onChange={(e) => changeRole(u, e.target.value as "admin" | "user")}
+                        onChange={(v) => changeRole(u, v as "admin" | "user")}
                         title={u.isSelf ? "No puedes cambiar tu propio rol" : "Cambiar rol"}
-                        className="px-2.5 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs text-slate-300 focus:outline-none focus:border-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <option value="user">Usuario</option>
-                        <option value="admin">Administrador</option>
-                      </select>
-                      <select
+                        options={[
+                          { value: "user", label: "Usuario" },
+                          { value: "admin", label: "Administrador" },
+                        ]}
+                      />
+                      <LiquidSelect
                         value={u.area ?? ""}
                         disabled={savingId === u.id}
-                        onChange={(e) => changeArea(u, e.target.value ? (e.target.value as Area) : null)}
+                        onChange={(v) => changeArea(u, v ? (v as Area) : null)}
                         title="Asignar área"
-                        className="px-2.5 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs text-slate-300 focus:outline-none focus:border-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <option value="">Sin área</option>
-                        {AREAS.map((a) => <option key={a} value={a}>{a}</option>)}
-                      </select>
+                        options={[
+                          { value: "", label: "Sin área" },
+                          ...AREAS.map((a) => ({ value: a, label: a })),
+                        ]}
+                      />
                       {savingId === u.id && <Loader2 size={14} className="animate-spin text-slate-500" />}
                       <button
                         onClick={() => setResettingUser(u)}
