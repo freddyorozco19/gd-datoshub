@@ -5,6 +5,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SERVICE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 const ROLES = new Set(["admin", "user"]);
+const AREAS = new Set(["TI", "DATOS", "PREVENTA", "CALIDAD"]);
 
 /** Llama a la API admin de GoTrue con la service-role key (solo server). */
 function adminFetch(path: string, init?: RequestInit) {
@@ -35,7 +36,7 @@ function authFetch(path: string, init?: RequestInit) {
 interface GoTrueUser {
   id: string;
   email?: string;
-  app_metadata?: { role?: string };
+  app_metadata?: { role?: string; area?: string | null };
   last_sign_in_at?: string | null;
   created_at?: string;
 }
@@ -56,6 +57,7 @@ export async function GET() {
     id:    u.id,
     email: u.email ?? "",
     role:  u.app_metadata?.role === "admin" ? "admin" : "user",
+    area:  u.app_metadata?.area && AREAS.has(u.app_metadata.area) ? u.app_metadata.area : null,
     lastSignInAt: u.last_sign_in_at ?? null,
     createdAt:    u.created_at ?? null,
     isSelf: u.id === admin.id,
@@ -118,42 +120,63 @@ export async function POST(req: NextRequest) {
   }, { status: 201 });
 }
 
-/** PATCH — cambia el rol de un usuario (solo admin). */
+/** PATCH — cambia el rol y/o el área de un usuario (solo admin). */
 export async function PATCH(req: NextRequest) {
   const admin = await requireAdmin();
   if (!admin) {
     return Response.json({ error: "Acceso restringido a administradores." }, { status: 403 });
   }
 
-  let body: { id?: string; role?: string };
+  let body: { id?: string; role?: string; area?: string | null };
   try {
     body = await req.json();
   } catch {
     return Response.json({ error: "Cuerpo JSON inválido." }, { status: 400 });
   }
 
-  const { id, role } = body;
-  if (!id || !role || !ROLES.has(role)) {
-    return Response.json({ error: "Parámetros inválidos (id y role: 'admin'|'user')." }, { status: 400 });
+  const { id, role, area } = body;
+  if (!id || (role === undefined && area === undefined)) {
+    return Response.json({ error: "Parámetros inválidos (id y al menos role o area)." }, { status: 400 });
+  }
+  if (role !== undefined && !ROLES.has(role)) {
+    return Response.json({ error: "Rol inválido." }, { status: 400 });
+  }
+  if (area !== undefined && area !== null && !AREAS.has(area)) {
+    return Response.json({ error: "Área inválida." }, { status: 400 });
   }
 
   // Evita que el admin se quite a sí mismo el rol y se bloquee fuera.
-  if (id === admin.id && role !== "admin") {
+  if (id === admin.id && role !== undefined && role !== "admin") {
     return Response.json({ error: "No puedes quitarte el rol de administrador a ti mismo." }, { status: 409 });
   }
 
+  // El PUT de GoTrue reemplaza app_metadata por completo, así que se fusiona
+  // con lo existente (rol/área) para no perder el campo que no se está editando.
+  const currentRes = await adminFetch(`/users/${id}`);
+  if (!currentRes.ok) {
+    return Response.json({ error: "No se pudo cargar el usuario." }, { status: 502 });
+  }
+  const current = (await currentRes.json()) as GoTrueUser;
+
+  const nextMetadata = {
+    ...current.app_metadata,
+    ...(role !== undefined ? { role } : {}),
+    ...(area !== undefined ? { area } : {}),
+  };
+
   const res = await adminFetch(`/users/${id}`, {
     method: "PUT",
-    body: JSON.stringify({ app_metadata: { role } }),
+    body: JSON.stringify({ app_metadata: nextMetadata }),
   });
   if (!res.ok) {
-    return Response.json({ error: "No se pudo actualizar el rol." }, { status: 502 });
+    return Response.json({ error: "No se pudo actualizar el usuario." }, { status: 502 });
   }
   const u = (await res.json()) as GoTrueUser;
   return Response.json({
     id: u.id,
     email: u.email ?? "",
     role: u.app_metadata?.role === "admin" ? "admin" : "user",
+    area: u.app_metadata?.area && AREAS.has(u.app_metadata.area) ? u.app_metadata.area : null,
   });
 }
 

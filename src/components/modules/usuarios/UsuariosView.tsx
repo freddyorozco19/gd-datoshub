@@ -7,10 +7,14 @@ import {
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 
+const AREAS = ["TI", "DATOS", "PREVENTA", "CALIDAD"] as const;
+type Area = typeof AREAS[number];
+
 interface UserRow {
   id: string;
   email: string;
   role: "admin" | "user";
+  area: Area | null;
   lastSignInAt: string | null;
   createdAt: string | null;
   isSelf: boolean;
@@ -574,6 +578,25 @@ function UsuariosPanel() {
     }
   }
 
+  async function changeArea(u: UserRow, area: Area | null) {
+    if (area === u.area) return;
+    setSavingId(u.id); setError(null);
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: u.id, area }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
+      setUsers((prev) => prev.map((x) => (x.id === u.id ? { ...x, area } : x)));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo actualizar el área.");
+    } finally {
+      setSavingId(null);
+    }
+  }
+
 
   const admins = users.filter((u) => u.role === "admin").length;
 
@@ -642,14 +665,14 @@ function UsuariosPanel() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
-                {["Usuario", "Rol", "Último ingreso", "Creado", "Acción"].map((h) => (
+                {["Usuario", "Rol", "Área", "Último ingreso", "Creado", "Acción"].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.04]">
               {loading && (
-                <tr><td colSpan={5} className="px-4 py-12 text-center text-slate-500">
+                <tr><td colSpan={6} className="px-4 py-12 text-center text-slate-500">
                   <Loader2 size={20} className="animate-spin inline" /> <span className="ml-2 align-middle">Cargando usuarios…</span>
                 </td></tr>
               )}
@@ -671,6 +694,13 @@ function UsuariosPanel() {
                       {u.role === "admin" ? "Administrador" : "Usuario"}
                     </span>
                   </td>
+                  <td className="px-4 py-3">
+                    {u.area ? (
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">{u.area}</span>
+                    ) : (
+                      <span className="text-xs text-slate-600">Sin área</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">
                     <span className="flex items-center gap-1"><Clock size={12} /> {fmtDate(u.lastSignInAt)}</span>
                   </td>
@@ -686,6 +716,16 @@ function UsuariosPanel() {
                       >
                         <option value="user">Usuario</option>
                         <option value="admin">Administrador</option>
+                      </select>
+                      <select
+                        value={u.area ?? ""}
+                        disabled={savingId === u.id}
+                        onChange={(e) => changeArea(u, e.target.value ? (e.target.value as Area) : null)}
+                        title="Asignar área"
+                        className="px-2.5 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs text-slate-300 focus:outline-none focus:border-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <option value="">Sin área</option>
+                        {AREAS.map((a) => <option key={a} value={a}>{a}</option>)}
                       </select>
                       {savingId === u.id && <Loader2 size={14} className="animate-spin text-slate-500" />}
                       <button
@@ -708,7 +748,7 @@ function UsuariosPanel() {
                 </tr>
               ))}
               {!loading && users.length === 0 && !error && (
-                <tr><td colSpan={5} className="px-4 py-12 text-center text-sm text-slate-500">No hay usuarios.</td></tr>
+                <tr><td colSpan={6} className="px-4 py-12 text-center text-sm text-slate-500">No hay usuarios.</td></tr>
               )}
             </tbody>
           </table>
