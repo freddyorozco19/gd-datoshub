@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
-  Users, Shield, User as UserIcon, Loader2, AlertCircle, RefreshCw, Clock,
+  Users, Shield, User as UserIcon, Loader2, AlertCircle, RefreshCw,
   History, Globe, Monitor, CheckCircle2, XCircle, UserPlus, X, Mail, Trash2, KeyRound,
   ChevronDown,
 } from "lucide-react";
@@ -779,15 +779,9 @@ function UsuariosPanel() {
                       {u.role === "admin" ? "Administrador" : "Usuario"}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    {u.area ? (
-                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">{u.area}</span>
-                    ) : (
-                      <span className="text-xs text-slate-600">Sin área</span>
-                    )}
-                  </td>
+                  <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{u.area ?? "Sin área"}</td>
                   <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">
-                    <span className="flex items-center gap-1"><Clock size={12} /> {fmtDate(u.lastSignInAt)}</span>
+                    {fmtDate(u.lastSignInAt)}
                   </td>
                   <td className="px-4 py-3 text-slate-600 text-xs whitespace-nowrap">{fmtDate(u.createdAt)}</td>
                   <td className="px-4 py-3">
