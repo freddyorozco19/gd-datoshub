@@ -6,7 +6,7 @@ import {
   RefreshCw, Search, Download, ChevronUp, ChevronDown,
   Users, AlertCircle,
   ChevronLeft, ChevronRight,
-  ChevronsLeft, ChevronsRight, Eye, X, History,
+  ChevronsLeft, ChevronsRight, X, History,
   ExternalLink, Sparkles, Calendar,
   Trophy, Activity, Maximize2,
   Paperclip, FileText, FileImage, File,
@@ -871,6 +871,14 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
   const [selectedDate, setSelectedDate] = useState<string>(todayGMT5);
   const [modal, setModal] = useState<{ leads: Lead[]; heading?: string } | null>(null);
   const isToday = selectedDate === todayGMT5();
+  const dateInputRef = useRef<HTMLInputElement>(null);
+
+  function openDatePicker() {
+    const el = dateInputRef.current;
+    if (!el) return;
+    if ("showPicker" in el) (el as HTMLInputElement & { showPicker: () => void }).showPicker();
+    else el.focus();
+  }
 
   function shiftDay(delta: number) {
     const d = new Date(selectedDate + "T12:00:00");
@@ -897,21 +905,29 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
 
         <div className="relative flex items-center gap-1 mb-3">
           <button onClick={() => shiftDay(-1)} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 transition-colors shrink-0"><ChevronLeft size={14} /></button>
-          <input type="date" value={selectedDate} max={todayGMT5()}
+          <button type="button" onClick={openDatePicker} title="Elegir fecha"
+            className="flex-1 flex items-center justify-center p-1.5 rounded-lg border border-white/[0.1] bg-white/[0.04] hover:border-white/[0.18] text-slate-400 hover:text-slate-200 transition-colors">
+            <Calendar size={14} />
+          </button>
+          <input ref={dateInputRef} type="date" value={selectedDate} max={todayGMT5()}
             onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
-            className="flex-1 min-w-0 text-xs border border-white/[0.1] rounded-lg px-2 py-1.5 text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/[0.04] backdrop-blur-md" />
+            tabIndex={-1} className="sr-only" />
           <button onClick={() => shiftDay(1)} disabled={isToday}
             className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 disabled:opacity-30 transition-colors shrink-0"><ChevronRight size={14} /></button>
         </div>
 
-        <div className="relative flex items-end justify-between mb-1">
+        <div className="relative mb-1">
           <span className="text-4xl font-bold text-slate-100 leading-none">{dayLeads.length}</span>
-          <button onClick={() => setModal({ leads: dayLeads })} disabled={dayLeads.length === 0} title="Ver tabla de leads"
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-blue-400 disabled:opacity-30 transition-colors">
-            <Eye size={15} />
-          </button>
         </div>
-        <p className="relative text-xs text-slate-400 mb-4 capitalize">{fmtLabel}</p>
+        <button
+          type="button"
+          onClick={() => setModal({ leads: dayLeads })}
+          disabled={dayLeads.length === 0}
+          title="Ver tabla de leads"
+          className="relative text-xs text-slate-400 hover:text-blue-400 mb-4 capitalize disabled:cursor-default disabled:hover:text-slate-400 transition-colors"
+        >
+          {fmtLabel}
+        </button>
 
         {sorted.length === 0 ? (
           <p className="text-xs text-slate-400 text-center py-4">Sin leads en esta fecha</p>
