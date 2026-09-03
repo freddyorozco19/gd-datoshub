@@ -1557,7 +1557,7 @@ export default function LeadsView() {
                             ["fechaCreacion",      "Fecha Creación"],
                             ["ingresosEsperados",  "Ingresos Esp."],
                             ["cierreEsperado",     "Cierre Esp."],
-                            ["ganado",             "Estado"],
+                            ["etapa",              "Etapa Actual"],
                             ["activo",             "Activo"],
                             ["ultimaModificacion", "Actualizado"],
                           ] as [SortKey, string][]
@@ -1601,7 +1601,7 @@ export default function LeadsView() {
                             <td className="px-3 py-3 text-right font-semibold text-white whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
                             <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
                             <td className="px-3 py-3">
-                              <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-300"}`}>{lead.ganado}</span>
+                              <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-300"}`}>{lead.etapa || "—"}</span>
                             </td>
                             <td className="px-3 py-3 text-center text-slate-300">
                               {lead.activo ? "Sí" : "No"}
