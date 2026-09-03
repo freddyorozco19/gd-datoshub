@@ -33,8 +33,15 @@ interface AccessEvent {
   status: string;
 }
 
-const fmtDate = (s: string | null): string =>
-  s ? new Date(s).toLocaleString("es-CO", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "nunca";
+const fmtDate = (s: string | null): string => {
+  if (!s) return "nunca";
+  const d = new Date(s);
+  const dd  = String(d.getDate()).padStart(2, "0");
+  const mm  = String(d.getMonth() + 1).padStart(2, "0");
+  const hh  = String(d.getHours()).padStart(2, "0");
+  const min = String(d.getMinutes()).padStart(2, "0");
+  return `${dd}/${mm}/${d.getFullYear()} ${hh}:${min}`;
+};
 
 const fmtDateTime = (s: string): string =>
   new Date(s).toLocaleString("es-CO", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" });
