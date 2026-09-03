@@ -8,7 +8,7 @@ import {
   CalendarCheck2, ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight, Eye, X, History,
   ExternalLink, Sparkles, Calendar,
-  Trophy, Activity,
+  Trophy, Activity, Maximize2,
   Paperclip, FileText, FileImage, File,
 } from "lucide-react";
 import type { Lead, OdooAttachment } from "@/lib/odoo/types";
@@ -678,6 +678,7 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
 function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   const [sortBy, setSortBy] = useState<"leads" | "ganados" | "ingresos">("leads");
   const [selectedComercial, setSelectedComercial] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
   const comercialLeads = useMemo(
     () => {
@@ -689,7 +690,7 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
     [leads, selectedComercial, sortBy]
   );
 
-  const ranking = useMemo(() => {
+  const fullRanking = useMemo(() => {
     const map: Record<string, { leads: number; ganados: number; ingresos: number }> = {};
     leads.forEach((l) => {
       const k = l.comercial || "Sin asignar";
@@ -700,11 +701,13 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
     });
     return Object.entries(map)
       .map(([name, stats]) => ({ name, ...stats }))
-      .sort((a, b) => b[sortBy] - a[sortBy])
-      .slice(0, 7);
+      .sort((a, b) => b[sortBy] - a[sortBy]);
   }, [leads, sortBy]);
 
+  const ranking = useMemo(() => fullRanking.slice(0, 7), [fullRanking]);
+
   const maxVal = Math.max(...ranking.map((r) => r[sortBy]), 1);
+  const maxValFull = Math.max(...fullRanking.map((r) => r[sortBy]), 1);
 
   function fmt(r: typeof ranking[0]) {
     if (sortBy === "ingresos")
@@ -721,6 +724,14 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
           <Users size={15} className="text-violet-400" />
         </div>
         <span className="text-sm font-semibold text-slate-200 flex-1">Ranking</span>
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          title="Ver ranking completo"
+          className="p-1 rounded-lg text-slate-500 hover:text-violet-400 hover:bg-white/[0.06] transition-colors"
+        >
+          <Maximize2 size={13} />
+        </button>
       </div>
 
       {/* tabs de ordenamiento */}
@@ -772,6 +783,71 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
           title={selectedComercial}
           onClose={() => setSelectedComercial(null)}
         />
+      )}
+
+      {expanded && createPortal(
+        <div
+          className="dashboard-shell fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+          style={{ backgroundColor: "var(--app-modal-overlay)" }}
+          onClick={(e) => { if (e.target === e.currentTarget) setExpanded(false); }}
+        >
+          <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 w-full max-w-md max-h-[85vh] flex flex-col overflow-hidden">
+            <div className="app-bar modal-header flex items-center justify-between px-5 py-4 border-b border-white/[0.07]">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-white/[0.12] shrink-0"><Users size={15} /></div>
+                <h2 className="font-semibold text-base text-white">Ranking completo</h2>
+              </div>
+              <button onClick={() => setExpanded(false)} className="p-2 rounded-lg text-slate-300 hover:bg-white/[0.1] hover:text-white transition-colors">
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="overflow-y-auto flex-1 px-5 py-4">
+              <div className="flex gap-1 mb-4">
+                {(["leads", "ganados", "ingresos"] as const).map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => setSortBy(key)}
+                    className={`flex-1 text-[11px] font-semibold py-1.5 rounded-lg border transition-all duration-150 capitalize ${
+                      sortBy === key
+                        ? "bg-violet-500/10 text-violet-400 border-violet-500/20"
+                        : "text-slate-500 bg-white/[0.03] border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.05]"
+                    }`}
+                  >
+                    {key}
+                  </button>
+                ))}
+              </div>
+
+              <div className="space-y-3">
+                {fullRanking.map((r, i) => (
+                  <button
+                    key={r.name}
+                    type="button"
+                    onClick={() => { setSelectedComercial(r.name); setExpanded(false); }}
+                    title={`Ver leads de ${r.name}`}
+                    className="w-full text-left rounded-lg px-2 py-1.5 -mx-2 hover:bg-violet-500/10 transition-colors group focus:outline-none"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-5 text-center shrink-0 text-xs font-bold text-slate-400">{i + 1}</span>
+                        <span className="text-sm text-slate-200 truncate group-hover:text-violet-400 transition-colors" title={r.name}>{r.name}</span>
+                      </div>
+                      <span className="text-xs font-bold text-slate-500 shrink-0 ml-2">{fmt(r)}</span>
+                    </div>
+                    <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden ml-7">
+                      <div
+                        className="h-full bg-violet-500 rounded-full transition-all duration-500"
+                        style={{ width: `${Math.round((r[sortBy] / maxValFull) * 100)}%` }}
+                      />
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
