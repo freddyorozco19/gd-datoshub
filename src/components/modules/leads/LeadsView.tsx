@@ -162,13 +162,17 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
   const DAY_LABELS = ["L", "", "X", "", "V", "", "D"];
 
   return (
-    <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-4">
-      <div className="mb-3">
+    <div className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden">
+      {/* sheen superior, efecto de cristal */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+      <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+
+      <div className="relative mb-3">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <div className="p-1.5 rounded-lg bg-emerald-500/10 shrink-0">
+          <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 shrink-0">
             <Activity size={15} className="text-emerald-400" />
           </div>
-          <span className="text-sm font-semibold text-slate-200 uppercase tracking-wide">Actividad de leads</span>
+          <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Actividad de leads</span>
         </div>
         <div className="flex items-center justify-center gap-1.5">
           <span className="text-[10px] text-slate-400">Menos</span>
@@ -718,12 +722,16 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   }
 
   return (
-    <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <div className="p-1.5 rounded-lg bg-violet-500/10 shrink-0">
+    <div className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden">
+      {/* sheen superior, efecto de cristal */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+      <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
+
+      <div className="relative flex items-center gap-2 mb-3">
+        <div className="p-1.5 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0">
           <Users size={15} className="text-violet-400" />
         </div>
-        <span className="text-sm font-semibold text-slate-200 flex-1">Ranking</span>
+        <span className="text-sm font-semibold text-slate-100 flex-1">Ranking</span>
         <button
           type="button"
           onClick={() => setExpanded(true)}
@@ -882,10 +890,14 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
   return (
     <div className="w-56 shrink-0 flex flex-col gap-2">
       <LeadHeatmap leads={leads} />
-      <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="p-1.5 rounded-lg bg-blue-500/10 shrink-0"><CalendarCheck2 size={15} className="text-blue-400" /></div>
-          <span className="text-sm font-semibold text-slate-200 flex-1">Leads por día</span>
+      <div className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden">
+        {/* sheen superior, efecto de cristal */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+        <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
+
+        <div className="relative flex items-center gap-2 mb-3">
+          <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 shrink-0"><CalendarCheck2 size={15} className="text-blue-400" /></div>
+          <span className="text-sm font-semibold text-slate-100 flex-1">Leads por día</span>
           <button onClick={() => setModal({ leads: dayLeads })} disabled={dayLeads.length === 0} title="Ver tabla de leads"
             className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-blue-400 disabled:opacity-30 transition-colors">
             <Eye size={15} />
