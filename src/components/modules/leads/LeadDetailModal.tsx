@@ -109,7 +109,7 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
 
         {/* body */}
         <div className="overflow-y-auto flex-1 px-6 py-5 space-y-6">
-          <section>
+          <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Cliente & Contacto</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Cliente"          value={lead.cliente} />
@@ -121,7 +121,7 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
             </div>
           </section>
 
-          <section>
+          <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Oportunidad</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Tipo de Oportunidad" value={lead.tipoOportunidad} />
@@ -133,7 +133,7 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
             </div>
           </section>
 
-          <section>
+          <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Financiero</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Ingresos Esperados" value={lead.ingresosEsperados ? COP(lead.ingresosEsperados) : null} />
@@ -144,7 +144,7 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
           </section>
 
           {(lead.alcance || lead.objeto) && (
-            <section>
+            <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
               <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Alcance & Objeto</h3>
               <div className="space-y-3">
                 {lead.alcance && <div><p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Alcance</p><p className="text-xs text-slate-200 leading-relaxed">{lead.alcance}</p></div>}
@@ -153,7 +153,7 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
             </section>
           )}
 
-          <section>
+          <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Fechas</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Fecha Creación"        value={lead.fechaCreacion       ? lead.fechaCreacion.substring(0, 10)  : null} />
@@ -165,7 +165,7 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
           </section>
 
           {lead.adjuntos > 0 && (
-            <section>
+            <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
               <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
                 <Paperclip size={10} /> Adjuntos · {lead.adjuntos}
               </h3>
