@@ -1166,12 +1166,14 @@ function FilterSelect({
   onChange,
   options,
   headerAction,
+  widthClass = "w-28",
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: string[];
   headerAction?: ReactNode;
+  widthClass?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [rect, setRect] = useState<{ top: number; left: number; width: number } | null>(null);
@@ -1199,7 +1201,7 @@ function FilterSelect({
   }
 
   return (
-    <div className="flex flex-col gap-1.5 shrink-0 w-28">
+    <div className={`flex flex-col gap-1.5 shrink-0 ${widthClass}`}>
       <div className="flex items-center justify-center gap-1">
         <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{label}</label>
         {headerAction}
@@ -1475,7 +1477,7 @@ export default function LeadsView() {
           <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
             <FilterSelect label="Comercial"   value={filters.comercial}     onChange={(v) => setFilters((f) => ({ ...f, comercial: v }))}     options={opts.comercial} />
             <FilterSelect label="Línea"       value={filters.linea}         onChange={(v) => setFilters((f) => ({ ...f, linea: v }))}         options={opts.linea} />
-            <FilterSelect label="Etapa Prev." value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} />
+            <FilterSelect label="Etapa Preventa" value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} widthClass="w-36" />
             <FilterSelect label="Preventa"    value={filters.preventa}      onChange={(v) => setFilters((f) => ({ ...f, preventa: v }))}      options={opts.preventa} />
             <FilterSelect
               label="Etapa Actual" value={filters.etapa}
@@ -1508,7 +1510,7 @@ export default function LeadsView() {
 
             {/* búsqueda + acciones */}
             <div className="flex flex-col gap-1.5 shrink-0">
-              <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Buscar</label>
+              <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap text-center">Buscar</label>
               <div className="flex items-center gap-2">
                 <div className="relative">
                   <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
