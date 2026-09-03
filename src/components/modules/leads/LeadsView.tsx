@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import {
   RefreshCw, Search, Download, ChevronUp, ChevronDown,
   Users, AlertCircle,
-  CalendarCheck2, ChevronLeft, ChevronRight,
+  ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight, Eye, X, History,
   ExternalLink, Sparkles, Calendar,
   Trophy, Activity, Maximize2,
@@ -895,16 +895,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
         <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
-        <div className="relative flex items-center gap-2 mb-3">
-          <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 shrink-0"><CalendarCheck2 size={15} className="text-blue-400" /></div>
-          <span className="text-sm font-semibold text-slate-100 flex-1">Leads por día</span>
-          <button onClick={() => setModal({ leads: dayLeads })} disabled={dayLeads.length === 0} title="Ver tabla de leads"
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-blue-400 disabled:opacity-30 transition-colors">
-            <Eye size={15} />
-          </button>
-        </div>
-
-        <div className="flex items-center gap-1 mb-1">
+        <div className="relative flex items-center gap-1 mb-3">
           <button onClick={() => shiftDay(-1)} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 transition-colors shrink-0"><ChevronLeft size={14} /></button>
           <input type="date" value={selectedDate} max={todayGMT5()}
             onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
@@ -913,10 +904,14 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
             className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 disabled:opacity-30 transition-colors shrink-0"><ChevronRight size={14} /></button>
         </div>
 
-        <div className="flex items-end gap-1.5 mb-4">
+        <div className="relative flex items-end justify-between mb-1">
           <span className="text-4xl font-bold text-slate-100 leading-none">{dayLeads.length}</span>
-          <span className="text-xs text-slate-400 mb-1">leads</span>
+          <button onClick={() => setModal({ leads: dayLeads })} disabled={dayLeads.length === 0} title="Ver tabla de leads"
+            className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-blue-400 disabled:opacity-30 transition-colors">
+            <Eye size={15} />
+          </button>
         </div>
+        <p className="relative text-xs text-slate-400 mb-4 capitalize">{fmtLabel}</p>
 
         {sorted.length === 0 ? (
           <p className="text-xs text-slate-400 text-center py-4">Sin leads en esta fecha</p>
