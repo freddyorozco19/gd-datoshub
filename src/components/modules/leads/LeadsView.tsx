@@ -876,8 +876,11 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
   function openDatePicker() {
     const el = dateInputRef.current;
     if (!el) return;
-    if ("showPicker" in el) (el as HTMLInputElement & { showPicker: () => void }).showPicker();
-    else el.focus();
+    try {
+      el.showPicker();
+    } catch {
+      el.focus();
+    }
   }
 
   function shiftDay(delta: number) {
