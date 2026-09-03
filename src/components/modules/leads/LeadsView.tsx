@@ -1558,6 +1558,7 @@ export default function LeadsView() {
                             ["ingresosEsperados",  "Ingresos Esp."],
                             ["cierreEsperado",     "Cierre Esp."],
                             ["etapa",              "Etapa Actual"],
+                            ["ganado",             "Ganado"],
                             ["activo",             "Activo"],
                             ["ultimaModificacion", "Actualizado"],
                           ] as [SortKey, string][]
@@ -1575,7 +1576,7 @@ export default function LeadsView() {
                     <tbody ref={scrollBodyRef}>
                       {filtered.length === 0 ? (
                         <tr>
-                          <td colSpan={11} className="px-4 py-12 text-center text-slate-400 text-sm">
+                          <td colSpan={12} className="px-4 py-12 text-center text-slate-400 text-sm">
                             Sin leads con los filtros aplicados
                           </td>
                         </tr>
@@ -1602,6 +1603,9 @@ export default function LeadsView() {
                             <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
                             <td className="px-3 py-3">
                               <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-300"}`}>{lead.etapa || "—"}</span>
+                            </td>
+                            <td className="px-3 py-3">
+                              <span className={`px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-300"}`}>{lead.ganado || "—"}</span>
                             </td>
                             <td className="px-3 py-3 text-center text-slate-300">
                               {lead.activo ? "Sí" : "No"}
