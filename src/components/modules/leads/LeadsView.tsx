@@ -861,8 +861,6 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
       <RecentLeadsWidget leads={leads} />
       <ComercialRankingWidget leads={leads} />
 
-      <p className="text-xs text-slate-400 text-center leading-relaxed px-1">Por fecha de creación · todos los registros</p>
-
       {modal && <DayLeadsModal leads={modal.leads} date={selectedDate} heading={modal.heading} onClose={() => setModal(null)} />}
     </div>
   );
@@ -1686,7 +1684,7 @@ export default function LeadsView() {
               </div>
             </div>
 
-            <TodayLeadsWidget leads={leads} />
+            <TodayLeadsWidget leads={filtered} />
           </div>
         )}
       </div>
