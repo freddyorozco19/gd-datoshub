@@ -172,7 +172,7 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
           <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 shrink-0">
             <Activity size={15} className="text-emerald-400" />
           </div>
-          <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Actividad de leads</span>
+          <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Actividad leads</span>
         </div>
         <div className="flex items-center justify-center gap-1.5">
           <span className="text-[10px] text-slate-400">Menos</span>
