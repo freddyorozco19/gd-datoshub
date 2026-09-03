@@ -1223,7 +1223,7 @@ export default function LeadsView() {
     linea:           unique(leads.map((l) => l.linea)),
     etapaPreventa:   unique(leads.map((l) => l.etapaPreventa)),
     preventa:        unique(leads.map((l) => l.preventa)),
-    activo:          ["ALL", "true", "false"],
+    etapa:           unique(leads.map((l) => l.etapa)),
   }), [leads]);
 
   /* límites del slider de fecha — del primer lead cargado a hoy */
@@ -1386,7 +1386,7 @@ export default function LeadsView() {
             <FilterSelect label="Línea"       value={filters.linea}         onChange={(v) => setFilters((f) => ({ ...f, linea: v }))}         options={opts.linea} />
             <FilterSelect label="Etapa Prev." value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} />
             <FilterSelect label="Preventa"    value={filters.preventa}      onChange={(v) => setFilters((f) => ({ ...f, preventa: v }))}      options={opts.preventa} />
-            <FilterSelect label="Activo"      value={filters.activo}        onChange={(v) => setFilters((f) => ({ ...f, activo: v }))}        options={opts.activo} />
+            <FilterSelect label="Etapa Actual" value={filters.etapa}        onChange={(v) => setFilters((f) => ({ ...f, etapa: v }))}         options={opts.etapa} />
 
             {activeFilterCount > 0 && (
               <button
