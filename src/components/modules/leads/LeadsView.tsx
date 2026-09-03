@@ -1079,11 +1079,13 @@ function FilterSelect({
   value,
   onChange,
   options,
+  headerAction,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: string[];
+  headerAction?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const [rect, setRect] = useState<{ top: number; left: number; width: number } | null>(null);
@@ -1112,7 +1114,10 @@ function FilterSelect({
 
   return (
     <div className="flex flex-col gap-1.5 shrink-0 w-28">
-      <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{label}</label>
+      <div className="flex items-center gap-1">
+        <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{label}</label>
+        {headerAction}
+      </div>
       <button
         type="button"
         ref={btnRef}
@@ -1386,17 +1391,21 @@ export default function LeadsView() {
             <FilterSelect label="Línea"       value={filters.linea}         onChange={(v) => setFilters((f) => ({ ...f, linea: v }))}         options={opts.linea} />
             <FilterSelect label="Etapa Prev." value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} />
             <FilterSelect label="Preventa"    value={filters.preventa}      onChange={(v) => setFilters((f) => ({ ...f, preventa: v }))}      options={opts.preventa} />
-            <FilterSelect label="Etapa Actual" value={filters.etapa}        onChange={(v) => setFilters((f) => ({ ...f, etapa: v }))}         options={opts.etapa} />
-
-            {activeFilterCount > 0 && (
-              <button
-                onClick={clearFilters}
-                title={`Limpiar todo (${activeFilterCount})`}
-                className="flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-white/[0.06] transition-colors mb-2.5 shrink-0"
-              >
-                <X size={13} />
-              </button>
-            )}
+            <FilterSelect
+              label="Etapa Actual" value={filters.etapa}
+              onChange={(v) => setFilters((f) => ({ ...f, etapa: v }))}
+              options={opts.etapa}
+              headerAction={activeFilterCount > 0 && (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  title={`Limpiar todo (${activeFilterCount})`}
+                  className="text-slate-500 hover:text-rose-400 transition-colors"
+                >
+                  <X size={11} />
+                </button>
+              )}
+            />
 
             <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
 
