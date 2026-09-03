@@ -725,18 +725,18 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
     <div className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden">
       {/* sheen superior, efecto de cristal */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
-      <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative flex items-center gap-2 mb-3">
-        <div className="p-1.5 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0">
-          <Users size={15} className="text-violet-400" />
+        <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 shrink-0">
+          <Users size={15} className="text-blue-400" />
         </div>
         <span className="text-sm font-semibold text-slate-100 flex-1">Ranking</span>
         <button
           type="button"
           onClick={() => setExpanded(true)}
           title="Ver ranking completo"
-          className="p-1 rounded-lg text-slate-500 hover:text-violet-400 hover:bg-white/[0.06] transition-colors"
+          className="p-1 rounded-lg text-slate-500 hover:text-blue-400 hover:bg-white/[0.06] transition-colors"
         >
           <Maximize2 size={13} />
         </button>
@@ -750,7 +750,7 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
             onClick={() => setSortBy(key)}
             className={`flex-1 text-[10px] font-semibold py-1.5 rounded-lg border transition-all duration-150 capitalize ${
               sortBy === key
-                ? "bg-violet-500/10 text-violet-400 border-violet-500/20"
+                ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
                 : "text-slate-500 bg-white/[0.03] border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.05]"
             }`}
           >
@@ -766,18 +766,18 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
             type="button"
             onClick={() => setSelectedComercial(r.name)}
             title={`Ver leads de ${r.name}`}
-            className="w-full text-left rounded-lg px-1.5 py-1 -mx-1.5 hover:bg-violet-500/10 transition-colors group focus:outline-none"
+            className="w-full text-left rounded-lg px-1.5 py-1 -mx-1.5 hover:bg-blue-500/10 transition-colors group focus:outline-none"
           >
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-1.5 min-w-0">
                 <span className="w-4 text-center shrink-0 text-[10px] font-bold text-slate-300">{i + 1}</span>
-                <span className="text-xs text-slate-200 truncate leading-none group-hover:text-violet-400 transition-colors" title={r.name}>{r.name}</span>
+                <span className="text-xs text-slate-200 truncate leading-none group-hover:text-blue-400 transition-colors" title={r.name}>{r.name}</span>
               </div>
               <span className="text-[10px] font-bold text-slate-600 shrink-0 ml-2">{fmt(r)}</span>
             </div>
             <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden ml-5">
               <div
-                className="h-full bg-violet-500 rounded-full transition-all duration-500"
+                className="h-full bg-blue-500 rounded-full transition-all duration-500"
                 style={{ width: `${Math.round((r[sortBy] / maxVal) * 100)}%` }}
               />
             </div>
@@ -818,7 +818,7 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
                     onClick={() => setSortBy(key)}
                     className={`flex-1 text-[11px] font-semibold py-1.5 rounded-lg border transition-all duration-150 capitalize ${
                       sortBy === key
-                        ? "bg-violet-500/10 text-violet-400 border-violet-500/20"
+                        ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
                         : "text-slate-500 bg-white/[0.03] border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.05]"
                     }`}
                   >
@@ -834,18 +834,18 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
                     type="button"
                     onClick={() => { setSelectedComercial(r.name); setExpanded(false); }}
                     title={`Ver leads de ${r.name}`}
-                    className="w-full text-left rounded-lg px-2 py-1.5 -mx-2 hover:bg-violet-500/10 transition-colors group focus:outline-none"
+                    className="w-full text-left rounded-lg px-2 py-1.5 -mx-2 hover:bg-blue-500/10 transition-colors group focus:outline-none"
                   >
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2 min-w-0">
                         <span className="w-5 text-center shrink-0 text-xs font-bold text-slate-400">{i + 1}</span>
-                        <span className="text-sm text-slate-200 truncate group-hover:text-violet-400 transition-colors" title={r.name}>{r.name}</span>
+                        <span className="text-sm text-slate-200 truncate group-hover:text-blue-400 transition-colors" title={r.name}>{r.name}</span>
                       </div>
                       <span className="text-xs font-bold text-slate-500 shrink-0 ml-2">{fmt(r)}</span>
                     </div>
                     <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden ml-7">
                       <div
-                        className="h-full bg-violet-500 rounded-full transition-all duration-500"
+                        className="h-full bg-blue-500 rounded-full transition-all duration-500"
                         style={{ width: `${Math.round((r[sortBy] / maxValFull) * 100)}%` }}
                       />
                     </div>
