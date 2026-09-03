@@ -970,7 +970,7 @@ interface Filters {
   dateTo:          string;
 }
 
-const filterOptionLabel = (o: string) => (o === "ALL" ? "Todos" : o === "true" ? "Activo" : o === "false" ? "Inactivo" : o);
+const filterOptionLabel = (o: string) => (o === "ALL" ? "TODOS" : o === "true" ? "Activo" : o === "false" ? "Inactivo" : o);
 
 /* ── helpers de fecha para el slider de rango ─────────────────────────── */
 const DAY_MS = 86400000;
