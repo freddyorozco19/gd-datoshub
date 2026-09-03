@@ -919,15 +919,12 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
             className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 disabled:opacity-30 transition-colors shrink-0"><ChevronRight size={14} /></button>
         </div>
 
-        <div className="relative mb-1">
-          <span className="text-4xl font-bold text-slate-100 leading-none">{dayLeads.length}</span>
-        </div>
         <button
           type="button"
           onClick={() => setModal({ leads: dayLeads })}
           disabled={dayLeads.length === 0}
           title="Ver tabla de leads"
-          className="relative text-xs text-slate-400 hover:text-blue-400 mb-4 capitalize disabled:cursor-default disabled:hover:text-slate-400 transition-colors"
+          className="relative w-full text-left text-sm font-semibold text-slate-100 hover:text-blue-400 capitalize mb-4 px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.14] disabled:cursor-default disabled:hover:bg-white/[0.03] disabled:hover:border-white/[0.08] disabled:hover:text-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
         >
           {fmtLabel}
         </button>
