@@ -906,28 +906,35 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
         <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
-        <div className="relative flex items-center gap-1 mb-3">
+        <div className="relative flex items-center gap-1 mb-4">
           <button onClick={() => shiftDay(-1)} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 transition-colors shrink-0"><ChevronLeft size={14} /></button>
-          <button type="button" onClick={openDatePicker} title="Elegir fecha"
-            className="flex-1 flex items-center justify-center p-1.5 rounded-lg border border-white/[0.1] bg-white/[0.04] hover:border-white/[0.18] text-slate-400 hover:text-slate-200 transition-colors">
-            <Calendar size={14} />
+
+          <button
+            type="button"
+            onClick={() => setModal({ leads: dayLeads })}
+            disabled={dayLeads.length === 0}
+            title="Ver tabla de leads"
+            className="flex-1 min-w-0 flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-white/[0.1] bg-white/[0.04] hover:border-white/[0.18] hover:bg-white/[0.06] disabled:cursor-default disabled:hover:bg-white/[0.04] disabled:hover:border-white/[0.1] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
+          >
+            <span className="text-sm font-semibold text-slate-100 capitalize truncate">{fmtLabel}</span>
+            <span
+              role="button"
+              tabIndex={0}
+              title="Elegir fecha"
+              onClick={(e) => { e.stopPropagation(); openDatePicker(); }}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); openDatePicker(); } }}
+              className="shrink-0 p-1 -m-1 rounded text-slate-400 hover:text-slate-200 transition-colors"
+            >
+              <Calendar size={14} />
+            </span>
           </button>
           <input ref={dateInputRef} type="date" value={selectedDate} max={todayGMT5()}
             onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
             tabIndex={-1} className="sr-only" />
+
           <button onClick={() => shiftDay(1)} disabled={isToday}
             className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 disabled:opacity-30 transition-colors shrink-0"><ChevronRight size={14} /></button>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setModal({ leads: dayLeads })}
-          disabled={dayLeads.length === 0}
-          title="Ver tabla de leads"
-          className="relative w-full text-left text-sm font-semibold text-slate-100 hover:text-blue-400 capitalize mb-4 px-3 py-2 rounded-lg border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.14] disabled:cursor-default disabled:hover:bg-white/[0.03] disabled:hover:border-white/[0.08] disabled:hover:text-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50"
-        >
-          {fmtLabel}
-        </button>
 
         {sorted.length === 0 ? (
           <p className="text-xs text-slate-400 text-center py-4">Sin leads en esta fecha</p>
