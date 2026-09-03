@@ -1472,7 +1472,7 @@ export default function LeadsView() {
           <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
             <FilterSelect label="Comercial"   value={filters.comercial}     onChange={(v) => setFilters((f) => ({ ...f, comercial: v }))}     options={opts.comercial} />
             <FilterSelect label="Línea"       value={filters.linea}         onChange={(v) => setFilters((f) => ({ ...f, linea: v }))}         options={opts.linea} />
-            <FilterSelect label="Etapa Preventa" value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} widthClass="w-36" />
+            <FilterSelect label="Etapa Prev." value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} />
             <FilterSelect label="Preventa"    value={filters.preventa}      onChange={(v) => setFilters((f) => ({ ...f, preventa: v }))}      options={opts.preventa} />
             <FilterSelect
               label="Etapa Actual" value={filters.etapa}
