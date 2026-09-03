@@ -1391,9 +1391,10 @@ export default function LeadsView() {
             {activeFilterCount > 0 && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-rose-400 transition-colors mb-2.5 shrink-0"
+                title={`Limpiar todo (${activeFilterCount})`}
+                className="flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-white/[0.06] transition-colors mb-2.5 shrink-0"
               >
-                <X size={11} /> Limpiar todo ({activeFilterCount})
+                <X size={13} />
               </button>
             )}
 
