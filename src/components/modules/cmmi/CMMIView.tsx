@@ -343,6 +343,8 @@ function ComercialSourcePicker({ onFile, loading, error }: {
   const btnActive = `${btnBase} bg-indigo-600 text-white`;
   const btnIdle   = `${btnBase} bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:bg-white/[0.08] hover:text-slate-200`;
 
+  useState(() => { loadGhFiles(); });
+
   return (
     <div className="max-w-xl mx-auto mt-10 space-y-4">
       {/* Selector de modo */}
