@@ -402,10 +402,11 @@ function ExamCard({ exam, provider, onClick }: { exam: ExamConfig; provider: Pro
   return (
     <button
       onClick={available ? onClick : undefined}
-      className={`relative w-full text-left bg-white/[0.04] backdrop-blur-xl border rounded-lg p-3 transition-all duration-200 ${
+      style={{ backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)' }}
+      className={`relative w-full text-left bg-white/[0.05] border rounded-lg p-3 shadow-lg shadow-black/20 transition-all duration-200 ${
         available
-          ? 'border-border hover:border-white/25 hover:bg-white/5 cursor-pointer group'
-          : 'border-border/50 opacity-50 cursor-not-allowed'
+          ? 'border-white/[0.1] hover:border-white/25 hover:bg-white/[0.08] cursor-pointer group'
+          : 'border-white/[0.06] opacity-50 cursor-not-allowed'
       }`}
     >
       <div className="flex items-start justify-between mb-1.5">
@@ -2128,13 +2129,12 @@ export default function CertificacionesView() {
   const [selectedProvider, setSelectedProvider] = useState<ProviderConfig | null>(null)
   const [selectedExam, setSelectedExam] = useState<ExamConfig | null>(null)
 
-  const goRoot     = () => { setView('providers'); setSelectedProvider(null); setSelectedExam(null) }
   const goProvider = () => { setView('exams'); setSelectedExam(null) }
   const selectProvider = (p: ProviderConfig) => { setSelectedProvider(p); setView('exams') }
   const selectExam     = (e: ExamConfig)      => { setSelectedExam(e);    setView('viewer') }
 
   return (
-    <div className="flex flex-col h-full overflow-auto bg-[#07070F]">
+    <div className="flex flex-col h-full overflow-auto">
       <Topbar
         title="Certificaciones"
         tabs={([
@@ -2163,20 +2163,6 @@ export default function CertificacionesView() {
 
         {mainTab === 'catalogo' && (
         <>
-        {/* Page header */}
-        {view !== 'providers' && (
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div></div>
-          <button
-            onClick={view === 'viewer' ? goProvider : goRoot}
-            className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft size={15} />
-            Volver
-          </button>
-        </div>
-        )}
-
         {/* ── Nivel 1: Proveedores ── */}
         {view === 'providers' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -2214,6 +2200,13 @@ export default function CertificacionesView() {
         {view === 'viewer' && selectedProvider && selectedExam && (
           <>
             <div className="flex items-center gap-3 pb-2 border-b border-border">
+              <button
+                onClick={goProvider}
+                title="Volver a exámenes"
+                className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0"
+              >
+                <ArrowLeft size={16} />
+              </button>
               <span className="inline-flex h-9 items-center rounded-lg bg-white/10 px-2 ring-1 ring-inset ring-white/15 backdrop-blur-md">
                 {selectedProvider.logoImg ? (
                   <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="h-5 w-auto max-w-[110px] object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
