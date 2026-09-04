@@ -9,7 +9,7 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 const ROUTE_META: Record<string, { label: string; parent?: string }> = {
   "/dashboard":       { label: "Dashboard" },
   "/leads":           { label: "Leads" },
-  "/productos":       { label: "Productos",      parent: "Comercial" },
+  "/productos":       { label: "Productos" },
   "/reuniones":       { label: "Reuniones",       parent: "Comercial" },
   "/integraciones":   { label: "Integraciones",   parent: "Sistemas"  },
   "/reportes":        { label: "Reportes",        parent: "Análisis"  },

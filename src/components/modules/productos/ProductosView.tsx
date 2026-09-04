@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   BellRing, Activity, FileSearch, Workflow, Globe2, Server,
   MessageSquareHeart, Building2, Leaf, ShieldCheck, Landmark,
-  Truck, ArrowLeft, ChevronRight, Search, Package,
+  Truck, ChevronRight, Search, Package,
   AlertTriangle, Lightbulb, TrendingUp, GitBranch, BookOpen,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
@@ -529,7 +529,7 @@ function ProductCard({ producto, onClick }: { producto: Producto; onClick: () =>
 }
 
 /* ── Micrositio ───────────────────────────────────────────────────────────── */
-function ProductoDetalle({ producto, onBack }: { producto: Producto; onBack: () => void }) {
+function ProductoDetalle({ producto }: { producto: Producto }) {
   const Icon = producto.icon;
   const [tab, setTab] = useState<TabId>("problema");
   const current = TABS.find((t) => t.id === tab)!;
@@ -541,10 +541,6 @@ function ProductoDetalle({ producto, onBack }: { producto: Producto; onBack: () 
       {/* Hero */}
       <div className="relative px-6 md:px-10 pt-7 pb-7 border-b border-white/[0.05]"
         style={{ background: `radial-gradient(ellipse 70% 120% at 15% -10%, rgba(${producto.rgb},0.13) 0%, transparent 65%)` }}>
-        <button onClick={onBack}
-          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 transition-colors mb-5">
-          <ArrowLeft size={14} /> Volver al catálogo
-        </button>
         <div className="flex items-start gap-5 max-w-4xl">
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
             style={{ background: `rgba(${producto.rgb},0.12)`, border: `1px solid rgba(${producto.rgb},0.3)` }}>
@@ -709,7 +705,7 @@ export default function ProductosView() {
   const [busqueda, setBusqueda] = useState("");
 
   if (productoActivo) {
-    return <ProductoDetalle producto={productoActivo} onBack={() => setProductoActivo(null)} />;
+    return <ProductoDetalle producto={productoActivo} />;
   }
 
   const filtrados = PRODUCTOS.filter((p) => {
