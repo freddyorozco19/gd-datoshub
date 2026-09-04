@@ -158,19 +158,19 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
     return { weeks: weeksArr, monthLabels: mlabels };
   }, [leads]);
 
-  const COLORS = ["bg-white/[0.06]", "bg-emerald-900/60", "bg-emerald-700/60", "bg-emerald-500", "bg-emerald-400"];
+  const COLORS = ["bg-white/[0.06]", "bg-blue-900/60", "bg-blue-700/60", "bg-blue-500", "bg-blue-400"];
   const DAY_LABELS = ["L", "", "X", "", "V", "", "D"];
 
   return (
     <div className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden">
       {/* sheen superior, efecto de cristal */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
-      <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative mb-3">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 shrink-0">
-            <Activity size={15} className="text-emerald-400" />
+          <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 shrink-0">
+            <Activity size={15} className="text-blue-400" />
           </div>
           <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Actividad leads</span>
         </div>
