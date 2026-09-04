@@ -364,11 +364,11 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
 
         {/* ── título + meta ── */}
         <div className="mt-5">
-          <h3 className="text-lg font-bold text-white">{p.name}</h3>
-          <p className="mt-0.5 text-xs text-slate-400">
+          <h3 className="text-xl font-bold text-white tracking-tight">{p.name}</h3>
+          <p className="mt-1 text-[13px] text-slate-400 tracking-wide">
             {p.exams.length} exámenes
             {available > 0 && (
-              <span className="text-emerald-400"> · {available} disponible{available > 1 ? 's' : ''}</span>
+              <span className="text-emerald-400 font-medium"> · {available} disponible{available > 1 ? 's' : ''}</span>
             )}
           </p>
         </div>
@@ -379,13 +379,12 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
             <span
               key={e.id}
               title={`${e.name}${e.dataFile ? ' · disponible' : ' · próximamente'}`}
-              className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 font-mono text-[10px] font-semibold transition-colors ${
+              className={`inline-flex items-center rounded-md border px-2 py-1 font-mono text-[10.5px] font-semibold tracking-wide transition-colors ${
                 e.dataFile
                   ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
                   : 'border-white/10 bg-white/[0.03] text-slate-500'
               }`}
             >
-              {e.dataFile && <span className="h-1 w-1 rounded-full bg-emerald-400" />}
               {e.code}
             </span>
           ))}
