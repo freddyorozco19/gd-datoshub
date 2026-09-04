@@ -71,6 +71,7 @@ const PROVIDERS: ProviderConfig[] = [
       { id: 'dp-300', code: 'DP-300', name: 'Azure Database Administrator', dataFile: '/data/exam_dp300.json', questions: 364, level: 'Associate',   examTopicsPath: 'microsoft/dp-300' },
       { id: 'dp-900', code: 'DP-900', name: 'Azure Data Fundamentals',      dataFile: '/data/exam_74.json', questions: 303, level: 'Fundamental', examTopicsPath: 'microsoft/dp-900' },
       { id: 'dp-600', code: 'DP-600', name: 'Microsoft Fabric Analytics Engineer', dataFile: '/data/exam_dp600.json', questions: 198, level: 'Associate' },
+      { id: 'dp-700', code: 'DP-700', name: 'Implementing Data Eng. Using Microsoft Fabric', dataFile: '/data/exam_dp700.json', questions: 118, level: 'Associate' },
       { id: 'pl-300', code: 'PL-300', name: 'Power BI Data Analyst',         dataFile: '/data/exam_pl300.json', questions: 370, level: 'Associate' },
     ],
   },
