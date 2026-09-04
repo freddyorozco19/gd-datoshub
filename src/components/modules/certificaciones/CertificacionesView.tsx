@@ -60,7 +60,7 @@ const PROVIDERS: ProviderConfig[] = [
       { id: 'az-303', code: 'AZ-303', name: 'Azure Architect Technologies',             level: 'Associate'   },
       { id: 'az-304', code: 'AZ-304', name: 'Azure Architect Design',                   level: 'Associate'   },
       { id: 'az-305', code: 'AZ-305', name: 'Azure Solutions Architect',                level: 'Expert'      },
-      { id: 'az-400', code: 'AZ-400', name: 'DevOps Engineer',                          level: 'Expert'      },
+      { id: 'az-400', code: 'AZ-400', name: 'DevOps Engineer',                          dataFile: '/data/exam_az400.json', questions: 559, level: 'Expert'      },
       { id: 'az-500', code: 'AZ-500', name: 'Azure Security Engineer',                  level: 'Associate'   },
       { id: 'az-600', code: 'AZ-600', name: 'Azure Stack Hub Operator',                 level: 'Associate'   },
       { id: 'az-700', code: 'AZ-700', name: 'Azure Network Engineer',                   level: 'Associate'   },
