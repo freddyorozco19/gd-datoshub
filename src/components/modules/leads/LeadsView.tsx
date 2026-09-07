@@ -175,9 +175,7 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
           <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Actividad leads</span>
         </div>
         <div className="flex items-center justify-center gap-1.5">
-          <span className="text-[10px] text-slate-400">Menos</span>
           {COLORS.map((c, i) => <div key={i} className={`w-2.5 h-2.5 rounded-sm ${c}`} />)}
-          <span className="text-[10px] text-slate-400">Más</span>
         </div>
       </div>
 
