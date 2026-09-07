@@ -168,14 +168,11 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
       <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative mb-3">
-        <div className="flex items-center justify-center gap-2 mb-2">
+        <div className="flex items-center justify-center gap-2">
           <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 shrink-0">
             <Activity size={15} className="text-blue-400" />
           </div>
           <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Actividad leads</span>
-        </div>
-        <div className="flex items-center justify-center gap-1.5">
-          {COLORS.map((c, i) => <div key={i} className={`w-2.5 h-2.5 rounded-sm ${c}`} />)}
         </div>
       </div>
 
