@@ -87,7 +87,7 @@ const PROVIDERS: ProviderConfig[] = [
     logoImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/960px-Amazon_Web_Services_Logo.svg.png',
     exams: [
       { id: 'aif-c01', code: 'AIF-C01', name: 'AWS Certified AI Practitioner', dataFile: '/data/exam_aifC01.json', questions: 233, level: 'Fundamental' },
-      { id: 'clf-c02', code: 'CLF-C02', name: 'Cloud Practitioner',    level: 'Fundamental' },
+      { id: 'clf-c02', code: 'CLF-C02', name: 'Cloud Practitioner',    dataFile: '/data/exam_clf_c02.json', questions: 718, level: 'Fundamental' },
       { id: 'saa-c03', code: 'SAA-C03', name: 'Solutions Architect',   level: 'Associate'   },
       { id: 'dva-c02', code: 'DVA-C02', name: 'Developer Associate',   level: 'Associate'   },
     ],
