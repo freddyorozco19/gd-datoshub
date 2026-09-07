@@ -129,24 +129,17 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md" style={{ backgroundColor: "var(--app-modal-overlay)" }} onClick={onClose}>
       {/* Liquid glass card */}
       <div
         onClick={e => e.stopPropagation()}
-        className="w-full max-w-md rounded-3xl overflow-hidden shadow-2xl"
-        style={{
-          background: "linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%)",
-          backdropFilter: "blur(40px) saturate(180%)",
-          WebkitBackdropFilter: "blur(40px) saturate(180%)",
-          border: "1px solid rgba(255,255,255,0.14)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15)",
-        }}
+        className="modal-panel backdrop-blur-2xl w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-white/[0.14]"
       >
         {/* Highlight stripe top */}
         <div className="h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)" }} />
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+        <div className="app-bar modal-header flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center"
               style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.25), rgba(99,102,241,0.15))", border: "1px solid rgba(99,102,241,0.25)", boxShadow: "0 2px 8px rgba(59,130,246,0.2)" }}>
@@ -158,7 +151,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
             </div>
           </div>
           <button onClick={onClose}
-            className="w-7 h-7 rounded-full flex items-center justify-center transition-colors hover:bg-white/10 text-slate-500 hover:text-slate-200">
+            className="w-7 h-7 rounded-full flex items-center justify-center transition-colors hover:bg-white/[0.1] text-slate-400 hover:text-white">
             <X size={15} />
           </button>
         </div>
@@ -178,8 +171,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                 </p>
               </div>
               <button onClick={onClose}
-                className="mt-2 px-5 py-2 rounded-xl text-sm text-slate-300 transition-colors hover:text-white"
-                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                className="mt-2 px-5 py-2 rounded-xl text-sm text-slate-300 transition-colors hover:text-white bg-white/[0.07] border border-white/[0.1]">
                 Cerrar
               </button>
             </div>
@@ -192,14 +184,10 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                   type="email" required autoFocus
                   value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="usuario@empresa.com"
-                  className="w-full rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none transition-all"
-                  style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.09)",
-                    boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)",
-                  }}
-                  onFocus={e => { e.currentTarget.style.border = "1px solid rgba(99,102,241,0.5)"; e.currentTarget.style.boxShadow = "inset 0 1px 2px rgba(0,0,0,0.2), 0 0 0 3px rgba(99,102,241,0.08)"; }}
-                  onBlur={e =>  { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.09)"; e.currentTarget.style.boxShadow = "inset 0 1px 2px rgba(0,0,0,0.2)"; }}
+                  className="w-full rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none transition-all bg-white/[0.05] border border-white/[0.08] focus:border-transparent"
+                  style={{ boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)" }}
+                  onFocus={e => { e.currentTarget.style.boxShadow = "inset 0 1px 2px rgba(0,0,0,0.2), 0 0 0 3px rgba(99,102,241,0.3)"; }}
+                  onBlur={e =>  { e.currentTarget.style.boxShadow = "inset 0 1px 2px rgba(0,0,0,0.2)"; }}
                 />
               </div>
 
@@ -211,14 +199,9 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                     const active = role === r.value;
                     return (
                       <button type="button" key={r.value} onClick={() => setRole(r.value)}
-                        className="relative flex flex-col items-start gap-1.5 rounded-xl px-4 py-3 text-left transition-all"
+                        className={`relative flex flex-col items-start gap-1.5 rounded-xl px-4 py-3 text-left transition-all border ${active ? "border-indigo-400/45" : "bg-white/[0.04] border-white/[0.07]"}`}
                         style={{
-                          background: active
-                            ? "linear-gradient(135deg, rgba(99,102,241,0.25), rgba(59,130,246,0.15))"
-                            : "rgba(255,255,255,0.04)",
-                          border: active
-                            ? "1px solid rgba(99,102,241,0.45)"
-                            : "1px solid rgba(255,255,255,0.07)",
+                          background: active ? "linear-gradient(135deg, rgba(99,102,241,0.25), rgba(59,130,246,0.15))" : undefined,
                           boxShadow: active ? "0 0 0 3px rgba(99,102,241,0.1), inset 0 1px 0 rgba(255,255,255,0.08)" : "none",
                         }}>
                         {/* Check */}
@@ -252,7 +235,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                   Cancelar
                 </button>
                 <button type="submit" disabled={loading || !email}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm text-white font-medium disabled:opacity-50 transition-all"
+                  className="app-bar flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm text-white font-medium disabled:opacity-50 transition-all"
                   style={{
                     background: "linear-gradient(135deg, #4f46e5, #3b82f6)",
                     boxShadow: "0 2px 12px rgba(79,70,229,0.35), inset 0 1px 0 rgba(255,255,255,0.12)",
