@@ -545,7 +545,7 @@ export default function DashboardView() {
   ];
 
   return (
-    <div className="flex flex-col flex-1 overflow-auto" style={{ background: "var(--color-background)" }}>
+    <div className="flex flex-col flex-1 overflow-auto">
       <Topbar title="Dashboard" />
       {/* ── Hero header ── */}
       <div className="relative px-5 md:px-7 pt-4 pb-5">
