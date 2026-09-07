@@ -2030,8 +2030,6 @@ function RegistrosPanel() {
                 const estado = meta?.estado ?? e.defaultEstado
                 const url = meta?.url ?? null
                 const expiracion = meta?.expiracion ?? null
-                const isExpired = !!expiracion && new Date(expiracion) < new Date()
-                const isSoon = !!expiracion && !isExpired && (new Date(expiracion).getTime() - Date.now()) < 1000 * 60 * 60 * 24 * 60
                 return (
                   <tr key={e.examId} className="hover:bg-white/[0.03] transition-colors">
                     <td className="px-4 py-3 font-mono font-bold text-xs" style={{ color: e.providerColor }}>{e.code}</td>
@@ -2043,13 +2041,13 @@ function RegistrosPanel() {
                         {ESTADO_LABEL[estado]}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs whitespace-nowrap">
-                      {expiracion ? (
-                        <span className={isExpired ? 'text-rose-400 font-medium' : isSoon ? 'text-amber-400 font-medium' : 'text-slate-400'}>
-                          {new Date(expiracion).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })}
-                          {isExpired && ' · vencida'}
-                        </span>
-                      ) : <span className="text-slate-600">—</span>}
+                    <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">
+                      {expiracion ? (() => {
+                        const d = new Date(expiracion)
+                        const dd = String(d.getDate()).padStart(2, '0')
+                        const mm = String(d.getMonth() + 1).padStart(2, '0')
+                        return `${dd}/${mm}/${d.getFullYear()}`
+                      })() : 'NA'}
                     </td>
                     <td className="px-4 py-3 text-xs max-w-[200px]">
                       {url ? (
