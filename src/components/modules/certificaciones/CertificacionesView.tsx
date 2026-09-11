@@ -695,7 +695,7 @@ function QuestionCard({
             const alt = typeof img === 'string' ? '' : (img.alt || '')
             return (
               <img key={i} src={src} alt={alt}
-                className="max-w-full rounded-lg border border-white/10 mt-1"
+                className="max-w-full rounded-lg border border-white/10 mt-1 mx-auto block"
                 onError={e => (e.currentTarget.style.display = 'none')} />
             )
           })}
