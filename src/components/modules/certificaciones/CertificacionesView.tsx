@@ -157,7 +157,7 @@ interface Question {
   explanation?: string
   options?: string[]
   correctAnswer?: string
-  learnMore?: string[]
+  learnMore?: Array<string | { text: string; url: string }>
   images?: (string | QuestionImage)[]
 }
 
@@ -828,12 +828,23 @@ function QuestionCard({
                     <div className="mt-2 pt-1.5 border-t border-emerald-800/30">
                       <p className="text-[9px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
                       <ul className="space-y-0.5">
-                        {q.learnMore.map((ref, ri) => (
-                          <li key={ri} className="flex items-start gap-1 text-[11px] text-slate-400 leading-snug">
-                            <span className="mt-0.5 shrink-0 text-slate-600">›</span>
-                            <span>{ref}</span>
-                          </li>
-                        ))}
+                        {q.learnMore.map((ref, ri) => {
+                          const text = typeof ref === 'string' ? ref : ref.text
+                          const url  = typeof ref === 'string' ? '' : ref.url
+                          return (
+                            <li key={ri} className="flex items-start gap-1 text-[11px] leading-snug">
+                              <span className="mt-0.5 shrink-0 text-slate-600">›</span>
+                              {url ? (
+                                <a href={url} target="_blank" rel="noopener noreferrer"
+                                  className="text-blue-400 hover:text-blue-300 hover:underline transition-colors">
+                                  {text}
+                                </a>
+                              ) : (
+                                <span className="text-slate-400">{text}</span>
+                              )}
+                            </li>
+                          )
+                        })}
                       </ul>
                     </div>
                   )}
