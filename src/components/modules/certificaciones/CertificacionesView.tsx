@@ -711,12 +711,13 @@ function QuestionCard({
                 const isSelected  = selected === i
                 const isCorrect   = isCorrectOpt(opt, shown.correctAnswer)
 
+                const revealMode = verified || showAns
                 let cls = 'bg-slate-800/50 border-slate-700/50 text-slate-300 hover:bg-white/5 hover:border-slate-500 cursor-pointer'
-                if (!verified) {
+                if (!revealMode) {
                   if (isSelected) cls = 'bg-primary/20 border-primary/70 text-white cursor-pointer'
                 } else {
                   if (isCorrect)               cls = 'bg-emerald-900/30 border-emerald-600/60 text-emerald-300 cursor-default'
-                  else if (isSelected)         cls = 'bg-red-900/30 border-red-600/60 text-red-300 cursor-default'
+                  else if (verified && isSelected) cls = 'bg-red-900/30 border-red-600/60 text-red-300 cursor-default'
                   else                         cls = 'bg-slate-800/30 border-slate-700/30 text-slate-500 cursor-default opacity-60'
                 }
 
@@ -727,12 +728,12 @@ function QuestionCard({
                     onClick={() => handleSelect(i)}
                     className={`w-full flex items-start gap-2.5 px-3 py-2.5 rounded-lg border text-sm text-left transition-all duration-150 ${cls}`}
                   >
-                    {verified && isCorrect   && <CheckCircle size={14} className="text-emerald-400 shrink-0 mt-0.5" />}
+                    {revealMode && isCorrect && <CheckCircle size={14} className="text-emerald-400 shrink-0 mt-0.5" />}
                     {verified && isSelected && !isCorrect && <XCircle size={14} className="text-red-400 shrink-0 mt-0.5" />}
-                    {!verified && isSelected && (
+                    {!revealMode && isSelected && (
                       <span className="w-3.5 h-3.5 rounded-full border-2 border-primary bg-primary/40 shrink-0 mt-0.5" />
                     )}
-                    {!verified && !isSelected && (
+                    {!revealMode && !isSelected && (
                       <span className="w-3.5 h-3.5 rounded-full border border-slate-600 shrink-0 mt-0.5" />
                     )}
                     <span className="flex flex-col gap-1.5 min-w-0">
@@ -793,7 +794,7 @@ function QuestionCard({
                 onClick={() => setShowAns(v => !v)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-xs font-semibold hover:bg-white/5 transition-colors ml-auto"
               >
-                {showAns ? <><EyeOff size={12} /> Ocultar respuesta</> : <><Eye size={12} /> Ver respuesta</>}
+                {showAns ? <><EyeOff size={12} /> Hide Answer</> : <><Eye size={12} /> Answer</>}
               </button>
             )}
           </div>
