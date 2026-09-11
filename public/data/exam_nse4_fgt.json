@@ -1,7 +1,7 @@
 {
   "examTitle": "NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator",
   "totalQuestions": 84,
-  "scrapedAt": "2026-09-11T19:08:14.645Z",
+  "scrapedAt": "2026-09-11T19:22:44.912Z",
   "questions": [
     {
       "number": "1",
@@ -107,7 +107,7 @@
         "C. Set the Action as Exempt for www.facebook.com in the Static URL Filter.",
         "D. Change the type as Simple in the Static URL Filter section."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "C",
       "explanation": "A Static URL Filter action of Monitor behaves like Allow and continues processing through the remaining FortiGuard web filters, so Facebook is still blocked by the Social Networking category. Setting the matching www.facebook.com URL-filter entry to Exempt bypasses the remaining FortiGuard web filtering for that URL while the Social Networking category remains blocked for other sites.",
       "learnMore": [
         {
@@ -185,7 +185,7 @@
         "D. Set SSL inspection to deep-content inspection.",
         "E. Move up Google in the Application and Filter Overrides section to set its priority to 1."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "E",
       "explanation": "Application and filter overrides are evaluated in priority order. A specific Google application override configured as Monitor must precede the Excessive-Bandwidth filter configured as Block, or Google traffic that matches the filter is blocked. SSL certificate inspection examines only up to the TLS headers; deep-content inspection decrypts HTTPS traffic so FortiGate can inspect its content and apply application control to encrypted Google application traffic. Fortinet: Application Control Profile GUI Improvements Fortinet: SSL & SSH Inspection",
       "learnMore": [
         {
@@ -237,7 +237,7 @@
         "C. 100.65.0.101",
         "D. 10.0.11.254"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B",
       "explanation": "A policy that uses an IP pool for source NAT translates outbound sessions to an address from that pool instead of the outgoing interface address. The configured overload pool contains only 100.65.0.102, so that is the translated source address. The VIP 100.65.0.200 provides destination NAT for inbound HTTPS traffic to 10.0.11.50 and is unrelated to this outbound flow. Dynamic SNAT",
       "learnMore": [
         {
@@ -306,7 +306,7 @@
         "C. In the firewall policy, set match-vip to enable using CLI.",
         "D. In the system settings, set Multiple Interface Policies to enable."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B",
       "explanation": "A one-to-one IP pool maps each internal address to a distinct external address and does not use port address translation. The range 100.65.0.110–100.65.0.111 therefore provides translations for only two hosts. Setting the pool to overload allows multiple hosts to share external address translation through PAT, and extending the pool endpoint to 100.65.0.112 adds a third external address for one-to-one mapping.",
       "learnMore": [
         {
@@ -1012,7 +1012,7 @@
         "C. Facebook access is allowed but you cannot play Facebook videos based on Video/Audio category filter settings.",
         "D. YouTube access is blocked based on Excessive-Bandwidth Application and Filter override settings."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D",
       "explanation": "Facebook belongs to the Social Media category, which the sensor sets to Block, so all Facebook access is blocked (B). The Application and Filter Overrides table is evaluated top-down by priority: the priority-1 Excessive-Bandwidth behavior filter (Block) is matched before the priority-2 Google filter (Monitor). YouTube is a high-bandwidth streaming app that matches the Excessive-Bandwidth behavior first, so it is blocked by that override before the Google/Monitor entry is ever reached (D). A is wrong because the higher-priority Excessive-Bandwidth Block pre-empts the lower-priority Google Monitor entry, so YouTube is not allowed. C is wrong because Facebook is blocked entirely by the Social Media category, not merely restricted from playing video.",
       "learnMore": [
         {
