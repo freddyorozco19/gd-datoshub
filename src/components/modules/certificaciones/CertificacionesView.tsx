@@ -2230,7 +2230,10 @@ export default function CertificacionesView() {
           return (
             <button
               key={id}
-              onClick={() => setMainTab(id)}
+              onClick={() => {
+                setMainTab(id)
+                if (id === 'catalogo') router.push('/certificaciones')
+              }}
               className={`flex items-center gap-1.5 h-full px-3 text-xs font-medium border-b-2 transition-colors ${
                 active
                   ? 'border-blue-500 text-blue-400'
