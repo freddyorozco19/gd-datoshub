@@ -773,7 +773,7 @@ function QuestionCard({
               </button>
             )}
 
-            {hasAnswer && (
+            {(hasAnswer || !!q.explanation) && (
               <button
                 onClick={() => setShowAns(v => !v)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-xs font-semibold hover:bg-white/5 transition-colors ml-auto"
@@ -783,7 +783,7 @@ function QuestionCard({
             )}
           </div>
 
-          {(showAns || verified) && hasAnswer && (
+          {(showAns || verified) && (hasAnswer || !!q.explanation) && (
             <div className="bg-emerald-900/15 border border-emerald-700/40 rounded-lg px-3 py-2.5">
               <div className="flex items-center justify-between mb-1">
                 <p className="text-[11px] text-emerald-500 font-semibold uppercase tracking-wide">Respuesta correcta</p>
@@ -824,6 +824,19 @@ function QuestionCard({
                   <p className="text-xs text-blue-300 leading-relaxed">
                     {explEs && explEsText ? explEsText : q.explanation}
                   </p>
+                  {q.learnMore && q.learnMore.length > 0 && (
+                    <div className="mt-2 pt-1.5 border-t border-emerald-800/30">
+                      <p className="text-[9px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
+                      <ul className="space-y-0.5">
+                        {q.learnMore.map((ref, ri) => (
+                          <li key={ri} className="flex items-start gap-1 text-[11px] text-slate-400 leading-snug">
+                            <span className="mt-0.5 shrink-0 text-slate-600">›</span>
+                            <span>{ref}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
