@@ -136,7 +136,7 @@ const PROVIDERS: ProviderConfig[] = [
     logoImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Fortinet_logo.svg/3840px-Fortinet_logo.svg.png',
     exams: [
       { id: 'fcf',  code: 'FCF',   name: 'Certified Fundamentals in Cybersecurity', level: 'Fundamental'  },
-      { id: 'nse4-fgt-7-6', code: 'NSE4_FGT_AD-7.6', name: 'Fortinet NSE 4 - FortiOS 7.6 Administrator', dataFile: '/data/exam_nse4_fgt.json', questions: 84, level: 'Associate' },
+      { id: 'nse4-fgt-ad-7-6', code: 'NSE4_FGT_AD-7.6', name: 'Fortinet NSE 4 - FortiOS 7.6 Administrator', dataFile: '/data/exam_nse4_fgt.json', questions: 84, level: 'Associate' },
       { id: 'nse7', code: 'NSE 7', name: 'Network Security Architect',              level: 'Professional' },
     ],
   },
