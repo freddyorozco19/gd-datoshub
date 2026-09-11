@@ -305,6 +305,9 @@ const VIEWS: Record<string, React.ComponentType> = {
 
 export default function PortalPage() {
   const pathname = usePathname();
-  const View = VIEWS[pathname] ?? DashboardView;
+  // Prefix-match para rutas con sub-segmentos (ej: /certificaciones/microsoft/az-104)
+  const View =
+    VIEWS[pathname] ??
+    (pathname.startsWith('/certificaciones/') ? CertificacionesView : DashboardView);
   return <View />;
 }

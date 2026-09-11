@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   Search, ChevronDown, ChevronUp, BookOpen, CheckCircle, XCircle,
   ImageIcon, Filter, RefreshCw, ChevronRight, ArrowLeft, Lock,
@@ -2196,14 +2197,26 @@ type View = 'providers' | 'exams' | 'viewer'
 type MainTab = 'catalogo' | 'registros'
 
 export default function CertificacionesView() {
+  const pathname  = usePathname()
+  const router    = useRouter()
   const [mainTab, setMainTab] = useState<MainTab>('catalogo')
-  const [view, setView] = useState<View>('providers')
-  const [selectedProvider, setSelectedProvider] = useState<ProviderConfig | null>(null)
-  const [selectedExam, setSelectedExam] = useState<ExamConfig | null>(null)
 
-  const goProvider = () => { setView('exams'); setSelectedExam(null) }
-  const selectProvider = (p: ProviderConfig) => { setSelectedProvider(p); setView('exams') }
-  const selectExam     = (e: ExamConfig)      => { setSelectedExam(e);    setView('viewer') }
+  // Derivar estado desde la URL: /certificaciones[/providerId[/examId]]
+  const segments       = pathname.replace(/^\/certificaciones\/?/, '').split('/').filter(Boolean)
+  const providerSlug   = segments[0] ?? null
+  const examSlug       = segments[1] ?? null
+
+  const selectedProvider = providerSlug ? (PROVIDERS.find(p => p.id === providerSlug) ?? null) : null
+  const selectedExam     = (selectedProvider && examSlug)
+    ? (selectedProvider.exams.find(e => e.id === examSlug) ?? null)
+    : null
+
+  const view: View = selectedExam ? 'viewer' : selectedProvider ? 'exams' : 'providers'
+
+  const selectProvider = (p: ProviderConfig) => router.push(`/certificaciones/${p.id}`)
+  const selectExam     = (e: ExamConfig)      => router.push(`/certificaciones/${selectedProvider!.id}/${e.id}`)
+  const goProvider     = ()                   => router.push(`/certificaciones/${selectedProvider!.id}`)
+  const goProviders    = ()                   => router.push('/certificaciones')
 
   return (
     <div className="flex flex-col h-full overflow-auto">
@@ -2246,6 +2259,13 @@ export default function CertificacionesView() {
         {view === 'exams' && selectedProvider && (
           <>
             <div className="flex items-center gap-3">
+              <button
+                onClick={goProviders}
+                title="Volver a proveedores"
+                className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0"
+              >
+                <ArrowLeft size={16} />
+              </button>
               <span className="inline-flex h-11 items-center rounded-xl bg-white/10 px-2.5 ring-1 ring-inset ring-white/15 backdrop-blur-md">
                 {selectedProvider.logoImg ? (
                   <img src={selectedProvider.logoImg} alt={`Logo ${selectedProvider.name}`} className="h-6 w-auto max-w-[130px] object-contain" onError={e => { e.currentTarget.style.display = 'none' }} />
