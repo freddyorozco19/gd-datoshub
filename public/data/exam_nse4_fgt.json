@@ -1,7 +1,7 @@
 {
   "examTitle": "NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator",
   "totalQuestions": 84,
-  "scrapedAt": "2026-09-11T19:42:57.488Z",
+  "scrapedAt": "2026-09-11T19:59:42.980Z",
   "questions": [
     {
       "number": "1",
@@ -33,7 +33,7 @@
         "C. A packet with the source IP address 10.10.10.10 arriving on port2 is allowed if strict RPF is enabled.",
         "D. A packet with the source IP address 10.100.110.10 arriving on port2 is allowed if strict RPF is enabled."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "AD",
       "explanation": "Feasible-path RPF accepts a packet when at least one active route to its source uses the receiving interface; the default route through port2 therefore permits source 10.0.13.10 received on port2. Strict RPF requires the best route back to the source to use the receiving interface; source 10.100.110.10 matches the default route through port2 and therefore passes when received on port2.",
       "learnMore": [
         {
@@ -164,7 +164,7 @@
         "C. If SD-WAN is enabled, you control the load balancing algorithm with the parameter load-balance-mode.",
         "D. If SD-WAN is enabled, you can configure routes with unequal distance and priority values to be part of ECMP."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "AC",
       "explanation": "When SD-WAN is disabled, the IPv4 ECMP load-balancing algorithm is configured in config system settings with v4-ecmp-mode. When SD-WAN is enabled, ECMP configuration moves to config system sdwan, where load-balance-mode controls the algorithm. Volume-based balancing is available only as measured-volume-based under SD-WAN, and ECMP static routes must have equal distance and priority values.",
       "learnMore": [
         {
@@ -185,7 +185,7 @@
         "D. Set SSL inspection to deep-content inspection.",
         "E. Move up Google in the Application and Filter Overrides section to set its priority to 1."
       ],
-      "correctAnswer": "E",
+      "correctAnswer": "DE",
       "explanation": "Application and filter overrides are evaluated in priority order. A specific Google application override configured as Monitor must precede the Excessive-Bandwidth filter configured as Block, or Google traffic that matches the filter is blocked. SSL certificate inspection examines only up to the TLS headers; deep-content inspection decrypts HTTPS traffic so FortiGate can inspect its content and apply application control to encrypted Google application traffic. Fortinet: Application Control Profile GUI Improvements Fortinet: SSL & SSH Inspection",
       "learnMore": [
         {
@@ -306,7 +306,7 @@
         "C. In the firewall policy, set match-vip to enable using CLI.",
         "D. In the system settings, set Multiple Interface Policies to enable."
       ],
-      "correctAnswer": "B",
+      "correctAnswer": "AB",
       "explanation": "A one-to-one IP pool maps each internal address to a distinct external address and does not use port address translation. The range 100.65.0.110–100.65.0.111 therefore provides translations for only two hosts. Setting the pool to overload allows multiple hosts to share external address translation through PAT, and extending the pool endpoint to 100.65.0.112 adds a third external address for one-to-one mapping.",
       "learnMore": [
         {
@@ -349,7 +349,7 @@
         "C. The administrator must define the remote network correctly in the phase 2 selectors.",
         "D. The administrator must use a policy route instead of a static route for add-route to work properly."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "AC",
       "explanation": "The add-route option adds a route for the peer destination selector when the dynamic IPsec tunnel has been negotiated, so a successful Phase 2 security association is required. The route is based on the Phase 2 remote proxy ID (destination selector); consequently, the remote network must be defined correctly in the Phase 2 selectors.",
       "learnMore": [
         {
@@ -444,7 +444,7 @@
         "C. In advanced mode, FortiGate can be configured as an LDAP client and group filters can be configured on FortiGate.",
         "D. In advanced mode, security profiles can be applied only to user groups, not individual users."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "AC",
       "explanation": "FSSO Collector Agent advanced mode uses LDAP distinguished-name group information, which supports nested or inherited group memberships. It also allows FortiGate to use an LDAP server locally and define the group filters on FortiGate. The Windows NetBIOS Domain\\Username convention is associated with standard mode, not advanced mode. Fortinet technical tip",
       "learnMore": [
         {
@@ -492,7 +492,7 @@
         "C. The matching firewall policy denies the traffic.",
         "D. The RPF check fails."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "AC",
       "explanation": "The routing lookup selects port2 (gw-0.0.0.0 via port2), indicating that the default gateway route uses port2. Firewall policy 2 matches with the act-drop action, and the forward-policy check explicitly denies the traffic. Protocol 1 with ICMP type 8 is ICMP rather than UDP, and no RPF failure is reported.",
       "learnMore": [
         {
@@ -547,7 +547,7 @@
         "C. Administrators can change the configuration.",
         "D. FortiGate has entered conserve mode."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "AD",
       "explanation": "At 90% memory utilization, FortiGate exceeds both the configured red threshold of 88%, which forces entry into conserve mode, and the extreme threshold of 89%, at which new sessions are dropped.",
       "learnMore": [
         {
@@ -581,7 +581,7 @@
         "D. The IPS engine handles the process as a standalone.",
         "E. If a virus is detected, the last packet is delivered to the client."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "ABC",
       "explanation": "Flow-based antivirus uses a hybrid of the scan modes associated with proxy-based inspection, with the scan method selected according to the file type. It provides higher-throughput performance than proxy-based antivirus. During file handling, FortiGate can buffer the file while forwarding data to the client, retaining the final packet pending the antivirus verdict; a malicious verdict prevents that final packet from being sent. The IPS process can forward files requiring a full scan to the scanunit process, so it is not a standalone handler for the entire process.",
       "learnMore": [
         {
@@ -605,7 +605,7 @@
         "C. FortiGate uses the AD server as the collector agent.",
         "D. FortiGate uses the SMB protocol to read the event viewer logs from the DCs."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "AD",
       "explanation": "Agentless FSSO polling has FortiGate directly poll Windows domain controllers for Security Event logon information, without a collector or DC agent. It uses SMB to read the DC event logs, and its built-in collector functionality does not provide workstation checks.",
       "learnMore": [
         {
@@ -734,7 +734,7 @@
         "D. By default, SD-WAN rules are skipped if the included SD-WAN members do not have a valid route to the destination.",
         "E. By default, SD-WAN rules are skipped if the best route to the destination is not an SD-WAN member."
       ],
-      "correctAnswer": "E",
+      "correctAnswer": "CDE",
       "explanation": "Policy-based routes have precedence over SD-WAN routes. By default, SD-WAN rules are matched only when the best route to the destination points to an SD-WAN member, and an SD-WAN member is selected only when it has a valid route to that destination.",
       "learnMore": [
         {
@@ -906,7 +906,7 @@
         "C. Configure a lower distance on the static route for the primary tunnel, and a higher distance on the static route for the secondary tunnel.",
         "D. In the phase1-interface, enable npu-offload to detect a dead tunnel."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "AC",
       "explanation": "Dead Peer Detection (DPD) identifies unavailable IKE peers so FortiGate can remove or reestablish a failed tunnel and trigger failover promptly. For identical static-route destinations, FortiGate prefers the route with the lower administrative distance; setting a lower distance for the primary tunnel and a higher one for the secondary makes the latter a backup route. Fortinet’s redundant VPN guidance specifies DPD on each Phase 1 configuration and static routes with different distance values to prioritize them.",
       "learnMore": [
         {
@@ -981,7 +981,7 @@
         "C. By right clicking the Implicit deny policy",
         "D. Filtering by Policy UUID and Application Name in the log entry"
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "AD",
       "explanation": "Application Control UTM events are available in the FortiGate Log & Report > Security Events logs. The messages include policy and application fields, so filtering by the policy UUID and application name identifies the relevant entries. Fortinet documents that the Security Events page displays detailed logs for each UTM type, including Application Control, and its log-field reference defines the policy UUID field.",
       "learnMore": [
         {
@@ -1012,7 +1012,7 @@
         "C. Facebook access is allowed but you cannot play Facebook videos based on Video/Audio category filter settings.",
         "D. YouTube access is blocked based on Excessive-Bandwidth Application and Filter override settings."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "BD",
       "explanation": "Facebook belongs to the Social Media category, which the sensor sets to Block, so all Facebook access is blocked (B). The Application and Filter Overrides table is evaluated top-down by priority: the priority-1 Excessive-Bandwidth behavior filter (Block) is matched before the priority-2 Google filter (Monitor). YouTube is a high-bandwidth streaming app that matches the Excessive-Bandwidth behavior first, so it is blocked by that override before the Google/Monitor entry is ever reached (D). A is wrong because the higher-priority Excessive-Bandwidth Block pre-empts the lower-priority Google Monitor entry, so YouTube is not allowed. C is wrong because Facebook is blocked entirely by the Social Media category, not merely restricted from playing video.",
       "learnMore": [
         {
@@ -1049,7 +1049,7 @@
         "C. The website is exempted from SSL inspection.",
         "D. The EICAR test file exceeds the protocol options oversize limit."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "AC",
       "explanation": "FortiGate antivirus requires decrypted HTTPS content to inspect the downloaded file. A certificate-inspection profile does not decrypt the payload, and an SSL-inspection exemption bypasses inspection for the website; either condition prevents antivirus scanning of the HTTPS file content.",
       "learnMore": [],
       "images": []
@@ -1084,7 +1084,7 @@
         "C. Heartbeat interfaces have virtual IP addresses that are manually assigned.",
         "D. A change in the heartbeat IP address happens when a FortiGate device joins or leaves the cluster."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "AD",
       "explanation": "HA heartbeat interface IP addresses are automatically assigned link-local addresses that identify individual cluster members. Allocation is based on member serial-number priority, so the primary unit is not necessarily assigned 169.254.0.1, and the assigned addresses can change when cluster membership changes. Fortinet: HA heartbeat interface",
       "learnMore": [
         {
@@ -1126,7 +1126,7 @@
         "C. These websites are in an allowlist of reputable domain names maintained by FortiGuard.",
         "D. The legal regulation aims to prioritize user privacy and protect sensitive information for these websites."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "AD",
       "explanation": "SSL deep inspection substitutes the server certificate so that encrypted traffic can be decrypted and inspected. Sites protected by HTTP Strict Transport Security reject certificate errors rather than permitting a user override, so affected services may need to be exempted. Financial and health-related traffic is also commonly excluded to meet privacy and legal requirements for sensitive information.",
       "learnMore": [
         {
@@ -1157,7 +1157,7 @@
         "C. FortiGate halts complete system operation and requires a reboot to regain available resources.",
         "D. FortiGate continues to transmit packets without IPS inspection when the fail -open global setting in IPS is enabled."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "BD",
       "explanation": "Conserve mode is triggered by low available memory and reduces selected functions rather than stopping the entire FortiGate. Critical security actions, including quarantine, can continue. With config ips global set to fail-open enable, flow-based IPS performs no scans and allows new packets to pass. Fortinet: Conserve mode",
       "learnMore": [
         {
@@ -1298,7 +1298,7 @@
         "C. FortiGate identified the FortiGuard Server using DNS lookup.",
         "D. You can configure unreliable protocols to communicate with FortiGuard Server."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "AD",
       "explanation": "FortiGuard rating-server weight increases as failed rating requests accumulate and decreases following successful requests. FortiOS can also use UDP for FortiGuard server communication; UDP is an unreliable transport protocol. With Anycast disabled, HTTPS on port 8888 is a configured unicast connection rather than the default Anycast HTTPS/443 connection. The I flag identifies the initial contract server, whereas D denotes an IP address returned by DNS.",
       "learnMore": [
         {
@@ -1497,7 +1497,7 @@
         "C. The proxy auto-configuration (PAC) file",
         "D. FortiSASE Firewall-as-a-Service (FWaaS)"
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "BD",
       "explanation": "FortiSASE SIA agent-based mode uses FortiClient to form a full-tunnel SSL VPN connection to FortiSASE Firewall-as-a-Service (FWaaS), with traffic secured through VPN policies. PAC files apply to agentless proxy access, and FortiExtender supports site-based access.",
       "learnMore": [
         {
@@ -1521,7 +1521,7 @@
         "C. Using the FortiGate CLI command diagnose log test",
         "D. In the Forward Traffic section"
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "BD",
       "explanation": "Application Control UTM events can be located with filters for their poluuid and app fields. FortiGate also records a correlated Forward Traffic log containing Application Control information and references to associated App Control logs, allowing the activity to be viewed from the Forward Traffic section. diagnose log test generates test logs rather than displaying these events, and the logged traffic was handled by policy ID 510 rather than the implicit-deny policy.",
       "learnMore": [
         {
@@ -1553,7 +1553,7 @@
         "D. Manual with load balancing",
         "E. Lowest Quality (SLA) with load balancing"
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "ACD",
       "explanation": "FortiGate permits Lowest Cost (SLA) rules with or without load balancing, and it permits load balancing under Manual mode. Load balancing is not available under Best Quality, and Lowest Quality (SLA) is not a defined SD-WAN rule strategy.",
       "learnMore": [
         {
@@ -1573,7 +1573,7 @@
         "C. On HQ-NGFW, set Encryption to AES256.",
         "D. On HQ-NGFW, enable Diffie-Hellman Group 2."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "AC",
       "explanation": "IPsec phase 2 requires reciprocal traffic selectors and at least one matching encryption/authentication proposal. The BR1-FGT remote selector must identify HQ-NGFW’s 10.0.11.0/24 subnet, and HQ-NGFW must use AES256 so its AES/SHA1 proposal matches BR1-FGT. Both peers already share PFS Diffie-Hellman group 5.",
       "learnMore": [
         {
@@ -1674,7 +1674,7 @@
         "C. Set the Freeware and Software Downloads category Action to Warning.",
         "D. Configure a separate firewall policy with action Deny and an FQDN address object for *. download.com as destination address."
       ],
-      "correctAnswer": "B",
+      "correctAnswer": "AB",
       "explanation": "A web rating override can assign download.com to the Malicious Websites subcategory, whose configured action is Block, without changing the allowed action for Freeware and Software Downloads. Alternatively, a static URL filter entry using a wildcard match and the Block action denies requests matching download.com independently of its FortiGuard category. FortiGate URL filters support wildcard patterns and a Block action, while web rating overrides reassign a URL to another category whose profile action is applied.",
       "learnMore": [
         {
@@ -1799,7 +1799,7 @@
         "C. Denied users are blocked for 30 minutes.",
         "D. Session helpers are disabled for denied traffic."
       ],
-      "correctAnswer": "B",
+      "correctAnswer": "AB",
       "explanation": "Enabling ses-denied-traffic adds denied traffic flows to the session table. Subsequent packets in the same denied flow are handled as part of that blocked session, reducing repeated processing and the number of denied-traffic logs. The block-session-timer value is a blocked-session duration in seconds; a value of 30 retains the denied session for 30 seconds, rather than blocking users for 30 minutes.",
       "learnMore": [
         {
@@ -1830,7 +1830,7 @@
         "C. The new static route must have the distance set to 9.",
         "D. The new static route must have the metric set to1."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "BC",
       "explanation": "For equally specific routes, FortiGate prefers the route with the lower administrative distance. If distances are equal, the route with the lower priority number is preferred. Therefore, increasing the existing port3 route’s distance from 9 to 11 allows a new port2 static route using the default distance of 10 to win. Alternatively, assigning the new port2 route a distance of 9 makes its distance equal to the existing route’s; its default priority of 1 is lower than the existing route’s priority of 2, so port2 is selected. Metric does not establish the required preference for these static routes.",
       "learnMore": [
         {
@@ -1913,7 +1913,7 @@
         "D. All the SLA targets can be configured.",
         "E. They rely on session loss and jitter."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "ABD",
       "explanation": "SD-WAN performance SLAs assess the health of links connected to SD-WAN member interfaces through active probes or passively captured session information. Their configurable SLA target constraints include latency, jitter, and packet loss, and they can be selected by an SD-WAN rule using the Lowest Cost (SLA) strategy. They do not monitor the FortiGate device itself.",
       "learnMore": [
         {
@@ -2011,7 +2011,7 @@
         "C. They must have the same hard drive configuration.",
         "D. They must have the same number of configured VDOMs."
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "AC",
       "explanation": "FGCP members can form one cluster only when they share the same HA group ID. They must also have identical hardware configurations, including the same number of hard disks. Fortinet documents that HA members require the same group ID and the same hardware configuration.",
       "learnMore": [
         {
@@ -2035,7 +2035,7 @@
         "C. When sniffing the heartbeat interface, the administrator must see the IP address 169.254.0.2.",
         "D. HA incremental synchronization includes FIB entries and IPsec SAs."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "AD",
       "explanation": "Administratively shutting down a monitored interface on the primary unit produces a link-down event that triggers HA link failover. HA incremental synchronization propagates dynamic forwarding information, including FIB entries, and IPsec security associations (SAs) to cluster members.",
       "learnMore": [
         {
@@ -2108,7 +2108,7 @@
         "C. Both interfaces must have DHCP enabled and interfaces set to LAN and DMZ roles assigned.",
         "D. Both interfaces must have the interface role assigned."
       ],
-      "correctAnswer": "B",
+      "correctAnswer": "AB",
       "explanation": "In NAT/route mode, FortiGate acts as a Layer 3 gateway, so each participating interface requires an IP address and supplies a route to its directly connected subnet. DHCP is an optional addressing method, while interface roles are classifications that control available interface settings and may be Undefined rather than being mandatory. FortiGate Interface settings FortiGate Routing concepts",
       "learnMore": [
         {
@@ -2132,7 +2132,7 @@
         "C. It is mandatory to provide a policy ID while creating a firewall policy regardless of GUI or CLI.",
         "D. You can create a policy in CLI with policy ID 0."
       ],
-      "correctAnswer": "D",
+      "correctAnswer": "AD",
       "explanation": "A firewall policy ID is a permanent unique identifier rather than the policy-processing sequence; policy order can be changed independently. The GUI assigns an ID automatically, while the CLI supports creating a policy using ID 0, which results in assignment of an available policy ID.",
       "learnMore": [
         {
@@ -2183,7 +2183,7 @@
         "C. Extended authentication (XAuth) to request the remote peer to provide a username and password",
         "D. Extended authentication (XAuth) for faster authentication because fewer packets are exchanged"
       ],
-      "correctAnswer": "C",
+      "correctAnswer": "AC",
       "explanation": "FortiGate supports pre-shared-key and PKI-signature (certificate) authentication for IKEv1. It also supports Extended Authentication (XAuth) in IKEv1, in which the remote dialup user supplies credentials such as a username and password in a separate exchange. Certificate-based authentication requires the needed certificates on both peers, and XAuth adds security rather than reducing packet exchanges.",
       "learnMore": [
         {

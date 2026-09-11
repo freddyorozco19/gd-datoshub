@@ -315,10 +315,20 @@ function getType(q: Question) {
 function isCorrectOpt(opt: string, correctAnswer?: string): boolean {
   if (!correctAnswer || !opt) return false
   const ans = correctAnswer.trim()
-  // Respuesta como letra sola (A-E): comparar primer carácter de la opción
-  if (/^[A-E]$/i.test(ans)) return opt.trim().charAt(0).toUpperCase() === ans.toUpperCase()
-  // Respuesta como texto completo: verificar que la respuesta contiene los primeros 12 chars de la opción
+  const optLetter = opt.trim().charAt(0).toUpperCase()
+  // Respuesta como una o varias letras (A, AD, ABC...): verificar si la letra de la opción está incluida
+  if (/^[A-E]+$/i.test(ans)) return ans.toUpperCase().includes(optLetter)
+  // Respuesta como texto completo
   return ans.toLowerCase().includes(opt.substring(0, 12).toLowerCase().trim())
+}
+
+function chooseNLabel(correctAnswer?: string): string | null {
+  if (!correctAnswer) return null
+  const count = correctAnswer.trim().length
+  if (count === 2) return 'Selecciona dos'
+  if (count === 3) return 'Selecciona tres'
+  if (count >= 4) return `Selecciona ${count}`
+  return null
 }
 
 const LEVEL_ORDER: Record<string, number> = {
@@ -692,6 +702,11 @@ function QuestionCard({
 
           {hasOptions && (
             <div className="space-y-2">
+              {chooseNLabel(shown.correctAnswer) && (
+                <p className="text-xs font-medium text-amber-400/80 bg-amber-900/20 border border-amber-700/30 rounded px-2.5 py-1 inline-block mb-1">
+                  {chooseNLabel(shown.correctAnswer)}
+                </p>
+              )}
               {shown.options!.map((opt, i) => {
                 const isSelected  = selected === i
                 const isCorrect   = isCorrectOpt(opt, shown.correctAnswer)
@@ -802,7 +817,11 @@ function QuestionCard({
                   </button>
                 )}
               </div>
-              <p className="text-sm text-emerald-300 leading-relaxed">{shown.correctAnswer}</p>
+              <p className="text-sm text-emerald-300 leading-relaxed">
+                {shown.correctAnswer && /^[A-E]{2,}$/i.test(shown.correctAnswer.trim())
+                  ? shown.correctAnswer.trim().toUpperCase().split('').join(', ')
+                  : shown.correctAnswer}
+              </p>
               {showExpl && q.explanation && (
                 <div className="mt-2 pt-2 border-t border-emerald-800/40">
                   <div className="flex items-center justify-between mb-1.5">
@@ -1266,7 +1285,11 @@ function ExamResults({
                     <span className="text-xs text-slate-300 leading-relaxed">{q.questionText?.slice(0, 120)}{(q.questionText?.length ?? 0) > 120 ? '…' : ''}</span>
                   </div>
                   {!ok && q.correctAnswer && (
-                    <p className="text-[11px] text-emerald-400/80 ml-6">✓ {q.correctAnswer}</p>
+                    <p className="text-[11px] text-emerald-400/80 ml-6">
+                      ✓ {/^[A-E]{2,}$/i.test(q.correctAnswer.trim())
+                        ? q.correctAnswer.trim().toUpperCase().split('').join(', ')
+                        : q.correctAnswer}
+                    </p>
                   )}
                 </div>
               )
