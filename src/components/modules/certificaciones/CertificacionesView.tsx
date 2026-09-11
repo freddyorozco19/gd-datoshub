@@ -1713,62 +1713,54 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
         <SemanticSearchPanel questions={data.questions} />
       )}
 
-      <div className="flex gap-3 flex-wrap">
-        <div className="relative flex-1 min-w-48">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input
-            type="text" value={search}
-            onChange={e => { setSearch(e.target.value); setPage(1) }}
-            placeholder="Buscar pregunta, opción, respuesta..."
-            className="w-full bg-white/[0.04] backdrop-blur-xl border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/60 transition-colors"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <Filter size={14} className="text-slate-500" />
+      <div className="bg-white/[0.04] backdrop-blur-xl border border-border rounded-xl overflow-hidden">
+
+        {/* Fila única: búsqueda + tipo + concepto */}
+        <div className="flex gap-2 flex-wrap items-center px-3 py-2.5 border-b border-border/60">
+          <div className="relative flex-1 min-w-40">
+            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text" value={search}
+              onChange={e => { setSearch(e.target.value); setPage(1) }}
+              placeholder="Buscar pregunta, opción, respuesta..."
+              className="w-full bg-slate-800/50 border border-border rounded-lg pl-8 pr-3 py-2 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/60 transition-colors"
+            />
+          </div>
           <select value={filter} onChange={e => { setFilter(e.target.value as FilterType); setPage(1) }}
-            className="bg-white/[0.04] backdrop-blur-xl border border-border rounded-lg px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-primary/60 cursor-pointer">
+            className="bg-slate-800/50 border border-border rounded-lg px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-primary/60 cursor-pointer">
             <option value="all">Todos los tipos</option>
             <option value="mc">Opción múltiple</option>
             <option value="yn">Sí / No</option>
             <option value="img">Con imagen</option>
             <option value="noanswer">Sin respuesta</option>
           </select>
-        </div>
-      </div>
-
-      <div className="bg-white/[0.04] backdrop-blur-xl border border-border rounded-xl overflow-hidden">
-
-        <button
-          onClick={() => setShowTagPanel(v => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors"
-        >
-          <div className="flex items-center gap-2.5">
-            <Filter size={14} className="text-slate-500" />
-            <span className="text-sm font-medium text-slate-300">Filtrar por concepto</span>
+          <button
+            onClick={() => setShowTagPanel(v => !v)}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${
+              showTagPanel || activeTag
+                ? 'bg-primary/15 border-primary/40 text-primary'
+                : 'bg-slate-800/50 border-border text-slate-400 hover:text-slate-200 hover:border-slate-500'
+            }`}
+          >
+            <Filter size={13} />
+            <span className="font-medium">Conceptos</span>
             {activeTag && (
-              <span className="text-[10px] bg-primary/20 border border-primary/40 text-primary px-2 py-0.5 rounded-full font-semibold">
+              <span className="text-[10px] bg-primary/30 border border-primary/50 text-primary px-1.5 py-0.5 rounded-full font-semibold max-w-[120px] truncate">
                 {activeTag}
               </span>
             )}
-            <span className="text-[11px] text-slate-600">
-              {allTagCounts.length} conceptos
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-slate-600">({allTagCounts.length})</span>
             {activeTag && (
-              <button
+              <span
+                role="button"
                 onClick={e => { e.stopPropagation(); setActiveTag(null); setPage(1) }}
-                className="text-[11px] text-slate-500 hover:text-red-400 transition-colors px-2 py-0.5 rounded border border-slate-700 hover:border-red-500/50"
-              >
-                ✕ Quitar
-              </button>
+                className="text-slate-500 hover:text-red-400 transition-colors ml-0.5"
+                title="Quitar filtro"
+              >✕</span>
             )}
-            {showTagPanel
-              ? <ChevronUp size={14} className="text-slate-500" />
-              : <ChevronDown size={14} className="text-slate-500" />
-            }
-          </div>
-        </button>
+            {showTagPanel ? <ChevronUp size={13} className="ml-0.5" /> : <ChevronDown size={13} className="ml-0.5" />}
+          </button>
+        </div>
 
         {showTagPanel && (
           <div className="border-t border-border px-4 py-3 space-y-3">
