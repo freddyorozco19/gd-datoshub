@@ -33,7 +33,7 @@
         "C. A packet with the source IP address 10.10.10.10 arriving on port2 is allowed if strict RPF is enabled.",
         "D. A packet with the source IP address 10.100.110.10 arriving on port2 is allowed if strict RPF is enabled."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D",
       "explanation": "Feasible-path RPF accepts a packet when at least one active route to its source uses the receiving interface; the default route through port2 therefore permits source 10.0.13.10 received on port2. Strict RPF requires the best route back to the source to use the receiving interface; source 10.100.110.10 matches the default route through port2 and therefore passes when received on port2.",
       "learnMore": [
         {
@@ -80,7 +80,7 @@
         "C. The Underlay zone is the zone by default.",
         "D. The virtual-wan-link and overlay zones can be deleted."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A",
       "explanation": "virtual-wan-link is the default SD-WAN zone, and the four displayed member interfaces are assigned within the SD-WAN configuration. The Underlay zone has no member interfaces listed beneath it, so it is an empty zone. Fortinet documents that the default SD-WAN zone is named virtual-wan-link.",
       "learnMore": [
         {
