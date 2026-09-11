@@ -1,7 +1,7 @@
 {
   "examTitle": "NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator",
   "totalQuestions": 84,
-  "scrapedAt": "2026-09-11T19:22:44.912Z",
+  "scrapedAt": "2026-09-11T19:42:57.488Z",
   "questions": [
     {
       "number": "1",
@@ -651,7 +651,7 @@
         "C. For www.facebook.com, the URL filter action is incorrect.",
         "D. The web filter profile feature set is configured incorrectly."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "D",
       "explanation": "A web filter profile’s feature set must correspond to the inspection mode of the firewall policy that applies it. A flow-based profile attached to a proxy-based policy is incorrectly configured. In addition, a static URL filter action of Monitor permits and logs the matching URL; it does not bypass subsequent FortiGuard filtering. Fortinet documents that URL filters are processed before FortiGuard Web Filtering, and that Monitor allows matching traffic with logging.",
       "learnMore": [
         {
