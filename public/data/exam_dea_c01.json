@@ -1,7 +1,7 @@
 {
   "examTitle": "DEA-C01: AWS Certified Data Engineer Associate",
   "totalQuestions": 366,
-  "scrapedAt": "2026-09-11T16:19:31.437Z",
+  "scrapedAt": "2026-09-11T16:25:14.770Z",
   "questions": [
     {
       "number": "1",
@@ -4996,43 +4996,6 @@
       "images": []
     },
     {
-      "number": "13",
-      "questionText": "A company uses Amazon Redshift as its data warehouse. A data engineer must query a table named orders.complete_orders_history, which has 100 columns. The query must return every column except those named companyId and unique_system_id. Which Amazon Redshift SQL statement meets this requirement?",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "",
-      "explanation": "Amazon Redshift supports SELECT * EXCLUDE column_list to return all columns from a table except the named columns. This syntax is intended for wide tables when only a small subset of columns must be omitted; NOT IN, EXCEPT, and TRUNCATE are not column-exclusion clauses in this context.",
-      "images": []
-    },
-    {
-      "number": "222",
-      "questionText": "A company has several applications that use datasets stored in an Amazon S3 bucket. Its ecommerce application produces a dataset containing personally identifiable information (PII). Its internal analytics application does not need access to the PII. To meet regulatory requirements, the company must avoid unnecessarily sharing PII. A data engineer needs to implement a solution that dynamically redacts PII according to the needs of each application that accesses the dataset. Which solution meets these requirements with the LEAST operational overhead?",
-      "translation": "",
-      "options": [
-        "A. Create an S3 bucket policy to limit the access each application has. Create multiple copies of the dataset. Give each dataset copy the appropriate level of redaction for the needs of the application that accesses the copy.",
-        "B. Create an S3 Object Lambda endpoint. Use the S3 Object Lambda endpoint to read data from the S3 bucket. Implement redaction logic within an S3 Object Lambda function to dynamically redact PII based on the needs of each application that accesses the data.",
-        "C. Use AWS Glue to transform the data for each application. Create multiple copies of the dataset. Give each dataset copy the appropriate level of redaction for the needs of the application that accesses the copy.",
-        "D. Create an API Gateway endpoint that has custom authorizers. Use the API Gateway endpoint to read data from the S3 bucket. Initiate a REST API call to dynamically redact PII based on the needs of each application that accesses the data."
-      ],
-      "correctAnswer": "",
-      "explanation": "Amazon S3 Object Lambda can invoke custom Lambda code for S3 retrieval requests and return a transformed object to the requesting application. The transformation can dynamically redact confidential data such as PII without altering the original object or maintaining separate redacted dataset copies, which minimizes operational overhead.",
-      "images": []
-    },
-    {
-      "number": "223",
-      "questionText": "A company receives .csv files containing physical-address data. The data is in columns named Door_No, Street_Name, City, and Zip_Code. The company needs to create one column that stores these values in the following format: Which solution meets this requirement with the LEAST coding effort?",
-      "translation": "",
-      "options": [
-        "A. Use AWS Glue DataBrew to read the files. Use the NEST_TO_ARRAY transformation to create the new column.",
-        "B. Use AWS Glue DataBrew to read the files. Use the NEST_TO_MAP transformation to create the new column.",
-        "C. Use AWS Glue DataBrew to read the files. Use the PIVOT transformation to create the new column.",
-        "D. Write a Lambda function in Python to read the files. Use the Python data dictionary type to create the new column."
-      ],
-      "correctAnswer": "",
-      "explanation": "AWS Glue DataBrew NEST_TO_MAP converts selected columns into key-value pairs, using each source column name as the key and its row value as the value. This produces the required single address column without custom code.",
-      "images": []
-    },
-    {
       "number": "232",
       "questionText": "A company needs to aggregate and filter a large volume of streaming data in real time with low latency. The company must store the data in Amazon S3 for analysis. Which solution meets these requirements in the MOST operationally efficient manner?",
       "translation": "",
@@ -5105,21 +5068,6 @@
       "images": []
     },
     {
-      "number": "275",
-      "questionText": "A data engineer needs to orchestrate a sequence of Amazon Athena queries that will execute each day. Each query might run for longer than 15 minutes. Which combination of steps meets these requirements MOST cost-effectively? Choose two",
-      "translation": "",
-      "options": [
-        "A. Use an AWS Lambda function and the Athena Boto3 client start_query_execution API call to invoke the Athena queries programmatically.",
-        "B. Create an AWS Step Functions workflow and add two states. Add the first state before the Lambda function. Configure the second state as a Wait state to periodically check whether the Athena query has finished using the Athena Boto3 get_query_execution API call. Configure the workflow to invoke the next query when the current query has finished running.",
-        "C. Use an AWS Glue Python shell job and the Athena Boto3 client start_query_execution API call to invoke the Athena queries programmatically.",
-        "D. Use an AWS Glue Python shell script to run a sleep timer that checks every 5 minutes to determine whether the current Athena query has finished running successfully. Configure the Python shell script to invoke the next query when the current query has finished running.",
-        "E. Use Amazon Managed Workflows for Apache Airflow (Amazon MWAA) to orchestrate the Athena queries in AWS Batch."
-      ],
-      "correctAnswer": "",
-      "explanation": "Amazon Athena query execution is asynchronous: StartQueryExecution submits the query, and GetQueryExecution returns its current status. AWS Lambda has a maximum invocation timeout of 15 minutes, so Lambda can submit each query without waiting for it to finish. AWS Step Functions can use a Wait state between status checks and start the next query only after the preceding query completes, avoiding idle Glue compute and the additional overhead of MWAA and AWS Batch.",
-      "images": []
-    },
-    {
       "number": "279",
       "questionText": "A company routinely loads data into an Amazon DynamoDB table. The company must keep the data in DynamoDB for 1 year. After 1 year, the company must archive the data for 5 years. After 5 years, the company must delete the data. Which solution meets these requirements in the MOST operationally efficient manner?",
       "translation": "",
@@ -5149,6 +5097,58 @@
       "images": []
     },
     {
+      "number": "13",
+      "questionText": "A company uses Amazon Redshift as its data warehouse. A data engineer must query a table named orders.complete_orders_history, which has 100 columns. The query must return every column except those named companyId and unique_system_id. Which Amazon Redshift SQL statement meets this requirement?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "",
+      "explanation": "Amazon Redshift supports SELECT * EXCLUDE column_list to return all columns from a table except the named columns. This syntax is intended for wide tables when only a small subset of columns must be omitted; NOT IN, EXCEPT, and TRUNCATE are not column-exclusion clauses in this context.",
+      "images": []
+    },
+    {
+      "number": "222",
+      "questionText": "A company has several applications that use datasets stored in an Amazon S3 bucket. Its ecommerce application produces a dataset containing personally identifiable information (PII). Its internal analytics application does not need access to the PII. To meet regulatory requirements, the company must avoid unnecessarily sharing PII. A data engineer needs to implement a solution that dynamically redacts PII according to the needs of each application that accesses the dataset. Which solution meets these requirements with the LEAST operational overhead?",
+      "translation": "",
+      "options": [
+        "A. Create an S3 bucket policy to limit the access each application has. Create multiple copies of the dataset. Give each dataset copy the appropriate level of redaction for the needs of the application that accesses the copy.",
+        "B. Create an S3 Object Lambda endpoint. Use the S3 Object Lambda endpoint to read data from the S3 bucket. Implement redaction logic within an S3 Object Lambda function to dynamically redact PII based on the needs of each application that accesses the data.",
+        "C. Use AWS Glue to transform the data for each application. Create multiple copies of the dataset. Give each dataset copy the appropriate level of redaction for the needs of the application that accesses the copy.",
+        "D. Create an API Gateway endpoint that has custom authorizers. Use the API Gateway endpoint to read data from the S3 bucket. Initiate a REST API call to dynamically redact PII based on the needs of each application that accesses the data."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Amazon S3 Object Lambda can invoke custom Lambda code for S3 retrieval requests and return a transformed object to the requesting application. The transformation can dynamically redact confidential data such as PII without altering the original object or maintaining separate redacted dataset copies, which minimizes operational overhead.",
+      "images": []
+    },
+    {
+      "number": "223",
+      "questionText": "A company receives .csv files containing physical-address data. The data is in columns named Door_No, Street_Name, City, and Zip_Code. The company needs to create one column that stores these values in the following format: Which solution meets this requirement with the LEAST coding effort?",
+      "translation": "",
+      "options": [
+        "A. Use AWS Glue DataBrew to read the files. Use the NEST_TO_ARRAY transformation to create the new column.",
+        "B. Use AWS Glue DataBrew to read the files. Use the NEST_TO_MAP transformation to create the new column.",
+        "C. Use AWS Glue DataBrew to read the files. Use the PIVOT transformation to create the new column.",
+        "D. Write a Lambda function in Python to read the files. Use the Python data dictionary type to create the new column."
+      ],
+      "correctAnswer": "B",
+      "explanation": "AWS Glue DataBrew NEST_TO_MAP converts selected columns into key-value pairs, using each source column name as the key and its row value as the value. This produces the required single address column without custom code.",
+      "images": []
+    },
+    {
+      "number": "275",
+      "questionText": "A data engineer needs to orchestrate a sequence of Amazon Athena queries that will execute each day. Each query might run for longer than 15 minutes. Which combination of steps meets these requirements MOST cost-effectively? Choose two",
+      "translation": "",
+      "options": [
+        "A. Use an AWS Lambda function and the Athena Boto3 client start_query_execution API call to invoke the Athena queries programmatically.",
+        "B. Create an AWS Step Functions workflow and add two states. Add the first state before the Lambda function. Configure the second state as a Wait state to periodically check whether the Athena query has finished using the Athena Boto3 get_query_execution API call. Configure the workflow to invoke the next query when the current query has finished running.",
+        "C. Use an AWS Glue Python shell job and the Athena Boto3 client start_query_execution API call to invoke the Athena queries programmatically.",
+        "D. Use an AWS Glue Python shell script to run a sleep timer that checks every 5 minutes to determine whether the current Athena query has finished running successfully. Configure the Python shell script to invoke the next query when the current query has finished running.",
+        "E. Use Amazon Managed Workflows for Apache Airflow (Amazon MWAA) to orchestrate the Athena queries in AWS Batch."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Amazon Athena query execution is asynchronous: StartQueryExecution submits the query, and GetQueryExecution returns its current status. AWS Lambda has a maximum invocation timeout of 15 minutes, so Lambda can submit each query without waiting for it to finish. AWS Step Functions can use a Wait state between status checks and start the next query only after the preceding query completes, avoiding idle Glue compute and the additional overhead of MWAA and AWS Batch.",
+      "images": []
+    },
+    {
       "number": "281",
       "questionText": "A company operates a data warehouse in an on-premises Oracle database. The company wants to create a data lake on AWS. It needs to load data warehouse tables into Amazon S3 and synchronize the tables with incremental data that arrives from the data warehouse each day. Each table includes a column with monotonically increasing values. Every table is smaller than 50 GB. The data warehouse tables are refreshed nightly between 1 AM and 2 AM. A business intelligence team queries the tables daily between 10 AM and 8 PM. Which solution meets these requirements in the MOST operationally efficient way?",
       "translation": "",
@@ -5158,7 +5158,7 @@
         "C. Use an AWS Database Migration Service (AWS DMS) full load migration to load the data warehouse tables into Amazon S3 every day. Overwrite the previous day's full-load copy every day.",
         "D. Use AWS Glue to load a full copy of the data warehouse tables into Amazon S3 every day. Overwrite the previous day's full-load copy every day."
       ],
-      "correctAnswer": "",
+      "correctAnswer": "B",
       "explanation": "AWS Glue job bookmarks for JDBC sources retain the value of specified bookmark keys and use it to identify rows not processed by earlier successful runs. A strictly monotonically increasing column is valid as a user-defined bookmark key, so a scheduled Glue job can perform the initial full load and subsequently read and append only daily new rows to Amazon S3.",
       "images": []
     }
