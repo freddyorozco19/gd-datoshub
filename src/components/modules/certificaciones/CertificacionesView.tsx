@@ -135,13 +135,20 @@ const PROVIDERS: ProviderConfig[] = [
     logoImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Fortinet_logo.svg/3840px-Fortinet_logo.svg.png',
     exams: [
       { id: 'fcf',  code: 'FCF',   name: 'Certified Fundamentals in Cybersecurity', level: 'Fundamental'  },
-      { id: 'nse4', code: 'NSE 4', name: 'Network Security Professional',           level: 'Associate'    },
+      { id: 'nse4', code: 'NSE4-FGT-7.6', name: 'FortiOS 7.6 Administrator', dataFile: '/data/exam_nse4_fgt.json', questions: 84, level: 'Associate' },
       { id: 'nse7', code: 'NSE 7', name: 'Network Security Architect',              level: 'Professional' },
     ],
   },
 ]
 
 // ─── Types de preguntas ───────────────────────────────────────────────────────
+
+interface QuestionImage {
+  path: string
+  alt?: string
+  inOption?: boolean
+  optionLetter?: string | null
+}
 
 interface Question {
   number: string
@@ -150,7 +157,8 @@ interface Question {
   explanation?: string
   options?: string[]
   correctAnswer?: string
-  images?: string[]
+  learnMore?: string[]
+  images?: (string | QuestionImage)[]
 }
 
 interface ExamData {
@@ -669,10 +677,18 @@ function QuestionCard({
             </div>
           )}
 
-          {shown.images?.map((src, i) => (
-            <img key={i} src={src} alt="" className="max-w-full rounded-lg border border-border"
-              onError={e => (e.currentTarget.style.display = 'none')} />
-          ))}
+          {shown.images?.filter(img => {
+            const info = typeof img === 'string' ? null : img
+            return !info?.inOption
+          }).map((img, i) => {
+            const src = typeof img === 'string' ? img : img.path
+            const alt = typeof img === 'string' ? '' : (img.alt || '')
+            return (
+              <img key={i} src={src} alt={alt}
+                className="max-w-full rounded-lg border border-white/10 mt-1"
+                onError={e => (e.currentTarget.style.display = 'none')} />
+            )
+          })}
 
           {hasOptions && (
             <div className="space-y-2">
@@ -704,7 +720,21 @@ function QuestionCard({
                     {!verified && !isSelected && (
                       <span className="w-3.5 h-3.5 rounded-full border border-slate-600 shrink-0 mt-0.5" />
                     )}
-                    <span>{opt}</span>
+                    <span className="flex flex-col gap-1.5 min-w-0">
+                      <span>{opt}</span>
+                      {(() => {
+                        const letter = opt.match(/^([A-E])\./)?.[1]
+                        if (!letter) return null
+                        const optImgs = (q.images ?? []).filter(img =>
+                          typeof img !== 'string' && img.inOption && img.optionLetter === letter
+                        ) as QuestionImage[]
+                        return optImgs.map((img, ii) => (
+                          <img key={ii} src={img.path} alt={img.alt || ''}
+                            className="max-w-full rounded border border-white/10 mt-0.5"
+                            onError={e => (e.currentTarget.style.display = 'none')} />
+                        ))
+                      })()}
+                    </span>
                   </button>
                 )
               })}
