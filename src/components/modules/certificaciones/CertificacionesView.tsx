@@ -1177,6 +1177,14 @@ function ExamScreen({
                   )}
                 </button>
               )}
+              {getQuestionTags(q).slice(0, 3).map(tag => {
+                const cls = TAG_COLOR[tag.color] ?? TAG_COLOR.slate
+                return (
+                  <span key={tag.label} className={`inline-flex items-center text-[10px] font-semibold px-2 py-0.5 rounded-full border ${cls}`}>
+                    {tag.label}
+                  </span>
+                )
+              })}
             </div>
             <p className="text-white text-[15px] leading-relaxed">{displayText}</p>
           </div>
