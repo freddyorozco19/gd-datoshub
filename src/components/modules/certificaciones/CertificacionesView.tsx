@@ -4,10 +4,10 @@ import { useState, useEffect, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   Search, ChevronDown, ChevronUp, BookOpen, CheckCircle, XCircle,
-  ImageIcon, Filter, RefreshCw, ChevronRight, ArrowLeft, Lock,
+  ImageIcon, Filter, RefreshCw, ChevronRight, ChevronLeft, ArrowLeft, Lock,
   Eye, EyeOff, RotateCcw, ExternalLink,
   Play, Clock, Trophy, X, GraduationCap, AlertTriangle,
-  ListChecks, Pencil, Loader2, LayoutGrid,
+  ListChecks, Pencil, Loader2, LayoutGrid, Bookmark,
 } from 'lucide-react'
 import Topbar from '@/components/layout/Topbar'
 
@@ -888,7 +888,7 @@ interface ExamModeCfg {
   onlyWithAnswer: boolean
   translateToEs: boolean
 }
-interface ExamModeAns { selected: number[]; confirmed: boolean }
+interface ExamModeAns { selected: number[]; confirmed: boolean; flagged: boolean }
 
 function fmtTime(s: number) {
   return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
@@ -1006,7 +1006,7 @@ function ExamScreen({
 }) {
   const total = questions.length
   const [current,     setCurrent]     = useState(0)
-  const [answers,     setAnswers]     = useState<ExamModeAns[]>(questions.map(() => ({ selected: [], confirmed: false })))
+  const [answers,     setAnswers]     = useState<ExamModeAns[]>(questions.map(() => ({ selected: [], confirmed: false, flagged: false })))
   const [timeLeft,    setTimeLeft]    = useState(config.timeLimitMin * 60)
   const [showExit,    setShowExit]    = useState(false)
 
@@ -1091,8 +1091,13 @@ function ExamScreen({
     if (current < total - 1) setCurrent(c => c + 1)
     else onFinish(answers)
   }
+  const goPrev = () => { if (current > 0) setCurrent(c => c - 1) }
+  const toggleFlag = () => {
+    setAnswers(prev => prev.map((a, i) => i === current ? { ...a, flagged: !a.flagged } : a))
+  }
 
   const answeredCount = answers.filter(a => a.confirmed).length
+  const flaggedCount  = answers.filter(a => a.flagged).length
 
   return (
     <div className="fixed inset-0 z-40 bg-[#07070F] flex flex-col overflow-hidden">
@@ -1104,9 +1109,10 @@ function ExamScreen({
             <ArrowLeft size={14} /> Salir
           </button>
 
-          <span className="text-xs text-slate-400">
-            <span className="text-white font-bold">{current + 1}</span>/{total}
-            {answeredCount > 0 && <span className="ml-2 text-slate-600">· {answeredCount} respondidas</span>}
+          <span className="text-xs text-slate-400 flex items-center gap-2">
+            <span><span className="text-white font-bold">{current + 1}</span>/{total}</span>
+            {answeredCount > 0 && <span className="text-slate-600">· {answeredCount} respondidas</span>}
+            {flaggedCount > 0 && <span className="text-amber-500/70">· {flaggedCount} marcadas</span>}
           </span>
 
           <div className="flex items-center gap-3">
@@ -1212,54 +1218,70 @@ function ExamScreen({
             })}
           </div>
 
-          {!ans.confirmed ? (
+          {/* Show Answer */}
+          {!ans.confirmed && (
             <button onClick={confirmAns} disabled={ans.selected.length === 0}
-              className="w-full py-3.5 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-35 disabled:cursor-not-allowed text-white font-bold text-sm transition-colors">
-              Verificar respuesta
+              className="w-full py-3.5 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-35 disabled:cursor-not-allowed text-white font-bold text-sm transition-colors mb-3">
+              Show Answer
             </button>
-          ) : (
-            <div className="space-y-3">
-              {/* Explanation + Learn More tras verificar */}
-              {(q.explanation || (q.learnMore && q.learnMore.length > 0)) && (
-                <div className="bg-slate-800/60 border border-white/[0.08] rounded-xl px-4 py-3.5 space-y-2.5">
-                  {q.explanation && (
-                    <div>
-                      <p className="text-[10px] text-blue-400 font-semibold uppercase tracking-wide mb-1">Explicación</p>
-                      <p className="text-sm text-slate-300 leading-relaxed">{xlat?.explanation ?? q.explanation}</p>
-                    </div>
-                  )}
-                  {q.learnMore && q.learnMore.length > 0 && (
-                    <div>
-                      <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
-                      <ul className="space-y-1">
-                        {q.learnMore.map((item, i) => {
-                          const text = typeof item === 'string' ? item : item.text
-                          const url  = typeof item === 'string' ? null  : item.url
-                          return (
-                            <li key={i} className="text-xs">
-                              {url ? (
-                                <a href={url} target="_blank" rel="noopener noreferrer"
-                                  className="text-blue-400 hover:text-blue-300 hover:underline transition-colors">
-                                  {text}
-                                </a>
-                              ) : (
-                                <span className="text-slate-400">{text}</span>
-                              )}
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    </div>
-                  )}
+          )}
+
+          {/* Explanation + Learn More */}
+          {ans.confirmed && (q.explanation || (q.learnMore && q.learnMore.length > 0)) && (
+            <div className="bg-slate-800/60 border border-white/[0.08] rounded-xl px-4 py-3.5 space-y-2.5 mb-3">
+              {q.explanation && (
+                <div>
+                  <p className="text-[10px] text-blue-400 font-semibold uppercase tracking-wide mb-1">Explicación</p>
+                  <p className="text-sm text-slate-300 leading-relaxed">{xlat?.explanation ?? q.explanation}</p>
                 </div>
               )}
-              <button onClick={goNext}
-                className="w-full py-3.5 rounded-xl bg-primary hover:opacity-90 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2">
-                {current < total - 1 ? 'Siguiente pregunta' : 'Ver resultados'}
-                <ChevronRight size={15} />
-              </button>
+              {q.learnMore && q.learnMore.length > 0 && (
+                <div>
+                  <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
+                  <ul className="space-y-1">
+                    {q.learnMore.map((item, i) => {
+                      const text = typeof item === 'string' ? item : item.text
+                      const url  = typeof item === 'string' ? null  : item.url
+                      return (
+                        <li key={i} className="text-xs">
+                          {url ? (
+                            <a href={url} target="_blank" rel="noopener noreferrer"
+                              className="text-blue-400 hover:text-blue-300 hover:underline transition-colors">
+                              {text}
+                            </a>
+                          ) : (
+                            <span className="text-slate-400">{text}</span>
+                          )}
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
+
+          {/* Navegación: Anterior · Revisar Después · Siguiente */}
+          <div className="grid grid-cols-3 gap-2">
+            <button onClick={goPrev} disabled={current === 0}
+              className="flex items-center justify-center gap-1.5 py-3 rounded-xl border border-white/[0.08] bg-white/[0.03] text-slate-400 hover:bg-white/[0.07] hover:text-white disabled:opacity-25 disabled:cursor-not-allowed transition-colors text-sm font-semibold">
+              <ChevronLeft size={15} /> Anterior
+            </button>
+            <button onClick={toggleFlag}
+              className={`flex items-center justify-center gap-1.5 py-3 rounded-xl border transition-colors text-sm font-semibold ${
+                ans.flagged
+                  ? 'bg-amber-500/15 border-amber-500/50 text-amber-300 hover:bg-amber-500/25'
+                  : 'border-white/[0.08] bg-white/[0.03] text-slate-400 hover:bg-white/[0.07] hover:text-amber-300'
+              }`}>
+              <Bookmark size={14} className={ans.flagged ? 'fill-amber-300' : ''} />
+              {ans.flagged ? 'Marcada' : 'Revisar después'}
+            </button>
+            <button onClick={goNext}
+              className="flex items-center justify-center gap-1.5 py-3 rounded-xl bg-primary hover:opacity-90 text-white font-semibold text-sm transition-colors">
+              {current < total - 1 ? 'Siguiente' : 'Ver resultados'}
+              <ChevronRight size={15} />
+            </button>
+          </div>
         </div>
       </div>
 
