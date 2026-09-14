@@ -1194,6 +1194,20 @@ function ExamScreen({
               })}
             </div>
             <p className="text-white text-[15px] leading-relaxed">{displayText}</p>
+
+            {/* imágenes asociadas a la pregunta (no a opciones) */}
+            {q.images?.filter(img => {
+              const info = typeof img === 'string' ? null : img
+              return !info?.inOption
+            }).map((img, i) => {
+              const src = typeof img === 'string' ? img : img.path
+              const alt = typeof img === 'string' ? '' : (img.alt || '')
+              return (
+                <img key={i} src={src} alt={alt}
+                  className="max-w-full rounded-lg border border-white/10 mt-3 mx-auto block"
+                  onError={e => (e.currentTarget.style.display = 'none')} />
+              )
+            })}
           </div>
 
           <div className="space-y-3 mb-8">
@@ -1207,11 +1221,24 @@ function ExamScreen({
                 else if (sel)     cls = 'bg-red-500/10 border-red-500/50 text-red-300 cursor-default'
                 else              cls = 'bg-white/[0.02] border-white/[0.04] text-slate-600 cursor-default'
               } else if (sel)     cls = 'bg-teal-500/10 border-teal-500/60 text-teal-200 cursor-pointer'
+              const letter = opt.match(/^([A-E])\./)?.[1]
+              const optImgs = letter
+                ? (q.images ?? []).filter(img =>
+                    typeof img !== 'string' && img.inOption && img.optionLetter === letter
+                  ) as QuestionImage[]
+                : []
               return (
                 <button key={idx} onClick={() => selectOpt(idx)}
                   className={`w-full text-left px-4 py-3.5 rounded-xl border transition-all duration-150 flex items-start gap-3 ${cls}`}>
                   <span className="text-xs font-bold mt-0.5 flex-shrink-0 opacity-70">{opt.charAt(0)}.</span>
-                  <span className="text-sm leading-relaxed flex-1">{opt.slice(opt.indexOf('.') + 1).trim()}</span>
+                  <span className="text-sm leading-relaxed flex-1 flex flex-col gap-1.5">
+                    <span>{opt.slice(opt.indexOf('.') + 1).trim()}</span>
+                    {optImgs.map((img, ii) => (
+                      <img key={ii} src={img.path} alt={img.alt || ''}
+                        className="max-w-full rounded border border-white/10 mt-0.5 block"
+                        onError={e => (e.currentTarget.style.display = 'none')} />
+                    ))}
+                  </span>
                   {confirmed && correct && <CheckCircle size={15} className="text-emerald-400 flex-shrink-0 mt-0.5" />}
                   {confirmed && sel && !correct && <XCircle size={15} className="text-red-400 flex-shrink-0 mt-0.5" />}
                 </button>
