@@ -1,4 +1,5 @@
 import Sidebar from "@/components/layout/Sidebar";
+import PageViewTracker from "@/components/layout/PageViewTracker";
 
 export default function PortalLayout({
   children,
@@ -21,6 +22,7 @@ export default function PortalLayout({
           <div className="absolute top-[48%] right-[18%] w-[320px] h-[300px] bg-teal-400/20 blur-[110px]"
             style={{ borderRadius: "45% 55% 40% 60% / 60% 40% 55% 45%" }} />
         </div>
+        <PageViewTracker />
         {children}
       </div>
     </div>

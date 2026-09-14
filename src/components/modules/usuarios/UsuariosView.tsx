@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   Users, Shield, User as UserIcon, Loader2, AlertCircle, RefreshCw,
@@ -27,6 +27,7 @@ interface AccessEvent {
   created_at: string;
   email: string | null;
   action: string;
+  path: string | null;
   ip: string | null;
   browser: string | null;
   os: string | null;
@@ -825,11 +826,19 @@ function UsuariosPanel() {
 }
 
 /* ── Trazabilidad de accesos ───────────────────────────────────────── */
+const ACTION_CFG: Record<string, { label: string; cls: string }> = {
+  login:     { label: "Inicio de sesión", cls: "bg-emerald-500/10 text-emerald-400" },
+  page_view: { label: "Vista de página",  cls: "bg-blue-500/10 text-blue-400"       },
+  logout:    { label: "Cierre de sesión", cls: "bg-slate-500/20 text-slate-400"     },
+};
+
 function TrazabilidadPanel() {
   const [events, setEvents] = useState<AccessEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [needsSetup, setNeedsSetup] = useState(false);
+  const [actionFilter, setActionFilter] = useState<string>("all");
+  const [userFilter, setUserFilter] = useState<string>("");
 
   async function load() {
     setLoading(true); setError(null); setNeedsSetup(false);
@@ -850,22 +859,55 @@ function TrazabilidadPanel() {
 
   useEffect(() => { load(); }, []);
 
+  const allUsers = useMemo(() => [...new Set(events.map((e: AccessEvent) => e.email).filter(Boolean) as string[])].sort(), [events]);
+  const filtered = useMemo(() => events.filter(e => {
+    if (actionFilter !== "all" && e.action !== actionFilter) return false;
+    if (userFilter && e.email !== userFilter) return false;
+    return true;
+  }), [events, actionFilter, userFilter]);
+
+  const loginCount    = events.filter(e => e.action === "login").length;
+  const pageViewCount = events.filter(e => e.action === "page_view").length;
+
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3 flex-wrap">
+        {/* KPIs */}
         <div className="flex items-center gap-2 bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] px-4 py-2.5 text-sm">
           <History size={16} className="text-blue-400" />
           <span className="font-semibold text-slate-200">{events.length}</span>
-          <span className="text-slate-500">eventos de acceso</span>
+          <span className="text-slate-500">eventos totales</span>
         </div>
-        <button
-          onClick={load}
-          disabled={loading}
-          className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] disabled:opacity-60 transition-colors"
-        >
+        <div className="flex items-center gap-2 bg-emerald-500/5 rounded-xl border border-emerald-500/20 px-3 py-2.5 text-sm">
+          <span className="font-semibold text-emerald-400">{loginCount}</span>
+          <span className="text-slate-500 text-xs">logins</span>
+        </div>
+        <div className="flex items-center gap-2 bg-blue-500/5 rounded-xl border border-blue-500/20 px-3 py-2.5 text-sm">
+          <span className="font-semibold text-blue-400">{pageViewCount}</span>
+          <span className="text-slate-500 text-xs">vistas de página</span>
+        </div>
+
+        {/* Filtros */}
+        <select value={actionFilter} onChange={e => setActionFilter(e.target.value)}
+          className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-primary/60 transition-colors">
+          <option value="all">Todos los eventos</option>
+          <option value="login">Solo logins</option>
+          <option value="page_view">Solo vistas de página</option>
+        </select>
+        {allUsers.length > 1 && (
+          <select value={userFilter} onChange={e => setUserFilter(e.target.value)}
+            className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-primary/60 transition-colors">
+            <option value="">Todos los usuarios</option>
+            {allUsers.map((u: string) => <option key={u} value={u}>{u}</option>)}
+          </select>
+        )}
+
+        <button onClick={load} disabled={loading}
+          className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] disabled:opacity-60 transition-colors">
           <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
         </button>
       </div>
+      <p className="text-[11px] text-slate-600">Mostrando {filtered.length} de {events.length} eventos</p>
 
       {needsSetup && (
         <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
@@ -885,26 +927,27 @@ function TrazabilidadPanel() {
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
               <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
-                {["Fecha / Hora", "Email", "Acción", "IP", "Navegador", "SO", "Estado"].map((h) => (
+                {["Fecha / Hora", "Email", "Acción", "Página", "IP", "Navegador", "SO", "Estado"].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.04]">
               {loading && (
-                <tr><td colSpan={7} className="px-4 py-12 text-center text-slate-500">
+                <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-500">
                   <Loader2 size={20} className="animate-spin inline" /> <span className="ml-2 align-middle">Cargando trazabilidad…</span>
                 </td></tr>
               )}
-              {!loading && events.map((ev) => (
+              {!loading && filtered.map((ev: AccessEvent) => {
+                const ac = ACTION_CFG[ev.action] ?? { label: ev.action, cls: "bg-slate-500/10 text-slate-400" };
+                return (
                 <tr key={ev.id} className="hover:bg-white/[0.03] transition-colors">
                   <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap tabular-nums">{fmtDateTime(ev.created_at)}</td>
-                  <td className="px-4 py-3 font-medium text-slate-300 max-w-[220px] truncate" title={ev.email ?? ""}>{ev.email || "—"}</td>
+                  <td className="px-4 py-3 font-medium text-slate-300 max-w-[200px] truncate" title={ev.email ?? ""}>{ev.email || "—"}</td>
                   <td className="px-4 py-3">
-                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">
-                      {ev.action === "login" ? "Inicio de sesión" : ev.action}
-                    </span>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${ac.cls}`}>{ac.label}</span>
                   </td>
+                  <td className="px-4 py-3 text-slate-400 text-xs max-w-[180px] truncate font-mono" title={ev.path ?? ""}>{ev.path || "—"}</td>
                   <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">
                     <span className="flex items-center gap-1"><Globe size={12} className="text-slate-600" /> {ev.ip || "—"}</span>
                   </td>
@@ -920,9 +963,9 @@ function TrazabilidadPanel() {
                     )}
                   </td>
                 </tr>
-              ))}
-              {!loading && events.length === 0 && !error && !needsSetup && (
-                <tr><td colSpan={7} className="px-4 py-12 text-center text-sm text-slate-500">Aún no hay registros de acceso.</td></tr>
+              )})}
+              {!loading && filtered.length === 0 && !error && !needsSetup && (
+                <tr><td colSpan={8} className="px-4 py-12 text-center text-sm text-slate-500">Aún no hay registros de acceso.</td></tr>
               )}
             </tbody>
           </table>
