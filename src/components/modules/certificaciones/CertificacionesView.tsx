@@ -1137,15 +1137,22 @@ function ExamScreen({
             <div className="flex items-center gap-3 mb-2">
               <span className="text-[10px] font-bold text-teal-500/60 uppercase tracking-widest">{q.number}</span>
               {config.translateToEs ? (
-                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-bold ${
-                  xlatLoading
-                    ? 'bg-white/[0.04] border-white/[0.08] text-slate-500'
-                    : xlatError
-                      ? 'bg-red-500/10 border-red-500/30 text-red-400'
-                      : 'bg-amber-500/15 border-amber-500/40 text-amber-300'
-                }`}>
-                  {xlatLoading ? <RefreshCw size={9} className="animate-spin" /> : xlatError ? '✕ ES' : '🇪🇸 Auto'}
-                </span>
+                <button
+                  onClick={() => xlat ? setXlat(null) : doTranslate(current)}
+                  disabled={xlatLoading}
+                  title={xlat ? 'Ver en inglés' : 'Ver en español'}
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-bold transition-colors disabled:opacity-40 ${
+                    xlatLoading
+                      ? 'bg-white/[0.04] border-white/[0.08] text-slate-500'
+                      : xlatError
+                        ? 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20'
+                        : xlat
+                          ? 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
+                          : 'bg-white/[0.05] border-white/[0.10] text-slate-400 hover:border-slate-500 hover:text-slate-200'
+                  }`}
+                >
+                  {xlatLoading ? <RefreshCw size={9} className="animate-spin" /> : xlatError ? '✕ ESP' : xlat ? 'ESP' : 'ENG'}
+                </button>
               ) : (
                 <button
                   onClick={translate}
