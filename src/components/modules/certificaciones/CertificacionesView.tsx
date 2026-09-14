@@ -1170,11 +1170,47 @@ function ExamScreen({
               Verificar respuesta
             </button>
           ) : (
-            <button onClick={goNext}
-              className="w-full py-3.5 rounded-xl bg-primary hover:opacity-90 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2">
-              {current < total - 1 ? 'Siguiente pregunta' : 'Ver resultados'}
-              <ChevronRight size={15} />
-            </button>
+            <div className="space-y-3">
+              {/* Explanation + Learn More tras verificar */}
+              {(q.explanation || (q.learnMore && q.learnMore.length > 0)) && (
+                <div className="bg-slate-800/60 border border-white/[0.08] rounded-xl px-4 py-3.5 space-y-2.5">
+                  {q.explanation && (
+                    <div>
+                      <p className="text-[10px] text-blue-400 font-semibold uppercase tracking-wide mb-1">Explicación</p>
+                      <p className="text-sm text-slate-300 leading-relaxed">{q.explanation}</p>
+                    </div>
+                  )}
+                  {q.learnMore && q.learnMore.length > 0 && (
+                    <div>
+                      <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
+                      <ul className="space-y-1">
+                        {q.learnMore.map((item, i) => {
+                          const text = typeof item === 'string' ? item : item.text
+                          const url  = typeof item === 'string' ? null  : item.url
+                          return (
+                            <li key={i} className="text-xs">
+                              {url ? (
+                                <a href={url} target="_blank" rel="noopener noreferrer"
+                                  className="text-blue-400 hover:text-blue-300 hover:underline transition-colors">
+                                  {text}
+                                </a>
+                              ) : (
+                                <span className="text-slate-400">{text}</span>
+                              )}
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+              <button onClick={goNext}
+                className="w-full py-3.5 rounded-xl bg-primary hover:opacity-90 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2">
+                {current < total - 1 ? 'Siguiente pregunta' : 'Ver resultados'}
+                <ChevronRight size={15} />
+              </button>
+            </div>
           )}
         </div>
       </div>
