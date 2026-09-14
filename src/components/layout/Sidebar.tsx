@@ -32,7 +32,6 @@ const SECTIONS: NavSection[] = [
     id: "analisis",
     header: "Análisis",
     items: [
-      { label: "Reportes",        href: "/reportes",        icon: BarChart3   },
       { label: "Repositorios",    href: "/repositorios",    icon: FolderOpen  },
       { label: "CMMI",            href: "/cmmi",            icon: ShieldCheck },
       { label: "Certificaciones", href: "/certificaciones", icon: BookOpen    },
