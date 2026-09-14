@@ -7,7 +7,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SERVICE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export async function POST(req: NextRequest) {
-  let body: { email?: string; status?: string; action?: string; path?: string } = {};
+  let body: { email?: string; status?: string; action?: string; path?: string; metadata?: Record<string, unknown> } = {};
   try { body = await req.json(); } catch { /* sin cuerpo */ }
 
   let userId: string | null = null;
@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
     email,
     action,
     path:       body.path ?? null,
+    metadata:   body.metadata ?? null,
     ip,
     user_agent: ua.slice(0, 500),
     browser,

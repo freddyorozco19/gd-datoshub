@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   Search, ChevronDown, ChevronUp, BookOpen, CheckCircle, XCircle,
@@ -10,6 +10,7 @@ import {
   ListChecks, Pencil, Loader2, LayoutGrid, Bookmark,
 } from 'lucide-react'
 import Topbar from '@/components/layout/Topbar'
+import { track } from '@/lib/track'
 
 // ─── Config de proveedores y exámenes ────────────────────────────────────────
 
@@ -1682,6 +1683,7 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
     let pool = cfg.onlyWithAnswer ? data.questions.filter(q => !!q.correctAnswer) : data.questions
     if (cfg.randomOrder) pool = [...pool].sort(() => Math.random() - 0.5)
     pool = pool.slice(0, cfg.numQuestions)
+    track('exam_start', { exam: exam.code, provider: provider?.name, num_questions: pool.length })
     setExamSession({ questions: pool, config: cfg, startMs: Date.now() })
     setShowExamCfg(false)
     setExamResult(null)
@@ -1689,10 +1691,21 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
 
   const finishExam = (answers: ExamModeAns[]) => {
     if (!examSession) return
+    const elapsedSec = Math.floor((Date.now() - examSession.startMs) / 1000)
+    const total   = examSession.questions.length
+    const skipped = answers.filter(a => !a.confirmed).length
+    const correct = answers.filter((a, i) => {
+      const q = examSession.questions[i]
+      if (!a.confirmed || a.selected.length === 0) return false
+      const expectedCount = /^[A-E]+$/i.test(q.correctAnswer?.trim() ?? '') ? (q.correctAnswer?.trim().length ?? 1) : 1
+      return a.selected.length === expectedCount && a.selected.every(si => isCorrectOpt(q.options?.[si] ?? '', q.correctAnswer))
+    }).length
+    const pct = Math.round((correct / (total - skipped || 1)) * 100)
+    track('exam_finish', { exam: exam.code, provider: provider?.name, score_pct: pct, correct, total, skipped, passed: pct >= 70, elapsed_sec: elapsedSec })
     setExamResult({
       questions:  examSession.questions,
       answers,
-      elapsedSec: Math.floor((Date.now() - examSession.startMs) / 1000),
+      elapsedSec,
       config:     examSession.config,
     })
     setExamSession(null)
@@ -1716,6 +1729,15 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
       .then((d: ExamData | null) => setEsData(d))
       .catch(() => setEsData(null))
   }, [exam.dataFile])
+
+  // tracking de búsqueda con debounce de 1s (mínimo 3 caracteres)
+  useEffect(() => {
+    if (search.trim().length < 3) return
+    const timer = setTimeout(() => {
+      track('search', { query: search.trim(), exam: exam.code })
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [search, exam.code])
 
   const filtered = useMemo(() => {
     if (!data) return []

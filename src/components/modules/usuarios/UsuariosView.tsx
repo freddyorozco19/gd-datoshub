@@ -32,6 +32,7 @@ interface AccessEvent {
   browser: string | null;
   os: string | null;
   status: string;
+  metadata: Record<string, unknown> | null;
 }
 
 const fmtDate = (s: string | null): string => {
@@ -826,10 +827,55 @@ function UsuariosPanel() {
 }
 
 /* ── Trazabilidad de accesos ───────────────────────────────────────── */
-const ACTION_CFG: Record<string, { label: string; cls: string }> = {
-  login:     { label: "Inicio de sesión", cls: "bg-emerald-500/10 text-emerald-400" },
-  page_view: { label: "Vista de página",  cls: "bg-blue-500/10 text-blue-400"       },
-  logout:    { label: "Cierre de sesión", cls: "bg-slate-500/20 text-slate-400"     },
+
+function MetadataCell({ meta, action }: { meta: Record<string, unknown>; action: string }) {
+  if (action === "page_exit") {
+    const sec = meta.duration_sec as number | undefined;
+    if (sec == null) return <span>—</span>;
+    const m = Math.floor(sec / 60), s = sec % 60;
+    return <span className="tabular-nums">{m > 0 ? `${m}m ` : ""}{s}s en página</span>;
+  }
+  if (action === "search") {
+    return <span className="font-mono text-violet-300 truncate block max-w-[200px]" title={String(meta.query ?? "")}>"{String(meta.query ?? "")}"</span>;
+  }
+  if (action === "download") {
+    return <span className="font-mono truncate block max-w-[200px]" title={String(meta.file ?? meta.label ?? "")}>{String(meta.file ?? meta.label ?? "—")}</span>;
+  }
+  if (action === "exam_start") {
+    return <span>{String(meta.exam ?? "")} · {String(meta.num_questions ?? "")} preguntas</span>;
+  }
+  if (action === "exam_finish") {
+    const pct = meta.score_pct as number | undefined;
+    const passed = meta.passed as boolean | undefined;
+    return (
+      <span className={`font-semibold ${passed ? "text-emerald-400" : "text-rose-400"}`}>
+        {String(meta.exam ?? "")} · {pct != null ? `${pct}%` : "—"}
+        {passed != null && <span className="ml-1 font-normal text-slate-500">{passed ? "aprobado" : "reprobado"}</span>}
+      </span>
+    );
+  }
+  if (action === "error") {
+    return <span className="text-rose-300 truncate block max-w-[200px]" title={String(meta.message ?? "")}>{String(meta.message ?? "—")}</span>;
+  }
+  if (action === "config_change") {
+    return <span className="truncate block max-w-[200px]">{String(meta.field ?? meta.label ?? JSON.stringify(meta))}</span>;
+  }
+  // fallback genérico
+  const keys = Object.keys(meta).slice(0, 2);
+  return <span className="text-slate-600 truncate block max-w-[200px]">{keys.map(k => `${k}: ${meta[k]}`).join(" · ")}</span>;
+}
+
+const ACTION_CFG: Record<string, { label: string; cls: string; icon?: string }> = {
+  login:         { label: "Inicio sesión",   cls: "bg-emerald-500/10 text-emerald-400" },
+  logout:        { label: "Cierre sesión",   cls: "bg-slate-500/20 text-slate-400"     },
+  page_view:     { label: "Vista página",    cls: "bg-blue-500/10 text-blue-400"       },
+  page_exit:     { label: "Salida página",   cls: "bg-indigo-500/10 text-indigo-400"   },
+  search:        { label: "Búsqueda",        cls: "bg-violet-500/10 text-violet-400"   },
+  download:      { label: "Descarga",        cls: "bg-amber-500/10 text-amber-400"     },
+  exam_start:    { label: "Examen iniciado", cls: "bg-cyan-500/10 text-cyan-400"       },
+  exam_finish:   { label: "Examen finalizado", cls: "bg-teal-500/10 text-teal-400"    },
+  config_change: { label: "Config. cambiada", cls: "bg-orange-500/10 text-orange-400" },
+  error:         { label: "Error JS",        cls: "bg-rose-500/10 text-rose-400"      },
 };
 
 function TrazabilidadPanel() {
@@ -868,6 +914,9 @@ function TrazabilidadPanel() {
 
   const loginCount    = events.filter(e => e.action === "login").length;
   const pageViewCount = events.filter(e => e.action === "page_view").length;
+  const examCount     = events.filter(e => e.action === "exam_finish").length;
+  const searchCount   = events.filter(e => e.action === "search").length;
+  const errorCount    = events.filter(e => e.action === "error").length;
 
   return (
     <div className="space-y-5">
@@ -884,15 +933,36 @@ function TrazabilidadPanel() {
         </div>
         <div className="flex items-center gap-2 bg-blue-500/5 rounded-xl border border-blue-500/20 px-3 py-2.5 text-sm">
           <span className="font-semibold text-blue-400">{pageViewCount}</span>
-          <span className="text-slate-500 text-xs">vistas de página</span>
+          <span className="text-slate-500 text-xs">vistas</span>
         </div>
+        <div className="flex items-center gap-2 bg-cyan-500/5 rounded-xl border border-cyan-500/20 px-3 py-2.5 text-sm">
+          <span className="font-semibold text-cyan-400">{examCount}</span>
+          <span className="text-slate-500 text-xs">exámenes</span>
+        </div>
+        <div className="flex items-center gap-2 bg-violet-500/5 rounded-xl border border-violet-500/20 px-3 py-2.5 text-sm">
+          <span className="font-semibold text-violet-400">{searchCount}</span>
+          <span className="text-slate-500 text-xs">búsquedas</span>
+        </div>
+        {errorCount > 0 && (
+          <div className="flex items-center gap-2 bg-rose-500/5 rounded-xl border border-rose-500/20 px-3 py-2.5 text-sm">
+            <span className="font-semibold text-rose-400">{errorCount}</span>
+            <span className="text-slate-500 text-xs">errores JS</span>
+          </div>
+        )}
 
         {/* Filtros */}
         <select value={actionFilter} onChange={e => setActionFilter(e.target.value)}
           className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-primary/60 transition-colors">
           <option value="all">Todos los eventos</option>
-          <option value="login">Solo logins</option>
-          <option value="page_view">Solo vistas de página</option>
+          <option value="login">Logins</option>
+          <option value="page_view">Vistas de página</option>
+          <option value="page_exit">Salidas de página</option>
+          <option value="search">Búsquedas</option>
+          <option value="download">Descargas</option>
+          <option value="exam_start">Exámenes iniciados</option>
+          <option value="exam_finish">Exámenes finalizados</option>
+          <option value="config_change">Cambios de config</option>
+          <option value="error">Errores JS</option>
         </select>
         {allUsers.length > 1 && (
           <select value={userFilter} onChange={e => setUserFilter(e.target.value)}
@@ -927,14 +997,14 @@ function TrazabilidadPanel() {
           <table className="w-full text-sm">
             <thead className="sticky top-0 z-10">
               <tr className="bg-black/20 backdrop-blur-md border-b border-white/[0.07]">
-                {["Fecha / Hora", "Email", "Acción", "Página", "IP", "Navegador", "SO", "Estado"].map((h) => (
+                {["Fecha / Hora", "Email", "Acción", "Detalle", "Página", "IP", "Navegador", "SO", "Estado"].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.04]">
               {loading && (
-                <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-500">
+                <tr><td colSpan={9} className="px-4 py-12 text-center text-slate-500">
                   <Loader2 size={20} className="animate-spin inline" /> <span className="ml-2 align-middle">Cargando trazabilidad…</span>
                 </td></tr>
               )}
@@ -946,6 +1016,11 @@ function TrazabilidadPanel() {
                   <td className="px-4 py-3 font-medium text-slate-300 max-w-[200px] truncate" title={ev.email ?? ""}>{ev.email || "—"}</td>
                   <td className="px-4 py-3">
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${ac.cls}`}>{ac.label}</span>
+                  </td>
+                  <td className="px-4 py-3 text-slate-500 text-xs max-w-[220px]">
+                    {ev.metadata ? (
+                      <MetadataCell meta={ev.metadata} action={ev.action} />
+                    ) : "—"}
                   </td>
                   <td className="px-4 py-3 text-slate-400 text-xs max-w-[180px] truncate font-mono" title={ev.path ?? ""}>{ev.path || "—"}</td>
                   <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">
@@ -965,7 +1040,7 @@ function TrazabilidadPanel() {
                 </tr>
               )})}
               {!loading && filtered.length === 0 && !error && !needsSetup && (
-                <tr><td colSpan={8} className="px-4 py-12 text-center text-sm text-slate-500">Aún no hay registros de acceso.</td></tr>
+                <tr><td colSpan={9} className="px-4 py-12 text-center text-sm text-slate-500">Aún no hay registros de acceso.</td></tr>
               )}
             </tbody>
           </table>
