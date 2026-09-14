@@ -888,7 +888,7 @@ interface ExamModeCfg {
   onlyWithAnswer: boolean
   translateToEs: boolean
 }
-interface ExamModeAns { selected: number | null; confirmed: boolean }
+interface ExamModeAns { selected: number[]; confirmed: boolean }
 
 function fmtTime(s: number) {
   return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
@@ -1006,7 +1006,7 @@ function ExamScreen({
 }) {
   const total = questions.length
   const [current,     setCurrent]     = useState(0)
-  const [answers,     setAnswers]     = useState<ExamModeAns[]>(questions.map(() => ({ selected: null, confirmed: false })))
+  const [answers,     setAnswers]     = useState<ExamModeAns[]>(questions.map(() => ({ selected: [], confirmed: false })))
   const [timeLeft,    setTimeLeft]    = useState(config.timeLimitMin * 60)
   const [showExit,    setShowExit]    = useState(false)
 
@@ -1077,10 +1077,14 @@ function ExamScreen({
 
   const selectOpt = (idx: number) => {
     if (ans.confirmed) return
-    setAnswers(prev => prev.map((a, i) => i === current ? { ...a, selected: idx } : a))
+    setAnswers(prev => prev.map((a, i) => {
+      if (i !== current) return a
+      const already = a.selected.includes(idx)
+      return { ...a, selected: already ? a.selected.filter(s => s !== idx) : [...a.selected, idx] }
+    }))
   }
   const confirmAns = () => {
-    if (ans.selected === null) return
+    if (ans.selected.length === 0) return
     setAnswers(prev => prev.map((a, i) => i === current ? { ...a, confirmed: true } : a))
   }
   const goNext = () => {
@@ -1172,7 +1176,7 @@ function ExamScreen({
 
           <div className="space-y-3 mb-8">
             {displayOpts.map((opt, idx) => {
-              const sel       = ans.selected === idx
+              const sel       = ans.selected.includes(idx)
               const confirmed = ans.confirmed
               const correct   = isCorrectOpt(q.options?.[idx] ?? opt, q.correctAnswer)
               let cls = 'bg-white/[0.03] border-white/[0.08] text-slate-300 hover:bg-white/[0.07] hover:border-slate-600 cursor-pointer'
@@ -1194,7 +1198,7 @@ function ExamScreen({
           </div>
 
           {!ans.confirmed ? (
-            <button onClick={confirmAns} disabled={ans.selected === null}
+            <button onClick={confirmAns} disabled={ans.selected.length === 0}
               className="w-full py-3.5 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-35 disabled:cursor-not-allowed text-white font-bold text-sm transition-colors">
               Verificar respuesta
             </button>
@@ -1277,7 +1281,12 @@ function ExamResults({
   onRetry: () => void; onClose: () => void
 }) {
   const total    = questions.length
-  const correct  = answers.filter((a, i) => a.confirmed && isCorrectOpt(questions[i].options?.[a.selected!] ?? '', questions[i].correctAnswer)).length
+  const correct  = answers.filter((a, i) => {
+    const q = questions[i]
+    if (!a.confirmed || a.selected.length === 0) return false
+    const expectedCount = /^[A-E]+$/i.test(q.correctAnswer?.trim() ?? '') ? (q.correctAnswer?.trim().length ?? 1) : 1
+    return a.selected.length === expectedCount && a.selected.every(si => isCorrectOpt(q.options?.[si] ?? '', q.correctAnswer))
+  }).length
   const skipped  = answers.filter(a => !a.confirmed).length
   const wrong    = total - correct - skipped
   const pct      = Math.round((correct / (total - skipped || 1)) * 100)
@@ -1338,8 +1347,9 @@ function ExamResults({
           <div className="divide-y divide-white/[0.04] border-t border-white/[0.05]">
             {questions.map((q, i) => {
               const a       = answers[i]
-              const selOpt  = a.selected !== null ? (q.options?.[a.selected] ?? '') : null
-              const ok      = a.confirmed && selOpt ? isCorrectOpt(selOpt, q.correctAnswer) : false
+              const ok      = a.confirmed && a.selected.length > 0
+                && a.selected.every(si => isCorrectOpt(q.options?.[si] ?? '', q.correctAnswer))
+                && a.selected.length === ((/^[A-E]+$/i.test(q.correctAnswer?.trim() ?? '')) ? (q.correctAnswer?.trim().length ?? 1) : 1)
               return (
                 <div key={i} className="px-4 py-3">
                   <div className="flex items-start gap-2 mb-1.5">
