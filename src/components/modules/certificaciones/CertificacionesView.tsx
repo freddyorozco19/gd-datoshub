@@ -887,6 +887,7 @@ interface ExamModeCfg {
   timeLimitMin: number
   randomOrder:  boolean
   onlyWithAnswer: boolean
+  translateToEs: boolean
 }
 interface ExamModeAns { selected: number | null; confirmed: boolean }
 
@@ -903,10 +904,11 @@ function ExamConfigModal({
   onStart: (cfg: ExamModeCfg) => void
   onClose: () => void
 }) {
-  const [numQ,      setNumQ]      = useState<number>(25)
-  const [timeLimit, setTimeLimit] = useState<number>(0)
-  const [random,    setRandom]    = useState(true)
-  const [onlyAns,   setOnlyAns]   = useState(true)
+  const [numQ,        setNumQ]        = useState<number>(25)
+  const [timeLimit,   setTimeLimit]   = useState<number>(0)
+  const [random,      setRandom]      = useState(true)
+  const [onlyAns,     setOnlyAns]     = useState(true)
+  const [translateEs, setTranslateEs] = useState(false)
 
   const pool    = onlyAns ? withAnswer : total
   const actualQ = numQ === -1 ? pool : Math.min(numQ, pool)
@@ -967,8 +969,9 @@ function ExamConfigModal({
           <div className="space-y-2.5">
             <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Opciones</p>
             {([
-              { key: 'r', label: 'Orden aleatorio',              val: random,  set: setRandom  },
-              { key: 'a', label: 'Solo preguntas con respuesta', val: onlyAns, set: setOnlyAns },
+              { key: 'r', label: 'Orden aleatorio',              val: random,       set: setRandom       },
+              { key: 'a', label: 'Solo preguntas con respuesta', val: onlyAns,      set: setOnlyAns      },
+              { key: 't', label: 'Traducir todo al español',     val: translateEs,  set: setTranslateEs  },
             ] as { key: string; label: string; val: boolean; set: (v: boolean) => void }[]).map(({ key, label, val, set }) => (
               <button key={key} onClick={() => set(!val)}
                 className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] transition-colors">
@@ -983,7 +986,7 @@ function ExamConfigModal({
 
         <div className="px-5 pb-5">
           <button
-            onClick={() => onStart({ numQuestions: actualQ, timeLimitMin: timeLimit, randomOrder: random, onlyWithAnswer: onlyAns })}
+            onClick={() => onStart({ numQuestions: actualQ, timeLimitMin: timeLimit, randomOrder: random, onlyWithAnswer: onlyAns, translateToEs: translateEs })}
             className="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm transition-colors flex items-center justify-center gap-2">
             <Play size={14} />
             Iniciar · {actualQ} preguntas {timeLimit > 0 ? `· ${timeLimit} min` : ''}
@@ -1008,18 +1011,15 @@ function ExamScreen({
   const [timeLeft,    setTimeLeft]    = useState(config.timeLimitMin * 60)
   const [showExit,    setShowExit]    = useState(false)
 
-  const [xlat,        setXlat]        = useState<{ text: string; opts: string[] } | null>(null)
+  const [xlat,        setXlat]        = useState<{ text: string; opts: string[]; explanation?: string } | null>(null)
   const [xlatLoading, setXlatLoading] = useState(false)
   const [xlatError,   setXlatError]   = useState(false)
 
-  useEffect(() => { setXlat(null); setXlatError(false) }, [current])
-
-  const translate = async () => {
-    if (xlat) { setXlat(null); return }
-    if (xlatLoading) return
+  const doTranslate = async (idx: number) => {
     setXlatLoading(true); setXlatError(false)
     try {
       const tx = async (str: string) => {
+        if (!str) return str
         const r = await fetch(
           `https://api.mymemory.translated.net/get?q=${encodeURIComponent(str)}&langpair=en|es`,
           { signal: AbortSignal.timeout(8000) }
@@ -1027,14 +1027,32 @@ function ExamScreen({
         const d = await r.json()
         return (d.responseData?.translatedText as string) || str
       }
-      const q = questions[current]
-      const [text, ...opts] = await Promise.all([
+      const q = questions[idx]
+      const tasks: Promise<string>[] = [
         tx(q.questionText || ''),
         ...(q.options ?? []).map(o => tx(o)),
-      ])
-      setXlat({ text, opts })
+        tx(q.explanation || ''),
+      ]
+      const results = await Promise.all(tasks)
+      const optCount = (q.options ?? []).length
+      const text = results[0]
+      const opts = results.slice(1, 1 + optCount)
+      const explanation = results[1 + optCount] || undefined
+      setXlat({ text, opts, explanation })
     } catch { setXlatError(true) }
     finally { setXlatLoading(false) }
+  }
+
+  useEffect(() => {
+    setXlat(null); setXlatError(false)
+    if (config.translateToEs) doTranslate(current)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current])
+
+  const translate = async () => {
+    if (xlat) { setXlat(null); return }
+    if (xlatLoading) return
+    await doTranslate(current)
   }
 
   useEffect(() => {
@@ -1115,28 +1133,40 @@ function ExamScreen({
           <div className="mb-7">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-[10px] font-bold text-teal-500/60 uppercase tracking-widest">{q.number}</span>
-              <button
-                onClick={translate}
-                disabled={xlatLoading}
-                title={xlat ? 'Ver original' : 'Traducir al español'}
-                className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-bold transition-colors disabled:opacity-40 ${
-                  xlat
-                    ? 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
+              {config.translateToEs ? (
+                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-bold ${
+                  xlatLoading
+                    ? 'bg-white/[0.04] border-white/[0.08] text-slate-500'
                     : xlatError
-                      ? 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20'
-                      : 'bg-white/[0.05] border-white/[0.10] text-slate-400 hover:border-slate-500 hover:text-slate-200'
-                }`}
-              >
-                {xlatLoading ? (
-                  <RefreshCw size={9} className="animate-spin" />
-                ) : xlat ? (
-                  <span>🇪🇸 ES</span>
-                ) : xlatError ? (
-                  <span>✕ retry</span>
-                ) : (
-                  <span>🇺🇸→🇪🇸</span>
-                )}
-              </button>
+                      ? 'bg-red-500/10 border-red-500/30 text-red-400'
+                      : 'bg-amber-500/15 border-amber-500/40 text-amber-300'
+                }`}>
+                  {xlatLoading ? <RefreshCw size={9} className="animate-spin" /> : xlatError ? '✕ ES' : '🇪🇸 Auto'}
+                </span>
+              ) : (
+                <button
+                  onClick={translate}
+                  disabled={xlatLoading}
+                  title={xlat ? 'Ver original' : 'Traducir al español'}
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-bold transition-colors disabled:opacity-40 ${
+                    xlat
+                      ? 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
+                      : xlatError
+                        ? 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20'
+                        : 'bg-white/[0.05] border-white/[0.10] text-slate-400 hover:border-slate-500 hover:text-slate-200'
+                  }`}
+                >
+                  {xlatLoading ? (
+                    <RefreshCw size={9} className="animate-spin" />
+                  ) : xlat ? (
+                    <span>🇪🇸 ES</span>
+                  ) : xlatError ? (
+                    <span>✕ retry</span>
+                  ) : (
+                    <span>🇺🇸→🇪🇸</span>
+                  )}
+                </button>
+              )}
             </div>
             <p className="text-white text-[15px] leading-relaxed">{displayText}</p>
           </div>
@@ -1177,7 +1207,7 @@ function ExamScreen({
                   {q.explanation && (
                     <div>
                       <p className="text-[10px] text-blue-400 font-semibold uppercase tracking-wide mb-1">Explicación</p>
-                      <p className="text-sm text-slate-300 leading-relaxed">{q.explanation}</p>
+                      <p className="text-sm text-slate-300 leading-relaxed">{xlat?.explanation ?? q.explanation}</p>
                     </div>
                   )}
                   {q.learnMore && q.learnMore.length > 0 && (
