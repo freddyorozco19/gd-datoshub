@@ -1311,10 +1311,11 @@ function ExamScreen({
 // ─── Modo Examen — Resultados ─────────────────────────────────────────────────
 
 function ExamResults({
-  questions, answers, elapsedSec, onRetry, onClose,
+  questions, answers, elapsedSec, exam, provider, config, onRetry, onClose,
 }: {
   questions: Question[]; answers: ExamModeAns[]
   elapsedSec: number
+  exam?: ExamConfig; provider?: ProviderConfig; config?: ExamModeCfg
   onRetry: () => void; onClose: () => void
 }) {
   const total    = questions.length
@@ -1329,6 +1330,29 @@ function ExamResults({
   const pct      = Math.round((correct / (total - skipped || 1)) * 100)
   const passed   = pct >= 70
   const [showDetail, setShowDetail] = useState(false)
+
+  useEffect(() => {
+    if (!exam) return
+    fetch('/api/certifications/history', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        provider_id:   provider?.id   ?? '',
+        provider_name: provider?.name ?? '',
+        exam_id:       exam.id,
+        exam_code:     exam.code,
+        exam_name:     exam.name,
+        score_pct:     pct,
+        correct,
+        wrong,
+        skipped,
+        total,
+        elapsed_sec:   elapsedSec,
+        config:        config ?? {},
+      }),
+    }).catch(() => { /* silent — no bloquea la UI */ })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
@@ -1632,7 +1656,7 @@ function SemanticSearchPanel({ questions }: { questions: Question[] }) {
 
 const PER_PAGE = 25
 
-function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
+function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderConfig }) {
   const [data,   setData]   = useState<ExamData | null>(null)
   const [esData, setEsData] = useState<ExamData | null>(null)
   const [loading, setLoading] = useState(true)
@@ -1650,7 +1674,7 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
     questions: Question[]; config: ExamModeCfg; startMs: number
   } | null>(null)
   const [examResult, setExamResult] = useState<{
-    questions: Question[]; answers: ExamModeAns[]; elapsedSec: number
+    questions: Question[]; answers: ExamModeAns[]; elapsedSec: number; config: ExamModeCfg
   } | null>(null)
 
   const startExam = (cfg: ExamModeCfg) => {
@@ -1669,6 +1693,7 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
       questions:  examSession.questions,
       answers,
       elapsedSec: Math.floor((Date.now() - examSession.startMs) / 1000),
+      config:     examSession.config,
     })
     setExamSession(null)
   }
@@ -1750,6 +1775,9 @@ function ExamViewer({ exam }: { exam: ExamConfig; provider?: ProviderConfig }) {
         questions={examResult.questions}
         answers={examResult.answers}
         elapsedSec={examResult.elapsedSec}
+        exam={exam}
+        provider={provider}
+        config={examResult.config}
         onRetry={() => { setExamResult(null); setShowExamCfg(true) }}
         onClose={() => setExamResult(null)}
       />
@@ -2303,10 +2331,277 @@ function Breadcrumb({ provider, exam, onGoRoot, onGoProvider }: {
   )
 }
 
+// ─── Historial ───────────────────────────────────────────────────────────────
+
+interface HistoryRow {
+  id: string
+  user_id: string
+  user_email: string
+  provider_id: string
+  provider_name: string
+  exam_id: string
+  exam_code: string
+  exam_name: string
+  score_pct: number
+  correct: number
+  wrong: number
+  skipped: number
+  total: number
+  elapsed_sec: number
+  config: Record<string, unknown>
+  created_at: string
+}
+
+function fmtElapsed(sec: number) {
+  if (sec < 60) return `${sec}s`
+  const m = Math.floor(sec / 60), s = sec % 60
+  return `${m}m ${s}s`
+}
+
+function fmtDate(iso: string) {
+  const d = new Date(iso)
+  return d.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })
+    + ' ' + d.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })
+}
+
+function HistoryPanel() {
+  const [rows,      setRows]      = useState<HistoryRow[]>([])
+  const [loading,   setLoading]   = useState(true)
+  const [error,     setError]     = useState<string | null>(null)
+  const [needsSetup, setNeedsSetup] = useState(false)
+  const [isAdmin,   setIsAdmin]   = useState(false)
+  const [search,    setSearch]    = useState('')
+  const [userFilter, setUserFilter] = useState('')
+  const [examFilter, setExamFilter] = useState('')
+  const [expanded,  setExpanded]  = useState<string | null>(null)
+
+  async function load() {
+    setLoading(true); setError(null); setNeedsSetup(false)
+    try {
+      const res  = await fetch('/api/certifications/history?limit=200')
+      const json = await res.json()
+      if (!res.ok) {
+        if (json.needsSetup) { setNeedsSetup(true); return }
+        throw new Error(json.error ?? `Error ${res.status}`)
+      }
+      setRows(json.rows ?? [])
+      setIsAdmin(json.isAdmin ?? false)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'No se pudo cargar el historial.')
+    } finally { setLoading(false) }
+  }
+
+  useEffect(() => { load() }, [])
+
+  const allUsers  = useMemo(() => [...new Set(rows.map(r => r.user_email))].sort(), [rows])
+  const allExams  = useMemo(() => [...new Set(rows.map(r => r.exam_code))].sort(), [rows])
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim()
+    return rows.filter(r => {
+      if (userFilter && r.user_email !== userFilter) return false
+      if (examFilter && r.exam_code !== examFilter) return false
+      if (q) {
+        const h = [r.user_email, r.exam_code, r.exam_name, r.provider_name].join(' ').toLowerCase()
+        if (!h.includes(q)) return false
+      }
+      return true
+    })
+  }, [rows, search, userFilter, examFilter])
+
+  const stats = useMemo(() => {
+    const total  = filtered.length
+    const passed = filtered.filter(r => r.score_pct >= 70).length
+    const avg    = total ? Math.round(filtered.reduce((s, r) => s + r.score_pct, 0) / total) : 0
+    return { total, passed, failed: total - passed, avg }
+  }, [filtered])
+
+  if (needsSetup) return (
+    <div className="bg-amber-900/20 border border-amber-700/40 rounded-xl px-5 py-4 space-y-3">
+      <p className="text-amber-300 font-semibold text-sm">La tabla <code>exam_history</code> no existe en Supabase.</p>
+      <p className="text-amber-200/70 text-xs">Ejecuta el siguiente SQL en tu proyecto Supabase (SQL Editor):</p>
+      <pre className="bg-black/40 rounded-lg p-4 text-xs text-slate-300 overflow-x-auto whitespace-pre">{`CREATE TABLE exam_history (
+  id            uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id       uuid REFERENCES auth.users(id),
+  user_email    text NOT NULL,
+  provider_id   text NOT NULL DEFAULT '',
+  provider_name text NOT NULL DEFAULT '',
+  exam_id       text NOT NULL,
+  exam_code     text NOT NULL,
+  exam_name     text NOT NULL,
+  score_pct     int  NOT NULL,
+  correct       int  NOT NULL,
+  wrong         int  NOT NULL,
+  skipped       int  NOT NULL,
+  total         int  NOT NULL,
+  elapsed_sec   int  NOT NULL DEFAULT 0,
+  config        jsonb,
+  created_at    timestamptz DEFAULT now()
+);
+ALTER TABLE exam_history ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "own_select" ON exam_history FOR SELECT USING (user_id = auth.uid());
+CREATE POLICY "own_insert" ON exam_history FOR INSERT WITH CHECK (user_id = auth.uid());`}</pre>
+      <button onClick={load} className="text-xs px-3 py-1.5 rounded-lg bg-amber-600/30 border border-amber-600/50 text-amber-300 hover:bg-amber-600/50 transition-colors">
+        Reintentar
+      </button>
+    </div>
+  )
+
+  return (
+    <div className="space-y-4">
+
+      {/* Filtros */}
+      <div className="flex flex-wrap gap-2 items-center">
+        <div className="relative flex-1 min-w-48">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Buscar examen, proveedor..."
+            className="w-full bg-white/[0.04] border border-border rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/60 transition-colors" />
+        </div>
+        {isAdmin && allUsers.length > 1 && (
+          <select value={userFilter} onChange={e => setUserFilter(e.target.value)}
+            className="bg-white/[0.04] border border-border rounded-lg px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-primary/60 transition-colors">
+            <option value="">Todos los usuarios</option>
+            {allUsers.map(u => <option key={u} value={u}>{u}</option>)}
+          </select>
+        )}
+        {allExams.length > 1 && (
+          <select value={examFilter} onChange={e => setExamFilter(e.target.value)}
+            className="bg-white/[0.04] border border-border rounded-lg px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-primary/60 transition-colors">
+            <option value="">Todos los exámenes</option>
+            {allExams.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        )}
+        <button onClick={load} title="Actualizar" className="flex items-center justify-center w-9 h-9 rounded-lg border border-border bg-white/[0.04] text-slate-400 hover:text-white transition-colors">
+          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+        </button>
+      </div>
+
+      {/* KPI cards */}
+      {!loading && !error && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            { label: 'Ejecuciones', value: stats.total,  color: 'text-blue-400'    },
+            { label: 'Aprobadas',   value: stats.passed,  color: 'text-emerald-400' },
+            { label: 'Reprobadas',  value: stats.failed,  color: 'text-red-400'     },
+            { label: 'Promedio',    value: `${stats.avg}%`, color: stats.avg >= 70 ? 'text-emerald-400' : 'text-amber-400' },
+          ].map(({ label, value, color }) => (
+            <div key={label} className="bg-white/[0.04] border border-border rounded-xl px-4 py-3">
+              <div className={`text-2xl font-black ${color}`}>{value}</div>
+              <div className="text-xs text-slate-500 mt-0.5">{label}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Estado */}
+      {loading && (
+        <div className="flex items-center justify-center py-16 gap-2 text-slate-500">
+          <Loader2 size={18} className="animate-spin" /> Cargando historial…
+        </div>
+      )}
+      {error && !loading && (
+        <div className="bg-red-900/20 border border-red-700/40 rounded-xl px-4 py-3 text-red-300 text-sm">{error}</div>
+      )}
+
+      {/* Tabla */}
+      {!loading && !error && filtered.length === 0 && (
+        <div className="text-center py-16 text-slate-500 text-sm">Sin ejecuciones registradas.</div>
+      )}
+      {!loading && !error && filtered.length > 0 && (
+        <div className="space-y-2">
+          {filtered.map(row => {
+            const passed = row.score_pct >= 70
+            const open   = expanded === row.id
+            return (
+              <div key={row.id} className={`bg-white/[0.04] border rounded-xl overflow-hidden transition-all ${open ? 'border-primary/40' : 'border-border hover:border-slate-600'}`}>
+                <button onClick={() => setExpanded(open ? null : row.id)}
+                  className="w-full text-left px-4 py-3.5 flex items-center gap-3 hover:bg-white/[0.03] transition-colors">
+                  {/* Score badge */}
+                  <span className={`shrink-0 w-12 text-center text-sm font-black rounded-lg py-1 ${passed ? 'bg-emerald-500/15 text-emerald-300' : 'bg-red-500/15 text-red-300'}`}>
+                    {row.score_pct}%
+                  </span>
+                  {/* Exam info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-bold text-slate-200">{row.exam_code}</span>
+                      <span className="text-[10px] text-slate-500 truncate">{row.exam_name}</span>
+                    </div>
+                    <div className="flex items-center gap-3 mt-0.5 flex-wrap">
+                      {isAdmin && <span className="text-[10px] text-slate-500">{row.user_email}</span>}
+                      <span className="text-[10px] text-slate-600">{fmtDate(row.created_at)}</span>
+                    </div>
+                  </div>
+                  {/* Stats */}
+                  <div className="hidden sm:flex items-center gap-4 text-xs shrink-0">
+                    <span className="text-emerald-400">{row.correct} ✓</span>
+                    <span className="text-red-400">{row.wrong} ✗</span>
+                    {row.skipped > 0 && <span className="text-slate-500">{row.skipped} —</span>}
+                    <span className="text-slate-500">{fmtElapsed(row.elapsed_sec)}</span>
+                  </div>
+                  {open ? <ChevronUp size={14} className="text-slate-500 shrink-0" /> : <ChevronDown size={14} className="text-slate-500 shrink-0" />}
+                </button>
+
+                {open && (
+                  <div className="border-t border-border/50 px-4 py-4 space-y-3">
+                    {/* Barra de progreso */}
+                    <div>
+                      <div className="flex justify-between text-[10px] text-slate-500 mb-1">
+                        <span>{row.correct} correctas · {row.wrong} incorrectas{row.skipped > 0 ? ` · ${row.skipped} sin responder` : ''}</span>
+                        <span>{row.total} preguntas</span>
+                      </div>
+                      <div className="h-2 bg-white/[0.05] rounded-full overflow-hidden flex">
+                        <div className="bg-emerald-500 h-full transition-all" style={{ width: `${(row.correct / row.total) * 100}%` }} />
+                        <div className="bg-red-500/70 h-full transition-all"  style={{ width: `${(row.wrong   / row.total) * 100}%` }} />
+                      </div>
+                    </div>
+                    {/* Detalles */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                      <div className="bg-white/[0.03] rounded-lg px-3 py-2">
+                        <p className="text-slate-500 text-[10px] uppercase tracking-wide">Proveedor</p>
+                        <p className="text-slate-200 font-medium mt-0.5">{row.provider_name || '—'}</p>
+                      </div>
+                      <div className="bg-white/[0.03] rounded-lg px-3 py-2">
+                        <p className="text-slate-500 text-[10px] uppercase tracking-wide">Tiempo</p>
+                        <p className="text-slate-200 font-medium mt-0.5">{fmtElapsed(row.elapsed_sec)}</p>
+                      </div>
+                      <div className="bg-white/[0.03] rounded-lg px-3 py-2">
+                        <p className="text-slate-500 text-[10px] uppercase tracking-wide">Resultado</p>
+                        <p className={`font-bold mt-0.5 ${passed ? 'text-emerald-400' : 'text-red-400'}`}>{passed ? 'Aprobado' : 'Reprobado'}</p>
+                      </div>
+                      {row.config && Object.keys(row.config).length > 0 && (
+                        <div className="col-span-2 sm:col-span-3 bg-white/[0.03] rounded-lg px-3 py-2">
+                          <p className="text-slate-500 text-[10px] uppercase tracking-wide mb-1">Configuración</p>
+                          <div className="flex flex-wrap gap-2">
+                            {(row.config.randomOrder as boolean) && <span className="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">Aleatorio</span>}
+                            {(row.config.onlyWithAnswer as boolean) && <span className="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">Solo con respuesta</span>}
+                            {(row.config.translateToEs as boolean) && <span className="text-[10px] bg-amber-900/40 text-amber-300 px-2 py-0.5 rounded-full">Traducido ESP</span>}
+                            {(row.config.timeLimitMin as number) > 0 && <span className="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">{row.config.timeLimitMin as number} min</span>}
+                          </div>
+                        </div>
+                      )}
+                      {isAdmin && (
+                        <div className="col-span-2 sm:col-span-3 bg-white/[0.03] rounded-lg px-3 py-2">
+                          <p className="text-slate-500 text-[10px] uppercase tracking-wide">Usuario</p>
+                          <p className="text-slate-200 font-medium mt-0.5">{row.user_email}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ─── Main view ────────────────────────────────────────────────────────────────
 
 type View = 'providers' | 'exams' | 'viewer'
-type MainTab = 'catalogo' | 'registros'
+type MainTab = 'catalogo' | 'registros' | 'historial'
 
 export default function CertificacionesView() {
   const pathname  = usePathname()
@@ -2335,8 +2630,9 @@ export default function CertificacionesView() {
       <Topbar
         title="Certificaciones"
         tabs={([
-          { id: 'catalogo' as MainTab,  label: 'Catálogo',  icon: LayoutGrid },
+          { id: 'catalogo'  as MainTab, label: 'Catálogo',  icon: LayoutGrid },
           { id: 'registros' as MainTab, label: 'Registros', icon: ListChecks },
+          { id: 'historial' as MainTab, label: 'Historial',  icon: Clock      },
         ]).map(({ id, label, icon: Icon }) => {
           const active = id === mainTab
           return (
@@ -2360,6 +2656,7 @@ export default function CertificacionesView() {
       <div className="px-5 py-5 w-full space-y-4">
 
         {mainTab === 'registros' && <RegistrosPanel />}
+        {mainTab === 'historial' && <HistoryPanel />}
 
         {mainTab === 'catalogo' && (
         <>
