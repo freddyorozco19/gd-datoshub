@@ -1,7 +1,7 @@
 {
   "examTitle": "NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator",
   "totalQuestions": 84,
-  "scrapedAt": "2026-09-11T19:59:42.980Z",
+  "scrapedAt": "2026-09-14T15:23:50.994Z",
   "questions": [
     {
       "number": "1",
@@ -72,7 +72,7 @@
     },
     {
       "number": "4",
-      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Fortinet / NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator / Refer to the exhibit showing an SD-WAN zone configuration in the FortiGate GUI. Question 4 SD-WAN Configuration and Monitoring Refer to the exhibit showing an SD-WAN zone configuration in the FortiGate GUI. Based on the exhibit, which statement is correct?",
+      "questionText": "Refer to the exhibit showing an SD-WAN zone configuration in the FortiGate GUI. Based on the exhibit, which statement is correct?",
       "translation": "",
       "options": [
         "A. The Underlay zone contains no member.",
@@ -99,7 +99,7 @@
     },
     {
       "number": "5",
-      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Fortinet / NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator / Refer to the exhibits. Question 5 Web Filtering Refer to the exhibits. An administrator has configured the Web Filter Profile to block access to every social networking site except Facebook. However, when users attempt to reach Facebook.com, they are redirected to a FortiGuard web-filtering block page. Based on the exhibits, which configuration change must the administrator make to permit Facebook while blocking every other social networking site?",
+      "questionText": "Refer to the exhibits. An administrator has configured the Web Filter Profile to block access to every social networking site except Facebook. However, when users attempt to reach Facebook.com, they are redirected to a FortiGuard web-filtering block page. Based on the exhibits, which configuration change must the administrator make to permit Facebook while blocking every other social networking site?",
       "translation": "",
       "options": [
         "A. Set the Social Networking action as warning in the FortiGuard Category Based Filter.",
@@ -176,7 +176,7 @@
     },
     {
       "number": "8",
-      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Fortinet / NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator / Refer to the exhibits. Question 8 Intrusion Prevention and Application Control Refer to the exhibits. You have configured the application sensor and its corresponding firewall policy as shown in the exhibits. You cannot access any Google applications, although you can access www.fortinet.com. Which two actions should you take to resolve the issue? Choose two",
+      "questionText": "Refer to the exhibits. You have configured the application sensor and its corresponding firewall policy as shown in the exhibits. You cannot access any Google applications, although you can access www.fortinet.com. Which two actions should you take to resolve the issue? Choose two",
       "translation": "",
       "options": [
         "A. Change the Inspection mode to Flow-based.",
@@ -229,7 +229,7 @@
     },
     {
       "number": "10",
-      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Fortinet / NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator / Refer to the exhibits. Question 10 Firewall Policies and NAT Refer to the exhibits. The exhibits display a FortiGate device network diagram and the firewall-policy, VIP, and IP-pool settings on the FortiGate device. The WAN (port2) interface is assigned IP address 100.65.0.101/24. The LAN (port4) interface is assigned IP address 10.0.11.254/24. The first firewall policy has NAT enabled and uses the IP pool. The second firewall policy uses a VIP as its destination address. Which IP address is used to source NAT (SNAT) internet traffic originating from a workstation with IP address 10.0.11.50?",
+      "questionText": "Refer to the exhibits. The exhibits display a FortiGate device network diagram and the firewall-policy, VIP, and IP-pool settings on the FortiGate device. The WAN (port2) interface is assigned IP address 100.65.0.101/24. The LAN (port4) interface is assigned IP address 10.0.11.254/24. The first firewall policy has NAT enabled and uses the IP pool. The second firewall policy uses a VIP as its destination address. Which IP address is used to source NAT (SNAT) internet traffic originating from a workstation with IP address 10.0.11.50?",
       "translation": "",
       "options": [
         "A. 100.65.0.200",
@@ -298,7 +298,7 @@
     },
     {
       "number": "12",
-      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Fortinet / NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator / Refer to the exhibits. Question 12 Firewall Policies and NAT Refer to the exhibits. A FortiGate network diagram, together with the FortiGate firewall-policy and IP-pool configuration, is shown. Two PCs, PC1 and PC2, are connected behind the FortiGate and can successfully access the internet. However, after the administrator adds a third PC to the network (PC3), that PC cannot connect to the internet. Based on the information in the exhibits, which two configuration options can the administrator use to resolve PC3's connectivity issue? Choose two",
+      "questionText": "Refer to the exhibits. A FortiGate network diagram, together with the FortiGate firewall-policy and IP-pool configuration, is shown. Two PCs, PC1 and PC2, are connected behind the FortiGate and can successfully access the internet. However, after the administrator adds a third PC to the network (PC3), that PC cannot connect to the internet. Based on the information in the exhibits, which two configuration options can the administrator use to resolve PC3's connectivity issue? Choose two",
       "translation": "",
       "options": [
         "A. In the IP pool configuration, set type to overload.",
@@ -643,7 +643,7 @@
     },
     {
       "number": "25",
-      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Fortinet / NSE4-FGT-AD-7-6: Fortinet NSE 4 - FortiOS 7.6 Administrator / Refer to the exhibits. Question 25 Web Filtering Refer to the exhibits. A web filter profile configuration and a firewall policy configuration are displayed. You are attempting to access www.facebook.com, but are redirected to a FortiGuard web-filtering block page. Based on the exhibits, what could be causing this issue?",
+      "questionText": "Refer to the exhibits. A web filter profile configuration and a firewall policy configuration are displayed. You are attempting to access www.facebook.com, but are redirected to a FortiGuard web-filtering block page. Based on the exhibits, what could be causing this issue?",
       "translation": "",
       "options": [
         "A. The web rating override configuration is incorrect.",
