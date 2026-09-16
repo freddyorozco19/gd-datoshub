@@ -155,11 +155,13 @@ interface QuestionImage {
 
 interface Question {
   number: string
+  questionType?: string
   questionText?: string
   translation?: string
   explanation?: string
   options?: string[]
   correctAnswer?: string
+  statements?: { text: string; answer: string }[]
   learnMore?: Array<string | { text: string; url: string }>
   images?: (string | QuestionImage)[]
 }
@@ -1009,6 +1011,7 @@ function ExamScreen({
   const total = questions.length
   const [current,     setCurrent]     = useState(0)
   const [answers,     setAnswers]     = useState<ExamModeAns[]>(questions.map(() => ({ selected: [], confirmed: false, flagged: false })))
+  const [ynAnswers,   setYnAnswers]   = useState<Record<number, Record<number, string>>>({})
   const [timeLeft,    setTimeLeft]    = useState(config.timeLimitMin * 60)
   const [showExit,    setShowExit]    = useState(false)
 
@@ -1097,6 +1100,15 @@ function ExamScreen({
   const toggleFlag = () => {
     setAnswers(prev => prev.map((a, i) => i === current ? { ...a, flagged: !a.flagged } : a))
   }
+
+  const toggleYN = (qIdx: number, stmtIdx: number, value: string) => {
+    if (answers[qIdx].confirmed) return
+    setYnAnswers(prev => ({ ...prev, [qIdx]: { ...(prev[qIdx] ?? {}), [stmtIdx]: value } }))
+  }
+  const ynAllAnswered = (qIdx: number, q: Question) =>
+    (q.statements ?? []).every((_, i) => ynAnswers[qIdx]?.[i] !== undefined)
+  const ynIsCorrect = (qIdx: number, q: Question) =>
+    (q.statements ?? []).every((s, i) => ynAnswers[qIdx]?.[i] === s.answer)
 
   const answeredCount = answers.filter(a => a.confirmed).length
   const flaggedCount  = answers.filter(a => a.flagged).length
@@ -1212,44 +1224,97 @@ function ExamScreen({
           </div>
 
           <div className="space-y-3 mb-8">
-            {displayOpts.map((opt, idx) => {
-              const sel       = ans.selected.includes(idx)
-              const confirmed = ans.confirmed
-              const correct   = isCorrectOpt(q.options?.[idx] ?? opt, q.correctAnswer)
-              let cls = 'bg-white/[0.03] border-white/[0.08] text-slate-300 hover:bg-white/[0.07] hover:border-slate-600 cursor-pointer'
-              if (confirmed) {
-                if (correct)      cls = 'bg-emerald-500/10 border-emerald-500/50 text-emerald-200 cursor-default'
-                else if (sel)     cls = 'bg-red-500/10 border-red-500/50 text-red-300 cursor-default'
-                else              cls = 'bg-white/[0.02] border-white/[0.04] text-slate-600 cursor-default'
-              } else if (sel)     cls = 'bg-teal-500/10 border-teal-500/60 text-teal-200 cursor-pointer'
-              const letter = opt.match(/^([A-E])\./)?.[1]
-              const optImgs = letter
-                ? (q.images ?? []).filter(img =>
-                    typeof img !== 'string' && img.inOption && img.optionLetter === letter
-                  ) as QuestionImage[]
-                : []
-              return (
-                <button key={idx} onClick={() => selectOpt(idx)}
-                  className={`w-full text-left px-4 py-3.5 rounded-xl border transition-all duration-150 flex items-start gap-3 ${cls}`}>
-                  <span className="text-xs font-bold mt-0.5 flex-shrink-0 opacity-70">{opt.charAt(0)}.</span>
-                  <span className="text-sm leading-relaxed flex-1 flex flex-col gap-1.5">
-                    <span>{opt.slice(opt.indexOf('.') + 1).trim()}</span>
-                    {optImgs.map((img, ii) => (
-                      <img key={ii} src={img.path} alt={img.alt || ''}
-                        className="max-w-full rounded border border-white/10 mt-0.5 block"
-                        onError={e => (e.currentTarget.style.display = 'none')} />
-                    ))}
-                  </span>
-                  {confirmed && correct && <CheckCircle size={15} className="text-emerald-400 flex-shrink-0 mt-0.5" />}
-                  {confirmed && sel && !correct && <XCircle size={15} className="text-red-400 flex-shrink-0 mt-0.5" />}
-                </button>
-              )
-            })}
+            {q.questionType === 'yes-no' ? (
+              // ── Formato Yes/No ─────────────────────────────────────────────
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="text-left text-slate-400 font-normal pb-2 pr-4">Statement</th>
+                    <th className="w-16 text-center text-slate-400 font-normal pb-2">Yes</th>
+                    <th className="w-16 text-center text-slate-400 font-normal pb-2">No</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(q.statements ?? []).map((stmt, si) => {
+                    const confirmed  = ans.confirmed
+                    const userAns    = ynAnswers[current]?.[si]
+                    return (
+                      <tr key={si} className="border-b border-white/5">
+                        <td className="py-2.5 pr-4 text-slate-300 text-[13px] leading-snug align-middle">{stmt.text}</td>
+                        {(['Yes', 'No'] as const).map(val => {
+                          const selected = userAns === val
+                          const correct  = val === stmt.answer
+                          let cls = 'w-8 h-8 rounded-full border text-xs font-medium transition-colors '
+                          if (confirmed && correct)         cls += 'bg-emerald-500/30 border-emerald-500 text-emerald-300'
+                          else if (confirmed && selected && !correct) cls += 'bg-red-500/20 border-red-500 text-red-300'
+                          else if (confirmed)               cls += 'border-white/10 text-slate-600 cursor-default'
+                          else if (selected)                cls += 'bg-teal-500/20 border-teal-500 text-teal-200 cursor-pointer'
+                          else                              cls += 'border-white/10 text-slate-500 hover:border-slate-500 hover:text-slate-300 cursor-pointer'
+                          return (
+                            <td key={val} className="text-center py-2.5 align-middle">
+                              <button className={cls} onClick={() => toggleYN(current, si, val)} disabled={confirmed}>
+                                {val[0]}
+                              </button>
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              // ── Formato MC/dropdown ─────────────────────────────────────────
+              displayOpts.map((opt, idx) => {
+                const sel       = ans.selected.includes(idx)
+                const confirmed = ans.confirmed
+                const correct   = isCorrectOpt(q.options?.[idx] ?? opt, q.correctAnswer)
+                let cls = 'bg-white/[0.03] border-white/[0.08] text-slate-300 hover:bg-white/[0.07] hover:border-slate-600 cursor-pointer'
+                if (confirmed) {
+                  if (correct)      cls = 'bg-emerald-500/10 border-emerald-500/50 text-emerald-200 cursor-default'
+                  else if (sel)     cls = 'bg-red-500/10 border-red-500/50 text-red-300 cursor-default'
+                  else              cls = 'bg-white/[0.02] border-white/[0.04] text-slate-600 cursor-default'
+                } else if (sel)     cls = 'bg-teal-500/10 border-teal-500/60 text-teal-200 cursor-pointer'
+                const letter = opt.match(/^([A-E])\./)?.[1]
+                const optImgs = letter
+                  ? (q.images ?? []).filter(img =>
+                      typeof img !== 'string' && img.inOption && img.optionLetter === letter
+                    ) as QuestionImage[]
+                  : []
+                return (
+                  <button key={idx} onClick={() => selectOpt(idx)}
+                    className={`w-full text-left px-4 py-3.5 rounded-xl border transition-all duration-150 flex items-start gap-3 ${cls}`}>
+                    <span className="text-xs font-bold mt-0.5 flex-shrink-0 opacity-70">{opt.charAt(0)}.</span>
+                    <span className="text-sm leading-relaxed flex-1 flex flex-col gap-1.5">
+                      <span>{opt.slice(opt.indexOf('.') + 1).trim()}</span>
+                      {optImgs.map((img, ii) => (
+                        <img key={ii} src={img.path} alt={img.alt || ''}
+                          className="max-w-full rounded border border-white/10 mt-0.5 block"
+                          onError={e => (e.currentTarget.style.display = 'none')} />
+                      ))}
+                    </span>
+                    {confirmed && correct && <CheckCircle size={15} className="text-emerald-400 flex-shrink-0 mt-0.5" />}
+                    {confirmed && sel && !correct && <XCircle size={15} className="text-red-400 flex-shrink-0 mt-0.5" />}
+                  </button>
+                )
+              })
+            )}
           </div>
 
           {/* Show Answer */}
           {!ans.confirmed && (
-            <button onClick={confirmAns} disabled={ans.selected.length === 0}
+            <button
+              onClick={q.questionType === 'yes-no'
+                ? () => {
+                    if (!ynAllAnswered(current, q)) return
+                    // Codificar respuestas Yes/No en selected: si*2 = Yes, si*2+1 = No
+                    const encoded = (q.statements ?? []).map((_, si) =>
+                      ynAnswers[current]?.[si] === 'Yes' ? si * 2 : si * 2 + 1
+                    )
+                    setAnswers(prev => prev.map((a, i) => i === current ? { ...a, confirmed: true, selected: encoded } : a))
+                  }
+                : confirmAns}
+              disabled={q.questionType === 'yes-no' ? !ynAllAnswered(current, q) : ans.selected.length === 0}
               className="w-full py-3.5 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-35 disabled:cursor-not-allowed text-white font-bold text-sm transition-colors mb-3">
               Show Answer
             </button>
@@ -1351,6 +1416,13 @@ function ExamResults({
   const correct  = answers.filter((a, i) => {
     const q = questions[i]
     if (!a.confirmed || a.selected.length === 0) return false
+    // Formato Yes/No: selected codifica si*2=Yes, si*2+1=No
+    if (q.questionType === 'yes-no' && q.statements?.length) {
+      return q.statements.every((stmt, si) => {
+        const isYes = a.selected.includes(si * 2)
+        return (isYes && stmt.answer === 'Yes') || (!isYes && stmt.answer === 'No')
+      })
+    }
     const expectedCount = /^[A-E]+$/i.test(q.correctAnswer?.trim() ?? '') ? (q.correctAnswer?.trim().length ?? 1) : 1
     return a.selected.length === expectedCount && a.selected.every(si => isCorrectOpt(q.options?.[si] ?? '', q.correctAnswer))
   }).length
@@ -1725,6 +1797,12 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
     const correct = answers.filter((a, i) => {
       const q = examSession.questions[i]
       if (!a.confirmed || a.selected.length === 0) return false
+      if (q.questionType === 'yes-no' && q.statements?.length) {
+        return q.statements.every((stmt, si) => {
+          const isYes = a.selected.includes(si * 2)
+          return (isYes && stmt.answer === 'Yes') || (!isYes && stmt.answer === 'No')
+        })
+      }
       const expectedCount = /^[A-E]+$/i.test(q.correctAnswer?.trim() ?? '') ? (q.correctAnswer?.trim().length ?? 1) : 1
       return a.selected.length === expectedCount && a.selected.every(si => isCorrectOpt(q.options?.[si] ?? '', q.correctAnswer))
     }).length
