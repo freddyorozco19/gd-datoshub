@@ -20,12 +20,14 @@ let examData = fs.existsSync(OUT_FILE)
   ? JSON.parse(fs.readFileSync(OUT_FILE, 'utf-8'))
   : { examTitle: 'AB-900: Microsoft 365 Copilot and Agent Administration Fundamentals', totalQuestions: 0, scrapedAt: '', questions: [] };
 
-const good = examData.questions.filter(q =>
-  // MC/dropdown con respuesta y texto
-  (q.correctAnswer && q.questionText && q.questionText.length > 20) ||
-  // Yes/No con al menos un statement capturado
-  (q.questionType === 'yes-no' && q.statements && q.statements.length > 0)
-);
+const good = examData.questions.filter(q => {
+  if (q.questionType === 'yes-no') {
+    // Sólo conservar si tiene al menos un statement con respuesta Yes/No
+    return q.statements && q.statements.some(s => s.answer === 'Yes' || s.answer === 'No');
+  }
+  // MC/dropdown: necesita respuesta y texto
+  return q.correctAnswer && q.questionText && q.questionText.length > 20;
+});
 if (good.length < examData.questions.length) {
   console.log(`[LIMPIEZA] Descartando ${examData.questions.length - good.length} inválidas. Manteniendo ${good.length}.`);
   examData.questions = good;
@@ -179,8 +181,8 @@ async function downloadImage(page, src, filename) {
         let dropdownOptions = [];
         const { isDropdown, isYesNo } = await page.evaluate(() => ({
           isDropdown: !!document.querySelector('div.dropdown-question'),
-          isYesNo: /for each statement.*select yes/i.test(document.body.innerText.slice(0, 3000)) ||
-                   /yes\s*or\s*no/i.test(document.body.innerText.slice(0, 1500)),
+          isYesNo: !!document.querySelector('table.statements-table') ||
+                   /for each statement.*select yes/i.test(document.body.innerText.slice(0, 3000)),
         }));
         if (isDropdown) {
           try {
@@ -278,91 +280,32 @@ async function downloadImage(page, src, filename) {
 
           // ── Formato C: Yes or No (tabla con statements) ───────────────────
           const bodyFull = document.body.innerText;
+          // Detectar por tabla específica de ExamCademy
+          const stmtsTable = document.querySelector('table.statements-table');
           const isYNFmt = options.length === 0 && (
+            !!stmtsTable ||
             /for each statement.*select yes/i.test(bodyFull.slice(0, 4000)) ||
             /yes\s*or\s*no/i.test(bodyFull.slice(0, 2000))
           );
           if (isYNFmt) {
             questionType = 'yes-no';
-            // Encontrar la tabla con statements
-            const tables = Array.from(document.querySelectorAll('table'));
-            for (const table of tables) {
-              const headerText = (table.querySelector('thead, tr:first-child')?.innerText || '').toLowerCase();
-              // Confirmar que es tabla de Yes/No
-              if (!headerText.includes('yes') && !headerText.includes('statement') && !headerText.includes('no')) continue;
-
-              const dataRows = Array.from(table.querySelectorAll('tbody tr, tr')).filter(r => {
-                const t = (r.innerText || '').trim().toLowerCase();
-                // Saltar fila de header
-                return t.length > 5 && !/^statements?\s*(yes)?\s*(no)?$/.test(t) && !r.closest('thead');
-              });
-
-              for (const row of dataRows) {
-                const cells = Array.from(row.querySelectorAll('td'));
-                if (cells.length < 3) continue;
-                const stmtText = (cells[0]?.innerText || '').trim();
+            const table = stmtsTable || document.querySelector('table');
+            if (table) {
+              const rows = Array.from(table.querySelectorAll('tr.statements-row, tbody tr')).filter(r => !r.closest('thead'));
+              for (const row of rows) {
+                // Texto del statement: td.statements-statement span, o primer td
+                const stmtEl = row.querySelector('td.statements-statement span, td.statements-statement, td:first-child');
+                const stmtText = (stmtEl?.innerText || '').trim();
                 if (!stmtText || stmtText.length < 5) continue;
 
+                // Respuesta correcta: la celda cuya label tiene clase "statements-opt-missed"
+                // ExamCademy usa "opted-missed" para marcar la opción correcta (la que no deberías perder)
+                const optCells = Array.from(row.querySelectorAll('td.statements-opt, td:not(:first-child)'));
                 let answer = '';
-                // Intento 1: inputs radio checked
-                const radios = Array.from(row.querySelectorAll('input[type="radio"], [role="radio"]'));
-                for (const radio of radios) {
-                  const chk = radio.checked ||
-                    radio.getAttribute('aria-checked') === 'true' ||
-                    radio.classList.contains('selected') ||
-                    radio.classList.contains('is-selected') ||
-                    radio.classList.contains('correct') ||
-                    radio.classList.contains('is-correct');
-                  if (chk) {
-                    const val = (radio.getAttribute('value') || radio.getAttribute('aria-label') || '').toLowerCase();
-                    answer = /yes/i.test(val) ? 'Yes' : /no/i.test(val) ? 'No' : '';
-                    if (!answer) {
-                      // Por posición: celda index 1 = Yes, index 2 = No
-                      const cellIdx = cells.indexOf(radio.closest('td'));
-                      if (cellIdx === 1) answer = 'Yes';
-                      else if (cellIdx === 2) answer = 'No';
-                    }
-                    break;
-                  }
-                }
-                // Intento 2: clase en la celda Yes/No
-                if (!answer) {
-                  const yesCell = cells[1];
-                  const noCell  = cells[2];
-                  const classNames = ['selected', 'correct', 'is-correct', 'checked', 'is-checked', 'active', 'is-active', 'answered', 'highlight'];
-                  const hasClass = (el, cls) => cls.some(c => el.classList.contains(c) || el.querySelector('.' + c));
-                  if (hasClass(yesCell, classNames)) answer = 'Yes';
-                  else if (hasClass(noCell, classNames)) answer = 'No';
-                }
-                // Intento 3: detectar por color inline o data-* atributos
-                if (!answer) {
-                  const yesCell = cells[1];
-                  const noCell  = cells[2];
-                  if (yesCell.getAttribute('data-answer') === 'true' || yesCell.getAttribute('data-correct') === 'true') answer = 'Yes';
-                  else if (noCell.getAttribute('data-answer') === 'true' || noCell.getAttribute('data-correct') === 'true') answer = 'No';
-                }
-                ynStatements.push({ text: stmtText, answer });
-              }
-              if (ynStatements.length > 0) break;
-            }
+                if (optCells[0]?.querySelector('label.statements-opt-missed')) answer = 'Yes';
+                else if (optCells[1]?.querySelector('label.statements-opt-missed')) answer = 'No';
 
-            // Fallback: si no encontramos tabla, intentar con divs/listas que tengan Yes/No
-            if (ynStatements.length === 0) {
-              // Buscar cualquier elemento que contenga "Yes" y "No" como botones/radios cerca de texto
-              const stmtEls = Array.from(document.querySelectorAll(
-                '[class*="statement"], [class*="yn-row"], [class*="row-item"]'
-              )).filter(el => {
-                const t = (el.innerText || '').trim();
-                return t.length > 10 && !el.closest('nav,header,footer,thead');
-              });
-              for (const el of stmtEls) {
-                const text = (el.innerText || '').split(/yes|no/i)[0].trim();
-                const hasYes = /yes/i.test(el.innerHTML);
-                const hasNo  = /no/i.test(el.innerHTML);
-                const selectedYes = el.querySelector('[class*="selected"][class*="yes"], [data-value="yes"][class*="select"], [aria-selected="true"]:first-child');
-                const selectedNo  = el.querySelector('[class*="selected"][class*="no"],  [data-value="no"][class*="select"]');
-                const answer = selectedYes ? 'Yes' : selectedNo ? 'No' : '';
-                if (text && hasYes && hasNo) ynStatements.push({ text, answer });
+                ynStatements.push({ text: stmtText, answer });
               }
             }
 
