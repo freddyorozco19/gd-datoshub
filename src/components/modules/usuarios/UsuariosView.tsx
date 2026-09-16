@@ -977,7 +977,6 @@ function TrazabilidadPanel() {
           <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
         </button>
       </div>
-      <p className="text-[11px] text-slate-600">Mostrando {filtered.length} de {events.length} eventos</p>
 
       {needsSetup && (
         <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
@@ -1047,9 +1046,6 @@ function TrazabilidadPanel() {
         </div>
       </div>
 
-      <p className="text-xs text-slate-600">
-        Cada inicio de sesión en la plataforma queda registrado automáticamente con fecha, IP, navegador y sistema operativo.
-      </p>
     </div>
   );
 }
