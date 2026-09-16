@@ -7,7 +7,7 @@ const { chromium } = require('playwright');
 const fs   = require('fs');
 const path = require('path');
 
-const LOGIN_URL  = 'https://auth.examcademy.com/u/login';
+const LOGIN_URL  = 'https://auth.examcademy.com/u/login?state=hKFo2SBvVk9qUnZuRXAweG96cU8yclVzMkl5Q2JYSEVILXpNbqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHR1SzJGcWNHOHJnVjYwVVluc3hpVnBqdmdEUHIxV1Vno2NpZNkgZU9vckF1VjVsZERxeGtuOVY0MGczdWVodW94b3RRSVA';
 const BASE_URL   = 'https://examcademy.com/exams/microsoft/ab-900';
 const OUT_FILE   = path.join(__dirname, 'public', 'data', 'exam_ab900.json');
 const LINKS_FILE = path.join(__dirname, 'public', 'data', 'exam_ab900_links.json');
@@ -170,7 +170,40 @@ async function downloadImage(page, src, filename) {
         await page.goto(href, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await sleep(rand(2000, 3000));
 
-        // Clic en "SHOW ANSWER"
+        // ── Detectar formato dropdown y capturar opciones ANTES de SHOW ANSWER ──
+        let dropdownOptions = [];
+        const isDropdown = await page.evaluate(() => !!document.querySelector('div.dropdown-question'));
+        if (isDropdown) {
+          try {
+            // Abrir el inline select trigger (span.select.inline)
+            const trigger = page.locator('span.select.inline, span.select-trigger').first();
+            if (await trigger.count() > 0) {
+              await trigger.click({ timeout: 3000 });
+              await sleep(1000);
+            }
+            // Capturar opciones del menú desplegado
+            dropdownOptions = await page.evaluate(() => {
+              const letters = ['A', 'B', 'C', 'D', 'E'];
+              // Buscar items del menú flotante
+              const items = Array.from(document.querySelectorAll(
+                '[class*="select-option"], [class*="selectOption"], ' +
+                '[class*="option-row"], [class*="optionRow"], ' +
+                'ul.select-options li, ul.options li, ' +
+                '[class*="select-list"] li, [class*="dropdown"] li, ' +
+                '[class*="select-menu"] li, [class*="selectMenu"] li, ' +
+                '[class*="menu-list"] li, [class*="menuList"] li'
+              )).filter(el => {
+                const rect = el.getBoundingClientRect();
+                return rect.width > 40 && rect.height > 5 && !el.closest('nav,header,footer');
+              });
+              return items.slice(0, 5).map((el, i) => `${letters[i]}. ${(el.innerText || '').trim()}`);
+            });
+            await page.keyboard.press('Escape');
+            await sleep(400);
+          } catch (_) {}
+        }
+
+        // ── Clic SHOW ANSWER ──────────────────────────────────────────────────
         let clicked = false;
         try {
           await page.locator('button', { hasText: /show answer/i }).first().click({ timeout: 5000 });
@@ -192,8 +225,8 @@ async function downloadImage(page, src, filename) {
           await sleep(rand(1500, 2500));
         }
 
-        const q = await page.evaluate(() => {
-          // ── Opciones y respuesta correcta ─────────────────────────────────
+        const q = await page.evaluate((preDropdownOpts) => {
+          // ── Formato A: opciones tipo botón mc-option ───────────────────────
           const optBtns = Array.from(document.querySelectorAll('button.mc-option'));
           const options = [];
           let correctAnswer = '';
@@ -206,11 +239,62 @@ async function downloadImage(page, src, filename) {
             }
           }
 
+          // ── Formato B: dropdown fill-in-the-blank (ExamCademy custom) ──────
+          const dropdownQ = document.querySelector('div.dropdown-question');
+          if (options.length === 0 && dropdownQ) {
+            // Opciones: usar las capturadas antes de SHOW ANSWER
+            if (preDropdownOpts && preDropdownOpts.length > 0) {
+              options.push(...preDropdownOpts);
+            }
+            // Respuesta correcta: span.dropdown-correct-answer → "→ Microsoft Defender XDR"
+            const correctEl = dropdownQ.querySelector('span.dropdown-correct-answer');
+            if (correctEl) {
+              const rawAns = (correctEl.innerText || '').replace(/^[→>]\s*/, '').trim();
+              const letters = ['A', 'B', 'C', 'D', 'E'];
+              for (let i = 0; i < options.length; i++) {
+                const optText = options[i].replace(/^[A-E]\.\s*/, '').trim();
+                if (optText.toLowerCase() === rawAns.toLowerCase() ||
+                    optText.toLowerCase().includes(rawAns.toLowerCase()) ||
+                    rawAns.toLowerCase().includes(optText.toLowerCase())) {
+                  correctAnswer = letters[i];
+                  break;
+                }
+              }
+              // Si no encontramos match, guardar la respuesta literal para referencia
+              if (!correctAnswer) correctAnswer = rawAns;
+            }
+          }
+
           // ── Texto de la pregunta ──────────────────────────────────────────
           let questionText = '';
           const bodyText = document.body.innerText;
-          const qMatch = bodyText.match(/Question\n+\d+\n+[^\n]+\n+([\s\S]+?)\n+[A-E]\n/);
-          if (qMatch) questionText = qMatch[1].replace(/\n/g, ' ').trim();
+
+          // Para formato dropdown: construir desde span.dropdown-prose-text + campo blank
+          if (dropdownQ && options.length > 0) {
+            const instruction = (dropdownQ.querySelector('p.dropdown-instruction')?.innerText || '').trim();
+            const prose = dropdownQ.querySelector('div.dropdown-prose');
+            if (prose) {
+              const parts = [];
+              prose.childNodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                  const t = node.textContent.trim();
+                  if (t) parts.push(t);
+                } else if (node.classList?.contains('dropdown-prose-text')) {
+                  const t = (node.innerText || '').trim();
+                  if (t) parts.push(t);
+                } else if (node.classList?.contains('dropdown-field')) {
+                  parts.push('[___]');
+                }
+              });
+              questionText = (instruction ? instruction + ' ' : '') + parts.join(' ').replace(/\s{2,}/g, ' ').trim();
+            }
+          }
+
+          // Para formato mc: extraer desde body text o el bloque de opciones
+          if (!questionText || questionText.length < 20) {
+            const qMatch = bodyText.match(/Question\n+\d+\n+[^\n]+\n+([\s\S]+?)\n+[A-E]\n/);
+            if (qMatch) questionText = qMatch[1].replace(/\n/g, ' ').trim();
+          }
           if (!questionText || questionText.length < 20 || /EXAM\s*CADEMY/i.test(questionText)) {
             if (optBtns[0]) {
               const qBlock = optBtns[0].closest('main, [role="main"]');
@@ -258,7 +342,7 @@ async function downloadImage(page, src, filename) {
           }
 
           return { options, correctAnswer, questionText, explanation, learnMore, imageInfos };
-        });
+        }, dropdownOptions);
 
         // ── Descargar imágenes ─────────────────────────────────────────────
         const images = [];
