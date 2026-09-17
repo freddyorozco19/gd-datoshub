@@ -151,6 +151,7 @@ interface QuestionImage {
   alt?: string
   inOption?: boolean
   optionLetter?: string | null
+  inAnswer?: boolean
 }
 
 interface Question {
@@ -695,7 +696,7 @@ function QuestionCard({
 
           {shown.images?.filter(img => {
             const info = typeof img === 'string' ? null : img
-            return !info?.inOption
+            return !info?.inOption && !info?.inAnswer
           }).map((img, i) => {
             const src = typeof img === 'string' ? img : img.path
             const alt = typeof img === 'string' ? '' : (img.alt || '')
@@ -897,6 +898,14 @@ function QuestionCard({
                     : shown.correctAnswer}
                 </p>
               )}
+              {shown.images?.filter(img => typeof img !== 'string' && img.inAnswer).map((img, i) => {
+                const info = img as QuestionImage
+                return (
+                  <img key={i} src={info.path} alt={info.alt || ''}
+                    className="max-w-full rounded-lg border border-emerald-700/30 mt-2 mx-auto block"
+                    onError={e => (e.currentTarget.style.display = 'none')} />
+                )
+              })}
               {showExpl && q.explanation && (
                 <div className="mt-2 pt-2 border-t border-emerald-800/40">
                   <div className="flex items-center justify-between mb-1.5">
@@ -1284,10 +1293,10 @@ function ExamScreen({
             </div>
             <p className="text-white text-[15px] leading-relaxed">{displayText}</p>
 
-            {/* imágenes asociadas a la pregunta (no a opciones) */}
+            {/* imágenes asociadas a la pregunta (no a opciones, no a respuesta) */}
             {q.images?.filter(img => {
               const info = typeof img === 'string' ? null : img
-              return !info?.inOption
+              return !info?.inOption && !info?.inAnswer
             }).map((img, i) => {
               const src = typeof img === 'string' ? img : img.path
               const alt = typeof img === 'string' ? '' : (img.alt || '')
@@ -1520,6 +1529,20 @@ function ExamScreen({
                   </ul>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Imágenes de respuesta (hotspot/exhibit answer) */}
+          {ans.confirmed && q.images?.some(img => typeof img !== 'string' && img.inAnswer) && (
+            <div className="mb-3">
+              {q.images.filter(img => typeof img !== 'string' && img.inAnswer).map((img, i) => {
+                const info = img as QuestionImage
+                return (
+                  <img key={i} src={info.path} alt={info.alt || ''}
+                    className="max-w-full rounded-xl border border-emerald-700/30 mt-2 mx-auto block"
+                    onError={e => (e.currentTarget.style.display = 'none')} />
+                )
+              })}
             </div>
           )}
 

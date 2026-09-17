@@ -880,7 +880,20 @@
       "correctAnswer": "Change history",
       "explanation": "Change history records changes to SharePoint site settings, allowing administrators to identify modifications made by a site administrator. Select Change history.",
       "learnMore": [],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab900/q38_img0.png",
+          "alt": "SharePoint admin center exhibit",
+          "inOption": false,
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/ab900/q38_img1.png",
+          "alt": "Answer: Change history highlighted in SharePoint admin center",
+          "inOption": false,
+          "inAnswer": true
+        }
+      ]
     },
     {
       "number": "39",
@@ -1475,7 +1488,14 @@
           "url": "https://learn.microsoft.com/en-us/purview/edisc-search-export"
         }
       ],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab900/q61_img0.png",
+          "alt": "",
+          "inOption": false,
+          "inAnswer": false
+        }
+      ]
     },
     {
       "number": "62",
@@ -1564,7 +1584,14 @@
           "url": "https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports"
         }
       ],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab900/q66_img0.png",
+          "alt": "",
+          "inOption": false,
+          "inAnswer": false
+        }
+      ]
     },
     {
       "number": "67",
@@ -1706,7 +1733,14 @@
           "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-access-control"
         }
       ],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab900/q73_img0.png",
+          "alt": "",
+          "inOption": false,
+          "inAnswer": false
+        }
+      ]
     },
     {
       "number": "74",
