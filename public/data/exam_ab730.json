@@ -1,0 +1,566 @@
+{
+  "examTitle": "AB-730: Microsoft AI Business Professional",
+  "totalQuestions": 25,
+  "scrapedAt": "2026-09-17T20:49:43.174Z",
+  "questions": [
+    {
+      "number": "1",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, Yes",
+      "statements": [
+        {
+          "text": "When Microsoft 365 Copilot searches for content on the web, it uses the Bing search service.",
+          "answer": "Yes"
+        },
+        {
+          "text": "When Microsoft 365 Copilot searches for content on the web, it uploads the entire conversation history into the search request.",
+          "answer": "No"
+        },
+        {
+          "text": "When Microsoft 365 Copilot searches for content on the web, the query is anonymized and stripped of any user-identifiable information.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot sends generated web-search queries to the Bing search service. The query is a short query derived from relevant prompt terms, rather than the entire conversation history. User and tenant identifiers are removed before the generated query is sent to Bing.",
+      "learnMore": [
+        {
+          "text": "Data, privacy, and security for web search in Microsoft 365 Copilot and Microsoft 365 Copilot Chat",
+          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/manage-public-web-access"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "2",
+      "questionType": "mc",
+      "questionText": "You are building a custom agent in the Microsoft 365 Copilot app for your company's marketing team. The agent will produce marketing collateral, including copy, logos, and artwork. What should you add to the agent? More than one answer choice may meet the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. code interpreter",
+        "B. image generator",
+        "C. a suggested prompt",
+        "D. a template"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The image generator capability enables a Microsoft 365 Copilot declarative agent to create and revise graphics from user prompts. That capability directly supports producing visual marketing collateral such as logos and artwork in addition to the agent's text output.",
+      "learnMore": [
+        {
+          "text": "Add the image generator capability to your agent",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/image-generator"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "3",
+      "questionType": "mc",
+      "questionText": "SelectYou generate a report by using the Researcher agent in Microsoft 365 Copilot. You can use to save and edit the response.ExplanationA Copilot page turns a generated response into persistent, editable content that can be refined, reused, and shared. An agent, conversation, or notebook is not the editable output container used to save the response.Learn moreGet started with Microsoft 365 Copilot Pages",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "a page",
+      "explanation": "A Copilot page turns a generated response into persistent, editable content that can be refined, reused, and shared. An agent, conversation, or notebook is not the editable output container used to save the response.",
+      "learnMore": [
+        {
+          "text": "Get started with Microsoft 365 Copilot Pages",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-microsoft-365-copilot-pages"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "4",
+      "questionType": "yes-no",
+      "questionText": "For each statement below, select Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, No, Yes",
+      "statements": [
+        {
+          "text": "Microsoft 365 Copilot uses your business data to train underlying AI models.",
+          "answer": "No"
+        },
+        {
+          "text": "Microsoft 365 Copilot automatically assigns permissions to resources, so that users can find information more easily.",
+          "answer": "No"
+        },
+        {
+          "text": "Microsoft 365 Copilot uses the same underlying data access controls as other Microsoft 365 services to ensure that users are presented with only information to which they have access.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Microsoft does not use prompts, responses, or Microsoft Graph data from Microsoft 365 Copilot to train foundation models. Copilot does not elevate or automatically assign resource permissions; it applies the existing Microsoft 365 identity model and access controls so responses use only content the signed-in user is permitted to access.",
+      "learnMore": [
+        {
+          "text": "Enterprise data protection in Microsoft 365 Copilot and Microsoft 365 Copilot Chat",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection"
+        },
+        {
+          "text": "Microsoft 365 Copilot data protection architecture",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture-data-protection-auditing"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "5",
+      "questionType": "mc",
+      "questionText": "You have an active Microsoft 365 Copilot conversation. You need to chat with an agent named Agent1 during that conversation. What should you enter to invoke Agent1?",
+      "translation": "",
+      "options": [
+        "A. [Agent1]",
+        "B. #Agent1",
+        "C. /Agent1",
+        "D. @Agent1"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft 365 Copilot uses an at-sign mention to attach an available agent to an ongoing conversation. Entering @Agent1 invokes the named agent in that chat.",
+      "learnMore": [
+        {
+          "text": "Use Microsoft 365 Copilot in model-driven apps",
+          "url": "https://learn.microsoft.com/en-us/power-apps/user/use-microsoft-365-copilot-model-driven-apps"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "6",
+      "questionType": "mc",
+      "questionText": "You are a marketing assistant getting ready for a budget meeting with your manager. You need to assess the key spending and performance trends from the previous year to understand which marketing channels provide the best return on investment (ROI). What should you use in Microsoft 365 Copilot to meet the goal? More than one answer choice may meet the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. the Analyst agent",
+        "B. Chat",
+        "C. the Researcher agent",
+        "D. a notebook"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The Analyst agent is purpose-built for data analysis: it can calculate statistics, identify trends and outliers, consolidate data, and produce reports with charts and tables. That makes it the best fit for comparing channel spending, performance, and ROI.",
+      "learnMore": [
+        {
+          "text": "Get started with Analyst in Microsoft 365 Copilot",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-analyst-in-microsoft-365-copilot"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "7",
+      "questionType": "mc",
+      "questionText": "You have a Microsoft Excel workbook open that includes a table. The table holds sales data in these columns: OrderDate OrderNumber Amount You plan to use Microsoft Copilot in Excel to create a monthly summary of the table's sales data. What should the prompt include to produce an effective summary? More than one answer choice may achieve the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. the desired format of the response",
+        "B. a specific cell range from the worksheet",
+        "C. the file name of the workbook",
+        "D. the clear goal of the summary",
+        "E. a formula to calculate monthly totals"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A clear goal is the essential part of a Copilot prompt because it specifies the task Copilot must perform. Other details can refine the response, but Microsoft's prompting guidance identifies a clear goal as the required element.",
+      "learnMore": [
+        {
+          "text": "Get started writing prompts in Microsoft 365 Copilot",
+          "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/get-started-writing-prompts-in-microsoft-365-copilot"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "8",
+      "questionType": "mc",
+      "questionText": "You use Microsoft 365 Copilot to create a training plan. You need to determine whether your organization already has any training plans similar to the new one. What should you use in Copilot?",
+      "translation": "",
+      "options": [
+        "A. Search",
+        "B. Designer",
+        "C. Apps",
+        "D. Pages"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Search in the Microsoft 365 Copilot app finds organizational content such as files, chats, meetings, and messages, so it can locate existing training plans for comparison.",
+      "learnMore": [
+        {
+          "text": "Get started with Search in the Microsoft 365 Copilot app",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-search-in-the-microsoft-365-copilot-app"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "9",
+      "questionType": "mc",
+      "questionText": "You participate in many Microsoft Teams meetings. You want to make sure you can catch up on important points and next steps after every meeting. Which Microsoft 365 Copilot feature should you use after the meetings?",
+      "translation": "",
+      "options": [
+        "A. Recap",
+        "B. Meeting Whiteboard",
+        "C. Meeting info",
+        "D. Thread summaries"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Teams Recap is available after recorded or transcribed meetings and brings together the recording, transcript, notes, summaries, and follow-up tasks. Copilot in Recap can summarize key points and generate follow-up actions.",
+      "learnMore": [
+        {
+          "text": "Recap in Microsoft Teams",
+          "url": "https://support.microsoft.com/en-US/teams/meetings/recap-in-microsoft-teams"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "10",
+      "questionType": "mc",
+      "questionText": "You plan to summarize a proposal for a partnership between your company and another company. You must use Microsoft 365 Copilot to summarize the proposal as a bulleted list containing three to five key points for a project kickoff meeting. Every bullet point must use concise, simple wording. Which two details should you put in the prompt? Each correct answer provides part of the solution. NOTE: Each correct selection is worth one point. Choose two",
+      "translation": "",
+      "options": [
+        "A. a list of contact details for key stakeholders of the partnership",
+        "B. profiles of both companies generated by using the Researcher agent",
+        "C. a specific knowledge source to ground the response",
+        "D. concise instructions for what to do with the proposal"
+      ],
+      "correctAnswer": "CD",
+      "explanation": "An effective summarization prompt needs a clear goal and expectations describing the required output, along with the proposal as the specific grounding source. Concise instructions define the three-to-five-item bulleted format and simple wording, while the source keeps the summary anchored to the proposal.",
+      "learnMore": [
+        {
+          "text": "Get started writing prompts in Microsoft 365 Copilot",
+          "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/get-started-writing-prompts-in-microsoft-365-copilot"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "11",
+      "questionType": "mc",
+      "questionText": "You need to open Microsoft 365 Copilot in a web browser. Which URL should you use?",
+      "translation": "",
+      "options": [
+        "A. https://m365.cloud.microsoft",
+        "B. https://copilotstudio.microsoft.com",
+        "C. https://myapps.microsoft.com",
+        "D. https://myaccount.microsoft.com"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The Microsoft 365 Copilot web app is accessed by signing in at m365.cloud.microsoft with a work or school account.",
+      "learnMore": [
+        {
+          "text": "What is the Microsoft 365 Copilot app?",
+          "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/what-is-the-microsoft-365-copilot-app"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "12",
+      "questionType": "multi-dropdown",
+      "questionText": "You have a Microsoft 365 Copilot license. You intend to run several prompts. What should you use so that Copilot produces the best response for each prompt? More than one option may meet the objective.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "The Analyst agent, The Researcher agent, Chat",
+      "statements": [
+        {
+          "text": "Prompt 1: From /Feedback_Q1–Q3.xlsx, consolidate all the sheets, categorize the feedback by theme, compute the positive/negative sentiment by product line, and visualize the top five drivers.",
+          "answer": "The Analyst agent"
+        },
+        {
+          "text": "Prompt 2: Using our SharePoint folder ‘/Go-To-Market/2025’ and reputable web sources, produce a 1-page brief about AI trends that includes five key insights, citations, and callouts on gaps/risks.",
+          "answer": "The Researcher agent"
+        },
+        {
+          "text": "Prompt 3: For a VP, prepare a polished executive email that distills the strategic priorities, critical decisions, and immediate next steps from the attached Strategic_Plan_2025.docx, ensuring that the tone aligns with senior leadership’s communication standards.",
+          "answer": "Chat"
+        }
+      ],
+      "dropdownOptions": [
+        "The Analyst agent",
+        "Chat",
+        "The Researcher agent"
+      ],
+      "explanation": "Analyst is optimized for consolidating spreadsheet data, calculating statistics and trends, and producing charts or tables, so it best fits Prompt 1. Researcher combines work content and reputable web sources to produce deep, structured, source-cited reports, so it best fits Prompt 2. Standard Chat is optimized for everyday drafting and can use an attached Word document as context, so it best fits Prompt 3.",
+      "learnMore": [
+        {
+          "text": "Get started with Analyst in Microsoft 365 Copilot",
+          "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/get-started-with-analyst-in-microsoft-365-copilot"
+        },
+        {
+          "text": "Get started with Researcher agent in Microsoft 365 Copilot",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/researcher-agent"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "13",
+      "questionType": "mc",
+      "questionText": "You intend to use a notebook in Microsoft 365 Copilot. What purpose does a notebook serve?",
+      "translation": "",
+      "options": [
+        "A. to create a transcript of a conversation that you can easily email to other users",
+        "B. to provide a private location that can be used to organize reference materials across related conversations",
+        "C. to generate a summary of all the interactions you had with Copilot during a specific conversation"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A Microsoft 365 Copilot Notebook is a scoped workspace that brings together selected references and related content so Copilot can provide focused, context-aware responses grounded in those materials.",
+      "learnMore": [
+        {
+          "text": "How Microsoft 365 Copilot Notebooks works",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/how-microsoft-365-copilot-notebooks-works"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "14",
+      "questionType": "mc",
+      "questionText": "You generate a report by using the Researcher agent in Microsoft 365 Copilot. What can you use to confirm whether valid sources were used to generate the report?",
+      "translation": "",
+      "options": [
+        "A. citations",
+        "B. instructions",
+        "C. memory",
+        "D. capabilities"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Researcher produces source-cited reports, and its citations identify the sources behind the report so their validity can be checked.",
+      "learnMore": [
+        {
+          "text": "Get started with Researcher in Microsoft 365 Copilot",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-researcher-in-microsoft-365-copilot"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "15",
+      "questionType": "mc",
+      "questionText": "SelectOverreliance is a common risk associated with generative AI, whereExplanationOverreliance occurs when people accept AI output without appropriate scrutiny, including accepting incorrect or incomplete output instead of verifying it.Learn moreOverreliance on AI: Risk Identification and Mitigation Framework",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "users accept the AI-generated output without verifying its accuracy.",
+      "explanation": "Overreliance occurs when people accept AI output without appropriate scrutiny, including accepting incorrect or incomplete output instead of verifying it.",
+      "learnMore": [
+        {
+          "text": "Overreliance on AI: Risk Identification and Mitigation Framework",
+          "url": "https://learn.microsoft.com/en-us/ai/playbook/technology-guidance/overreliance-on-ai/overreliance-on-ai"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "16",
+      "questionType": "mc",
+      "questionText": "You have a Microsoft 365 Copilot license. You are creating a business presentation by using Copilot in PowerPoint. Which two tasks can you complete by using Copilot in PowerPoint? Each correct answer presents a complete solution. NOTE: Each correct selection is worth one point. Choose two",
+      "translation": "",
+      "options": [
+        "A. Insert a custom animation for a specific object on a slide.",
+        "B. Create a slide layout based on the content of your presentation.",
+        "C. Customize the design theme of your presentation to match your company's branding.",
+        "D. Produce a summary slide based on the key points in your presentation."
+      ],
+      "correctAnswer": "BD",
+      "explanation": "Copilot in PowerPoint generates slide layouts optimized for presentation content, improving visual organization and flow. It also creates summary slides that distill key points from the full deck into a single consolidated slide. Object animations and corporate design theme customization require manual work beyond Copilot's content-generation and presentation-optimization capabilities.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "17",
+      "questionType": "mc",
+      "questionText": "What is the purpose of adding custom instructions to Microsoft 365 Copilot?",
+      "translation": "",
+      "options": [
+        "A. to set preferences that are applied to all Copilot interactions, such as the tone and style of responses",
+        "B. to enable Copilot to take actions on your behalf, such as sending emails",
+        "C. to apply security rules that must be followed by Copilot, such as which information is shared",
+        "D. to provide additional context to Copilot, such as your name, title, and company, so that Copilot can complete tasks more efficiently"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Custom instructions let users set persistent preferences for how Microsoft 365 Copilot responds, including response format, tone, and style. Copilot uses those preferences to tailor responses in future conversations.",
+      "learnMore": [
+        {
+          "text": "Customize how Microsoft 365 Copilot responds to you",
+          "url": "https://support.microsoft.com/en-us/Microsoft-365-Copilot/customize-how-microsoft-365-copilot-responds-to-you"
+        },
+        {
+          "text": "Personalize what Microsoft 365 Copilot remembers",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/personalize-what-microsoft-365-copilot-remembers"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "18",
+      "questionType": "mc",
+      "questionText": "You ask Microsoft 365 Copilot to produce a report based on information from the web. After verifying the response, you find that some of the information is fictional. What does this exemplify?",
+      "translation": "",
+      "options": [
+        "A. deepfake",
+        "B. fabrication",
+        "C. overreliance",
+        "D. prompt injection",
+        "E. bias"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Fabrication, also called hallucination, occurs when a generative AI model invents information that is not grounded in its inputs or existing data.",
+      "learnMore": [
+        {
+          "text": "Human review for automation with a prompt",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/azure-openai-human-review"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "19",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, No, Yes",
+      "statements": [
+        {
+          "text": "You can review the Microsoft 365 Copilot activity history from the My Account portal.",
+          "answer": "No"
+        },
+        {
+          "text": "When you delete the Microsoft 365 Copilot activity history, you also immediately delete all the associated notebooks and pages.",
+          "answer": "No"
+        },
+        {
+          "text": "Users can delete their entire Microsoft 365 Copilot activity history, including their prompts and the responses Copilot returns.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "For work or school accounts, the My Account portal provides the control to request deletion of Microsoft 365 Copilot activity history; users review conversation history in the Microsoft 365 Copilot app. Deletion can take time and does not remove content saved in files, notebooks, or pages. The deletable activity history includes the user's prompts and Copilot's responses.",
+      "learnMore": [
+        {
+          "text": "Delete your Microsoft 365 Copilot activity history",
+          "url": "https://support.microsoft.com/en-us/privacy/delete-your-microsoft-365-copilot-activity-history"
+        },
+        {
+          "text": "How Microsoft 365 Copilot Chat history works",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/how-microsoft-365-copilot-chat-history-works"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "20",
+      "questionType": "mc",
+      "questionText": "SelectYou are creating an agent in the Microsoft 365 Copilot app. The agent persona must be warm and friendly. To set the persona, you should modify theExplanationAn agent's instructions define its behavior and general guidelines, including the tone and user experience it should present. A warm and friendly persona therefore belongs in the instructions.Learn moreWrite effective instructions for declarative agents",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "instructions.",
+      "explanation": "An agent's instructions define its behavior and general guidelines, including the tone and user experience it should present. A warm and friendly persona therefore belongs in the instructions.",
+      "learnMore": [
+        {
+          "text": "Write effective instructions for declarative agents",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/declarative-agent-instructions"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "21",
+      "questionType": "mc",
+      "questionText": "AB-730: AI Business Professional By Microsoft · Question Mode EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes freddy.orozco729 freddy.orozco729@gmail.com Exams / Microsoft / AB-730: AI Business Professional / You open Microsoft 356 Copilot, as illustrated in the following exhibit. Question 21 Manage prompts and conversations by using AI You open Microsoft 356 Copilot, as illustrated in the following exhibit. What can be inferred about the Standings conversation?",
+      "translation": "",
+      "options": [
+        "A. The conversation contains only anonymous data.",
+        "B. The conversation contains a verified response.",
+        "C. The conversation was added to a notebook.",
+        "D. The conversation contains a scheduled prompt.",
+        "E. The conversation was shared."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Scheduled-prompt conversations are shown in the Conversations section in bold with a status icon. Those indicators on Standings identify it as a conversation that contains a scheduled prompt.",
+      "learnMore": [
+        {
+          "text": "Schedule your most used Copilot prompts",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "22",
+      "questionType": "mc",
+      "questionText": "You are working as a medical researcher. You must ensure that Microsoft 365 Copilot responds professionally in a manner appropriate to your field. What is the best way to meet the goal? More than one answer choice may meet the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. In the conversation, attach an example to your prompts.",
+        "B. From Settings, configure Custom instructions.",
+        "C. In the conversation, create a sample prompt and save it to the Copilot Prompt Gallery.",
+        "D. From Settings, configure Copilot Memory."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Custom instructions in Copilot personalization settings let a user specify persistent communication preferences, relevant background, and the desired response style, making them the best way to request professionally worded responses appropriate to a medical researcher.",
+      "learnMore": [
+        {
+          "text": "Customize how Microsoft 365 Copilot responds to you",
+          "url": "https://support.microsoft.com/en-us/Microsoft-365-Copilot/customize-how-microsoft-365-copilot-responds-to-you"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "23",
+      "questionType": "mc",
+      "questionText": "You have a Microsoft Word document open with a sensitivity label named Highly Confidential applied. In Microsoft PowerPoint, you plan to use Microsoft 365 Copilot to create a presentation from the Word document. What result will occur?",
+      "translation": "",
+      "options": [
+        "A. Copilot will be unable to generate the presentation.",
+        "B. Copilot will generate the presentation and will prompt you for a label.",
+        "C. Copilot will generate the presentation and apply the Highly Confidential label.",
+        "D. Copilot will generate the presentation and will NOT apply a label."
+      ],
+      "correctAnswer": "C",
+      "explanation": "When Copilot in PowerPoint creates new content from a labeled source file, it automatically inherits the source file's sensitivity label and its protection settings. The generated presentation therefore receives the Highly Confidential label.",
+      "learnMore": [
+        {
+          "text": "Use Microsoft Purview to manage data security & compliance for Microsoft 365 Copilot & Microsoft 365 Copilot Chat",
+          "url": "https://learn.microsoft.com/en-us/purview/ai-m365-copilot"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "24",
+      "questionType": "mc",
+      "questionText": "Selectin Microsoft 365 Copilot ensures that business data stays within a Microsoft 365 tenant and is NOT used to train AI models.ExplanationEnterprise data protection applies Microsoft 365 contractual, privacy, security, access-control, and tenant-isolation commitments to Copilot. Under EDP, prompts, responses, and data accessed through Microsoft Graph are not used to train foundation models.Learn moreEnterprise data protection in Microsoft 365 Copilot and Microsoft 365 Copilot Chat",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Enterprise data protection (EDP)",
+      "explanation": "Enterprise data protection applies Microsoft 365 contractual, privacy, security, access-control, and tenant-isolation commitments to Copilot. Under EDP, prompts, responses, and data accessed through Microsoft Graph are not used to train foundation models.",
+      "learnMore": [
+        {
+          "text": "Enterprise data protection in Microsoft 365 Copilot and Microsoft 365 Copilot Chat",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "25",
+      "questionType": "mc",
+      "questionText": "AB-730: AI Business Professional By Microsoft · Question Mode EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes freddy.orozco729 freddy.orozco729@gmail.com Exams / Microsoft / AB-730: AI Business Professional / You use Microsoft 365 Copilot. Question 25 Manage prompts and conversations by using AI You use Microsoft 365 Copilot. You discover that one of your conversations used a knowledge source containing confidential information. You need to delete that conversation's data without administrative approval. If possible, you must keep your other conversations. What should you use?",
+      "translation": "",
+      "options": [
+        "A. the Microsoft 365 admin center",
+        "B. the My Account portal in Microsoft 365 Copilot",
+        "C. the Microsoft Purview compliance portal",
+        "D. the Microsoft 365 Copilot app"
+      ],
+      "correctAnswer": "D",
+      "explanation": "The Microsoft 365 Copilot app lets a user delete a specific conversation from chat history. This removes the selected conversation while leaving other conversations intact and does not require an administrator.",
+      "learnMore": [
+        {
+          "text": "How Microsoft 365 Copilot Chat history works",
+          "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/how-microsoft-365-copilot-chat-history-works"
+        }
+      ],
+      "images": []
+    }
+  ]
+}
