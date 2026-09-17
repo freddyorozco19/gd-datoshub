@@ -47,6 +47,7 @@ const PROVIDERS: ProviderConfig[] = [
     exams: [
       { id: 'ai-100', code: 'AI-100', name: 'Designing/Implementing Azure AI Solution', level: 'Associate'   },
       { id: 'ai-102', code: 'AI-102', name: 'Azure AI Engineer',                        level: 'Associate'   },
+      { id: 'ab-730', code: 'AB-730', name: 'AI Business Professional',                  dataFile: '/data/exam_ab730.json', questions: 93, level: 'Fundamental' },
       { id: 'ab-900', code: 'AB-900', name: 'M365 Copilot & Agent Admin Fundamentals',  dataFile: '/data/exam_ab900.json', questions: 88, level: 'Fundamental' },
       { id: 'ai-900', code: 'AI-900', name: 'Azure AI Fundamentals',                    level: 'Fundamental' },
       { id: 'ai-901', code: 'AI-901', name: 'Microsoft Azure AI',                       dataFile: '/data/exam_ai901.json', questions: 50, level: 'Fundamental' },
