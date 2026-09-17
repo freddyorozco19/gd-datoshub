@@ -1473,7 +1473,7 @@
     {
       "number": "61",
       "questionType": "hotspot",
-      "questionText": "",
+      "questionText": "Your organization has a Microsoft 365 subscription. The HR department requests a copy of all recent files modified by a user named User1. What should you use in the Microsoft Purview portal?",
       "translation": "",
       "options": [],
       "correctAnswer": "Microsoft Purview eDiscovery",
@@ -1573,7 +1573,7 @@
     {
       "number": "66",
       "questionType": "hotspot",
-      "questionText": "",
+      "questionText": "Your organization has a Microsoft 365 subscription. You discover that Microsoft SharePoint files are shared with users outside your organization. You need to identify which files are shared with those external users. Which report should you use in the SharePoint admin center?",
       "translation": "",
       "options": [],
       "correctAnswer": "Data access governance",
@@ -1722,7 +1722,7 @@
     {
       "number": "73",
       "questionType": "hotspot",
-      "questionText": "",
+      "questionText": "You have a Microsoft SharePoint site named Site1 and a security group named Group1. You must prevent all users who currently have access to Site1 from accessing its content unless they are also members of Group1. Which settings should you configure?",
       "translation": "",
       "options": [],
       "correctAnswer": "Private",
