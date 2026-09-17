@@ -488,6 +488,7 @@ function QuestionCard({
   const [verified,    setVerified]    = useState(false)
   const [showAns,     setShowAns]     = useState(false)
   const [mdRowAnswers, setMdRowAnswers] = useState<Record<number, string>>({})
+  const [ynRowAnswers, setYnRowAnswers] = useState<Record<number, 'Yes' | 'No'>>({})
   const [showExpl,      setShowExpl]      = useState(false)
   const [explEs,        setExplEs]        = useState(false)
   const [explEsText,    setExplEsText]    = useState<string | null>(null)
@@ -513,7 +514,7 @@ function QuestionCard({
     setSelected(prev => prev === i ? null : i)
   }
 
-  const reset = () => { setSelected(null); setVerified(false); setShowAns(false); setShowExpl(false); setExplEs(false); setMdRowAnswers({}) }
+  const reset = () => { setSelected(null); setVerified(false); setShowAns(false); setShowExpl(false); setExplEs(false); setMdRowAnswers({}); setYnRowAnswers({}) }
 
   const toggleExplEs = async () => {
     if (explEs) { setExplEs(false); return }
@@ -775,6 +776,49 @@ function QuestionCard({
                 : <><XCircle     size={15} /> Incorrecto — la respuesta correcta está resaltada en verde</>
               }
             </div>
+          )}
+
+          {q.questionType === 'yes-no' && q.statements?.length && (
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left text-slate-400 font-normal pb-2 pr-4">Statement</th>
+                  <th className="w-14 text-center text-slate-400 font-normal pb-2">Yes</th>
+                  <th className="w-14 text-center text-slate-400 font-normal pb-2">No</th>
+                </tr>
+              </thead>
+              <tbody>
+                {q.statements.map((stmt, si) => {
+                  const revealed = showAns
+                  const userAns  = ynRowAnswers[si]
+                  const correct  = stmt.answer as 'Yes' | 'No'
+                  return (
+                    <tr key={si} className="border-b border-white/5">
+                      <td className="py-2.5 pr-4 text-slate-300 text-[13px] leading-snug align-middle">{stmt.text}</td>
+                      {(['Yes', 'No'] as const).map(val => {
+                        const sel = userAns === val
+                        const isCorrect = val === correct
+                        let cls = 'w-8 h-8 rounded-full border text-xs font-medium transition-colors '
+                        if (revealed && isCorrect)              cls += 'bg-emerald-500/30 border-emerald-500 text-emerald-300'
+                        else if (revealed && sel && !isCorrect) cls += 'bg-red-500/20 border-red-500 text-red-300'
+                        else if (revealed)                      cls += 'border-white/10 text-slate-600 cursor-default'
+                        else if (sel)                           cls += 'bg-teal-500/20 border-teal-500 text-teal-200 cursor-pointer'
+                        else                                    cls += 'border-white/10 text-slate-500 hover:border-slate-500 hover:text-slate-300 cursor-pointer'
+                        return (
+                          <td key={val} className="text-center py-2.5 align-middle">
+                            <button className={cls}
+                              onClick={() => { if (!revealed) setYnRowAnswers(prev => ({ ...prev, [si]: val })) }}
+                              disabled={revealed}>
+                              {val[0]}
+                            </button>
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
           )}
 
           {q.questionType === 'multi-dropdown' && q.statements?.length && (
