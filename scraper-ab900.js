@@ -22,8 +22,13 @@ let examData = fs.existsSync(OUT_FILE)
 
 const good = examData.questions.filter(q => {
   if (q.questionType === 'yes-no') {
-    // Sólo conservar si tiene al menos un statement con respuesta Yes/No
     return q.statements && q.statements.some(s => s.answer === 'Yes' || s.answer === 'No');
+  }
+  if (q.questionType === 'multi-dropdown') {
+    return q.statements && q.statements.some(s => s.answer && s.answer.length > 0);
+  }
+  if (q.questionType === 'hotspot') {
+    return !!q.correctAnswer;
   }
   // MC/dropdown: necesita respuesta y texto
   return q.correctAnswer && q.questionText && q.questionText.length > 20;
@@ -179,15 +184,16 @@ async function downloadImage(page, src, filename) {
 
         // ── Detectar formato ANTES de SHOW ANSWER ────────────────────────────
         let dropdownOptions = [];
-        const { isDropdown, isYesNo } = await page.evaluate(() => ({
+        const { isDropdown, isYesNo, isMultiDropdown } = await page.evaluate(() => ({
           isDropdown: !!document.querySelector('div.dropdown-question'),
+          isMultiDropdown: document.querySelectorAll('div.dropdown-question div.dropdown-row').length > 1,
           isYesNo: !!document.querySelector('table.statements-table') ||
                    /for each statement.*select yes/i.test(document.body.innerText.slice(0, 3000)),
         }));
-        if (isDropdown) {
+        if (isDropdown && !isMultiDropdown) {
           try {
-            // Abrir el inline select trigger (span.select.inline)
-            const trigger = page.locator('span.select.inline, span.select-trigger').first();
+            // Abrir el select trigger — puede ser span.select.inline o button.select-trigger.boxed
+            const trigger = page.locator('span.select.inline, button.select-trigger.boxed, button.select-trigger, span.select-trigger').first();
             if (await trigger.count() > 0) {
               await trigger.click({ timeout: 3000 });
               await sleep(1000);
@@ -195,17 +201,21 @@ async function downloadImage(page, src, filename) {
             // Capturar opciones del menú desplegado
             dropdownOptions = await page.evaluate(() => {
               const letters = ['A', 'B', 'C', 'D', 'E'];
-              // Buscar items del menú flotante
+              // ExamCademy usa un portal div.select-menu en body (sin li, texto por líneas)
+              const menu = document.querySelector('div.select-menu');
+              if (menu) {
+                const lines = (menu.innerText || '').trim().split('\n')
+                  .map(l => l.trim()).filter(l => l.length > 0);
+                if (lines.length >= 2) {
+                  return lines.slice(0, 5).map((l, i) => `${letters[i]}. ${l}`);
+                }
+              }
+              // Fallback: buscar items con clase select-option
               const items = Array.from(document.querySelectorAll(
-                '[class*="select-option"], [class*="selectOption"], ' +
-                '[class*="option-row"], [class*="optionRow"], ' +
-                'ul.select-options li, ul.options li, ' +
-                '[class*="select-list"] li, [class*="dropdown"] li, ' +
-                '[class*="select-menu"] li, [class*="selectMenu"] li, ' +
-                '[class*="menu-list"] li, [class*="menuList"] li'
+                '[class*="select-option"], [class*="selectOption"]'
               )).filter(el => {
                 const rect = el.getBoundingClientRect();
-                return rect.width > 40 && rect.height > 5 && !el.closest('nav,header,footer');
+                return rect.width > 40 && rect.height > 5;
               });
               return items.slice(0, 5).map((el, i) => `${letters[i]}. ${(el.innerText || '').trim()}`);
             });
@@ -214,14 +224,32 @@ async function downloadImage(page, src, filename) {
           } catch (_) {}
         }
 
+        // ── Descartar cookie consent (bloquea el click si es la 1ª pregunta) ───
+        try {
+          const cookieDialog = page.locator('div.cookie-consent, [role="dialog"][class*="cookie"]');
+          if (await cookieDialog.count() > 0) {
+            // Intentar botón de rechazo/aceptar; si falla, forzar ocultamiento via JS
+            const cookieBtn = page.locator('div.cookie-consent button, [role="dialog"][class*="cookie"] button').first();
+            if (await cookieBtn.count() > 0) {
+              await cookieBtn.click({ force: true, timeout: 2000 });
+            } else {
+              await page.evaluate(() => {
+                const d = document.querySelector('div.cookie-consent, [role="dialog"][class*="cookie"]');
+                if (d) d.style.display = 'none';
+              });
+            }
+            await sleep(500);
+          }
+        } catch (_) {}
+
         // ── Clic SHOW ANSWER ──────────────────────────────────────────────────
         let clicked = false;
         try {
-          await page.locator('button', { hasText: /show answer/i }).first().click({ timeout: 5000 });
+          await page.locator('button', { hasText: /show answer/i }).first().click({ force: true, timeout: 5000 });
           clicked = true;
         } catch (_) {
           try {
-            await page.locator('text=/show answer/i').first().click({ timeout: 3000 });
+            await page.locator('text=/show answer/i').first().click({ force: true, timeout: 3000 });
             clicked = true;
           } catch (_2) {}
         }
@@ -236,7 +264,7 @@ async function downloadImage(page, src, filename) {
           await sleep(rand(1500, 2500));
         }
 
-        const q = await page.evaluate((preDropdownOpts) => {
+        const q = await page.evaluate(({ preDropdownOpts, wasMultiDropdown }) => {
           // ── Formato A: opciones tipo botón mc-option ───────────────────────
           const optBtns = Array.from(document.querySelectorAll('button.mc-option'));
           const options = [];
@@ -252,11 +280,31 @@ async function downloadImage(page, src, filename) {
             }
           }
 
-          // ── Formato B: dropdown fill-in-the-blank (ExamCademy custom) ──────
           const dropdownQ = document.querySelector('div.dropdown-question');
-          if (options.length === 0 && dropdownQ) {
-            // Opciones: usar las capturadas antes de SHOW ANSWER
-            if (preDropdownOpts && preDropdownOpts.length > 0) {
+
+          // ── Formato D: multi-dropdown — ANTES de Format B para capturar todas las filas ─
+          if (wasMultiDropdown) {
+            questionType = 'multi-dropdown';
+            const dropdownList = document.querySelector('div.dropdown-question div.dropdown-list');
+            if (dropdownList) {
+              const rows = Array.from(dropdownList.querySelectorAll('div.dropdown-row'));
+              for (const row of rows) {
+                const stmtText = (row.querySelector('.dropdown-label span, .dropdown-label')?.innerText || '').trim();
+                const ansEl = row.querySelector('span.dropdown-correct-answer');
+                const ansText = (ansEl?.innerText || '').replace(/^[→>]\s*/, '').trim();
+                ynStatements.push({ text: stmtText, answer: ansText });
+              }
+              if (ynStatements.some(s => s.answer)) {
+                correctAnswer = ynStatements.map(s => s.answer).join(', ');
+              }
+            }
+          }
+
+          // ── Formato B: dropdown fill-in-the-blank (ExamCademy custom) ──────
+          // Corre si hay dropdown, NO es multi-dropdown, y aún no hay respuesta
+          if (!wasMultiDropdown && dropdownQ && !correctAnswer) {
+            // Opciones: solo usar preDropdownOpts si Format A no encontró nada
+            if (options.length === 0 && preDropdownOpts && preDropdownOpts.length > 0) {
               options.push(...preDropdownOpts);
             }
             // Respuesta correcta: span.dropdown-correct-answer → "→ Microsoft Defender XDR"
@@ -282,7 +330,7 @@ async function downloadImage(page, src, filename) {
           const bodyFull = document.body.innerText;
           // Detectar por tabla específica de ExamCademy
           const stmtsTable = document.querySelector('table.statements-table');
-          const isYNFmt = options.length === 0 && (
+          const isYNFmt = options.length === 0 && ynStatements.length === 0 && (
             !!stmtsTable ||
             /for each statement.*select yes/i.test(bodyFull.slice(0, 4000)) ||
             /yes\s*or\s*no/i.test(bodyFull.slice(0, 2000))
@@ -332,8 +380,9 @@ async function downloadImage(page, src, filename) {
             if (!questionText) questionText = 'For each statement, select Yes when it is true. Otherwise, select No.';
           }
 
-          // Para formato dropdown: construir desde span.dropdown-prose-text + campo blank
-          if (dropdownQ && options.length > 0) {
+          // Para formato dropdown: construir desde div.dropdown-prose o innerText del bloque
+          // (excluir multi-dropdown — su texto viene de bodyText, no de dropdownQ.innerText)
+          if (dropdownQ && !wasMultiDropdown) {
             const instruction = (dropdownQ.querySelector('p.dropdown-instruction')?.innerText || '').trim();
             const prose = dropdownQ.querySelector('div.dropdown-prose');
             if (prose) {
@@ -351,6 +400,23 @@ async function downloadImage(page, src, filename) {
               });
               questionText = (instruction ? instruction + ' ' : '') + parts.join(' ').replace(/\s{2,}/g, ' ').trim();
             }
+            // Fallback: usar el texto visible del bloque dropdown excluyendo elementos de UI
+            if (!questionText || questionText.length < 20) {
+              try {
+                const dqClone = dropdownQ.cloneNode(true);
+                dqClone.querySelectorAll('span.select, .select-menu, span.dropdown-correct-answer, .btn-lead, button').forEach(el => el.remove());
+                const dqText = (dqClone.innerText || '').replace(/\s+/g, ' ').trim();
+                if (dqText && dqText.length > 10 && !/EXAM\s*CADEMY/i.test(dqText)) {
+                  questionText = (instruction ? instruction + ' ' : '') + dqText;
+                }
+              } catch (_) {}
+            }
+          }
+
+          // Para multi-dropdown: texto antes del primer "Select" label del dropdown
+          if ((questionType === 'multi-dropdown' || wasMultiDropdown) && (!questionText || questionText.length < 20)) {
+            const m = bodyText.match(/Question\n+\d+\n+[^\n]+\n+([\s\S]+?)\n+Select\b/);
+            if (m) questionText = m[1].replace(/\n/g, ' ').trim();
           }
 
           // Para formato mc: extraer desde body text o el bloque de opciones
@@ -404,8 +470,22 @@ async function downloadImage(page, src, filename) {
             imageInfos.push({ src, alt: img.alt || '', inOption, optionLetter });
           }
 
+          // ── Formato E: hotspot/imagen — respuesta en texto de explicación ──
+          if (!correctAnswer && options.length === 0 && ynStatements.length === 0 && explanation) {
+            const m = explanation.match(/\bSelect\s+([^.]{3,60})\./i)
+                   || explanation.match(/\bChoose\s+([^.]{3,60})\./i)
+                   || explanation.match(/\bClick\s+([^.]{3,60})\./i)
+                   || explanation.match(/\bUse\s+([A-Z][^.]{2,59})\./i)
+                   || explanation.match(/\bSet\s+.{0,30}?\bto\s+([A-Z][a-zA-Z\s]+?)(?:\s+and\b|\s*\.)/i)
+                   || explanation.match(/^([A-Z][a-zA-Z\s]{5,59}?)\s+(?:can\b|is\b|are\b|will\b|allows?\b)/);
+            if (m) {
+              correctAnswer = m[1].trim();
+              questionType = 'hotspot';
+            }
+          }
+
           return { options, correctAnswer, questionText, explanation, learnMore, imageInfos, questionType, ynStatements };
-        }, dropdownOptions);
+        }, { preDropdownOpts: dropdownOptions, wasMultiDropdown: isMultiDropdown });
 
         // ── Descargar imágenes ─────────────────────────────────────────────
         const images = [];
@@ -444,7 +524,7 @@ async function downloadImage(page, src, filename) {
         doneNums.add(num);
 
         const ansLabel = entry.correctAnswer ? `→ ${entry.correctAnswer}` : '(sin resp)';
-        const typeTag  = entry.questionType === 'yes-no' ? '[YN]' : entry.questionType === 'mc' ? '[MC]' : '[?]';
+        const typeTag  = { 'yes-no':'[YN]', 'multi-dropdown':'[MD]', 'hotspot':'[HS]', 'mc':'[MC]' }[entry.questionType] || '[?]';
         console.log(`  Q${num} [${i+1}/${allQuestionUrls.length}] ${typeTag}: ${entry.questionText.slice(0, 50)}… ${ansLabel}`);
         console.log(`    Opciones: ${entry.options.length} | Statements: ${entry.statements?.length || 0} | Imágenes: ${images.length}`);
 

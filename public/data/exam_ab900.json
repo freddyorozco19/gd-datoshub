@@ -1,7 +1,7 @@
 {
   "examTitle": "AB-900: Microsoft 365 Copilot and Agent Administration Fundamentals",
   "totalQuestions": 88,
-  "scrapedAt": "2026-09-16T18:29:59.977Z",
+  "scrapedAt": "2026-09-17T15:20:21.683Z",
   "questions": [
     {
       "number": "2",
@@ -1145,92 +1145,6 @@
       "images": []
     },
     {
-      "number": "10",
-      "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. User1 is [___] Site1.",
-      "translation": "",
-      "options": [
-        "A. Default SharePoint groups",
-        "B. a site visitor of",
-        "C. a site owner of",
-        "D. a site member of",
-        "E. prevented from accessing"
-      ],
-      "correctAnswer": "",
-      "explanation": "“Everyone except external users” automatically includes internal users in the organization. Because that principal is a member of Site1’s Site members group, User1 receives the members group’s Edit access.",
-      "learnMore": [
-        {
-          "text": "Default SharePoint groups",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/default-sharepoint-groups"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "11",
-      "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. Resolving the [___] recommendation will improve the Identity Secure Score the most.",
-      "translation": "",
-      "options": [
-        "A. Do not expire passwords",
-        "B. Use least privileged administrative roles",
-        "C. Enable policy to block legacy authentication",
-        "D. Require multifactor authentication for administrative roles"
-      ],
-      "correctAnswer": "",
-      "explanation": "Microsoft Entra Secure Score recommendations contribute only their unachieved points. Requiring multifactor authentication for administrative roles has 0 of 10 points achieved, so resolving it adds up to 10 points. Blocking legacy authentication has only 7.27 points remaining, while the other two recommendations are already fully achieved.",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "13",
-      "questionType": "mc",
-      "questionText": "",
-      "translation": "",
-      "options": [
-        "A. Microsoft Purview Information Protection",
-        "B. Help prevent sharing sensitive items via SharePoint and OneDrive with external users"
-      ],
-      "correctAnswer": "A",
-      "explanation": "Microsoft Purview Information Protection discovers and classifies sensitive information across the organization. Microsoft Purview Data Loss Prevention uses policies to prevent prohibited sharing, including sharing sensitive items with external users.",
-      "learnMore": [
-        {
-          "text": "Microsoft Purview Information Protection",
-          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
-        },
-        {
-          "text": "Help prevent sharing sensitive items via SharePoint and OneDrive with external users",
-          "url": "https://learn.microsoft.com/en-us/purview/dlp-create-policy-spo-odb-external"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "14",
-      "questionType": "mc",
-      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Microsoft / AB-900: Microsoft 365 Copilot and Agent Administration Fundamentals / You have a Microsoft SharePoint site, as shown in the following exhibit. Question 14 Understand data protection and governance tasks for Microsoft 365 and Copilot You have a Microsoft SharePoint site, as shown in the following exhibit. You need to view the settings for SLabel1. What should you use?",
-      "translation": "",
-      "options": [
-        "A. the Microsoft Defender portal",
-        "B. the SharePoint admin center",
-        "C. the Microsoft 365 admin center",
-        "D. the Microsoft Purview portal"
-      ],
-      "correctAnswer": "",
-      "explanation": "Sensitivity-label configuration is managed in the Microsoft Purview portal, under Information Protection > Sensitivity labels. The label list there lets administrators open a label and view its configured settings; SharePoint only displays the label assigned to the document.",
-      "learnMore": [
-        {
-          "text": "Learn about sensitivity labels",
-          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
-        },
-        {
-          "text": "Create and publish sensitivity labels",
-          "url": "https://learn.microsoft.com/en-us/purview/create-sensitivity-labels"
-        }
-      ],
-      "images": []
-    },
-    {
       "number": "16",
       "questionType": "yes-no",
       "questionText": "For each statement, select Yes",
@@ -1401,27 +1315,6 @@
       "images": []
     },
     {
-      "number": "25",
-      "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. User5 is using [___] for multifactor authentication (MFA).",
-      "translation": "",
-      "options": [
-        "A. How number matching works in MFA push notifications for Authenticator",
-        "B. email OTP",
-        "C. the Microsoft Authenticator app",
-        "D. a Temporary Access Pass"
-      ],
-      "correctAnswer": "",
-      "explanation": "Number matching requires the user to enter the number displayed during sign-in into the Microsoft Authenticator approval prompt. It is an Authenticator push-notification MFA method.",
-      "learnMore": [
-        {
-          "text": "How number matching works in MFA push notifications for Authenticator",
-          "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-mfa-number-match"
-        }
-      ],
-      "images": []
-    },
-    {
       "number": "26",
       "questionType": "yes-no",
       "questionText": "For each statement below, select Yes",
@@ -1521,17 +1414,6 @@
           "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/copilot-prompt-gallery"
         }
       ],
-      "images": []
-    },
-    {
-      "number": "38",
-      "questionType": "mc",
-      "questionText": "",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "",
-      "explanation": "",
-      "learnMore": [],
       "images": []
     },
     {
@@ -1803,29 +1685,6 @@
       "images": []
     },
     {
-      "number": "59",
-      "questionType": "mc",
-      "questionText": "",
-      "translation": "",
-      "options": [
-        "A. Learn about data loss prevention",
-        "B. Microsoft Purview Information Protection"
-      ],
-      "correctAnswer": "A",
-      "explanation": "Microsoft Purview DLP policies identify sensitive information and help prevent inappropriate sharing of sensitive files. Microsoft Purview Information Protection provides data classification, including trainable classifiers that learn from example content to identify sensitive content.",
-      "learnMore": [
-        {
-          "text": "Learn about data loss prevention",
-          "url": "https://learn.microsoft.com/en-ca/purview/dlp-learn-about-dlp"
-        },
-        {
-          "text": "Microsoft Purview Information Protection",
-          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
-        }
-      ],
-      "images": []
-    },
-    {
       "number": "60",
       "questionType": "yes-no",
       "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
@@ -1860,28 +1719,6 @@
       "images": []
     },
     {
-      "number": "61",
-      "questionType": "mc",
-      "questionText": "",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "",
-      "explanation": "",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "66",
-      "questionType": "mc",
-      "questionText": "",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "",
-      "explanation": "",
-      "learnMore": [],
-      "images": []
-    },
-    {
       "number": "71",
       "questionType": "yes-no",
       "questionText": "For each statement below, select Yes",
@@ -1911,40 +1748,6 @@
         {
           "text": "How does Microsoft 365 Copilot work?",
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "73",
-      "questionType": "mc",
-      "questionText": "",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "",
-      "explanation": "",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "74",
-      "questionType": "mc",
-      "questionText": "",
-      "translation": "",
-      "options": [
-        "A. Microsoft 365 Copilot pay-as-you-go overview for IT admins",
-        "B. Set up Microsoft 365 Copilot pay-as-you-go services"
-      ],
-      "correctAnswer": "The Microsoft 365 admin center",
-      "explanation": "Microsoft 365 Copilot pay-as-you-go billing is configured in the Microsoft 365 admin center through billing policies. A billing policy allocates billing responsibility across departments, associates users with billing rules and an Azure subscription, and supports budget and spending monitoring. Auto-claim policies assign licenses, while Copilot connectors index external content; neither provides Copilot consumption billing.",
-      "learnMore": [
-        {
-          "text": "Microsoft 365 Copilot pay-as-you-go overview for IT admins",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/overview"
-        },
-        {
-          "text": "Set up Microsoft 365 Copilot pay-as-you-go services",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/setup"
         }
       ],
       "images": []
@@ -1984,18 +1787,100 @@
       "images": []
     },
     {
+      "number": "10",
+      "questionType": "mc",
+      "questionText": "Select the answer that correctly completes the sentence. User1 is [___] Site1.",
+      "translation": "",
+      "options": [
+        "A. a site visitor of",
+        "B. a site owner of",
+        "C. a site member of",
+        "D. prevented from accessing"
+      ],
+      "correctAnswer": "C",
+      "explanation": "“Everyone except external users” automatically includes internal users in the organization. Because that principal is a member of Site1’s Site members group, User1 receives the members group’s Edit access.",
+      "learnMore": [
+        {
+          "text": "Default SharePoint groups",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/default-sharepoint-groups"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "11",
+      "questionType": "mc",
+      "questionText": "Select the answer that correctly completes the sentence. Resolving the [___] recommendation will improve the Identity Secure Score the most.",
+      "translation": "",
+      "options": [
+        "A. Do not expire passwords",
+        "B. Use least privileged administrative roles",
+        "C. Enable policy to block legacy authentication",
+        "D. Require multifactor authentication for administrative roles"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft Entra Secure Score recommendations contribute only their unachieved points. Requiring multifactor authentication for administrative roles has 0 of 10 points achieved, so resolving it adds up to 10 points. Blocking legacy authentication has only 7.27 points remaining, while the other two recommendations are already fully achieved.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "14",
+      "questionType": "mc",
+      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Microsoft / AB-900: Microsoft 365 Copilot and Agent Administration Fundamentals / You have a Microsoft SharePoint site, as shown in the following exhibit. Question 14 Understand data protection and governance tasks for Microsoft 365 and Copilot You have a Microsoft SharePoint site, as shown in the following exhibit. You need to view the settings for SLabel1. What should you use?",
+      "translation": "",
+      "options": [
+        "A. the Microsoft Defender portal",
+        "B. the SharePoint admin center",
+        "C. the Microsoft 365 admin center",
+        "D. the Microsoft Purview portal"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Sensitivity-label configuration is managed in the Microsoft Purview portal, under Information Protection > Sensitivity labels. The label list there lets administrators open a label and view its configured settings; SharePoint only displays the label assigned to the document.",
+      "learnMore": [
+        {
+          "text": "Learn about sensitivity labels",
+          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
+        },
+        {
+          "text": "Create and publish sensitivity labels",
+          "url": "https://learn.microsoft.com/en-us/purview/create-sensitivity-labels"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "25",
+      "questionType": "mc",
+      "questionText": "Select the answer that correctly completes the sentence. User5 is using [___] for multifactor authentication (MFA).",
+      "translation": "",
+      "options": [
+        "A. email OTP",
+        "B. the Microsoft Authenticator app",
+        "C. SMS",
+        "D. a Temporary Access Pass"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Number matching requires the user to enter the number displayed during sign-in into the Microsoft Authenticator approval prompt. It is an Authenticator push-notification MFA method.",
+      "learnMore": [
+        {
+          "text": "How number matching works in MFA push notifications for Authenticator",
+          "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-mfa-number-match"
+        }
+      ],
+      "images": []
+    },
+    {
       "number": "83",
       "questionType": "mc",
       "questionText": "Select the answer that correctly completes the sentence. John can [___] .",
       "translation": "",
       "options": [
-        "A. Microsoft Entra built-in roles: Global Reader",
-        "B. Microsoft Purview eDiscovery permissions",
-        "C. view all the users in the Microsoft Entra tenant",
-        "D. view all the content in Microsoft SharePoint sites",
-        "E. read all the content in Microsoft Exchange mailboxes"
+        "A. view all the users in the Microsoft Entra tenant",
+        "B. view all the content in Microsoft SharePoint sites",
+        "C. read all the content in Microsoft Exchange mailboxes",
+        "D. perform eDiscovery of Microsoft 365 Copilot prompts"
       ],
-      "correctAnswer": "",
+      "correctAnswer": "A",
       "explanation": "The Microsoft Entra Global Reader role gives read-only access to Microsoft Entra and Microsoft 365 administration data, so it can view users in the tenant. It does not authorize reading SharePoint site content or Exchange mailbox content, nor does it grant the eDiscovery permissions needed to search Microsoft 365 Copilot prompts.",
       "learnMore": [
         {
@@ -2005,6 +1890,159 @@
         {
           "text": "Microsoft Purview eDiscovery permissions",
           "url": "https://learn.microsoft.com/en-us/purview/ediscovery-assign-permissions"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "13",
+      "questionType": "multi-dropdown",
+      "questionText": "Your organization has a Microsoft 365 subscription. You need to use Microsoft Purview to satisfy these requirements: Discover and classify sensitive data across multiple platforms. Block users from sharing intellectual property with external users. Which Microsoft Purview solution should you use for each requirement?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Information Protection, Data Loss Prevention",
+      "statements": [
+        {
+          "text": "Discover and classify sensitive data across multiple platforms:",
+          "answer": "Information Protection"
+        },
+        {
+          "text": "Block users from sharing intellectual property with external users:",
+          "answer": "Data Loss Prevention"
+        }
+      ],
+      "explanation": "Microsoft Purview Information Protection discovers and classifies sensitive information across the organization. Microsoft Purview Data Loss Prevention uses policies to prevent prohibited sharing, including sharing sensitive items with external users.",
+      "learnMore": [
+        {
+          "text": "Microsoft Purview Information Protection",
+          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
+        },
+        {
+          "text": "Help prevent sharing sensitive items via SharePoint and OneDrive with external users",
+          "url": "https://learn.microsoft.com/en-us/purview/dlp-create-policy-spo-odb-external"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "59",
+      "questionType": "multi-dropdown",
+      "questionText": "Your organization has a Microsoft 365 subscription. You need to use Microsoft Purview to meet these requirements: Prevent users from sharing files that contain Personally Identifiable Information (PII). Use machine learning to train a model that detects sensitive content. Which Microsoft Purview solution should you use for each requirement?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Data Loss Prevention, Information Protection",
+      "statements": [
+        {
+          "text": "Prevent users from sharing PII:",
+          "answer": "Data Loss Prevention"
+        },
+        {
+          "text": "Use machine learning to train a model:",
+          "answer": "Information Protection"
+        }
+      ],
+      "explanation": "Microsoft Purview DLP policies identify sensitive information and help prevent inappropriate sharing of sensitive files. Microsoft Purview Information Protection provides data classification, including trainable classifiers that learn from example content to identify sensitive content.",
+      "learnMore": [
+        {
+          "text": "Learn about data loss prevention",
+          "url": "https://learn.microsoft.com/en-ca/purview/dlp-learn-about-dlp"
+        },
+        {
+          "text": "Microsoft Purview Information Protection",
+          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "74",
+      "questionType": "multi-dropdown",
+      "questionText": "Your company uses Microsoft 365 Copilot pay-as-you-go billing. The company wants improved visibility into Copilot usage costs and the ability to forecast departmental spending. You need to ensure that you can view Copilot costs by department. What should you use?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "The Microsoft 365 admin center, A billing policy",
+      "statements": [
+        {
+          "text": "Portal:",
+          "answer": "The Microsoft 365 admin center"
+        },
+        {
+          "text": "Feature:",
+          "answer": "A billing policy"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot pay-as-you-go billing is configured in the Microsoft 365 admin center through billing policies. A billing policy allocates billing responsibility across departments, associates users with billing rules and an Azure subscription, and supports budget and spending monitoring. Auto-claim policies assign licenses, while Copilot connectors index external content; neither provides Copilot consumption billing.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot pay-as-you-go overview for IT admins",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/overview"
+        },
+        {
+          "text": "Set up Microsoft 365 Copilot pay-as-you-go services",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/setup"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "38",
+      "questionType": "hotspot",
+      "questionText": "",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Change history",
+      "explanation": "Change history records changes to SharePoint site settings, allowing administrators to identify modifications made by a site administrator. Select Change history.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "61",
+      "questionType": "hotspot",
+      "questionText": "",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Microsoft Purview eDiscovery",
+      "explanation": "Microsoft Purview eDiscovery can locate SharePoint and OneDrive files by properties including author and last-modified time, and it can export the matching content. Audit is used to review logged activities, not to retrieve copies of the files.",
+      "learnMore": [
+        {
+          "text": "Finding content in sites in eDiscovery",
+          "url": "https://learn.microsoft.com/en-us/purview/edisc-search-sites"
+        },
+        {
+          "text": "Export search results in eDiscovery",
+          "url": "https://learn.microsoft.com/en-us/purview/edisc-search-export"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "66",
+      "questionType": "hotspot",
+      "questionText": "",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Data access governance",
+      "explanation": "Use Data access governance. Its SharePoint reports help identify potentially overshared content and review sharing/access exposure.",
+      "learnMore": [
+        {
+          "text": "Data access governance reports for SharePoint and OneDrive sites",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "73",
+      "questionType": "hotspot",
+      "questionText": "",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Private",
+      "explanation": "Set the site privacy to Private and configure Restricted site access with Group1. Restricted site access blocks users outside the specified Entra security group even if they previously had permissions or a shared link; a member must also have the underlying site or content permission.",
+      "learnMore": [
+        {
+          "text": "Restrict SharePoint site access with Microsoft 365 groups and Microsoft Entra security groups",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-access-control"
         }
       ],
       "images": []
