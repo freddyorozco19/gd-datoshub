@@ -486,6 +486,7 @@ function QuestionCard({
   const [selected,    setSelected]    = useState<number | null>(null)
   const [verified,    setVerified]    = useState(false)
   const [showAns,     setShowAns]     = useState(false)
+  const [mdRowAnswers, setMdRowAnswers] = useState<Record<number, string>>({})
   const [showExpl,      setShowExpl]      = useState(false)
   const [explEs,        setExplEs]        = useState(false)
   const [explEsText,    setExplEsText]    = useState<string | null>(null)
@@ -511,7 +512,7 @@ function QuestionCard({
     setSelected(prev => prev === i ? null : i)
   }
 
-  const reset = () => { setSelected(null); setVerified(false); setShowAns(false); setShowExpl(false); setExplEs(false) }
+  const reset = () => { setSelected(null); setVerified(false); setShowAns(false); setShowExpl(false); setExplEs(false); setMdRowAnswers({}) }
 
   const toggleExplEs = async () => {
     if (explEs) { setExplEs(false); return }
@@ -776,26 +777,58 @@ function QuestionCard({
           )}
 
           {q.questionType === 'multi-dropdown' && q.statements?.length && (
-            <table className="w-full text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left text-slate-500 font-normal pb-1.5 pr-3">Requirement</th>
-                  <th className="text-left text-slate-500 font-normal pb-1.5">Solution</th>
-                </tr>
-              </thead>
-              <tbody>
-                {q.statements.map((stmt, si) => (
-                  <tr key={si} className="border-b border-white/5 last:border-0">
-                    <td className="py-2 pr-3 text-slate-400 align-top w-1/2">{stmt.text}</td>
-                    <td className="py-2 align-top">
-                      <span className="px-2 py-0.5 rounded bg-slate-800 border border-white/10 text-slate-300 text-[11px]">
-                        SELECT…
-                      </span>
-                    </td>
+            <div className="space-y-2">
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="text-left text-slate-500 font-normal pb-1.5 pr-3">Requirement</th>
+                    <th className="text-left text-slate-500 font-normal pb-1.5">Solution</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {q.statements.map((stmt, si) => {
+                    const val      = mdRowAnswers[si] ?? ''
+                    const isRight  = val.trim().toLowerCase() === stmt.answer.toLowerCase()
+                    const revealed = verified || showAns
+                    const opts     = q.dropdownOptions ?? []
+                    return (
+                      <tr key={si} className="border-b border-white/5 last:border-0">
+                        <td className="py-2 pr-3 text-slate-400 align-top w-1/2">{stmt.text}</td>
+                        <td className="py-2 align-top">
+                          {revealed ? (
+                            <div className={`px-2 py-1 rounded text-[11px] ${isRight ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-red-500/10 text-red-300 border border-red-500/30'}`}>
+                              {isRight
+                                ? <><CheckCircle size={10} className="inline mr-1" />{stmt.answer}</>
+                                : <><XCircle size={10} className="inline mr-1" />{val ? <><span className="line-through opacity-50">{val}</span> → </> : ''}<span className="text-emerald-300">{stmt.answer}</span></>
+                              }
+                            </div>
+                          ) : opts.length > 0 ? (
+                            <select
+                              value={val}
+                              onChange={e => setMdRowAnswers(prev => ({ ...prev, [si]: e.target.value }))}
+                              className="w-full px-2 py-1 rounded bg-slate-800 border border-white/10 text-slate-200 text-[11px] focus:outline-none focus:border-teal-500/50 cursor-pointer"
+                            >
+                              <option value="">Select…</option>
+                              {opts.map((opt, oi) => <option key={oi} value={opt}>{opt}</option>)}
+                            </select>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded bg-slate-800 border border-white/10 text-slate-300 text-[11px]">SELECT…</span>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+              {!verified && !showAns && q.dropdownOptions && Object.keys(mdRowAnswers).length === q.statements.length && (
+                <button
+                  onClick={() => setVerified(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/50 text-primary text-xs font-semibold hover:bg-primary/30 transition-colors"
+                >
+                  <CheckCircle size={13} /> Verificar respuesta
+                </button>
+              )}
+            </div>
           )}
 
           <div className="flex items-center gap-2 flex-wrap">
