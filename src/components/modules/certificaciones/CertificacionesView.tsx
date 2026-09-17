@@ -1012,6 +1012,8 @@ function ExamScreen({
   const [current,     setCurrent]     = useState(0)
   const [answers,     setAnswers]     = useState<ExamModeAns[]>(questions.map(() => ({ selected: [], confirmed: false, flagged: false })))
   const [ynAnswers,   setYnAnswers]   = useState<Record<number, Record<number, string>>>({})
+  const [mdAnswers,   setMdAnswers]   = useState<Record<number, Record<number, string>>>({})
+  const [hsAnswers,   setHsAnswers]   = useState<Record<number, string>>({})
   const [timeLeft,    setTimeLeft]    = useState(config.timeLimitMin * 60)
   const [showExit,    setShowExit]    = useState(false)
 
@@ -1109,6 +1111,10 @@ function ExamScreen({
     (q.statements ?? []).every((_, i) => ynAnswers[qIdx]?.[i] !== undefined)
   const ynIsCorrect = (qIdx: number, q: Question) =>
     (q.statements ?? []).every((s, i) => ynAnswers[qIdx]?.[i] === s.answer)
+
+  const mdAllAnswered = (qIdx: number, q: Question) =>
+    (q.statements ?? []).every((_, i) => (mdAnswers[qIdx]?.[i] ?? '').trim().length > 0)
+  const hsAllAnswered = (qIdx: number) => (hsAnswers[qIdx] ?? '').trim().length > 0
 
   const answeredCount = answers.filter(a => a.confirmed).length
   const flaggedCount  = answers.filter(a => a.flagged).length
@@ -1263,6 +1269,68 @@ function ExamScreen({
                   })}
                 </tbody>
               </table>
+            ) : q.questionType === 'multi-dropdown' ? (
+              // ── Formato Multi-dropdown ──────────────────────────────────────
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="text-left text-slate-400 font-normal pb-2 pr-4">Requirement</th>
+                    <th className="text-left text-slate-400 font-normal pb-2">Solution</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(q.statements ?? []).map((stmt, si) => {
+                    const confirmed = ans.confirmed
+                    const userVal   = mdAnswers[current]?.[si] ?? ''
+                    const isRight   = userVal.trim().toLowerCase() === stmt.answer.toLowerCase()
+                    return (
+                      <tr key={si} className="border-b border-white/5">
+                        <td className="py-2.5 pr-4 text-slate-300 text-[13px] leading-snug align-top w-1/2">{stmt.text}</td>
+                        <td className="py-2.5 align-top">
+                          {confirmed ? (
+                            <div className={`px-3 py-1.5 rounded-lg text-[13px] ${isRight ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-red-500/10 text-red-300 border border-red-500/30'}`}>
+                              {isRight ? userVal : <><span className="line-through opacity-50">{userVal}</span> → <span className="text-emerald-300">{stmt.answer}</span></>}
+                            </div>
+                          ) : (
+                            <input
+                              type="text"
+                              value={userVal}
+                              onChange={e => setMdAnswers(prev => ({ ...prev, [current]: { ...(prev[current] ?? {}), [si]: e.target.value } }))}
+                              placeholder="Type the solution…"
+                              className="w-full px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-200 text-[13px] placeholder-slate-500 focus:outline-none focus:border-teal-500/50"
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            ) : q.questionType === 'hotspot' ? (
+              // ── Formato Hotspot ─────────────────────────────────────────────
+              <div className="space-y-3">
+                <p className="text-slate-400 text-sm">Select the correct item in the image or type your answer:</p>
+                {ans.confirmed ? (
+                  <div className={`px-4 py-3 rounded-xl border text-sm ${
+                    (hsAnswers[current] ?? '').trim().toLowerCase() === (q.correctAnswer ?? '').toLowerCase()
+                      ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-200'
+                      : 'bg-red-500/10 border-red-500/40 text-red-300'
+                  }`}>
+                    {(hsAnswers[current] ?? '').trim().toLowerCase() === (q.correctAnswer ?? '').toLowerCase()
+                      ? <><CheckCircle size={14} className="inline mr-2" />{hsAnswers[current]}</>
+                      : <><XCircle size={14} className="inline mr-2" /><span className="line-through opacity-60">{hsAnswers[current]}</span> → <span className="text-emerald-300">{q.correctAnswer}</span></>
+                    }
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    value={hsAnswers[current] ?? ''}
+                    onChange={e => setHsAnswers(prev => ({ ...prev, [current]: e.target.value }))}
+                    placeholder="Type your answer…"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-sm placeholder-slate-500 focus:outline-none focus:border-teal-500/50"
+                  />
+                )}
+              </div>
             ) : (
               // ── Formato MC/dropdown ─────────────────────────────────────────
               displayOpts.map((opt, idx) => {
@@ -1304,17 +1372,34 @@ function ExamScreen({
           {/* Show Answer */}
           {!ans.confirmed && (
             <button
-              onClick={q.questionType === 'yes-no'
-                ? () => {
-                    if (!ynAllAnswered(current, q)) return
-                    // Codificar respuestas Yes/No en selected: si*2 = Yes, si*2+1 = No
-                    const encoded = (q.statements ?? []).map((_, si) =>
-                      ynAnswers[current]?.[si] === 'Yes' ? si * 2 : si * 2 + 1
-                    )
-                    setAnswers(prev => prev.map((a, i) => i === current ? { ...a, confirmed: true, selected: encoded } : a))
-                  }
-                : confirmAns}
-              disabled={q.questionType === 'yes-no' ? !ynAllAnswered(current, q) : ans.selected.length === 0}
+              onClick={
+                q.questionType === 'yes-no' ? () => {
+                  if (!ynAllAnswered(current, q)) return
+                  const encoded = (q.statements ?? []).map((_, si) =>
+                    ynAnswers[current]?.[si] === 'Yes' ? si * 2 : si * 2 + 1
+                  )
+                  setAnswers(prev => prev.map((a, i) => i === current ? { ...a, confirmed: true, selected: encoded } : a))
+                }
+                : q.questionType === 'multi-dropdown' ? () => {
+                  if (!mdAllAnswered(current, q)) return
+                  const allOk = (q.statements ?? []).every((s, si) =>
+                    (mdAnswers[current]?.[si] ?? '').trim().toLowerCase() === s.answer.toLowerCase()
+                  )
+                  setAnswers(prev => prev.map((a, i) => i === current ? { ...a, confirmed: true, selected: [allOk ? 1 : 0] } : a))
+                }
+                : q.questionType === 'hotspot' ? () => {
+                  if (!hsAllAnswered(current)) return
+                  const ok = (hsAnswers[current] ?? '').trim().toLowerCase() === (q.correctAnswer ?? '').toLowerCase()
+                  setAnswers(prev => prev.map((a, i) => i === current ? { ...a, confirmed: true, selected: [ok ? 1 : 0] } : a))
+                }
+                : confirmAns
+              }
+              disabled={
+                q.questionType === 'yes-no' ? !ynAllAnswered(current, q)
+                : q.questionType === 'multi-dropdown' ? !mdAllAnswered(current, q)
+                : q.questionType === 'hotspot' ? !hsAllAnswered(current)
+                : ans.selected.length === 0
+              }
               className="w-full py-3.5 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-35 disabled:cursor-not-allowed text-white font-bold text-sm transition-colors mb-3">
               Show Answer
             </button>
@@ -1416,12 +1501,15 @@ function ExamResults({
   const correct  = answers.filter((a, i) => {
     const q = questions[i]
     if (!a.confirmed || a.selected.length === 0) return false
-    // Formato Yes/No: selected codifica si*2=Yes, si*2+1=No
     if (q.questionType === 'yes-no' && q.statements?.length) {
       return q.statements.every((stmt, si) => {
         const isYes = a.selected.includes(si * 2)
         return (isYes && stmt.answer === 'Yes') || (!isYes && stmt.answer === 'No')
       })
+    }
+    // multi-dropdown y hotspot: selected=[1] = correcto, [0] = incorrecto
+    if (q.questionType === 'multi-dropdown' || q.questionType === 'hotspot') {
+      return a.selected[0] === 1
     }
     const expectedCount = /^[A-E]+$/i.test(q.correctAnswer?.trim() ?? '') ? (q.correctAnswer?.trim().length ?? 1) : 1
     return a.selected.length === expectedCount && a.selected.every(si => isCorrectOpt(q.options?.[si] ?? '', q.correctAnswer))
@@ -1509,9 +1597,14 @@ function ExamResults({
           <div className="divide-y divide-white/[0.04] border-t border-white/[0.05]">
             {questions.map((q, i) => {
               const a       = answers[i]
-              const ok      = a.confirmed && a.selected.length > 0
-                && a.selected.every(si => isCorrectOpt(q.options?.[si] ?? '', q.correctAnswer))
-                && a.selected.length === ((/^[A-E]+$/i.test(q.correctAnswer?.trim() ?? '')) ? (q.correctAnswer?.trim().length ?? 1) : 1)
+              const ok      = a.confirmed && a.selected.length > 0 && (
+                (q.questionType === 'yes-no' && q.statements?.length)
+                  ? q.statements.every((s, si) => { const isY = a.selected.includes(si*2); return (isY && s.answer==='Yes')||(!isY && s.answer==='No') })
+                  : (q.questionType === 'multi-dropdown' || q.questionType === 'hotspot')
+                    ? a.selected[0] === 1
+                    : a.selected.every(si => isCorrectOpt(q.options?.[si] ?? '', q.correctAnswer))
+                      && a.selected.length === ((/^[A-E]+$/i.test(q.correctAnswer?.trim() ?? '')) ? (q.correctAnswer?.trim().length ?? 1) : 1)
+              )
               return (
                 <div key={i} className="px-4 py-3">
                   <div className="flex items-start gap-2 mb-1.5">
@@ -1802,6 +1895,9 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
           const isYes = a.selected.includes(si * 2)
           return (isYes && stmt.answer === 'Yes') || (!isYes && stmt.answer === 'No')
         })
+      }
+      if (q.questionType === 'multi-dropdown' || q.questionType === 'hotspot') {
+        return a.selected[0] === 1
       }
       const expectedCount = /^[A-E]+$/i.test(q.correctAnswer?.trim() ?? '') ? (q.correctAnswer?.trim().length ?? 1) : 1
       return a.selected.length === expectedCount && a.selected.every(si => isCorrectOpt(q.options?.[si] ?? '', q.correctAnswer))
