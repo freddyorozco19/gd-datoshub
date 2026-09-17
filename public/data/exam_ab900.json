@@ -1,7 +1,7 @@
 {
   "examTitle": "AB-900: Microsoft 365 Copilot and Agent Administration Fundamentals",
   "totalQuestions": 88,
-  "scrapedAt": "2026-09-17T15:20:21.683Z",
+  "scrapedAt": "2026-09-17T16:34:42.390Z",
   "questions": [
     {
       "number": "1",
@@ -265,6 +265,42 @@
       "correctAnswer": "B",
       "explanation": "Zero Trust rests on three principles: verify explicitly, use least-privileged access, and assume breach, so every request is authenticated and authorized rather than trusted by default. Treating traffic from the corporate network as inherently trustworthy or reducing authentication prompts and access reviews runs counter to this model.",
       "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "13",
+      "questionType": "multi-dropdown",
+      "questionText": "Your organization has a Microsoft 365 subscription. You need to use Microsoft Purview to satisfy these requirements: Discover and classify sensitive data across multiple platforms. Block users from sharing intellectual property with external users. Which Microsoft Purview solution should you use for each requirement?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Information Protection, Data Loss Prevention",
+      "statements": [
+        {
+          "text": "Discover and classify sensitive data across multiple platforms:",
+          "answer": "Information Protection"
+        },
+        {
+          "text": "Block users from sharing intellectual property with external users:",
+          "answer": "Data Loss Prevention"
+        }
+      ],
+      "dropdownOptions": [
+        "Communication Compliance",
+        "Data Loss Prevention",
+        "Information Protection",
+        "Insider Risk Management"
+      ],
+      "explanation": "Microsoft Purview Information Protection discovers and classifies sensitive information across the organization. Microsoft Purview Data Loss Prevention uses policies to prevent prohibited sharing, including sharing sensitive items with external users.",
+      "learnMore": [
+        {
+          "text": "Microsoft Purview Information Protection",
+          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
+        },
+        {
+          "text": "Help prevent sharing sensitive items via SharePoint and OneDrive with external users",
+          "url": "https://learn.microsoft.com/en-us/purview/dlp-create-policy-spo-odb-external"
+        }
+      ],
       "images": []
     },
     {
@@ -1344,6 +1380,43 @@
       "images": []
     },
     {
+      "number": "59",
+      "questionType": "multi-dropdown",
+      "questionText": "Your organization has a Microsoft 365 subscription. You need to use Microsoft Purview to meet these requirements: Prevent users from sharing files that contain Personally Identifiable Information (PII). Use machine learning to train a model that detects sensitive content. Which Microsoft Purview solution should you use for each requirement?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Data Loss Prevention, Information Protection",
+      "statements": [
+        {
+          "text": "Prevent users from sharing PII:",
+          "answer": "Data Loss Prevention"
+        },
+        {
+          "text": "Use machine learning to train a model:",
+          "answer": "Information Protection"
+        }
+      ],
+      "dropdownOptions": [
+        "Communication Compliance",
+        "Data Loss Prevention",
+        "DSPM for AI",
+        "Information Protection",
+        "Insider Risk Management"
+      ],
+      "explanation": "Microsoft Purview DLP policies identify sensitive information and help prevent inappropriate sharing of sensitive files. Microsoft Purview Information Protection provides data classification, including trainable classifiers that learn from example content to identify sensitive content.",
+      "learnMore": [
+        {
+          "text": "Learn about data loss prevention",
+          "url": "https://learn.microsoft.com/en-ca/purview/dlp-learn-about-dlp"
+        },
+        {
+          "text": "Microsoft Purview Information Protection",
+          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
+        }
+      ],
+      "images": []
+    },
+    {
       "number": "60",
       "questionType": "yes-no",
       "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
@@ -1624,6 +1697,41 @@
         {
           "text": "Restrict SharePoint site access with Microsoft 365 groups and Microsoft Entra security groups",
           "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-access-control"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "74",
+      "questionType": "multi-dropdown",
+      "questionText": "Your company uses Microsoft 365 Copilot pay-as-you-go billing. The company wants improved visibility into Copilot usage costs and the ability to forecast departmental spending. You need to ensure that you can view Copilot costs by department. What should you use?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "The Microsoft 365 admin center, A billing policy",
+      "statements": [
+        {
+          "text": "Portal:",
+          "answer": "The Microsoft 365 admin center"
+        },
+        {
+          "text": "Feature:",
+          "answer": "A billing policy"
+        }
+      ],
+      "dropdownOptions": [
+        "The Microsoft 365 admin center",
+        "The Microsoft Entra admin center",
+        "The Microsoft Purview portal"
+      ],
+      "explanation": "Microsoft 365 Copilot pay-as-you-go billing is configured in the Microsoft 365 admin center through billing policies. A billing policy allocates billing responsibility across departments, associates users with billing rules and an Azure subscription, and supports budget and spending monitoring. Auto-claim policies assign licenses, while Copilot connectors index external content; neither provides Copilot consumption billing.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot pay-as-you-go overview for IT admins",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/overview"
+        },
+        {
+          "text": "Set up Microsoft 365 Copilot pay-as-you-go services",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/setup"
         }
       ],
       "images": []

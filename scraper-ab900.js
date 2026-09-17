@@ -227,9 +227,9 @@ async function downloadImage(page, src, filename) {
         }
 
         if (isMultiDropdown) {
-          // Para multi-dropdown: abrir el primer trigger para capturar la lista de opciones compartidas
+          // Para multi-dropdown: abrir el primer SELECT... boxed para capturar la lista de opciones
           try {
-            const firstTrigger = page.locator('button.select-trigger.boxed, button.select-trigger').first();
+            const firstTrigger = page.locator('button.select-trigger.boxed').first();
             if (await firstTrigger.count() > 0) {
               await firstTrigger.click({ force: true, timeout: 3000 });
               await sleep(1000);
