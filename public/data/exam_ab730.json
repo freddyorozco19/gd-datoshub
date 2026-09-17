@@ -1,7 +1,7 @@
 {
   "examTitle": "AB-730: Microsoft AI Business Professional",
-  "totalQuestions": 25,
-  "scrapedAt": "2026-09-17T20:49:43.174Z",
+  "totalQuestions": 24,
+  "scrapedAt": "2026-09-17T21:06:03.159Z",
   "questions": [
     {
       "number": "1",
@@ -457,28 +457,6 @@
         {
           "text": "Write effective instructions for declarative agents",
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/declarative-agent-instructions"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "21",
-      "questionType": "mc",
-      "questionText": "You open Microsoft 365 Copilot, as illustrated in the following exhibit. What can be inferred about the Standings conversation?",
-      "translation": "",
-      "options": [
-        "A. The conversation contains only anonymous data.",
-        "B. The conversation contains a verified response.",
-        "C. The conversation was added to a notebook.",
-        "D. The conversation contains a scheduled prompt.",
-        "E. The conversation was shared."
-      ],
-      "correctAnswer": "D",
-      "explanation": "Scheduled-prompt conversations are shown in the Conversations section in bold with a status icon. Those indicators on Standings identify it as a conversation that contains a scheduled prompt.",
-      "learnMore": [
-        {
-          "text": "Schedule your most used Copilot prompts",
-          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts"
         }
       ],
       "images": []

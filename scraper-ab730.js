@@ -462,6 +462,21 @@ async function downloadImage(page, src, filename) {
               }
             }
           }
+          // Si sigue con breadcrumb (EXAM CADEMY), extraer desde el breadcrumb mismo
+          if (/EXAM\s*CADEMY/i.test(questionText)) {
+            const m = bodyText.match(/Question\s+\d+\s*\n+[^\n]+\n+([\s\S]+?)\n+[A-E]\./);
+            if (m) {
+              const candidate = m[1].replace(/\n/g, ' ').trim();
+              if (!(/EXAM\s*CADEMY/i.test(candidate)) && candidate.length > 15) {
+                questionText = candidate;
+              }
+            }
+            if (/EXAM\s*CADEMY/i.test(questionText)) {
+              // Último intento: extraer del patrón en el breadcrumb
+              const m2 = bodyText.match(/\/\s*(.{20,300}?)\s*\n+Question\s+\d+/);
+              if (m2 && !(/EXAM\s*CADEMY/i.test(m2[1]))) questionText = m2[1].trim();
+            }
+          }
 
           let explanation = '';
           const explMatch = bodyText.match(/EXPLANATION\n+([\s\S]+?)(?:\nLEARN MORE|\nCommunity Discussion|\n\d+\s*Community)/);
@@ -533,6 +548,16 @@ async function downloadImage(page, src, filename) {
 
           return { options, correctAnswer, questionText, explanation, learnMore, imageInfos, questionType, ynStatements, dropdownOpts: mdOpts };
         }, { preDropdownOpts: dropdownOptions, wasMultiDropdown: isMultiDropdown, mdOpts: mdDropdownOptions });
+
+        // Patch hardcodeado para preguntas cuya extracción falló en batches anteriores
+        const KNOWN_TEXT = {
+          '21': 'You open Microsoft 365 Copilot, as illustrated in the following exhibit. What can be inferred about the Standings conversation?',
+          '25': 'You use Microsoft 365 Copilot. You discover that one of your conversations used a knowledge source containing confidential information. You need to delete that conversation\'s data without administrative approval. If possible, you must keep your other conversations. What should you use?',
+        };
+        if (KNOWN_TEXT[num] && (!q.questionText || /EXAM\s*CADEMY/i.test(q.questionText) || q.questionText.length < 20)) {
+          q.questionText = KNOWN_TEXT[num];
+          console.log(`    [PATCH] questionText de Q${num} aplicado desde lista conocida`);
+        }
 
         // ── Descargar imágenes ─────────────────────────────────────────────
         const images = [];
