@@ -6,7 +6,7 @@
     {
       "number": "1",
       "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "Yes, No, Yes",
@@ -57,7 +57,7 @@
     {
       "number": "3",
       "questionType": "mc",
-      "questionText": "SelectYou generate a report by using the Researcher agent in Microsoft 365 Copilot. You can use to save and edit the response.ExplanationA Copilot page turns a generated response into persistent, editable content that can be refined, reused, and shared. An agent, conversation, or notebook is not the editable output container used to save the response.Learn moreGet started with Microsoft 365 Copilot Pages",
+      "questionText": "You generate a report by using the Researcher agent in Microsoft 365 Copilot. You can use [___] to save and edit the response.",
       "translation": "",
       "options": [],
       "correctAnswer": "a page",
@@ -73,7 +73,7 @@
     {
       "number": "4",
       "questionType": "yes-no",
-      "questionText": "For each statement below, select Yes",
+      "questionText": "For each statement below, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "No, No, Yes",
@@ -335,7 +335,7 @@
     {
       "number": "15",
       "questionType": "mc",
-      "questionText": "SelectOverreliance is a common risk associated with generative AI, whereExplanationOverreliance occurs when people accept AI output without appropriate scrutiny, including accepting incorrect or incomplete output instead of verifying it.Learn moreOverreliance on AI: Risk Identification and Mitigation Framework",
+      "questionText": "Choose the answer that correctly finishes the sentence. Overreliance is a common risk associated with generative AI, where [___]",
       "translation": "",
       "options": [],
       "correctAnswer": "users accept the AI-generated output without verifying its accuracy.",
@@ -448,7 +448,7 @@
     {
       "number": "20",
       "questionType": "mc",
-      "questionText": "SelectYou are creating an agent in the Microsoft 365 Copilot app. The agent persona must be warm and friendly. To set the persona, you should modify theExplanationAn agent's instructions define its behavior and general guidelines, including the tone and user experience it should present. A warm and friendly persona therefore belongs in the instructions.Learn moreWrite effective instructions for declarative agents",
+      "questionText": "You are creating an agent in the Microsoft 365 Copilot app. The agent persona must be warm and friendly. To set the persona, you should modify the [___]",
       "translation": "",
       "options": [],
       "correctAnswer": "instructions.",
@@ -464,7 +464,7 @@
     {
       "number": "21",
       "questionType": "mc",
-      "questionText": "AB-730: AI Business Professional By Microsoft · Question Mode EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes freddy.orozco729 freddy.orozco729@gmail.com Exams / Microsoft / AB-730: AI Business Professional / You open Microsoft 356 Copilot, as illustrated in the following exhibit. Question 21 Manage prompts and conversations by using AI You open Microsoft 356 Copilot, as illustrated in the following exhibit. What can be inferred about the Standings conversation?",
+      "questionText": "You open Microsoft 365 Copilot, as illustrated in the following exhibit. What can be inferred about the Standings conversation?",
       "translation": "",
       "options": [
         "A. The conversation contains only anonymous data.",
@@ -528,7 +528,7 @@
     {
       "number": "24",
       "questionType": "mc",
-      "questionText": "Selectin Microsoft 365 Copilot ensures that business data stays within a Microsoft 365 tenant and is NOT used to train AI models.ExplanationEnterprise data protection applies Microsoft 365 contractual, privacy, security, access-control, and tenant-isolation commitments to Copilot. Under EDP, prompts, responses, and data accessed through Microsoft Graph are not used to train foundation models.Learn moreEnterprise data protection in Microsoft 365 Copilot and Microsoft 365 Copilot Chat",
+      "questionText": "In Microsoft 365 Copilot, [___] ensures that business data stays within a Microsoft 365 tenant and is NOT used to train AI models.",
       "translation": "",
       "options": [],
       "correctAnswer": "Enterprise data protection (EDP)",
@@ -544,7 +544,7 @@
     {
       "number": "25",
       "questionType": "mc",
-      "questionText": "AB-730: AI Business Professional By Microsoft · Question Mode EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes freddy.orozco729 freddy.orozco729@gmail.com Exams / Microsoft / AB-730: AI Business Professional / You use Microsoft 365 Copilot. Question 25 Manage prompts and conversations by using AI You use Microsoft 365 Copilot. You discover that one of your conversations used a knowledge source containing confidential information. You need to delete that conversation's data without administrative approval. If possible, you must keep your other conversations. What should you use?",
+      "questionText": "You use Microsoft 365 Copilot. You discover that one of your conversations used a knowledge source containing confidential information. You need to delete that conversation's data without administrative approval. If possible, you must keep your other conversations. What should you use?",
       "translation": "",
       "options": [
         "A. the Microsoft 365 admin center",
