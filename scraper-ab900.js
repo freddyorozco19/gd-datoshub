@@ -191,6 +191,7 @@ async function downloadImage(page, src, filename) {
           isYesNo: !!document.querySelector('table.statements-table') ||
                    /for each statement.*select yes/i.test(document.body.innerText.slice(0, 3000)),
         }));
+        let mdDropdownOptions = [];
         if (isDropdown && !isMultiDropdown) {
           try {
             // Abrir el select trigger — puede ser span.select.inline o button.select-trigger.boxed
@@ -222,6 +223,30 @@ async function downloadImage(page, src, filename) {
             });
             await page.keyboard.press('Escape');
             await sleep(400);
+          } catch (_) {}
+        }
+
+        if (isMultiDropdown) {
+          // Para multi-dropdown: abrir el primer trigger para capturar la lista de opciones compartidas
+          try {
+            const firstTrigger = page.locator('button.select-trigger.boxed, button.select-trigger').first();
+            if (await firstTrigger.count() > 0) {
+              await firstTrigger.click({ force: true, timeout: 3000 });
+              await sleep(1000);
+              mdDropdownOptions = await page.evaluate(() => {
+                const menu = document.querySelector('div.select-menu');
+                if (menu) {
+                  const lines = (menu.innerText || '').trim().split('\n')
+                    .map(l => l.trim()).filter(l => l.length > 0);
+                  if (lines.length >= 2) return lines;
+                }
+                const items = Array.from(document.querySelectorAll('[class*="select-option"], [class*="selectOption"]'))
+                  .filter(el => { const r = el.getBoundingClientRect(); return r.width > 40 && r.height > 5; });
+                return items.map(el => (el.innerText || '').trim()).filter(t => t.length > 0);
+              });
+              await page.keyboard.press('Escape');
+              await sleep(400);
+            }
           } catch (_) {}
         }
 
@@ -265,7 +290,7 @@ async function downloadImage(page, src, filename) {
           await sleep(rand(1500, 2500));
         }
 
-        const q = await page.evaluate(({ preDropdownOpts, wasMultiDropdown }) => {
+        const q = await page.evaluate(({ preDropdownOpts, wasMultiDropdown, mdOpts }) => {
           // ── Formato A: opciones tipo botón mc-option ───────────────────────
           const optBtns = Array.from(document.querySelectorAll('button.mc-option'));
           const options = [];
@@ -485,8 +510,8 @@ async function downloadImage(page, src, filename) {
             }
           }
 
-          return { options, correctAnswer, questionText, explanation, learnMore, imageInfos, questionType, ynStatements };
-        }, { preDropdownOpts: dropdownOptions, wasMultiDropdown: isMultiDropdown });
+          return { options, correctAnswer, questionText, explanation, learnMore, imageInfos, questionType, ynStatements, dropdownOpts: mdOpts };
+        }, { preDropdownOpts: dropdownOptions, wasMultiDropdown: isMultiDropdown, mdOpts: mdDropdownOptions });
 
         // ── Descargar imágenes ─────────────────────────────────────────────
         const images = [];
@@ -516,6 +541,7 @@ async function downloadImage(page, src, filename) {
           options:       q.options.map(o => clean(o)),
           correctAnswer: clean(q.correctAnswer),
           ...(q.ynStatements && q.ynStatements.length > 0 ? { statements: q.ynStatements } : {}),
+          ...(q.dropdownOpts && q.dropdownOpts.length > 0 ? { dropdownOptions: q.dropdownOpts } : {}),
           explanation:   clean(q.explanation),
           learnMore:     q.learnMore,
           images,

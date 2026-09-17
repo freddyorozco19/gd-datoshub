@@ -162,6 +162,7 @@ interface Question {
   options?: string[]
   correctAnswer?: string
   statements?: { text: string; answer: string }[]
+  dropdownOptions?: string[]
   learnMore?: Array<string | { text: string; url: string }>
   images?: (string | QuestionImage)[]
 }
@@ -774,6 +775,29 @@ function QuestionCard({
             </div>
           )}
 
+          {q.questionType === 'multi-dropdown' && q.statements?.length && (
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left text-slate-500 font-normal pb-1.5 pr-3">Requirement</th>
+                  <th className="text-left text-slate-500 font-normal pb-1.5">Solution</th>
+                </tr>
+              </thead>
+              <tbody>
+                {q.statements.map((stmt, si) => (
+                  <tr key={si} className="border-b border-white/5 last:border-0">
+                    <td className="py-2 pr-3 text-slate-400 align-top w-1/2">{stmt.text}</td>
+                    <td className="py-2 align-top">
+                      <span className="px-2 py-0.5 rounded bg-slate-800 border border-white/10 text-slate-300 text-[11px]">
+                        SELECT…
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
           <div className="flex items-center gap-2 flex-wrap">
             {hasOptions && selected !== null && !verified && (
               <button
@@ -822,11 +846,24 @@ function QuestionCard({
                   </button>
                 )}
               </div>
-              <p className="text-sm text-emerald-300 leading-relaxed">
-                {shown.correctAnswer && /^[A-E]{2,}$/i.test(shown.correctAnswer.trim())
-                  ? shown.correctAnswer.trim().toUpperCase().split('').join(', ')
-                  : shown.correctAnswer}
-              </p>
+              {q.questionType === 'multi-dropdown' && q.statements?.length ? (
+                <table className="w-full text-xs mt-0.5">
+                  <tbody>
+                    {q.statements.map((stmt, si) => (
+                      <tr key={si} className="border-b border-emerald-800/30 last:border-0">
+                        <td className="py-1.5 pr-3 text-slate-400 align-top w-1/2">{stmt.text}</td>
+                        <td className="py-1.5 text-emerald-300 font-medium align-top">→ {stmt.answer}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-sm text-emerald-300 leading-relaxed">
+                  {shown.correctAnswer && /^[A-E]{2,}$/i.test(shown.correctAnswer.trim())
+                    ? shown.correctAnswer.trim().toUpperCase().split('').join(', ')
+                    : shown.correctAnswer}
+                </p>
+              )}
               {showExpl && q.explanation && (
                 <div className="mt-2 pt-2 border-t border-emerald-800/40">
                   <div className="flex items-center justify-between mb-1.5">
@@ -1283,14 +1320,27 @@ function ExamScreen({
                     const confirmed = ans.confirmed
                     const userVal   = mdAnswers[current]?.[si] ?? ''
                     const isRight   = userVal.trim().toLowerCase() === stmt.answer.toLowerCase()
+                    const opts      = q.dropdownOptions ?? []
                     return (
                       <tr key={si} className="border-b border-white/5">
                         <td className="py-2.5 pr-4 text-slate-300 text-[13px] leading-snug align-top w-1/2">{stmt.text}</td>
                         <td className="py-2.5 align-top">
                           {confirmed ? (
                             <div className={`px-3 py-1.5 rounded-lg text-[13px] ${isRight ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-red-500/10 text-red-300 border border-red-500/30'}`}>
-                              {isRight ? userVal : <><span className="line-through opacity-50">{userVal}</span> → <span className="text-emerald-300">{stmt.answer}</span></>}
+                              {isRight
+                                ? <><CheckCircle size={12} className="inline mr-1.5" />{userVal || stmt.answer}</>
+                                : <><XCircle size={12} className="inline mr-1.5" /><span className="line-through opacity-50">{userVal}</span> → <span className="text-emerald-300">{stmt.answer}</span></>
+                              }
                             </div>
+                          ) : opts.length > 0 ? (
+                            <select
+                              value={userVal}
+                              onChange={e => setMdAnswers(prev => ({ ...prev, [current]: { ...(prev[current] ?? {}), [si]: e.target.value } }))}
+                              className="w-full px-3 py-1.5 rounded-lg bg-slate-800 border border-white/10 text-slate-200 text-[13px] focus:outline-none focus:border-teal-500/50 cursor-pointer"
+                            >
+                              <option value="">Select…</option>
+                              {opts.map((opt, oi) => <option key={oi} value={opt}>{opt}</option>)}
+                            </select>
                           ) : (
                             <input
                               type="text"
