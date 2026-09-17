@@ -874,7 +874,7 @@
     {
       "number": "38",
       "questionType": "hotspot",
-      "questionText": "",
+      "questionText": "Your organization has a Microsoft 365 subscription that includes a Microsoft SharePoint site named Site1. You need to identify changes that a site administrator made to Site1’s site settings. Which report should you use in the SharePoint admin center?",
       "translation": "",
       "options": [],
       "correctAnswer": "Change history",
