@@ -92,7 +92,7 @@
     {
       "number": "5",
       "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "Yes, No, Yes",
@@ -146,7 +146,7 @@
     {
       "number": "7",
       "questionType": "yes-no",
-      "questionText": "For each statement below, select Yes",
+      "questionText": "For each statement below, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "Yes, Yes, No",
@@ -357,7 +357,7 @@
     {
       "number": "16",
       "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "Yes, Yes, No",
@@ -475,7 +475,7 @@
     {
       "number": "21",
       "questionType": "yes-no",
-      "questionText": "For each statement below, select Yes",
+      "questionText": "For each statement below, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "Yes, Yes, No",
@@ -529,7 +529,7 @@
     {
       "number": "23",
       "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "No, Yes, Yes",
@@ -618,7 +618,7 @@
     {
       "number": "26",
       "questionType": "yes-no",
-      "questionText": "For each statement below, select Yes",
+      "questionText": "For each statement below, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "No, Yes, Yes",
@@ -840,7 +840,7 @@
     {
       "number": "37",
       "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "Yes, Yes, No",
@@ -992,7 +992,7 @@
     {
       "number": "44",
       "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "No, No, Yes",
@@ -1047,7 +1047,7 @@
     {
       "number": "46",
       "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "Yes, Yes, No",
@@ -1226,7 +1226,7 @@
     {
       "number": "53",
       "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "No, Yes, No",
@@ -1294,7 +1294,7 @@
     {
       "number": "55",
       "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "No, Yes, Yes",
@@ -1667,7 +1667,7 @@
     {
       "number": "71",
       "questionType": "yes-no",
-      "questionText": "For each statement below, select Yes",
+      "questionText": "For each statement below, select Yes when it is true. Otherwise, select No.",
       "translation": "",
       "options": [],
       "correctAnswer": "No, No, Yes",
