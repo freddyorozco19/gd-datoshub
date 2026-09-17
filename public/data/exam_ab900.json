@@ -1,7 +1,7 @@
 {
   "examTitle": "AB-900: Microsoft 365 Copilot and Agent Administration Fundamentals",
   "totalQuestions": 88,
-  "scrapedAt": "2026-09-17T16:34:42.390Z",
+  "scrapedAt": "2026-09-17T16:45:02.872Z",
   "questions": [
     {
       "number": "1",
@@ -306,7 +306,7 @@
     {
       "number": "14",
       "questionType": "mc",
-      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Microsoft / AB-900: Microsoft 365 Copilot and Agent Administration Fundamentals / You have a Microsoft SharePoint site, as shown in the following exhibit. Question 14 Understand data protection and governance tasks for Microsoft 365 and Copilot You have a Microsoft SharePoint site, as shown in the following exhibit. You need to view the settings for SLabel1. What should you use?",
+      "questionText": "You have a Microsoft SharePoint site, as shown in the following exhibit. You need to view the settings for SLabel1. What should you use?",
       "translation": "",
       "options": [
         "A. the Microsoft Defender portal",
@@ -326,7 +326,14 @@
           "url": "https://learn.microsoft.com/en-us/purview/create-sensitivity-labels"
         }
       ],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab900/q14_img0.png",
+          "alt": "SharePoint site showing documents with sensitivity labels SLabel1 and SLabel2",
+          "inOption": false,
+          "optionLetter": null
+        }
+      ]
     },
     {
       "number": "15",

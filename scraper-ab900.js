@@ -288,6 +288,11 @@ async function downloadImage(page, src, filename) {
             );
           } catch (_) {}
           await sleep(rand(1500, 2500));
+          // Scroll para forzar carga de imágenes lazy
+          await page.evaluate(() => window.scrollBy(0, 600));
+          await sleep(600);
+          await page.evaluate(() => window.scrollTo(0, 0));
+          await sleep(400);
         }
 
         const q = await page.evaluate(({ preDropdownOpts, wasMultiDropdown, mdOpts }) => {
@@ -392,6 +397,22 @@ async function downloadImage(page, src, filename) {
           let questionText = '';
           const bodyText = bodyFull;
 
+          // Fuente primaria: div.exam-content (solo el cuerpo de la pregunta, sin sidebar)
+          const examContent = document.querySelector('div.exam-content, div.question-content, [class*="exam-content"]');
+          if (examContent && !wasMultiDropdown && questionType !== 'yes-no' && !dropdownQ) {
+            const contentText = (examContent.innerText || '').trim();
+            // Quitar breadcrumb al inicio (termina antes de "Question\nN")
+            const afterQ = contentText.replace(/^[\s\S]*?(?=\bQuestion\s*\n)/i, '');
+            // Extraer entre el header de la pregunta y las opciones
+            const m = afterQ.match(/Question\s*\n+\d+\s*\n+[^\n]+\n+([\s\S]+?)\n+[A-E](?:\n|\.\s)/);
+            if (m) {
+              const candidate = m[1].replace(/\n/g, ' ').trim();
+              if (candidate.length > 15 && !/EXAM\s*CADEMY/i.test(candidate)) {
+                questionText = candidate;
+              }
+            }
+          }
+
           // Para formato Yes/No: extraer instrucción
           if (questionType === 'yes-no') {
             const instrEl = document.querySelector(
@@ -483,13 +504,14 @@ async function downloadImage(page, src, filename) {
 
           // ── Imágenes (excluir nav/UI) ──────────────────────────────────────
           const imageInfos = [];
-          const skipSelectors = 'nav, header, footer, [class*="navbar"], [class*="sidebar"], [class*="logo"], [class*="icon"], [class*="avatar"]';
+          const skipSelectors = 'nav, header, footer, [class*="navbar"], [class*="sidebar"], [class*="logo"], [class*="avatar"], [class*="user-avatar"]';
           for (const img of Array.from(document.querySelectorAll('img'))) {
             if (img.closest(skipSelectors)) continue;
             const src = img.src || '';
             if (!src || src.startsWith('data:image/svg') || src.includes('favicon')) continue;
             const rect = img.getBoundingClientRect();
-            if (rect.width > 0 && rect.width < 40 && rect.height > 0 && rect.height < 40) continue;
+            // Saltar iconos pequeños (< 60px en ambas dimensiones)
+            if (rect.width > 0 && rect.height > 0 && rect.width < 60 && rect.height < 60) continue;
             const inOption    = !!img.closest('button.mc-option');
             const optBtn      = img.closest('button.mc-option');
             const optionLetter = optBtn ? (optBtn.querySelector('.btn-lead')?.innerText || '').trim() : null;
