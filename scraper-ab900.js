@@ -42,6 +42,7 @@ const questions = examData.questions;
 const doneNums  = new Set(questions.map(q => q.number));
 
 function save() {
+  examData.questions.sort((a, b) => parseInt(a.number) - parseInt(b.number));
   examData.totalQuestions = questions.length;
   examData.scrapedAt = new Date().toISOString();
   fs.writeFileSync(OUT_FILE, JSON.stringify(examData, null, 2));

@@ -4,6 +4,27 @@
   "scrapedAt": "2026-09-17T15:20:21.683Z",
   "questions": [
     {
+      "number": "1",
+      "questionText": "Select the answer that correctly completes the sentence. You can use [___] to review threat indicators correlated across email, identity, and device incidents in a single view.",
+      "translation": "",
+      "options": [
+        "A. Microsoft Defender XDR in the Microsoft Defender portal",
+        "B. Microsoft Defender for Office 365",
+        "C. Microsoft Defender XDR",
+        "D. Microsoft Purview Compliance Manager",
+        "E. Microsoft Purview Data Loss Prevention"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Microsoft Defender XDR correlates security alerts and events from across the organization into unified incidents, providing investigation context spanning email, identities, and endpoints/devices.",
+      "learnMore": [
+        {
+          "text": "Microsoft Defender XDR in the Microsoft Defender portal",
+          "url": "https://learn.microsoft.com/en-us/defender-xdr/microsoft-365-defender-portal"
+        }
+      ],
+      "images": []
+    },
+    {
       "number": "2",
       "questionText": "Your organization has a Microsoft 365 subscription. You create a security group named Group1 and assign the group a Microsoft 365 E3 license. You discover that a user named User1 does not have access to the Microsoft 365 E3 features. You need to ensure that User1 can access every Microsoft 365 E3 feature. Which two actions can you take? Each correct answer provides a complete solution. NOTE: Each correct selection is worth one point. Choose two",
       "translation": "",
@@ -48,6 +69,61 @@
       "images": []
     },
     {
+      "number": "4",
+      "questionText": "Select the answer that correctly completes the sentence. Conditional Access policies [___]",
+      "translation": "",
+      "options": [
+        "A. Microsoft Entra Conditional Access overview",
+        "B. are configured by using the Microsoft Defender portal.",
+        "C. are applied only to on-premises resources.",
+        "D. provide control over how users can access cloud apps.",
+        "E. require a Microsoft Exchange mailbox."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft Entra Conditional Access evaluates access signals and enforces access controls for cloud applications. Policies are configured in the Microsoft Entra admin center and do not depend on an Exchange mailbox.",
+      "learnMore": [
+        {
+          "text": "Microsoft Entra Conditional Access overview",
+          "url": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "5",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, Yes",
+      "statements": [
+        {
+          "text": "Microsoft 365 Copilot honors Microsoft Purview sensitivity labels.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft 365 Copilot ignores Microsoft Purview data loss prevention (DLP) policies.",
+          "answer": "No"
+        },
+        {
+          "text": "Microsoft 365 Copilot honors existing Microsoft 365 permissions.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot recognizes and uses Purview sensitivity labels, and it honors the user’s existing access permissions when grounding responses. Purview DLP policies can restrict sensitive content in Copilot grounding and interactions, so Copilot does not ignore them.",
+      "learnMore": [
+        {
+          "text": "Learn about sensitivity labels",
+          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
+        },
+        {
+          "text": "Microsoft 365 Copilot data protection architecture",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture-data-protection-auditing"
+        }
+      ],
+      "images": []
+    },
+    {
       "number": "6",
       "questionText": "You need to build a Microsoft 365 Copilot agent that can generate charts and visualizations from a Microsoft Excel workbook. What should you configure for the agent?",
       "translation": "",
@@ -63,6 +139,40 @@
         {
           "text": "Code Interpreter Capability for Declarative Agents for Microsoft 365 Copilot",
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/code-interpreter"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "7",
+      "questionType": "yes-no",
+      "questionText": "For each statement below, select Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "Microsoft Purview DSPM for AI can provide insight into ChatGPT usage.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Purview DSPM for AI can provide insight into Microsoft 365 Copilot usage.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Purview DSPM for AI can block users from using Microsoft 365 Copilot.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Microsoft Purview DSPM for AI delivers insights and analytics for AI activity, including supported third-party AI sites such as ChatGPT and Microsoft 365 Copilot. DSPM for AI provides visibility, recommendations, and integration with Purview controls; it does not control whether users can access Microsoft 365 Copilot.",
+      "learnMore": [
+        {
+          "text": "Learn about Microsoft Purview Data Security Posture Management for AI",
+          "url": "https://learn.microsoft.com/en-us/purview/dspm-for-ai"
+        },
+        {
+          "text": "Use Microsoft Purview to manage data security and compliance for Microsoft 365 Copilot",
+          "url": "https://learn.microsoft.com/en-ca/purview/ai-m365-copilot"
         }
       ],
       "images": []
@@ -88,6 +198,61 @@
       "images": []
     },
     {
+      "number": "9",
+      "questionText": "Select the answer that correctly completes the sentence. From the SharePoint admin center, you can create a [___]",
+      "translation": "",
+      "options": [
+        "A. Manage sites in the SharePoint admin center",
+        "B. server."
+      ],
+      "correctAnswer": "site.",
+      "explanation": "The SharePoint admin center is used to create and manage SharePoint sites. It is not used to create servers, users, or Microsoft 365 roles.",
+      "learnMore": [
+        {
+          "text": "Manage sites in the SharePoint admin center",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/manage-sites-in-new-admin-center"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "10",
+      "questionType": "mc",
+      "questionText": "Select the answer that correctly completes the sentence. User1 is [___] Site1.",
+      "translation": "",
+      "options": [
+        "A. a site visitor of",
+        "B. a site owner of",
+        "C. a site member of",
+        "D. prevented from accessing"
+      ],
+      "correctAnswer": "C",
+      "explanation": "“Everyone except external users” automatically includes internal users in the organization. Because that principal is a member of Site1’s Site members group, User1 receives the members group’s Edit access.",
+      "learnMore": [
+        {
+          "text": "Default SharePoint groups",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/default-sharepoint-groups"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "11",
+      "questionType": "mc",
+      "questionText": "Select the answer that correctly completes the sentence. Resolving the [___] recommendation will improve the Identity Secure Score the most.",
+      "translation": "",
+      "options": [
+        "A. Do not expire passwords",
+        "B. Use least privileged administrative roles",
+        "C. Enable policy to block legacy authentication",
+        "D. Require multifactor authentication for administrative roles"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft Entra Secure Score recommendations contribute only their unachieved points. Requiring multifactor authentication for administrative roles has 0 of 10 points achieved, so resolving it adds up to 10 points. Blocking legacy authentication has only 7.27 points remaining, while the other two recommendations are already fully achieved.",
+      "learnMore": [],
+      "images": []
+    },
+    {
       "number": "12",
       "questionText": "You are reviewing your company’s security policies as part of a Zero Trust strategy. Which statement accurately describes the Zero Trust principles?",
       "translation": "",
@@ -100,6 +265,61 @@
       "correctAnswer": "B",
       "explanation": "Zero Trust rests on three principles: verify explicitly, use least-privileged access, and assume breach, so every request is authenticated and authorized rather than trusted by default. Treating traffic from the corporate network as inherently trustworthy or reducing authentication prompts and access reviews runs counter to this model.",
       "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "13",
+      "questionType": "multi-dropdown",
+      "questionText": "Your organization has a Microsoft 365 subscription. You need to use Microsoft Purview to satisfy these requirements: Discover and classify sensitive data across multiple platforms. Block users from sharing intellectual property with external users. Which Microsoft Purview solution should you use for each requirement?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Information Protection, Data Loss Prevention",
+      "statements": [
+        {
+          "text": "Discover and classify sensitive data across multiple platforms:",
+          "answer": "Information Protection"
+        },
+        {
+          "text": "Block users from sharing intellectual property with external users:",
+          "answer": "Data Loss Prevention"
+        }
+      ],
+      "explanation": "Microsoft Purview Information Protection discovers and classifies sensitive information across the organization. Microsoft Purview Data Loss Prevention uses policies to prevent prohibited sharing, including sharing sensitive items with external users.",
+      "learnMore": [
+        {
+          "text": "Microsoft Purview Information Protection",
+          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
+        },
+        {
+          "text": "Help prevent sharing sensitive items via SharePoint and OneDrive with external users",
+          "url": "https://learn.microsoft.com/en-us/purview/dlp-create-policy-spo-odb-external"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "14",
+      "questionType": "mc",
+      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Microsoft / AB-900: Microsoft 365 Copilot and Agent Administration Fundamentals / You have a Microsoft SharePoint site, as shown in the following exhibit. Question 14 Understand data protection and governance tasks for Microsoft 365 and Copilot You have a Microsoft SharePoint site, as shown in the following exhibit. You need to view the settings for SLabel1. What should you use?",
+      "translation": "",
+      "options": [
+        "A. the Microsoft Defender portal",
+        "B. the SharePoint admin center",
+        "C. the Microsoft 365 admin center",
+        "D. the Microsoft Purview portal"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Sensitivity-label configuration is managed in the Microsoft Purview portal, under Information Protection > Sensitivity labels. The label list there lets administrators open a label and view its configured settings; SharePoint only displays the label assigned to the document.",
+      "learnMore": [
+        {
+          "text": "Learn about sensitivity labels",
+          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
+        },
+        {
+          "text": "Create and publish sensitivity labels",
+          "url": "https://learn.microsoft.com/en-us/purview/create-sensitivity-labels"
+        }
+      ],
       "images": []
     },
     {
@@ -117,6 +337,74 @@
         {
           "text": "Assign or unassign licenses for users in the Microsoft 365 admin center",
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/assign-licenses-to-users?view=o365-worldwide"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "16",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "A Communication Compliance policy can detect inappropriate text in Microsoft Teams messages.",
+          "answer": "Yes"
+        },
+        {
+          "text": "A Communication Compliance policy can detect offensive language in Microsoft 365 Copilot prompts.",
+          "answer": "Yes"
+        },
+        {
+          "text": "A Communication Compliance policy can be used to retain email messages for 10 years.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Communication Compliance detects inappropriate, abusive, and offensive text in Teams communications and can analyze Microsoft 365 Copilot prompts and responses for inappropriate or risky interactions. Retaining email for a fixed 10-year period requires Microsoft Purview retention policies or retention labels, rather than a Communication Compliance policy.",
+      "learnMore": [
+        {
+          "text": "Learn about Communication Compliance",
+          "url": "https://learn.microsoft.com/en-us/purview/communication-compliance"
+        },
+        {
+          "text": "Configure a Communication Compliance policy to detect generative AI interactions",
+          "url": "https://learn.microsoft.com/en-us/purview/communication-compliance-copilot"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "17",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "Microsoft Defender for Office 365 provides protection from phishing and malware attacks.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Defender for Identity monitors identities in Active Directory domains.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Defender Vulnerability Management provides protection for software as a service (SaaS) applications.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Microsoft Defender for Office 365 protects email and collaboration workloads against phishing and malware. Microsoft Defender for Identity provides monitoring and detection for identities in Active Directory environments. Defender Vulnerability Management focuses on discovering, assessing, prioritizing, and remediating vulnerabilities across organizational assets; SaaS application protection is a Microsoft Defender for Cloud Apps capability.",
+      "learnMore": [
+        {
+          "text": "Why do I need Microsoft Defender for Office 365?",
+          "url": "https://learn.microsoft.com/en-us/defender-office-365/mdo-about"
+        },
+        {
+          "text": "Microsoft Defender for Identity overview",
+          "url": "https://learn.microsoft.com/en-us/defender-for-identity/what-is"
         }
       ],
       "images": []
@@ -152,6 +440,60 @@
       "images": []
     },
     {
+      "number": "20",
+      "questionText": "Select the answer that correctly completes the sentence. Microsoft Purview sensitivity labels can be applied to [___]",
+      "translation": "",
+      "options": [
+        "A. Use sensitivity labels to protect collaborative workspaces (groups and sites)",
+        "B. Azure Blob Storage.",
+        "C. Microsoft 365 Copilot conversations.",
+        "D. Microsoft SharePoint sites."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft Purview sensitivity labels support SharePoint sites as protected containers, where the label can govern settings such as access and external sharing.",
+      "learnMore": [
+        {
+          "text": "Use sensitivity labels to protect collaborative workspaces (groups and sites)",
+          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels-teams-groups-sites"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "21",
+      "questionType": "yes-no",
+      "questionText": "For each statement below, select Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "A sensitivity label can be applied to a Microsoft SharePoint site.",
+          "answer": "Yes"
+        },
+        {
+          "text": "A sensitivity label can be applied to an email message in Microsoft Exchange.",
+          "answer": "Yes"
+        },
+        {
+          "text": "A sensitivity label can be applied to Windows 11 devices.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Sensitivity labels can protect SharePoint sites through the Groups & sites scope and can be applied to email messages through the Emails scope. They are not applied to Windows devices themselves; Windows integration enables labeling supported files, not the device.",
+      "learnMore": [
+        {
+          "text": "Learn about sensitivity labels",
+          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
+        },
+        {
+          "text": "Use sensitivity labels to protect collaborative workspaces (groups and sites)",
+          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels-teams-groups-sites"
+        }
+      ],
+      "images": []
+    },
+    {
       "number": "22",
       "questionText": "You use Microsoft 365 Copilot. You need to schedule a prompt to run at midnight. What task should you include in your solution?",
       "translation": "",
@@ -167,6 +509,174 @@
         {
           "text": "Schedule your most used Copilot prompts",
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "23",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, Yes",
+      "statements": [
+        {
+          "text": "For administrators to use SharePoint Advanced Management, all the users in your organization need a Microsoft 365 Copilot license.",
+          "answer": "No"
+        },
+        {
+          "text": "SharePoint Advanced Management can help restrict Microsoft 365 Copilot from accessing Microsoft SharePoint content.",
+          "answer": "Yes"
+        },
+        {
+          "text": "SharePoint Advanced Management is available as a standalone license for organizations without Microsoft 365 Copilot.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Only one assigned Microsoft 365 Copilot license is required for SharePoint administrators to receive the applicable SAM capabilities; licenses are not required for every user. SAM can use Restricted Content Discovery or Restricted Access Control to keep site content from surfacing in Copilot or limit access to an allowed group. Organizations without Copilot can obtain SAM through a standalone license.",
+      "learnMore": [
+        {
+          "text": "SharePoint Advanced Management overview",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/advanced-management"
+        },
+        {
+          "text": "Restrict discovery of SharePoint sites and content",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-content-discovery"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "24",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "You can use a Microsoft Entra security group to assign permissions to Microsoft Entra ID resources.",
+          "answer": "Yes"
+        },
+        {
+          "text": "You can use a Microsoft Entra security group to assign Microsoft 365 licenses.",
+          "answer": "Yes"
+        },
+        {
+          "text": "You can use a Microsoft Entra security group to assign permissions to Microsoft Exchange mailboxes.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Microsoft Entra security groups can be assigned access to directory resources, applications, and services. Security groups also support group-based Microsoft 365 license assignment. Exchange mailbox permissions require an Exchange-recognized, mail-enabled security group or another supported Exchange recipient; a standard Microsoft Entra security group alone does not meet that requirement.",
+      "learnMore": [
+        {
+          "text": "Learn about Microsoft Entra groups, membership, and access",
+          "url": "https://learn.microsoft.com/en-us/entra/fundamentals/concept-learn-about-groups"
+        },
+        {
+          "text": "Assign or unassign licenses to a group in the Microsoft 365 admin center",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/manage-group-licenses?view=o365-worldwide"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "25",
+      "questionType": "mc",
+      "questionText": "Select the answer that correctly completes the sentence. User5 is using [___] for multifactor authentication (MFA).",
+      "translation": "",
+      "options": [
+        "A. email OTP",
+        "B. the Microsoft Authenticator app",
+        "C. SMS",
+        "D. a Temporary Access Pass"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Number matching requires the user to enter the number displayed during sign-in into the Microsoft Authenticator approval prompt. It is an Authenticator push-notification MFA method.",
+      "learnMore": [
+        {
+          "text": "How number matching works in MFA push notifications for Authenticator",
+          "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-mfa-number-match"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "26",
+      "questionType": "yes-no",
+      "questionText": "For each statement below, select Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, Yes",
+      "statements": [
+        {
+          "text": "Zero Trust requires an Azure subscription.",
+          "answer": "No"
+        },
+        {
+          "text": "Zero Trust is a security strategy, NOT a specific product.",
+          "answer": "Yes"
+        },
+        {
+          "text": "From the Microsoft 365 admin center, you can enable Zero Trust for your organization.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Zero Trust is a security strategy that can be implemented across cloud and on-premises environments; it is not contingent on an Azure subscription. Microsoft explicitly states that Zero Trust is a strategy rather than a product or service. The Microsoft 365 admin center provides the advanced deployment guide to set up the Microsoft Zero Trust security model for an organization.",
+      "learnMore": [
+        {
+          "text": "What is Zero Trust?",
+          "url": "https://learn.microsoft.com/en-us/security/zero-trust/zero-trust-overview"
+        },
+        {
+          "text": "Zero Trust deployment plan with Microsoft 365",
+          "url": "https://learn.microsoft.com/en-us/security/zero-trust/microsoft-365-zero-trust"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "27",
+      "questionText": "Select the answer that correctly completes the sentence. In Microsoft 365 Copilot, you should use [___] to perform multi-step reasoning over unstructured data.",
+      "translation": "",
+      "options": [
+        "A. Get started with Researcher in Microsoft 365 Copilot",
+        "B. Get started with Analyst in Microsoft 365 Copilot",
+        "C. a notebook",
+        "D. the Analyst agent",
+        "E. the Researcher agent"
+      ],
+      "correctAnswer": "E",
+      "explanation": "The Researcher agent is designed for complex, multi-step research and deep reasoning across work content and web sources. The Analyst agent is intended for structured data analysis, such as spreadsheets, CSV files, and databases.",
+      "learnMore": [
+        {
+          "text": "Get started with Researcher in Microsoft 365 Copilot",
+          "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/get-started-with-researcher-in-microsoft-365-copilot"
+        },
+        {
+          "text": "Get started with Analyst in Microsoft 365 Copilot",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-analyst-in-microsoft-365-copilot"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "28",
+      "questionText": "Select the answer that correctly completes the sentence. You can use the [___] Microsoft Purview solution to find all the content that relates to the term “Project Falcon” in the emails exchanged by two users.",
+      "translation": "",
+      "options": [
+        "A. Microsoft Purview eDiscovery search",
+        "B. Data Catalog",
+        "C. eDiscovery",
+        "D. Insider Risk Management"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Microsoft Purview eDiscovery supports searching Microsoft 365 email and other content locations for relevant content using keywords and conditions.",
+      "learnMore": [
+        {
+          "text": "Microsoft Purview eDiscovery search",
+          "url": "https://learn.microsoft.com/en-us/purview/ediscovery-search-for-content"
         }
       ],
       "images": []
@@ -241,6 +751,65 @@
       "images": []
     },
     {
+      "number": "34",
+      "questionText": "Select the answer that correctly completes the sentence. From the Microsoft Teams admin center, you can [___]",
+      "translation": "",
+      "options": [
+        "A. Manage devices in Microsoft Teams",
+        "B. Managing Microsoft Teams Rooms",
+        "C. assign a Teams license to a user.",
+        "D. deploy the Teams client.",
+        "E. manage a Teams Rooms device."
+      ],
+      "correctAnswer": "E",
+      "explanation": "The Microsoft Teams admin center supports device management for Teams Rooms, such as viewing device status and applying settings. License assignment is handled in Microsoft 365 administration, while restrictions on creating teams are configured through Microsoft 365 group creation settings.",
+      "learnMore": [
+        {
+          "text": "Manage devices in Microsoft Teams",
+          "url": "https://learn.microsoft.com/en-us/microsoftteams/devices/device-management"
+        },
+        {
+          "text": "Managing Microsoft Teams Rooms",
+          "url": "https://learn.microsoft.com/en-us/microsoftteams/rooms/rooms-manage"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "35",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, Yes",
+      "statements": [
+        {
+          "text": "Administrators can remove a specific Copilot agent from all users.",
+          "answer": "Yes"
+        },
+        {
+          "text": "From the Microsoft 365 admin center, administrators can configure the prompts of a Copilot agent.",
+          "answer": "No"
+        },
+        {
+          "text": "Administrators can deploy Copilot agents to specific users.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Administrators can remove or block an individual agent organization-wide and can deploy agents to selected users or groups. The Microsoft 365 admin center governs agent access, visibility, and lifecycle; configuring an agent’s prompts is performed in the agent-authoring experience, such as Microsoft Copilot Studio.",
+      "learnMore": [
+        {
+          "text": "Agent Registry in the Microsoft 365 admin center",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-registry?view=o365-worldwide"
+        },
+        {
+          "text": "Configure suggested prompts for Teams and Microsoft 365",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/configure-starter-prompts"
+        }
+      ],
+      "images": []
+    },
+    {
       "number": "36",
       "questionText": "Your company is evaluating Microsoft 365 Copilot licensing. In which scenario should you use pay-as-you-go billing?",
       "translation": "",
@@ -252,6 +821,51 @@
       ],
       "correctAnswer": "D",
       "explanation": "Pay-as-you-go billing for Microsoft 365 Copilot allows organizations to extend Copilot capabilities to unlicensed users without purchasing full per-user licenses. This model is specifically used when making custom agents available to users who do not have a Copilot license, billing based on consumption rather than per-user licensing. The other options (Researcher agent, Teams meeting recaps, and Word editing) are included in standard Copilot licensing.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "37",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "From the Copilot Prompt Gallery, you can modify a saved prompt.",
+          "answer": "Yes"
+        },
+        {
+          "text": "From the Copilot Prompt Gallery, you can share a saved prompt to a Microsoft Teams team.",
+          "answer": "Yes"
+        },
+        {
+          "text": "You can create a shared link for a prompt that was NOT saved to the Copilot Prompt Gallery.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Microsoft's own support documentation for Prompt Gallery states that from Your Prompts you can click any saved prompt to view, edit, or run it, so a saved prompt can indeed be modified in place. Prompt Gallery also lets a user share a saved prompt directly with a Microsoft Teams team. However, the sharing workflow is only exposed for prompts that already exist in Your Prompts (accessed by hovering a saved prompt and selecting the share option), so a prompt that was never saved cannot be turned into a shared link.",
+      "learnMore": [
+        {
+          "text": "Save your favorite prompts to use again",
+          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/save-your-favorite-prompts-to-use-again"
+        },
+        {
+          "text": "Understand Prompt Gallery in Copilot",
+          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/copilot-prompt-gallery"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "38",
+      "questionType": "hotspot",
+      "questionText": "",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Change history",
+      "explanation": "Change history records changes to SharePoint site settings, allowing administrators to identify modifications made by a site administrator. Select Change history.",
       "learnMore": [],
       "images": []
     },
@@ -287,6 +901,27 @@
       "correctAnswer": "C",
       "explanation": "Authorization determines what an authenticated user is allowed to access and do within a system. After identity is verified (authentication), authorization policies grant or deny access to specific resources. Option A describes authentication; option B describes multi-factor authentication; option D describes identity federation or external identity validation.",
       "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "41",
+      "questionText": "Select the answer that correctly completes the sentence. When you need to add a domain to a Microsoft 365 subscription, you must verify the domain by [___]",
+      "translation": "",
+      "options": [
+        "A. Gather the information you need to create DNS records - Microsoft 365 admin",
+        "B. adding a public DNS record.",
+        "C. confirming your business address.",
+        "D. uploading a certificate.",
+        "E. uploading a webpage."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Microsoft 365 verifies that an organization controls a custom domain by checking a DNS record that it adds at the domain’s DNS host, typically a TXT record.",
+      "learnMore": [
+        {
+          "text": "Gather the information you need to create DNS records - Microsoft 365 admin",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/get-help-with-domains/information-for-dns-records?view=o365-worldwide"
+        }
+      ],
       "images": []
     },
     {
@@ -329,1094 +964,6 @@
       "images": []
     },
     {
-      "number": "48",
-      "questionText": "Your company requires every Microsoft SharePoint site to have at least two owners. You need to make sites with fewer than two owners read-only when they are not remediated. What should you configure in the SharePoint admin center?",
-      "translation": "",
-      "options": [
-        "A. Site-level access restriction",
-        "B. Data access governance reports",
-        "C. Site lifecycle management",
-        "D. Block download policy for SharePoint and OneDrive"
-      ],
-      "correctAnswer": "C",
-      "explanation": "SharePoint Site lifecycle management contains site ownership policies, which define the minimum required number of owners or administrators, notify responsible users about noncompliance, and support enforcement actions such as read-only access. Microsoft documents that setting the minimum owner count to two identifies sites requiring remediation.",
-      "learnMore": [
-        {
-          "text": "Create a SharePoint site ownership policy",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/site-ownership-policy"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "49",
-      "questionText": "Your organization has a Microsoft 365 subscription. Which two tasks can you perform by using the Exchange admin center? Each correct answer presents part of the solution. NOTE: Each correct selection is worth one point. Choose two",
-      "translation": "",
-      "options": [
-        "A. Assign a Microsoft Exchange license.",
-        "B. Create a mail flow rule.",
-        "C. Create a shared mailbox.",
-        "D. Add a custom domain."
-      ],
-      "correctAnswer": "BC",
-      "explanation": "The Exchange admin center is where mail flow (transport) rules are created and managed, and it is also one of the places administrators create and configure shared mailboxes. Assigning licenses and adding a custom domain are tenant-wide setup tasks handled in the Microsoft 365 admin center, not the Exchange admin center.",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "56",
-      "questionText": "You use Microsoft 365 Copilot. What does Copilot use to create responses from corporate data stored in Microsoft SharePoint?",
-      "translation": "",
-      "options": [
-        "A. Microsoft Intune",
-        "B. Microsoft Defender",
-        "C. Microsoft Graph",
-        "D. Microsoft Purview"
-      ],
-      "correctAnswer": "C",
-      "explanation": "Microsoft 365 Copilot uses Microsoft Graph to retrieve and ground responses with organizational data, including SharePoint documents, while honoring each user's existing permissions.",
-      "learnMore": [
-        {
-          "text": "How does Microsoft 365 Copilot work?",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "58",
-      "questionText": "Your organization has a Microsoft 365 subscription. All users have Microsoft 365 Copilot licenses assigned. Some users report getting Copilot responses that include information from a Microsoft SharePoint site named Finance. The users state that the information is commercially sensitive. You need to stop Copilot from providing responses that include information from the Finance site. What should you do?",
-      "translation": "",
-      "options": [
-        "A. From Microsoft Purview, create an Information Barrier (IB) policy.",
-        "B. From Microsoft Defender, create a data connector.",
-        "C. From Microsoft Entra, create a Conditional Access policy.",
-        "D. From the Finance site, configure permissions."
-      ],
-      "correctAnswer": "D",
-      "explanation": "Microsoft 365 Copilot accesses SharePoint data in the context of the signed-in user and honors that user’s existing permissions. Restricting permissions on the Finance site removes unauthorized users’ access to its content, so Copilot cannot use that content in responses for those users.",
-      "learnMore": [
-        {
-          "text": "How does Microsoft 365 Copilot work?",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
-        },
-        {
-          "text": "Understanding permission levels in SharePoint",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/understanding-permission-levels"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "67",
-      "questionText": "Your organization has a Microsoft 365 subscription. Your company recently purchased Microsoft 365 Copilot licenses for some users. You need to identify how many unlicensed users have used Copilot in Microsoft Teams. Which usage report should you use in the Microsoft 365 admin center?",
-      "translation": "",
-      "options": [
-        "A. Microsoft 365 Copilot Chat",
-        "B. Microsoft 365 Copilot Search",
-        "C. Microsoft 365 Apps",
-        "D. Microsoft 365 Copilot"
-      ],
-      "correctAnswer": "A",
-      "explanation": "The Microsoft 365 Copilot Chat usage report specifically covers users who do not hold a Microsoft 365 Copilot license, tracking their interactions with Copilot Chat across Teams, Outlook, Word, Excel, PowerPoint, and other apps. The Microsoft 365 Copilot usage report, by contrast, reports only on users who already hold a Copilot license.",
-      "learnMore": [
-        {
-          "text": "Microsoft 365 Copilot Chat usage report",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/activity-reports/microsoft-copilot-usage"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "68",
-      "questionText": "What can you use to block a user account automatically when a risky sigh-in is detected?",
-      "translation": "",
-      "options": [
-        "A. Microsoft Defender for Identity",
-        "B. Microsoft Entra ID Protection",
-        "C. Microsoft Defender for Office 365",
-        "D. Microsoft Entra Privileged Identity Management (PIM)"
-      ],
-      "correctAnswer": "B",
-      "explanation": "Microsoft Entra ID Protection detects risky sign-in behavior and automatically enforces risk policies, including blocking access or requiring password changes when suspicious activity is detected. This is the dedicated identity-risk tool within the Microsoft security stack. Defender for Identity focuses on on-premises threats; Defender for Office 365 protects email; PIM manages privileged access.",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "70",
-      "questionText": "Your company is evaluating Microsoft 365 Copilot pay-as-you-go billing instead of purchasing a Microsoft 365 Copilot license. In which scenario can pay-as-you-go billing apply?",
-      "translation": "",
-      "options": [
-        "A. performing multi-step reasoning by using the Researcher agent",
-        "B. generating a recap of a Microsoft Teams meeting",
-        "C. using a custom agent that is grounded in work data",
-        "D. using the AI assistant to edit a document in Copilot in Word"
-      ],
-      "correctAnswer": "C",
-      "explanation": "Pay-as-you-go billing for Microsoft 365 Copilot specifically applies to messages consumed by custom agents built in Copilot Studio that are grounded in organizational or work data. This consumption-based model allows organizations to pay per message rather than purchasing per-user licenses, making it suitable for scenarios with variable or broad audiences accessing custom agents. The other options represent core M365 Copilot licensed features requiring per-user licenses.",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "75",
-      "questionText": "Your organization has a Microsoft 365 subscription. You need to investigate security incidents and alerts generated by the Windows 11 devices in your organization. What should you use?",
-      "translation": "",
-      "options": [
-        "A. Microsoft Entra ID Protection",
-        "B. Microsoft Defender for Identity",
-        "C. Microsoft Purview Insider Risk Management",
-        "D. Microsoft Defender for Endpoint"
-      ],
-      "correctAnswer": "D",
-      "explanation": "Microsoft Defender for Endpoint provides endpoint detection and response capabilities for Windows devices, including investigating incidents and alerts, reviewing affected devices, and collecting related evidence.",
-      "learnMore": [
-        {
-          "text": "Investigate incidents in Microsoft Defender for Endpoint",
-          "url": "https://learn.microsoft.com/en-us/defender-endpoint/investigate-incidents"
-        },
-        {
-          "text": "Investigate devices in the Microsoft Defender for Endpoint Devices list",
-          "url": "https://learn.microsoft.com/en-us/defender-endpoint/investigate-machines"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "76",
-      "questionText": "Your company is piloting Microsoft 365 Copilot and has purchased 100 Microsoft 365 Copilot licenses. You need to view detailed reports on Copilot usage in Microsoft Teams, including meeting hours summarized by Copilot and meeting actions taken using Copilot. What should you use?",
-      "translation": "",
-      "options": [
-        "A. the Microsoft 365 Copilot readiness report in the Microsoft 365 admin center",
-        "B. the Microsoft 365 Copilot usage report in the Microsoft 365 admin center",
-        "C. the Microsoft 365 Copilot dashboard in Microsoft Viva Insights",
-        "D. the Microsoft 365 Apps usage report in the Microsoft 365 admin center"
-      ],
-      "correctAnswer": "C",
-      "explanation": "The Microsoft Copilot Dashboard in Microsoft Viva Insights provides detailed adoption and impact metrics for Teams, including total meeting hours summarized or recapped by Copilot and meeting-summary actions taken using Copilot. Organizations with at least 50 assigned Copilot licenses have access to its full capabilities.",
-      "learnMore": [
-        {
-          "text": "Connect to the Microsoft Copilot Dashboard for Microsoft 365 customers",
-          "url": "https://learn.microsoft.com/en-us/viva/insights/org-team-insights/copilot-dashboard"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "77",
-      "questionText": "User1 creates a Microsoft 365 Copilot agent named Agent1 and shares it with User2. What happens when an administrator blocks Agent1?",
-      "translation": "",
-      "options": [
-        "A. Agent1 is accessible to User1 and User2 until the users manually uninstall Agent. No other users can install Agent1.",
-        "B. Agent1 is accessible to User1 and User2, and no other users can install Agent1.",
-        "C. Agent1 is removed from User2, and User1 can continue to use Agent1.",
-        "D. Agent1is removed from User1 and User2, and no users can install Agent1."
-      ],
-      "correctAnswer": "D",
-      "explanation": "Blocking a Microsoft 365 Copilot agent blocks it for members of the organization: they cannot install or use it, and it is removed from users who had already installed it. This includes both the creator and users with whom it was shared.",
-      "learnMore": [
-        {
-          "text": "Understand agent details in Microsoft 365 admin center",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-details?view=o365-worldwide"
-        },
-        {
-          "text": "Agent Registry in the Microsoft 365 admin center",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-registry?view=o365-worldwide"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "78",
-      "questionText": "Your company has a Microsoft SharePoint site named Site1. Site1 contains all the policies of the company’s HR department. The policies are saved as Microsoft Word documents. All users have read access to Site1. The HR department manager reports that user requests about the policies are NOT being addressed in a timely manner, especially around major holidays. You need to recommend a solution to enable the users to find the HR department policies. The solution must provide the users with a list of common queries and ensure that responses are grounded only in Site1. What should you include in the recommendation?",
-      "translation": "",
-      "options": [
-        "A. the personal assistant in Copilot in Word",
-        "B. a custom Microsoft 365 Copilot agent",
-        "C. the Researcher agent in Microsoft 365 Copilot",
-        "D. a Microsoft 365 Copilot notebook"
-      ],
-      "correctAnswer": "B",
-      "explanation": "A custom Microsoft 365 Copilot agent can be scoped so its knowledge comes only from Site1, and it can be configured with a curated set of starter prompts covering the common HR policy questions users ask. The Researcher agent and the personal assistant in Copilot in Word are not restricted to a single SharePoint site, and a notebook is a personal workspace rather than a shared, discoverable tool for other users.",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "80",
-      "questionText": "Your organization has a Microsoft 365 subscription. You need to assess your organization’s Identity Secure Score. Which two factors affect the score? Each correct answer presents a complete solution. > NOTE: Each correct selection is worth one point. Choose two",
-      "translation": "",
-      "options": [
-        "A. the SharePoint site permissions",
-        "B. the number of global administrators",
-        "C. passwords that are never expired",
-        "D. the location of the users"
-      ],
-      "correctAnswer": "BC",
-      "explanation": "Microsoft Entra Identity Secure Score includes recommendations to designate more than one Global Administrator and to not expire passwords. Compliance with these identity-security recommendations affects the score.",
-      "learnMore": [
-        {
-          "text": "What is the Identity Secure Score?",
-          "url": "https://learn.microsoft.com/en-us/entra/identity/monitoring-health/concept-identity-secure-score"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "81",
-      "questionText": "Your organization has a Microsoft 365 E5 subscription. You need to prevent users from sharing corporate financial data to external users. What should you use?",
-      "translation": "",
-      "options": [
-        "A. role groups",
-        "B. data loss prevention (DLP) policies",
-        "C. insider risk management policies",
-        "D. retention labels"
-      ],
-      "correctAnswer": "B",
-      "explanation": "Data Loss Prevention (DLP) policies detect sensitive information patterns (financial data, personally identifiable information) and automatically block or restrict sharing to external recipients. DLP rules can identify and prevent unauthorized external sharing of corporate financial data before transmission. Role groups, insider risk management, and retention labels do not provide content-based sharing controls.",
-      "learnMore": [
-        "QUESTION 80",
-        "81 / 88",
-        "QUESTION 82"
-      ],
-      "images": []
-    },
-    {
-      "number": "82",
-      "questionText": "Your organization has a Microsoft 365 subscription. You need to assess the impact of a recent phishing incident that targeted email users. What should you use?",
-      "translation": "",
-      "options": [
-        "A. the Microsoft Defender portal",
-        "B. the Microsoft 365 admin center",
-        "C. the Microsoft Entra admin center",
-        "D. the Microsoft Exchange admin center"
-      ],
-      "correctAnswer": "A",
-      "explanation": "The Microsoft Defender portal provides Microsoft Defender for Office 365 investigation capabilities, including the Phish view in Threat Explorer or Real-time detections, to examine phishing email activity and its impact on affected users. It also consolidates incident alerts and evidence for investigation.",
-      "learnMore": [
-        {
-          "text": "Email security with Threat Explorer and Real-time detections in Microsoft Defender for Office 365",
-          "url": "https://learn.microsoft.com/en-us/defender-office-365/threat-explorer-email-security"
-        },
-        {
-          "text": "Investigate incidents in the Microsoft Defender portal",
-          "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-incidents"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "85",
-      "questionText": "Your organization has a Microsoft 365 subscription containing Microsoft SharePoint sites and Microsoft Teams teams. You discover that sites and teams have been shared with users outside your organization. You need to determine which sites and teams were shared with the external users. What should you use?",
-      "translation": "",
-      "options": [
-        "A. the SharePoint admin center",
-        "B. the Microsoft Teams admin center",
-        "C. the Microsoft 365 admin center",
-        "D. the Microsoft Defender portal"
-      ],
-      "correctAnswer": "C",
-      "explanation": "The Microsoft 365 admin center centrally lists guest users and manages membership of active teams and Microsoft 365 groups. Microsoft Teams uses Microsoft 365 Groups for team membership, so external guest membership can be identified there for Teams and their group-connected resources.",
-      "learnMore": [
-        {
-          "text": "Guests in the Microsoft 365 admin center",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/add-users/about-guest-users?view=o365-worldwide"
-        },
-        {
-          "text": "Manage guest access in Microsoft 365 groups",
-          "url": "https://learn.microsoft.com/en-sg/microsoft-365/admin/create-groups/manage-guest-access-in-groups?view=o365-worldwide"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "86",
-      "questionText": "Your organization uses a Microsoft 365 subscription. All users are licensed for Microsoft 365 Copilot. You need to determine where sensitive content is used in Copilot interactions, analyze content-usage patterns, and receive recommendations for applying the appropriate protections. What should you use?",
-      "translation": "",
-      "options": [
-        "A. Microsoft Viva Insights",
-        "B. the Microsoft Purview DSPM for AI solution",
-        "C. Microsoft Security Copilot",
-        "D. the Microsoft Purview Insider Risk Management solution"
-      ],
-      "correctAnswer": "B",
-      "explanation": "Microsoft Purview Data Security Posture Management (DSPM) for AI assesses how Microsoft 365 Copilot interacts with sensitive data, provides visibility into AI usage and data exposure risks, and recommends controls such as sensitivity labels and data loss prevention policies to protect that data.",
-      "learnMore": [
-        {
-          "text": "Understand How to Secure AI Data with Microsoft Purview",
-          "url": "https://learn.microsoft.com/en-us/training/modules/purview-ai-understand-risks/"
-        },
-        {
-          "text": "Learn about Data Security Posture Management for AI",
-          "url": "https://learn.microsoft.com/en-us/purview/dspm-for-ai"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "87",
-      "questionText": "Your organization has a Microsoft 365 E5 subscription. You create a Microsoft Purview sensitivity label named Label1. You need to ensure that users can apply Label1 to files in Microsoft 365. What should you use?",
-      "translation": "",
-      "options": [
-        "A. a sensitivity label policy",
-        "B. a trainable classifier",
-        "C. a retention label policy",
-        "D. an auto-labeling policy"
-      ],
-      "correctAnswer": "A",
-      "explanation": "A sensitivity label must be published via a sensitivity label policy to make it visible and applicable to end users. Creating the label alone does not expose it in Office applications; the policy controls which users see the label and what protection settings apply when it is applied. Trainable classifiers, retention policies, and auto-labeling policies serve different purposes in the information governance workflow.",
-      "learnMore": [
-        "QUESTION 86",
-        "87 / 88",
-        "QUESTION 88"
-      ],
-      "images": []
-    },
-    {
-      "number": "89",
-      "questionText": "You need to identify files and emails that contain social security numbers (SSNs) and credit card numbers. What should you use in the Microsoft Purview portal?",
-      "translation": "",
-      "options": [
-        "A. Data explorer",
-        "B. Information Protection reports",
-        "C. Information Protection policies",
-        "D. Activity explorer"
-      ],
-      "correctAnswer": "A",
-      "explanation": "Data Explorer in Microsoft Purview displays files and emails matching sensitive information type definitions, including built-in patterns for U.S. Social Security Numbers and credit card numbers. It shows where sensitive data is stored across SharePoint, OneDrive, Exchange, and Teams. Information Protection policies and Activity Explorer serve different functions; Information Protection reports lack the granular file/email visibility.",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "1",
-      "questionText": "Select the answer that correctly completes the sentence. You can use [___] to review threat indicators correlated across email, identity, and device incidents in a single view.",
-      "translation": "",
-      "options": [
-        "A. Microsoft Defender XDR in the Microsoft Defender portal",
-        "B. Microsoft Defender for Office 365",
-        "C. Microsoft Defender XDR",
-        "D. Microsoft Purview Compliance Manager",
-        "E. Microsoft Purview Data Loss Prevention"
-      ],
-      "correctAnswer": "A",
-      "explanation": "Microsoft Defender XDR correlates security alerts and events from across the organization into unified incidents, providing investigation context spanning email, identities, and endpoints/devices.",
-      "learnMore": [
-        {
-          "text": "Microsoft Defender XDR in the Microsoft Defender portal",
-          "url": "https://learn.microsoft.com/en-us/defender-xdr/microsoft-365-defender-portal"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "4",
-      "questionText": "Select the answer that correctly completes the sentence. Conditional Access policies [___]",
-      "translation": "",
-      "options": [
-        "A. Microsoft Entra Conditional Access overview",
-        "B. are configured by using the Microsoft Defender portal.",
-        "C. are applied only to on-premises resources.",
-        "D. provide control over how users can access cloud apps.",
-        "E. require a Microsoft Exchange mailbox."
-      ],
-      "correctAnswer": "D",
-      "explanation": "Microsoft Entra Conditional Access evaluates access signals and enforces access controls for cloud applications. Policies are configured in the Microsoft Entra admin center and do not depend on an Exchange mailbox.",
-      "learnMore": [
-        {
-          "text": "Microsoft Entra Conditional Access overview",
-          "url": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "9",
-      "questionText": "Select the answer that correctly completes the sentence. From the SharePoint admin center, you can create a [___]",
-      "translation": "",
-      "options": [
-        "A. Manage sites in the SharePoint admin center",
-        "B. server."
-      ],
-      "correctAnswer": "site.",
-      "explanation": "The SharePoint admin center is used to create and manage SharePoint sites. It is not used to create servers, users, or Microsoft 365 roles.",
-      "learnMore": [
-        {
-          "text": "Manage sites in the SharePoint admin center",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/manage-sites-in-new-admin-center"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "20",
-      "questionText": "Select the answer that correctly completes the sentence. Microsoft Purview sensitivity labels can be applied to [___]",
-      "translation": "",
-      "options": [
-        "A. Use sensitivity labels to protect collaborative workspaces (groups and sites)",
-        "B. Azure Blob Storage.",
-        "C. Microsoft 365 Copilot conversations.",
-        "D. Microsoft SharePoint sites."
-      ],
-      "correctAnswer": "D",
-      "explanation": "Microsoft Purview sensitivity labels support SharePoint sites as protected containers, where the label can govern settings such as access and external sharing.",
-      "learnMore": [
-        {
-          "text": "Use sensitivity labels to protect collaborative workspaces (groups and sites)",
-          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels-teams-groups-sites"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "27",
-      "questionText": "Select the answer that correctly completes the sentence. In Microsoft 365 Copilot, you should use [___] to perform multi-step reasoning over unstructured data.",
-      "translation": "",
-      "options": [
-        "A. Get started with Researcher in Microsoft 365 Copilot",
-        "B. Get started with Analyst in Microsoft 365 Copilot",
-        "C. a notebook",
-        "D. the Analyst agent",
-        "E. the Researcher agent"
-      ],
-      "correctAnswer": "E",
-      "explanation": "The Researcher agent is designed for complex, multi-step research and deep reasoning across work content and web sources. The Analyst agent is intended for structured data analysis, such as spreadsheets, CSV files, and databases.",
-      "learnMore": [
-        {
-          "text": "Get started with Researcher in Microsoft 365 Copilot",
-          "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/get-started-with-researcher-in-microsoft-365-copilot"
-        },
-        {
-          "text": "Get started with Analyst in Microsoft 365 Copilot",
-          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-analyst-in-microsoft-365-copilot"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "28",
-      "questionText": "Select the answer that correctly completes the sentence. You can use the [___] Microsoft Purview solution to find all the content that relates to the term “Project Falcon” in the emails exchanged by two users.",
-      "translation": "",
-      "options": [
-        "A. Microsoft Purview eDiscovery search",
-        "B. Data Catalog",
-        "C. eDiscovery",
-        "D. Insider Risk Management"
-      ],
-      "correctAnswer": "A",
-      "explanation": "Microsoft Purview eDiscovery supports searching Microsoft 365 email and other content locations for relevant content using keywords and conditions.",
-      "learnMore": [
-        {
-          "text": "Microsoft Purview eDiscovery search",
-          "url": "https://learn.microsoft.com/en-us/purview/ediscovery-search-for-content"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "34",
-      "questionText": "Select the answer that correctly completes the sentence. From the Microsoft Teams admin center, you can [___]",
-      "translation": "",
-      "options": [
-        "A. Manage devices in Microsoft Teams",
-        "B. Managing Microsoft Teams Rooms",
-        "C. assign a Teams license to a user.",
-        "D. deploy the Teams client.",
-        "E. manage a Teams Rooms device."
-      ],
-      "correctAnswer": "E",
-      "explanation": "The Microsoft Teams admin center supports device management for Teams Rooms, such as viewing device status and applying settings. License assignment is handled in Microsoft 365 administration, while restrictions on creating teams are configured through Microsoft 365 group creation settings.",
-      "learnMore": [
-        {
-          "text": "Manage devices in Microsoft Teams",
-          "url": "https://learn.microsoft.com/en-us/microsoftteams/devices/device-management"
-        },
-        {
-          "text": "Managing Microsoft Teams Rooms",
-          "url": "https://learn.microsoft.com/en-us/microsoftteams/rooms/rooms-manage"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "41",
-      "questionText": "Select the answer that correctly completes the sentence. When you need to add a domain to a Microsoft 365 subscription, you must verify the domain by [___]",
-      "translation": "",
-      "options": [
-        "A. Gather the information you need to create DNS records - Microsoft 365 admin",
-        "B. adding a public DNS record.",
-        "C. confirming your business address.",
-        "D. uploading a certificate.",
-        "E. uploading a webpage."
-      ],
-      "correctAnswer": "B",
-      "explanation": "Microsoft 365 verifies that an organization controls a custom domain by checking a DNS record that it adds at the domain’s DNS host, typically a TXT record.",
-      "learnMore": [
-        {
-          "text": "Gather the information you need to create DNS records - Microsoft 365 admin",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/get-help-with-domains/information-for-dns-records?view=o365-worldwide"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "45",
-      "questionText": "Select the answer that correctly completes the sentence. From the Microsoft Purview portal, you can use Data explorer to [___]",
-      "translation": "",
-      "options": [
-        "A. Get started with data explorer",
-        "B. create and manage privacy policies.",
-        "C. perform searches for content in mailboxes and sites.",
-        "D. identify sensitive information and where it is located.",
-        "E. review the effectiveness of your data loss prevention (DLP) policies."
-      ],
-      "correctAnswer": "D",
-      "explanation": "Microsoft Purview Data Explorer shows items classified by sensitive information types and enables investigation of the locations where those items reside.",
-      "learnMore": [
-        {
-          "text": "Get started with data explorer",
-          "url": "https://learn.microsoft.com/en-us/purview/data-classification-data-explorer"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "47",
-      "questionText": "Select the answer that correctly completes the sentence. [___] is a unified enterprise suite that coordinates detection, prevention, investigation, and response across endpoints, identities, email, and applications to provide integrated protection against sophisticated attacks.",
-      "translation": "",
-      "options": [
-        "A. What is Microsoft Defender XDR?",
-        "B. Microsoft Defender XDR",
-        "C. Microsoft Entra Conditional Access",
-        "D. Microsoft Entra ID Protection",
-        "E. Microsoft Purview"
-      ],
-      "correctAnswer": "A",
-      "explanation": "Microsoft Defender XDR natively coordinates prevention, detection, investigation, and response across endpoints, identities, email, and applications, providing integrated protection against sophisticated attacks.",
-      "learnMore": [
-        {
-          "text": "What is Microsoft Defender XDR?",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/security/strengthen-security-posture-configure-capabilities?view=o365-worldwide"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "52",
-      "questionText": "Select the answer that correctly completes the sentence. In the Microsoft 365 admin center, the Credits used metric in the Copilot credits report shows the total credits used by users in your organization that [___] and are interacting with work grounded agents in Microsoft 365 Copilot Chat.",
-      "translation": "",
-      "options": [
-        "A. Microsoft 365 Copilot credits report",
-        "B. use Microsoft Teams",
-        "C. are external to your organization",
-        "D. are assigned a Microsoft 365 Copilot license",
-        "E. are NOT assigned a Microsoft 365 Copilot license"
-      ],
-      "correctAnswer": "E",
-      "explanation": "The Copilot credits report measures metered agent interactions in Microsoft 365 Copilot Chat by users in the organization who are not assigned a Microsoft 365 Copilot license.",
-      "learnMore": [
-        {
-          "text": "Microsoft 365 Copilot credits report",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/activity-reports/microsoft-365-copilot-credits?view=o365-worldwide"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "62",
-      "questionText": "Select the answer that correctly completes the sentence. The Microsoft responsible AI principle of [___] requires the oversight of AI systems to ensure that humans remain in control.",
-      "translation": "",
-      "options": [
-        "A. accountability",
-        "B. inclusiveness",
-        "C. privacy and security",
-        "D. reliability and safety",
-        "E. transparency"
-      ],
-      "correctAnswer": "A",
-      "explanation": "Accountability requires people to oversee AI systems and remain responsible for their decisions and outcomes, ensuring that humans retain control.",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "63",
-      "questionText": "Select the answer that correctly completes the sentence. Microsoft 365 Copilot retrieves data from [___] by using Microsoft Graph.",
-      "translation": "",
-      "options": [
-        "A. Microsoft 365 Copilot overview",
-        "B. Azure OpenAI",
-        "C. external users",
-        "D. Microsoft SharePoint files",
-        "E. web searchers"
-      ],
-      "correctAnswer": "D",
-      "explanation": "Microsoft 365 Copilot uses Microsoft Graph to access organizational content for grounding, including files stored in SharePoint.",
-      "learnMore": [
-        {
-          "text": "Microsoft 365 Copilot overview",
-          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "64",
-      "questionText": "Select the answer that correctly completes the sentence. Restricted SharePoint Search enables you to restrict [___] access to Microsoft SharePoint sites without preventing users from accessing the files and content to which they have permission.",
-      "translation": "",
-      "options": [
-        "A. Restricted SharePoint Search - SharePoint in Microsoft 365",
-        "B. administrator",
-        "C. guest user",
-        "D. Microsoft 365 Copilot",
-        "E. Microsoft Purview eDiscovery"
-      ],
-      "correctAnswer": "D",
-      "explanation": "Restricted SharePoint Search restricts Microsoft 365 Copilot’s access to a curated set of SharePoint sites. It does not alter existing user permissions, so users retain access to content for which they are authorized.",
-      "learnMore": [
-        {
-          "text": "Restricted SharePoint Search - SharePoint in Microsoft 365",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-sharepoint-search"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "65",
-      "questionText": "Select the answer that correctly completes the sentence. Microsoft Entra Privileged Identity Management (PIM) provides [___]",
-      "translation": "",
-      "options": [
-        "A. restricted access to Microsoft 365 services.",
-        "B. the lifecycle management of users.",
-        "C. the management of enterprise applications.",
-        "D. time-bound role activation."
-      ],
-      "correctAnswer": "D",
-      "explanation": "Microsoft Entra Privileged Identity Management enables just-in-time privileged access: eligible users activate assigned roles when needed for a defined, time-limited duration.",
-      "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "69",
-      "questionText": "Select the answer that correctly completes the sentence. In Microsoft Entra Privileged Identity Management (PIM), an administrator has made you eligible for the User Administrator role. Before you can create a user account, you must [___]",
-      "translation": "",
-      "options": [
-        "A. Activate Microsoft Entra roles in PIM",
-        "B. activate the role.",
-        "C. install the Microsoft Authenticator app.",
-        "D. request a license.",
-        "E. update your location information."
-      ],
-      "correctAnswer": "B",
-      "explanation": "An eligible Microsoft Entra PIM role assignment provides no active permissions until the user activates it. Activating the eligible User Administrator role makes its directory permissions available, including the ability to create user accounts.",
-      "learnMore": [
-        {
-          "text": "Activate Microsoft Entra roles in PIM",
-          "url": "https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-how-to-activate-role"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "72",
-      "questionText": "Select the answer that correctly completes the sentence. [___] includes signals, such as collaboration history, document relevance, and communication frequency, which influence Microsoft 365 Copilot responses.",
-      "translation": "",
-      "options": [
-        "A. Microsoft 365 Copilot overview",
-        "B. Microsoft Copilot Studio",
-        "C. Microsoft Graph",
-        "D. Microsoft Purview",
-        "E. Microsoft Viva Insights"
-      ],
-      "correctAnswer": "C",
-      "explanation": "Microsoft Graph connects Microsoft 365 data and relationship signals that Microsoft 365 Copilot uses to ground and personalize responses. Copilot Studio is for creating and extending copilots, Purview focuses on governance and compliance, and Viva Insights provides workplace analytics.",
-      "learnMore": [
-        {
-          "text": "Microsoft 365 Copilot overview",
-          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "84",
-      "questionText": "Select the answer that correctly completes the sentence. You can use the [___] Microsoft Purview solution to detect Microsoft 365 Copilot prompts that contain sensitive information.",
-      "translation": "",
-      "options": [
-        "A. Microsoft Purview DSPM for AI",
-        "B. Data Lifecycle Management",
-        "C. DSPM for AI",
-        "D. Information Barriers",
-        "E. Information Protection"
-      ],
-      "correctAnswer": "A",
-      "explanation": "Microsoft Purview DSPM for AI monitors AI use and detects risky prompts and responses, including interactions involving sensitive information in Microsoft 365 Copilot.",
-      "learnMore": [
-        {
-          "text": "Microsoft Purview DSPM for AI",
-          "url": "https://learn.microsoft.com/en-us/purview/dspm-for-ai"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "88",
-      "questionText": "Select the answer that correctly completes the sentence. If a user shares a Microsoft 365 Copilot agent, you can use [___] to block users from using the agent.",
-      "translation": "",
-      "options": [
-        "A. Governance and Lifecycle actions for agents available in Microsoft 365 admin center",
-        "B. Microsoft Foundry",
-        "C. Microsoft Copilot Studio",
-        "D. the Microsoft 365 admin center",
-        "E. the Power Apps portal"
-      ],
-      "correctAnswer": "D",
-      "explanation": "The Microsoft 365 admin center provides lifecycle controls for Copilot agents, including blocking an agent so users in the organization cannot use it.",
-      "learnMore": [
-        {
-          "text": "Governance and Lifecycle actions for agents available in Microsoft 365 admin center",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-actions?view=o365-worldwide"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "5",
-      "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Yes, No, Yes",
-      "statements": [
-        {
-          "text": "Microsoft 365 Copilot honors Microsoft Purview sensitivity labels.",
-          "answer": "Yes"
-        },
-        {
-          "text": "Microsoft 365 Copilot ignores Microsoft Purview data loss prevention (DLP) policies.",
-          "answer": "No"
-        },
-        {
-          "text": "Microsoft 365 Copilot honors existing Microsoft 365 permissions.",
-          "answer": "Yes"
-        }
-      ],
-      "explanation": "Microsoft 365 Copilot recognizes and uses Purview sensitivity labels, and it honors the user’s existing access permissions when grounding responses. Purview DLP policies can restrict sensitive content in Copilot grounding and interactions, so Copilot does not ignore them.",
-      "learnMore": [
-        {
-          "text": "Learn about sensitivity labels",
-          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
-        },
-        {
-          "text": "Microsoft 365 Copilot data protection architecture",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture-data-protection-auditing"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "7",
-      "questionType": "yes-no",
-      "questionText": "For each statement below, select Yes",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Yes, Yes, No",
-      "statements": [
-        {
-          "text": "Microsoft Purview DSPM for AI can provide insight into ChatGPT usage.",
-          "answer": "Yes"
-        },
-        {
-          "text": "Microsoft Purview DSPM for AI can provide insight into Microsoft 365 Copilot usage.",
-          "answer": "Yes"
-        },
-        {
-          "text": "Microsoft Purview DSPM for AI can block users from using Microsoft 365 Copilot.",
-          "answer": "No"
-        }
-      ],
-      "explanation": "Microsoft Purview DSPM for AI delivers insights and analytics for AI activity, including supported third-party AI sites such as ChatGPT and Microsoft 365 Copilot. DSPM for AI provides visibility, recommendations, and integration with Purview controls; it does not control whether users can access Microsoft 365 Copilot.",
-      "learnMore": [
-        {
-          "text": "Learn about Microsoft Purview Data Security Posture Management for AI",
-          "url": "https://learn.microsoft.com/en-us/purview/dspm-for-ai"
-        },
-        {
-          "text": "Use Microsoft Purview to manage data security and compliance for Microsoft 365 Copilot",
-          "url": "https://learn.microsoft.com/en-ca/purview/ai-m365-copilot"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "16",
-      "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Yes, Yes, No",
-      "statements": [
-        {
-          "text": "A Communication Compliance policy can detect inappropriate text in Microsoft Teams messages.",
-          "answer": "Yes"
-        },
-        {
-          "text": "A Communication Compliance policy can detect offensive language in Microsoft 365 Copilot prompts.",
-          "answer": "Yes"
-        },
-        {
-          "text": "A Communication Compliance policy can be used to retain email messages for 10 years.",
-          "answer": "No"
-        }
-      ],
-      "explanation": "Communication Compliance detects inappropriate, abusive, and offensive text in Teams communications and can analyze Microsoft 365 Copilot prompts and responses for inappropriate or risky interactions. Retaining email for a fixed 10-year period requires Microsoft Purview retention policies or retention labels, rather than a Communication Compliance policy.",
-      "learnMore": [
-        {
-          "text": "Learn about Communication Compliance",
-          "url": "https://learn.microsoft.com/en-us/purview/communication-compliance"
-        },
-        {
-          "text": "Configure a Communication Compliance policy to detect generative AI interactions",
-          "url": "https://learn.microsoft.com/en-us/purview/communication-compliance-copilot"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "17",
-      "questionType": "yes-no",
-      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Yes, Yes, No",
-      "statements": [
-        {
-          "text": "Microsoft Defender for Office 365 provides protection from phishing and malware attacks.",
-          "answer": "Yes"
-        },
-        {
-          "text": "Microsoft Defender for Identity monitors identities in Active Directory domains.",
-          "answer": "Yes"
-        },
-        {
-          "text": "Microsoft Defender Vulnerability Management provides protection for software as a service (SaaS) applications.",
-          "answer": "No"
-        }
-      ],
-      "explanation": "Microsoft Defender for Office 365 protects email and collaboration workloads against phishing and malware. Microsoft Defender for Identity provides monitoring and detection for identities in Active Directory environments. Defender Vulnerability Management focuses on discovering, assessing, prioritizing, and remediating vulnerabilities across organizational assets; SaaS application protection is a Microsoft Defender for Cloud Apps capability.",
-      "learnMore": [
-        {
-          "text": "Why do I need Microsoft Defender for Office 365?",
-          "url": "https://learn.microsoft.com/en-us/defender-office-365/mdo-about"
-        },
-        {
-          "text": "Microsoft Defender for Identity overview",
-          "url": "https://learn.microsoft.com/en-us/defender-for-identity/what-is"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "21",
-      "questionType": "yes-no",
-      "questionText": "For each statement below, select Yes",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Yes, Yes, No",
-      "statements": [
-        {
-          "text": "A sensitivity label can be applied to a Microsoft SharePoint site.",
-          "answer": "Yes"
-        },
-        {
-          "text": "A sensitivity label can be applied to an email message in Microsoft Exchange.",
-          "answer": "Yes"
-        },
-        {
-          "text": "A sensitivity label can be applied to Windows 11 devices.",
-          "answer": "No"
-        }
-      ],
-      "explanation": "Sensitivity labels can protect SharePoint sites through the Groups & sites scope and can be applied to email messages through the Emails scope. They are not applied to Windows devices themselves; Windows integration enables labeling supported files, not the device.",
-      "learnMore": [
-        {
-          "text": "Learn about sensitivity labels",
-          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
-        },
-        {
-          "text": "Use sensitivity labels to protect collaborative workspaces (groups and sites)",
-          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels-teams-groups-sites"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "23",
-      "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "No, Yes, Yes",
-      "statements": [
-        {
-          "text": "For administrators to use SharePoint Advanced Management, all the users in your organization need a Microsoft 365 Copilot license.",
-          "answer": "No"
-        },
-        {
-          "text": "SharePoint Advanced Management can help restrict Microsoft 365 Copilot from accessing Microsoft SharePoint content.",
-          "answer": "Yes"
-        },
-        {
-          "text": "SharePoint Advanced Management is available as a standalone license for organizations without Microsoft 365 Copilot.",
-          "answer": "Yes"
-        }
-      ],
-      "explanation": "Only one assigned Microsoft 365 Copilot license is required for SharePoint administrators to receive the applicable SAM capabilities; licenses are not required for every user. SAM can use Restricted Content Discovery or Restricted Access Control to keep site content from surfacing in Copilot or limit access to an allowed group. Organizations without Copilot can obtain SAM through a standalone license.",
-      "learnMore": [
-        {
-          "text": "SharePoint Advanced Management overview",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/advanced-management"
-        },
-        {
-          "text": "Restrict discovery of SharePoint sites and content",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-content-discovery"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "24",
-      "questionType": "yes-no",
-      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Yes, Yes, No",
-      "statements": [
-        {
-          "text": "You can use a Microsoft Entra security group to assign permissions to Microsoft Entra ID resources.",
-          "answer": "Yes"
-        },
-        {
-          "text": "You can use a Microsoft Entra security group to assign Microsoft 365 licenses.",
-          "answer": "Yes"
-        },
-        {
-          "text": "You can use a Microsoft Entra security group to assign permissions to Microsoft Exchange mailboxes.",
-          "answer": "No"
-        }
-      ],
-      "explanation": "Microsoft Entra security groups can be assigned access to directory resources, applications, and services. Security groups also support group-based Microsoft 365 license assignment. Exchange mailbox permissions require an Exchange-recognized, mail-enabled security group or another supported Exchange recipient; a standard Microsoft Entra security group alone does not meet that requirement.",
-      "learnMore": [
-        {
-          "text": "Learn about Microsoft Entra groups, membership, and access",
-          "url": "https://learn.microsoft.com/en-us/entra/fundamentals/concept-learn-about-groups"
-        },
-        {
-          "text": "Assign or unassign licenses to a group in the Microsoft 365 admin center",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/manage-group-licenses?view=o365-worldwide"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "26",
-      "questionType": "yes-no",
-      "questionText": "For each statement below, select Yes",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "No, Yes, Yes",
-      "statements": [
-        {
-          "text": "Zero Trust requires an Azure subscription.",
-          "answer": "No"
-        },
-        {
-          "text": "Zero Trust is a security strategy, NOT a specific product.",
-          "answer": "Yes"
-        },
-        {
-          "text": "From the Microsoft 365 admin center, you can enable Zero Trust for your organization.",
-          "answer": "Yes"
-        }
-      ],
-      "explanation": "Zero Trust is a security strategy that can be implemented across cloud and on-premises environments; it is not contingent on an Azure subscription. Microsoft explicitly states that Zero Trust is a strategy rather than a product or service. The Microsoft 365 admin center provides the advanced deployment guide to set up the Microsoft Zero Trust security model for an organization.",
-      "learnMore": [
-        {
-          "text": "What is Zero Trust?",
-          "url": "https://learn.microsoft.com/en-us/security/zero-trust/zero-trust-overview"
-        },
-        {
-          "text": "Zero Trust deployment plan with Microsoft 365",
-          "url": "https://learn.microsoft.com/en-us/security/zero-trust/microsoft-365-zero-trust"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "35",
-      "questionType": "yes-no",
-      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Yes, No, Yes",
-      "statements": [
-        {
-          "text": "Administrators can remove a specific Copilot agent from all users.",
-          "answer": "Yes"
-        },
-        {
-          "text": "From the Microsoft 365 admin center, administrators can configure the prompts of a Copilot agent.",
-          "answer": "No"
-        },
-        {
-          "text": "Administrators can deploy Copilot agents to specific users.",
-          "answer": "Yes"
-        }
-      ],
-      "explanation": "Administrators can remove or block an individual agent organization-wide and can deploy agents to selected users or groups. The Microsoft 365 admin center governs agent access, visibility, and lifecycle; configuring an agent’s prompts is performed in the agent-authoring experience, such as Microsoft Copilot Studio.",
-      "learnMore": [
-        {
-          "text": "Agent Registry in the Microsoft 365 admin center",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-registry?view=o365-worldwide"
-        },
-        {
-          "text": "Configure suggested prompts for Teams and Microsoft 365",
-          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/configure-starter-prompts"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "37",
-      "questionType": "yes-no",
-      "questionText": "For each statement, select Yes",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Yes, Yes, No",
-      "statements": [
-        {
-          "text": "From the Copilot Prompt Gallery, you can modify a saved prompt.",
-          "answer": "Yes"
-        },
-        {
-          "text": "From the Copilot Prompt Gallery, you can share a saved prompt to a Microsoft Teams team.",
-          "answer": "Yes"
-        },
-        {
-          "text": "You can create a shared link for a prompt that was NOT saved to the Copilot Prompt Gallery.",
-          "answer": "No"
-        }
-      ],
-      "explanation": "Microsoft's own support documentation for Prompt Gallery states that from Your Prompts you can click any saved prompt to view, edit, or run it, so a saved prompt can indeed be modified in place. Prompt Gallery also lets a user share a saved prompt directly with a Microsoft Teams team. However, the sharing workflow is only exposed for prompts that already exist in Your Prompts (accessed by hovering a saved prompt and selecting the share option), so a prompt that was never saved cannot be turned into a shared link.",
-      "learnMore": [
-        {
-          "text": "Save your favorite prompts to use again",
-          "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/save-your-favorite-prompts-to-use-again"
-        },
-        {
-          "text": "Understand Prompt Gallery in Copilot",
-          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/copilot-prompt-gallery"
-        }
-      ],
-      "images": []
-    },
-    {
       "number": "44",
       "questionType": "yes-no",
       "questionText": "For each statement, select Yes",
@@ -1446,6 +993,27 @@
         {
           "text": "Audit log activities",
           "url": "https://learn.microsoft.com/en-us/purview/audit-log-activities"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "45",
+      "questionText": "Select the answer that correctly completes the sentence. From the Microsoft Purview portal, you can use Data explorer to [___]",
+      "translation": "",
+      "options": [
+        "A. Get started with data explorer",
+        "B. create and manage privacy policies.",
+        "C. perform searches for content in mailboxes and sites.",
+        "D. identify sensitive information and where it is located.",
+        "E. review the effectiveness of your data loss prevention (DLP) policies."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft Purview Data Explorer shows items classified by sensitive information types and enables investigation of the locations where those items reside.",
+      "learnMore": [
+        {
+          "text": "Get started with data explorer",
+          "url": "https://learn.microsoft.com/en-us/purview/data-classification-data-explorer"
         }
       ],
       "images": []
@@ -1482,6 +1050,62 @@
           "url": "https://learn.microsoft.com/en-us/purview/compliance-manager-scoring"
         }
       ],
+      "images": []
+    },
+    {
+      "number": "47",
+      "questionText": "Select the answer that correctly completes the sentence. [___] is a unified enterprise suite that coordinates detection, prevention, investigation, and response across endpoints, identities, email, and applications to provide integrated protection against sophisticated attacks.",
+      "translation": "",
+      "options": [
+        "A. What is Microsoft Defender XDR?",
+        "B. Microsoft Defender XDR",
+        "C. Microsoft Entra Conditional Access",
+        "D. Microsoft Entra ID Protection",
+        "E. Microsoft Purview"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Microsoft Defender XDR natively coordinates prevention, detection, investigation, and response across endpoints, identities, email, and applications, providing integrated protection against sophisticated attacks.",
+      "learnMore": [
+        {
+          "text": "What is Microsoft Defender XDR?",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/security/strengthen-security-posture-configure-capabilities?view=o365-worldwide"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "48",
+      "questionText": "Your company requires every Microsoft SharePoint site to have at least two owners. You need to make sites with fewer than two owners read-only when they are not remediated. What should you configure in the SharePoint admin center?",
+      "translation": "",
+      "options": [
+        "A. Site-level access restriction",
+        "B. Data access governance reports",
+        "C. Site lifecycle management",
+        "D. Block download policy for SharePoint and OneDrive"
+      ],
+      "correctAnswer": "C",
+      "explanation": "SharePoint Site lifecycle management contains site ownership policies, which define the minimum required number of owners or administrators, notify responsible users about noncompliance, and support enforcement actions such as read-only access. Microsoft documents that setting the minimum owner count to two identifies sites requiring remediation.",
+      "learnMore": [
+        {
+          "text": "Create a SharePoint site ownership policy",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/site-ownership-policy"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "49",
+      "questionText": "Your organization has a Microsoft 365 subscription. Which two tasks can you perform by using the Exchange admin center? Each correct answer presents part of the solution. NOTE: Each correct selection is worth one point. Choose two",
+      "translation": "",
+      "options": [
+        "A. Assign a Microsoft Exchange license.",
+        "B. Create a mail flow rule.",
+        "C. Create a shared mailbox.",
+        "D. Add a custom domain."
+      ],
+      "correctAnswer": "BC",
+      "explanation": "The Exchange admin center is where mail flow (transport) rules are created and managed, and it is also one of the places administrators create and configure shared mailboxes. Assigning licenses and adding a custom domain are tenant-wide setup tasks handled in the Microsoft 365 admin center, not the Exchange admin center.",
+      "learnMore": [],
       "images": []
     },
     {
@@ -1548,6 +1172,27 @@
         {
           "text": "Microsoft 365 Copilot app overview for IT admins",
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-app-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "52",
+      "questionText": "Select the answer that correctly completes the sentence. In the Microsoft 365 admin center, the Credits used metric in the Copilot credits report shows the total credits used by users in your organization that [___] and are interacting with work grounded agents in Microsoft 365 Copilot Chat.",
+      "translation": "",
+      "options": [
+        "A. Microsoft 365 Copilot credits report",
+        "B. use Microsoft Teams",
+        "C. are external to your organization",
+        "D. are assigned a Microsoft 365 Copilot license",
+        "E. are NOT assigned a Microsoft 365 Copilot license"
+      ],
+      "correctAnswer": "E",
+      "explanation": "The Copilot credits report measures metered agent interactions in Microsoft 365 Copilot Chat by users in the organization who are not assigned a Microsoft 365 Copilot license.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot credits report",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/activity-reports/microsoft-365-copilot-credits?view=o365-worldwide"
         }
       ],
       "images": []
@@ -1651,6 +1296,26 @@
       "images": []
     },
     {
+      "number": "56",
+      "questionText": "You use Microsoft 365 Copilot. What does Copilot use to create responses from corporate data stored in Microsoft SharePoint?",
+      "translation": "",
+      "options": [
+        "A. Microsoft Intune",
+        "B. Microsoft Defender",
+        "C. Microsoft Graph",
+        "D. Microsoft Purview"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Microsoft 365 Copilot uses Microsoft Graph to retrieve and ground responses with organizational data, including SharePoint documents, while honoring each user's existing permissions.",
+      "learnMore": [
+        {
+          "text": "How does Microsoft 365 Copilot work?",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
+        }
+      ],
+      "images": []
+    },
+    {
       "number": "57",
       "questionType": "yes-no",
       "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
@@ -1680,6 +1345,60 @@
         {
           "text": "Microsoft 365 Copilot Researcher agent frequently asked questions",
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/faq-researcher"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "58",
+      "questionText": "Your organization has a Microsoft 365 subscription. All users have Microsoft 365 Copilot licenses assigned. Some users report getting Copilot responses that include information from a Microsoft SharePoint site named Finance. The users state that the information is commercially sensitive. You need to stop Copilot from providing responses that include information from the Finance site. What should you do?",
+      "translation": "",
+      "options": [
+        "A. From Microsoft Purview, create an Information Barrier (IB) policy.",
+        "B. From Microsoft Defender, create a data connector.",
+        "C. From Microsoft Entra, create a Conditional Access policy.",
+        "D. From the Finance site, configure permissions."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft 365 Copilot accesses SharePoint data in the context of the signed-in user and honors that user’s existing permissions. Restricting permissions on the Finance site removes unauthorized users’ access to its content, so Copilot cannot use that content in responses for those users.",
+      "learnMore": [
+        {
+          "text": "How does Microsoft 365 Copilot work?",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
+        },
+        {
+          "text": "Understanding permission levels in SharePoint",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/understanding-permission-levels"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "59",
+      "questionType": "multi-dropdown",
+      "questionText": "Your organization has a Microsoft 365 subscription. You need to use Microsoft Purview to meet these requirements: Prevent users from sharing files that contain Personally Identifiable Information (PII). Use machine learning to train a model that detects sensitive content. Which Microsoft Purview solution should you use for each requirement?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Data Loss Prevention, Information Protection",
+      "statements": [
+        {
+          "text": "Prevent users from sharing PII:",
+          "answer": "Data Loss Prevention"
+        },
+        {
+          "text": "Use machine learning to train a model:",
+          "answer": "Information Protection"
+        }
+      ],
+      "explanation": "Microsoft Purview DLP policies identify sensitive information and help prevent inappropriate sharing of sensitive files. Microsoft Purview Information Protection provides data classification, including trainable classifiers that learn from example content to identify sensitive content.",
+      "learnMore": [
+        {
+          "text": "Learn about data loss prevention",
+          "url": "https://learn.microsoft.com/en-ca/purview/dlp-learn-about-dlp"
+        },
+        {
+          "text": "Microsoft Purview Information Protection",
+          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
         }
       ],
       "images": []
@@ -1719,6 +1438,186 @@
       "images": []
     },
     {
+      "number": "61",
+      "questionType": "hotspot",
+      "questionText": "",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Microsoft Purview eDiscovery",
+      "explanation": "Microsoft Purview eDiscovery can locate SharePoint and OneDrive files by properties including author and last-modified time, and it can export the matching content. Audit is used to review logged activities, not to retrieve copies of the files.",
+      "learnMore": [
+        {
+          "text": "Finding content in sites in eDiscovery",
+          "url": "https://learn.microsoft.com/en-us/purview/edisc-search-sites"
+        },
+        {
+          "text": "Export search results in eDiscovery",
+          "url": "https://learn.microsoft.com/en-us/purview/edisc-search-export"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "62",
+      "questionText": "Select the answer that correctly completes the sentence. The Microsoft responsible AI principle of [___] requires the oversight of AI systems to ensure that humans remain in control.",
+      "translation": "",
+      "options": [
+        "A. accountability",
+        "B. inclusiveness",
+        "C. privacy and security",
+        "D. reliability and safety",
+        "E. transparency"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Accountability requires people to oversee AI systems and remain responsible for their decisions and outcomes, ensuring that humans retain control.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "63",
+      "questionText": "Select the answer that correctly completes the sentence. Microsoft 365 Copilot retrieves data from [___] by using Microsoft Graph.",
+      "translation": "",
+      "options": [
+        "A. Microsoft 365 Copilot overview",
+        "B. Azure OpenAI",
+        "C. external users",
+        "D. Microsoft SharePoint files",
+        "E. web searchers"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft 365 Copilot uses Microsoft Graph to access organizational content for grounding, including files stored in SharePoint.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot overview",
+          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "64",
+      "questionText": "Select the answer that correctly completes the sentence. Restricted SharePoint Search enables you to restrict [___] access to Microsoft SharePoint sites without preventing users from accessing the files and content to which they have permission.",
+      "translation": "",
+      "options": [
+        "A. Restricted SharePoint Search - SharePoint in Microsoft 365",
+        "B. administrator",
+        "C. guest user",
+        "D. Microsoft 365 Copilot",
+        "E. Microsoft Purview eDiscovery"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Restricted SharePoint Search restricts Microsoft 365 Copilot’s access to a curated set of SharePoint sites. It does not alter existing user permissions, so users retain access to content for which they are authorized.",
+      "learnMore": [
+        {
+          "text": "Restricted SharePoint Search - SharePoint in Microsoft 365",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-sharepoint-search"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "65",
+      "questionText": "Select the answer that correctly completes the sentence. Microsoft Entra Privileged Identity Management (PIM) provides [___]",
+      "translation": "",
+      "options": [
+        "A. restricted access to Microsoft 365 services.",
+        "B. the lifecycle management of users.",
+        "C. the management of enterprise applications.",
+        "D. time-bound role activation."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft Entra Privileged Identity Management enables just-in-time privileged access: eligible users activate assigned roles when needed for a defined, time-limited duration.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "66",
+      "questionType": "hotspot",
+      "questionText": "",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Data access governance",
+      "explanation": "Use Data access governance. Its SharePoint reports help identify potentially overshared content and review sharing/access exposure.",
+      "learnMore": [
+        {
+          "text": "Data access governance reports for SharePoint and OneDrive sites",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "67",
+      "questionText": "Your organization has a Microsoft 365 subscription. Your company recently purchased Microsoft 365 Copilot licenses for some users. You need to identify how many unlicensed users have used Copilot in Microsoft Teams. Which usage report should you use in the Microsoft 365 admin center?",
+      "translation": "",
+      "options": [
+        "A. Microsoft 365 Copilot Chat",
+        "B. Microsoft 365 Copilot Search",
+        "C. Microsoft 365 Apps",
+        "D. Microsoft 365 Copilot"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The Microsoft 365 Copilot Chat usage report specifically covers users who do not hold a Microsoft 365 Copilot license, tracking their interactions with Copilot Chat across Teams, Outlook, Word, Excel, PowerPoint, and other apps. The Microsoft 365 Copilot usage report, by contrast, reports only on users who already hold a Copilot license.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot Chat usage report",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/activity-reports/microsoft-copilot-usage"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "68",
+      "questionText": "What can you use to block a user account automatically when a risky sigh-in is detected?",
+      "translation": "",
+      "options": [
+        "A. Microsoft Defender for Identity",
+        "B. Microsoft Entra ID Protection",
+        "C. Microsoft Defender for Office 365",
+        "D. Microsoft Entra Privileged Identity Management (PIM)"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Microsoft Entra ID Protection detects risky sign-in behavior and automatically enforces risk policies, including blocking access or requiring password changes when suspicious activity is detected. This is the dedicated identity-risk tool within the Microsoft security stack. Defender for Identity focuses on on-premises threats; Defender for Office 365 protects email; PIM manages privileged access.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "69",
+      "questionText": "Select the answer that correctly completes the sentence. In Microsoft Entra Privileged Identity Management (PIM), an administrator has made you eligible for the User Administrator role. Before you can create a user account, you must [___]",
+      "translation": "",
+      "options": [
+        "A. Activate Microsoft Entra roles in PIM",
+        "B. activate the role.",
+        "C. install the Microsoft Authenticator app.",
+        "D. request a license.",
+        "E. update your location information."
+      ],
+      "correctAnswer": "B",
+      "explanation": "An eligible Microsoft Entra PIM role assignment provides no active permissions until the user activates it. Activating the eligible User Administrator role makes its directory permissions available, including the ability to create user accounts.",
+      "learnMore": [
+        {
+          "text": "Activate Microsoft Entra roles in PIM",
+          "url": "https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-how-to-activate-role"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "70",
+      "questionText": "Your company is evaluating Microsoft 365 Copilot pay-as-you-go billing instead of purchasing a Microsoft 365 Copilot license. In which scenario can pay-as-you-go billing apply?",
+      "translation": "",
+      "options": [
+        "A. performing multi-step reasoning by using the Researcher agent",
+        "B. generating a recap of a Microsoft Teams meeting",
+        "C. using a custom agent that is grounded in work data",
+        "D. using the AI assistant to edit a document in Copilot in Word"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Pay-as-you-go billing for Microsoft 365 Copilot specifically applies to messages consumed by custom agents built in Copilot Studio that are grounded in organizational or work data. This consumption-based model allows organizations to pay per message rather than purchasing per-user licenses, making it suitable for scenarios with variable or broad audiences accessing custom agents. The other options represent core M365 Copilot licensed features requiring per-user licenses.",
+      "learnMore": [],
+      "images": []
+    },
+    {
       "number": "71",
       "questionType": "yes-no",
       "questionText": "For each statement below, select Yes",
@@ -1750,6 +1649,156 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
         }
       ],
+      "images": []
+    },
+    {
+      "number": "72",
+      "questionText": "Select the answer that correctly completes the sentence. [___] includes signals, such as collaboration history, document relevance, and communication frequency, which influence Microsoft 365 Copilot responses.",
+      "translation": "",
+      "options": [
+        "A. Microsoft 365 Copilot overview",
+        "B. Microsoft Copilot Studio",
+        "C. Microsoft Graph",
+        "D. Microsoft Purview",
+        "E. Microsoft Viva Insights"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Microsoft Graph connects Microsoft 365 data and relationship signals that Microsoft 365 Copilot uses to ground and personalize responses. Copilot Studio is for creating and extending copilots, Purview focuses on governance and compliance, and Viva Insights provides workplace analytics.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot overview",
+          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "73",
+      "questionType": "hotspot",
+      "questionText": "",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Private",
+      "explanation": "Set the site privacy to Private and configure Restricted site access with Group1. Restricted site access blocks users outside the specified Entra security group even if they previously had permissions or a shared link; a member must also have the underlying site or content permission.",
+      "learnMore": [
+        {
+          "text": "Restrict SharePoint site access with Microsoft 365 groups and Microsoft Entra security groups",
+          "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-access-control"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "74",
+      "questionType": "multi-dropdown",
+      "questionText": "Your company uses Microsoft 365 Copilot pay-as-you-go billing. The company wants improved visibility into Copilot usage costs and the ability to forecast departmental spending. You need to ensure that you can view Copilot costs by department. What should you use?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "The Microsoft 365 admin center, A billing policy",
+      "statements": [
+        {
+          "text": "Portal:",
+          "answer": "The Microsoft 365 admin center"
+        },
+        {
+          "text": "Feature:",
+          "answer": "A billing policy"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot pay-as-you-go billing is configured in the Microsoft 365 admin center through billing policies. A billing policy allocates billing responsibility across departments, associates users with billing rules and an Azure subscription, and supports budget and spending monitoring. Auto-claim policies assign licenses, while Copilot connectors index external content; neither provides Copilot consumption billing.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot pay-as-you-go overview for IT admins",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/overview"
+        },
+        {
+          "text": "Set up Microsoft 365 Copilot pay-as-you-go services",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/setup"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "75",
+      "questionText": "Your organization has a Microsoft 365 subscription. You need to investigate security incidents and alerts generated by the Windows 11 devices in your organization. What should you use?",
+      "translation": "",
+      "options": [
+        "A. Microsoft Entra ID Protection",
+        "B. Microsoft Defender for Identity",
+        "C. Microsoft Purview Insider Risk Management",
+        "D. Microsoft Defender for Endpoint"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft Defender for Endpoint provides endpoint detection and response capabilities for Windows devices, including investigating incidents and alerts, reviewing affected devices, and collecting related evidence.",
+      "learnMore": [
+        {
+          "text": "Investigate incidents in Microsoft Defender for Endpoint",
+          "url": "https://learn.microsoft.com/en-us/defender-endpoint/investigate-incidents"
+        },
+        {
+          "text": "Investigate devices in the Microsoft Defender for Endpoint Devices list",
+          "url": "https://learn.microsoft.com/en-us/defender-endpoint/investigate-machines"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "76",
+      "questionText": "Your company is piloting Microsoft 365 Copilot and has purchased 100 Microsoft 365 Copilot licenses. You need to view detailed reports on Copilot usage in Microsoft Teams, including meeting hours summarized by Copilot and meeting actions taken using Copilot. What should you use?",
+      "translation": "",
+      "options": [
+        "A. the Microsoft 365 Copilot readiness report in the Microsoft 365 admin center",
+        "B. the Microsoft 365 Copilot usage report in the Microsoft 365 admin center",
+        "C. the Microsoft 365 Copilot dashboard in Microsoft Viva Insights",
+        "D. the Microsoft 365 Apps usage report in the Microsoft 365 admin center"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The Microsoft Copilot Dashboard in Microsoft Viva Insights provides detailed adoption and impact metrics for Teams, including total meeting hours summarized or recapped by Copilot and meeting-summary actions taken using Copilot. Organizations with at least 50 assigned Copilot licenses have access to its full capabilities.",
+      "learnMore": [
+        {
+          "text": "Connect to the Microsoft Copilot Dashboard for Microsoft 365 customers",
+          "url": "https://learn.microsoft.com/en-us/viva/insights/org-team-insights/copilot-dashboard"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "77",
+      "questionText": "User1 creates a Microsoft 365 Copilot agent named Agent1 and shares it with User2. What happens when an administrator blocks Agent1?",
+      "translation": "",
+      "options": [
+        "A. Agent1 is accessible to User1 and User2 until the users manually uninstall Agent. No other users can install Agent1.",
+        "B. Agent1 is accessible to User1 and User2, and no other users can install Agent1.",
+        "C. Agent1 is removed from User2, and User1 can continue to use Agent1.",
+        "D. Agent1is removed from User1 and User2, and no users can install Agent1."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Blocking a Microsoft 365 Copilot agent blocks it for members of the organization: they cannot install or use it, and it is removed from users who had already installed it. This includes both the creator and users with whom it was shared.",
+      "learnMore": [
+        {
+          "text": "Understand agent details in Microsoft 365 admin center",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-details?view=o365-worldwide"
+        },
+        {
+          "text": "Agent Registry in the Microsoft 365 admin center",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-registry?view=o365-worldwide"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "78",
+      "questionText": "Your company has a Microsoft SharePoint site named Site1. Site1 contains all the policies of the company’s HR department. The policies are saved as Microsoft Word documents. All users have read access to Site1. The HR department manager reports that user requests about the policies are NOT being addressed in a timely manner, especially around major holidays. You need to recommend a solution to enable the users to find the HR department policies. The solution must provide the users with a list of common queries and ensure that responses are grounded only in Site1. What should you include in the recommendation?",
+      "translation": "",
+      "options": [
+        "A. the personal assistant in Copilot in Word",
+        "B. a custom Microsoft 365 Copilot agent",
+        "C. the Researcher agent in Microsoft 365 Copilot",
+        "D. a Microsoft 365 Copilot notebook"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A custom Microsoft 365 Copilot agent can be scoped so its knowledge comes only from Site1, and it can be configured with a curated set of starter prompts covering the common HR policy questions users ask. The Researcher agent and the personal assistant in Copilot in Word are not restricted to a single SharePoint site, and a notebook is a personal workspace rather than a shared, discoverable tool for other users.",
+      "learnMore": [],
       "images": []
     },
     {
@@ -1787,84 +1836,64 @@
       "images": []
     },
     {
-      "number": "10",
-      "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. User1 is [___] Site1.",
+      "number": "80",
+      "questionText": "Your organization has a Microsoft 365 subscription. You need to assess your organization’s Identity Secure Score. Which two factors affect the score? Each correct answer presents a complete solution. > NOTE: Each correct selection is worth one point. Choose two",
       "translation": "",
       "options": [
-        "A. a site visitor of",
-        "B. a site owner of",
-        "C. a site member of",
-        "D. prevented from accessing"
+        "A. the SharePoint site permissions",
+        "B. the number of global administrators",
+        "C. passwords that are never expired",
+        "D. the location of the users"
       ],
-      "correctAnswer": "C",
-      "explanation": "“Everyone except external users” automatically includes internal users in the organization. Because that principal is a member of Site1’s Site members group, User1 receives the members group’s Edit access.",
+      "correctAnswer": "BC",
+      "explanation": "Microsoft Entra Identity Secure Score includes recommendations to designate more than one Global Administrator and to not expire passwords. Compliance with these identity-security recommendations affects the score.",
       "learnMore": [
         {
-          "text": "Default SharePoint groups",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/default-sharepoint-groups"
+          "text": "What is the Identity Secure Score?",
+          "url": "https://learn.microsoft.com/en-us/entra/identity/monitoring-health/concept-identity-secure-score"
         }
       ],
       "images": []
     },
     {
-      "number": "11",
-      "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. Resolving the [___] recommendation will improve the Identity Secure Score the most.",
+      "number": "81",
+      "questionText": "Your organization has a Microsoft 365 E5 subscription. You need to prevent users from sharing corporate financial data to external users. What should you use?",
       "translation": "",
       "options": [
-        "A. Do not expire passwords",
-        "B. Use least privileged administrative roles",
-        "C. Enable policy to block legacy authentication",
-        "D. Require multifactor authentication for administrative roles"
+        "A. role groups",
+        "B. data loss prevention (DLP) policies",
+        "C. insider risk management policies",
+        "D. retention labels"
       ],
-      "correctAnswer": "D",
-      "explanation": "Microsoft Entra Secure Score recommendations contribute only their unachieved points. Requiring multifactor authentication for administrative roles has 0 of 10 points achieved, so resolving it adds up to 10 points. Blocking legacy authentication has only 7.27 points remaining, while the other two recommendations are already fully achieved.",
-      "learnMore": [],
+      "correctAnswer": "B",
+      "explanation": "Data Loss Prevention (DLP) policies detect sensitive information patterns (financial data, personally identifiable information) and automatically block or restrict sharing to external recipients. DLP rules can identify and prevent unauthorized external sharing of corporate financial data before transmission. Role groups, insider risk management, and retention labels do not provide content-based sharing controls.",
+      "learnMore": [
+        "QUESTION 80",
+        "81 / 88",
+        "QUESTION 82"
+      ],
       "images": []
     },
     {
-      "number": "14",
-      "questionType": "mc",
-      "questionText": "EXAM CADEMY Search Ctrl K MODES Browse Saved Learn Exam GAMES Blitz Survival TOOLS Readiness BETA AstroTutor Notes Scroll to top freddy.orozco729 freddy.orozco729@gmail.com Exams / Microsoft / AB-900: Microsoft 365 Copilot and Agent Administration Fundamentals / You have a Microsoft SharePoint site, as shown in the following exhibit. Question 14 Understand data protection and governance tasks for Microsoft 365 and Copilot You have a Microsoft SharePoint site, as shown in the following exhibit. You need to view the settings for SLabel1. What should you use?",
+      "number": "82",
+      "questionText": "Your organization has a Microsoft 365 subscription. You need to assess the impact of a recent phishing incident that targeted email users. What should you use?",
       "translation": "",
       "options": [
         "A. the Microsoft Defender portal",
-        "B. the SharePoint admin center",
-        "C. the Microsoft 365 admin center",
-        "D. the Microsoft Purview portal"
+        "B. the Microsoft 365 admin center",
+        "C. the Microsoft Entra admin center",
+        "D. the Microsoft Exchange admin center"
       ],
-      "correctAnswer": "D",
-      "explanation": "Sensitivity-label configuration is managed in the Microsoft Purview portal, under Information Protection > Sensitivity labels. The label list there lets administrators open a label and view its configured settings; SharePoint only displays the label assigned to the document.",
+      "correctAnswer": "A",
+      "explanation": "The Microsoft Defender portal provides Microsoft Defender for Office 365 investigation capabilities, including the Phish view in Threat Explorer or Real-time detections, to examine phishing email activity and its impact on affected users. It also consolidates incident alerts and evidence for investigation.",
       "learnMore": [
         {
-          "text": "Learn about sensitivity labels",
-          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
+          "text": "Email security with Threat Explorer and Real-time detections in Microsoft Defender for Office 365",
+          "url": "https://learn.microsoft.com/en-us/defender-office-365/threat-explorer-email-security"
         },
         {
-          "text": "Create and publish sensitivity labels",
-          "url": "https://learn.microsoft.com/en-us/purview/create-sensitivity-labels"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "25",
-      "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. User5 is using [___] for multifactor authentication (MFA).",
-      "translation": "",
-      "options": [
-        "A. email OTP",
-        "B. the Microsoft Authenticator app",
-        "C. SMS",
-        "D. a Temporary Access Pass"
-      ],
-      "correctAnswer": "B",
-      "explanation": "Number matching requires the user to enter the number displayed during sign-in into the Microsoft Authenticator approval prompt. It is an Authenticator push-notification MFA method.",
-      "learnMore": [
-        {
-          "text": "How number matching works in MFA push notifications for Authenticator",
-          "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-mfa-number-match"
+          "text": "Investigate incidents in the Microsoft Defender portal",
+          "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-incidents"
         }
       ],
       "images": []
@@ -1895,156 +1924,127 @@
       "images": []
     },
     {
-      "number": "13",
-      "questionType": "multi-dropdown",
-      "questionText": "Your organization has a Microsoft 365 subscription. You need to use Microsoft Purview to satisfy these requirements: Discover and classify sensitive data across multiple platforms. Block users from sharing intellectual property with external users. Which Microsoft Purview solution should you use for each requirement?",
+      "number": "84",
+      "questionText": "Select the answer that correctly completes the sentence. You can use the [___] Microsoft Purview solution to detect Microsoft 365 Copilot prompts that contain sensitive information.",
       "translation": "",
-      "options": [],
-      "correctAnswer": "Information Protection, Data Loss Prevention",
-      "statements": [
-        {
-          "text": "Discover and classify sensitive data across multiple platforms:",
-          "answer": "Information Protection"
-        },
-        {
-          "text": "Block users from sharing intellectual property with external users:",
-          "answer": "Data Loss Prevention"
-        }
+      "options": [
+        "A. Microsoft Purview DSPM for AI",
+        "B. Data Lifecycle Management",
+        "C. DSPM for AI",
+        "D. Information Barriers",
+        "E. Information Protection"
       ],
-      "explanation": "Microsoft Purview Information Protection discovers and classifies sensitive information across the organization. Microsoft Purview Data Loss Prevention uses policies to prevent prohibited sharing, including sharing sensitive items with external users.",
+      "correctAnswer": "A",
+      "explanation": "Microsoft Purview DSPM for AI monitors AI use and detects risky prompts and responses, including interactions involving sensitive information in Microsoft 365 Copilot.",
       "learnMore": [
         {
-          "text": "Microsoft Purview Information Protection",
-          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
-        },
-        {
-          "text": "Help prevent sharing sensitive items via SharePoint and OneDrive with external users",
-          "url": "https://learn.microsoft.com/en-us/purview/dlp-create-policy-spo-odb-external"
+          "text": "Microsoft Purview DSPM for AI",
+          "url": "https://learn.microsoft.com/en-us/purview/dspm-for-ai"
         }
       ],
       "images": []
     },
     {
-      "number": "59",
-      "questionType": "multi-dropdown",
-      "questionText": "Your organization has a Microsoft 365 subscription. You need to use Microsoft Purview to meet these requirements: Prevent users from sharing files that contain Personally Identifiable Information (PII). Use machine learning to train a model that detects sensitive content. Which Microsoft Purview solution should you use for each requirement?",
+      "number": "85",
+      "questionText": "Your organization has a Microsoft 365 subscription containing Microsoft SharePoint sites and Microsoft Teams teams. You discover that sites and teams have been shared with users outside your organization. You need to determine which sites and teams were shared with the external users. What should you use?",
       "translation": "",
-      "options": [],
-      "correctAnswer": "Data Loss Prevention, Information Protection",
-      "statements": [
-        {
-          "text": "Prevent users from sharing PII:",
-          "answer": "Data Loss Prevention"
-        },
-        {
-          "text": "Use machine learning to train a model:",
-          "answer": "Information Protection"
-        }
+      "options": [
+        "A. the SharePoint admin center",
+        "B. the Microsoft Teams admin center",
+        "C. the Microsoft 365 admin center",
+        "D. the Microsoft Defender portal"
       ],
-      "explanation": "Microsoft Purview DLP policies identify sensitive information and help prevent inappropriate sharing of sensitive files. Microsoft Purview Information Protection provides data classification, including trainable classifiers that learn from example content to identify sensitive content.",
+      "correctAnswer": "C",
+      "explanation": "The Microsoft 365 admin center centrally lists guest users and manages membership of active teams and Microsoft 365 groups. Microsoft Teams uses Microsoft 365 Groups for team membership, so external guest membership can be identified there for Teams and their group-connected resources.",
       "learnMore": [
         {
-          "text": "Learn about data loss prevention",
-          "url": "https://learn.microsoft.com/en-ca/purview/dlp-learn-about-dlp"
+          "text": "Guests in the Microsoft 365 admin center",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/add-users/about-guest-users?view=o365-worldwide"
         },
         {
-          "text": "Microsoft Purview Information Protection",
-          "url": "https://learn.microsoft.com/en-us/purview/information-protection"
+          "text": "Manage guest access in Microsoft 365 groups",
+          "url": "https://learn.microsoft.com/en-sg/microsoft-365/admin/create-groups/manage-guest-access-in-groups?view=o365-worldwide"
         }
       ],
       "images": []
     },
     {
-      "number": "74",
-      "questionType": "multi-dropdown",
-      "questionText": "Your company uses Microsoft 365 Copilot pay-as-you-go billing. The company wants improved visibility into Copilot usage costs and the ability to forecast departmental spending. You need to ensure that you can view Copilot costs by department. What should you use?",
+      "number": "86",
+      "questionText": "Your organization uses a Microsoft 365 subscription. All users are licensed for Microsoft 365 Copilot. You need to determine where sensitive content is used in Copilot interactions, analyze content-usage patterns, and receive recommendations for applying the appropriate protections. What should you use?",
       "translation": "",
-      "options": [],
-      "correctAnswer": "The Microsoft 365 admin center, A billing policy",
-      "statements": [
-        {
-          "text": "Portal:",
-          "answer": "The Microsoft 365 admin center"
-        },
-        {
-          "text": "Feature:",
-          "answer": "A billing policy"
-        }
+      "options": [
+        "A. Microsoft Viva Insights",
+        "B. the Microsoft Purview DSPM for AI solution",
+        "C. Microsoft Security Copilot",
+        "D. the Microsoft Purview Insider Risk Management solution"
       ],
-      "explanation": "Microsoft 365 Copilot pay-as-you-go billing is configured in the Microsoft 365 admin center through billing policies. A billing policy allocates billing responsibility across departments, associates users with billing rules and an Azure subscription, and supports budget and spending monitoring. Auto-claim policies assign licenses, while Copilot connectors index external content; neither provides Copilot consumption billing.",
+      "correctAnswer": "B",
+      "explanation": "Microsoft Purview Data Security Posture Management (DSPM) for AI assesses how Microsoft 365 Copilot interacts with sensitive data, provides visibility into AI usage and data exposure risks, and recommends controls such as sensitivity labels and data loss prevention policies to protect that data.",
       "learnMore": [
         {
-          "text": "Microsoft 365 Copilot pay-as-you-go overview for IT admins",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/overview"
+          "text": "Understand How to Secure AI Data with Microsoft Purview",
+          "url": "https://learn.microsoft.com/en-us/training/modules/purview-ai-understand-risks/"
         },
         {
-          "text": "Set up Microsoft 365 Copilot pay-as-you-go services",
-          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/setup"
+          "text": "Learn about Data Security Posture Management for AI",
+          "url": "https://learn.microsoft.com/en-us/purview/dspm-for-ai"
         }
       ],
       "images": []
     },
     {
-      "number": "38",
-      "questionType": "hotspot",
-      "questionText": "",
+      "number": "87",
+      "questionText": "Your organization has a Microsoft 365 E5 subscription. You create a Microsoft Purview sensitivity label named Label1. You need to ensure that users can apply Label1 to files in Microsoft 365. What should you use?",
       "translation": "",
-      "options": [],
-      "correctAnswer": "Change history",
-      "explanation": "Change history records changes to SharePoint site settings, allowing administrators to identify modifications made by a site administrator. Select Change history.",
+      "options": [
+        "A. a sensitivity label policy",
+        "B. a trainable classifier",
+        "C. a retention label policy",
+        "D. an auto-labeling policy"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A sensitivity label must be published via a sensitivity label policy to make it visible and applicable to end users. Creating the label alone does not expose it in Office applications; the policy controls which users see the label and what protection settings apply when it is applied. Trainable classifiers, retention policies, and auto-labeling policies serve different purposes in the information governance workflow.",
+      "learnMore": [
+        "QUESTION 86",
+        "87 / 88",
+        "QUESTION 88"
+      ],
+      "images": []
+    },
+    {
+      "number": "88",
+      "questionText": "Select the answer that correctly completes the sentence. If a user shares a Microsoft 365 Copilot agent, you can use [___] to block users from using the agent.",
+      "translation": "",
+      "options": [
+        "A. Governance and Lifecycle actions for agents available in Microsoft 365 admin center",
+        "B. Microsoft Foundry",
+        "C. Microsoft Copilot Studio",
+        "D. the Microsoft 365 admin center",
+        "E. the Power Apps portal"
+      ],
+      "correctAnswer": "D",
+      "explanation": "The Microsoft 365 admin center provides lifecycle controls for Copilot agents, including blocking an agent so users in the organization cannot use it.",
+      "learnMore": [
+        {
+          "text": "Governance and Lifecycle actions for agents available in Microsoft 365 admin center",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-actions?view=o365-worldwide"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "89",
+      "questionText": "You need to identify files and emails that contain social security numbers (SSNs) and credit card numbers. What should you use in the Microsoft Purview portal?",
+      "translation": "",
+      "options": [
+        "A. Data explorer",
+        "B. Information Protection reports",
+        "C. Information Protection policies",
+        "D. Activity explorer"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Data Explorer in Microsoft Purview displays files and emails matching sensitive information type definitions, including built-in patterns for U.S. Social Security Numbers and credit card numbers. It shows where sensitive data is stored across SharePoint, OneDrive, Exchange, and Teams. Information Protection policies and Activity Explorer serve different functions; Information Protection reports lack the granular file/email visibility.",
       "learnMore": [],
-      "images": []
-    },
-    {
-      "number": "61",
-      "questionType": "hotspot",
-      "questionText": "",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Microsoft Purview eDiscovery",
-      "explanation": "Microsoft Purview eDiscovery can locate SharePoint and OneDrive files by properties including author and last-modified time, and it can export the matching content. Audit is used to review logged activities, not to retrieve copies of the files.",
-      "learnMore": [
-        {
-          "text": "Finding content in sites in eDiscovery",
-          "url": "https://learn.microsoft.com/en-us/purview/edisc-search-sites"
-        },
-        {
-          "text": "Export search results in eDiscovery",
-          "url": "https://learn.microsoft.com/en-us/purview/edisc-search-export"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "66",
-      "questionType": "hotspot",
-      "questionText": "",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Data access governance",
-      "explanation": "Use Data access governance. Its SharePoint reports help identify potentially overshared content and review sharing/access exposure.",
-      "learnMore": [
-        {
-          "text": "Data access governance reports for SharePoint and OneDrive sites",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "73",
-      "questionType": "hotspot",
-      "questionText": "",
-      "translation": "",
-      "options": [],
-      "correctAnswer": "Private",
-      "explanation": "Set the site privacy to Private and configure Restricted site access with Group1. Restricted site access blocks users outside the specified Entra security group even if they previously had permissions or a shared link; a member must also have the underlying site or content permission.",
-      "learnMore": [
-        {
-          "text": "Restrict SharePoint site access with Microsoft 365 groups and Microsoft Entra security groups",
-          "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-access-control"
-        }
-      ],
       "images": []
     }
   ]
