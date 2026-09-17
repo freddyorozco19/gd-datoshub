@@ -1725,7 +1725,7 @@
       "questionText": "You have a Microsoft SharePoint site named Site1 and a security group named Group1. You must prevent all users who currently have access to Site1 from accessing its content unless they are also members of Group1. Which settings should you configure?",
       "translation": "",
       "options": [],
-      "correctAnswer": "Private",
+      "correctAnswer": "Privacy (set to Private) and Restricted site access",
       "explanation": "Set the site privacy to Private and configure Restricted site access with Group1. Restricted site access blocks users outside the specified Entra security group even if they previously had permissions or a shared link; a member must also have the underlying site or content permission.",
       "learnMore": [
         {
