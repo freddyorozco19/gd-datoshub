@@ -578,7 +578,7 @@ function QuestionCard({
       >
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">
-            <span className="text-xs font-mono text-slate-500 shrink-0">#{index + 1}</span>
+            <span className="text-xs font-mono text-slate-500 shrink-0">#{q.number}</span>
             <span className="text-sm text-slate-300 truncate">
               {(() => { const t = shown.questionText?.split('\n')[0] || shown.number; return t.length > 110 ? t.slice(0, 110) + '…' : t })()}
             </span>
