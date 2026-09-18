@@ -103,7 +103,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#4285F4',
     bgGradient: 'from-indigo-950 to-slate-900',
     logo: '◈',
-    logoImg: 'https://e7.pngegg.com/pngimages/569/340/png-clipart-google-cloud-platform-cloud-computing-cloud-storage-google-storage-cloud-security-text-logo.png',
+    logoImg: '/googleEA.webp',
     exams: [
       { id: 'ace',  code: 'ACE',  name: 'Associate Cloud Engineer', level: 'Associate'   },
       { id: 'pca',  code: 'PCA',  name: 'Professional Cloud Arch.', level: 'Professional'},
