@@ -380,10 +380,8 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
         </span>
       )}
 
-      {/* overlay vertical — oscurece los cuadrantes inferiores del logo y el área del texto */}
-      <span className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" style={{ backgroundSize: '100% 60%', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom' }} />
-      {/* refuerzo diagonal — oscurece esquina inferior izquierda donde está el amarillo */}
-      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, transparent 55%)' }} />
+      {/* sombra: negro desde abajo cubriendo cuadrantes inferiores */}
+      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, black 0%, black 25%, rgba(0,0,0,0.75) 45%, transparent 70%)' }} />
 
       {/* texto superpuesto sobre el logo, en la parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
