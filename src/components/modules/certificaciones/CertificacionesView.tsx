@@ -363,7 +363,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
       onClick={onClick}
       className="group relative w-full text-left overflow-hidden rounded-2xl bg-[#0e0e12] border border-white/[0.08] transition-all duration-200
         hover:border-white/15 hover:shadow-2xl hover:shadow-black/70"
-      style={{ aspectRatio: '4/3' }}
+      style={{ aspectRatio: '16/9' }}
     >
       {/* logo pequeño en esquina superior izquierda, clipping natural por la card */}
       {p.logoImg ? (
