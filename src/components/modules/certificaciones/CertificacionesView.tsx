@@ -88,7 +88,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#FF9900',
     bgGradient: 'from-orange-950 to-slate-900',
     logo: '☁',
-    logoImg: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/960px-Amazon_Web_Services_Logo.svg.png',
+    logoImg: '/amazonEA.webp',
     exams: [
       { id: 'aif-c01', code: 'AIF-C01', name: 'AWS Certified AI Practitioner', dataFile: '/data/exam_aifC01.json', questions: 233, level: 'Fundamental' },
       { id: 'clf-c02', code: 'CLF-C02', name: 'Cloud Practitioner',    dataFile: '/data/exam_clf_c02.json', questions: 718, level: 'Fundamental' },
