@@ -481,7 +481,13 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts"
         }
       ],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab730/q21_img0.png",
+          "alt": "Microsoft 365 Copilot with Standings conversation",
+          "inOption": false
+        }
+      ]
     },
     {
       "number": "22",
