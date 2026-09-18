@@ -383,8 +383,8 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
       {/* overlay degradado oscuro inferior */}
       <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
       <span className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent pointer-events-none" />
-      {/* sombra concentrada en esquina inferior derecha */}
-      <span className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at bottom right, black 0%, transparent 65%)' }} />
+      {/* sombra diagonal desde esquina inferior derecha del logo */}
+      <span className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at 45% 80%, rgba(0,0,0,0.85) 0%, transparent 55%)' }} />
 
       {/* texto superpuesto sobre el logo, en la parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
