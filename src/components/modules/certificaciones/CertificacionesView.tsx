@@ -365,31 +365,22 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
         hover:border-white/15 hover:shadow-2xl hover:shadow-black/70"
       style={{ aspectRatio: '4/3' }}
     >
-      {/* logo con máscara radial para que se disuelva en el fondo */}
+      {/* logo pequeño en esquina superior izquierda, clipping natural por la card */}
       {p.logoImg ? (
         <img
           src={p.logoImg}
           alt=""
           aria-hidden
-          className="absolute inset-0 w-full h-full object-contain p-5 pointer-events-none transition-opacity duration-300 opacity-75 group-hover:opacity-95"
-          style={{ objectPosition: 'left bottom', WebkitMaskImage: 'radial-gradient(ellipse 75% 70% at 18% 80%, black 30%, transparent 72%)', maskImage: 'radial-gradient(ellipse 75% 70% at 18% 80%, black 30%, transparent 72%)' }}
+          className="absolute -top-2 -left-2 h-20 w-20 object-contain pointer-events-none opacity-100"
           onError={e => { e.currentTarget.style.display = 'none' }}
         />
       ) : (
-        <span
-          aria-hidden
-          className="absolute inset-0 flex items-center justify-center text-7xl pointer-events-none transition-opacity duration-300 opacity-30 group-hover:opacity-50"
-          style={{ WebkitMaskImage: 'radial-gradient(ellipse 70% 65% at 50% 45%, black 30%, transparent 70%)', maskImage: 'radial-gradient(ellipse 70% 65% at 50% 45%, black 30%, transparent 70%)' }}
-        >
+        <span aria-hidden className="absolute -top-1 -left-1 text-5xl pointer-events-none leading-none opacity-90">
           {p.logo}
         </span>
       )}
 
-      {/* overlay para reforzar el texto */}
-      <span className="absolute inset-0 bg-gradient-to-t from-[#0e0e12] via-[#0e0e12]/50 to-transparent pointer-events-none" />
-      <span className="absolute inset-0 bg-gradient-to-r from-[#0e0e12]/70 via-transparent to-transparent pointer-events-none" />
-
-      {/* texto en la parte inferior */}
+      {/* texto en la parte inferior, separado del logo */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-4">
         <h3 className="text-[15px] font-bold text-white leading-tight tracking-tight">{p.name}</h3>
         <p className="text-[12px] text-slate-500 mt-0.5">{p.exams.length} exams</p>
