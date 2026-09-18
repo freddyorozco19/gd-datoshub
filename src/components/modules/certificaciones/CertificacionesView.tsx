@@ -42,7 +42,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#0078d4',
     bgGradient: 'from-blue-950 to-slate-900',
     logo: '⊞',
-    logoImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPZEN2r056LDjjb6IT5qShwFPl4uJy1-BAgP0hGMmiqQ&s=10',
+    logoImg: '/microsoftEA.webp',
     alias: 'Azure',
     exams: [
       { id: 'ai-100', code: 'AI-100', name: 'Designing/Implementing Azure AI Solution', level: 'Associate'   },
