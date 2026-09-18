@@ -47,7 +47,7 @@ const PROVIDERS: ProviderConfig[] = [
     exams: [
       { id: 'ai-100', code: 'AI-100', name: 'Designing/Implementing Azure AI Solution', level: 'Associate'   },
       { id: 'ai-102', code: 'AI-102', name: 'Azure AI Engineer',                        level: 'Associate'   },
-      { id: 'ab-730', code: 'AB-730', name: 'AI Business Professional',                  dataFile: '/data/exam_ab730.json', questions: 93, level: 'Fundamental' },
+      { id: 'ab-730', code: 'AB-730', name: 'AI Business Professional',                  dataFile: '/data/exam_ab730.json', questions: 92, level: 'Fundamental' },
       { id: 'ab-900', code: 'AB-900', name: 'M365 Copilot & Agent Admin Fundamentals',  dataFile: '/data/exam_ab900.json', questions: 88, level: 'Fundamental' },
       { id: 'ai-900', code: 'AI-900', name: 'Azure AI Fundamentals',                    level: 'Fundamental' },
       { id: 'ai-901', code: 'AI-901', name: 'Microsoft Azure AI',                       dataFile: '/data/exam_ai901.json', questions: 50, level: 'Fundamental' },
@@ -357,11 +357,10 @@ const LEVEL_COLOR: Record<string, string> = {
 
 // ─── Level 1: Provider cards ─────────────────────────────────────────────────
 
-function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }) {
-  const available = p.exams.filter(e => e.dataFile).length
+function ProviderCard({ p, onClick, onSelectExam }: { p: ProviderConfig; onClick: () => void; onSelectExam: (e: ExamConfig) => void }) {
+  const availableExams = p.exams.filter(e => e.dataFile)
   return (
-    <button
-      onClick={onClick}
+    <div
       className={`group relative w-full text-left overflow-hidden rounded-2xl border border-white/10 p-6 transition-all duration-300
         bg-gradient-to-br ${p.bgGradient}
         hover:border-white/25 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50`}
@@ -374,8 +373,8 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
       />
 
       <div className="relative flex h-full flex-col">
-        {/* ── top: logo + flecha ── */}
-        <div className="flex items-start justify-between">
+        {/* ── top: logo + flecha (abre vista de proveedor) ── */}
+        <button onClick={onClick} className="flex items-start justify-between w-full text-left">
           <span className="inline-flex h-12 items-center rounded-xl bg-white/10 px-3 ring-1 ring-inset ring-white/15 backdrop-blur-md">
             {p.logoImg ? (
               <img
@@ -391,37 +390,38 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-400 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white group-hover:translate-x-0.5">
             <ChevronRight size={15} />
           </span>
-        </div>
+        </button>
 
         {/* ── título + meta ── */}
-        <div className="mt-5">
+        <button onClick={onClick} className="mt-5 text-left">
           <h3 className="text-xl font-bold text-white tracking-tight">{p.name}</h3>
           <p className="mt-1 text-[13px] text-slate-400 tracking-wide">
             {p.exams.length} exámenes
-            {available > 0 && (
-              <span className="text-emerald-400 font-medium"> · {available} disponible{available > 1 ? 's' : ''}</span>
+            {availableExams.length > 0 && (
+              <span className="text-emerald-400 font-medium"> · {availableExams.length} disponible{availableExams.length > 1 ? 's' : ''}</span>
             )}
           </p>
-        </div>
+        </button>
 
-        {/* ── chips de exámenes ── */}
-        <div className="mt-4 flex flex-wrap gap-1.5">
-          {p.exams.map(e => (
-            <span
-              key={e.id}
-              title={`${e.name}${e.dataFile ? ' · disponible' : ' · próximamente'}`}
-              className={`inline-flex items-center rounded-md border px-2 py-1 font-mono text-[10.5px] font-semibold tracking-wide transition-colors ${
-                e.dataFile
-                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
-                  : 'border-white/10 bg-white/[0.03] text-slate-500'
-              }`}
-            >
-              {e.code}
-            </span>
-          ))}
-        </div>
+        {/* ── chips: solo exámenes disponibles, cada uno clickeable ── */}
+        {availableExams.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {availableExams.map(e => (
+              <button
+                key={e.id}
+                title={e.name}
+                onClick={() => onSelectExam(e)}
+                className="inline-flex items-center rounded-md border px-2 py-1 font-mono text-[10.5px] font-semibold tracking-wide transition-all
+                  border-emerald-500/30 bg-emerald-500/10 text-emerald-300
+                  hover:border-emerald-400/60 hover:bg-emerald-500/20 hover:text-emerald-200 hover:scale-105"
+              >
+                {e.code}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-    </button>
+    </div>
   )
 }
 
@@ -3038,7 +3038,14 @@ export default function CertificacionesView() {
         {/* ── Nivel 1: Proveedores ── */}
         {view === 'providers' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {PROVIDERS.map(p => <ProviderCard key={p.id} p={p} onClick={() => selectProvider(p)} />)}
+            {PROVIDERS.map(p => (
+              <ProviderCard
+                key={p.id}
+                p={p}
+                onClick={() => selectProvider(p)}
+                onSelectExam={e => router.push(`/certificaciones/${p.id}/${e.id}`)}
+              />
+            ))}
           </div>
         )}
 
