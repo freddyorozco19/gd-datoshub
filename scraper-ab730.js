@@ -184,8 +184,22 @@ async function downloadImage(page, src, filename) {
     let retries = 2;
     while (retries-- > 0) {
       try {
+        // Interceptar peticiones CDN antes de navegar
+        const cdnNetworkUrls = [];
+        const onReq = req => {
+          const u = req.url();
+          if (u.includes('cdn.examcademy.com/images/questions')) cdnNetworkUrls.push(u);
+        };
+        page.on('request', onReq);
+
         await page.goto(href, { waitUntil: 'domcontentloaded', timeout: 60000 });
         await sleep(rand(2000, 3000));
+        // Scroll para activar lazy load de imágenes
+        await page.evaluate(() => window.scrollBy(0, 400));
+        await sleep(600);
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await sleep(400);
+        page.off('request', onReq);
 
         // ── Detectar formato ANTES de SHOW ANSWER ────────────────────────────
         let dropdownOptions = [];
@@ -292,7 +306,7 @@ async function downloadImage(page, src, filename) {
           await sleep(400);
         }
 
-        const q = await page.evaluate(({ preDropdownOpts, wasMultiDropdown, mdOpts }) => {
+        const q = await page.evaluate(({ preDropdownOpts, wasMultiDropdown, mdOpts, networkCdnUrls }) => {
           const optBtns = Array.from(document.querySelectorAll('button.mc-option'));
           const options = [];
           let correctAnswer = '';
@@ -507,18 +521,43 @@ async function downloadImage(page, src, filename) {
               .trim();
           }
 
-          // Imágenes: filtrar por CDN de preguntas primero, luego fallback general
+          // Imágenes: network interception (CDN) + DOM fallback
+          const CDN_PATTERN = 'cdn.examcademy.com/images/questions';
           const imageInfos = [];
+          const seen = new Set();
+
+          // 1) URLs capturadas por network interception (más fiable que el DOM)
+          for (const src of (networkCdnUrls || [])) {
+            if (seen.has(src)) continue;
+            seen.add(src);
+            imageInfos.push({ src, alt: '', inOption: false, optionLetter: null });
+          }
+
+          // 2) <img src="...cdn..."> (por si network interception no la captó)
           const cdnImgs = Array.from(document.querySelectorAll('img'))
-            .filter(i => i.src && i.src.includes('cdn.examcademy.com/images/questions'));
-          if (cdnImgs.length > 0) {
-            for (const img of cdnImgs) {
-              const inOption = !!img.closest('button.mc-option');
-              const optBtn = img.closest('button.mc-option');
-              const optionLetter = optBtn ? (optBtn.querySelector('.btn-lead')?.innerText || '').trim() : null;
-              imageInfos.push({ src: img.src, alt: img.alt || '', inOption, optionLetter });
+            .filter(i => i.src && i.src.includes(CDN_PATTERN));
+          for (const img of cdnImgs) {
+            if (seen.has(img.src)) continue;
+            seen.add(img.src);
+            const inOption = !!img.closest('button.mc-option');
+            const optBtn = img.closest('button.mc-option');
+            const optionLetter = optBtn ? (optBtn.querySelector('.btn-lead')?.innerText || '').trim() : null;
+            imageInfos.push({ src: img.src, alt: img.alt || '', inOption, optionLetter });
+          }
+
+          // 3) background-image CSS
+          const skipBg = 'nav, header, footer, [class*="navbar"], [class*="sidebar"], [class*="logo"], [class*="avatar"]';
+          for (const el of Array.from(document.querySelectorAll('*'))) {
+            if (el.closest(skipBg)) continue;
+            const bg = window.getComputedStyle(el).backgroundImage || '';
+            const m = bg.match(/url\(["']?(https?:\/\/[^"')]+cdn\.examcademy\.com\/images\/questions[^"')]+)["']?\)/i);
+            if (m && !seen.has(m[1])) {
+              seen.add(m[1]);
+              imageInfos.push({ src: m[1], alt: el.getAttribute('aria-label') || '', inOption: false, optionLetter: null });
             }
-          } else {
+          }
+
+          if (imageInfos.length === 0) {
             const skipSelectors = 'nav, header, footer, [class*="navbar"], [class*="sidebar"], [class*="logo"], [class*="avatar"], [class*="user-avatar"]';
             for (const img of Array.from(document.querySelectorAll('img'))) {
               if (img.closest(skipSelectors)) continue;
@@ -547,7 +586,7 @@ async function downloadImage(page, src, filename) {
           }
 
           return { options, correctAnswer, questionText, explanation, learnMore, imageInfos, questionType, ynStatements, dropdownOpts: mdOpts };
-        }, { preDropdownOpts: dropdownOptions, wasMultiDropdown: isMultiDropdown, mdOpts: mdDropdownOptions });
+        }, { preDropdownOpts: dropdownOptions, wasMultiDropdown: isMultiDropdown, mdOpts: mdDropdownOptions, networkCdnUrls: cdnNetworkUrls });
 
         // Patch hardcodeado para preguntas cuya extracción falló en batches anteriores
         const KNOWN_TEXT = {
