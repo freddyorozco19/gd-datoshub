@@ -358,7 +358,6 @@ const LEVEL_COLOR: Record<string, string> = {
 // ─── Level 1: Provider cards ─────────────────────────────────────────────────
 
 function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }) {
-  const availableExams = p.exams.filter(e => e.dataFile)
   return (
     <button
       onClick={onClick}
@@ -372,31 +371,26 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
           src={p.logoImg}
           alt=""
           aria-hidden
-          className="absolute inset-0 w-full h-full object-contain p-6 opacity-20 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-contain p-5 opacity-50 group-hover:opacity-65 transition-opacity duration-300 pointer-events-none"
           onError={e => { e.currentTarget.style.display = 'none' }}
         />
       )}
       {!p.logoImg && (
         <span
           aria-hidden
-          className="absolute inset-0 flex items-center justify-center text-7xl opacity-10 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"
+          className="absolute inset-0 flex items-center justify-center text-7xl opacity-25 group-hover:opacity-40 transition-opacity duration-300 pointer-events-none"
         >
           {p.logo}
         </span>
       )}
 
       {/* overlay degradado inferior */}
-      <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+      <span className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none" />
 
       {/* texto en la parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3.5 pt-6">
         <h3 className="text-[15px] font-bold text-white leading-tight tracking-tight">{p.name}</h3>
-        <p className="text-[12px] text-slate-400 mt-0.5">
-          {p.exams.length} exams
-          {availableExams.length > 0 && (
-            <span className="text-emerald-400"> · {availableExams.length} available</span>
-          )}
-        </p>
+        <p className="text-[12px] text-slate-400 mt-0.5">{p.exams.length} exams</p>
       </div>
     </button>
   )
