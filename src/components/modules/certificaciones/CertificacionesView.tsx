@@ -365,25 +365,25 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
         hover:border-white/15 hover:shadow-2xl hover:shadow-black/70"
       style={{ aspectRatio: '16/9' }}
     >
-      {/* logo pequeño en esquina superior izquierda, clipping natural por la card */}
+      {/* logo grande sangrando en esquina superior izquierda */}
       {p.logoImg ? (
         <img
           src={p.logoImg}
           alt=""
           aria-hidden
-          className="absolute top-0 left-0 h-14 w-14 object-contain pointer-events-none opacity-100"
+          className="absolute -top-3 -left-3 h-[90%] w-auto object-contain pointer-events-none opacity-100"
           onError={e => { e.currentTarget.style.display = 'none' }}
         />
       ) : (
-        <span aria-hidden className="absolute -top-1 -left-1 text-5xl pointer-events-none leading-none opacity-90">
+        <span aria-hidden className="absolute -top-2 -left-2 text-8xl pointer-events-none leading-none opacity-90">
           {p.logo}
         </span>
       )}
 
-      {/* texto en la parte inferior, separado del logo */}
-      <div className="absolute bottom-0 left-0 right-0 px-4 pb-4">
-        <h3 className="text-[15px] font-bold text-white leading-tight tracking-tight">{p.name}</h3>
-        <p className="text-[12px] text-slate-500 mt-0.5">{p.exams.length} exams</p>
+      {/* texto superpuesto sobre el logo, en la parte inferior */}
+      <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
+        <h3 className="text-[15px] font-bold text-white leading-tight tracking-tight drop-shadow-lg">{p.name}</h3>
+        <p className="text-[12px] text-slate-400 mt-0.5 drop-shadow-lg">{p.exams.length} exams</p>
       </div>
     </button>
   )
