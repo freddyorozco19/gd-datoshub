@@ -361,10 +361,19 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
   return (
     <button
       onClick={onClick}
-      className="group relative w-full text-left overflow-hidden rounded-2xl bg-[#0e0e12] border border-white/[0.08] transition-all duration-200
-        hover:border-white/15 hover:shadow-2xl hover:shadow-black/70"
-      style={{ aspectRatio: '16/9' }}
+      className="group relative w-full text-left overflow-hidden rounded-2xl border border-white/[0.12] transition-all duration-300
+        hover:border-white/25 hover:scale-[1.02]"
+      style={{
+        aspectRatio: '16/9',
+        background: 'rgba(255,255,255,0.05)',
+        backdropFilter: 'blur(24px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -1px 0 rgba(0,0,0,0.25)',
+      }}
     >
+      {/* specular highlight superior */}
+      <span className="absolute top-0 left-0 right-0 h-[40%] pointer-events-none rounded-t-2xl"
+        style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.07) 0%, transparent 100%)' }} />
       {/* logo grande sangrando en esquina superior izquierda */}
       {p.logoImg ? (
         <img
