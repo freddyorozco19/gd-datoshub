@@ -381,7 +381,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
       )}
 
       {/* sombra: negro desde abajo cubriendo cuadrantes inferiores */}
-      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, black 0%, black 30%, rgba(0,0,0,0.75) 55%, rgba(0,0,0,0.3) 75%, transparent 90%)' }} />
+      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, black 0%, black 25%, rgba(0,0,0,0.75) 40%, rgba(0,0,0,0.3) 55%, transparent 68%)' }} />
       {/* oscurecer cuadrantes superiores (rojo y verde) */}
       <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(120deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.5) 30%, transparent 52%)' }} />
 
