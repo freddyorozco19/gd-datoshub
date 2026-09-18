@@ -362,29 +362,32 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
     <button
       onClick={onClick}
       className="group relative w-full text-left overflow-hidden rounded-2xl bg-[#0e0e12] border border-white/[0.08] transition-all duration-200
-        hover:border-white/18 hover:bg-[#13131a] hover:shadow-2xl hover:shadow-black/70"
+        hover:border-white/15 hover:shadow-2xl hover:shadow-black/70"
       style={{ aspectRatio: '4/3' }}
     >
-      {/* logo esquina superior derecha */}
+      {/* logo con máscara radial para que se disuelva en el fondo */}
       {p.logoImg ? (
         <img
           src={p.logoImg}
           alt=""
           aria-hidden
-          className="absolute top-3 right-3 h-[52%] w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+          className="absolute inset-0 w-full h-full object-contain p-6 pointer-events-none transition-opacity duration-300 opacity-70 group-hover:opacity-90"
+          style={{ WebkitMaskImage: 'radial-gradient(ellipse 70% 65% at 62% 42%, black 35%, transparent 75%)', maskImage: 'radial-gradient(ellipse 70% 65% at 62% 42%, black 35%, transparent 75%)' }}
           onError={e => { e.currentTarget.style.display = 'none' }}
         />
       ) : (
         <span
           aria-hidden
-          className="absolute top-3 right-3 text-5xl opacity-60 group-hover:opacity-80 transition-opacity duration-300 pointer-events-none leading-none"
+          className="absolute inset-0 flex items-center justify-center text-7xl pointer-events-none transition-opacity duration-300 opacity-30 group-hover:opacity-50"
+          style={{ WebkitMaskImage: 'radial-gradient(ellipse 70% 65% at 50% 45%, black 30%, transparent 70%)', maskImage: 'radial-gradient(ellipse 70% 65% at 50% 45%, black 30%, transparent 70%)' }}
         >
           {p.logo}
         </span>
       )}
 
-      {/* overlay degradado inferior */}
-      <span className="absolute inset-0 bg-gradient-to-t from-[#0e0e12] via-[#0e0e12]/60 to-transparent pointer-events-none" />
+      {/* overlay para reforzar el texto */}
+      <span className="absolute inset-0 bg-gradient-to-t from-[#0e0e12] via-[#0e0e12]/50 to-transparent pointer-events-none" />
+      <span className="absolute inset-0 bg-gradient-to-r from-[#0e0e12]/70 via-transparent to-transparent pointer-events-none" />
 
       {/* texto en la parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-4">
