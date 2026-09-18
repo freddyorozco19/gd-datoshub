@@ -371,7 +371,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
           src={p.logoImg}
           alt=""
           aria-hidden
-          className="absolute -top-2 -left-2 h-20 w-20 object-contain pointer-events-none opacity-100"
+          className="absolute top-0 left-0 h-14 w-14 object-contain pointer-events-none opacity-100"
           onError={e => { e.currentTarget.style.display = 'none' }}
         />
       ) : (
