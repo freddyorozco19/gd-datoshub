@@ -381,7 +381,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
       )}
 
       {/* sombra: negro desde abajo cubriendo cuadrantes inferiores */}
-      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, black 0%, black 25%, rgba(0,0,0,0.75) 45%, transparent 70%)' }} />
+      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, black 0%, black 30%, rgba(0,0,0,0.75) 55%, rgba(0,0,0,0.3) 75%, transparent 90%)' }} />
 
       {/* texto superpuesto sobre el logo, en la parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
