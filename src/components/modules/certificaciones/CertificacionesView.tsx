@@ -357,10 +357,11 @@ const LEVEL_COLOR: Record<string, string> = {
 
 // ─── Level 1: Provider cards ─────────────────────────────────────────────────
 
-function ProviderCard({ p, onClick, onSelectExam }: { p: ProviderConfig; onClick: () => void; onSelectExam: (e: ExamConfig) => void }) {
+function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }) {
   const availableExams = p.exams.filter(e => e.dataFile)
   return (
-    <div
+    <button
+      onClick={onClick}
       className={`group relative w-full text-left overflow-hidden rounded-2xl border border-white/10 p-6 transition-all duration-300
         bg-gradient-to-br ${p.bgGradient}
         hover:border-white/25 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50`}
@@ -373,8 +374,8 @@ function ProviderCard({ p, onClick, onSelectExam }: { p: ProviderConfig; onClick
       />
 
       <div className="relative flex h-full flex-col">
-        {/* ── top: logo + flecha (abre vista de proveedor) ── */}
-        <button onClick={onClick} className="flex items-start justify-between w-full text-left">
+        {/* ── top: logo + flecha ── */}
+        <div className="flex items-start justify-between w-full">
           <span className="inline-flex h-12 items-center rounded-xl bg-white/10 px-3 ring-1 ring-inset ring-white/15 backdrop-blur-md">
             {p.logoImg ? (
               <img
@@ -390,10 +391,10 @@ function ProviderCard({ p, onClick, onSelectExam }: { p: ProviderConfig; onClick
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-400 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white group-hover:translate-x-0.5">
             <ChevronRight size={15} />
           </span>
-        </button>
+        </div>
 
         {/* ── título + meta ── */}
-        <button onClick={onClick} className="mt-5 text-left">
+        <div className="mt-5">
           <h3 className="text-xl font-bold text-white tracking-tight">{p.name}</h3>
           <p className="mt-1 text-[13px] text-slate-400 tracking-wide">
             {p.exams.length} exámenes
@@ -401,27 +402,9 @@ function ProviderCard({ p, onClick, onSelectExam }: { p: ProviderConfig; onClick
               <span className="text-emerald-400 font-medium"> · {availableExams.length} disponible{availableExams.length > 1 ? 's' : ''}</span>
             )}
           </p>
-        </button>
-
-        {/* ── chips: solo exámenes disponibles, cada uno clickeable ── */}
-        {availableExams.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {availableExams.map(e => (
-              <button
-                key={e.id}
-                title={e.name}
-                onClick={() => onSelectExam(e)}
-                className="inline-flex items-center rounded-md border px-2 py-1 font-mono text-[10.5px] font-semibold tracking-wide transition-all
-                  border-emerald-500/30 bg-emerald-500/10 text-emerald-300
-                  hover:border-emerald-400/60 hover:bg-emerald-500/20 hover:text-emerald-200 hover:scale-105"
-              >
-                {e.code}
-              </button>
-            ))}
-          </div>
-        )}
+        </div>
       </div>
-    </div>
+    </button>
   )
 }
 
@@ -3043,7 +3026,6 @@ export default function CertificacionesView() {
                 key={p.id}
                 p={p}
                 onClick={() => selectProvider(p)}
-                onSelectExam={e => router.push(`/certificaciones/${p.id}/${e.id}`)}
               />
             ))}
           </div>
