@@ -387,7 +387,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
 
       {/* texto superpuesto sobre el logo, en la parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
-        <h3 className="text-[15px] font-bold text-white leading-tight tracking-tight drop-shadow-lg">{p.name}</h3>
+        <h3 className="text-[16px] font-bold text-white leading-tight tracking-tight drop-shadow-lg">{p.name}</h3>
         <p className="text-[12px] text-slate-400 mt-0.5 drop-shadow-lg">{p.exams.length} exams</p>
       </div>
     </button>
