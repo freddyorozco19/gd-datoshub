@@ -371,8 +371,8 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
           src={p.logoImg}
           alt=""
           aria-hidden
-          className="absolute inset-0 w-full h-full object-contain p-6 pointer-events-none transition-opacity duration-300 opacity-70 group-hover:opacity-90"
-          style={{ WebkitMaskImage: 'radial-gradient(ellipse 70% 65% at 62% 42%, black 35%, transparent 75%)', maskImage: 'radial-gradient(ellipse 70% 65% at 62% 42%, black 35%, transparent 75%)' }}
+          className="absolute inset-0 w-full h-full object-contain p-5 pointer-events-none transition-opacity duration-300 opacity-75 group-hover:opacity-95"
+          style={{ objectPosition: 'right top', WebkitMaskImage: 'radial-gradient(ellipse 75% 70% at 85% 20%, black 30%, transparent 72%)', maskImage: 'radial-gradient(ellipse 75% 70% at 85% 20%, black 30%, transparent 72%)' }}
           onError={e => { e.currentTarget.style.display = 'none' }}
         />
       ) : (
