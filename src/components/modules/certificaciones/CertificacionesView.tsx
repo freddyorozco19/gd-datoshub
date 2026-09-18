@@ -384,7 +384,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
       <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
       <span className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent pointer-events-none" />
       {/* sombra diagonal desde esquina inferior derecha */}
-      <span className="absolute inset-0 bg-gradient-to-tl from-black/70 via-black/20 to-transparent pointer-events-none" />
+      <span className="absolute inset-0 bg-gradient-to-tl from-black via-black/50 to-transparent pointer-events-none" />
 
       {/* texto superpuesto sobre el logo, en la parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
