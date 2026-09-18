@@ -362,47 +362,41 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
   return (
     <button
       onClick={onClick}
-      className={`group relative w-full text-left overflow-hidden rounded-2xl border border-white/10 p-6 transition-all duration-300
-        bg-gradient-to-br ${p.bgGradient}
-        hover:border-white/25 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50`}
+      className="group relative w-full text-left overflow-hidden rounded-xl bg-[#111116] border border-white/[0.07] transition-all duration-200
+        hover:border-white/20 hover:bg-[#17171f] hover:scale-[1.02] hover:shadow-xl hover:shadow-black/60"
+      style={{ aspectRatio: '16/9' }}
     >
-      {/* resplandor de marca */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -top-20 -right-12 h-56 w-56 rounded-full blur-3xl opacity-20 group-hover:opacity-35 transition-opacity duration-500"
-        style={{ background: p.color }}
-      />
+      {/* logo centrado como imagen de fondo */}
+      {p.logoImg && (
+        <img
+          src={p.logoImg}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 w-full h-full object-contain p-6 opacity-20 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none"
+          onError={e => { e.currentTarget.style.display = 'none' }}
+        />
+      )}
+      {!p.logoImg && (
+        <span
+          aria-hidden
+          className="absolute inset-0 flex items-center justify-center text-7xl opacity-10 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"
+        >
+          {p.logo}
+        </span>
+      )}
 
-      <div className="relative flex h-full flex-col">
-        {/* ── top: logo + flecha ── */}
-        <div className="flex items-start justify-between w-full">
-          <span className="inline-flex h-12 items-center rounded-xl bg-white/10 px-3 ring-1 ring-inset ring-white/15 backdrop-blur-md">
-            {p.logoImg ? (
-              <img
-                src={p.logoImg}
-                alt={`Logo ${p.name}`}
-                className="h-7 w-auto max-w-[140px] object-contain"
-                onError={e => { e.currentTarget.style.display = 'none' }}
-              />
-            ) : (
-              <span className="text-3xl leading-none" style={{ color: p.color }}>{p.logo}</span>
-            )}
-          </span>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-400 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white group-hover:translate-x-0.5">
-            <ChevronRight size={15} />
-          </span>
-        </div>
+      {/* overlay degradado inferior */}
+      <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-        {/* ── título + meta ── */}
-        <div className="mt-5">
-          <h3 className="text-xl font-bold text-white tracking-tight">{p.name}</h3>
-          <p className="mt-1 text-[13px] text-slate-400 tracking-wide">
-            {p.exams.length} exámenes
-            {availableExams.length > 0 && (
-              <span className="text-emerald-400 font-medium"> · {availableExams.length} disponible{availableExams.length > 1 ? 's' : ''}</span>
-            )}
-          </p>
-        </div>
+      {/* texto en la parte inferior */}
+      <div className="absolute bottom-0 left-0 right-0 px-4 pb-3.5 pt-6">
+        <h3 className="text-[15px] font-bold text-white leading-tight tracking-tight">{p.name}</h3>
+        <p className="text-[12px] text-slate-400 mt-0.5">
+          {p.exams.length} exams
+          {availableExams.length > 0 && (
+            <span className="text-emerald-400"> · {availableExams.length} available</span>
+          )}
+        </p>
       </div>
     </button>
   )
@@ -3020,7 +3014,7 @@ export default function CertificacionesView() {
         <>
         {/* ── Nivel 1: Proveedores ── */}
         {view === 'providers' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {PROVIDERS.map(p => (
               <ProviderCard
                 key={p.id}
