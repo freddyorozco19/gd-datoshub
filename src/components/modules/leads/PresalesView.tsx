@@ -62,7 +62,7 @@ function Kpi({ label, value, hint, tone = "blue" }: { label: string; value: stri
 }
 
 // etapas de preventa que no se muestran como columna en Carga por preventa (valores normalizados)
-const HIDDEN_ETAPA_COLS = new Set(["oferta declinada", "no viable", "suspendida"]);
+const HIDDEN_ETAPA_COLS = new Set(["oferta declinada", "no viable", "oferta no viable", "suspendida", "sin etapa"]);
 
 const ESTADO_OPTS = ["ALL", "Pendiente", "Ganado", "Perdido"];
 type QueueKey = "sinAsignar" | "estancados" | "proximos";
