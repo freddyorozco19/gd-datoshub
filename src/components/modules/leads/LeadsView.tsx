@@ -888,6 +888,10 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
         <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
+        <div className="relative flex items-center justify-center mb-3">
+          <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Leads del día</span>
+        </div>
+
         <div className="relative flex items-center gap-1 mb-4">
           <button onClick={() => shiftDay(-1)} className="p-1.5 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200 transition-colors shrink-0"><ChevronLeft size={14} /></button>
 
