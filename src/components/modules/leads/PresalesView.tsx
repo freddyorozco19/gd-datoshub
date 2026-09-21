@@ -61,6 +61,9 @@ function Kpi({ label, value, hint, tone = "blue" }: { label: string; value: stri
   );
 }
 
+// etapas de preventa que no se muestran como columna en Carga por preventa (valores normalizados)
+const HIDDEN_ETAPA_COLS = new Set(["oferta declinada", "no viable", "suspendida"]);
+
 const ESTADO_OPTS = ["ALL", "Pendiente", "Ganado", "Perdido"];
 type QueueKey = "sinAsignar" | "estancados" | "proximos";
 
@@ -125,13 +128,15 @@ export default function PresalesView({
   /* carga por preventa */
   // Una columna por cada valor real del campo Etapa Prev. (además de Abierto), en vez de valores supuestos.
   const { byPreventa, etapaCols } = useMemo(() => {
-    type Row = { name: string; open: number; pipeline: number; stale: number; counts: Record<string, number> };
+    type Row = { name: string; open: number; won: number; lost: number; pipeline: number; stale: number; counts: Record<string, number> };
     const map = new Map<string, Row>();
     const labels = new Map<string, string>();   // valor normalizado → etiqueta original
     const totals = new Map<string, number>();
     for (const l of filtered) {
       const name = l.preventa || "Sin asignar";
-      const r = map.get(name) ?? { name, open: 0, pipeline: 0, stale: 0, counts: {} };
+      const r = map.get(name) ?? { name, open: 0, won: 0, lost: 0, pipeline: 0, stale: 0, counts: {} };
+      if (l.ganado === "Ganado") r.won++;
+      else if (l.ganado === "Perdido") r.lost++;
       const key = normText(l.etapaPreventa) || "sin etapa";
       if (!labels.has(key)) labels.set(key, l.etapaPreventa || "Sin etapa");
       totals.set(key, (totals.get(key) ?? 0) + 1);
@@ -140,7 +145,7 @@ export default function PresalesView({
       map.set(name, r);
     }
     const cols = [...totals.keys()]
-      .filter((k) => k !== "abierto")
+      .filter((k) => k !== "abierto" && !HIDDEN_ETAPA_COLS.has(k))
       .sort((a, b) => (totals.get(b) ?? 0) - (totals.get(a) ?? 0))
       .map((k) => ({ key: k, label: labels.get(k) ?? k }));
     const rows = [...map.values()].sort((a, b) => b.open - a.open || Object.values(b.counts).reduce((s, n) => s + n, 0) - Object.values(a.counts).reduce((s, n) => s + n, 0));
@@ -148,8 +153,6 @@ export default function PresalesView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtered]);
   const maxOpen = Math.max(1, ...byPreventa.map((r) => r.open));
-  const hasGanado  = etapaCols.some((c) => c.key === "ganado");
-  const hasPerdido = etapaCols.some((c) => c.key === "perdido");
 
   /* embudo por etapa de preventa */
   const byEtapa = useMemo(() => {
@@ -249,14 +252,14 @@ export default function PresalesView({
                         {etapaCols.map((c) => (
                           <th key={c.key} className="text-right font-semibold pb-2 px-2 whitespace-nowrap">{c.label}</th>
                         ))}
-                        {hasGanado && hasPerdido && <th className="text-right font-semibold pb-2 px-2">Éxito</th>}
+                        <th className="text-right font-semibold pb-2 px-2">Éxito</th>
                         <th className="text-right font-semibold pb-2 px-2">Pipeline</th>
                         <th className="text-right font-semibold pb-2 pl-2">Estancados</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/[0.05]">
                       {byPreventa.map((r) => {
-                        const rate = pct(r.counts["ganado"] ?? 0, (r.counts["ganado"] ?? 0) + (r.counts["perdido"] ?? 0));
+                        const rate = pct(r.won, r.won + r.lost);
                         const active = fPreventa === r.name;
                         return (
                           <tr key={r.name}
@@ -277,9 +280,7 @@ export default function PresalesView({
                                 <td key={c.key} className={`py-2 px-2 text-right tabular-nums ${n === 0 ? "text-slate-600" : c.key === "ganado" ? "text-emerald-400" : "text-slate-300"}`}>{n}</td>
                               );
                             })}
-                            {hasGanado && hasPerdido && (
-                              <td className="py-2 px-2 text-right tabular-nums text-slate-300">{rate === null ? "—" : `${rate}%`}</td>
-                            )}
+                            <td className="py-2 px-2 text-right tabular-nums text-slate-300">{rate === null ? "—" : `${rate}%`}</td>
                             <td className="py-2 px-2 text-right tabular-nums text-slate-300 whitespace-nowrap">{fmtCOP(r.pipeline)}</td>
                             <td className={`py-2 pl-2 text-right tabular-nums ${r.stale > 0 ? "text-rose-400 font-semibold" : "text-slate-500"}`}>{r.stale}</td>
                           </tr>
