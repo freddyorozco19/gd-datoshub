@@ -27,7 +27,9 @@ function ViewLoading() {
 
 /* ─── Vistas pesadas cargadas bajo demanda (chunks separados) ─────────── */
 const DashboardView       = dynamic(() => import("@/components/modules/dashboard/DashboardView"),             { loading: ViewLoading });
-const LeadsView           = dynamic(() => import("@/components/modules/leads/LeadsView"),                     { loading: ViewLoading });
+// ssr:false — la vista depende de la fecha/zona horaria del navegador y carga sus datos en el cliente;
+// pre-renderizarla en el servidor (UTC) provoca el error de hidratación #418.
+const LeadsView           = dynamic(() => import("@/components/modules/leads/LeadsView"),                     { ssr: false, loading: ViewLoading });
 const CMMIView            = dynamic(() => import("@/components/modules/cmmi/CMMIView"),                       { loading: ViewLoading });
 const UsuariosView        = dynamic(() => import("@/components/modules/usuarios/UsuariosView"),               { loading: ViewLoading });
 const CertificacionesView = dynamic(() => import("@/components/modules/certificaciones/CertificacionesView"), { loading: ViewLoading });
