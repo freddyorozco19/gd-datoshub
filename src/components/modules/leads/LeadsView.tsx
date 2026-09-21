@@ -6,7 +6,7 @@ import {
   RefreshCw, Search, Download, ChevronUp, ChevronDown,
   Users, AlertCircle,
   ChevronLeft, ChevronRight,
-  ChevronsLeft, ChevronsRight, X, History,
+  ChevronsLeft, ChevronsRight, X,
   ExternalLink, Sparkles, Calendar,
   Trophy, Maximize2,
   Paperclip, FileText, FileImage, File,
@@ -568,20 +568,12 @@ function LeadDetailModal({ lead, onClose }: LeadDetailModalProps) {
 /* ── widget: últimas 5 leads asignadas ──────────────────────────────── */
 function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
   const [lineaFilter, setLineaFilter] = useState<string[]>([]);
-  const initialized = useRef(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
   const availableLineas = useMemo(
     () => Array.from(new Set(leads.map((l) => l.linea).filter(Boolean))).sort(),
     [leads]
   );
-
-  useEffect(() => {
-    if (initialized.current || availableLineas.length === 0) return;
-    initialized.current = true;
-    const datos = availableLineas.find((l) => l.toUpperCase().startsWith("DATOS Y SISTEMAS"));
-    setLineaFilter(datos ? [datos] : [availableLineas[0]]);
-  }, [availableLineas]);
 
   const lineaColor = useMemo(() => {
     const map: Record<string, typeof LINE_PALETTE[0]> = {};
@@ -590,20 +582,17 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
   }, [availableLineas]);
 
   function toggleLinea(linea: string) {
-    setLineaFilter((prev) => {
-      if (prev.includes(linea)) {
-        if (prev.length === 1) return prev;
-        return prev.filter((l) => l !== linea);
-      }
-      return [...prev, linea];
-    });
+    setLineaFilter((prev) =>
+      prev.includes(linea) ? prev.filter((l) => l !== linea) : [...prev, linea]
+    );
   }
 
+  // sin líneas seleccionadas = todas
   const recent = useMemo(() =>
     [...leads]
       .sort((a, b) => b.fechaCreacion.localeCompare(a.fechaCreacion))
-      .filter((l) => lineaFilter.includes(l.linea))
-      .slice(0, 5),
+      .filter((l) => lineaFilter.length === 0 || lineaFilter.includes(l.linea))
+      .slice(0, 3),
     [leads, lineaFilter]
   );
 
@@ -613,9 +602,8 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
       <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
 
-      <div className="relative flex items-center gap-2 mb-3">
-        <div className="p-1.5 rounded-lg bg-violet-500/10 border border-violet-500/20 shrink-0"><History size={15} className="text-violet-400" /></div>
-        <span className="text-sm font-semibold text-slate-100 flex-1">Últimas asignadas</span>
+      <div className="relative flex items-center justify-center mb-3">
+        <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Últimas asignadas</span>
       </div>
 
       {availableLineas.length > 0 && (
@@ -643,7 +631,7 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
       )}
 
       {recent.length === 0 ? (
-        <p className="text-xs text-slate-400 text-center py-4">Sin leads en las líneas seleccionadas</p>
+        <p className="text-xs text-slate-400 text-center py-4">Sin leads</p>
       ) : (
         <div className="relative divide-y divide-white/[0.05]">
           {recent.map((lead, i) => {
