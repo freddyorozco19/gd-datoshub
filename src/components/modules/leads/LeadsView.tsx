@@ -8,7 +8,7 @@ import {
   ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight, X, History,
   ExternalLink, Sparkles, Calendar,
-  Trophy, Activity, Maximize2,
+  Trophy, Maximize2,
   Paperclip, FileText, FileImage, File,
 } from "lucide-react";
 import type { Lead, OdooAttachment } from "@/lib/odoo/types";
@@ -169,9 +169,6 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
 
       <div className="relative mb-3">
         <div className="flex items-center justify-center gap-2">
-          <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 shrink-0">
-            <Activity size={15} className="text-blue-400" />
-          </div>
           <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Actividad leads</span>
         </div>
       </div>
