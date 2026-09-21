@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
-import { RefreshCw, AlertCircle, Loader2, X } from "lucide-react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { RefreshCw, AlertCircle, Loader2, X, UserCog } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import FilterSelect from "./FilterSelect";
 import LeadDetailModal from "./LeadDetailModal";
+import PresalesManageModal, { type PresalesStatusRow } from "./PresalesManageModal";
 
 /* ── constantes de gestión ───────────────────────────────────────────── */
 const DAY_MS     = 86400000;
@@ -65,7 +66,7 @@ function Kpi({ label, value, hint, tone = "blue" }: { label: string; value: stri
 const HIDDEN_ETAPA_COLS = new Set(["oferta declinada", "no viable", "oferta no viable", "suspendida", "sin etapa"]);
 
 const ESTADO_OPTS = ["ALL", "Pendiente", "Ganado", "Perdido"];
-type QueueKey = "sinAsignar" | "estancados" | "proximos";
+type QueueKey = "sinAsignar" | "inactivos" | "estancados" | "proximos";
 
 /* ── vista ───────────────────────────────────────────────────────────── */
 export default function PresalesView({
@@ -78,14 +79,47 @@ export default function PresalesView({
   const [queue,     setQueue]     = useState<QueueKey>("sinAsignar");
   const [selected,  setSelected]  = useState<Lead | null>(null);
 
+  /* estado activo/inactivo de cada preventa (gestionado desde esta página) */
+  const [statuses,   setStatuses]   = useState<Record<string, PresalesStatusRow>>({});
+  const [canManage,  setCanManage]  = useState(false);
+  const [needsSetup, setNeedsSetup] = useState(false);
+  const [onlyActive, setOnlyActive] = useState(true);
+  const [showManage, setShowManage] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/presales/status")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d) return;
+        setStatuses(Object.fromEntries((d.statuses as PresalesStatusRow[]).map((s) => [s.name, s])));
+        setCanManage(!!d.canManage);
+        setNeedsSetup(!!d.needsSetup);
+      })
+      .catch(() => {});
+  }, []);
+
+  const isInactive = (name: string) => statuses[name]?.active === false;
+
+  async function toggleStatus(name: string, active: boolean) {
+    const res = await fetch("/api/presales/status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, active }),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
+    setStatuses((prev) => ({ ...prev, [name]: json.status as PresalesStatusRow }));
+    setNeedsSetup(false);
+  }
+
   /* universo de preventa: leads con preventa asignado o con etapa de preventa */
   const scope = useMemo(() => leads.filter((l) => l.preventa || l.etapaPreventa), [leads]);
 
   const opts = useMemo(() => ({
-    preventa: unique(scope.map((l) => l.preventa)),
+    preventa: unique(scope.map((l) => l.preventa).filter((n) => !onlyActive || statuses[n]?.active !== false)),
     linea:    unique(scope.map((l) => l.linea)),
     etapa:    unique(scope.map((l) => l.etapaPreventa)),
-  }), [scope]);
+  }), [scope, onlyActive, statuses]);
 
   const filtered = useMemo(() => scope.filter((l) =>
     (fPreventa === "ALL" || l.preventa === fPreventa) &&
@@ -152,7 +186,22 @@ export default function PresalesView({
     return { byPreventa: rows, etapaCols: cols };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtered]);
-  const maxOpen = Math.max(1, ...byPreventa.map((r) => r.open));
+  // con "Solo activos" la tabla oculta a los inactivos; los indicadores de arriba conservan el histórico completo
+  const tableRows = onlyActive ? byPreventa.filter((r) => !isInactive(r.name)) : byPreventa;
+  const maxOpen = Math.max(1, ...tableRows.map((r) => r.open));
+
+  /* personas para la ventana de gestión: todos los preventas de ODOO, sin depender de los filtros */
+  const people = useMemo(() => {
+    const map = new Map<string, { name: string; open: number; total: number }>();
+    for (const l of scope) {
+      if (!l.preventa) continue;
+      const r = map.get(l.preventa) ?? { name: l.preventa, open: 0, total: 0 };
+      r.total++;
+      if (normText(l.etapaPreventa) === "abierto") r.open++;
+      map.set(l.preventa, r);
+    }
+    return [...map.values()];
+  }, [scope]);
 
   /* embudo por etapa de preventa */
   const byEtapa = useMemo(() => {
@@ -189,6 +238,7 @@ export default function PresalesView({
   /* cola de gestión */
   const queues: Record<QueueKey, { label: string; items: Lead[]; hint: (l: Lead) => string }> = {
     sinAsignar: { label: "Sin preventa", items: stats.sinAsig, hint: (l) => `${daysSince(l)} d sin cambios` },
+    inactivos:  { label: "Preventa inactivo", items: stats.open.filter((l) => !!l.preventa && isInactive(l.preventa)), hint: (l) => `${daysSince(l)} d sin cambios` },
     estancados: { label: `Estancados +${STALE_DAYS} d`, items: [...stats.stale].sort((a, b) => daysSince(b) - daysSince(a)), hint: (l) => `${daysSince(l)} d sin cambios` },
     proximos:   { label: `Cierre ≤ ${SOON_DAYS} d`, items: [...stats.soon].sort((a, b) => (daysToClose(a) ?? 0) - (daysToClose(b) ?? 0)), hint: (l) => `cierra en ${daysToClose(l)} d` },
   };
@@ -207,11 +257,33 @@ export default function PresalesView({
               <X size={11} />
             </button>
           )} />
-        <button onClick={onReload} disabled={loading} title="Actualizar"
-          className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.1] hover:bg-white/[0.05] disabled:opacity-60 transition-colors">
-          <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
-        </button>
+        <div className="ml-auto flex items-center gap-2">
+          <button type="button" onClick={() => setOnlyActive((v) => !v)}
+            title="Oculta a los preventas inactivos en la tabla de carga y en el filtro Preventa"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${
+              onlyActive ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.1] text-slate-400"
+            }`}>
+            Solo activos
+          </button>
+          {canManage && (
+            <button type="button" onClick={() => setShowManage(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 border border-white/[0.1] hover:bg-white/[0.05] transition-colors">
+              <UserCog size={13} /> Gestionar preventas
+            </button>
+          )}
+          <button onClick={onReload} disabled={loading} title="Actualizar"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.1] hover:bg-white/[0.05] disabled:opacity-60 transition-colors">
+            <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
+          </button>
+        </div>
       </div>
+
+      {canManage && needsSetup && (
+        <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
+          <AlertCircle size={16} className="shrink-0 mt-0.5" />
+          La tabla presales_status aún no está creada en Supabase, por eso todos los preventas figuran como activos. Ejecuta supabase/migrations/20260921_presales_status.sql en el SQL Editor.
+        </div>
+      )}
 
       {error && (
         <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
@@ -240,7 +312,7 @@ export default function PresalesView({
             {/* carga por preventa */}
             <Card title="Carga por preventa" className="xl:col-span-3"
               right={<span className="text-[10px] text-slate-500">Clic para filtrar</span>}>
-              {byPreventa.length === 0 ? (
+              {tableRows.length === 0 ? (
                 <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
               ) : (
                 <div className="overflow-x-auto">
@@ -258,7 +330,7 @@ export default function PresalesView({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/[0.05]">
-                      {byPreventa.map((r) => {
+                      {tableRows.map((r) => {
                         const rate = pct(r.won, r.won + r.lost);
                         const active = fPreventa === r.name;
                         return (
@@ -387,6 +459,9 @@ export default function PresalesView({
       )}
 
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
+      {showManage && (
+        <PresalesManageModal people={people} statuses={statuses} onToggle={toggleStatus} onClose={() => setShowManage(false)} />
+      )}
     </div>
   );
 }

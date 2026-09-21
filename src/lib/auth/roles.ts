@@ -16,6 +16,12 @@ export async function getAuthedUser(): Promise<User | null> {
   return data.user;
 }
 
+/** Roles que pueden gestionar quién está activo en Presales. */
+export const canManagePresales = (user: User | null | undefined) => {
+  const r = roleOf(user);
+  return !!user && (r === "admin" || r === "leader");
+};
+
 /**
  * Garantiza que quien llama sea admin.
  * Devuelve el usuario admin, o null si no hay sesión / no es admin.
