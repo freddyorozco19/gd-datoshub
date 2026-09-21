@@ -710,7 +710,7 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
       <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative flex items-center justify-center mb-3">
-        <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Ranking comercial</span>
+        <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Top comercial</span>
         <button
           type="button"
           onClick={() => setExpanded(true)}
