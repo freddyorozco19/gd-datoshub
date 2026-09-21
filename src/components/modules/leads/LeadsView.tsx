@@ -284,7 +284,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, onClose }: 
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
-        <div className="app-bar modal-header flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
+        <div className="app-bar modal-header flex items-center justify-between px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
           <div>
             <div className="flex items-center gap-2">
               <h2 className="font-semibold text-slate-100 capitalize">{headerTitle}</h2>
