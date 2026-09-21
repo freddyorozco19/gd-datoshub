@@ -36,38 +36,3 @@ export async function GET() {
   const events = await res.json();
   return Response.json({ events });
 }
-
-/** POST — diagnóstico: intenta insertar un evento de prueba por acción y devuelve la respuesta de Supabase. */
-export async function POST() {
-  const admin = await requireAdmin();
-  if (!admin) {
-    return Response.json({ error: "Acceso restringido a administradores." }, { status: 403 });
-  }
-
-  const results: { action: string; ok: boolean; status: number; detail: string }[] = [];
-  for (const action of ["login", "page_view", "exam_finish"]) {
-    try {
-      const r = await fetch(`${SUPABASE_URL}/rest/v1/access_log`, {
-        method: "POST",
-        headers: {
-          apikey: SERVICE_KEY,
-          Authorization: `Bearer ${SERVICE_KEY}`,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify({
-          user_id: admin.id,
-          email: admin.email ?? null,
-          action,
-          path: "/diagnostico",
-          metadata: { diagnostic: true },
-          status: "success",
-        }),
-      });
-      results.push({ action, ok: r.ok, status: r.status, detail: r.ok ? "" : (await r.text()).slice(0, 400) });
-    } catch (e) {
-      results.push({ action, ok: false, status: 0, detail: e instanceof Error ? e.message : String(e) });
-    }
-  }
-  return Response.json({ results });
-}
