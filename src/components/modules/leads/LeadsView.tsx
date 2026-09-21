@@ -1191,6 +1191,7 @@ function FilterSelect({
   widthClass?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const [rect, setRect] = useState<{ top: number; left: number; width: number } | null>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -1210,10 +1211,22 @@ function FilterSelect({
   function toggle() {
     if (!open && btnRef.current) {
       const r = btnRef.current.getBoundingClientRect();
-      setRect({ top: r.bottom + 4, left: r.left, width: r.width });
+      setRect({ top: r.bottom + 4, left: r.left, width: Math.max(r.width, 190) });
+      setQuery("");
     }
     setOpen((o) => !o);
   }
+
+  function pick(o: string) {
+    onChange(o);
+    setOpen(false);
+  }
+
+  const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const q = norm(query.trim());
+  const visible = q
+    ? options.filter((o) => norm(filterOptionLabel(o)).includes(q) || norm(o).includes(q))
+    : options;
 
   return (
     <div className={`flex flex-col gap-1.5 shrink-0 ${widthClass}`}>
@@ -1238,23 +1251,38 @@ function FilterSelect({
           <div
             ref={panelRef}
             style={{ position: "fixed", top: rect.top, left: rect.left, width: rect.width, backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)" }}
-            className="modal-panel max-h-64 overflow-auto z-50 rounded-lg border border-white/[0.12] shadow-2xl shadow-black/40 py-1"
+            className="modal-panel max-h-72 flex flex-col overflow-hidden z-50 rounded-lg border border-white/[0.12] shadow-2xl shadow-black/40"
           >
-            {options.map((o) => (
-              <button
-                key={o}
-                type="button"
-                onClick={() => {
-                  onChange(o);
-                  setOpen(false);
+            <div className="p-1.5 border-b border-white/[0.08] shrink-0">
+              <input
+                autoFocus
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setOpen(false);
+                  if (e.key === "Enter" && visible.length > 0) pick(visible[0]);
                 }}
-                className={`w-full text-left px-3 py-1.5 text-xs transition-colors ${
-                  o === value ? "filter-option-selected" : "filter-option text-slate-300"
-                }`}
-              >
-                {filterOptionLabel(o)}
-              </button>
-            ))}
+                placeholder="Buscar…"
+                className="w-full text-xs rounded-md px-2 py-1.5 bg-white/[0.06] border border-white/[0.1] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/60"
+              />
+            </div>
+            <div className="overflow-auto py-1">
+              {visible.map((o) => (
+                <button
+                  key={o}
+                  type="button"
+                  onClick={() => pick(o)}
+                  className={`w-full text-left px-3 py-1.5 text-xs transition-colors ${
+                    o === value ? "filter-option-selected" : "filter-option text-slate-300"
+                  }`}
+                >
+                  {filterOptionLabel(o)}
+                </button>
+              ))}
+              {visible.length === 0 && (
+                <p className="px-3 py-2 text-xs text-slate-500">Sin resultados</p>
+              )}
+            </div>
           </div>
         </div>,
         document.body
