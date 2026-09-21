@@ -153,7 +153,7 @@ export default function PresalesView({
     const stale   = open.filter((l) => daysSince(l) > STALE_DAYS);
     const soon    = open.filter((l) => { const d = daysToClose(l); return d !== null && d >= 0 && d <= SOON_DAYS; });
     return {
-      total: filtered.length, etapaAbierta: open.length, open, won, lost, sinAsig, stale, soon,
+      total: filtered.length, open, won, lost, sinAsig, stale, soon,
       pipeline: open.reduce((s, l) => s + l.ingresosEsperados, 0),
       winRate: pct(won.length, won.length + lost.length),
     };
@@ -190,6 +190,16 @@ export default function PresalesView({
   // con "Solo activos" la tabla oculta a los inactivos; los indicadores de arriba conservan el histórico completo
   const tableRows = onlyActive ? byPreventa.filter((r) => !isInactive(r.name)) : byPreventa;
   const maxOpen = Math.max(1, ...tableRows.map((r) => r.open));
+
+  const totals = {
+    open:     tableRows.reduce((s, r) => s + r.open, 0),
+    won:      tableRows.reduce((s, r) => s + r.won, 0),
+    lost:     tableRows.reduce((s, r) => s + r.lost, 0),
+    pipeline: tableRows.reduce((s, r) => s + r.pipeline, 0),
+    stale:    tableRows.reduce((s, r) => s + r.stale, 0),
+    counts:   Object.fromEntries(etapaCols.map((c) => [c.key, tableRows.reduce((s, r) => s + (r.counts[c.key] ?? 0), 0)])) as Record<string, number>,
+  };
+  const totalRate = pct(totals.won, totals.won + totals.lost);
 
   /* personas para la ventana de gestión: todos los preventas de ODOO, sin depender de los filtros */
   const people = useMemo(() => {
@@ -301,7 +311,7 @@ export default function PresalesView({
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
             <Kpi label="En preventa"     value={String(stats.total)} hint="Total de leads" />
-            <Kpi label="Preventa abierta" value={String(stats.etapaAbierta)} hint="Etapa Prev. = Abierto" />
+            <Kpi label="Preventa abierta" value={String(totals.open)} hint={onlyActive ? "Etapa Prev. = Abierto · solo activos" : "Etapa Prev. = Abierto"} />
             <Kpi label="Pipeline abierto" value={fmtCOP(stats.pipeline)} hint="Ingresos esperados" />
             <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`} tone="emerald" />
             <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)} hint="Abiertos sin responsable" tone="amber" />
@@ -360,6 +370,23 @@ export default function PresalesView({
                         );
                       })}
                     </tbody>
+                    <tfoot>
+                      <tr className="border-t border-white/[0.14] font-semibold">
+                        <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
+                        <td className="pt-2.5 pr-3">
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1" />
+                            <span className="w-6 text-right tabular-nums text-slate-100">{totals.open}</span>
+                          </div>
+                        </td>
+                        {etapaCols.map((c) => (
+                          <td key={c.key} className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{totals.counts[c.key]}</td>
+                        ))}
+                        <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{totalRate === null ? "—" : `${totalRate}%`}</td>
+                        <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100 whitespace-nowrap">{fmtCOP(totals.pipeline)}</td>
+                        <td className="pt-2.5 pl-2 text-right tabular-nums text-slate-100">{totals.stale}</td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               )}
