@@ -983,7 +983,8 @@ const idxToDate = (idx: number, minStr: string) => {
   d.setDate(d.getDate() + idx);
   return d.toISOString().substring(0, 10);
 };
-const fmtShortDate = (d: string) => new Date(d).toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/-/g, "/");
+// AAAA-MM-DD → DD/MM/AAAA sin pasar por Date (evita el desfase de un día por zona horaria)
+const fmtShortDate = (d: string) => { const [y, m, day] = d.substring(0, 10).split("-"); return `${day}/${m}/${y}`; };
 
 /* periodos de un año calendario (meses base 0) */
 const YEAR_PERIODS = [
