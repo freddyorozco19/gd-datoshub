@@ -709,16 +709,13 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
       <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
-      <div className="relative flex items-center gap-2 mb-3">
-        <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 shrink-0">
-          <Users size={15} className="text-blue-400" />
-        </div>
-        <span className="text-sm font-semibold text-slate-100 flex-1">Ranking</span>
+      <div className="relative flex items-center justify-center mb-3">
+        <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Ranking comercial</span>
         <button
           type="button"
           onClick={() => setExpanded(true)}
           title="Ver ranking completo"
-          className="p-1 rounded-lg text-slate-500 hover:text-blue-400 hover:bg-white/[0.06] transition-colors"
+          className="absolute right-0 p-1 rounded-lg text-slate-500 hover:text-blue-400 hover:bg-white/[0.06] transition-colors"
         >
           <Maximize2 size={13} />
         </button>
