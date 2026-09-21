@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/lib/auth/roles";
+import { TRACE_EXCLUDED_EMAILS } from "@/lib/auth/trace";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SERVICE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -10,8 +11,10 @@ export async function GET() {
     return Response.json({ error: "Acceso restringido a administradores." }, { status: 403 });
   }
 
+  // Excluye las cuentas ignoradas (conserva filas sin email, ej. errores previos al login).
+  const notExcluded = TRACE_EXCLUDED_EMAILS.map((e) => `email.not.ilike.${e}`).join(",");
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/access_log?select=*&order=created_at.desc&limit=300`,
+    `${SUPABASE_URL}/rest/v1/access_log?select=*&or=(email.is.null,and(${notExcluded}))&order=created_at.desc&limit=300`,
     {
       headers: {
         apikey: SERVICE_KEY,
