@@ -998,15 +998,6 @@ const idxToDate = (idx: number, minStr: string) => {
 };
 const fmtShortDate = (d: string) => new Date(d).toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/-/g, "/");
 
-/* ── accesos rápidos del popup de fecha ──────────────────────────────── */
-const DATE_PRESETS: { key: string; label: string }[] = [
-  { key: "month",    label: "Mes" },
-  { key: "quarter",  label: "Trimestre" },
-  { key: "semester", label: "Semestre" },
-  { key: "year",     label: "Año" },
-  { key: "all",      label: "Todo" },
-];
-
 /* periodos de un año calendario (meses base 0) */
 const YEAR_PERIODS = [
   { key: "year", label: "Todo el año", startMonth: 0, endMonth: 11, span: true },
@@ -1060,20 +1051,6 @@ function DateRangeSlider({
   function handleTo(v: number) {
     const nextTo = Math.max(v, fromIdx);
     onChange(idxToDate(fromIdx, min), idxToDate(nextTo, min));
-  }
-
-  function applyPreset(key: string) {
-    if (key === "all") { onChange(min, max); setOpen(false); return; }
-    const end   = new Date(max);
-    const start = new Date(end);
-    if (key === "month")         start.setMonth(start.getMonth() - 1);
-    else if (key === "quarter")  start.setMonth(start.getMonth() - 3);
-    else if (key === "semester") start.setMonth(start.getMonth() - 6);
-    else if (key === "year")     start.setFullYear(start.getFullYear() - 1);
-    let startStr = start.toISOString().substring(0, 10);
-    if (startStr < min) startStr = min;
-    onChange(startStr, max);
-    setOpen(false);
   }
 
   const minYear = Number(min.slice(0, 4));
@@ -1218,21 +1195,6 @@ function DateRangeSlider({
               </div>
             </div>
 
-            <div className="h-px bg-white/[0.08]" />
-
-            <div>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Accesos rápidos</p>
-              <div className="grid grid-cols-3 gap-1.5">
-                {DATE_PRESETS.map((p) => (
-                  <button
-                    key={p.key} type="button" onClick={() => applyPreset(p.key)}
-                    className="text-[11px] px-2 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.1] hover:bg-white/[0.08] hover:border-white/[0.18] text-slate-300 hover:text-white transition-colors"
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </div>,
         document.body,
