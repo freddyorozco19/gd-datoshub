@@ -26,6 +26,7 @@ const fmtCOP = (v: number) => {
 };
 
 const unique = (arr: string[]) => ["ALL", ...Array.from(new Set(arr.filter(Boolean))).sort()];
+const normText = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
 const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : null);
 
 const CARD = "relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden";
@@ -112,8 +113,9 @@ export default function PresalesView({
     const sinAsig = open.filter((l) => !l.preventa);
     const stale   = open.filter((l) => daysSince(l) > STALE_DAYS);
     const soon    = open.filter((l) => { const d = daysToClose(l); return d !== null && d >= 0 && d <= SOON_DAYS; });
+    const etapaAbierta = filtered.filter((l) => normText(l.etapaPreventa) === "abierto").length;
     return {
-      total: filtered.length, open, won, lost, sinAsig, stale, soon,
+      total: filtered.length, etapaAbierta, open, won, lost, sinAsig, stale, soon,
       pipeline: open.reduce((s, l) => s + l.ingresosEsperados, 0),
       winRate: pct(won.length, won.length + lost.length),
     };
@@ -208,8 +210,9 @@ export default function PresalesView({
       ) : (
         <>
           {/* KPIs */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
-            <Kpi label="En preventa"     value={String(stats.total)} hint={`${stats.open.length} abiertos`} />
+          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+            <Kpi label="En preventa"     value={String(stats.total)} hint="Total de leads" />
+            <Kpi label="Preventa abierta" value={String(stats.etapaAbierta)} hint="Etapa Prev. = Abierto" />
             <Kpi label="Pipeline abierto" value={fmtCOP(stats.pipeline)} hint="Ingresos esperados" />
             <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`} tone="emerald" />
             <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)} hint="Abiertos sin responsable" tone="amber" />
