@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { Lead, OdooAttachment } from "@/lib/odoo/types";
 import Topbar from "@/components/layout/Topbar";
+import { createClient } from "@/lib/supabase/client";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
 import PresalesView from "./PresalesView";
@@ -980,6 +981,14 @@ type LeadsTab = "business" | "presales";
 
 export default function LeadsView() {
   const [tab,       setTab]       = useState<LeadsTab>("business");
+  // Presales solo para perfiles Líder y Administrador (rol en app_metadata)
+  const [canViewPresales, setCanViewPresales] = useState(false);
+  useEffect(() => {
+    createClient().auth.getUser().then(({ data: { user } }) => {
+      const role = (user?.app_metadata as { role?: string } | undefined)?.role;
+      setCanViewPresales(role === "admin" || role === "leader");
+    });
+  }, []);
   const [leads,     setLeads]     = useState<Lead[]>([]);
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState<string | null>(null);
@@ -1228,9 +1237,9 @@ export default function LeadsView() {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <Topbar title="Leads" subtitle="Oportunidades sincronizadas desde ODOO CRM" tabs={topbarTabs} />
+      <Topbar title="Leads" subtitle="Oportunidades sincronizadas desde ODOO CRM" tabs={canViewPresales ? topbarTabs : undefined} />
 
-      {tab === "presales" ? (
+      {tab === "presales" && canViewPresales ? (
         <PresalesView leads={leads} loading={loading} error={error} onReload={loadLeads} LeadsListModal={DayLeadsModal} />
       ) : (
       <div className="flex-1 overflow-auto p-5 space-y-4 relative">
