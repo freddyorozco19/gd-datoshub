@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ComponentType, type ReactNode } from "react";
 import { RefreshCw, AlertCircle, Loader2, X, UserCog } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import FilterSelect from "./FilterSelect";
@@ -69,9 +69,13 @@ const ESTADO_OPTS = ["ALL", "Pendiente", "Ganado", "Perdido"];
 type QueueKey = "sinAsignar" | "inactivos" | "estancados" | "proximos";
 
 /* ── vista ───────────────────────────────────────────────────────────── */
+// popup con la tabla de leads (el mismo de la pestaña Business); se recibe por prop para no crear un import circular
+export type LeadsListModalType = ComponentType<{ leads: Lead[]; title?: string; heading?: string; suffix?: string; onClose: () => void }>;
+
 export default function PresalesView({
-  leads, loading, error, onReload,
-}: { leads: Lead[]; loading: boolean; error: string | null; onReload: () => void }) {
+  leads, loading, error, onReload, LeadsListModal,
+}: { leads: Lead[]; loading: boolean; error: string | null; onReload: () => void; LeadsListModal: LeadsListModalType }) {
+  const [listModal, setListModal] = useState<{ leads: Lead[]; heading: string } | null>(null);
   const [fPreventa, setFPreventa] = useState("ALL");
   const [fLinea,    setFLinea]    = useState("ALL");
   const [fEtapa,    setFEtapa]    = useState("ALL");
@@ -322,7 +326,7 @@ export default function PresalesView({
           <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
             {/* carga por preventa */}
             <Card title="Carga por preventa" className="xl:col-span-3"
-              right={<span className="text-[10px] text-slate-500">Clic para filtrar</span>}>
+              right={<span className="text-[10px] text-slate-500">Clic para ver los leads</span>}>
               {tableRows.length === 0 ? (
                 <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
               ) : (
@@ -343,11 +347,10 @@ export default function PresalesView({
                     <tbody className="divide-y divide-white/[0.05]">
                       {tableRows.map((r) => {
                         const rate = pct(r.won, r.won + r.lost);
-                        const active = fPreventa === r.name;
                         return (
                           <tr key={r.name}
-                            onClick={() => r.name !== "Sin asignar" && setFPreventa(active ? "ALL" : r.name)}
-                            className={`transition-colors ${r.name !== "Sin asignar" ? "cursor-pointer hover:bg-white/[0.05]" : ""} ${active ? "bg-white/[0.06]" : ""}`}>
+                            onClick={() => setListModal({ leads: filtered.filter((l) => (l.preventa || "Sin asignar") === r.name), heading: r.name })}
+                            className="transition-colors cursor-pointer hover:bg-white/[0.05]">
                             <td className={`py-2 pr-3 font-medium truncate max-w-[180px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
                             <td className="py-2 pr-3">
                               <div className="flex items-center gap-2">
@@ -371,7 +374,12 @@ export default function PresalesView({
                       })}
                     </tbody>
                     <tfoot>
-                      <tr className="border-t border-white/[0.14] font-semibold">
+                      <tr
+                        onClick={() => {
+                          const names = new Set(tableRows.map((r) => r.name));
+                          setListModal({ leads: filtered.filter((l) => names.has(l.preventa || "Sin asignar")), heading: "Total" });
+                        }}
+                        className="border-t border-white/[0.14] font-semibold cursor-pointer hover:bg-white/[0.05] transition-colors">
                         <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
                         <td className="pt-2.5 pr-3">
                           <div className="flex items-center gap-2">
@@ -487,6 +495,15 @@ export default function PresalesView({
       )}
 
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
+      {listModal && (
+        <LeadsListModal
+          leads={listModal.leads}
+          title="Leads de preventa"
+          heading={listModal.heading}
+          suffix=" con los filtros aplicados"
+          onClose={() => setListModal(null)}
+        />
+      )}
       {showManage && (
         <PresalesManageModal people={people} statuses={statuses} onSave={saveStatuses} onClose={() => setShowManage(false)} />
       )}

@@ -228,9 +228,9 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
 }
 
 /* ── modal: tabla de leads del día ──────────────────────────────────── */
-interface DayLeadsModalProps { leads: Lead[]; date?: string; title?: string; heading?: string; onClose: () => void; }
+interface DayLeadsModalProps { leads: Lead[]; date?: string; title?: string; heading?: string; suffix?: string; onClose: () => void; }
 
-function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalProps) {
+export function DayLeadsModal({ leads, date, title, heading, suffix, onClose }: DayLeadsModalProps) {
   const dateLabel = date
     ? new Date(date + "T12:00:00").toLocaleDateString("es-CO", {
         weekday: "long", day: "numeric", month: "long", year: "numeric",
@@ -293,7 +293,7 @@ function DayLeadsModal({ leads, date, title, heading, onClose }: DayLeadsModalPr
             <p className="text-xs text-slate-400 mt-0.5">
               {mFiltered.length}{mFiltered.length !== leads.length && ` de ${leads.length}`}{" "}
               {leads.length === 1 ? "lead registrado" : "leads registrados"}
-              {heading && " en esta línea"}
+              {heading && (suffix ?? " en esta línea")}
             </p>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-300 transition-colors">
@@ -1447,7 +1447,7 @@ export default function LeadsView() {
       <Topbar title="Leads" subtitle="Oportunidades sincronizadas desde ODOO CRM" tabs={topbarTabs} />
 
       {tab === "presales" ? (
-        <PresalesView leads={leads} loading={loading} error={error} onReload={loadLeads} />
+        <PresalesView leads={leads} loading={loading} error={error} onReload={loadLeads} LeadsListModal={DayLeadsModal} />
       ) : (
       <div className="flex-1 overflow-auto p-5 space-y-4 relative">
 
