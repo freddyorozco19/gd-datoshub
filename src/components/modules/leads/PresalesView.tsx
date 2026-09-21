@@ -354,7 +354,7 @@ export default function PresalesView({
           <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
             {/* carga por preventa */}
             <Card title="Carga por preventa" className="xl:col-span-3"
-              right={<span className="text-[10px] text-slate-500">Clic para ver los leads</span>}>
+              right={<span className="text-[10px] text-slate-500">Clic para ver los abiertos</span>}>
               {tableRows.length === 0 ? (
                 <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
               ) : (
@@ -377,7 +377,7 @@ export default function PresalesView({
                         const rate = pct(r.won, r.won + r.lost);
                         return (
                           <tr key={r.name}
-                            onClick={() => setListModal({ leads: filtered.filter((l) => (l.preventa || "Sin asignar") === r.name), heading: r.name })}
+                            onClick={() => setListModal({ leads: filtered.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
                             className="transition-colors cursor-pointer hover:bg-white/[0.05]">
                             <td className={`py-2 pr-3 font-medium truncate max-w-[180px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
                             <td className="py-2 pr-3">
@@ -405,7 +405,7 @@ export default function PresalesView({
                       <tr
                         onClick={() => {
                           const names = new Set(tableRows.map((r) => r.name));
-                          setListModal({ leads: filtered.filter((l) => names.has(l.preventa || "Sin asignar")), heading: "Total" });
+                          setListModal({ leads: filtered.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Total" });
                         }}
                         className="border-t border-white/[0.14] font-semibold cursor-pointer hover:bg-white/[0.05] transition-colors">
                         <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
@@ -528,7 +528,7 @@ export default function PresalesView({
           leads={listModal.leads}
           title="Leads de preventa"
           heading={listModal.heading}
-          suffix=" con los filtros aplicados"
+          suffix=" con Etapa Prev. abierta"
           onClose={() => setListModal(null)}
         />
       )}
