@@ -329,7 +329,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, onClose }: 
             <div className="flex items-center justify-center py-16 text-slate-400 text-sm">Sin leads con los filtros seleccionados</div>
           ) : (
             <table className="w-full text-xs">
-              <thead className="sticky top-0 bg-black/40 backdrop-blur-md border-b border-white/[0.07]">
+              <thead className="sticky top-0 z-10 bg-[#0D0D1A] border-b border-white/[0.07]">
                 <tr>
                   {([ ["nombre","Nombre"], ["cliente","Cliente"], ["comercial","Comercial"], ["linea","Línea"], ["etapa","Etapa"], ["tipoOportunidad","Tipo Oportunidad"], ["preventa","Preventa"], ["ingresosEsperados","Ingresos Esp."], ["ganado","Estado"] ] as [keyof Lead, string][]).map(([key, label]) => (
                     <th key={key} onClick={() => mToggleSort(key)}
