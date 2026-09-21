@@ -20,7 +20,7 @@ const parseDate = (s: string): Date | null => {
 
 const fmtCOP = (v: number) => {
   if (!v) return "—";
-  if (v >= 1e9) return `$${(v / 1e9).toFixed(1)} mil M`;
+  if (v >= 1e9) return `$${(v / 1e9).toLocaleString("es-CO", { maximumFractionDigits: 1 })} mil M`;
   if (v >= 1e6) return `$${Math.round(v / 1e6)} M`;
   return `$${Math.round(v).toLocaleString("es-CO")}`;
 };
@@ -53,7 +53,7 @@ function Kpi({ label, value, hint, tone = "blue" }: { label: string; value: stri
           <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
           <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">{label}</p>
         </div>
-        <p className="text-2xl font-bold text-slate-100 mt-1.5 tabular-nums leading-none">{value}</p>
+        <p className="text-xl font-bold text-slate-100 mt-1.5 tabular-nums leading-none whitespace-nowrap">{value}</p>
         {hint && <p className="text-[11px] text-slate-500 mt-1.5">{hint}</p>}
       </div>
     </div>
