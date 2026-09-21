@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type ComponentType, type ReactNode } from
 import { RefreshCw, AlertCircle, Loader2, X, UserCog } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import FilterSelect from "./FilterSelect";
+import DateRangeSlider from "./DateRangeSlider";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesManageModal, { type PresalesStatusRow } from "./PresalesManageModal";
 
@@ -80,6 +81,8 @@ export default function PresalesView({
   const [fLinea,    setFLinea]    = useState("ALL");
   const [fEtapa,    setFEtapa]    = useState("ALL");
   const [fEstado,   setFEstado]   = useState("ALL");
+  const [dFrom,     setDFrom]     = useState("");
+  const [dTo,       setDTo]       = useState("");
   const [queue,     setQueue]     = useState<QueueKey>("sinAsignar");
   const [selected,  setSelected]  = useState<Lead | null>(null);
 
@@ -130,11 +133,25 @@ export default function PresalesView({
     (fPreventa === "ALL" || l.preventa === fPreventa) &&
     (fLinea    === "ALL" || l.linea === fLinea) &&
     (fEtapa    === "ALL" || l.etapaPreventa === fEtapa) &&
-    (fEstado   === "ALL" || l.ganado === fEstado)
-  ), [scope, fPreventa, fLinea, fEtapa, fEstado]);
+    (fEstado   === "ALL" || l.ganado === fEstado) &&
+    (!dFrom || l.fechaCreacion >= dFrom) &&
+    (!dTo   || l.fechaCreacion.substring(0, 10) <= dTo)
+  ), [scope, fPreventa, fLinea, fEtapa, fEstado, dFrom, dTo]);
 
-  const activeFilters = [fPreventa, fLinea, fEtapa, fEstado].filter((v) => v !== "ALL").length;
-  const clearFilters = () => { setFPreventa("ALL"); setFLinea("ALL"); setFEtapa("ALL"); setFEstado("ALL"); };
+  /* límites del slider de fecha — del primer lead cargado a hoy (igual que Business) */
+  const dateBounds = useMemo(() => {
+    const today = new Date().toISOString().substring(0, 10);
+    const days = scope.map((l) => l.fechaCreacion.substring(0, 10)).filter(Boolean).sort();
+    if (!days.length) {
+      const d = new Date();
+      d.setFullYear(d.getFullYear() - 1);
+      return { min: d.toISOString().substring(0, 10), max: today };
+    }
+    return { min: days[0], max: days[days.length - 1] > today ? days[days.length - 1] : today };
+  }, [scope]);
+
+  const activeFilters = [fPreventa, fLinea, fEtapa, fEstado].filter((v) => v !== "ALL").length + (dFrom || dTo ? 1 : 0);
+  const clearFilters = () => { setFPreventa("ALL"); setFLinea("ALL"); setFEtapa("ALL"); setFEstado("ALL"); setDFrom(""); setDTo(""); };
 
   const [now] = useState(() => Date.now());
   const daysSince = (l: Lead) => {
@@ -272,6 +289,17 @@ export default function PresalesView({
               <X size={11} />
             </button>
           )} />
+
+        <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
+
+        <DateRangeSlider
+          min={dateBounds.min}
+          max={dateBounds.max}
+          from={dFrom}
+          to={dTo}
+          onChange={(from, to) => { setDFrom(from); setDTo(to); }}
+        />
+
         <div className="ml-auto flex items-center gap-2">
           <button type="button" onClick={() => setOnlyActive((v) => !v)}
             title="Oculta a los preventas inactivos en la tabla de carga y en el filtro Preventa"
