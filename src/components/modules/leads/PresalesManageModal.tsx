@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { Users, X, Search, AlertCircle } from "lucide-react";
+import { Users, X, Search, AlertCircle, Loader2 } from "lucide-react";
 
 export interface PresalesStatusRow {
   name: string;
@@ -21,16 +21,25 @@ const fmtStamp = (iso: string) => {
 };
 
 export default function PresalesManageModal({
-  people, statuses, onToggle, onClose,
+  people, statuses, onSave, onClose,
 }: {
   people: PresalesPerson[];
   statuses: Record<string, PresalesStatusRow>;
-  onToggle: (name: string, active: boolean) => Promise<void>;
+  onSave: (changes: { name: string; active: boolean }[]) => Promise<void>;
   onClose: () => void;
 }) {
-  const [query, setQuery] = useState("");
-  const [busy, setBusy]   = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [query, setQuery]   = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError]   = useState<string | null>(null);
+  // cambios pendientes (aún no guardados): nombre → activo
+  const [draft, setDraft]   = useState<Record<string, boolean>>({});
+
+  const effective = (name: string) => draft[name] ?? (statuses[name] ? statuses[name].active : true);
+  // al confirmar se guardan los cambios y también los "Nuevos" (quedan revisados con su estado actual)
+  const toSave = people
+    .filter((p) => (statuses[p.name] ? effective(p.name) !== statuses[p.name].active : true))
+    .map((p) => ({ name: p.name, active: effective(p.name) }));
+  const pendingChanges = Object.keys(draft).filter((n) => statuses[n] && draft[n] !== statuses[n].active).length;
 
   // el orden se fija al abrir (nuevos → activos → inactivos) para que las filas no salten al cambiar un interruptor
   const [order] = useState(() =>
@@ -49,14 +58,19 @@ export default function PresalesManageModal({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  async function toggle(name: string, next: boolean) {
-    setBusy(name); setError(null);
+  function toggle(name: string, next: boolean) {
+    setDraft((d) => ({ ...d, [name]: next }));
+  }
+
+  async function confirm() {
+    if (toSave.length === 0) { onClose(); return; }
+    setSaving(true); setError(null);
     try {
-      await onToggle(name, next);
+      await onSave(toSave);
+      onClose();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "No se pudo guardar el cambio.");
-    } finally {
-      setBusy(null);
+      setError(e instanceof Error ? e.message : "No se pudieron guardar los cambios.");
+      setSaving(false);
     }
   }
 
@@ -71,7 +85,7 @@ export default function PresalesManageModal({
       <div
         className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
         style={{ backgroundColor: "var(--app-modal-overlay)" }}
-        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        onClick={(e) => { if (e.target === e.currentTarget && pendingChanges === 0) onClose(); }}
       >
         <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-xl max-h-[85vh] flex flex-col overflow-hidden">
           <div className="app-bar modal-header flex items-center justify-between px-6 py-4 border-b border-white/[0.07] shrink-0">
@@ -112,9 +126,8 @@ export default function PresalesManageModal({
               <div className="divide-y divide-white/[0.05]">
                 {visible.map((name) => {
                   const p = byName.get(name);
-                  const st = statuses[name];
-                  const isNew = !st;
-                  const active = st ? st.active : true;
+                  const isNew = !statuses[name];
+                  const active = effective(name);
                   return (
                     <div key={name} className="flex items-center gap-3 px-2 py-2.5">
                       <div className="flex-1 min-w-0">
@@ -131,7 +144,7 @@ export default function PresalesManageModal({
                       </div>
                       <span className="text-[10px] text-slate-500 w-14 text-right">{active ? "Activo" : "Inactivo"}</span>
                       <button
-                        type="button" role="switch" aria-checked={active} disabled={busy === name}
+                        type="button" role="switch" aria-checked={active} disabled={saving}
                         onClick={() => toggle(name, !active)}
                         title={active ? "Marcar como inactivo" : "Marcar como activo"}
                         className={`relative shrink-0 w-9 h-5 rounded-full transition-colors disabled:opacity-50 ${active ? "bg-blue-500" : "bg-white/[0.12]"}`}
@@ -145,10 +158,28 @@ export default function PresalesManageModal({
             )}
           </div>
 
-          <div className="px-6 py-3 border-t border-white/[0.07] text-[10px] text-slate-500 shrink-0">
-            {last?.updated_at
-              ? <>Último cambio: {last.updated_by ?? "—"} · {fmtStamp(last.updated_at)}</>
-              : "Sin cambios registrados todavía"}
+          <div className="px-6 py-3 border-t border-white/[0.07] shrink-0 flex items-center gap-3">
+            <p className="flex-1 min-w-0 text-[10px] text-slate-500">
+              {pendingChanges > 0
+                ? <span className="text-amber-400 font-medium">{pendingChanges} cambio{pendingChanges === 1 ? "" : "s"} sin confirmar</span>
+                : last?.updated_at
+                  ? <>Último cambio: {last.updated_by ?? "—"} · {fmtStamp(last.updated_at)}</>
+                  : "Sin cambios registrados todavía"}
+            </p>
+            <button type="button" onClick={onClose} disabled={saving}
+              className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-slate-200 disabled:opacity-50 transition-colors">
+              Cancelar
+            </button>
+            <button type="button" onClick={confirm} disabled={saving}
+              className="app-bar flex items-center gap-2 px-5 py-2 rounded-xl text-xs text-white font-medium disabled:opacity-60 transition-all"
+              style={{
+                background: "linear-gradient(135deg, #4f46e5, #3b82f6)",
+                boxShadow: "0 2px 12px rgba(79,70,229,0.35), inset 0 1px 0 rgba(255,255,255,0.12)",
+                border: "1px solid rgba(99,102,241,0.4)",
+              }}>
+              {saving && <Loader2 size={13} className="animate-spin" />}
+              Confirmar
+            </button>
           </div>
         </div>
       </div>

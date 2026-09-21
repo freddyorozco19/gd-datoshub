@@ -31,34 +31,35 @@ export async function GET() {
   return Response.json({ statuses: await res.json(), canManage, needsSetup: false });
 }
 
-/** POST — marca un preventa como activo/inactivo (solo administrador o líder). */
+/** POST — guarda en lote el estado activo/inactivo de varios preventas (solo administrador o líder). */
 export async function POST(req: NextRequest) {
   const user = await getAuthedUser();
   if (!canManagePresales(user)) {
     return Response.json({ error: "Acceso restringido a administradores y líderes." }, { status: 403 });
   }
 
-  let body: { name?: string; active?: boolean };
+  let body: { changes?: { name?: string; active?: boolean }[] };
   try {
     body = await req.json();
   } catch {
     return Response.json({ error: "Cuerpo JSON inválido." }, { status: 400 });
   }
 
-  const name = typeof body.name === "string" ? body.name.trim() : "";
-  if (!name || name.length > 200 || typeof body.active !== "boolean") {
-    return Response.json({ error: "Parámetros inválidos (name y active)." }, { status: 400 });
+  const changes = Array.isArray(body.changes) ? body.changes : [];
+  const valid = changes.length > 0 && changes.length <= 500 && changes.every(
+    (c) => typeof c.name === "string" && c.name.trim() && c.name.length <= 200 && typeof c.active === "boolean",
+  );
+  if (!valid) {
+    return Response.json({ error: "Parámetros inválidos (changes: [{ name, active }])." }, { status: 400 });
   }
 
+  const now = new Date().toISOString();
   const res = await fetch(`${SUPABASE_URL}/rest/v1/presales_status?on_conflict=name`, {
     method: "POST",
     headers: { ...headers, Prefer: "resolution=merge-duplicates,return=representation" },
-    body: JSON.stringify({
-      name,
-      active: body.active,
-      updated_by: user!.email ?? null,
-      updated_at: new Date().toISOString(),
-    }),
+    body: JSON.stringify(
+      changes.map((c) => ({ name: c.name!.trim(), active: c.active, updated_by: user!.email ?? null, updated_at: now })),
+    ),
   });
   if (!res.ok) {
     const detail = await res.text();
@@ -68,6 +69,5 @@ export async function POST(req: NextRequest) {
     }
     return Response.json({ error: "No se pudo guardar el cambio." }, { status: 502 });
   }
-  const rows = await res.json();
-  return Response.json({ status: rows[0] ?? null });
+  return Response.json({ statuses: await res.json() });
 }

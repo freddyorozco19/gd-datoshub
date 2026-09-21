@@ -100,15 +100,16 @@ export default function PresalesView({
 
   const isInactive = (name: string) => statuses[name]?.active === false;
 
-  async function toggleStatus(name: string, active: boolean) {
+  async function saveStatuses(changes: { name: string; active: boolean }[]) {
     const res = await fetch("/api/presales/status", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, active }),
+      body: JSON.stringify({ changes }),
     });
     const json = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
-    setStatuses((prev) => ({ ...prev, [name]: json.status as PresalesStatusRow }));
+    const saved = json.statuses as PresalesStatusRow[];
+    setStatuses((prev) => ({ ...prev, ...Object.fromEntries(saved.map((s) => [s.name, s])) }));
     setNeedsSetup(false);
   }
 
@@ -460,7 +461,7 @@ export default function PresalesView({
 
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
       {showManage && (
-        <PresalesManageModal people={people} statuses={statuses} onToggle={toggleStatus} onClose={() => setShowManage(false)} />
+        <PresalesManageModal people={people} statuses={statuses} onSave={saveStatuses} onClose={() => setShowManage(false)} />
       )}
     </div>
   );
