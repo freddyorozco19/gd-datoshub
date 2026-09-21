@@ -1,12 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import type { User } from "@supabase/supabase-js";
 
-export type Role = "admin" | "user";
+export type Role = "admin" | "leader" | "user";
 
 /** Lee el rol desde app_metadata (controlado solo por service-role). */
 export function roleOf(user: User | null | undefined): Role {
   const r = (user?.app_metadata as { role?: string } | undefined)?.role;
-  return r === "admin" ? "admin" : "user";
+  return r === "admin" ? "admin" : r === "leader" ? "leader" : "user";
 }
 
 /** Devuelve el usuario autenticado (o null) desde la sesión server-side. */

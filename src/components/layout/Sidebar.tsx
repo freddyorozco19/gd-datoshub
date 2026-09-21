@@ -65,6 +65,7 @@ export default function Sidebar() {
   const [mode, setMode]             = useState<SidebarMode>("expanded");
   const [hovered, setHovered]       = useState(false);
   const [isAdmin, setIsAdmin]       = useState(false);
+  const [roleLabel, setRoleLabel]   = useState("Usuario");
   const [email, setEmail]           = useState("");
   const [displayName, setDisplay]   = useState("");
   const [closedSections, setClosedSections] = useState<Record<string, boolean>>({});
@@ -85,6 +86,7 @@ export default function Sidebar() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       const role = (user?.app_metadata as { role?: string } | undefined)?.role;
       setIsAdmin(role === "admin");
+      setRoleLabel(role === "admin" ? "Administrador" : role === "leader" ? "Líder" : "Usuario");
       const e = user?.email ?? "";
       setEmail(e);
       const parts = e.split("@")[0].split(/[._-]/);
@@ -199,7 +201,7 @@ export default function Sidebar() {
               {!collapsed && (
                 <div className="px-3 py-2.5 border-b border-white/[0.06]">
                   <p className="text-xs font-medium text-slate-200 truncate">{displayName || email}</p>
-                  <p className="text-[10px] text-slate-500">{isAdmin ? "Administrador" : "Usuario"}</p>
+                  <p className="text-[10px] text-slate-500">{roleLabel}</p>
                 </div>
               )}
               {MODE_ORDER.map((m) => {
@@ -235,7 +237,7 @@ export default function Sidebar() {
             {!collapsed && (
               <div className="flex-1 min-w-0 text-left">
                 <p className="text-xs font-medium text-slate-200 truncate">{displayName || email.split("@")[0]}</p>
-                <p className="text-[10px] text-slate-500">{isAdmin ? "Administrador" : "Usuario"}</p>
+                <p className="text-[10px] text-slate-500">{roleLabel}</p>
               </div>
             )}
           </button>

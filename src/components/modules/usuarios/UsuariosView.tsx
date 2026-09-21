@@ -5,17 +5,26 @@ import { createPortal } from "react-dom";
 import {
   Users, Shield, User as UserIcon, Loader2, AlertCircle, RefreshCw,
   History, Globe, Monitor, CheckCircle2, XCircle, UserPlus, X, Mail, Trash2, KeyRound,
-  ChevronDown,
+  ChevronDown, Star,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 
 const AREAS = ["TI", "DATOS", "PREVENTA", "CALIDAD"] as const;
 type Area = typeof AREAS[number];
 
+type RoleValue = "admin" | "leader" | "user";
+const ROLE_LABEL: Record<RoleValue, string> = { admin: "Administrador", leader: "Líder", user: "Usuario" };
+const ROLE_BADGE: Record<RoleValue, string> = {
+  admin:  "bg-violet-500/10 text-violet-400",
+  leader: "bg-amber-500/10 text-amber-400",
+  user:   "bg-white/[0.05] text-slate-400",
+};
+const ROLE_OPTIONS = (["user", "leader", "admin"] as const).map((v) => ({ value: v, label: ROLE_LABEL[v] }));
+
 interface UserRow {
   id: string;
   email: string;
-  role: "admin" | "user";
+  role: RoleValue;
   area: Area | null;
   lastSignInAt: string | null;
   createdAt: string | null;
@@ -100,7 +109,7 @@ export default function UsuariosView() {
 
 function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (email: string) => void }) {
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<"user" | "admin">("user");
+  const [role, setRole] = useState<RoleValue>("user");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
@@ -125,9 +134,10 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
     }
   }
 
-  const roles: { value: "user" | "admin"; label: string; desc: string; icon: React.ReactNode }[] = [
-    { value: "user",  label: "Usuario",        desc: "Acceso de lectura y análisis",        icon: <UserIcon size={15} /> },
-    { value: "admin", label: "Administrador",  desc: "Gestión completa de usuarios y datos", icon: <Shield size={15} /> },
+  const roles: { value: RoleValue; label: string; desc: string; icon: React.ReactNode }[] = [
+    { value: "user",   label: "Usuario",       desc: "Acceso de lectura y análisis",         icon: <UserIcon size={15} /> },
+    { value: "leader", label: "Líder",         desc: "Gestión de su equipo y área",          icon: <Star size={15} /> },
+    { value: "admin",  label: "Administrador", desc: "Gestión completa de usuarios y datos", icon: <Shield size={15} /> },
   ];
 
   return (
@@ -135,7 +145,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
       {/* Liquid glass card */}
       <div
         onClick={e => e.stopPropagation()}
-        className="modal-panel backdrop-blur-2xl w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-white/[0.14]"
+        className="modal-panel backdrop-blur-2xl w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-white/[0.14]"
       >
         {/* Highlight stripe top */}
         <div className="h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)" }} />
@@ -196,12 +206,12 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
               {/* Rol — cards */}
               <div>
                 <label className="block text-[10px] text-slate-400 uppercase tracking-widest mb-2">Rol</label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {roles.map(r => {
                     const active = role === r.value;
                     return (
                       <button type="button" key={r.value} onClick={() => setRole(r.value)}
-                        className={`relative flex flex-col items-start gap-1.5 rounded-xl px-4 py-3 text-left transition-all border ${active ? "border-indigo-400/45" : "bg-white/[0.04] border-white/[0.07]"}`}
+                        className={`relative flex flex-col items-start gap-1.5 rounded-xl px-3 py-3 text-left transition-all border ${active ? "border-indigo-400/45" : "bg-white/[0.04] border-white/[0.07]"}`}
                         style={{
                           background: active ? "linear-gradient(135deg, rgba(99,102,241,0.25), rgba(59,130,246,0.15))" : undefined,
                           boxShadow: active ? "0 0 0 3px rgba(99,102,241,0.1), inset 0 1px 0 rgba(255,255,255,0.08)" : "none",
@@ -629,7 +639,7 @@ function UsuariosPanel() {
 
   useEffect(() => { load(); }, []);
 
-  async function changeRole(u: UserRow, role: "admin" | "user") {
+  async function changeRole(u: UserRow, role: RoleValue) {
     if (role === u.role) return;
     setSavingId(u.id); setError(null);
     try {
@@ -668,7 +678,8 @@ function UsuariosPanel() {
   }
 
 
-  const admins = users.filter((u) => u.role === "admin").length;
+  const admins  = users.filter((u) => u.role === "admin").length;
+  const leaders = users.filter((u) => u.role === "leader").length;
 
   return (
     <div className="space-y-5">
@@ -683,6 +694,11 @@ function UsuariosPanel() {
           <Shield size={16} className="text-violet-400" />
           <span className="font-semibold text-slate-200">{admins}</span>
           <span className="text-slate-500">administradores</span>
+        </div>
+        <div className="flex items-center gap-2 bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] px-4 py-2.5 text-sm">
+          <Star size={16} className="text-amber-400" />
+          <span className="font-semibold text-slate-200">{leaders}</span>
+          <span className="text-slate-500">líderes</span>
         </div>
         <div className="ml-auto flex items-center gap-2">
           <button
@@ -750,8 +766,8 @@ function UsuariosPanel() {
                 <tr key={u.id} className="hover:bg-white/[0.03] transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2.5">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full shrink-0 ${u.role === "admin" ? "bg-violet-500/10 text-violet-400" : "bg-white/[0.05] text-slate-400"}`}>
-                        {u.role === "admin" ? <Shield size={15} /> : <UserIcon size={15} />}
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full shrink-0 ${ROLE_BADGE[u.role]}`}>
+                        {u.role === "admin" ? <Shield size={15} /> : u.role === "leader" ? <Star size={15} /> : <UserIcon size={15} />}
                       </div>
                       <div className="min-w-0">
                         <p className="font-medium text-slate-200 truncate">{u.email}</p>
@@ -760,8 +776,8 @@ function UsuariosPanel() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${u.role === "admin" ? "bg-violet-500/10 text-violet-400" : "bg-white/[0.05] text-slate-400"}`}>
-                      {u.role === "admin" ? "Administrador" : "Usuario"}
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${ROLE_BADGE[u.role]}`}>
+                      {ROLE_LABEL[u.role]}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{u.area ?? "Sin área"}</td>
@@ -774,12 +790,9 @@ function UsuariosPanel() {
                       <LiquidSelect
                         value={u.role}
                         disabled={savingId === u.id || u.isSelf}
-                        onChange={(v) => changeRole(u, v as "admin" | "user")}
+                        onChange={(v) => changeRole(u, v as RoleValue)}
                         title={u.isSelf ? "No puedes cambiar tu propio rol" : "Cambiar rol"}
-                        options={[
-                          { value: "user", label: "Usuario" },
-                          { value: "admin", label: "Administrador" },
-                        ]}
+                        options={ROLE_OPTIONS}
                       />
                       <LiquidSelect
                         value={u.area ?? ""}

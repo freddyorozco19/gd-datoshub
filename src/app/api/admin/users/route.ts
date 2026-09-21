@@ -4,7 +4,8 @@ import { requireAdmin } from "@/lib/auth/roles";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SERVICE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-const ROLES = new Set(["admin", "user"]);
+const ROLES = new Set(["admin", "leader", "user"]);
+const normRole = (r?: string) => (r === "admin" ? "admin" : r === "leader" ? "leader" : "user");
 const AREAS = new Set(["TI", "DATOS", "PREVENTA", "CALIDAD"]);
 
 /** Llama a la API admin de GoTrue con la service-role key (solo server). */
@@ -56,7 +57,7 @@ export async function GET() {
   const users = (data.users ?? []).map((u) => ({
     id:    u.id,
     email: u.email ?? "",
-    role:  u.app_metadata?.role === "admin" ? "admin" : "user",
+    role:  normRole(u.app_metadata?.role),
     area:  u.app_metadata?.area && AREAS.has(u.app_metadata.area) ? u.app_metadata.area : null,
     lastSignInAt: u.last_sign_in_at ?? null,
     createdAt:    u.created_at ?? null,
@@ -104,11 +105,11 @@ export async function POST(req: NextRequest) {
   }
   const u = (await inviteRes.json()) as GoTrueUser;
 
-  // Si el rol es admin, actualizamos app_metadata
-  if (role === "admin") {
+  // Si el rol no es el básico, actualizamos app_metadata
+  if (role !== "user") {
     await adminFetch(`/users/${u.id}`, {
       method: "PUT",
-      body: JSON.stringify({ app_metadata: { role: "admin" } }),
+      body: JSON.stringify({ app_metadata: { role } }),
     });
   }
 
@@ -175,7 +176,7 @@ export async function PATCH(req: NextRequest) {
   return Response.json({
     id: u.id,
     email: u.email ?? "",
-    role: u.app_metadata?.role === "admin" ? "admin" : "user",
+    role: normRole(u.app_metadata?.role),
     area: u.app_metadata?.area && AREAS.has(u.app_metadata.area) ? u.app_metadata.area : null,
   });
 }
