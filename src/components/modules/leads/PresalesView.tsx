@@ -311,7 +311,7 @@ export default function PresalesView({
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
             <Kpi label="En preventa"     value={String(stats.total)} hint="Total de leads" />
-            <Kpi label="Preventa abierta" value={String(totals.open)} hint={onlyActive ? "Etapa Prev. = Abierto · solo activos" : "Etapa Prev. = Abierto"} />
+            <Kpi label="Preventa abierta" value={String(totals.open)} />
             <Kpi label="Pipeline abierto" value={fmtCOP(stats.pipeline)} hint="Ingresos esperados" />
             <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`} tone="emerald" />
             <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)} hint="Abiertos sin responsable" tone="amber" />
