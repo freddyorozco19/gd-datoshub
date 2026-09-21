@@ -918,6 +918,23 @@ function TrazabilidadPanel() {
 
   useEffect(() => { load(); }, []);
 
+  const [diag, setDiag] = useState<{ action: string; ok: boolean; status: number; detail: string }[] | null>(null);
+  const [diagLoading, setDiagLoading] = useState(false);
+  async function runDiagnostic() {
+    setDiagLoading(true); setDiag(null);
+    try {
+      const res = await fetch("/api/admin/access-log", { method: "POST" });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
+      setDiag(json.results);
+      load();
+    } catch (e) {
+      setDiag([{ action: "diagnóstico", ok: false, status: 0, detail: e instanceof Error ? e.message : "Error" }]);
+    } finally {
+      setDiagLoading(false);
+    }
+  }
+
   const allUsers = useMemo(() => [...new Set(events.map((e: AccessEvent) => e.email).filter(Boolean) as string[])].sort(), [events]);
   const filtered = useMemo(() => events.filter(e => {
     if (actionFilter !== "all" && e.action !== actionFilter) return false;
@@ -985,11 +1002,30 @@ function TrazabilidadPanel() {
           </select>
         )}
 
+        <button onClick={runDiagnostic} disabled={diagLoading}
+          title="Intenta guardar un evento de prueba por cada tipo de acción y muestra la respuesta de la base de datos"
+          className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-amber-400 border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 disabled:opacity-60 transition-colors">
+          {diagLoading ? <Loader2 size={13} className="animate-spin" /> : <AlertCircle size={13} />} Diagnosticar registro
+        </button>
         <button onClick={load} disabled={loading}
-          className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] disabled:opacity-60 transition-colors">
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] disabled:opacity-60 transition-colors">
           <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
         </button>
       </div>
+
+      {diag && (
+        <div className="rounded-lg bg-white/[0.04] border border-white/[0.08] px-4 py-3 text-xs space-y-1.5">
+          <p className="font-semibold text-slate-200">Resultado del diagnóstico</p>
+          {diag.map((d) => (
+            <div key={d.action} className="flex items-start gap-2">
+              {d.ok ? <CheckCircle2 size={14} className="text-emerald-400 shrink-0 mt-0.5" /> : <XCircle size={14} className="text-rose-400 shrink-0 mt-0.5" />}
+              <span className="text-slate-300 font-mono">{d.action}</span>
+              <span className={d.ok ? "text-emerald-400" : "text-rose-400"}>{d.ok ? "guardado" : `falló (HTTP ${d.status})`}</span>
+              {d.detail && <span className="text-slate-400 break-all">{d.detail}</span>}
+            </div>
+          ))}
+        </div>
+      )}
 
       {needsSetup && (
         <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
