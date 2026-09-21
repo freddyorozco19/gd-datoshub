@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
   };
 
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/access_log`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/access_log`, {
       method: "POST",
       headers: {
         apikey:        SERVICE_KEY,
@@ -59,7 +59,12 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify(record),
     });
-  } catch { /* best-effort */ }
+    if (!res.ok) {
+      console.error("[log-access] insert falló", res.status, action, await res.text().catch(() => ""));
+    }
+  } catch (e) {
+    console.error("[log-access] error de red al insertar", action, e);
+  }
 
   return Response.json({ ok: true });
 }
