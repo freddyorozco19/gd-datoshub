@@ -103,7 +103,8 @@ export default function PresalesView({
     const d = parseDate(l.cierreEsperado);
     return d ? Math.ceil((d.getTime() - now) / DAY_MS) : null;
   };
-  const isOpen = (l: Lead) => l.ganado === "Pendiente" && l.activo;
+  // "Abierto" = el campo Etapa Prev. está en Abierto
+  const isOpen = (l: Lead) => normText(l.etapaPreventa) === "abierto";
 
   /* KPIs */
   const stats = useMemo(() => {
@@ -113,9 +114,8 @@ export default function PresalesView({
     const sinAsig = open.filter((l) => !l.preventa);
     const stale   = open.filter((l) => daysSince(l) > STALE_DAYS);
     const soon    = open.filter((l) => { const d = daysToClose(l); return d !== null && d >= 0 && d <= SOON_DAYS; });
-    const etapaAbierta = filtered.filter((l) => normText(l.etapaPreventa) === "abierto").length;
     return {
-      total: filtered.length, etapaAbierta, open, won, lost, sinAsig, stale, soon,
+      total: filtered.length, etapaAbierta: open.length, open, won, lost, sinAsig, stale, soon,
       pipeline: open.reduce((s, l) => s + l.ingresosEsperados, 0),
       winRate: pct(won.length, won.length + lost.length),
     };
@@ -123,20 +123,33 @@ export default function PresalesView({
   }, [filtered]);
 
   /* carga por preventa */
-  const byPreventa = useMemo(() => {
-    const map = new Map<string, { name: string; open: number; won: number; lost: number; pipeline: number; stale: number }>();
+  // Una columna por cada valor real del campo Etapa Prev. (además de Abierto), en vez de valores supuestos.
+  const { byPreventa, etapaCols } = useMemo(() => {
+    type Row = { name: string; open: number; pipeline: number; stale: number; counts: Record<string, number> };
+    const map = new Map<string, Row>();
+    const labels = new Map<string, string>();   // valor normalizado → etiqueta original
+    const totals = new Map<string, number>();
     for (const l of filtered) {
       const name = l.preventa || "Sin asignar";
-      const r = map.get(name) ?? { name, open: 0, won: 0, lost: 0, pipeline: 0, stale: 0 };
+      const r = map.get(name) ?? { name, open: 0, pipeline: 0, stale: 0, counts: {} };
+      const key = normText(l.etapaPreventa) || "sin etapa";
+      if (!labels.has(key)) labels.set(key, l.etapaPreventa || "Sin etapa");
+      totals.set(key, (totals.get(key) ?? 0) + 1);
+      r.counts[key] = (r.counts[key] ?? 0) + 1;
       if (isOpen(l)) { r.open++; r.pipeline += l.ingresosEsperados; if (daysSince(l) > STALE_DAYS) r.stale++; }
-      else if (l.ganado === "Ganado") r.won++;
-      else if (l.ganado === "Perdido") r.lost++;
       map.set(name, r);
     }
-    return [...map.values()].sort((a, b) => b.open - a.open || b.won - a.won);
+    const cols = [...totals.keys()]
+      .filter((k) => k !== "abierto")
+      .sort((a, b) => (totals.get(b) ?? 0) - (totals.get(a) ?? 0))
+      .map((k) => ({ key: k, label: labels.get(k) ?? k }));
+    const rows = [...map.values()].sort((a, b) => b.open - a.open || Object.values(b.counts).reduce((s, n) => s + n, 0) - Object.values(a.counts).reduce((s, n) => s + n, 0));
+    return { byPreventa: rows, etapaCols: cols };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtered]);
   const maxOpen = Math.max(1, ...byPreventa.map((r) => r.open));
+  const hasGanado  = etapaCols.some((c) => c.key === "ganado");
+  const hasPerdido = etapaCols.some((c) => c.key === "perdido");
 
   /* embudo por etapa de preventa */
   const byEtapa = useMemo(() => {
@@ -233,16 +246,17 @@ export default function PresalesView({
                       <tr className="text-[10px] uppercase tracking-wide text-slate-500">
                         <th className="text-left font-semibold pb-2 pr-3">Preventa</th>
                         <th className="text-left font-semibold pb-2 pr-3 w-36">Abiertos</th>
-                        <th className="text-right font-semibold pb-2 px-2">Ganados</th>
-                        <th className="text-right font-semibold pb-2 px-2">Perdidos</th>
-                        <th className="text-right font-semibold pb-2 px-2">Éxito</th>
+                        {etapaCols.map((c) => (
+                          <th key={c.key} className="text-right font-semibold pb-2 px-2 whitespace-nowrap">{c.label}</th>
+                        ))}
+                        {hasGanado && hasPerdido && <th className="text-right font-semibold pb-2 px-2">Éxito</th>}
                         <th className="text-right font-semibold pb-2 px-2">Pipeline</th>
                         <th className="text-right font-semibold pb-2 pl-2">Estancados</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/[0.05]">
                       {byPreventa.map((r) => {
-                        const rate = pct(r.won, r.won + r.lost);
+                        const rate = pct(r.counts["ganado"] ?? 0, (r.counts["ganado"] ?? 0) + (r.counts["perdido"] ?? 0));
                         const active = fPreventa === r.name;
                         return (
                           <tr key={r.name}
@@ -257,9 +271,15 @@ export default function PresalesView({
                                 <span className="w-6 text-right tabular-nums text-slate-300">{r.open}</span>
                               </div>
                             </td>
-                            <td className="py-2 px-2 text-right tabular-nums text-emerald-400">{r.won}</td>
-                            <td className="py-2 px-2 text-right tabular-nums text-slate-400">{r.lost}</td>
-                            <td className="py-2 px-2 text-right tabular-nums text-slate-300">{rate === null ? "—" : `${rate}%`}</td>
+                            {etapaCols.map((c) => {
+                              const n = r.counts[c.key] ?? 0;
+                              return (
+                                <td key={c.key} className={`py-2 px-2 text-right tabular-nums ${n === 0 ? "text-slate-600" : c.key === "ganado" ? "text-emerald-400" : "text-slate-300"}`}>{n}</td>
+                              );
+                            })}
+                            {hasGanado && hasPerdido && (
+                              <td className="py-2 px-2 text-right tabular-nums text-slate-300">{rate === null ? "—" : `${rate}%`}</td>
+                            )}
                             <td className="py-2 px-2 text-right tabular-nums text-slate-300 whitespace-nowrap">{fmtCOP(r.pipeline)}</td>
                             <td className={`py-2 pl-2 text-right tabular-nums ${r.stale > 0 ? "text-rose-400 font-semibold" : "text-slate-500"}`}>{r.stale}</td>
                           </tr>
