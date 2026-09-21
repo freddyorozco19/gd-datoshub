@@ -1007,6 +1007,17 @@ const DATE_PRESETS: { key: string; label: string }[] = [
   { key: "all",      label: "Todo" },
 ];
 
+/* periodos de un año calendario (meses base 0) */
+const YEAR_PERIODS = [
+  { key: "year", label: "Todo el año", startMonth: 0, endMonth: 11, span: true },
+  { key: "s1",   label: "S1",          startMonth: 0, endMonth: 5,  span: false },
+  { key: "s2",   label: "S2",          startMonth: 6, endMonth: 11, span: false },
+  { key: "q1",   label: "Q1",          startMonth: 0, endMonth: 2,  span: false },
+  { key: "q2",   label: "Q2",          startMonth: 3, endMonth: 5,  span: false },
+  { key: "q3",   label: "Q3",          startMonth: 6, endMonth: 8,  span: false },
+  { key: "q4",   label: "Q4",          startMonth: 9, endMonth: 11, span: false },
+] as const;
+
 /* ── slider de rango de fecha (reemplaza los inputs Desde/Hasta) ──────── */
 function DateRangeSlider({
   min, max, from, to, onChange,
@@ -1063,6 +1074,27 @@ function DateRangeSlider({
     if (startStr < min) startStr = min;
     onChange(startStr, max);
     setOpen(false);
+  }
+
+  const minYear = Number(min.slice(0, 4));
+  const maxYear = Number(max.slice(0, 4));
+  const years   = Array.from({ length: maxYear - minYear + 1 }, (_, i) => maxYear - i);
+  const [year, setYear] = useState(maxYear);
+
+  /* rango [inicio, fin] de un periodo del año, recortado a los datos disponibles; null si queda fuera */
+  function periodRange(y: number, p: (typeof YEAR_PERIODS)[number]): [string, string] | null {
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const endDay = new Date(y, p.endMonth + 1, 0).getDate();
+    let s = `${y}-${pad(p.startMonth + 1)}-01`;
+    let e = `${y}-${pad(p.endMonth + 1)}-${pad(endDay)}`;
+    if (s < min) s = min;
+    if (e > max) e = max;
+    return s > e ? null : [s, e];
+  }
+  function applyPeriod(y: number, p: (typeof YEAR_PERIODS)[number]) {
+    const r = periodRange(y, p);
+    if (!r) return;
+    onChange(r[0], r[1]);
   }
 
   const pctFrom = (fromIdx / totalDays) * 100;
@@ -1147,6 +1179,42 @@ function DateRangeSlider({
                     className="text-xs rounded-lg px-2 py-1.5 bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.18] focus:outline-none focus:border-blue-500/60 text-slate-200 transition-colors"
                   />
                 </div>
+              </div>
+            </div>
+
+            <div className="h-px bg-white/[0.08]" />
+
+            <div>
+              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Por año</p>
+              <div className="flex flex-wrap gap-1.5 mb-1.5">
+                {years.map((y) => (
+                  <button
+                    key={y} type="button"
+                    onClick={() => { setYear(y); applyPeriod(y, YEAR_PERIODS[0]); }}
+                    className={`text-[11px] px-2.5 py-1.5 rounded-lg border tabular-nums transition-colors ${
+                      y === year ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.1] text-slate-300"
+                    }`}
+                  >
+                    {y}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-4 gap-1.5">
+                {YEAR_PERIODS.map((p) => {
+                  const r = periodRange(year, p);
+                  const active = !!r && r[0] === fromDate && r[1] === toDate;
+                  return (
+                    <button
+                      key={p.key} type="button" disabled={!r}
+                      onClick={() => applyPeriod(year, p)}
+                      className={`text-[11px] px-2 py-1.5 rounded-lg border transition-colors disabled:opacity-30 disabled:pointer-events-none ${
+                        p.span ? "col-span-2" : ""
+                      } ${active ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.1] text-slate-300"}`}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
