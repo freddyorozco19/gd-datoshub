@@ -182,10 +182,10 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
             ) : !history || history.length === 0 ? (
               <p className="text-xs text-slate-400 text-center py-3">Sin cambios registrados para este lead</p>
             ) : (
-              <ol className="relative space-y-3 pl-4 before:absolute before:left-[3px] before:top-1.5 before:bottom-1.5 before:w-px before:bg-white/[0.08]">
+              <ol className="relative space-y-1 pl-4 before:absolute before:left-[3px] before:top-1.5 before:bottom-1.5 before:w-px before:bg-white/[0.08]">
                 {history.map((h, i) => (
-                  <li key={`${h.date}-${i}`} className="relative">
-                    <span className="absolute -left-4 top-1 w-[7px] h-[7px] rounded-full bg-blue-500" />
+                  <li key={`${h.date}-${i}`} className="relative rounded-lg px-2 py-1.5 -ml-2 transition-colors hover:bg-white/[0.05]">
+                    <span className="absolute -left-2 top-2.5 w-[7px] h-[7px] rounded-full bg-blue-500" />
                     <div className="flex items-baseline justify-between gap-2 text-xs">
                       <p>
                         {h.from ? <span className="text-slate-400">{h.from}</span> : <span className="text-blue-400">nuevo</span>}
