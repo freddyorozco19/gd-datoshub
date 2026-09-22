@@ -459,6 +459,60 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
   );
 }
 
+/* ── widget: últimos 3 leads ganados ─────────────────────────────────── */
+function RecentWonWidget({ leads }: { leads: Lead[] }) {
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+
+  const won = useMemo(() =>
+    leads
+      .filter((l) => l.ganado === "Ganado")
+      .sort((a, b) => (b.fechaCierre || b.ultimaModificacion).localeCompare(a.fechaCierre || a.ultimaModificacion))
+      .slice(0, 3),
+    [leads]
+  );
+
+  return (
+    <div className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden">
+      {/* sheen superior, efecto de cristal */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+      <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+
+      <div className="relative flex items-center justify-center mb-3">
+        <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Últimos ganados</span>
+      </div>
+
+      {won.length === 0 ? (
+        <p className="text-xs text-slate-400 text-center py-4">Sin leads ganados</p>
+      ) : (
+        <div className="relative divide-y divide-white/[0.05]">
+          {won.map((lead, i) => {
+            const fecha = lead.fechaCierre ? lead.fechaCierre.substring(0, 10) : "";
+            return (
+              <button key={lead.id} type="button" onClick={() => setSelectedLead(lead)}
+                className="w-full flex gap-2.5 items-start text-left px-1.5 py-2.5 hover:bg-white/[0.05] rounded-lg transition-colors group">
+                <span className="text-[10px] font-bold text-slate-500 mt-0.5 w-3.5 shrink-0 text-right group-hover:text-white transition-colors">{i + 1}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-slate-100 truncate leading-snug group-hover:text-white transition-colors" title={lead.nombre}>{lead.nombre}</p>
+                  {lead.cliente && <p className="text-[10px] truncate leading-tight mt-0.5 font-medium text-emerald-400">{lead.cliente}</p>}
+                  {(fecha || lead.ingresosEsperados > 0) && (
+                    <p className="text-[9px] text-slate-500 leading-tight mt-1 whitespace-nowrap">
+                      {fecha}
+                      {fecha && lead.ingresosEsperados > 0 && " · "}
+                      {lead.ingresosEsperados > 0 && COP(lead.ingresosEsperados)}
+                    </p>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} historyField="etapaActual" />}
+    </div>
+  );
+}
+
 /* ── widget: ranking de comerciales ────────────────────────────────── */
 function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   const [sortBy, setSortBy] = useState<"leads" | "ganados" | "ingresos">("leads");
@@ -489,7 +543,7 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
       .sort((a, b) => b[sortBy] - a[sortBy]);
   }, [leads, sortBy]);
 
-  const ranking = useMemo(() => fullRanking.slice(0, 7), [fullRanking]);
+  const ranking = useMemo(() => fullRanking.slice(0, 5), [fullRanking]);
 
   const maxVal = Math.max(...ranking.map((r) => r[sortBy]), 1);
   const maxValFull = Math.max(...fullRanking.map((r) => r[sortBy]), 1);
@@ -749,6 +803,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
       <LeadHeatmap leads={leads} />
 
       <RecentLeadsWidget leads={leads} />
+      <RecentWonWidget leads={leads} />
       <ComercialRankingWidget leads={leads} />
 
       {modal && <DayLeadsModal leads={modal.leads} date={selectedDate} heading={modal.heading} onClose={() => setModal(null)} />}
