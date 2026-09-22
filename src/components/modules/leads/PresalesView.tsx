@@ -447,21 +447,18 @@ export default function PresalesView({
 
             {/* embudo por etapa */}
             <Card title="Estado Preventa" className="xl:col-span-2"
-              right={<span className="text-[10px] text-slate-500">Prom. días sin cambios</span>}>
+              right={<span className="text-[10px] text-slate-500">Clic para ver los leads</span>}>
               {byEtapa.length === 0 ? (
                 <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
               ) : (
                 <div className="space-y-2.5">
                   {byEtapa.map((r) => (
                     <button key={r.name} type="button"
-                      onClick={() => r.name !== "Sin etapa" && setFEtapa(fEtapa === r.name ? "ALL" : r.name)}
+                      onClick={() => setListModal({ leads: etapaScope.filter((l) => (l.etapaPreventa || "Sin etapa") === r.name), heading: r.name })}
                       className="w-full text-left group">
                       <div className="flex items-baseline justify-between gap-2 text-xs mb-1">
                         <span className="text-slate-200 font-medium truncate group-hover:text-white transition-colors" title={r.name}>{r.name}</span>
-                        <span className="shrink-0 text-slate-500 tabular-nums">
-                          <span className="text-slate-300">{r.count}</span>
-                          {r.open > 0 && <> · {fmtCOP(r.pipeline)} · {Math.round(r.days / r.open)} d</>}
-                        </span>
+                        <span className="shrink-0 text-slate-300 tabular-nums">{r.count}</span>
                       </div>
                       <div className="h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
                         <div className="h-full rounded-full bg-blue-500" style={{ width: `${(r.count / maxEtapa) * 100}%` }} />
