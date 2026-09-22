@@ -54,7 +54,10 @@ const ETAPA_STYLE: Record<string, string> = {
 
 interface Props { lead: Lead; onClose: () => void }
 
+type Tab = "detalle" | "historial";
+
 export default function LeadDetailModal({ lead, onClose }: Props) {
+  const [tab, setTab] = useState<Tab>("detalle");
   const [attachments,        setAttachments]        = useState<OdooAttachment[] | null>(null);
   const [loadingAttachments, setLoadingAttachments] = useState(false);
 
@@ -132,8 +135,68 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
           </div>
         </div>
 
+        {/* tabs */}
+        {hasPreventaData && (
+          <div className="flex items-center gap-1 px-6 pt-3 border-b border-white/[0.07] shrink-0">
+            {([
+              { id: "detalle" as const, label: "Detalle" },
+              { id: "historial" as const, label: "Historial" },
+            ]).map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setTab(id)}
+                className={`relative px-3 pb-2.5 text-xs font-medium transition-colors ${
+                  tab === id ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                {label}
+                <span
+                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-t-full transition-all"
+                  style={{
+                    background: tab === id ? "rgba(96,165,250,1)" : "transparent",
+                    boxShadow: tab === id ? "0 0 8px rgba(96,165,250,0.6)" : "none",
+                  }}
+                />
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* body */}
         <div className="overflow-y-auto flex-1 px-6 py-5 space-y-6">
+        {tab === "historial" && hasPreventaData ? (
+          <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
+              <History size={10} /> Historial de Estado Preventa
+            </h3>
+            {loadingHistory ? (
+              <div className="flex items-center justify-center gap-2 py-4 text-slate-400 text-xs">
+                <Loader2 size={13} className="animate-spin" /> Cargando historial…
+              </div>
+            ) : !history || history.length === 0 ? (
+              <p className="text-xs text-slate-400 text-center py-3">Sin cambios registrados para este lead</p>
+            ) : (
+              <ol className="relative space-y-3 pl-4 before:absolute before:left-[3px] before:top-1.5 before:bottom-1.5 before:w-px before:bg-white/[0.08]">
+                {history.map((h, i) => (
+                  <li key={`${h.date}-${i}`} className="relative">
+                    <span className="absolute -left-4 top-1 w-[7px] h-[7px] rounded-full bg-blue-500" />
+                    <div className="flex items-baseline justify-between gap-2 text-xs">
+                      <p>
+                        {h.from ? <span className="text-slate-400">{h.from}</span> : <span className="text-blue-400">nuevo</span>}
+                        <span className="mx-1 text-slate-500">→</span>
+                        <span className="text-slate-100 font-medium">{h.to}</span>
+                      </p>
+                      <span className="shrink-0 text-[10px] text-slate-400 whitespace-nowrap">{fmtStamp(h.date)}</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-0.5">{h.author}</p>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
+        ) : (
+        <>
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Cliente & Contacto</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
@@ -157,38 +220,6 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
               <Field label="Tipo Venta"          value={lead.tipoVenta} />
             </div>
           </section>
-
-          {hasPreventaData && (
-            <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
-                <History size={10} /> Historial de Estado Preventa
-              </h3>
-              {loadingHistory ? (
-                <div className="flex items-center justify-center gap-2 py-4 text-slate-400 text-xs">
-                  <Loader2 size={13} className="animate-spin" /> Cargando historial…
-                </div>
-              ) : !history || history.length === 0 ? (
-                <p className="text-xs text-slate-400 text-center py-3">Sin cambios registrados para este lead</p>
-              ) : (
-                <ol className="relative space-y-3 pl-4 before:absolute before:left-[3px] before:top-1.5 before:bottom-1.5 before:w-px before:bg-white/[0.08]">
-                  {history.map((h, i) => (
-                    <li key={`${h.date}-${i}`} className="relative">
-                      <span className="absolute -left-4 top-1 w-[7px] h-[7px] rounded-full bg-blue-500" />
-                      <div className="flex items-baseline justify-between gap-2 text-xs">
-                        <p>
-                          {h.from ? <span className="text-slate-400">{h.from}</span> : <span className="text-blue-400">nuevo</span>}
-                          <span className="mx-1 text-slate-500">→</span>
-                          <span className="text-slate-100 font-medium">{h.to}</span>
-                        </p>
-                        <span className="shrink-0 text-[10px] text-slate-400 whitespace-nowrap">{fmtStamp(h.date)}</span>
-                      </div>
-                      <p className="text-[10px] text-slate-400 mt-0.5">{h.author}</p>
-                    </li>
-                  ))}
-                </ol>
-              )}
-            </section>
-          )}
 
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Financiero</h3>
@@ -254,6 +285,8 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
               )}
             </section>
           )}
+        </>
+        )}
         </div>
       </div>
     </div>
