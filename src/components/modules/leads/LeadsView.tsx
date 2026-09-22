@@ -462,14 +462,15 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
 /* ── widget: últimos 3 leads ganados ─────────────────────────────────── */
 function RecentWonWidget({ leads }: { leads: Lead[] }) {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
-  const won = useMemo(() =>
+  const allWon = useMemo(() =>
     leads
       .filter((l) => l.ganado === "Ganado")
-      .sort((a, b) => (b.fechaCierre || b.ultimaModificacion).localeCompare(a.fechaCierre || a.ultimaModificacion))
-      .slice(0, 3),
+      .sort((a, b) => (b.fechaCierre || b.ultimaModificacion).localeCompare(a.fechaCierre || a.ultimaModificacion)),
     [leads]
   );
+  const won = useMemo(() => allWon.slice(0, 3), [allWon]);
 
   return (
     <div className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden">
@@ -479,6 +480,16 @@ function RecentWonWidget({ leads }: { leads: Lead[] }) {
 
       <div className="relative flex items-center justify-center mb-3">
         <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Últimos ganados</span>
+        {allWon.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setExpanded(true)}
+            title="Ver todos los ganados"
+            className="absolute right-0 p-1 rounded-lg text-slate-500 hover:text-emerald-400 hover:bg-white/[0.06] transition-colors"
+          >
+            <Maximize2 size={13} />
+          </button>
+        )}
       </div>
 
       {won.length === 0 ? (
@@ -509,6 +520,9 @@ function RecentWonWidget({ leads }: { leads: Lead[] }) {
       )}
 
       {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} historyField="etapaActual" />}
+      {expanded && (
+        <DayLeadsModal leads={allWon} title="Leads ganados" onClose={() => setExpanded(false)} />
+      )}
     </div>
   );
 }
