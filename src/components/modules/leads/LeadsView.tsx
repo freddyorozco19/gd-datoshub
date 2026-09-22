@@ -989,6 +989,25 @@ export default function LeadsView() {
       setCanViewPresales(role === "admin" || role === "leader");
     });
   }, []);
+  // estado activo/inactivo de cada preventa (gestionado en Presales); columna "Estado Preventa" en Business
+  const [presalesActive, setPresalesActive] = useState<Record<string, boolean>>({});
+  useEffect(() => {
+    fetch("/api/presales/status")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d?.statuses) return;
+        setPresalesActive(Object.fromEntries((d.statuses as { name: string; active: boolean }[]).map((s) => [s.name, s.active])));
+      })
+      .catch(() => {});
+  }, []);
+  function estadoPreventa(preventa: string): { label: string; cls: string } {
+    if (!preventa) return { label: "—", cls: "text-slate-600" };
+    if (!(preventa in presalesActive)) return { label: "Nuevo", cls: "bg-blue-500/10 text-blue-400" };
+    return presalesActive[preventa]
+      ? { label: "Activo", cls: "bg-emerald-500/10 text-emerald-400" }
+      : { label: "Inactivo", cls: "bg-rose-500/10 text-rose-400" };
+  }
+
   const [leads,     setLeads]     = useState<Lead[]>([]);
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState<string | null>(null);
@@ -1425,6 +1444,21 @@ export default function LeadsView() {
                             ["linea",              "Línea"],
                             ["preventa",           "Preventa"],
                             ["etapaPreventa",      "Etapa Preventa"],
+                          ] as [SortKey, string][]
+                        ).map(([key, label]) => (
+                          <th
+                            key={key}
+                            onClick={() => toggleSort(key)}
+                            className="text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide cursor-pointer hover:text-white select-none whitespace-nowrap"
+                          >
+                            <span className="flex items-center gap-1">{label}<SortIcon col={key} /></span>
+                          </th>
+                        ))}
+                        <th className="text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide whitespace-nowrap">
+                          Estado Preventa
+                        </th>
+                        {(
+                          [
                             ["fechaCreacion",      "Fecha Creación"],
                             ["ingresosEsperados",  "Ingresos Esp."],
                             ["cierreEsperado",     "Cierre Esp."],
@@ -1447,7 +1481,7 @@ export default function LeadsView() {
                     <tbody ref={scrollBodyRef}>
                       {filtered.length === 0 ? (
                         <tr>
-                          <td colSpan={12} className="px-4 py-12 text-center text-slate-400 text-sm">
+                          <td colSpan={13} className="px-4 py-12 text-center text-slate-400 text-sm">
                             Sin leads con los filtros aplicados
                           </td>
                         </tr>
@@ -1469,6 +1503,11 @@ export default function LeadsView() {
                             </td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.etapaPreventa || "—"}</td>
+                            <td className="px-3 py-3 whitespace-nowrap">
+                              {(() => { const ep = estadoPreventa(lead.preventa); return ep.cls.startsWith("text-")
+                                ? <span className={ep.cls}>{ep.label}</span>
+                                : <span className={`px-2 py-0.5 rounded-full font-medium ${ep.cls}`}>{ep.label}</span>; })()}
+                            </td>
                             <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
                             <td className="px-3 py-3 text-right font-semibold text-white whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
                             <td className="px-3 py-3 text-slate-400 whitespace-nowrap">{lead.cierreEsperado || "—"}</td>
