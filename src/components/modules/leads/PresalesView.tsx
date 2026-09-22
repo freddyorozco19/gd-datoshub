@@ -140,6 +140,16 @@ export default function PresalesView({
     (!dTo   || l.fechaCreacion.substring(0, 10) <= dTo)
   ), [scope, fPreventa, fLinea, fEtapa, fEstado, dFrom, dTo]);
 
+  // igual que "filtered" pero sin el filtro Estado Preventa — para el widget que grafica justamente ese campo,
+  // que si no se veria siempre reducido a un solo valor por el propio filtro
+  const filteredAnyEstadoPreventa = useMemo(() => scope.filter((l) =>
+    (fPreventa === "ALL" || l.preventa === fPreventa) &&
+    (fLinea    === "ALL" || l.linea === fLinea) &&
+    (fEstado   === "ALL" || l.etapa === fEstado) &&
+    (!dFrom || l.fechaCreacion >= dFrom) &&
+    (!dTo   || l.fechaCreacion.substring(0, 10) <= dTo)
+  ), [scope, fPreventa, fLinea, fEstado, dFrom, dTo]);
+
   /* límites del slider de fecha — del primer lead cargado a hoy (igual que Business) */
   const dateBounds = useMemo(() => {
     const today = new Date().toISOString().substring(0, 10);
@@ -237,11 +247,11 @@ export default function PresalesView({
     return [...map.values()];
   }, [scope]);
 
-  /* embudo por etapa de preventa — respeta "Solo activos" */
+  /* Estado Preventa (todas las etapas) — respeta "Solo activos" pero no el propio filtro Estado Preventa */
   const etapaScope = useMemo(
-    () => onlyActive ? filtered.filter((l) => !l.preventa || !isInactive(l.preventa)) : filtered,
+    () => onlyActive ? filteredAnyEstadoPreventa.filter((l) => !l.preventa || !isInactive(l.preventa)) : filteredAnyEstadoPreventa,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filtered, onlyActive, statuses],
+    [filteredAnyEstadoPreventa, onlyActive, statuses],
   );
   const byEtapa = useMemo(() => {
     const map = new Map<string, { name: string; count: number; open: number; pipeline: number; days: number }>();
@@ -436,7 +446,7 @@ export default function PresalesView({
             </Card>
 
             {/* embudo por etapa */}
-            <Card title="Etapas de preventa" className="xl:col-span-2"
+            <Card title="Estado Preventa" className="xl:col-span-2"
               right={<span className="text-[10px] text-slate-500">Prom. días sin cambios</span>}>
               {byEtapa.length === 0 ? (
                 <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
