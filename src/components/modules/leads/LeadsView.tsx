@@ -17,6 +17,7 @@ import { createClient } from "@/lib/supabase/client";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
 import PresalesView from "./PresalesView";
+import { uniqueEtapaActual } from "./etapaOrder";
 
 const ODOO_BASE = "https://grow-data.odoo.com";
 
@@ -27,18 +28,6 @@ const COP = (v: number) =>
 
 const unique = (arr: string[]) =>
   ["ALL", ...Array.from(new Set(arr.filter(Boolean))).sort()];
-
-// orden del pipeline (no alfabético) para el filtro Etapa Actual
-const ETAPA_ORDER = [
-  "New", "Identificación de Oportunidad", "Preventa", "Presentación de Oferta",
-  "Evaluación de la Entidad", "Oferta Ganada", "Oferta No viable", "Oferta declinada",
-];
-const uniqueEtapaActual = (arr: string[]) => {
-  const present = new Set(arr.filter(Boolean));
-  const ordered = ETAPA_ORDER.filter((e) => present.has(e));
-  const rest = [...present].filter((e) => !ETAPA_ORDER.includes(e)).sort();
-  return ["ALL", ...ordered, ...rest];
-};
 
 const fmtDate = (s: string) => (s ? s.substring(0, 10) : "—");
 

@@ -5,6 +5,7 @@ import { RefreshCw, AlertCircle, Loader2, X, UserCog } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
+import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesManageModal, { type PresalesStatusRow } from "./PresalesManageModal";
 
@@ -66,7 +67,6 @@ function Kpi({ label, value, hint, tone = "blue" }: { label: string; value: stri
 // etapas de preventa que no se muestran como columna en Carga por preventa (valores normalizados)
 const HIDDEN_ETAPA_COLS = new Set(["oferta declinada", "no viable", "oferta no viable", "suspendida", "sin etapa"]);
 
-const ESTADO_OPTS = ["ALL", "Pendiente", "Ganado", "Perdido"];
 type QueueKey = "sinAsignar" | "inactivos" | "estancados" | "proximos";
 
 /* ── vista ───────────────────────────────────────────────────────────── */
@@ -124,16 +124,17 @@ export default function PresalesView({
   const scope = useMemo(() => leads.filter((l) => l.preventa || l.etapaPreventa), [leads]);
 
   const opts = useMemo(() => ({
-    preventa: unique(scope.map((l) => l.preventa).filter((n) => !onlyActive || statuses[n]?.active !== false)),
-    linea:    unique(scope.map((l) => l.linea)),
-    etapa:    unique(scope.map((l) => l.etapaPreventa)),
+    preventa:    unique(scope.map((l) => l.preventa).filter((n) => !onlyActive || statuses[n]?.active !== false)),
+    linea:       unique(scope.map((l) => l.linea)),
+    etapaPreventa: unique(scope.map((l) => l.etapaPreventa)),
+    etapaActual: uniqueEtapaActual(scope.map((l) => l.etapa)),
   }), [scope, onlyActive, statuses]);
 
   const filtered = useMemo(() => scope.filter((l) =>
     (fPreventa === "ALL" || l.preventa === fPreventa) &&
     (fLinea    === "ALL" || l.linea === fLinea) &&
     (fEtapa    === "ALL" || l.etapaPreventa === fEtapa) &&
-    (fEstado   === "ALL" || l.ganado === fEstado) &&
+    (fEstado   === "ALL" || l.etapa === fEstado) &&
     (!dFrom || l.fechaCreacion >= dFrom) &&
     (!dTo   || l.fechaCreacion.substring(0, 10) <= dTo)
   ), [scope, fPreventa, fLinea, fEtapa, fEstado, dFrom, dTo]);
@@ -285,10 +286,10 @@ export default function PresalesView({
     <div className="flex-1 overflow-auto p-5 space-y-4 relative">
       {/* filtros */}
       <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
-        <FilterSelect label="Preventa"    value={fPreventa} onChange={setFPreventa} options={opts.preventa} />
-        <FilterSelect label="Línea"       value={fLinea}    onChange={setFLinea}    options={opts.linea} />
-        <FilterSelect label="Etapa Prev." value={fEtapa}    onChange={setFEtapa}    options={opts.etapa} />
-        <FilterSelect label="Estado"      value={fEstado}   onChange={setFEstado}   options={ESTADO_OPTS}
+        <FilterSelect label="Línea"          value={fLinea}    onChange={setFLinea}    options={opts.linea} />
+        <FilterSelect label="Preventa"       value={fPreventa} onChange={setFPreventa} options={opts.preventa} />
+        <FilterSelect label="Etapa Actual"   value={fEstado}   onChange={setFEstado}   options={opts.etapaActual} />
+        <FilterSelect label="Estado Preventa" value={fEtapa}   onChange={setFEtapa}    options={opts.etapaPreventa}
           headerAction={activeFilters > 0 && (
             <button type="button" onClick={clearFilters} title={`Limpiar filtros (${activeFilters})`} className="text-slate-500 hover:text-rose-400 transition-colors">
               <X size={11} />
