@@ -222,9 +222,9 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
 }
 
 /* ── modal: tabla de leads del día ──────────────────────────────────── */
-interface DayLeadsModalProps { leads: Lead[]; date?: string; title?: string; heading?: string; suffix?: string; onClose: () => void; }
+interface DayLeadsModalProps { leads: Lead[]; date?: string; title?: string; heading?: string; suffix?: string; showCloseDate?: boolean; onClose: () => void; }
 
-export function DayLeadsModal({ leads, date, title, heading, suffix, onClose }: DayLeadsModalProps) {
+export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDate, onClose }: DayLeadsModalProps) {
   const dateLabel = date
     ? new Date(date + "T12:00:00").toLocaleDateString("es-CO", {
         weekday: "long", day: "numeric", month: "long", year: "numeric",
@@ -324,7 +324,12 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, onClose }: 
             <table className="w-full text-xs">
               <thead className="sticky top-0 z-10 bg-[#0D0D1A] border-b border-white/[0.07]">
                 <tr>
-                  {([ ["nombre","Nombre"], ["cliente","Cliente"], ["comercial","Comercial"], ["linea","Línea"], ["etapa","Etapa"], ["tipoOportunidad","Tipo Oportunidad"], ["preventa","Preventa"], ["ingresosEsperados","Ingresos Esp."], ["ganado","Estado"] ] as [keyof Lead, string][]).map(([key, label]) => (
+                  {([
+                    ["nombre","Nombre"], ["cliente","Cliente"], ["comercial","Comercial"], ["linea","Línea"], ["etapa","Etapa"],
+                    ["tipoOportunidad","Tipo Oportunidad"], ["preventa","Preventa"], ["ingresosEsperados","Ingresos Esp."],
+                    ...(showCloseDate ? [["fechaCierre","Fecha Cierre"]] as [keyof Lead, string][] : []),
+                    ["ganado","Estado"],
+                  ] as [keyof Lead, string][]).map(([key, label]) => (
                     <th key={key} onClick={() => mToggleSort(key)}
                       className="text-left px-4 py-3 font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap cursor-pointer hover:text-white select-none transition-colors">
                       <span className="flex items-center gap-1">
@@ -356,6 +361,9 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, onClose }: 
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.tipoOportunidad || "—"}</td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.preventa || "—"}</td>
                     <td className="px-4 py-3 text-right font-medium text-slate-200 whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
+                    {showCloseDate && (
+                      <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.fechaCierre ? lead.fechaCierre.substring(0, 10) : "—"}</td>
+                    )}
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span className={`px-2 py-0.5 rounded-full font-medium ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
                     </td>
@@ -546,7 +554,7 @@ function RecentWonWidget({ leads }: { leads: Lead[] }) {
 
       {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} historyField="etapaActual" />}
       {expanded && (
-        <DayLeadsModal leads={allWon} title="Leads ganados" onClose={() => setExpanded(false)} />
+        <DayLeadsModal leads={allWon} title="Leads ganados" showCloseDate onClose={() => setExpanded(false)} />
       )}
     </div>
   );
