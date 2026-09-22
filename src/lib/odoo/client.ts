@@ -175,15 +175,17 @@ export interface PreventaHistoryEntry {
   author: string;
 }
 
-/* ── Historial de cambios de Estado Preventa (x_studio_edopreventa) ──
-   Odoo ya audita este campo en mail.tracking.value (tracking activado
-   en Studio); no hace falta guardar nada propio, solo leerlo. ────── */
-export async function fetchPreventaHistory(limit = 30, leadId?: number): Promise<PreventaHistoryEntry[]> {
+/* ── Historial de cambios de un campo de crm.lead, leído de mail.tracking.value ──
+   Odoo ya audita ambos campos usados aquí (tracking activado): x_studio_edopreventa
+   (Estado Preventa) y stage_id (el Stage real del pipeline — no x_studio_etapa_actual,
+   que es solo una copia de texto sin tracking propio, con 0 cambios registrados).
+   No hace falta guardar nada propio, solo leerlo. ──────────────────────────────── */
+async function fetchFieldHistory(fieldName: string, limit: number, leadId?: number): Promise<PreventaHistoryEntry[]> {
   const uid = await login();
 
   const fieldRows = await executeKw<{ id: number }[]>(
     uid, "ir.model.fields", "search_read",
-    [[["model", "=", "crm.lead"], ["name", "=", "x_studio_edopreventa"]]],
+    [[["model", "=", "crm.lead"], ["name", "=", fieldName]]],
     { fields: ["id"], limit: 1 }
   );
   if (!fieldRows.length) return [];
@@ -244,6 +246,14 @@ export async function fetchPreventaHistory(limit = 30, leadId?: number): Promise
       };
     })
     .filter((e) => e.leadId);
+}
+
+export function fetchPreventaHistory(limit = 30, leadId?: number): Promise<PreventaHistoryEntry[]> {
+  return fetchFieldHistory("x_studio_edopreventa", limit, leadId);
+}
+
+export function fetchEtapaActualHistory(limit = 30, leadId?: number): Promise<PreventaHistoryEntry[]> {
+  return fetchFieldHistory("stage_id", limit, leadId);
 }
 
 /* ── Contenido binario de un adjunto (base64 → Buffer) ────────────── */

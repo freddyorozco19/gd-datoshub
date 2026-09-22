@@ -360,7 +360,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, onClose }: 
       </div>
 
       {/* detalle del lead — mismo popup que "Últimas asignadas" */}
-      {detailLead && <LeadDetailModal lead={detailLead} onClose={() => setDetailLead(null)} />}
+      {detailLead && <LeadDetailModal lead={detailLead} onClose={() => setDetailLead(null)} historyField="etapaActual" />}
     </div>
   );
   return createPortal(modal, document.body);
@@ -454,7 +454,7 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
         </div>
       )}
 
-      {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} />}
+      {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} historyField="etapaActual" />}
     </div>
   );
 }
@@ -1396,7 +1396,7 @@ export default function LeadsView() {
       )}
 
       {/* 1. modal detalle desde tabla principal */}
-      {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} />}
+      {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} historyField="etapaActual" />}
     </div>
   );
 }

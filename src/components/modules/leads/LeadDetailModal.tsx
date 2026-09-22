@@ -52,18 +52,23 @@ const ETAPA_STYLE: Record<string, string> = {
   "Perdido":           "bg-rose-500/10 text-rose-400",
 };
 
-interface Props { lead: Lead; onClose: () => void }
+// "estadoPreventa" (por defecto): x_studio_edopreventa, usado en Presales/Dashboard.
+// "etapaActual": el Stage real de Odoo (stage_id) — es el único de los dos con historial
+// (x_studio_etapa_actual, el campo que se ve en Business, es solo una copia de texto sin tracking).
+type HistoryField = "estadoPreventa" | "etapaActual";
+interface Props { lead: Lead; onClose: () => void; historyField?: HistoryField }
 
 type Tab = "detalle" | "historial";
 
-export default function LeadDetailModal({ lead, onClose }: Props) {
+export default function LeadDetailModal({ lead, onClose, historyField = "estadoPreventa" }: Props) {
   const [tab, setTab] = useState<Tab>("detalle");
   const [attachments,        setAttachments]        = useState<OdooAttachment[] | null>(null);
   const [loadingAttachments, setLoadingAttachments] = useState(false);
 
   const [history,        setHistory]        = useState<PreventaHistoryEntry[] | null>(null);
   const [loadingHistory, setLoadingHistory]  = useState(false);
-  const hasPreventaData = !!(lead.preventa || lead.etapaPreventa);
+  const hasHistoryData = historyField === "etapaActual" ? !!lead.etapa : !!(lead.preventa || lead.etapaPreventa);
+  const historyLabel = historyField === "etapaActual" ? "Historial de Etapa Actual" : "Historial de Estado Preventa";
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
@@ -81,17 +86,17 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
       .finally(() => setLoadingAttachments(false));
   }, [lead.id, lead.adjuntos]);
 
-  // historial de Estado Preventa — leído del tracking de Odoo, solo tiene sentido si el lead pasó por preventa
+  // historial (Estado Preventa o Etapa Actual, según historyField) — leído del tracking de Odoo
   useEffect(() => {
-    if (!hasPreventaData) return;
+    if (!hasHistoryData) return;
     setLoadingHistory(true);
-    fetch(`/api/presales/history?leadId=${lead.id}`)
+    fetch(`/api/presales/history?leadId=${lead.id}&field=${historyField}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => setHistory((d?.entries as PreventaHistoryEntry[] | undefined) ?? []))
       .catch(() => setHistory([]))
       .finally(() => setLoadingHistory(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lead.id, hasPreventaData]);
+  }, [lead.id, hasHistoryData, historyField]);
 
   const odooUrl = `${ODOO_BASE}/web#model=crm.lead&id=${lead.id}&view_type=form`;
 
@@ -136,7 +141,7 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
         </div>
 
         {/* tabs */}
-        {hasPreventaData && (
+        {hasHistoryData && (
           <div className="flex items-center gap-1 px-6 pt-3 border-b border-white/[0.07] shrink-0">
             {([
               { id: "detalle" as const, label: "Detalle" },
@@ -165,10 +170,10 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
 
         {/* body */}
         <div className="overflow-y-auto flex-1 px-6 py-5 space-y-6">
-        {tab === "historial" && hasPreventaData ? (
+        {tab === "historial" && hasHistoryData ? (
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
-              <History size={10} /> Historial de Estado Preventa
+              <History size={10} /> {historyLabel}
             </h3>
             {loadingHistory ? (
               <div className="flex items-center justify-center gap-2 py-4 text-slate-400 text-xs">
