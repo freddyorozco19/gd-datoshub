@@ -328,6 +328,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                 <tr>
                   {([
                     ["nombre","Nombre"], ["cliente","Cliente"], ["comercial","Comercial"], ["linea","Línea"], ["etapa","Etapa"],
+                    ...(showCloseDate ? [["etapaPreventa","Estado Preventa"]] as [keyof Lead, string][] : []),
                     ["tipoOportunidad","Tipo Oportunidad"], ["preventa","Preventa"], ["ingresosEsperados","Ingresos Esp."],
                     ...(showCloseDate ? [["fechaCierre","Fecha Cierre"]] as [keyof Lead, string][] : []),
                     ["ganado","Estado"],
@@ -360,6 +361,9 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span className={`px-2 py-0.5 rounded-full font-medium ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa || "—"}</span>
                     </td>
+                    {showCloseDate && (
+                      <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.etapaPreventa || "—"}</td>
+                    )}
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.tipoOportunidad || "—"}</td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.preventa || "—"}</td>
                     <td className="px-4 py-3 text-right font-medium text-slate-200 whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
