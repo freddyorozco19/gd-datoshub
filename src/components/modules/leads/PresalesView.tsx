@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, type ComponentType, type ReactNode } from "react";
 import { RefreshCw, AlertCircle, Loader2, X, UserCog } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
+import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
 import { uniqueEtapaActual } from "./etapaOrder";
@@ -30,6 +31,14 @@ const fmtCOP = (v: number) => {
 
 const unique = (arr: string[]) => ["ALL", ...Array.from(new Set(arr.filter(Boolean))).sort()];
 const normText = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
+
+// Odoo entrega create_date en UTC sin sufijo de zona ("YYYY-MM-DD HH:MM:SS"); se interpreta como
+// UTC explicito y se muestra en hora Colombia (GMT-5), igual que el resto de la app.
+const fmtStamp = (utc: string) => {
+  const d = new Date(utc.replace(" ", "T") + "Z");
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+};
 const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : null);
 
 const CARD = "relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden";
@@ -104,6 +113,22 @@ export default function PresalesView({
         setNeedsSetup(!!d.needsSetup);
       })
       .catch(() => {});
+  }, []);
+
+  /* historial de cambios de Estado Preventa (leído de Odoo, no de Supabase) */
+  const [history, setHistory] = useState<PreventaHistoryEntry[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(true);
+  const [historyError, setHistoryError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/presales/history?limit=15")
+      .then(async (r) => {
+        const json = await r.json();
+        if (!r.ok) throw new Error(json.error || `Error ${r.status}`);
+        setHistory(json.entries as PreventaHistoryEntry[]);
+      })
+      .catch((e) => setHistoryError(e instanceof Error ? e.message : "No se pudo cargar el historial."))
+      .finally(() => setHistoryLoading(false));
   }, []);
 
   const isInactive = (name: string) => statuses[name]?.active === false;
@@ -533,6 +558,45 @@ export default function PresalesView({
               </div>
             </Card>
           </div>
+
+          {/* cambios recientes de Estado Preventa — leidos del historial de auditoria de Odoo */}
+          <Card title="Cambios recientes de Estado Preventa"
+            right={<span className="text-[10px] text-slate-500">Historial de Odoo</span>}>
+            {historyLoading ? (
+              <div className="flex items-center justify-center gap-2 py-6 text-slate-500 text-xs">
+                <Loader2 size={14} className="animate-spin" /> Cargando historial…
+              </div>
+            ) : historyError ? (
+              <p className="text-xs text-rose-400 text-center py-6">{historyError}</p>
+            ) : history.length === 0 ? (
+              <p className="text-xs text-slate-500 text-center py-6">Sin cambios registrados</p>
+            ) : (
+              <div className="divide-y divide-white/[0.05]">
+                {history.map((h, i) => {
+                  const lead = leads.find((l) => l.id === h.leadId);
+                  return (
+                    <button key={`${h.leadId}-${h.date}-${i}`} type="button"
+                      disabled={!lead}
+                      onClick={() => lead && setSelected(lead)}
+                      className={`w-full flex items-center gap-3 text-left px-1.5 py-2 rounded-lg transition-colors ${lead ? "hover:bg-white/[0.05] cursor-pointer" : "cursor-default"}`}>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-slate-100 truncate" title={h.leadName}>{h.leadName}</p>
+                        <p className="text-[11px] text-slate-500 mt-0.5">
+                          {h.from ? <span className="text-slate-400">{h.from}</span> : <span className="text-blue-400">nuevo</span>}
+                          <span className="mx-1">→</span>
+                          <span className="text-slate-200 font-medium">{h.to}</span>
+                        </p>
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <p className="text-[11px] text-slate-300 whitespace-nowrap">{fmtStamp(h.date)}</p>
+                        <p className="text-[10px] text-slate-500 truncate max-w-[160px]">{h.author}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </Card>
         </>
       )}
 
