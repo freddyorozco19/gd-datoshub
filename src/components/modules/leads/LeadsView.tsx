@@ -1267,14 +1267,14 @@ export default function LeadsView() {
         <div>
           {/* todo en filas — sin scroll horizontal, se ajusta con wrap */}
           <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
-            <FilterSelect label="Comercial"   value={filters.comercial}     onChange={(v) => setFilters((f) => ({ ...f, comercial: v }))}     options={opts.comercial} />
-            <FilterSelect label="Línea"       value={filters.linea}         onChange={(v) => setFilters((f) => ({ ...f, linea: v }))}         options={opts.linea} />
-            <FilterSelect label="Etapa Prev." value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} />
-            <FilterSelect label="Preventa"    value={filters.preventa}      onChange={(v) => setFilters((f) => ({ ...f, preventa: v }))}      options={opts.preventa} />
+            <FilterSelect label="Línea"          value={filters.linea}         onChange={(v) => setFilters((f) => ({ ...f, linea: v }))}         options={opts.linea} />
+            <FilterSelect label="Comercial"      value={filters.comercial}     onChange={(v) => setFilters((f) => ({ ...f, comercial: v }))}     options={opts.comercial} />
+            <FilterSelect label="Etapa Actual"   value={filters.etapa}         onChange={(v) => setFilters((f) => ({ ...f, etapa: v }))}         options={opts.etapa} />
+            <FilterSelect label="Estado Preventa" value={filters.etapaPreventa} onChange={(v) => setFilters((f) => ({ ...f, etapaPreventa: v }))} options={opts.etapaPreventa} />
             <FilterSelect
-              label="Etapa Actual" value={filters.etapa}
-              onChange={(v) => setFilters((f) => ({ ...f, etapa: v }))}
-              options={opts.etapa}
+              label="Preventa" value={filters.preventa}
+              onChange={(v) => setFilters((f) => ({ ...f, preventa: v }))}
+              options={opts.preventa}
               headerAction={activeFilterCount > 0 && (
                 <button
                   type="button"
