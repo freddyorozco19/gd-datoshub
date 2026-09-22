@@ -32,6 +32,14 @@ const unique = (arr: string[]) =>
 
 const fmtDate = (s: string) => (s ? s.substring(0, 10) : "—");
 
+// Odoo entrega create_date en UTC sin sufijo de zona ("YYYY-MM-DD HH:MM:SS"); se interpreta como
+// UTC explícito y se muestra en hora local del navegador, igual que el resto de la app.
+const fmtStamp = (utc: string) => {
+  const d = new Date(utc.replace(" ", "T") + "Z");
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+};
+
 const WON_STYLE: Record<string, string> = {
   Ganado:     "bg-emerald-500/10 text-emerald-400",
   Perdido:    "bg-rose-500/10 text-rose-400",
@@ -472,6 +480,20 @@ function RecentWonWidget({ leads }: { leads: Lead[] }) {
   );
   const won = useMemo(() => allWon.slice(0, 3), [allWon]);
 
+  // fecha exacta en que cada lead pasó a su etapa ganadora — se lee del historial de stage_id
+  // (ver LeadDetailModal/Historial); solo se pide para los 3 que se muestran, no para toda la lista
+  const [wonDates, setWonDates] = useState<Record<number, string | null>>({});
+  useEffect(() => {
+    won.forEach((lead) => {
+      if (lead.id in wonDates) return;
+      fetch(`/api/presales/history?leadId=${lead.id}&field=etapaActual&limit=1`)
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => setWonDates((prev) => ({ ...prev, [lead.id]: d?.entries?.[0]?.date ?? null })))
+        .catch(() => setWonDates((prev) => ({ ...prev, [lead.id]: null })));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [won]);
+
   return (
     <div className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl p-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden">
       {/* sheen superior, efecto de cristal */}
@@ -497,7 +519,10 @@ function RecentWonWidget({ leads }: { leads: Lead[] }) {
       ) : (
         <div className="relative divide-y divide-white/[0.05]">
           {won.map((lead, i) => {
-            const fecha = lead.fechaCierre ? lead.fechaCierre.substring(0, 10) : "";
+            // fecha exacta del cambio a la etapa ganadora si ya llegó; mientras carga o si no hay
+            // historial, se cae a la fecha de cierre de Odoo (sin hora) como aproximación
+            const wonDate = wonDates[lead.id];
+            const fecha = wonDate ? fmtStamp(wonDate) : lead.id in wonDates && lead.fechaCierre ? lead.fechaCierre.substring(0, 10) : "";
             return (
               <button key={lead.id} type="button" onClick={() => setSelectedLead(lead)}
                 className="w-full flex gap-2.5 items-start text-left px-1.5 py-2.5 hover:bg-white/[0.05] rounded-lg transition-colors group">
