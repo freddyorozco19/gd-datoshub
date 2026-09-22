@@ -197,7 +197,7 @@ export default function Sidebar() {
         <div className="relative px-2 py-2.5 border-t border-white/[0.06]" data-avatar-menu>
           {/* Menú del avatar */}
           {avatarOpen && (
-            <div className={`absolute bottom-full mb-2 ${collapsed ? "left-1/2 -translate-x-1/2 w-44" : "left-0 right-0"} bg-[#15151f] border border-white/[0.1] rounded-xl shadow-2xl shadow-black/60 overflow-hidden z-50`}>
+            <div className={`absolute bottom-full mb-2 ${collapsed ? "left-2 w-44" : "left-0 right-0"} bg-[#15151f] border border-white/[0.1] rounded-xl shadow-2xl shadow-black/60 overflow-hidden z-50`}>
               {!collapsed && (
                 <div className="px-3 py-2.5 border-b border-white/[0.06]">
                   <p className="text-xs font-medium text-slate-200 truncate">{displayName || email}</p>
