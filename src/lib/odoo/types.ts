@@ -15,7 +15,7 @@ export interface OdooLead {
   partner_id: [number, string] | false;
   user_id: [number, string] | false;
   x_studio_linea: string | false;
-  stage_id: [number, string] | false;
+  x_studio_etapa_actual: string | false;
   team_id: [number, string] | false;
   x_studio_tipo_de_oportunidad: string | false;
   x_studio_fabricante_otro: string | false;

@@ -17,7 +17,7 @@ const ODOO_PASSWORD = process.env.ODOO_PASSWORD!;
 
 const LEAD_FIELDS = [
   "active", "name", "email_from", "phone", "partner_id", "user_id",
-  "x_studio_linea", "stage_id", "team_id", "x_studio_tipo_de_oportunidad",
+  "x_studio_linea", "x_studio_etapa_actual", "team_id", "x_studio_tipo_de_oportunidad",
   "x_studio_fabricante_otro", "x_studio_edopreventa", "x_studio_preventa",
   "create_date", "expected_revenue", "x_studio_consultoria_cop",
   "x_studio_datos_cop", "x_studio_ti_cop", "x_studio_alcance",
@@ -95,7 +95,7 @@ function normalize(raw: OdooLead): Lead {
     cliente: m2o(raw.partner_id),
     comercial: m2o(raw.user_id),
     linea: str(raw.x_studio_linea),
-    etapa: m2o(raw.stage_id),
+    etapa: str(raw.x_studio_etapa_actual),
     equipoVentas: m2o(raw.team_id),
     tipoOportunidad: str(raw.x_studio_tipo_de_oportunidad),
     fabricante: str(raw.x_studio_fabricante_otro),
