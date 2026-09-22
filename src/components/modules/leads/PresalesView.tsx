@@ -235,10 +235,15 @@ export default function PresalesView({
     return [...map.values()];
   }, [scope]);
 
-  /* embudo por etapa de preventa */
+  /* embudo por etapa de preventa — respeta "Solo activos" */
+  const etapaScope = useMemo(
+    () => onlyActive ? filtered.filter((l) => !l.preventa || !isInactive(l.preventa)) : filtered,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filtered, onlyActive, statuses],
+  );
   const byEtapa = useMemo(() => {
     const map = new Map<string, { name: string; count: number; open: number; pipeline: number; days: number }>();
-    for (const l of filtered) {
+    for (const l of etapaScope) {
       const name = l.etapaPreventa || "Sin etapa";
       const r = map.get(name) ?? { name, count: 0, open: 0, pipeline: 0, days: 0 };
       r.count++;
@@ -247,7 +252,7 @@ export default function PresalesView({
     }
     return [...map.values()].sort((a, b) => b.count - a.count);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filtered]);
+  }, [etapaScope]);
   const maxEtapa = Math.max(1, ...byEtapa.map((r) => r.count));
 
   /* ingreso mensual de leads a preventa (últimos 6 meses) */
