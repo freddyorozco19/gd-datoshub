@@ -310,6 +310,8 @@ export default function PortalPage() {
   // Prefix-match para rutas con sub-segmentos (ej: /certificaciones/microsoft/az-104)
   const View =
     VIEWS[pathname] ??
-    (pathname.startsWith('/certificaciones/') ? CertificacionesView : DashboardView);
+    (pathname.startsWith('/certificaciones/') ? CertificacionesView :
+     pathname.startsWith('/leads/')           ? LeadsView :
+     DashboardView);
   return <View />;
 }

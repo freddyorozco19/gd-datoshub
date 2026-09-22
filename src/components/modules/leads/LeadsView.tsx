@@ -14,6 +14,8 @@ import {
 import type { Lead, OdooAttachment } from "@/lib/odoo/types";
 import Topbar from "@/components/layout/Topbar";
 import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
 import PresalesView from "./PresalesView";
@@ -981,7 +983,10 @@ interface Filters {
 type LeadsTab = "business" | "presales";
 
 export default function LeadsView() {
-  const [tab,       setTab]       = useState<LeadsTab>("business");
+  // la pestaña activa vive en la URL (/leads, /leads/business, /leads/presales) para
+  // que las tabs sean enlaces reales: se pueden abrir en pestaña/ventana nueva, copiar el link, etc.
+  const pathname = usePathname();
+  const urlTab: LeadsTab = pathname.endsWith("/presales") ? "presales" : "business";
   // Presales solo para perfiles Líder y Administrador (rol en app_metadata)
   const [canViewPresales, setCanViewPresales] = useState(false);
   useEffect(() => {
@@ -1224,19 +1229,22 @@ export default function LeadsView() {
 
   const newCount = newLeadIds.size;
 
-  const tabItems: { id: LeadsTab; label: string; icon: typeof Users }[] = [
-    { id: "business", label: "Business", icon: Briefcase },
-    { id: "presales", label: "Presales", icon: ClipboardList },
+  // el tab efectivo ignora la URL si el usuario no puede ver Presales (ej. entró por link directo)
+  const tab: LeadsTab = canViewPresales ? urlTab : "business";
+
+  const tabItems: { id: LeadsTab; href: string; label: string; icon: typeof Users }[] = [
+    { id: "business", href: "/leads/business", label: "Business", icon: Briefcase },
+    { id: "presales", href: "/leads/presales", label: "Presales", icon: ClipboardList },
   ];
   const topbarTabs = (
     <>
-      {tabItems.map(({ id, label, icon: Icon }) => {
+      {tabItems.map(({ id, href, label, icon: Icon }) => {
         const active = id === tab;
         return (
-          <button
+          <Link
             key={id}
-            onClick={() => setTab(id)}
-            className={`relative flex items-center gap-1.5 px-4 h-full text-xs font-medium transition-colors ${
+            href={href}
+            className={`relative flex items-center gap-1.5 px-4 h-full text-xs font-medium transition-colors hover:bg-white/[0.04] ${
               active ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
             }`}
           >
@@ -1249,7 +1257,7 @@ export default function LeadsView() {
                 boxShadow: active ? "0 0 8px rgba(96,165,250,0.6)" : "none",
               }}
             />
-          </button>
+          </Link>
         );
       })}
     </>
