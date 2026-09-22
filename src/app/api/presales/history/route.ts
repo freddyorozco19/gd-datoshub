@@ -9,11 +9,15 @@ export async function GET(req: NextRequest) {
     return Response.json({ error: "No autenticado." }, { status: 401 });
   }
 
+  const leadIdParam = Number(req.nextUrl.searchParams.get("leadId"));
+  const leadId = Number.isFinite(leadIdParam) && leadIdParam > 0 ? leadIdParam : undefined;
+
   const limitParam = Number(req.nextUrl.searchParams.get("limit"));
-  const limit = Number.isFinite(limitParam) && limitParam > 0 ? Math.min(limitParam, 100) : 15;
+  const defaultLimit = leadId ? 50 : 15;
+  const limit = Number.isFinite(limitParam) && limitParam > 0 ? Math.min(limitParam, 100) : defaultLimit;
 
   try {
-    const entries = await fetchPreventaHistory(limit);
+    const entries = await fetchPreventaHistory(limit, leadId);
     return Response.json({ entries });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

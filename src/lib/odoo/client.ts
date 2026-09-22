@@ -178,7 +178,7 @@ export interface PreventaHistoryEntry {
 /* ── Historial de cambios de Estado Preventa (x_studio_edopreventa) ──
    Odoo ya audita este campo en mail.tracking.value (tracking activado
    en Studio); no hace falta guardar nada propio, solo leerlo. ────── */
-export async function fetchPreventaHistory(limit = 30): Promise<PreventaHistoryEntry[]> {
+export async function fetchPreventaHistory(limit = 30, leadId?: number): Promise<PreventaHistoryEntry[]> {
   const uid = await login();
 
   const fieldRows = await executeKw<{ id: number }[]>(
@@ -188,6 +188,22 @@ export async function fetchPreventaHistory(limit = 30): Promise<PreventaHistoryE
   );
   if (!fieldRows.length) return [];
 
+  // Para un lead puntual se acota primero por sus propios mensajes — evita traer y descartar
+  // el historial de todos los leads solo para quedarse con el de uno.
+  let leadMsgIds: number[] | null = null;
+  if (leadId) {
+    const leadMsgs = await executeKw<{ id: number }[]>(
+      uid, "mail.message", "search_read",
+      [[["model", "=", "crm.lead"], ["res_id", "=", leadId]]],
+      { fields: ["id"], limit: 0 }
+    );
+    leadMsgIds = leadMsgs.map((m) => m.id);
+    if (!leadMsgIds.length) return [];
+  }
+
+  const domain: unknown[] = [["field_id", "=", fieldRows[0].id]];
+  if (leadMsgIds) domain.push(["mail_message_id", "in", leadMsgIds]);
+
   const values = await executeKw<{
     old_value_char: string | false;
     new_value_char: string | false;
@@ -195,7 +211,7 @@ export async function fetchPreventaHistory(limit = 30): Promise<PreventaHistoryE
     mail_message_id: [number, string | false] | false;
   }[]>(
     uid, "mail.tracking.value", "search_read",
-    [[["field_id", "=", fieldRows[0].id]]],
+    [domain],
     { fields: ["old_value_char", "new_value_char", "create_date", "mail_message_id"], order: "create_date desc", limit }
   );
   if (!values.length) return [];

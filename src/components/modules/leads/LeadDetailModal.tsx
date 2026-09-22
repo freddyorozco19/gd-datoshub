@@ -2,8 +2,9 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { ExternalLink, X, Paperclip, FileText, FileImage, File } from "lucide-react";
+import { ExternalLink, X, Paperclip, FileText, FileImage, File, History, Loader2 } from "lucide-react";
 import type { Lead, OdooAttachment } from "@/lib/odoo/types";
+import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 
 const ODOO_BASE = "https://grow-data.odoo.com";
 
@@ -34,6 +35,14 @@ const WON_STYLE: Record<string, string> = {
   Pendiente:  "bg-blue-500/10 text-blue-400",
 };
 
+// Odoo entrega create_date en UTC sin sufijo de zona ("YYYY-MM-DD HH:MM:SS"); se interpreta como
+// UTC explícito y se muestra en hora local del navegador, igual que el resto de la app.
+const fmtStamp = (utc: string) => {
+  const d = new Date(utc.replace(" ", "T") + "Z");
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+};
+
 const ETAPA_STYLE: Record<string, string> = {
   "Nuevo":             "bg-white/[0.06] text-slate-400",
   "En proceso":        "bg-sky-500/10 text-sky-400",
@@ -48,6 +57,10 @@ interface Props { lead: Lead; onClose: () => void }
 export default function LeadDetailModal({ lead, onClose }: Props) {
   const [attachments,        setAttachments]        = useState<OdooAttachment[] | null>(null);
   const [loadingAttachments, setLoadingAttachments] = useState(false);
+
+  const [history,        setHistory]        = useState<PreventaHistoryEntry[] | null>(null);
+  const [loadingHistory, setLoadingHistory]  = useState(false);
+  const hasPreventaData = !!(lead.preventa || lead.etapaPreventa);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
@@ -64,6 +77,18 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
       .catch(() => setAttachments([]))
       .finally(() => setLoadingAttachments(false));
   }, [lead.id, lead.adjuntos]);
+
+  // historial de Estado Preventa — leído del tracking de Odoo, solo tiene sentido si el lead pasó por preventa
+  useEffect(() => {
+    if (!hasPreventaData) return;
+    setLoadingHistory(true);
+    fetch(`/api/presales/history?leadId=${lead.id}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => setHistory((d?.entries as PreventaHistoryEntry[] | undefined) ?? []))
+      .catch(() => setHistory([]))
+      .finally(() => setLoadingHistory(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lead.id, hasPreventaData]);
 
   const odooUrl = `${ODOO_BASE}/web#model=crm.lead&id=${lead.id}&view_type=form`;
 
@@ -132,6 +157,38 @@ export default function LeadDetailModal({ lead, onClose }: Props) {
               <Field label="Tipo Venta"          value={lead.tipoVenta} />
             </div>
           </section>
+
+          {hasPreventaData && (
+            <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
+                <History size={10} /> Historial de Estado Preventa
+              </h3>
+              {loadingHistory ? (
+                <div className="flex items-center justify-center gap-2 py-4 text-slate-400 text-xs">
+                  <Loader2 size={13} className="animate-spin" /> Cargando historial…
+                </div>
+              ) : !history || history.length === 0 ? (
+                <p className="text-xs text-slate-400 text-center py-3">Sin cambios registrados para este lead</p>
+              ) : (
+                <ol className="relative space-y-3 pl-4 before:absolute before:left-[3px] before:top-1.5 before:bottom-1.5 before:w-px before:bg-white/[0.08]">
+                  {history.map((h, i) => (
+                    <li key={`${h.date}-${i}`} className="relative">
+                      <span className="absolute -left-4 top-1 w-[7px] h-[7px] rounded-full bg-blue-500" />
+                      <div className="flex items-baseline justify-between gap-2 text-xs">
+                        <p>
+                          {h.from ? <span className="text-slate-400">{h.from}</span> : <span className="text-blue-400">nuevo</span>}
+                          <span className="mx-1 text-slate-500">→</span>
+                          <span className="text-slate-100 font-medium">{h.to}</span>
+                        </p>
+                        <span className="shrink-0 text-[10px] text-slate-400 whitespace-nowrap">{fmtStamp(h.date)}</span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 mt-0.5">{h.author}</p>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </section>
+          )}
 
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Financiero</h3>
