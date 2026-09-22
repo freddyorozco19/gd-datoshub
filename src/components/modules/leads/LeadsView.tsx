@@ -28,6 +28,18 @@ const COP = (v: number) =>
 const unique = (arr: string[]) =>
   ["ALL", ...Array.from(new Set(arr.filter(Boolean))).sort()];
 
+// orden del pipeline (no alfabético) para el filtro Etapa Actual
+const ETAPA_ORDER = [
+  "New", "Identificación de Oportunidad", "Preventa", "Presentación de Oferta",
+  "Evaluación de la Entidad", "Oferta Ganada", "Oferta No viable", "Oferta declinada",
+];
+const uniqueEtapaActual = (arr: string[]) => {
+  const present = new Set(arr.filter(Boolean));
+  const ordered = ETAPA_ORDER.filter((e) => present.has(e));
+  const rest = [...present].filter((e) => !ETAPA_ORDER.includes(e)).sort();
+  return ["ALL", ...ordered, ...rest];
+};
+
 const fmtDate = (s: string) => (s ? s.substring(0, 10) : "—");
 
 const fmtFileSize = (bytes: number): string => {
@@ -1074,7 +1086,7 @@ export default function LeadsView() {
     linea:           unique(leads.map((l) => l.linea)),
     etapaPreventa:   unique(leads.map((l) => l.etapaPreventa)),
     preventa:        unique(leads.map((l) => l.preventa)),
-    etapa:           unique(leads.map((l) => l.etapa)),
+    etapa:           uniqueEtapaActual(leads.map((l) => l.etapa)),
   }), [leads]);
 
   /* límites del slider de fecha — del primer lead cargado a hoy */
