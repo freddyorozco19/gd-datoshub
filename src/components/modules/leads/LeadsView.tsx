@@ -236,7 +236,9 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
   const [mComercial, setMComercial] = useState("ALL");
   const [mEstado,    setMEstado]    = useState("ALL");
   const [detailLead, setDetailLead] = useState<Lead | null>(null);
-  const [mSort, setMSort] = useState<{ key: keyof Lead; dir: "asc" | "desc" }>({ key: "nombre", dir: "asc" });
+  const [mSort, setMSort] = useState<{ key: keyof Lead; dir: "asc" | "desc" }>(
+    showCloseDate ? { key: "fechaCierre", dir: "desc" } : { key: "nombre", dir: "asc" }
+  );
 
   const mOpts = useMemo(() => ({
     linea:     unique(leads.map((l) => l.linea)),
