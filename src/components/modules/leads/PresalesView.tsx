@@ -79,8 +79,9 @@ export default function PresalesView({
   const [listModal, setListModal] = useState<{ leads: Lead[]; heading: string } | null>(null);
   const [fPreventa, setFPreventa] = useState("ALL");
   const [fLinea,    setFLinea]    = useState("ALL");
-  const [fEtapa,    setFEtapa]    = useState("ALL");
-  const [fEstado,   setFEstado]   = useState("ALL");
+  // por defecto: Etapa Actual = Preventa, Estado Preventa = ABIERTO (se pueden cambiar libremente)
+  const [fEtapa,    setFEtapa]    = useState("ABIERTO");
+  const [fEstado,   setFEstado]   = useState("Preventa");
   const [dFrom,     setDFrom]     = useState("");
   const [dTo,       setDTo]       = useState("");
   const [queue,     setQueue]     = useState<QueueKey>("sinAsignar");
