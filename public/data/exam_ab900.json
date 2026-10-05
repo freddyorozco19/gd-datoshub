@@ -201,10 +201,7 @@
       "number": "9",
       "questionText": "From the SharePoint admin center, you can create a [___]",
       "translation": "",
-      "options": [
-        "A. Manage sites in the SharePoint admin center",
-        "B. server."
-      ],
+      "options": [],
       "correctAnswer": "site.",
       "explanation": "The SharePoint admin center is used to create and manage SharePoint sites. It is not used to create servers, users, or Microsoft 365 roles.",
       "learnMore": [
@@ -213,7 +210,20 @@
           "url": "https://learn.microsoft.com/en-us/sharepoint/manage-sites-in-new-admin-center"
         }
       ],
-      "images": []
+      "images": [],
+      "questionType": "multi-dropdown",
+      "dropdownOptions": [
+        "site.",
+        "server.",
+        "user.",
+        "Microsoft 365 role."
+      ],
+      "statements": [
+        {
+          "text": "From the SharePoint admin center, you can create a [___]",
+          "answer": "site."
+        }
+      ]
     },
     {
       "number": "10",
@@ -234,7 +244,13 @@
           "url": "https://learn.microsoft.com/en-us/sharepoint/default-sharepoint-groups"
         }
       ],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab900/q10_img0.png",
+          "alt": "",
+          "inOption": false
+        }
+      ]
     },
     {
       "number": "11",
