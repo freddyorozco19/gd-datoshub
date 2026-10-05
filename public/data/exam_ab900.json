@@ -266,7 +266,13 @@
       "correctAnswer": "D",
       "explanation": "Microsoft Entra Secure Score recommendations contribute only their unachieved points. Requiring multifactor authentication for administrative roles has 0 of 10 points achieved, so resolving it adds up to 10 points. Blocking legacy authentication has only 7.27 points remaining, while the other two recommendations are already fully achieved.",
       "learnMore": [],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab900/q11_img0.png",
+          "alt": "",
+          "inOption": false
+        }
+      ]
     },
     {
       "number": "12",
