@@ -1,0 +1,2667 @@
+{
+  "examTitle": "AB-731: Microsoft AI Business Professional",
+  "totalQuestions": 100,
+  "scrapedAt": "2026-10-05T20:23:20.740Z",
+  "questions": [
+    {
+      "number": "1",
+      "questionType": "multi-dropdown",
+      "questionText": "The primary goal of generative AI is [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "to create new content, such as text, images, or code.",
+      "explanation": "Generative AI creates new content, including text, images, and code. Classification, trend analysis, and predictions from historical data are primarily analytical or predictive AI functions.",
+      "learnMore": [],
+      "images": [],
+      "dropdownOptions": [
+        "to analyze trends and classify data sources.",
+        "to create new content, such as text, images, or code.",
+        "to make predictions based on historical data."
+      ],
+      "statements": [
+        {
+          "text": "The primary goal of generative AI is [___]",
+          "answer": "to create new content, such as text, images, or code."
+        }
+      ]
+    },
+    {
+      "number": "2",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, Yes",
+      "statements": [
+        {
+          "text": "Allowing AI models to make autonomous decisions supports the Microsoft responsible AI principle of accountability.",
+          "answer": "No"
+        },
+        {
+          "text": "Regularly testing AI models for fairness and inclusiveness helps ensure they align with Microsoft's Responsible AI principles.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Protecting user data and limiting access to personal information supports the Microsoft responsible AI principles of privacy and security.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Microsoft's Responsible AI Standard is built on six principles: fairness, reliability and safety, privacy and security, inclusiveness, transparency, and accountability. The Accountability principle specifically states that AI systems should not be the final authority on decisions affecting people's lives, and that humans must maintain meaningful control over highly autonomous systems — so granting AI full autonomous decision-making authority actually conflicts with, rather than supports, accountability. The Fairness and Inclusiveness principles require that AI systems treat all groups equitably and avoid bias; regularly testing models against these criteria (e.g., via fairness assessment tools) is a core practice for ensuring alignment with these principles. The Privacy and Security principle requires AI systems to protect personal and business data through measures such as restricting access, encrypting data, and complying with privacy laws — protecting user data and limiting access to personal information directly fulfills this principle.",
+      "learnMore": [
+        {
+          "text": "What is Responsible AI - Azure Machine Learning | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai?view=azureml-api-2"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "3",
+      "questionType": "mc",
+      "questionText": "Which of the following correctly explains the difference between a pretrained generative AI model and a fine-tuned generative AI model?",
+      "translation": "",
+      "options": [
+        "A. A pretrained model requires labeled data, while a fine-tuned model does not.",
+        "B. A pretrained model is faster to train than a fine-tuned model because the pretrained model uses fewer parameters.",
+        "C. A pretrained model is trained on broad datasets, while a fine-tuned model is adapted to perform well on a narrower, domain-specific dataset.",
+        "D. A pretrained model is optimized for a specific task, while a fine-tuned model is designed for general-purpose use."
+      ],
+      "correctAnswer": "C",
+      "explanation": "A pretrained generative AI model is trained on a large, broad, general-purpose dataset to learn general patterns, language structure, and knowledge. Fine-tuning takes that pretrained model and continues training it on a smaller, narrower, domain- or task-specific dataset so it performs better on specialized tasks. This is why option C is correct: it accurately reflects that pretraining establishes broad general capability while fine-tuning adapts the model to a specific domain or use case.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "4",
+      "questionType": "mc",
+      "questionText": "Your organization stores thousands of reports and documents across multiple systems. You are recommending the use of Azure AI Search as part of a new generative AI solution to enhance information discovery. What is a key benefit of using Azure AI Search in this scenario?",
+      "translation": "",
+      "options": [
+        "A. generates responses to customer questions without referencing the existing data",
+        "B. queries and retrieves information from large collections of data by using natural language",
+        "C. automates document workflows based on the document content",
+        "D. improves model accuracy by fine-tuning organizational data"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Azure AI Search is designed to index and query large volumes of content, enabling users to retrieve relevant information using natural language queries. In generative AI solutions, it commonly serves as the retrieval component in Retrieval-Augmented Generation (RAG) patterns, allowing the AI system to search across large collections of documents and reports and return the most relevant results based on natural language input, which can then be used to ground AI-generated responses in organizational data.",
+      "learnMore": [
+        {
+          "text": "What is Azure AI Search?",
+          "url": "https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "5",
+      "questionType": "mc",
+      "questionText": "A company intends to use an AI-driven solution to analyze customer feedback in order to gain insights that will inform future product designs. The goal is to mitigate the privacy risks associated with this solution. What is the best approach to achieve this goal? (More than one answer choice may achieve the goal — select the BEST answer.)",
+      "translation": "",
+      "options": [
+        "A. Delete all the feedback data immediately after analysis.",
+        "B. Ensure that feedback is attributable to the customer so that it can be deleted upon request.",
+        "C. Limit privacy reviews to the final stage of the AI project lifecycle.",
+        "D. Anonymize the source data to remove customer Personally Identifiable Information (PII) from the feedback."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Anonymizing the source data to strip out Personally Identifiable Information before it is processed by the AI solution directly reduces privacy risk at its source, since the system can no longer expose or misuse identifiable customer data while still allowing the underlying feedback content to be analyzed for product design insights. This aligns with core privacy-by-design and data minimization principles (e.g., GDPR data minimization requirements and Microsoft's Responsible AI \"privacy and security\" pillar), which call for reducing exposure of personal data as early as possible in a system's lifecycle rather than relying on later remediation such as deletion after the fact, keeping data attributable (which increases rather than decreases exposure), or deferring privacy reviews to the end of the project.",
+      "learnMore": [
+        {
+          "text": "What is Responsible AI - Azure Machine Learning | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "6",
+      "questionType": "mc",
+      "questionText": "Your organization is assessing Microsoft Copilot Studio for supporting business process automation and employee self-service. Which two capabilities are directly supported in Copilot Studio? Each correct answer presents a complete solution. Choose two",
+      "translation": "",
+      "options": [
+        "A. drafting and summarizing files in Microsoft Word and PowerPoint",
+        "B. customizing agent behavior and responses",
+        "C. using agents to identify and respond to security incidents",
+        "D. building agents that connect to business data and automate user interactions",
+        "E. configuring document security"
+      ],
+      "correctAnswer": "BD",
+      "explanation": "Copilot Studio is a low-code authoring tool designed to let makers customize an agent's topics, conversation flow, tone, and responses, and to build agents that connect to enterprise data sources (through connectors, plugins, and knowledge sources) and automate multi-step user interactions using topics and Power Automate actions. Drafting/summarizing content in Word and PowerPoint is a Microsoft 365 Copilot feature, responding to security incidents is a Microsoft Security Copilot capability, and configuring document security belongs to Microsoft Purview Information Protection — none of these are native Copilot Studio functions.",
+      "learnMore": [
+        {
+          "text": "What is Microsoft Copilot Studio?",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-what-is-copilot-studio"
+        },
+        {
+          "text": "Copilot Studio agent capabilities overview",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-fundamentals-agents-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "7",
+      "questionType": "mc",
+      "questionText": "Your company wants to make sure AI solutions are used responsibly and that they align with company values and compliance requirements. You need to establish governance principles for AI use. Which two actions should you perform? Select the two BEST answers. Each correct answer presents a complete solution. NOTE: Each correct selection is worth one point. Choose two",
+      "translation": "",
+      "options": [
+        "A. Allow each department to tailor governance processes for its own AI initiatives.",
+        "B. Define accountability norms for AI decisions across business and technical teams.",
+        "C. Create a process to review AI initiatives for responsible AI alignment.",
+        "D. Assign governance ownership primarily to the AI engineering and data science teams.",
+        "E. Focus governance efforts on AI systems that handle regulated or sensitive data."
+      ],
+      "correctAnswer": "BC",
+      "explanation": "Effective AI governance requires clear accountability that spans both business and technical stakeholders, since responsible AI decisions (data use, fairness, transparency, compliance) are not purely technical concerns — business leaders must also be accountable for outcomes. It also requires a formal, repeatable review process so that every AI initiative is checked against responsible AI principles (fairness, reliability, privacy, security, inclusiveness, transparency, accountability) before and during deployment, rather than relying on ad hoc or team-specific practices. Allowing each department to define its own governance process (A) leads to inconsistent standards across the organization, assigning ownership solely to engineering/data science teams (D) excludes necessary business and compliance oversight, and restricting governance only to systems handling regulated or sensitive data (E) leaves other AI systems ungoverned even though responsible AI principles should apply broadly across all AI initiatives.",
+      "learnMore": [
+        {
+          "text": "Microsoft Responsible AI Standard",
+          "url": "https://www.microsoft.com/en-us/ai/responsible-ai"
+        },
+        {
+          "text": "Govern your AI applications and services - Cloud Adoption Framework",
+          "url": "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/ai/govern"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "8",
+      "questionType": "mc",
+      "questionText": "Your company stores hundreds of internal business reports.",
+      "translation": "",
+      "options": [
+        "A. natural language processing",
+        "B. Azure Machine Learning",
+        "C. Retrieval Augmented Generation (RAG)",
+        "D. Generative Adversarial Network (GAN)"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Retrieval Augmented Generation (RAG) is the pattern designed for exactly this scenario: it retrieves relevant passages from an organization's own content (such as the internal business reports) and feeds them into a generative model's prompt so that the agent's answers are grounded in and traceable to that specific content, rather than relying solely on the model's pretrained knowledge. This is the standard approach for building agents that answer questions over a private document set, as described in Microsoft's guidance on RAG in Azure AI Search and Copilot Studio.",
+      "learnMore": [
+        {
+          "text": "Retrieval Augmented Generation (RAG) in Azure AI Search",
+          "url": "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview"
+        },
+        {
+          "text": "Enhance AI responses with Retrieval Augmented Generation - Microsoft Copilot Studio",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/retrieval-augmented-generation"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "9",
+      "questionType": "mc",
+      "questionText": "Your company has purchased Microsoft 365 Copilot for its sales department. The sales team needs to quickly find and summarize information contained in internal documents. From which two data sources can the sales department obtain results by default? (Each correct answer presents part of the solution.) Choose two",
+      "translation": "",
+      "options": [
+        "A. Microsoft OneDrive",
+        "B. an on-premises file share",
+        "C. Microsoft SharePoint",
+        "D. Microsoft Sway",
+        "E. a custom customer relationship management (CRM) system"
+      ],
+      "correctAnswer": "AC",
+      "explanation": "Microsoft 365 Copilot uses Microsoft Graph to ground its responses in content that a user already has permission to access within core Microsoft 365 services — including files stored in OneDrive for Business and SharePoint Online — without any extra configuration. On-premises file shares and custom CRM systems are external data sources that require setting up Microsoft Graph connectors before Copilot can index and surface their content, so they are not available by default. Sway is not a document storage location searched by Copilot.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot overview",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365-copilot/microsoft-365-copilot-overview"
+        },
+        {
+          "text": "Microsoft Graph connectors overview",
+          "url": "https://learn.microsoft.com/en-us/microsoftsearch/connectors-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "10",
+      "questionType": "multi-dropdown",
+      "questionText": "Effective prompt engineering increases the [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "accuracy and relevance of AI-generated responses.",
+      "explanation": "Prompt engineering provides clearer instructions and context to a generative AI model, improving the accuracy and relevance of its responses. It does not change the storage capacity needed for AI data or the time required to train the underlying model.",
+      "learnMore": [],
+      "images": [],
+      "dropdownOptions": [
+        "storage capacity required for AI data.",
+        "training time required for generative AI models.",
+        "accuracy and relevance of AI-generated responses."
+      ],
+      "statements": [
+        {
+          "text": "Effective prompt engineering increases the [___]",
+          "answer": "accuracy and relevance of AI-generated responses."
+        }
+      ]
+    },
+    {
+      "number": "11",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, Yes",
+      "statements": [
+        {
+          "text": "Users that want to reason over work data by using a natural language prompt in Microsoft 365 Copilot must have a Copilot add-on license.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft 365 Copilot is included in Microsoft 365 E3 and Microsoft 365 E5 licenses.",
+          "answer": "No"
+        },
+        {
+          "text": "Some Microsoft 365 Copilot services are available through a pay-as-you-go plan.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot's work-based chat experience, which grounds natural language prompts in an organization's data (emails, files, chats, meetings) via Microsoft Graph, requires the dedicated Microsoft 365 Copilot add-on license; only the free web-grounded Copilot Chat is available without it. Microsoft 365 Copilot is sold as a separate add-on to eligible base subscriptions such as Microsoft 365 E3 and E5 — it is not bundled into those licenses and must be purchased/assigned separately. Additionally, Microsoft provides pay-as-you-go, consumption-based billing for certain Copilot services, such as Microsoft 365 Copilot Chat usage and SharePoint/declarative agents, letting organizations pay based on usage rather than a fixed per-user license.",
+      "learnMore": [
+        {
+          "text": "License Options for Microsoft 365 Copilot",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-licensing"
+        },
+        {
+          "text": "Microsoft 365 Copilot Pay-as-You-Go Service Overview",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "12",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, Yes",
+      "statements": [
+        {
+          "text": "Retrieval Augmented Generation (RAG) architectures require that a large language model (LLM) be retrained on proprietary data.",
+          "answer": "No"
+        },
+        {
+          "text": "Retrieval-Augmented Generation (RAG) grounds a language model to produce more factual and context-relevant responses.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Retrieval Augmented Generation (RAG) retrieves information from external knowledge sources at runtime instead of relying solely on the knowledge of a generative AI model.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "RAG works by retrieving relevant documents or data from an external knowledge base (such as a vector store) at inference time and injecting that context into the prompt sent to the LLM. This means the base model itself does not need to be retrained or fine-tuned on the proprietary data - the knowledge is supplied dynamically through retrieval, making the first statement false. Because the retrieved content provides up-to-date, domain-specific, and factual context, RAG grounds the model's responses, reducing hallucinations and improving relevance and accuracy, making the second statement true. Finally, RAG's defining characteristic is that it augments generation by pulling information from external sources at runtime rather than depending solely on the parametric knowledge baked into the model during pretraining, making the third statement true.",
+      "learnMore": [
+        {
+          "text": "Retrieval Augmented Generation (RAG) in Azure AI Search",
+          "url": "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "13",
+      "questionType": "mc",
+      "questionText": "Your company plans to build a generative AI solution based on internal data. You recommend using Microsoft Foundry as a starting point to develop and manage the solution. What is a key benefit of using Microsoft Foundry for this project?",
+      "translation": "",
+      "options": [
+        "A. Provides a scalable platform for developing and deploying generative AI solutions.",
+        "B. Removes the need to select or configure the underlying AI model.",
+        "C. Enables business users to build generative AI solutions.",
+        "D. Offers a low-code platform for developing generative AI solutions."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Microsoft Foundry is a unified Azure platform-as-a-service that combines production-grade infrastructure with developer tooling, giving teams a scalable environment to build, deploy, monitor, and govern generative AI solutions — from proof of concept through enterprise-scale production — using a broad catalog of models, agent orchestration, evaluation, and monitoring capabilities. It does not eliminate model selection (users choose and configure from a catalog of 1,900+ models), it is not restricted to or targeted specifically at business users, and it is not positioned as a low-code development tool; it primarily serves application developers, ML engineers/data scientists, and IT administrators with code-first and API-driven development experiences.",
+      "learnMore": [
+        {
+          "text": "What is Microsoft Foundry? - Microsoft Foundry | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry"
+        },
+        {
+          "text": "Microsoft Foundry | Microsoft Azure",
+          "url": "https://azure.microsoft.com/en-us/products/ai-foundry/"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "14",
+      "questionType": "multi-dropdown",
+      "questionText": "The main difference between generative AI and predictive AI is that generative AI [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "can produce new and original content.",
+      "explanation": "Generative AI creates new outputs such as text, images, audio, or code. Predictive AI uses existing data to forecast, classify, or estimate an outcome rather than generate original content.",
+      "learnMore": [],
+      "images": [],
+      "dropdownOptions": [
+        "uses a smaller dataset.",
+        "produces more accurate results.",
+        "can produce new and original content."
+      ],
+      "statements": [
+        {
+          "text": "The main difference between generative AI and predictive AI is that generative AI [___]",
+          "answer": "can produce new and original content."
+        }
+      ]
+    },
+    {
+      "number": "15",
+      "questionType": "mc",
+      "questionText": "You need to create a custom Azure Machine Learning model, and the data that will be used to train the model is consistent and uniform. What should you do first?",
+      "translation": "",
+      "options": [
+        "A. Prepare the training data.",
+        "B. Evaluate the model.",
+        "C. Train the model.",
+        "D. Tune hyperparameters.",
+        "E. Deploy the model."
+      ],
+      "correctAnswer": "A",
+      "explanation": "In the standard machine learning model development lifecycle, data preparation always precedes training, hyperparameter tuning, evaluation, and deployment. Even when data is consistent and uniform, it must first be gathered, formatted, and prepared (e.g., split into training/validation sets, cleaned, transformed) before it can be fed into a training algorithm. Only after the data is prepared can the model be trained, its hyperparameters tuned, its performance evaluated, and finally deployed for use.",
+      "learnMore": [
+        {
+          "text": "What is Azure Machine Learning?",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning"
+        },
+        {
+          "text": "Set up AutoML for tabular data",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "16",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, Yes",
+      "statements": [
+        {
+          "text": "Microsoft 365 Copilot can amplify existing data governance challenges.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Implementing Microsoft 365 Copilot reduces data management costs.",
+          "answer": "No"
+        },
+        {
+          "text": "Microsoft 365 Copilot can help IT teams manage data risks.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot inherits and surfaces content according to a tenant's existing permission and sharing configuration. When an organization has weak data governance — such as oversharing, missing sensitivity labels, or stale permissions — Copilot's ability to retrieve and summarize content across Microsoft 365 will expose and amplify those pre-existing gaps, making this a genuine risk highlighted in Microsoft's Copilot data-readiness guidance. Rolling out Copilot is not cost-reducing for data management; organizations must invest in preparing their data estate (SharePoint Advanced Management, Purview sensitivity labeling, access reviews, oversharing remediation) on top of Copilot licensing costs, so data management costs increase rather than decrease. Finally, Microsoft 365 Copilot integrates with Microsoft Purview and the Copilot Control System, which provide IT and security teams with auditing, oversharing insights, sensitivity-label enforcement, and remediation recommendations, directly helping them manage and mitigate data risks tied to Copilot usage.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot data and compliance readiness",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-minimum-requirements-data-compliance"
+        },
+        {
+          "text": "Data, Privacy, and Security for Microsoft 365 Copilot",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "17",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "Generative AI can be used in the automation of complex workflows.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Generative AI can be used to generate new content, such as text, images, and music.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Generative AI is best suited to perform mathematical calculations and solve equations.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Generative AI models can be integrated into orchestration frameworks and agents to automate multi-step, complex workflows by generating plans, code, or decisions at each stage, making the first statement true. Generative AI's defining capability is producing new, original content—text, images, audio, music, and code—based on patterns learned during training, making the second statement true. However, generative AI models are probabilistic next-token predictors rather than deterministic computation engines; they are well documented to be unreliable and error-prone at precise mathematical calculations and equation solving, so traditional calculators or symbolic math engines (or AI systems augmented with calculator/tool plugins) are better suited for that task, making the third statement false.",
+      "learnMore": [
+        {
+          "text": "Generative AI Fundamentals - Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "18",
+      "questionType": "multi-dropdown",
+      "questionText": "Microsoft 365 Copilot can be used to [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "create a Microsoft Word document.",
+      "explanation": "Microsoft 365 Copilot works within Word to help users create and draft documents. It is not a real-time network-monitoring tool or a mechanism for changing SharePoint administrative permissions.",
+      "learnMore": [
+        {
+          "text": "What is Microsoft 365 Copilot?",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "monitor network traffic and alerts in real time.",
+        "create a Microsoft Word document.",
+        "create a list in Microsoft SharePoint.",
+        "modify administrative permissions for Microsoft SharePoint files."
+      ],
+      "statements": [
+        {
+          "text": "Microsoft 365 Copilot can be used to [___]",
+          "answer": "create a Microsoft Word document."
+        }
+      ]
+    },
+    {
+      "number": "19",
+      "questionType": "mc",
+      "questionText": "You are exploring how Microsoft 365 Copilot uses Microsoft Graph to deliver AI-powered experiences. Which information in Microsoft Graph can Copilot use by default?",
+      "translation": "",
+      "options": [
+        "A. emails, files, meetings, and chats in Microsoft 365",
+        "B. data stored in a file share",
+        "C. social media activity",
+        "D. content from public websites"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Microsoft 365 Copilot is grounded in the Microsoft Graph, which by default provides access to the organizational content a user is authorized to see within Microsoft 365 — including emails, files, meetings, and chats (as well as calendar items and other Microsoft 365 data). Access to external sources such as file shares, social media, or public websites requires additional configuration, such as Microsoft Graph connectors or plugins, and is not available by default.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot overview - Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "20",
+      "questionType": "mc",
+      "questionText": "Your organization is rolling out Microsoft 365 Copilot. As part of the deployment, users must be able to use the Researcher agent to search across data stored in Microsoft SharePoint. You need to recommend a licensing plan for this solution. What should you recommend?",
+      "translation": "",
+      "options": [
+        "A. a Microsoft 365 Copilot per-user add-on license",
+        "B. pay-as-you-go",
+        "C. a Microsoft 365 subscription entitlement",
+        "D. a usage-based consumption license in Azure"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Microsoft 365 Copilot, including its built-in Researcher and Analyst reasoning agents, is sold as a per-user add-on license that is layered on top of an eligible base Microsoft 365 subscription (such as Microsoft 365 E3/E5, Office 365 E3/E5, Business Standard/Premium, and others). Only users assigned this dedicated Microsoft 365 Copilot add-on license can run the Researcher agent, which searches across a user's accessible work content — emails, chats, files, and SharePoint data — plus the web. A plain Microsoft 365 subscription entitlement only unlocks the free, web-grounded Copilot Chat experience, not full agents like Researcher; pay-as-you-go/usage-based billing applies to scenarios such as SharePoint agents and Copilot Chat working with shared tenant data rather than the full per-user Researcher experience; and Azure consumption-based licensing is unrelated to Microsoft 365 Copilot user licensing.",
+      "learnMore": [
+        {
+          "text": "License Options for Microsoft 365 Copilot | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-licensing"
+        },
+        {
+          "text": "Researcher and Analyst are now generally available in Microsoft 365 Copilot",
+          "url": "https://www.microsoft.com/en-us/microsoft-365/blog/2025/06/02/researcher-and-analyst-are-now-generally-available-in-microsoft-365-copilot/"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "21",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, No",
+      "statements": [
+        {
+          "text": "To use Microsoft 365 Copilot Chat, you must have a Microsoft 365 Copilot license.",
+          "answer": "No"
+        },
+        {
+          "text": "Microsoft 365 Copilot Chat provides context-aware assistance in Microsoft 365 apps.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft 365 Copilot Chat can only access information in open files and read emails.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot Chat is available at no additional cost to users with an eligible Microsoft 365/Entra account license and does not require a separate Microsoft 365 Copilot add-on license; the Copilot license instead unlocks deeper, organization-wide grounding in Microsoft Graph data. Copilot Chat is embedded in apps such as Word, Excel, Outlook, and Teams and can be aware of and work with content the user currently has open, making it context-aware. Its data access is not limited to only open files and read emails — it can also use general web knowledge, uploaded documents, and, when licensed, broader Microsoft Graph content such as SharePoint, OneDrive, and meetings, so the claim that it can 'only' access open files and emails is false.",
+      "learnMore": [
+        {
+          "text": "How Copilot Chat works with and without a Microsoft 365 Copilot license",
+          "url": "https://support.microsoft.com/en-us/topic/how-copilot-chat-works-with-and-without-a-microsoft-365-copilot-license-5810b659-fbe0-48ee-9fe6-d731fe86cdeb"
+        },
+        {
+          "text": "Minimum requirements for Microsoft 365 Copilot Chat",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-chat-requirements"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "22",
+      "questionType": "mc",
+      "questionText": "A company operates a website that publishes news articles every day. An AI solution needs to be recommended that can analyze the text of these articles and identify the main people, locations, and companies mentioned in them. What should be included in the recommendation?",
+      "translation": "",
+      "options": [
+        "A. Azure Language in Foundry Tools",
+        "B. Azure Vision in Foundry Tools",
+        "C. Content Safety in Foundry Control Plane",
+        "D. Azure Speech in Foundry Tools"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Named Entity Recognition (NER) is a feature of Azure Language (part of Foundry Tools, formerly Azure AI Language / Text Analytics) that analyzes unstructured text and identifies and categorizes entities such as people, locations, organizations, dates, and quantities. This directly matches the requirement to identify the main people, locations, and companies mentioned in news articles. Azure Vision analyzes images rather than text, Content Safety in Foundry Control Plane detects harmful or inappropriate content rather than extracting entities, and Azure Speech processes spoken audio rather than performing entity extraction on text.",
+      "learnMore": [
+        {
+          "text": "What is the named entity recognition (NER) feature in Azure Language? - Foundry Tools | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/named-entity-recognition/overview"
+        },
+        {
+          "text": "What is Azure Language in Foundry Tools - Foundry Tools | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "23",
+      "questionType": "mc",
+      "questionText": "Your company intends to use generative AI to help summarize and analyze its internal business documents. You need to recommend a solution that prevents the generative AI from accessing confidential or classified information. What should you include in the recommendation?",
+      "translation": "",
+      "options": [
+        "A. an information barrier (IB) policy",
+        "B. communication monitoring",
+        "C. a data retention policy",
+        "D. data governance"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Preventing an AI system such as Microsoft 365 Copilot from surfacing confidential or classified content requires data governance controls — specifically data classification and sensitivity labeling combined with permission-based access enforcement. When documents are classified and protected through a data governance framework, the AI can only access and reference content that the requesting user is already authorized to view; labeled/restricted files are excluded from AI-generated responses for users without the necessary permissions. Information barrier policies instead restrict communication and collaboration between defined groups of users, communication monitoring reviews conversations for compliance/conduct issues, and data retention policies control the lifecycle (how long data is kept), none of which govern whether AI can read and process classified content the way data governance (classification and access control) does.",
+      "learnMore": [
+        {
+          "text": "Microsoft Purview data security and compliance protections for Microsoft 365 Copilot and other generative AI apps",
+          "url": "https://learn.microsoft.com/en-us/purview/ai-microsoft-purview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "24",
+      "questionType": "mc",
+      "questionText": "Your company sells hiking and camping gear online. You need a generative AI solution that can interact with customers and ask questions about their needs. What should you include in the solution?",
+      "translation": "",
+      "options": [
+        "A. a chatbot",
+        "B. predictive AI",
+        "C. computer vision",
+        "D. a recommendation engine"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A chatbot built on generative AI (conversational AI) can hold a natural-language dialogue with customers, asking clarifying questions to understand their needs and responding dynamically based on context. This distinguishes it from predictive AI (which forecasts outcomes from historical data), computer vision (which analyzes images or video), and a recommendation engine (which suggests items based on behavioral or purchase data rather than conducting an interactive conversation). Because the requirement is specifically two-way conversational interaction with customers, a chatbot is the component that fulfills it.",
+      "learnMore": [
+        {
+          "text": "AI-900: Microsoft Azure AI Fundamentals Study Guide",
+          "url": "https://techcommunity.microsoft.com/blog/educatordeveloperblog/ai-900-microsoft-azure-ai-fundamentals-study-guide/3737182"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "25",
+      "questionType": "mc",
+      "questionText": "A company that manages an online catalog of office supplies plans to use a generative AI solution to create product descriptions for its website. The solution must meet the following requirements: The descriptions must be able to be posted immediately after they are created. The solution must allow selection and inclusion of specific product details in each description. The solution must be fast and simple for non-technical staff to use. What is the best type of solution to use? More than one answer choice may achieve the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. custom Azure Machine Learning model",
+        "B. the Researcher agent in Microsoft 365 Copilot",
+        "C. an interactive AI agent",
+        "D. a fine-tuned large language model (LLM)"
+      ],
+      "correctAnswer": "C",
+      "explanation": "An interactive AI agent is built for user-driven, conversational use: a non-technical staff member can provide or select product details directly in the interaction, receive a generated description immediately, and publish it right away without any additional technical setup. This directly satisfies all three requirements — immediate usability, selection/inclusion of product details, and simplicity for non-technical users. In contrast, a custom Azure Machine Learning model requires data science skills to build and deploy, a fine-tuned LLM requires technical fine-tuning and integration work before it can be used, and the Researcher agent in Microsoft 365 Copilot is purpose-built for research and analysis tasks rather than quick, detail-driven content generation for immediate publishing.",
+      "learnMore": [
+        {
+          "text": "Design autonomous agent capabilities - Microsoft Copilot Studio | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/autonomous-agents"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "26",
+      "questionType": "hotspot",
+      "questionText": "Match each business scenario to the appropriate AI solution design approach.",
+      "translation": "",
+      "options": [
+        "A. Build with Azure Machine Learning",
+        "B. Build with Microsoft Copilot Studio",
+        "C. Extend with Microsoft 365 Copilot connectors",
+        "D. Use Microsoft 365 Copilot"
+      ],
+      "correctAnswer": "Microsoft 365 Copilot provides built-in generative AI features directly inside Office apps (Word, Po",
+      "explanation": "Microsoft 365 Copilot provides built-in generative AI features directly inside Office apps (Word, PowerPoint, Outlook) for tasks like summarizing content and generating presentations, making it the right fit for the marketing scenario. Microsoft Copilot Studio is a low-code platform for building custom conversational agents grounded on specific data and processes, such as an HR bot that answers policy questions and processes leave requests. Azure Machine Learning is the platform for building, training, and deploying custom predictive models, which is required for a manufacturing scenario that predicts maintenance schedules from operational/sensor data. Microsoft 365 Copilot connectors extend Copilot's knowledge by ingesting external line-of-business data (such as ERP data) into Microsoft Graph or retrieving it in real time, allowing users to access that data through familiar Microsoft 365 productivity tools, which matches the finance department's requirement.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot connectors overview",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-copilot-connector"
+        },
+        {
+          "text": "Choose the Best Microsoft 365 Copilot Extensibility Path for Your Scenario",
+          "url": "https://learn.microsoft.com/en-us/training/modules/choose-microsoft-365-copilot-extensibility-path/"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "27",
+      "questionType": "hotspot",
+      "questionText": "Match each description to the appropriate Microsoft responsible AI principle.",
+      "translation": "",
+      "options": [
+        "A. Fairness",
+        "B. Reliability and safety",
+        "C. Privacy and security",
+        "D. Inclusiveness",
+        "E. Transparency",
+        "F. Accountability"
+      ],
+      "correctAnswer": "Microsoft's Responsible AI Standard defines six core principles. Privacy and security requires prote",
+      "explanation": "Microsoft's Responsible AI Standard defines six core principles. Privacy and security requires protecting personal data with strong safeguards. Transparency requires that AI systems be understandable, so people can know how and why decisions are made. Inclusiveness requires designing AI solutions to be accessible and to empower people of all abilities, backgrounds, and experiences. Accountability requires that people remain in control of AI systems through human oversight, governance, and clear ownership of outcomes. Fairness (equitable treatment without bias) and Reliability and safety (consistent, safe performance under normal and adverse conditions) are separate principles not described by these four statements.",
+      "learnMore": [
+        {
+          "text": "Responsible AI Principles and Approach | Microsoft AI",
+          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
+        },
+        {
+          "text": "What is Responsible AI - Azure Machine Learning | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai?view=azureml-api-2"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "28",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, Yes",
+      "statements": [
+        {
+          "text": "Microsoft Copilot provides a single AI app that has identical features and experiences across all Microsoft products.",
+          "answer": "No"
+        },
+        {
+          "text": "Microsoft 365 Copilot delivers AI capabilities for business users that use Microsoft 365 apps.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Security Copilot helps companies understand risks and the organizational security posture.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Microsoft Copilot is not a single uniform application; it manifests differently across products (e.g., Windows, Bing, Microsoft 365, Security) with experiences and features tailored to each context, so the claim of identical features everywhere is false. Microsoft 365 Copilot is explicitly the AI assistant embedded in Microsoft 365 apps (Word, Excel, PowerPoint, Outlook, Teams) to help business users with productivity tasks. Microsoft Security Copilot is a generative-AI security solution built to help security and IT teams quickly understand threat signals, investigate incidents, and assess overall organizational security posture.",
+      "learnMore": [
+        {
+          "text": "What is Microsoft Copilot?",
+          "url": "https://learn.microsoft.com/en-us/copilot/overview"
+        },
+        {
+          "text": "Microsoft 365 Copilot overview",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365-copilot/microsoft-365-copilot-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "29",
+      "questionType": "mc",
+      "questionText": "Your company sells hiking and camping gear online. You need a generative AI solution that can: Interact with customers Ask questions about their needs Escalate to a human agent if necessary What solution should you use?",
+      "translation": "",
+      "options": [
+        "A. a chatbot",
+        "B. predictive AI",
+        "C. a recommendation engine",
+        "D. computer vision"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A chatbot built on generative AI is designed to hold natural-language conversations with users, ask follow-up questions to clarify their needs, and hand off (escalate) the conversation to a human agent when the request exceeds its capabilities. This matches the requirement for interactive dialogue, needs discovery, and escalation. Predictive AI focuses on forecasting future outcomes from historical data, a recommendation engine suggests items based on user/item similarity or behavior patterns, and computer vision analyzes visual data — none of these are designed for conversational, question-driven customer interaction with human escalation.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "30",
+      "questionType": "multi-dropdown",
+      "questionText": "An organization that runs continuous, large-scale workloads with Azure OpenAI models should choose the [___] pricing model.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Provisioned (PTUs)",
+      "explanation": "Provisioned throughput units (PTUs) reserve Azure OpenAI model throughput for predictable, sustained, high-volume workloads. Standard on-demand deployment uses shared capacity, and Batch API is designed for asynchronous batch requests rather than continuous serving.",
+      "learnMore": [
+        {
+          "text": "Provisioned throughput for Foundry Models",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/provisioned-throughput"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "Batch API",
+        "Provisioned (PTUs)",
+        "Standard (On-Demand)",
+        "Provisioned throughput for Foundry Models"
+      ],
+      "statements": [
+        {
+          "text": "An organization that runs continuous, large-scale workloads with Azure OpenAI models should choose the [___] pricing model.",
+          "answer": "Provisioned (PTUs)"
+        }
+      ]
+    },
+    {
+      "number": "31",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, Yes",
+      "statements": [
+        {
+          "text": "Prompt engineering involves specifying guidelines that help a generative AI model generate useful and accurate responses.",
+          "answer": "Yes"
+        },
+        {
+          "text": "The instruction is the part of the prompt that includes examples to show the AI what its response should look like.",
+          "answer": "No"
+        },
+        {
+          "text": "The context is the part of the prompt that helps a generative AI model understand which information to use when generating a response.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Prompt engineering is precisely the practice of designing prompts—specifying guidelines, wording, and structure—so that a generative AI model produces useful and accurate output, making statement 1 true. A prompt is typically broken into components: the instruction (a clear statement of the task the model should perform), the context (background or domain information that tells the model what information is relevant), input data (the actual content to be processed), and examples (few-shot samples that demonstrate the desired response format/style). Because 'examples' is a distinct component from 'instruction,' the claim that the instruction includes examples is false, making statement 2 false (No). Context, by definition, supplies the background information the model needs to understand which information to draw on when generating a response, making statement 3 true (Yes).",
+      "learnMore": [
+        {
+          "text": "Prompt engineering techniques - Microsoft Foundry",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/prompt-engineering"
+        },
+        {
+          "text": "Prompt engineering concepts - .NET",
+          "url": "https://learn.microsoft.com/en-us/dotnet/ai/conceptual/prompt-engineering-dotnet"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "32",
+      "questionType": "mc",
+      "questionText": "Your company is evaluating a new AI solution prior to deployment and wants to make sure the solution adheres to Microsoft's responsible AI principles. Which approach best achieves this goal? More than one answer choice may achieve the goal — select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. Design the AI solution to automatically approve or reject customer loan applications.",
+        "B. Test the AI solution to identify and mitigate potential unfair or inconsistent outcomes in its outputs.",
+        "C. Prioritize model performance when tuning the AI solution.",
+        "D. Enable the AI solution to collect and store personal data."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Microsoft's responsible AI framework includes fairness as a core principle, requiring that AI systems be evaluated so they treat all groups of people equitably and do not produce biased or inconsistent outcomes. Testing an AI solution to identify and mitigate unfair or inconsistent results directly implements this fairness principle. In contrast, fully automating high-stakes decisions like loan approvals without human oversight undermines reliability and safety, focusing solely on model performance without considering fairness or transparency goes against balanced responsible AI practice, and collecting/storing personal data without proper safeguards conflicts with the privacy and security principle.",
+      "learnMore": [
+        {
+          "text": "Microsoft responsible AI principles",
+          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
+        },
+        {
+          "text": "What is Responsible AI - Azure Machine Learning",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "33",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, Yes",
+      "statements": [
+        {
+          "text": "Lack of trust in the security and accuracy of AI solutions is a common barrier to AI adoption.",
+          "answer": "Yes"
+        },
+        {
+          "text": "AI adoption efforts often fail when organizations overlook the importance of high-quality data.",
+          "answer": "Yes"
+        },
+        {
+          "text": "AI adoption is most successful when implemented with business and compliance stakeholders.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Security and accuracy concerns are consistently ranked among the top barriers preventing organizations from scaling AI solutions, as trust issues around data protection, model reliability, and output accuracy create hesitancy among decision-makers. High-quality, well-governed data is foundational to AI success because model outputs are only as reliable as the data used to train and operate them; poor data quality leads to biased, inaccurate, or unsafe AI outcomes and is a leading cause of failed AI initiatives. Successful AI adoption requires cross-functional collaboration, including business stakeholders to ensure the solution addresses real organizational needs and compliance stakeholders to ensure adherence to regulatory, privacy, and risk management requirements, particularly in regulated industries.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "34",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, No",
+      "statements": [
+        {
+          "text": "Microsoft Foundry provides a unified platform for developers and data professionals to create custom end-to-end AI solutions.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Foundry provides a unified platform for low-code developers and business users to create custom end-to-end AI solutions.",
+          "answer": "No"
+        },
+        {
+          "text": "You need a Microsoft 365 Copilot license to access Microsoft Foundry services.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Microsoft Foundry is a unified Azure platform-as-a-service designed for application developers, ML engineers, and data scientists to build, customize, deploy, and govern custom end-to-end AI solutions (models, agents, and tools) — this matches the first statement. The 'low-code developers and business users' audience is instead the target market for Microsoft Copilot Studio; Microsoft's own guidance contrasts Copilot Studio's low-code/business-user experience with Foundry's pro-code, technical-team focus, so the second statement is false. Finally, access to Microsoft Foundry is granted through a standard Azure account and subscription (via the Foundry portal at ai.azure.com), with usage billed per deployed model/agent/tool — it does not require a Microsoft 365 Copilot license, so the third statement is also false.",
+      "learnMore": [
+        {
+          "text": "What is Microsoft Foundry? - Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry"
+        },
+        {
+          "text": "Microsoft Copilot Studio vs. Microsoft Foundry: Building AI Agents and Apps",
+          "url": "https://techcommunity.microsoft.com/blog/microsoft-security-blog/microsoft-copilot-studio-vs-microsoft-foundry-building-ai-agents-and-apps/4483160"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "35",
+      "questionType": "mc",
+      "questionText": "A company implements an AI-driven loan approval system that allows applicants to request an explanation for why their loan application was rejected. Which Microsoft responsible AI principle does this scenario illustrate?",
+      "translation": "",
+      "options": [
+        "A. fairness",
+        "B. privacy and security",
+        "C. transparency",
+        "D. inclusiveness"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Microsoft's transparency principle states that AI systems should be understandable, and that people should be given meaningful explanations of the AI system's behavior, especially when the system informs decisions that significantly affect people's lives, such as loan approvals. Enabling applicants to request an explanation for a denied loan directly reflects the interpretability aspect of transparency, as opposed to fairness (avoiding bias/discrimination), privacy and security (protecting data), or inclusiveness (empowering people regardless of ability or circumstance).",
+      "learnMore": [
+        {
+          "text": "What is Responsible AI - Azure Machine Learning | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai?view=azureml-api-2"
+        },
+        {
+          "text": "Responsible AI Principles and Approach | Microsoft AI",
+          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "36",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, No",
+      "statements": [
+        {
+          "text": "You can use Azure Language in Foundry Tools to analyze the sentiment of customer reviews.",
+          "answer": "Yes"
+        },
+        {
+          "text": "You can use Azure Language in Foundry Tools to translate internal reports into multiple languages.",
+          "answer": "No"
+        },
+        {
+          "text": "You can use Azure Language in Foundry Tools to extract text from scanned documents.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Azure AI Language (Azure Language in Foundry Tools) provides NLP features for analyzing already-digitized text, including sentiment analysis and opinion mining, which directly supports analyzing the sentiment of customer reviews. Language translation into multiple languages is provided by a separate service, Azure AI Translator, not by the Language service. Extracting text from scanned documents (OCR) is provided by Azure AI Vision's Read/OCR capability or Azure AI Document Intelligence, not by the Language service, which requires text already in digital form as input.",
+      "learnMore": [
+        {
+          "text": "What is Azure Language in Foundry Tools - Foundry Tools | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
+        },
+        {
+          "text": "Azure Translator in Foundry Tools | Microsoft Azure",
+          "url": "https://azure.microsoft.com/en-us/products/ai-foundry/tools/translator"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "37",
+      "questionType": "mc",
+      "questionText": "You need to recommend a service that supports indexing information and knowledge mining by extracting insight…",
+      "translation": "",
+      "options": [
+        "A. Microsoft Foundry",
+        "B. Azure Vision in Foundry Tools",
+        "C. Azure Document Intelligence in Foundry Tools",
+        "D. Azure AI Search"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Azure AI Search is Microsoft's knowledge mining service. It ingests content from various data sources, enriches it using AI skills (such as OCR, key phrase extraction, entity recognition, and language detection) to extract insights from unstructured content like documents, and then indexes the enriched content so it can be explored through search, bots, or other applications. This end-to-end ingest-enrich-explore workflow, combined with the creation of a searchable index, is specifically what defines knowledge mining, distinguishing Azure AI Search from Document Intelligence (which focuses on extracting structured data from specific form/document types without indexing) and Azure Vision (which analyzes images only).",
+      "learnMore": [
+        {
+          "text": "Create a knowledge mining solution with Azure AI Search - Training | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/training/modules/ai-knowldge-mining/"
+        },
+        {
+          "text": "Knowledge Mining | Microsoft Azure",
+          "url": "https://azure.microsoft.com/en-us/solutions/knowledge-mining"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "38",
+      "questionType": "multi-dropdown",
+      "questionText": "An effective way to scale AI proficiency and adoption amongst employees is to [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "establish a champions program for your company.",
+      "explanation": "A champions program scales AI enablement by training peer advocates who guide, teach, and encourage colleagues, thereby increasing awareness, education, and sustained adoption throughout the organization.",
+      "learnMore": [
+        {
+          "text": "Support Microsoft Power Platform champions in your organization",
+          "url": "https://learn.microsoft.com/en-us/power-platform/guidance/adoption/champions"
+        },
+        {
+          "text": "Create your champions program for Microsoft Teams",
+          "url": "https://learn.microsoft.com/en-us/microsoftteams/teams-adoption-create-champions-program"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "launch an internal campaign to promote AI awareness.",
+        "offer a self-paced online training course for employees.",
+        "define performance metrics for AI tool usage.",
+        "establish a champions program for your company."
+      ],
+      "statements": [
+        {
+          "text": "An effective way to scale AI proficiency and adoption amongst employees is to [___]",
+          "answer": "establish a champions program for your company."
+        }
+      ]
+    },
+    {
+      "number": "39",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, Yes",
+      "statements": [
+        {
+          "text": "A barrier to AI adoption can include data limitations and a lack of AI readiness and skills.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Organizations often struggle with AI adoption because they prioritize technology selection before defining clear business use cases.",
+          "answer": "Yes"
+        },
+        {
+          "text": "A lack of cross-functional collaboration is a common barrier to AI adoption.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Data limitations — such as poor data quality, fragmented or siloed data, and insufficient data governance — combined with a shortage of AI skills and organizational readiness are consistently identified as leading barriers to enterprise AI adoption. Organizations that select AI tools and platforms before defining a clear business use case and measurable value proposition frequently fail to realize value, since strategy and outcome definition must precede technology selection for successful adoption. Finally, AI initiatives require coordination across IT, data science, legal/compliance, and business units; when this cross-functional collaboration is missing, the result is fragmented governance, duplicated investment, and misaligned initiatives — a recognized and common barrier to scaling AI within organizations.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "40",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, No, Yes",
+      "statements": [
+        {
+          "text": "Azure Vision in Foundry Tools can extract and analyze key phrases from PDF files.",
+          "answer": "No"
+        },
+        {
+          "text": "Azure Vision in Foundry Tools can generate images based on natural language descriptions.",
+          "answer": "No"
+        },
+        {
+          "text": "Azure Document Intelligence in Foundry Tools can be used to automate the processing of invoices and credit notes.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Azure Vision in Foundry Tools (formerly Azure AI/Computer Vision) offers Face analysis, Image Analysis, and OCR (Read API), which extracts raw text from images and documents but does not perform semantic key-phrase extraction — that capability belongs to Azure AI Language's Key Phrase Extraction feature. Azure Vision is also purely an analysis service; it does not generate new images from text prompts — that functionality is provided by Azure OpenAI's image generation models (DALL-E/GPT-image) within Microsoft Foundry. In contrast, Azure Document Intelligence provides a prebuilt Invoice model that extracts structured fields (vendor, totals, line items, dates, etc.) from sales invoices and similar documents; because credit notes share the same layout and fields, this model (often combined with a custom classifier) is routinely used to automate processing of both invoices and credit notes.",
+      "learnMore": [
+        {
+          "text": "What is Azure Vision in Foundry Tools?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview"
+        },
+        {
+          "text": "What is key phrase extraction in Azure Language in Foundry Tools?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/key-phrase-extraction/overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "41",
+      "questionType": "mc",
+      "questionText": "You have a historical dataset containing 1,000 records. You need an AI solution capable of analyzing this data to identify patterns and predict future outcomes. What should you include in the solution?",
+      "translation": "",
+      "options": [
+        "A. Microsoft Foundry",
+        "B. Azure Document Intelligence in Foundry Tools",
+        "C. Azure Machine Learning",
+        "D. Azure Content Understanding in Foundry Tools"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Azure Machine Learning is the Azure service designed for building, training, and deploying machine learning models that learn patterns from historical data (such as a 1,000-record dataset) and use those learned patterns to predict future outcomes, whether through regression, classification, or other supervised learning techniques. Microsoft Foundry is oriented toward building generative AI applications on top of foundation models rather than training custom predictive models from structured historical data. Azure Document Intelligence and Azure Content Understanding, as Foundry Tools, are designed for extracting structured information from documents and multimodal content, not for statistical pattern discovery and outcome prediction from historical datasets.",
+      "learnMore": [
+        {
+          "text": "What is Azure Machine Learning?",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "42",
+      "questionType": "mc",
+      "questionText": "A generative AI solution used by your company has been fine-tuned on data that reflects the general populatio…",
+      "translation": "",
+      "options": [
+        "A. Apply a newer version of the generative AI model.",
+        "B. Apply a content-moderation filter.",
+        "C. Create a new version of the solution that is trained on only inclusive and representative content.",
+        "D. Create a new version of the solution that is trained on only exclusionary content."
+      ],
+      "correctAnswer": "B",
+      "explanation": "A content-moderation filter can be layered on top of the existing model to detect and block harmful, exclusionary, or ableist language in real time, without the need to retrain or replace the underlying model. This approach directly addresses the harmful output while avoiding the significant cost and time investment associated with retraining the solution (as would be required by creating a new fine-tuned version) or upgrading to a different model version, neither of which guarantees the specific issue is resolved and both of which are more costly. Content moderation/filtering is a standard responsible-AI mitigation for controlling generated output content cost-effectively.",
+      "learnMore": [
+        {
+          "text": "Content filtering in Azure OpenAI Service",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter"
+        },
+        {
+          "text": "Content safety and responsible AI practices",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "43",
+      "questionType": "multi-dropdown",
+      "questionText": "For each task described below, select the appropriate Azure Foundry Tool from the corresponding drop-down lis…",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Azure Document Intelligence in Foundry Tools, Azure Language in Foundry Tools, Azure Vision in Foundry Tools",
+      "statements": [
+        {
+          "text": "Extracting structured data from forms and invoices:",
+          "answer": "Azure Document Intelligence in Foundry Tools"
+        },
+        {
+          "text": "Summarizing written content from business reports:",
+          "answer": "Azure Language in Foundry Tools"
+        },
+        {
+          "text": "Generating descriptive text for uploaded images:",
+          "answer": "Azure Vision in Foundry Tools"
+        }
+      ],
+      "dropdownOptions": [
+        "Azure Language in Foundry Tools",
+        "Azure Document Intelligence in Foundry Tools",
+        "Azure Vision in Foundry Tools"
+      ],
+      "explanation": "Azure Document Intelligence in Foundry Tools is a specialized document-processing service that uses OCR and machine-learning models to extract text, key-value pairs, tables, and structured data from forms, invoices, receipts, and similar structured documents, making it the right choice for extracting structured data from forms and invoices. Azure Language in Foundry Tools provides the Summarization capability, which offers extractive and abstractive summarization of plain text and documents, making it the right choice for summarizing written content such as business reports. Azure Vision in Foundry Tools includes Image Analysis capabilities (Caption and Dense Captions), which generate human-readable descriptive text/captions for the contents of an image, making it the right choice for generating descriptive text for uploaded images.",
+      "learnMore": [
+        {
+          "text": "Choose the right Azure AI tool for document processing - Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/choosing-right-ai-tool"
+        },
+        {
+          "text": "What is summarization? - Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "44",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, Yes",
+      "statements": [
+        {
+          "text": "For a user to access organizational data from a mobile device, the user needs a Microsoft 365 Copilot license.",
+          "answer": "No"
+        },
+        {
+          "text": "To reason over your organizational data by using Microsoft Graph, you need a Microsoft 365 Copilot license.",
+          "answer": "Yes"
+        },
+        {
+          "text": "To use the Analyst agent, you need a Microsoft 365 Copilot license.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Basic access to organizational data (email, files, calendar, Teams content) from a mobile device requires only the standard Microsoft 365 subscription license, not the Microsoft 365 Copilot add-on license. In contrast, reasoning over organizational data through Microsoft Graph is a defining capability of Microsoft 365 Copilot's work-based chat experience; per Microsoft documentation, work-based chat that surfaces results the user's Entra work/school account can access 'is available with a Microsoft 365 Copilot license,' whereas the free web-based chat is limited to internet results only. The Analyst agent (along with the Researcher agent) is an advanced, built-in Copilot agent bundled with the Microsoft 365 Copilot license; without that license a user's agent access is limited and excludes these advanced agents.",
+      "learnMore": [
+        {
+          "text": "License Options for Microsoft 365 Copilot",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-licensing"
+        },
+        {
+          "text": "Analyst Agent in Microsoft 365 Copilot FAQs",
+          "url": "https://services.northwestern.edu/TDClient/30/Portal/KB/ArticleDet?ID=2875"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "45",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "Microsoft 365 Copilot connectors enable you to index data from multiple sources to make the data available in Copilot.",
+          "answer": "Yes"
+        },
+        {
+          "text": "You can build a custom Microsoft 365 Copilot connector by using Microsoft Power Platform.",
+          "answer": "Yes"
+        },
+        {
+          "text": "To use Microsoft 365 Copilot connectors, you need a Microsoft 365 Copilot license.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Basic access to organizational data (email, files, calendar, Teams content) from a mobile device requires only the standard Microsoft 365 subscription license, not the Microsoft 365 Copilot add-on license. In contrast, reasoning over organizational data through Microsoft Graph is a defining capability of Microsoft 365 Copilot's work-based chat experience; per Microsoft documentation, work-based chat that surfaces results the user's Entra work/school account can access 'is available with a Microsoft 365 Copilot license,' whereas the free web-based chat is limited to internet results only. The Analyst agent (along with the Researcher agent) is an advanced, built-in Copilot agent bundled with the Microsoft 365 Copilot license; without that license a user's agent access is limited and excludes these advanced agents.",
+      "learnMore": [
+        {
+          "text": "License Options for Microsoft 365 Copilot",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-licensing"
+        },
+        {
+          "text": "Analyst Agent in Microsoft 365 Copilot FAQs",
+          "url": "https://services.northwestern.edu/TDClient/30/Portal/KB/ArticleDet?ID=2875"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "46",
+      "questionType": "mc",
+      "questionText": "Your organization has a Microsoft 365 subscription and makes use of Microsoft 365 Copilot Chat.",
+      "translation": "",
+      "options": [
+        "A. a Microsoft 365 Copilot add-on license",
+        "B. Microsoft Copilot Studio user license",
+        "C. a Copilot Chat pay-as-you-go plan"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Declarative agents that are grounded in shared tenant/work data (such as SharePoint or Copilot connectors) require users to have either a Microsoft 365 Copilot add-on license or access to Copilot Chat through an eligible Microsoft 365 license; without an add-on license, usage of such agents triggers usage-based (Copilot Credits) billing. The Microsoft 365 Copilot add-on license unlocks both web-based and work-based Copilot Chat plus embedded Copilot features across Word, Excel, Outlook, and Teams, and it allows building and using declarative agents that access work data without incurring extra consumption charges — making it the appropriate license for users who need to build and use declarative agents against work data on an ongoing basis. This is documented in Microsoft's licensing and cost considerations guidance for Copilot extensibility.",
+      "learnMore": [
+        {
+          "text": "Licensing and Cost Considerations for Copilot Extensibility Options",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/cost-considerations"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "47",
+      "questionType": "mc",
+      "questionText": "Your company is planning to build a proof-of-concept (PoC) agent that uses Azure OpenAI.",
+      "translation": "",
+      "options": [
+        "A. Microsoft 365 Copilot",
+        "B. Batch API",
+        "C. Provisioned (PTUs)",
+        "D. Standard (On-Demand)"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Standard (On-Demand) pricing in Azure OpenAI is a consumption-based, pay-as-you-go model that charges per token processed with no upfront capacity commitment. This makes it well suited to proof-of-concept and development scenarios where usage patterns are not yet established, since it lets a solution start with minimal, low-volume usage and scale elastically as demand grows, without the need to reserve fixed throughput capacity as required by the Provisioned (PTU) model, which is intended for steady, high-volume, predictable production workloads.",
+      "learnMore": [
+        {
+          "text": "Azure OpenAI Service - Pricing | Microsoft Azure",
+          "url": "https://azure.microsoft.com/en-us/pricing/details/azure-openai/"
+        },
+        {
+          "text": "Provisioned throughput for Foundry Models - Microsoft Foundry | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/provisioned-throughput"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "48",
+      "questionType": "hotspot",
+      "questionText": "Match the business processes to the appropriate Microsoft Copilot solutions.",
+      "translation": "",
+      "options": [
+        "A. Copilot in Power Automate",
+        "B. GitHub Copilot",
+        "C. Microsoft 365 Copilot",
+        "D. Microsoft Copilot Studio"
+      ],
+      "correctAnswer": "Microsoft 365 Copilot integrates directly into Office apps such as Excel, where it can analyze workb",
+      "explanation": "Microsoft 365 Copilot integrates directly into Office apps such as Excel, where it can analyze workbook data and generate financial summaries, charts, PivotTables, and visual reports using natural language prompts. Microsoft Copilot Studio is Microsoft's dedicated low-code platform for designing, building, testing, and deploying custom and autonomous agents that can plan, take actions, and complete business processes with minimal coding, distinguishing it from GitHub Copilot (a coding assistant for software development) and Copilot in Power Automate (which assists with building automated flows rather than full autonomous agents).",
+      "learnMore": [
+        {
+          "text": "Overview - Microsoft Copilot Studio",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-what-is-copilot-studio"
+        },
+        {
+          "text": "Get started with Copilot in Excel",
+          "url": "https://support.microsoft.com/en-us/excel/copilot/get-started-with-copilot-in-excel"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "49",
+      "questionType": "mc",
+      "questionText": "Your company has learned that a number of employees are using their personal ChatGPT accounts to help with wo…",
+      "translation": "",
+      "options": [
+        "A. analyzing and producing reports based on complex data",
+        "B. generating ideas and solving issues",
+        "C. drafting documents, emails, presentations, and marketing materials",
+        "D. accessing internal data in accordance with existing Microsoft 365 policies"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft 365 Copilot runs inside the organization's Microsoft 365 tenant and therefore inherits and enforces the organization's existing security and compliance controls—permission boundaries, sensitivity labels, and data loss prevention (DLP) policies—when it retrieves and reasons over internal content such as SharePoint sites, emails, and Teams chats. This means a user only sees Copilot responses built from data they are already authorized to access, and confidential information never leaves the tenant's trust boundary. A personal ChatGPT account has no connection to, or governance over, company data and policies, so any proprietary information shared with it escapes the organization's security controls entirely. This tenant-bound, policy-respecting access to internal data is the core differentiator that makes Copilot the safer choice for handling proprietary information, as documented in Microsoft's official Copilot vs. ChatGPT Enterprise comparison.",
+      "learnMore": [
+        {
+          "text": "Compare Copilot vs. ChatGPT Enterprise | Microsoft 365 Copilot",
+          "url": "https://www.microsoft.com/en-us/microsoft-365-copilot/copilot-vs-chatgpt-enterprise"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "50",
+      "questionType": "multi-dropdown",
+      "questionText": "When a generative AI model produces output that seems realistic but contains incorrect information, the behavior is known as [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "model inaccuracy.",
+      "explanation": "Model inaccuracy occurs when a generative AI system generates information that appears credible but is incorrect.",
+      "learnMore": [],
+      "images": [],
+      "dropdownOptions": [
+        "data leakage.",
+        "model inaccuracy.",
+        "overreliance.",
+        "prompt injection."
+      ],
+      "statements": [
+        {
+          "text": "When a generative AI model produces output that seems realistic but contains incorrect information, the behavior is known as [___]",
+          "answer": "model inaccuracy."
+        }
+      ]
+    },
+    {
+      "number": "51",
+      "questionType": "mc",
+      "questionText": "Which capability of Microsoft 365 Copilot best supports Microsoft's responsible AI principles of transparency, reliability, and safety?",
+      "translation": "",
+      "options": [
+        "A. Automatically approves AI-generated content for company-wide publishing.",
+        "B. Removes the need for a human to review AI-generated outputs.",
+        "C. Provides grounded, verifiable responses based on organizational data.",
+        "D. Enables users to select from an authorized catalog of AI models."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Microsoft 365 Copilot grounds its AI-generated content in the organization's own data—drawing on Microsoft Graph and content the user is authorized to access—rather than relying purely on generic model training data. This grounding process anchors responses in real, verifiable organizational information and supports citing sources, which directly advances transparency (users can trace where an answer came from), reliability (responses reflect accurate, current business data instead of fabricated content), and safety (grounding is a key mitigation Microsoft uses to reduce the risk of AI models generating ungrounded or harmful content). This is documented in Microsoft's guidance on data, privacy, and security for Microsoft 365 Copilot and its responsible AI overview.",
+      "learnMore": [
+        {
+          "text": "Data, Privacy, and Security for Microsoft 365 Copilot | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy"
+        },
+        {
+          "text": "What is Microsoft 365 Copilot? | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "52",
+      "questionType": "mc",
+      "questionText": "Your company uses generative AI to assist with content creation and customer interactions. You need to evaluate whether Azure Machine Learning can add value to the current customer management. For which use case should you use Machine Learning?",
+      "translation": "",
+      "options": [
+        "A. predicting customer retention",
+        "B. creating product descriptions from images",
+        "C. generating marketing campaigns",
+        "D. summarizing customer service transcripts"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Predicting customer retention (churn) is a predictive analytics task: it uses historical customer data to train a classification or regression model that forecasts a future outcome (whether a customer will stay or leave). This is the kind of structured-data, outcome-prediction task that Azure Machine Learning is designed for, as opposed to generative AI, which creates new content such as descriptions, campaigns, or summaries from prompts and existing unstructured data.",
+      "learnMore": [
+        {
+          "text": "AI vs. Machine Learning | Microsoft Azure",
+          "url": "https://azure.microsoft.com/en-us/overview/artificial-intelligence-ai-vs-machine-learning"
+        },
+        {
+          "text": "Generative AI versus Different Types of AI | Microsoft AI",
+          "url": "https://www.microsoft.com/en-us/ai/ai-101/generative-ai-vs-other-types-of-ai"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "53",
+      "questionType": "mc",
+      "questionText": "Each month your organization processes thousands of scanned invoices. You need to recommend an AI solution that can automatically pull out key details from these invoices, such as invoice numbers, vendor names, and total amounts. What is the best solution to recommend? More than one answer choice may achieve the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. Azure Document Intelligence in Foundry Tools",
+        "B. Azure Vision in Foundry Tools",
+        "C. Azure AI Search",
+        "D. Azure Machine Learning"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Azure Document Intelligence (part of Azure AI Foundry Tools, formerly Form Recognizer) includes a prebuilt invoice model specifically designed to automatically extract structured data such as invoice number, vendor name, line items, and total amounts from scanned or photographed invoices. This makes it the purpose-built, best-fit solution compared to Azure Vision (which performs general image analysis/OCR but not structured invoice field extraction), Azure AI Search (used for indexing and querying content, not extraction), or Azure Machine Learning (a general-purpose ML platform that would require building a custom model rather than using an out-of-the-box invoice extraction capability).",
+      "learnMore": [
+        {
+          "text": "Azure AI Document Intelligence documentation",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview"
+        },
+        {
+          "text": "Prebuilt invoice model - Document Intelligence",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/invoice"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "54",
+      "questionType": "mc",
+      "questionText": "Your company is planning to roll out AI initiatives across several business units. You need to make sure that every AI project stays aligned with the company's overall business strategy and is carried out responsibly. What is the best approach to achieve this goal? More than one answer choice may achieve the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. Allow each department to deploy its own AI tools and workflows.",
+        "B. Delegate AI decision-making to the company’s IT department.",
+        "C. Outsource AI development to an external vendor.",
+        "D. Establish an AI council to provide guidance, oversight, and coordination."
+      ],
+      "correctAnswer": "D",
+      "explanation": "An AI council (or similar cross-functional governance body) is the recommended approach because it provides centralized guidance, oversight, and coordination for AI initiatives across the organization. Such a council typically includes representatives from business, legal, risk, ethics, and technology functions, enabling it to ensure that AI projects are aligned with overall business strategy while also enforcing responsible AI principles such as fairness, transparency, privacy, and accountability. Allowing departments to act independently (A) leads to inconsistent governance and misalignment with corporate strategy. Delegating decisions solely to IT (B) narrows the scope to technical execution rather than strategic and ethical oversight. Outsourcing to an external vendor (C) cedes strategic control and does not guarantee alignment with internal business goals or responsible AI practices. This governance approach is consistent with responsible AI frameworks such as Microsoft's Responsible AI Standard and the NIST AI Risk Management Framework, which emphasize establishing organizational oversight structures for AI governance.",
+      "learnMore": [
+        {
+          "text": "Microsoft Responsible AI Standard",
+          "url": "https://www.microsoft.com/en-us/ai/responsible-ai"
+        },
+        {
+          "text": "NIST AI Risk Management Framework",
+          "url": "https://www.nist.gov/itl/ai-risk-management-framework"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "55",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, No",
+      "statements": [
+        {
+          "text": "Content filtering controls can prevent AI-generated responses from exposing confidential and sensitive information.",
+          "answer": "No"
+        },
+        {
+          "text": "AI-generated content can unintentionally reveal sensitive information if the generative AI model has access to unsecured data sources.",
+          "answer": "Yes"
+        },
+        {
+          "text": "To prevent data exposure, only the prompts used by users must be protected by using policies.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Content filtering mechanisms such as Azure AI Content Safety are built to detect and block harmful content categories (hate, violence, sexual content, self-harm) in prompts and completions; they are not a substitute for data loss prevention and are not designed to stop confidential or sensitive business data from being exposed in AI responses — that requires DLP/sensitivity-label based controls such as Microsoft Purview policies for Copilot and other generative AI apps. When a generative AI model has access to unsecured or ungoverned data sources (e.g., files or repositories without proper permissions/sensitivity labels), it can retrieve and unintentionally surface confidential information in its generated output, which is why data security posture management and access controls on data sources are required. Finally, protecting only user prompts is insufficient — effective data-exposure prevention policies (as implemented through Microsoft Purview DLP for Microsoft 365 Copilot and other generative AI apps) must govern both the prompts sent to the model and the AI-generated responses/interactions returned to users.",
+      "learnMore": [
+        {
+          "text": "Microsoft Purview data security and compliance protections for Microsoft 365 Copilot and other generative AI apps",
+          "url": "https://learn.microsoft.com/en-us/purview/ai-microsoft-purview"
+        },
+        {
+          "text": "What is Azure AI Content Safety? - Azure AI services",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "56",
+      "questionType": "mc",
+      "questionText": "Your company has built a custom Azure Machine Learning model that incorporates a generative AI assistant. The model performs well when first deployed, but after six months, its predictions become noticeably less accurate. What is a possible cause of this issue?",
+      "translation": "",
+      "options": [
+        "A. The model requires additional compute resources.",
+        "B. The input data changed over time.",
+        "C. The model was trained incorrectly."
+      ],
+      "correctAnswer": "B",
+      "explanation": "A gradual decline in model accuracy after a period of strong performance is a hallmark of data drift, where the statistical properties of incoming input data shift over time relative to the data the model was originally trained on. Since the model's learned patterns are based on historical data, changes in the real-world input distribution (e.g., shifting user behavior, seasonal trends, or evolving data sources) cause the model's predictions to become less aligned with current reality. Azure Machine Learning provides data drift monitoring capabilities specifically to detect this kind of degradation. Insufficient compute would affect training/inference speed rather than accuracy, and incorrect training would typically produce poor results from the outset rather than a delayed decline.",
+      "learnMore": [
+        {
+          "text": "Detect data drift on datasets (preview) - Azure Machine Learning",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/v1/how-to-monitor-datasets"
+        },
+        {
+          "text": "Model monitoring for data drift and model performance - Azure Machine Learning",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-monitoring"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "57",
+      "questionType": "mc",
+      "questionText": "Your organization uses a generative AI solution, and you need to improve the quality of its responses by applying grounding. Which statement correctly explains how grounding increases the accuracy and relevancy of the responses?",
+      "translation": "",
+      "options": [
+        "A. references a diverse set of people, disciplines, and perspectives",
+        "B. explains how and why AI models generate content",
+        "C. anchors the responses in specific data sources",
+        "D. specifies the strengths and weaknesses of the AI model"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Grounding is the technique of connecting a generative AI model's responses to specific, authoritative, or current data sources—such as enterprise documents, databases, or retrieval systems—rather than relying only on the model's static training data. By anchoring outputs to concrete, verifiable data sources, grounding reduces hallucinations and ensures the generated responses are more accurate, relevant, and contextually appropriate for the intended use case. This is distinct from concepts like diversity of perspectives, explainability of model behavior, or documenting a model's strengths and weaknesses, none of which define grounding.",
+      "learnMore": [
+        {
+          "text": "Grounding LLMs - Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/grounding-llms"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "58",
+      "questionType": "multi-dropdown",
+      "questionText": "Using high-quality grounding data in a generative AI solution [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "improves the accuracy and reliability of the predictions and outputs of AI.",
+      "explanation": "High-quality grounding data provides relevant, trustworthy context for generation, improving the accuracy and reliability of AI outputs. It reduces hallucinations but cannot guarantee that every response is factual.",
+      "learnMore": [],
+      "images": [],
+      "dropdownOptions": [
+        "ensures that all responses are factually accurate.",
+        "increases performance of an AI model.",
+        "improves the accuracy and reliability of the predictions and outputs of AI.",
+        "increases the amount of storage required to host an AI model."
+      ],
+      "statements": [
+        {
+          "text": "Using high-quality grounding data in a generative AI solution [___]",
+          "answer": "improves the accuracy and reliability of the predictions and outputs of AI."
+        }
+      ]
+    },
+    {
+      "number": "59",
+      "questionType": "multi-dropdown",
+      "questionText": "The Analyst agent in Microsoft 365 Copilot [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "uses structured data and provides insights by using text, charts, tables, and other visuals.",
+      "explanation": "The Analyst agent is an AI-powered data-analysis assistant that derives insights from data and presents reports that can include charts and tables.",
+      "learnMore": [
+        {
+          "text": "Get started with Analyst in Microsoft 365 Copilot",
+          "url": "https://support.microsoft.com/en-us/Microsoft-365-Copilot/get-started-with-analyst-in-microsoft-365-copilot"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "compiles background research for a new market or initiative.",
+        "enables you to generate audio summaries of select references.",
+        "uses a conversational agent to answer employee FAQs.",
+        "uses structured data and provides insights by using text, charts, tables, and other visuals."
+      ],
+      "statements": [
+        {
+          "text": "The Analyst agent in Microsoft 365 Copilot [___]",
+          "answer": "uses structured data and provides insights by using text, charts, tables, and other visuals."
+        }
+      ]
+    },
+    {
+      "number": "60",
+      "questionType": "multi-dropdown",
+      "questionText": "You use [___] to train a model that will forecast product demand based on historical sales data.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Azure Machine Learning",
+      "explanation": "Azure Machine Learning is the Azure service for training, validating, and deploying predictive machine-learning models, including demand-forecasting models trained from historical sales data.",
+      "learnMore": [],
+      "images": [],
+      "dropdownOptions": [
+        "Azure Machine Learning",
+        "Azure AI Search",
+        "Azure OpenAI"
+      ],
+      "statements": [
+        {
+          "text": "You use [___] to train a model that will forecast product demand based on historical sales data.",
+          "answer": "Azure Machine Learning"
+        }
+      ]
+    },
+    {
+      "number": "61",
+      "questionType": "mc",
+      "questionText": "Your company uses Microsoft 365 Copilot. You have identified several business processes that require custom workflows and specialized automation. You need to recommend a solution that extends Copilot's capabilities while minimizing development effort and cost. What should you recommend?",
+      "translation": "",
+      "options": [
+        "A. Create an agent by using Microsoft Foundry.",
+        "B. Deploy a Copilot connector.",
+        "C. Build a custom agent by using the full experience of Microsoft Copilot Studio.",
+        "D. Build a declarative agent by using the lite experience of Microsoft Copilot Studio."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Building a custom agent with the full experience of Microsoft Copilot Studio provides a low-code platform for creating agents with topics, actions, and flows/workflows, including the ability to orchestrate complex, multi-step logic, integrate enterprise data, call external APIs, and trigger automation in response to events. This satisfies the need for custom workflows and specialized automation while keeping development effort and cost lower than a pro-code solution such as Microsoft Foundry. Declarative agents built with the lite experience only add instructions, knowledge, and simple actions on top of Copilot's existing orchestrator and explicitly cannot implement complex custom workflow orchestration, and Copilot connectors only supply grounding data rather than automation logic.",
+      "learnMore": [
+        {
+          "text": "Overview - Microsoft Copilot Studio | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-what-is-copilot-studio"
+        },
+        {
+          "text": "Declarative Agents for Microsoft 365 Copilot | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-declarative-agent"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "62",
+      "questionType": "mc",
+      "questionText": "When building an AI adoption team within an enterprise, what practice is generally recommended?",
+      "translation": "",
+      "options": [
+        "A. Include primarily IT and project management staff initially to streamline deployment, adding governance and compliance roles later.",
+        "B. Include procurement and vendor management specialists early to evaluate AI tools, involving business teams once a platform is selected.",
+        "C. Include representatives from legal, leadership, and business units to align AI initiatives with organizational priorities.",
+        "D. Include only data scientists and engineers at first to validate technical feasibility, then add other stakeholders later."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Effective AI adoption requires cross-functional collaboration from the outset. Including legal, leadership, and business unit representatives ensures that AI initiatives are aligned with organizational priorities, regulatory obligations, and risk management from the start, rather than treating governance, compliance, or business alignment as an afterthought. Limiting initial team composition to a single function (such as IT, procurement, or data science/engineering) and adding other stakeholders later risks misalignment with business goals, compliance failures, and costly rework once broader input is finally incorporated.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "63",
+      "questionType": "multi-dropdown",
+      "questionText": "Adopting Microsoft responsible AI principles is important for your organization because the principles [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "promote the ethical and accountable use of AI.",
+      "explanation": "Microsoft’s responsible AI principles establish ethical and accountable practices for AI development and deployment, including fairness, reliability and safety, privacy and security, inclusiveness, transparency, and accountability.",
+      "learnMore": [
+        {
+          "text": "Responsible AI Principles and Approach | Microsoft AI",
+          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach/"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "ensure that AI models deliver consistent and equitable results.",
+        "help organizations increase trust in fully autonomous AI systems.",
+        "promote the ethical and accountable use of AI.",
+        "standardize model development practices across AI teams."
+      ],
+      "statements": [
+        {
+          "text": "Adopting Microsoft responsible AI principles is important for your organization because the principles [___]",
+          "answer": "promote the ethical and accountable use of AI."
+        }
+      ]
+    },
+    {
+      "number": "64",
+      "questionType": "multi-dropdown",
+      "questionText": "When Microsoft 365 Copilot accesses company data using the principle of least privilege, this is an example of a [___] control.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "data security",
+      "explanation": "The principle of least privilege limits Microsoft 365 Copilot’s access to only the data a user is authorized to access, which is a data security control.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot data, privacy, and security",
+          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "data classification",
+        "data compliance",
+        "data loss prevention (DLP)",
+        "data security"
+      ],
+      "statements": [
+        {
+          "text": "When Microsoft 365 Copilot accesses company data using the principle of least privilege, this is an example of a [___] control.",
+          "answer": "data security"
+        }
+      ]
+    },
+    {
+      "number": "65",
+      "questionType": "multi-dropdown",
+      "questionText": "The cost of using generative AI language models is based typically on the number of [___] processed.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "tokens",
+      "explanation": "Generative AI language-model services typically bill according to the number of input and output tokens processed. Tokens are the units the model uses to represent text.",
+      "learnMore": [],
+      "images": [],
+      "dropdownOptions": [
+        "documents",
+        "requests",
+        "tokens",
+        "words"
+      ],
+      "statements": [
+        {
+          "text": "The cost of using generative AI language models is based typically on the number of [___] processed.",
+          "answer": "tokens"
+        }
+      ]
+    },
+    {
+      "number": "66",
+      "questionType": "multi-dropdown",
+      "questionText": "An organization’s AI champions program includes [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "users who advocate for the value of AI by learning, sharing, and identifying use cases.",
+      "explanation": "AI champions drive adoption by learning about AI, sharing knowledge and benefits with colleagues, and identifying practical use cases. Infrastructure delivery, advanced analytics, and organization-wide strategy are separate technical or leadership responsibilities.",
+      "learnMore": [
+        {
+          "text": "Empower innovation and AI culture",
+          "url": "https://learn.microsoft.com/en-us/power-platform/guidance/adoption/common-vision/empower-innovation"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "technical teams responsible for designing advanced analytics solutions to track adoption.",
+        "users who advocate for the value of AI by learning, sharing, and identifying use cases.",
+        "users who are dedicated to building the infrastructure required to support AI across the organization.",
+        "users who come together and define the organization's overall AI strategy."
+      ],
+      "statements": [
+        {
+          "text": "An organization’s AI champions program includes [___]",
+          "answer": "users who advocate for the value of AI by learning, sharing, and identifying use cases."
+        }
+      ]
+    },
+    {
+      "number": "67",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "A manufacturer can use Azure Vision in Foundry Tools to identify product defects on an assembly line.",
+          "answer": "Yes"
+        },
+        {
+          "text": "A logistics company can use Azure Vision in Foundry Tools to recognize package shipping labels.",
+          "answer": "Yes"
+        },
+        {
+          "text": "The HR department at your company can only use Azure Vision in Foundry Tools to extract written content from Microsoft Word files.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Azure Vision in Foundry Tools (the rebranded Azure AI Vision/Computer Vision service) offers Image Analysis capabilities — including object detection and customizable models — that are commonly applied to production-line camera feeds to spot defects such as scratches, deformations, or missing parts, making the first statement true. Its OCR (Read) capability extracts printed and handwritten text from images, which is exactly the kind of task needed to recognize text on package shipping labels, making the second statement true. However, Azure Vision's OCR works on image file types (JPEG, PNG, BMP, PDF, TIFF) and is not restricted to, nor does it operate on, native Microsoft Word (.docx) files; extracting content from Word documents falls under Azure AI Document Intelligence's Read model rather than Azure Vision. Additionally, Azure Vision is not limited solely to text extraction — it also performs image tagging, captioning, and object detection — so the claim that it can 'only' be used to extract written content from Word files is false.",
+      "learnMore": [
+        {
+          "text": "OCR - Optical Character Recognition - Foundry Tools | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview-ocr"
+        },
+        {
+          "text": "Read model OCR data extraction - Document Intelligence - Foundry Tools | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/read?view=doc-intel-4.0.0"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "68",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, Yes",
+      "statements": [
+        {
+          "text": "Using incomplete or poor-quality data during generative AI model training can increase costs.",
+          "answer": "Yes"
+        },
+        {
+          "text": "AI models rely on training data to learn patterns and identify relationships to produce outputs.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Generative AI models trained on non-representative datasets can produce inaccurate or unbalanced results.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Poor-quality or incomplete training data forces additional data cleansing, retraining cycles, and troubleshooting, which raises the overall cost of developing and maintaining a generative AI model. AI and machine learning models are inherently trained by analyzing data to detect patterns and relationships, which they then use to generate predictions or outputs — this is the fundamental mechanism of model training. When training data is not representative of the real-world population or use case, the resulting model can develop biases, leading to inaccurate, skewed, or unbalanced outputs — a well-documented responsible AI concern. These principles are covered in Microsoft's Responsible AI and Azure AI fundamentals documentation regarding data quality, cost, and fairness in AI systems.",
+      "learnMore": [
+        {
+          "text": "Microsoft Responsible AI principles",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        },
+        {
+          "text": "Fundamentals of machine learning - Understand data",
+          "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "69",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, No",
+      "statements": [
+        {
+          "text": "A generative AI model guarantees factually accurate responses if the model is trained on a large dataset.",
+          "answer": "No"
+        },
+        {
+          "text": "Content filtering and responsible AI safeguards help a generative AI model generate safe and inoffensive content.",
+          "answer": "Yes"
+        },
+        {
+          "text": "A generative AI model always produces fair and unbiased results when the training data has been properly prepared and reviewed for fairness.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Generative AI models, even when trained on large datasets, can still produce factually incorrect or fabricated content (hallucinations); dataset size alone does not guarantee accuracy. Responsible AI safeguards such as content filtering (e.g., Azure AI Content Safety) are specifically designed to reduce harmful, offensive, or unsafe outputs, making models safer to use. However, no amount of data preparation and review can absolutely guarantee fairness or eliminate bias, since bias can be introduced through model design, training dynamics, or edge cases not covered during review — ongoing monitoring and mitigation are required rather than a one-time guarantee.",
+      "learnMore": [
+        {
+          "text": "Microsoft Responsible AI principles",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/responsible-use-of-ai-overview"
+        },
+        {
+          "text": "Content filtering in Azure OpenAI Service",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "70",
+      "questionType": "mc",
+      "questionText": "Your company has an AI solution that relies on a prebuilt Azure OpenAI model to generate content. You need to reduce the cost of the solution while minimizing the impact on the quality of the generated output. Which two actions should you perform? Each correct answer presents part of the solution. Note: Each correct selection is worth one point. Choose two",
+      "translation": "",
+      "options": [
+        "A. Switch to an alternate model.",
+        "B. Apply content moderation.",
+        "C. Optimize the prompts.",
+        "D. Decrease the number of hosting hours for the model.",
+        "E. Fine-tune the existing model."
+      ],
+      "correctAnswer": "AC",
+      "explanation": "Azure OpenAI usage costs are driven primarily by the model tier selected and the number of tokens processed. Choosing a less expensive but still capable model reduces per-call cost, and refining/shortening prompts reduces the token count charged for each request-response cycle — both approaches lower spend without materially degrading the quality of generated content. Content moderation is a built-in safety feature and does not affect billing; reducing hosting hours applies to dedicated/provisioned throughput deployments rather than typical prebuilt consumption-based usage and can reduce availability rather than target cost efficiently; fine-tuning adds training and hosting costs and is intended to improve output relevance, not reduce expense.",
+      "learnMore": [
+        {
+          "text": "Azure OpenAI Service pricing",
+          "url": "https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/"
+        },
+        {
+          "text": "Azure OpenAI Service models",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "71",
+      "questionType": "multi-dropdown",
+      "questionText": "[___] AI solution recognizes patterns in large and complex datasets to create new and original content.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "generative",
+      "explanation": "Generative AI learns patterns from large datasets and uses them to create new, original content.",
+      "learnMore": [],
+      "images": [],
+      "dropdownOptions": [
+        "prescriptive",
+        "predictive",
+        "generative"
+      ],
+      "statements": [
+        {
+          "text": "[___] AI solution recognizes patterns in large and complex datasets to create new and original content.",
+          "answer": "generative"
+        }
+      ]
+    },
+    {
+      "number": "72",
+      "questionType": "mc",
+      "questionText": "Your organization is getting ready to roll out Microsoft 365 Copilot and wants to align with Microsoft's responsible AI principles. As a business leader, you suggest forming an AI governance council to help ensure this alignment. What is the primary purpose of this council? Note that more than one answer choice could help achieve the goal, so select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. to monitor user behavior and enforce compliance with internal IT policies",
+        "B. to train employees on how to use Copilot features effectively",
+        "C. to oversee implementation, manage technical performance, and ensure successful AI deployment",
+        "D. to guide strategy, provide oversight, and ensure cross-functional alignment for responsible AI adoption"
+      ],
+      "correctAnswer": "D",
+      "explanation": "An AI governance council is intended to function as a cross-functional leadership body that connects business strategy with responsible AI adoption. Its core purpose is to guide overall AI strategy, provide ongoing oversight of AI use and risk, and ensure alignment across business, IT, legal/compliance, and change-management stakeholders — moving the organization from ad hoc experimentation to intentional, scalable, and responsible adoption of Copilot. This is distinct from narrower operational roles such as day-to-day technical implementation and performance monitoring, enforcing IT policy compliance, or delivering end-user training, which are supporting activities rather than the council's defining mission.",
+      "learnMore": [
+        {
+          "text": "Creating an AI Council – Microsoft Adoption",
+          "url": "https://adoption.microsoft.com/en-us/copilot/ai-council/"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "73",
+      "questionType": "multi-dropdown",
+      "questionText": "The Researcher agent in Microsoft 365 Copilot [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "uses reasoning capabilities to generate deep insights based on organizational data and the web.",
+      "explanation": "Researcher in Microsoft 365 Copilot uses advanced reasoning to conduct multi-step research and synthesize insights from organizational data and the web. The other choices describe capabilities associated with data-analysis or visualization tools rather than the Researcher agent.",
+      "learnMore": [
+        {
+          "text": "Researcher in Microsoft 365 Copilot",
+          "url": "https://support.microsoft.com/en-us/topic/get-started-with-researcher-in-microsoft-365-copilot-0b5904c5-bfa6-4444-a29c-ff11c943c833"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "creates visual dashboards from structured data in Microsoft Excel and Power BI.",
+        "generates a pivot table and performs time series forecasting.",
+        "performs complex, multi-step, data analysis and code execution tasks over arbitrary datasets.",
+        "uses reasoning capabilities to generate deep insights based on organizational data and the web."
+      ],
+      "statements": [
+        {
+          "text": "The Researcher agent in Microsoft 365 Copilot [___]",
+          "answer": "uses reasoning capabilities to generate deep insights based on organizational data and the web."
+        }
+      ]
+    },
+    {
+      "number": "74",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, Yes",
+      "statements": [
+        {
+          "text": "Microsoft Foundry helps organizations securely build and manage generative AI solutions in a governed environment.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Foundry provides built-in scalability to enable organizations to expand AI workloads as usage increases.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Foundry can be used for image recognition and computer vision tasks.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Microsoft Foundry (formerly Azure AI Foundry) is Microsoft's unified platform for building, customizing, evaluating, and governing generative AI applications and agents, offering a single governed control plane natively integrated with Microsoft Entra, Purview, and Defender for security and compliance — satisfying the first statement. Because it is built on Azure's global infrastructure, it inherently provides elastic, built-in scalability so workloads can grow from small prototypes to enterprise-scale AI solutions serving millions of users without re-architecting — satisfying the second statement. Foundry also provides access to a broad model catalog and Azure AI services, including Azure AI Vision, enabling multimodal capabilities such as image recognition and computer vision tasks in addition to generative AI/text scenarios — satisfying the third statement.",
+      "learnMore": [
+        {
+          "text": "Microsoft Foundry | Microsoft Azure",
+          "url": "https://azure.microsoft.com/en-us/products/ai-foundry/"
+        },
+        {
+          "text": "Microsoft Foundry: An End-to-End Platform for Building, Governing, and Scaling AI",
+          "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/microsoft-foundry-an-end-to-end-platform-for-building-governing-and-scaling-ai/4496736"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "75",
+      "questionType": "multi-dropdown",
+      "questionText": "When you use Microsoft 365 Copilot, [___] connects your organizational data to the AI model.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Microsoft Graph",
+      "explanation": "Microsoft 365 Copilot connectors ingest external data into Microsoft Graph and its semantic index, making that data available to Microsoft 365 Copilot for natural-language discovery and summarization.",
+      "learnMore": [
+        {
+          "text": "Copilot connector experiences",
+          "url": "https://learn.microsoft.com/en-us/graph/connecting-external-content-experiences"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "Azure AI Search",
+        "Microsoft Graph",
+        "Microsoft Purview",
+        "Microsoft SharePoint"
+      ],
+      "statements": [
+        {
+          "text": "When you use Microsoft 365 Copilot, [___] connects your organizational data to the AI model.",
+          "answer": "Microsoft Graph"
+        }
+      ]
+    },
+    {
+      "number": "76",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, Yes",
+      "statements": [
+        {
+          "text": "Retrieval Augmented Generation (RAG) requires model fine-tuning.",
+          "answer": "No"
+        },
+        {
+          "text": "Retrieval Augmented Generation (RAG) is helpful when you need a generative AI solution that can access current, verifiable information.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Retrieval Augmented Generation (RAG) enables you to get more relevant responses based on your organization's documents without retraining the base model.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Retrieval Augmented Generation (RAG) is an architectural pattern that combines a generative model with an external retrieval mechanism, allowing the model to reference relevant, up-to-date documents or data at inference time. It does not require fine-tuning or retraining of the base model; instead it retrieves relevant content from a knowledge store (such as an organization's own documents) and inserts it into the prompt/context so the model can generate grounded, relevant, and current responses. This makes RAG ideal for scenarios requiring access to current, verifiable information and for producing responses tailored to an organization's proprietary data without the cost and complexity of retraining.",
+      "learnMore": [
+        {
+          "text": "Retrieval Augmented Generation (RAG) in Azure AI Search",
+          "url": "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "77",
+      "questionType": "mc",
+      "questionText": "Your company plans to use generative AI to help build a website that will showcase various existing products. Which capability best describes a benefit of using generative AI for this project? More than one answer choice may achieve the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. creating product descriptions based on product specifications",
+        "B. designing a new product based on customer requirements",
+        "C. translating product descriptions into a different language",
+        "D. analyzing product sales to identify patterns and trends"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Generative AI models are designed to produce new, coherent content from structured or unstructured input, making them particularly well suited to automatically writing product descriptions from a set of product specifications. This directly supports the goal of populating a product showcase website with informative, human-readable text at scale. Designing new products from customer requirements is a product-design/ideation task rather than content generation for an existing catalog. Translating descriptions is a valid but secondary generative AI use case, less central to the core task described. Analyzing sales data to find patterns and trends is a predictive analytics task, which relies on statistical/ML pattern recognition rather than the generative (content-creation) capability of generative AI.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "78",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, No",
+      "statements": [
+        {
+          "text": "Microsoft 365 Copilot helps users create and analyze content in Microsoft 365 apps.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Copilot Studio can only be used to customize Microsoft 365 Copilot.",
+          "answer": "No"
+        },
+        {
+          "text": "Microsoft Security Copilot uses AI to assign sensitivity labels to documents.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot integrates directly into Word, Excel, PowerPoint, Outlook, and Teams to help users draft, summarize, and analyze content, making the first statement true. Microsoft Copilot Studio is a low-code/no-code platform that not only lets organizations customize and extend Microsoft 365 Copilot with plugins and agents, but also allows building fully standalone custom copilots unrelated to Microsoft 365 Copilot, so the claim that it 'can only' customize Microsoft 365 Copilot is false. Microsoft Security Copilot is an AI-powered security operations assistant focused on incident investigation, threat hunting, and guided response within the security stack; it does not create or assign sensitivity labels — that capability belongs to Microsoft Purview Information Protection, so this statement is also false.",
+      "learnMore": [
+        {
+          "text": "Announcing Microsoft Copilot Studio",
+          "url": "https://www.microsoft.com/en-us/microsoft-365/blog/2023/11/15/announcing-microsoft-copilot-studio-customize-copilot-for-microsoft-365-and-build-your-own-standalone-copilots/"
+        },
+        {
+          "text": "Learn about sensitivity labels - Microsoft Purview",
+          "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "79",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, No, Yes",
+      "statements": [
+        {
+          "text": "A text-to-image generator can be used to translate content into other languages.",
+          "answer": "No"
+        },
+        {
+          "text": "A predictive analytics model can generate new marketing content for a company's online ads.",
+          "answer": "No"
+        },
+        {
+          "text": "A generative AI chatbot can engage customers in personalized conversations and recommend products.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Text-to-image generators convert textual prompts into images; translating text between languages is a separate NLP/text-generation task and is not what a text-to-image model performs. Predictive analytics models forecast outcomes from historical data (e.g., likelihood of conversion) but do not create new original content like ad copy — content creation is a generative AI function, not a predictive analytics function. Generative AI chatbots, built on large language models, are specifically designed to hold personalized, context-aware conversations and can be configured to make product recommendations, which is a core documented use case for conversational generative AI in customer service and sales scenarios.",
+      "learnMore": [
+        {
+          "text": "What is Generative AI? | IBM",
+          "url": "https://www.ibm.com/think/topics/generative-ai"
+        },
+        {
+          "text": "Generative AI - Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Generative_AI"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "80",
+      "questionType": "mc",
+      "questionText": "Your organization intends to use generative AI to assist project managers and engineers in working with const…",
+      "translation": "",
+      "options": [
+        "A. a multi-modal solution",
+        "B. an optical character recognition (OCR) solution",
+        "C. a text completion solution",
+        "D. a document summarization solution"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A multi-modal generative AI solution can jointly process both visual content (images of blueprints) and textual content, enabling it to interpret diagrams, layouts, and symbols alongside any accompanying text. This capability allows it to summarize building designs, answer natural-language questions about the design, and extract specific information (such as the locations of electrical, heating, and plumbing systems) directly from the visual blueprint data — none of which is possible with OCR alone (which only extracts text), a text-completion model (which only continues text prompts), or a document summarization tool (which only condenses existing text content).",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "81",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "Larger datasets can increase the cost of a generative AI solution that uses an Azure Machine Learning workspace.",
+          "answer": "Yes"
+        },
+        {
+          "text": "The cost of consuming Azure OpenAI models is primarily identified by the number of input and output tokens processed.",
+          "answer": "Yes"
+        },
+        {
+          "text": "The cost of custom generative AI solutions always remains the same regardless of the model version or capability used.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Larger training/validation datasets in Azure Machine Learning require more compute resources and longer processing time, which increases overall solution cost. Azure OpenAI Service pricing is based on the number of tokens (input and output) processed by the model, as documented in Azure OpenAI pricing details. Different model versions and capabilities (e.g., GPT-3.5-Turbo vs GPT-4, or different context window sizes) have different per-token pricing, so costs vary by model version and capability rather than remaining constant.",
+      "learnMore": [
+        {
+          "text": "Azure OpenAI Service pricing",
+          "url": "https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/"
+        },
+        {
+          "text": "Plan and manage costs for Azure Machine Learning",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-plan-manage-cost"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "82",
+      "questionType": "mc",
+      "questionText": "A business unit uses an AI solution to process loan applications. It is discovered that the solution rejects the applications of all applicants who are older than 60 years of age. Which Microsoft responsible AI principle is being violated?",
+      "translation": "",
+      "options": [
+        "A. accountability",
+        "B. transparency",
+        "C. reliability and safety",
+        "D. fairness"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Microsoft's Responsible AI Standard defines fairness as requiring AI systems to treat everyone fairly and avoid affecting similar groups differently — explicitly noting that for use cases like loan applications, the system should make the same recommendations to people with similar financial circumstances regardless of characteristics such as age. A system that automatically rejects every applicant over age 60, regardless of their actual financial qualifications, is discriminating based on a protected attribute (age) rather than evaluating individuals on their merits, which is a direct violation of the fairness principle. This differs from accountability (human oversight and governance of AI decisions), transparency (explainability of how decisions are made), and reliability and safety (consistent, safe technical operation of the system).",
+      "learnMore": [
+        {
+          "text": "What is Responsible AI - Azure Machine Learning | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai?view=azureml-api-2"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "83",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, Yes, No",
+      "statements": [
+        {
+          "text": "Microsoft 365 Copilot enables users to search across emails, files, chats, meetings, and connected apps, by using natural language queries.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft 365 Copilot provides data protection, and helps ensure that user prompts and chat data are secure.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft 365 Copilot is included in all Microsoft 365 subscriptions.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot Search uses natural language to search across emails, files, chats, meetings, and connected third-party apps via Microsoft Graph and Copilot connectors, returning only content the user already has permission to view. Microsoft 365 Copilot also honors Microsoft 365's existing security, compliance, and privacy commitments, keeping tenant data within its compliance boundary and not using customer prompts or data to train the underlying foundation models, which protects user prompts and chat data. However, Microsoft 365 Copilot is a separately licensed add-on (the Microsoft 365 Copilot license) that must be purchased and assigned on top of an eligible base Microsoft 365/Office 365 subscription; it is not automatically included in every Microsoft 365 subscription.",
+      "learnMore": [
+        {
+          "text": "Microsoft 365 Copilot Search",
+          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-search"
+        },
+        {
+          "text": "What is Microsoft 365 Copilot?",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "84",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, No",
+      "statements": [
+        {
+          "text": "Prompt engineering changes how a generative AI model was trained.",
+          "answer": "No"
+        },
+        {
+          "text": "Prompt engineering focuses on designing clear, concise, and context-rich instructions.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Effective prompt engineering involves maximizing the number of tokens used in each request.",
+          "answer": "No"
+        }
+      ],
+      "explanation": "Prompt engineering is a technique for interacting with an already-trained generative AI model by crafting effective input prompts; it does not modify the model's training or weights. Best practices for prompt engineering emphasize clear, concise, and context-rich instructions to elicit accurate and relevant responses from the model. Effective prompts are not defined by maximizing token usage—unnecessarily long or token-heavy prompts can introduce noise, increase cost and latency, and reduce response quality, so conciseness and relevance are preferred over volume of tokens.",
+      "learnMore": [
+        {
+          "text": "Prompt engineering techniques - Azure OpenAI",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/prompt-engineering"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "85",
+      "questionType": "mc",
+      "questionText": "Your organization is assembling a set of AI-driven business solutions. Company leadership wants to know how Microsoft's responsible AI principles can help support the organization's long-term objectives. Which benefit best illustrates why responsible AI matters? More than one answer choice may seem to achieve the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. reduces the need for executive oversight in AI decision-making",
+        "B. enhances stakeholder trust and fosters sustainable AI adoption throughout the organization",
+        "C. guarantees that AI models provide accurate and relevant responses",
+        "D. reduces the need for data protection policies and governance"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Microsoft's responsible AI framework centers on principles such as fairness, reliability and safety, privacy and security, inclusiveness, transparency, and accountability. The core purpose of these principles is to build and maintain trust among stakeholders (customers, employees, regulators, and the public) so that AI systems can be adopted responsibly and sustained over time as part of long-term business strategy. Responsible AI does not eliminate the need for human/executive oversight, does not guarantee that model outputs are always accurate, and does not reduce the need for data protection and governance—rather, it strengthens and requires ongoing governance and oversight.",
+      "learnMore": [
+        {
+          "text": "Microsoft responsible AI principles and approach",
+          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
+        },
+        {
+          "text": "What is responsible AI - Azure Machine Learning",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "86",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Yes, No, Yes",
+      "statements": [
+        {
+          "text": "Microsoft 365 Copilot can help users compose professional emails and summarize conversations.",
+          "answer": "Yes"
+        },
+        {
+          "text": "When prompted, Microsoft 365 Copilot can autonomously update a spreadsheet that contains sales data.",
+          "answer": "No"
+        },
+        {
+          "text": "Microsoft 365 Copilot can summarize recent updates in business documents, spreadsheets, and presentations.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Microsoft 365 Copilot integrates with Outlook to draft professional emails and provide coaching tips on tone/clarity, and it can summarize email threads and chat conversations, so the first statement is true. In Excel, Copilot's 'Draft' capability provides suggestions for formulas, chart types, and data insights; it does not autonomously alter workbook data — users retain control and must review and apply any proposed changes, so the claim that it can 'autonomously update' sales data is false. Copilot is broadly able to summarize content in Word documents, Excel spreadsheets, PowerPoint presentations, and other files such as PDFs, so the third statement is true.",
+      "learnMore": [
+        {
+          "text": "What is Microsoft 365 Copilot? | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview"
+        },
+        {
+          "text": "Frequently asked questions about editing with Copilot in Excel",
+          "url": "https://support.microsoft.com/en-us/office/frequently-asked-questions-about-editing-with-copilot-in-excel-1cfd906d-40b4-46be-8e2d-65b893e28a02"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "87",
+      "questionType": "mc",
+      "questionText": "Which scenario represents the best opportunity for Azure Machine Learning to provide meaningful strategic value to a business?",
+      "translation": "",
+      "options": [
+        "A. Using historical sales data to forecast demand across product categories.",
+        "B. Digitizing a paper-based process to reduce errors.",
+        "C. Entering customer feedback into a spreadsheet to understand sentiment.",
+        "D. Sending personalized emails to customers based on the customer location."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Azure Machine Learning provides the greatest strategic value when applied to problems that require identifying patterns in historical data to make predictions that inform business decisions — such as using historical sales data to forecast demand across product categories. This is a classic machine learning (regression/time-series forecasting) scenario, where a trained model can uncover trends and relationships in data that are too complex for manual analysis, enabling better inventory, supply chain, and business planning decisions. In contrast, digitizing a paper process, manually entering feedback into a spreadsheet, or sending emails based on simple location rules do not require predictive modeling and can be accomplished through basic automation or business rules rather than machine learning, so they do not represent the same level of strategic value from an AI/ML investment.",
+      "learnMore": [
+        {
+          "text": "Introduction to Azure Machine Learning",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "88",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, Yes",
+      "statements": [
+        {
+          "text": "Microsoft Copilot in Outlook can automatically send follow-up replies to emails.",
+          "answer": "No"
+        },
+        {
+          "text": "Microsoft Copilot in Outlook can identify and surface tasks mentioned in your emails.",
+          "answer": "Yes"
+        },
+        {
+          "text": "Microsoft Copilot in Outlook can summarize long email threads and highlight action items and deadlines.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Copilot in Outlook drafts replies and follow-up messages for the user to review, but actually sending any email remains a manual, user-confirmed action — Copilot does not autonomously send emails on the user's behalf, so the first statement is false. Copilot can, however, analyze email content to detect implied requests and action items, surfacing tasks that are buried in messages, making the second statement true. Copilot also provides a 'Summarize' capability for long email threads that condenses the conversation and highlights key decisions, action items, and deadlines, making the third statement true.",
+      "learnMore": [
+        {
+          "text": "Frequently asked questions about Copilot in Outlook",
+          "url": "https://support.microsoft.com/en-us/office/frequently-asked-questions-about-copilot-in-outlook-07420c70-099e-4552-8522-7d426712917b"
+        },
+        {
+          "text": "Summarize an email thread with Copilot in Outlook",
+          "url": "https://support.microsoft.com/en-us/office/summarize-an-email-thread-with-copilot-in-outlook-a79873f2-396b-46dc-b852-7fe5947ab640"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "89",
+      "questionType": "multi-dropdown",
+      "questionText": "To ensure that your organization follows trustworthy AI principles, the organization should establish an AI governance council to [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "guide AI strategy, ensure responsible AI oversight, and promote alignment across business units.",
+      "explanation": "An AI governance council guides organizational AI strategy, provides responsible-AI oversight, and aligns stakeholders across business units. Deployment, model training, and data-labeling work belong to operational engineering and development teams.",
+      "learnMore": [
+        {
+          "text": "Study guide for Exam AB-731: AI Transformation Leader",
+          "url": "https://learn.microsoft.com/ga-ie/credentials/certifications/resources/study-guides/ab-731"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "configure and deploy AI models in the organization’s Azure environment.",
+        "guide AI strategy, ensure responsible AI oversight, and promote alignment across business units.",
+        "manage day-to-day model training and labeling tasks for AI development teams."
+      ],
+      "statements": [
+        {
+          "text": "To ensure that your organization follows trustworthy AI principles, the organization should establish an AI governance council to [___]",
+          "answer": "guide AI strategy, ensure responsible AI oversight, and promote alignment across business units."
+        }
+      ]
+    },
+    {
+      "number": "90",
+      "questionType": "mc",
+      "questionText": "Your organization is building an AI-powered customer support agent and must ensure the solution adheres to Microsoft's responsible AI principles. Which two actions should you take? Select the two best answers, where each correct answer represents part of the overall solution. Choose two",
+      "translation": "",
+      "options": [
+        "A. Retain all customer conversations.",
+        "B. Test the agent to ensure that responses are inclusive and culturally sensitive.",
+        "C. Enable the agent to operate independently.",
+        "D. Ensure that the agent can be used for multiple purposes.",
+        "E. Provide a clear disclaimer that users are interacting with an AI solution."
+      ],
+      "correctAnswer": "BE",
+      "explanation": "Testing the agent's responses for inclusivity and cultural sensitivity supports the Fairness and Inclusiveness principles, which require that AI systems treat all people fairly and avoid biased, offensive, or exclusionary outputs across different groups and cultures. Providing a clear disclaimer that users are interacting with an AI system supports the Transparency principle, which requires that people understand when they are engaging with an AI system, how it works, and its limitations, so they can make informed choices about using it. In contrast, retaining all conversations indefinitely conflicts with the Privacy and Security principle (data minimization), allowing the agent to act fully autonomously conflicts with Accountability (requiring human oversight), and designing the agent for many unrelated purposes conflicts with best practice guidance to scope AI systems to well-defined use cases so risks can be properly assessed and mitigated.",
+      "learnMore": [
+        {
+          "text": "Responsible AI Principles and Approach | Microsoft AI",
+          "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
+        },
+        {
+          "text": "What is Responsible AI - Azure Machine Learning | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai?view=azureml-api-2"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "91",
+      "questionType": "mc",
+      "questionText": "The HR department at your company spends a significant amount of time answering repetitive questions and updating policy documents. You need to recommend a solution that can: Automate employee interactions Respond to HR-related questions Connect to internal business data sources Which solution should you recommend?",
+      "translation": "",
+      "options": [
+        "A. Microsoft Security Copilot",
+        "B. Microsoft Copilot Studio",
+        "C. Microsoft 365 Copilot",
+        "D. Microsoft Copilot in Azure"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Microsoft Copilot Studio is the platform designed for building and managing custom AI agents that automate repetitive interactions, answer domain-specific questions, and ground their responses in an organization's own data. Agents built in Copilot Studio can be connected to internal knowledge sources—such as SharePoint, Dataverse, and HR systems of record like Workday, SAP, or ServiceNow—and can trigger Power Automate flows to handle tasks like leave requests, policy Q&A, and onboarding, all without requiring custom application development. This directly matches the requirement to automate HR employee interactions while connecting to internal business data, whereas Microsoft 365 Copilot, Microsoft Security Copilot, and Microsoft Copilot in Azure serve different purposes (general productivity assistance, security operations, and Azure cloud management, respectively) and are not designed for building custom connected conversational agents for a specific business function.",
+      "learnMore": [
+        {
+          "text": "Knowledge sources summary - Microsoft Copilot Studio | Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/knowledge-copilot-studio"
+        },
+        {
+          "text": "Transform HR with AI-powered agents | Microsoft Copilot Blog",
+          "url": "https://www.microsoft.com/en-us/microsoft-copilot/blog/copilot-studio/transform-hr-with-ai-powered-agents/"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "92",
+      "questionType": "mc",
+      "questionText": "Which business requirement is most closely associated with grounding a generative AI model?",
+      "translation": "",
+      "options": [
+        "A. supporting multiple languages",
+        "B. measuring the number of user interactions per day",
+        "C. enabling users to interact by using natural language queries",
+        "D. ensuring that verified company data sources are used for response generation"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Grounding in generative AI is the process of connecting a model to authoritative, verified external data sources—such as an organization's internal documents, databases, or knowledge bases—so that the model's outputs are based on accurate, current, and trustworthy information rather than relying solely on its static training data. This directly addresses issues like hallucination and outdated knowledge. The business requirement of ensuring verified company data sources are used for response generation is therefore the one most directly tied to grounding, as opposed to requirements like multilingual support, usage metrics, or natural language interaction, which relate to other aspects of a generative AI solution.",
+      "learnMore": [
+        {
+          "text": "Grounding LLMs - Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/dotnet/ai/conceptual/grounding-llms"
+        },
+        {
+          "text": "What is grounding in generative AI? - Google Cloud",
+          "url": "https://cloud.google.com/use-cases/grounding-ai"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "93",
+      "questionType": "multi-dropdown",
+      "questionText": "[___] is a unified platform for enterprise AI development, where you can build, customize, evaluate, and manage AI apps and models.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Microsoft Foundry",
+      "explanation": "Microsoft Foundry is Microsoft’s unified enterprise AI development platform for building, customizing, evaluating, and managing AI applications and models.",
+      "learnMore": [
+        {
+          "text": "Microsoft Foundry documentation",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "Azure Machine Learning",
+        "Microsoft Foundry",
+        "Azure AI Foundry"
+      ],
+      "statements": [
+        {
+          "text": "[___] is a unified platform for enterprise AI development, where you can build, customize, evaluate, and manage AI apps and models.",
+          "answer": "Microsoft Foundry"
+        }
+      ]
+    },
+    {
+      "number": "94",
+      "questionType": "mc",
+      "questionText": "You have a large language model (LLM) that was pretrained using public data. You want the LLM to generate responses that incorporate frequently updated proprietary content, such as internal documents and knowledge bases. You need to recommend a solution that ensures the LLM uses the most current information without retraining the model. What should you include in the recommendation?",
+      "translation": "",
+      "options": [
+        "A. Retrieval Augmented Generation (RAG)",
+        "B. prompt engineering",
+        "C. content filtering",
+        "D. model fine-tuning"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Retrieval Augmented Generation (RAG) lets an LLM ground its responses on external, frequently changing data sources—such as internal documents and knowledge bases—by retrieving relevant content at query time and adding it to the model's context/prompt. This provides access to the most current, proprietary information without any need to fine-tune or retrain the underlying model, satisfying the stated requirement. Prompt engineering only shapes instructions and cannot supply new factual content; content filtering addresses responsible AI/moderation concerns, not knowledge freshness; and fine-tuning requires retraining, which is explicitly excluded.",
+      "learnMore": [
+        {
+          "text": "Retrieval Augmented Generation (RAG) in Azure AI Search",
+          "url": "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "95",
+      "questionType": "multi-dropdown",
+      "questionText": "You need to recommend an AI solution for each task, and the solutions must use prebuilt AI capabilities to reduce development time. What should you recommend for each task?",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Azure Document Intelligence in Foundry Tools, Azure Content Understanding in Foundry Tools, Azure Language in Foundry Tools",
+      "statements": [
+        {
+          "text": "Extract information from invoices and credit notes:",
+          "answer": "Azure Document Intelligence in Foundry Tools"
+        },
+        {
+          "text": "Identify discussion topics in customer service call recordings:",
+          "answer": "Azure Content Understanding in Foundry Tools"
+        },
+        {
+          "text": "Detect customer sentiment and opinions:",
+          "answer": "Azure Language in Foundry Tools"
+        }
+      ],
+      "dropdownOptions": [
+        "Azure AI Search",
+        "Azure Document Intelligence in Foundry Tools",
+        "Azure Machine Learning"
+      ],
+      "explanation": "Azure Document Intelligence's prebuilt Invoice model uses OCR plus machine learning to automatically extract key fields such as vendor name, invoice ID, dates, totals, and line items from invoices and similar financial documents, requiring no custom model training. Azure Content Understanding's prebuilt post-call analysis analyzer (prebuilt-callCenter) processes conversational audio to produce transcripts with speaker diarization, call summaries, sentiment, and a list of relevant call categories/topics, making it the purpose-built prebuilt tool for identifying discussion topics in call recordings, whereas Azure Speech alone only provides transcription and does not extract topics. Azure Language's Sentiment Analysis and Opinion Mining feature is a prebuilt capability that assigns positive/neutral/negative sentiment labels at the sentence and document level and performs aspect-based opinion mining to surface specific opinions about product or service attributes.",
+      "learnMore": [
+        {
+          "text": "Invoice data extraction – Document Intelligence",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/invoice?view=doc-intel-4.0.0"
+        },
+        {
+          "text": "Azure Content Understanding in Foundry Tools prebuilt analyzers",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/concepts/prebuilt-analyzers"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "96",
+      "questionType": "yes-no",
+      "questionText": "For each statement, select Yes when it is true. Otherwise, select No.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "No, Yes, Yes",
+      "statements": [
+        {
+          "text": "A generative AI solution is well-suited to predict next-quarter sales trends.",
+          "answer": "No"
+        },
+        {
+          "text": "A generative AI solution can summarize lengthy policy documents.",
+          "answer": "Yes"
+        },
+        {
+          "text": "A generative AI solution can create product descriptions from product specifications.",
+          "answer": "Yes"
+        }
+      ],
+      "explanation": "Generative AI models are designed to generate new content such as text, images, or code based on learned patterns, making them well-suited for tasks like summarizing documents and creating descriptive text from structured input. However, predicting numeric outcomes such as future sales trends is a forecasting task that relies on statistical and machine learning techniques (regression, time-series analysis) applied to historical data, not the generative capabilities of large language models. Microsoft's AI fundamentals guidance distinguishes generative AI (content creation, summarization, translation, code generation) from predictive/forecasting machine learning workloads.",
+      "learnMore": [
+        {
+          "text": "Fundamentals of Generative AI - Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "97",
+      "questionType": "multi-dropdown",
+      "questionText": "[___] can analyze internal documents to detect Personally Identifiable Information (PII) and redact the PII from the output.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "Azure Language in Foundry Tools",
+      "explanation": "Azure Language provides PII detection for text and supports redacting the detected sensitive information in its output.",
+      "learnMore": [
+        {
+          "text": "Azure AI Language – PII detection",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/overview"
+        }
+      ],
+      "images": [],
+      "dropdownOptions": [
+        "Azure Language in Foundry Tools",
+        "Azure AI Search",
+        "Azure Vision in Foundry Tools",
+        "Azure Document Intelligence in Foundry Tools",
+        "Azure AI Language – PII detection"
+      ],
+      "statements": [
+        {
+          "text": "[___] can analyze internal documents to detect Personally Identifiable Information (PII) and redact the PII from the output.",
+          "answer": "Azure Language in Foundry Tools"
+        }
+      ]
+    },
+    {
+      "number": "98",
+      "questionType": "multi-dropdown",
+      "questionText": "Prompt engineering is the process of [___]",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "crafting clear instructions to guide generative AI solutions in generating context-appropriate content.",
+      "explanation": "Prompt engineering involves crafting clear, effective instructions that guide a generative AI model to produce contextually appropriate responses.",
+      "learnMore": [],
+      "images": [],
+      "dropdownOptions": [
+        "integrating AI-powered tools into business workflows.",
+        "identifying and fixing errors in AI-generated content.",
+        "designing, developing, and training generative AI models to produce contextually relevant content.",
+        "crafting clear instructions to guide generative AI solutions in generating context-appropriate content."
+      ],
+      "statements": [
+        {
+          "text": "Prompt engineering is the process of [___]",
+          "answer": "crafting clear instructions to guide generative AI solutions in generating context-appropriate content."
+        }
+      ]
+    },
+    {
+      "number": "99",
+      "questionType": "mc",
+      "questionText": "You are preparing to meet with a group of stakeholders to discuss how generative AI could benefit your company. During this meeting, you need to give the stakeholders an accurate description of generative AI. Which description should you provide?",
+      "translation": "",
+      "options": [
+        "A. Generative AI is designed to generate responses based on a user’s natural language prompts.",
+        "B. Generative AI is designed to translate documents into other languages.",
+        "C. Generative AI is designed to predict future trends based on historical data.",
+        "D. Generative AI is designed to recommend products based on user behavior."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Generative AI refers to a category of artificial intelligence models that create new content—such as text, images, or code—by generating responses to natural language prompts provided by users. This distinguishes it from other AI types such as predictive analytics (which forecasts trends from historical data) or recommendation engines (which suggest products based on user behavior). Microsoft's official learning materials describe generative AI as AI that can generate original content in response to natural language input, making option A the accurate general description.",
+      "learnMore": [
+        {
+          "text": "Fundamentals of Generative AI - Microsoft Learn",
+          "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "100",
+      "questionType": "mc",
+      "questionText": "Your organization relies on a non-reasoning generative AI model to produce text content. You have noticed that the model's outputs are inconsistent and fail to meet expectations, and you need to improve the prompts used. What should you do? More than one answer choice may achieve the goal. Select the BEST answer.",
+      "translation": "",
+      "options": [
+        "A. Provide the prompts with extensive examples of the expected output.",
+        "B. Add the context, sources, and expectations to the prompts.",
+        "C. Use technical terms in the prompts to enhance AI comprehension.",
+        "D. Add only a single concise requirement to the prompts."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Inconsistent outputs from a generative AI model are typically caused by prompts that are too ambiguous or under-specified. Best practice in prompt engineering is to supply the model with adequate context, relevant sources or reference information, and clearly defined expectations (such as required format, scope, tone, and level of detail). Doing so narrows the space of plausible responses and guides the model toward outputs that reliably match what is desired, directly addressing inconsistency and unmet expectations. Simply adding many examples, using technical jargon, or reducing the prompt to a single vague requirement do not reliably resolve the underlying ambiguity that causes inconsistent results.",
+      "learnMore": [
+        {
+          "text": "What is Prompt Engineering? - AWS",
+          "url": "https://aws.amazon.com/what-is/prompt-engineering/"
+        }
+      ],
+      "images": []
+    }
+  ]
+}
