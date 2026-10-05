@@ -56,7 +56,7 @@
     },
     {
       "number": "3",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "You generate a report by using the Researcher agent in Microsoft 365 Copilot. You can use [___] to save and edit the response.",
       "translation": "",
       "options": [],
@@ -68,7 +68,19 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-microsoft-365-copilot-pages"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "an agent",
+        "a conversation",
+        "a notebook",
+        "a page"
+      ],
+      "statements": [
+        {
+          "text": "You generate a report by using the Researcher agent in Microsoft 365 Copilot. You can use [___] to save and edit the response.",
+          "answer": "a page"
+        }
+      ]
     },
     {
       "number": "4",
@@ -334,7 +346,7 @@
     },
     {
       "number": "15",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "Choose the answer that correctly finishes the sentence. Overreliance is a common risk associated with generative AI, where [___]",
       "translation": "",
       "options": [],
@@ -346,7 +358,19 @@
           "url": "https://learn.microsoft.com/en-us/ai/playbook/technology-guidance/overreliance-on-ai/overreliance-on-ai"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "users exploit vulnerabilities to elicit unauthorized behavior.",
+        "the model is tricked into exposing confidential information.",
+        "the model generates misleading, inaccurate, or irrelevant content.",
+        "users accept the AI-generated output without verifying its accuracy."
+      ],
+      "statements": [
+        {
+          "text": "Choose the answer that correctly finishes the sentence. Overreliance is a common risk associated with generative AI, where [___]",
+          "answer": "users accept the AI-generated output without verifying its accuracy."
+        }
+      ]
     },
     {
       "number": "16",
@@ -447,7 +471,7 @@
     },
     {
       "number": "20",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "You are creating an agent in the Microsoft 365 Copilot app. The agent persona must be warm and friendly. To set the persona, you should modify the [___]",
       "translation": "",
       "options": [],
@@ -459,7 +483,19 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/declarative-agent-instructions"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "capabilities.",
+        "description.",
+        "instructions.",
+        "suggested prompts."
+      ],
+      "statements": [
+        {
+          "text": "You are creating an agent in the Microsoft 365 Copilot app. The agent persona must be warm and friendly. To set the persona, you should modify the [___]",
+          "answer": "instructions."
+        }
+      ]
     },
     {
       "number": "21",
@@ -533,7 +569,7 @@
     },
     {
       "number": "24",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "In Microsoft 365 Copilot, [___] ensures that business data stays within a Microsoft 365 tenant and is NOT used to train AI models.",
       "translation": "",
       "options": [],
@@ -545,7 +581,19 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "The Common Data Model",
+        "Enterprise data protection (EDP)",
+        "Sensitivity labels",
+        "Zero Trust"
+      ],
+      "statements": [
+        {
+          "text": "In Microsoft 365 Copilot, [___] ensures that business data stays within a Microsoft 365 tenant and is NOT used to train AI models.",
+          "answer": "Enterprise data protection (EDP)"
+        }
+      ]
     },
     {
       "number": "25",
@@ -749,7 +797,7 @@
     },
     {
       "number": "32",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "From Microsoft 365, you [___] the Researcher agent.",
       "translation": "",
       "options": [],
@@ -761,7 +809,19 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/faq-researcher"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "cannot modify the settings of",
+        "can modify the agent instructions of",
+        "can add an additional suggested prompt to",
+        "can delete one of the suggested prompts from"
+      ],
+      "statements": [
+        {
+          "text": "From Microsoft 365, you [___] the Researcher agent.",
+          "answer": "cannot modify the settings of"
+        }
+      ]
     },
     {
       "number": "33",
@@ -1615,7 +1675,7 @@
     },
     {
       "number": "64",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "Document1.docx [___]",
       "translation": "",
       "options": [],
@@ -1627,7 +1687,19 @@
           "url": "https://learn.microsoft.com/en-us/purview/ai-m365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "is in a notebook.",
+        "has a sensitivity label applied.",
+        "is NOT a supported file type.",
+        "is NOT accessible outside of your organization."
+      ],
+      "statements": [
+        {
+          "text": "Document1.docx [___]",
+          "answer": "has a sensitivity label applied."
+        }
+      ]
     },
     {
       "number": "65",
@@ -1804,7 +1876,7 @@
     },
     {
       "number": "72",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "You are using Microsoft 365 Copilot during a Microsoft Teams meeting. After the meeting, you can only [___] if the meeting was transcribed.",
       "translation": "",
       "options": [],
@@ -1820,7 +1892,19 @@
           "url": "https://support.microsoft.com/en-us/teams/copilot/use-copilot-without-transcribing-or-recording-a-teams-meeting-or-call"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "schedule a follow-up meeting",
+        "create a summary of the meeting chat",
+        "identify content that was attached to the meeting",
+        "generate a recap of what was discussed during the meeting"
+      ],
+      "statements": [
+        {
+          "text": "You are using Microsoft 365 Copilot during a Microsoft Teams meeting. After the meeting, you can only [___] if the meeting was transcribed.",
+          "answer": "generate a recap of what was discussed during the meeting"
+        }
+      ]
     },
     {
       "number": "73",
@@ -1845,7 +1929,7 @@
     },
     {
       "number": "74",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "From the Microsoft 365 My Account portal, if you select Delete history for the Copilot activity history, you can delete [___]",
       "translation": "",
       "options": [],
@@ -1857,7 +1941,19 @@
           "url": "https://support.microsoft.com/en-us/privacy/delete-your-microsoft-365-copilot-activity-history"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "a specific conversation.",
+        "a specific date range of activity.",
+        "all the Microsoft 365 Copilot activity.",
+        "all conversations with a specific agent."
+      ],
+      "statements": [
+        {
+          "text": "From the Microsoft 365 My Account portal, if you select Delete history for the Copilot activity history, you can delete [___]",
+          "answer": "all the Microsoft 365 Copilot activity."
+        }
+      ]
     },
     {
       "number": "75",
@@ -2045,7 +2141,7 @@
     },
     {
       "number": "82",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "From Microsoft 365 Copilot, you can use [___] to help users begin conversations with an agent and guide the users to use the agent more effectively.",
       "translation": "",
       "options": [],
@@ -2057,7 +2153,19 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-build-agents"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "agent settings",
+        "capabilities",
+        "instructions",
+        "suggested prompts"
+      ],
+      "statements": [
+        {
+          "text": "From Microsoft 365 Copilot, you can use [___] to help users begin conversations with an agent and guide the users to use the agent more effectively.",
+          "answer": "suggested prompts"
+        }
+      ]
     },
     {
       "number": "83",
@@ -2165,7 +2273,7 @@
     },
     {
       "number": "87",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "From Microsoft 365 Copilot, if you want to aggregate data and produce charts from the data, you should use [___]",
       "translation": "",
       "options": [],
@@ -2177,7 +2285,19 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-analyst-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "the Analyst agent.",
+        "a notebook.",
+        "a page.",
+        "the Researcher agent."
+      ],
+      "statements": [
+        {
+          "text": "From Microsoft 365 Copilot, if you want to aggregate data and produce charts from the data, you should use [___]",
+          "answer": "the Analyst agent."
+        }
+      ]
     },
     {
       "number": "88",
@@ -2215,7 +2335,7 @@
     },
     {
       "number": "89",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "When you are creating an agent in Microsoft 365 Copilot, you can leverage generative AI to build the agent by using [___].",
       "translation": "",
       "options": [],
@@ -2227,7 +2347,19 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-build-agents"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "the Configure tab",
+        "a Copilot notebook",
+        "a Copilot page",
+        "the Describe tab"
+      ],
+      "statements": [
+        {
+          "text": "When you are creating an agent in Microsoft 365 Copilot, you can leverage generative AI to build the agent by using [___].",
+          "answer": "the Describe tab"
+        }
+      ]
     },
     {
       "number": "90",
@@ -2253,7 +2385,7 @@
     },
     {
       "number": "91",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "[___] enables organizations to apply governance policies to conversations generated by using Microsoft 365 Copilot.",
       "translation": "",
       "options": [],
@@ -2265,11 +2397,23 @@
           "url": "https://learn.microsoft.com/en-au/purview/ai-microsoft-purview"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "Microsoft Defender for Cloud",
+        "Microsoft Entra ID",
+        "Microsoft Intune",
+        "Microsoft Purview"
+      ],
+      "statements": [
+        {
+          "text": "[___] enables organizations to apply governance policies to conversations generated by using Microsoft 365 Copilot.",
+          "answer": "Microsoft Purview"
+        }
+      ]
     },
     {
       "number": "92",
-      "questionType": "mc",
+      "questionType": "multi-dropdown",
       "questionText": "If you start a temporary chat in Microsoft 365 Copilot, and then start a new chat, all the prompts and responses from the temporary chat will be [___]",
       "translation": "",
       "options": [],
@@ -2281,7 +2425,19 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/personalize-what-microsoft-365-copilot-remembers"
         }
       ],
-      "images": []
+      "images": [],
+      "dropdownOptions": [
+        "deleted immediately.",
+        "deleted after one hour.",
+        "moved to a private notebook.",
+        "moved to your Microsoft OneDrive."
+      ],
+      "statements": [
+        {
+          "text": "If you start a temporary chat in Microsoft 365 Copilot, and then start a new chat, all the prompts and responses from the temporary chat will be [___]",
+          "answer": "deleted immediately."
+        }
+      ]
     }
   ]
 }
