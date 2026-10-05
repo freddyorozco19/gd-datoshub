@@ -635,7 +635,13 @@
           "url": "https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-mfa-number-match"
         }
       ],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab900/q25_img0.png",
+          "alt": "",
+          "inOption": false
+        }
+      ]
     },
     {
       "number": "26",
@@ -2002,7 +2008,13 @@
           "url": "https://learn.microsoft.com/en-us/purview/ediscovery-assign-permissions"
         }
       ],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ab900/q83_img0.png",
+          "alt": "",
+          "inOption": false
+        }
+      ]
     },
     {
       "number": "84",
