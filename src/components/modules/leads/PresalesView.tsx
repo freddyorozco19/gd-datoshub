@@ -272,12 +272,14 @@ export default function PresalesView({
     return [...map.values()];
   }, [scope]);
 
-  /* Estado Preventa (todas las etapas) — respeta "Solo activos" pero no el propio filtro Estado Preventa */
-  const etapaScope = useMemo(
-    () => onlyActive ? filteredAnyEstadoPreventa.filter((l) => !l.preventa || !isInactive(l.preventa)) : filteredAnyEstadoPreventa,
+  /* Estado Preventa (todas las etapas) — respeta "Solo activos" pero no el propio filtro Estado Preventa.
+     Filtro propio del widget: lead activo/inactivo en Odoo (campo "active" del lead, columna Activo de Business). */
+  const [fLeadActivo, setFLeadActivo] = useState<"ALL" | "true" | "false">("ALL");
+  const etapaScope = useMemo(() => {
+    const base = onlyActive ? filteredAnyEstadoPreventa.filter((l) => !l.preventa || !isInactive(l.preventa)) : filteredAnyEstadoPreventa;
+    return fLeadActivo === "ALL" ? base : base.filter((l) => String(l.activo) === fLeadActivo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filteredAnyEstadoPreventa, onlyActive, statuses],
-  );
+  }, [filteredAnyEstadoPreventa, onlyActive, statuses, fLeadActivo]);
   const byEtapa = useMemo(() => {
     const map = new Map<string, { name: string; count: number; open: number; pipeline: number; days: number }>();
     for (const l of etapaScope) {
@@ -472,7 +474,19 @@ export default function PresalesView({
 
             {/* embudo por etapa */}
             <Card title="Estado Preventa" className="xl:col-span-2"
-              right={<span className="text-[10px] text-slate-500">Clic para ver los leads</span>}>
+              right={
+                <div className="flex gap-1">
+                  {([["ALL", "Todos"], ["true", "Activo"], ["false", "Inactivo"]] as const).map(([v, label]) => (
+                    <button key={v} type="button" onClick={() => setFLeadActivo(v)}
+                      title="Filtra por el campo Activo del lead"
+                      className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
+                        fLeadActivo === v ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.08] text-slate-400"
+                      }`}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              }>
               {byEtapa.length === 0 ? (
                 <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
               ) : (
