@@ -5,7 +5,7 @@
   "questions": [
     {
       "number": "1",
-      "questionText": "Select the answer that correctly completes the sentence. You can use [___] to review threat indicators correlated across email, identity, and device incidents in a single view.",
+      "questionText": "You can use [___] to review threat indicators correlated across email, identity, and device incidents in a single view.",
       "translation": "",
       "options": [
         "A. Microsoft Defender XDR in the Microsoft Defender portal",
@@ -70,7 +70,7 @@
     },
     {
       "number": "4",
-      "questionText": "Select the answer that correctly completes the sentence. Conditional Access policies [___]",
+      "questionText": "Conditional Access policies [___]",
       "translation": "",
       "options": [
         "A. Microsoft Entra Conditional Access overview",
@@ -199,7 +199,7 @@
     },
     {
       "number": "9",
-      "questionText": "Select the answer that correctly completes the sentence. From the SharePoint admin center, you can create a [___]",
+      "questionText": "From the SharePoint admin center, you can create a [___]",
       "translation": "",
       "options": [
         "A. Manage sites in the SharePoint admin center",
@@ -218,7 +218,7 @@
     {
       "number": "10",
       "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. User1 is [___] Site1.",
+      "questionText": "User1 is [___] Site1.",
       "translation": "",
       "options": [
         "A. a site visitor of",
@@ -239,7 +239,7 @@
     {
       "number": "11",
       "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. Resolving the [___] recommendation will improve the Identity Secure Score the most.",
+      "questionText": "Resolving the [___] recommendation will improve the Identity Secure Score the most.",
       "translation": "",
       "options": [
         "A. Do not expire passwords",
@@ -454,7 +454,7 @@
     },
     {
       "number": "20",
-      "questionText": "Select the answer that correctly completes the sentence. Microsoft Purview sensitivity labels can be applied to [___]",
+      "questionText": "Microsoft Purview sensitivity labels can be applied to [___]",
       "translation": "",
       "options": [
         "A. Use sensitivity labels to protect collaborative workspaces (groups and sites)",
@@ -597,7 +597,7 @@
     {
       "number": "25",
       "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. User5 is using [___] for multifactor authentication (MFA).",
+      "questionText": "User5 is using [___] for multifactor authentication (MFA).",
       "translation": "",
       "options": [
         "A. email OTP",
@@ -651,7 +651,7 @@
     },
     {
       "number": "27",
-      "questionText": "Select the answer that correctly completes the sentence. In Microsoft 365 Copilot, you should use [___] to perform multi-step reasoning over unstructured data.",
+      "questionText": "In Microsoft 365 Copilot, you should use [___] to perform multi-step reasoning over unstructured data.",
       "translation": "",
       "options": [
         "A. Get started with Researcher in Microsoft 365 Copilot",
@@ -676,7 +676,7 @@
     },
     {
       "number": "28",
-      "questionText": "Select the answer that correctly completes the sentence. You can use the [___] Microsoft Purview solution to find all the content that relates to the term “Project Falcon” in the emails exchanged by two users.",
+      "questionText": "You can use the [___] Microsoft Purview solution to find all the content that relates to the term “Project Falcon” in the emails exchanged by two users.",
       "translation": "",
       "options": [
         "A. Microsoft Purview eDiscovery search",
@@ -765,7 +765,7 @@
     },
     {
       "number": "34",
-      "questionText": "Select the answer that correctly completes the sentence. From the Microsoft Teams admin center, you can [___]",
+      "questionText": "From the Microsoft Teams admin center, you can [___]",
       "translation": "",
       "options": [
         "A. Manage devices in Microsoft Teams",
@@ -931,7 +931,7 @@
     },
     {
       "number": "41",
-      "questionText": "Select the answer that correctly completes the sentence. When you need to add a domain to a Microsoft 365 subscription, you must verify the domain by [___]",
+      "questionText": "When you need to add a domain to a Microsoft 365 subscription, you must verify the domain by [___]",
       "translation": "",
       "options": [
         "A. Gather the information you need to create DNS records - Microsoft 365 admin",
@@ -1025,7 +1025,7 @@
     },
     {
       "number": "45",
-      "questionText": "Select the answer that correctly completes the sentence. From the Microsoft Purview portal, you can use Data explorer to [___]",
+      "questionText": "From the Microsoft Purview portal, you can use Data explorer to [___]",
       "translation": "",
       "options": [
         "A. Get started with data explorer",
@@ -1080,7 +1080,7 @@
     },
     {
       "number": "47",
-      "questionText": "Select the answer that correctly completes the sentence. [___] is a unified enterprise suite that coordinates detection, prevention, investigation, and response across endpoints, identities, email, and applications to provide integrated protection against sophisticated attacks.",
+      "questionText": "[___] is a unified enterprise suite that coordinates detection, prevention, investigation, and response across endpoints, identities, email, and applications to provide integrated protection against sophisticated attacks.",
       "translation": "",
       "options": [
         "A. What is Microsoft Defender XDR?",
@@ -1204,7 +1204,7 @@
     },
     {
       "number": "52",
-      "questionText": "Select the answer that correctly completes the sentence. In the Microsoft 365 admin center, the Credits used metric in the Copilot credits report shows the total credits used by users in your organization that [___] and are interacting with work grounded agents in Microsoft 365 Copilot Chat.",
+      "questionText": "In the Microsoft 365 admin center, the Credits used metric in the Copilot credits report shows the total credits used by users in your organization that [___] and are interacting with work grounded agents in Microsoft 365 Copilot Chat.",
       "translation": "",
       "options": [
         "A. Microsoft 365 Copilot credits report",
@@ -1499,7 +1499,7 @@
     },
     {
       "number": "62",
-      "questionText": "Select the answer that correctly completes the sentence. The Microsoft responsible AI principle of [___] requires the oversight of AI systems to ensure that humans remain in control.",
+      "questionText": "The Microsoft responsible AI principle of [___] requires the oversight of AI systems to ensure that humans remain in control.",
       "translation": "",
       "options": [
         "A. accountability",
@@ -1515,7 +1515,7 @@
     },
     {
       "number": "63",
-      "questionText": "Select the answer that correctly completes the sentence. Microsoft 365 Copilot retrieves data from [___] by using Microsoft Graph.",
+      "questionText": "Microsoft 365 Copilot retrieves data from [___] by using Microsoft Graph.",
       "translation": "",
       "options": [
         "A. Microsoft 365 Copilot overview",
@@ -1536,7 +1536,7 @@
     },
     {
       "number": "64",
-      "questionText": "Select the answer that correctly completes the sentence. Restricted SharePoint Search enables you to restrict [___] access to Microsoft SharePoint sites without preventing users from accessing the files and content to which they have permission.",
+      "questionText": "Restricted SharePoint Search enables you to restrict [___] access to Microsoft SharePoint sites without preventing users from accessing the files and content to which they have permission.",
       "translation": "",
       "options": [
         "A. Restricted SharePoint Search - SharePoint in Microsoft 365",
@@ -1557,7 +1557,7 @@
     },
     {
       "number": "65",
-      "questionText": "Select the answer that correctly completes the sentence. Microsoft Entra Privileged Identity Management (PIM) provides [___]",
+      "questionText": "Microsoft Entra Privileged Identity Management (PIM) provides [___]",
       "translation": "",
       "options": [
         "A. restricted access to Microsoft 365 services.",
@@ -1630,7 +1630,7 @@
     },
     {
       "number": "69",
-      "questionText": "Select the answer that correctly completes the sentence. In Microsoft Entra Privileged Identity Management (PIM), an administrator has made you eligible for the User Administrator role. Before you can create a user account, you must [___]",
+      "questionText": "In Microsoft Entra Privileged Identity Management (PIM), an administrator has made you eligible for the User Administrator role. Before you can create a user account, you must [___]",
       "translation": "",
       "options": [
         "A. Activate Microsoft Entra roles in PIM",
@@ -1700,7 +1700,7 @@
     },
     {
       "number": "72",
-      "questionText": "Select the answer that correctly completes the sentence. [___] includes signals, such as collaboration history, document relevance, and communication frequency, which influence Microsoft 365 Copilot responses.",
+      "questionText": "[___] includes signals, such as collaboration history, document relevance, and communication frequency, which influence Microsoft 365 Copilot responses.",
       "translation": "",
       "options": [
         "A. Microsoft 365 Copilot overview",
@@ -1960,7 +1960,7 @@
     {
       "number": "83",
       "questionType": "mc",
-      "questionText": "Select the answer that correctly completes the sentence. John can [___] .",
+      "questionText": "John can [___] .",
       "translation": "",
       "options": [
         "A. view all the users in the Microsoft Entra tenant",
@@ -1984,7 +1984,7 @@
     },
     {
       "number": "84",
-      "questionText": "Select the answer that correctly completes the sentence. You can use the [___] Microsoft Purview solution to detect Microsoft 365 Copilot prompts that contain sensitive information.",
+      "questionText": "You can use the [___] Microsoft Purview solution to detect Microsoft 365 Copilot prompts that contain sensitive information.",
       "translation": "",
       "options": [
         "A. Microsoft Purview DSPM for AI",
@@ -2072,7 +2072,7 @@
     },
     {
       "number": "88",
-      "questionText": "Select the answer that correctly completes the sentence. If a user shares a Microsoft 365 Copilot agent, you can use [___] to block users from using the agent.",
+      "questionText": "If a user shares a Microsoft 365 Copilot agent, you can use [___] to block users from using the agent.",
       "translation": "",
       "options": [
         "A. Governance and Lifecycle actions for agents available in Microsoft 365 admin center",
