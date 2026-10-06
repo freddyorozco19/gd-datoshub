@@ -222,9 +222,9 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
 }
 
 /* ── modal: tabla de leads del día ──────────────────────────────────── */
-interface DayLeadsModalProps { leads: Lead[]; date?: string; title?: string; heading?: string; suffix?: string; showCloseDate?: boolean; onClose: () => void; }
+interface DayLeadsModalProps { leads: Lead[]; date?: string; title?: string; heading?: string; suffix?: string; showCloseDate?: boolean; showEstadoPreventaChips?: boolean; onClose: () => void; }
 
-export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDate, onClose }: DayLeadsModalProps) {
+export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDate, showEstadoPreventaChips, onClose }: DayLeadsModalProps) {
   const dateLabel = date
     ? new Date(date + "T12:00:00").toLocaleDateString("es-CO", {
         weekday: "long", day: "numeric", month: "long", year: "numeric",
@@ -246,24 +246,44 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
     estado:    unique(leads.map((l) => l.ganado)),
   }), [leads]);
 
-  const mFiltered = useMemo(() => {
-    let data = [...leads];
+  // chip de Estado Preventa seleccionado ("ALL" = sin filtrar); solo se usa con showEstadoPreventaChips
+  const [mEstadoPrev, setMEstadoPrev] = useState("ALL");
+  const estadoPrevOf = (l: Lead) => l.etapaPreventa || "Sin etapa";
+
+  // leads tras aplicar los filtros de los selectores (sin el chip): base de los conteos de los chips,
+  // para que se recalculen con Línea/Comercial/Estado y sigan cuadrando con la tabla
+  const baseFiltered = useMemo(() => {
+    let data = leads;
     if (mLinea     !== "ALL") data = data.filter((l) => l.linea     === mLinea);
     if (mComercial !== "ALL") data = data.filter((l) => l.comercial === mComercial);
     if (mEstado    !== "ALL") data = data.filter((l) => l.ganado    === mEstado);
+    return data;
+  }, [leads, mLinea, mComercial, mEstado]);
+
+  const estadoPrevChips = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const l of baseFiltered) counts.set(estadoPrevOf(l), (counts.get(estadoPrevOf(l)) ?? 0) + 1);
+    // el chip seleccionado se conserva aunque los demás filtros lo dejen en 0
+    if (mEstadoPrev !== "ALL" && !counts.has(mEstadoPrev)) counts.set(mEstadoPrev, 0);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  }, [baseFiltered, mEstadoPrev]);
+
+  const mFiltered = useMemo(() => {
+    let data = [...baseFiltered];
+    if (showEstadoPreventaChips && mEstadoPrev !== "ALL") data = data.filter((l) => estadoPrevOf(l) === mEstadoPrev);
     data.sort((a, b) => {
       const av = a[mSort.key] ?? "", bv = b[mSort.key] ?? "";
       const cmp = String(av).localeCompare(String(bv), "es", { numeric: true });
       return mSort.dir === "asc" ? cmp : -cmp;
     });
     return data;
-  }, [leads, mLinea, mComercial, mEstado, mSort]);
+  }, [baseFiltered, showEstadoPreventaChips, mEstadoPrev, mSort]);
 
   function mToggleSort(key: keyof Lead) {
     setMSort((s) => s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" });
   }
 
-  const anyActive = mLinea !== "ALL" || mComercial !== "ALL" || mEstado !== "ALL";
+  const anyActive = mLinea !== "ALL" || mComercial !== "ALL" || mEstado !== "ALL" || (!!showEstadoPreventaChips && mEstadoPrev !== "ALL");
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) { if (e.key === "Escape" && !detailLead) onClose(); }
@@ -312,12 +332,32 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
             </div>
           ))}
           {anyActive && (
-            <button onClick={() => { setMLinea("ALL"); setMComercial("ALL"); setMEstado("ALL"); }}
+            <button onClick={() => { setMLinea("ALL"); setMComercial("ALL"); setMEstado("ALL"); setMEstadoPrev("ALL"); }}
               className="text-xs text-blue-400 hover:underline ml-auto">
               Limpiar filtros
             </button>
           )}
         </div>
+
+        {showEstadoPreventaChips && (
+          <div className="flex flex-wrap items-center gap-1.5 px-6 py-2.5 border-b border-white/[0.05] bg-black/10">
+            <span className="text-xs font-medium text-slate-500 whitespace-nowrap mr-1">Estado Preventa:</span>
+            <button type="button" onClick={() => setMEstadoPrev("ALL")}
+              className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
+                mEstadoPrev === "ALL" ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.08] text-slate-400"
+              }`}>
+              Todos <span className="tabular-nums opacity-70">{baseFiltered.length}</span>
+            </button>
+            {estadoPrevChips.map(([name, count]) => (
+              <button key={name} type="button" onClick={() => setMEstadoPrev(mEstadoPrev === name ? "ALL" : name)}
+                className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
+                  mEstadoPrev === name ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.08] text-slate-400"
+                }`}>
+                {name} <span className="tabular-nums opacity-70">{count}</span>
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="overflow-auto flex-1">
           {mFiltered.length === 0 ? (

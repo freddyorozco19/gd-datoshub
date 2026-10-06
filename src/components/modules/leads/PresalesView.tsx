@@ -86,12 +86,12 @@ type QueueKey = "sinAsignar" | "inactivos" | "estancados" | "proximos";
 
 /* ── vista ───────────────────────────────────────────────────────────── */
 // popup con la tabla de leads (el mismo de la pestaña Business); se recibe por prop para no crear un import circular
-export type LeadsListModalType = ComponentType<{ leads: Lead[]; title?: string; heading?: string; suffix?: string; onClose: () => void }>;
+export type LeadsListModalType = ComponentType<{ leads: Lead[]; title?: string; heading?: string; suffix?: string; showEstadoPreventaChips?: boolean; onClose: () => void }>;
 
 export default function PresalesView({
   leads, loading, error, onReload, LeadsListModal,
 }: { leads: Lead[]; loading: boolean; error: string | null; onReload: () => void; LeadsListModal: LeadsListModalType }) {
-  const [listModal, setListModal] = useState<{ leads: Lead[]; heading: string; suffix?: string } | null>(null);
+  const [listModal, setListModal] = useState<{ leads: Lead[]; heading: string; suffix?: string; chips?: boolean } | null>(null);
   const [fPreventa, setFPreventa] = useState("ALL");
   const [fLinea,    setFLinea]    = useState("ALL");
   // por defecto: Etapa Actual = Preventa, Estado Preventa = ABIERTO (se pueden cambiar libremente)
@@ -405,7 +405,7 @@ export default function PresalesView({
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
             <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)} hint="Total Leads en Preventa"
-              onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa" })} />
+              onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa", chips: true })} />
             <Kpi label="Preventa abierta" value={String(totals.open)} hint="Total leads"
               onClick={() => {
                 // mismos leads que suma la columna Abiertos de la tabla (respeta filtros y Solo activos)
@@ -645,6 +645,7 @@ export default function PresalesView({
           title="Leads de preventa"
           heading={listModal.heading}
           suffix={listModal.suffix ?? " con Etapa Prev. abierta"}
+          showEstadoPreventaChips={listModal.chips}
           onClose={() => setListModal(null)}
         />
       )}
