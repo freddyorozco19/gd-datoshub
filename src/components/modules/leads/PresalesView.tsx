@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ComponentType, type ReactNode } from "react";
-import { RefreshCw, AlertCircle, Loader2, X, UserCog } from "lucide-react";
+import { createPortal } from "react-dom";
+import { RefreshCw, AlertCircle, Loader2, X, UserCog, Maximize2 } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 import FilterSelect from "./FilterSelect";
@@ -268,12 +269,12 @@ export default function PresalesView({
 
   /* carga por preventa */
   // Una columna por cada valor real del campo Etapa Prev. (además de Abierto), en vez de valores supuestos.
-  const { byPreventa, etapaCols } = useMemo(() => {
-    type Row = { name: string; open: number; won: number; lost: number; pipeline: number; stale: number; counts: Record<string, number> };
-    const map = new Map<string, Row>();
+  type CargaRow = { name: string; open: number; won: number; lost: number; pipeline: number; stale: number; counts: Record<string, number> };
+  function buildCarga(src: Lead[]) {
+    const map = new Map<string, CargaRow>();
     const labels = new Map<string, string>();   // valor normalizado → etiqueta original
     const totals = new Map<string, number>();
-    for (const l of filtered) {
+    for (const l of src) {
       const name = l.preventa || "Sin asignar";
       const r = map.get(name) ?? { name, open: 0, won: 0, lost: 0, pipeline: 0, stale: 0, counts: {} };
       if (l.ganado === "Ganado") r.won++;
@@ -290,12 +291,15 @@ export default function PresalesView({
       .sort((a, b) => (totals.get(b) ?? 0) - (totals.get(a) ?? 0))
       .map((k) => ({ key: k, label: labels.get(k) ?? k }));
     const rows = [...map.values()].sort((a, b) => b.open - a.open || Object.values(b.counts).reduce((s, n) => s + n, 0) - Object.values(a.counts).reduce((s, n) => s + n, 0));
-    return { byPreventa: rows, etapaCols: cols };
+    return { rows, cols };
+  }
+  const { byPreventa, etapaCols } = useMemo(() => {
+    const r = buildCarga(filtered);
+    return { byPreventa: r.rows, etapaCols: r.cols };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtered]);
   // con "Solo activos" la tabla oculta a los inactivos; los indicadores de arriba conservan el histórico completo
   const tableRows = onlyActive ? byPreventa.filter((r) => !isInactive(r.name)) : byPreventa;
-  const maxOpen = Math.max(1, ...tableRows.map((r) => r.open));
 
   const totals = {
     open:     tableRows.reduce((s, r) => s + r.open, 0),
@@ -305,7 +309,6 @@ export default function PresalesView({
     stale:    tableRows.reduce((s, r) => s + r.stale, 0),
     counts:   Object.fromEntries(etapaCols.map((c) => [c.key, tableRows.reduce((s, r) => s + (r.counts[c.key] ?? 0), 0)])) as Record<string, number>,
   };
-  const totalRate = pct(totals.won, totals.won + totals.lost);
 
   /* tarjetas por compañía */
   const showSplit = fCompania === "ALL";   // con una compañía filtrada, el número principal ya es solo de ella
@@ -377,6 +380,116 @@ export default function PresalesView({
     proximos:   { label: `Cierre ≤ ${SOON_DAYS} d`, items: [...stats.soon].sort((a, b) => (daysToClose(a) ?? 0) - (daysToClose(b) ?? 0)), hint: (l) => `cierra en ${daysToClose(l)} d` },
   };
   const q = queues[queue];
+
+  /* widget Carga por preventa: pills de compañía propias (no afectan a las tarjetas) y vista ampliada */
+  const [fCargaComp, setFCargaComp] = useState<"ALL" | CompKey>("ALL");
+  const [cargaExpanded, setCargaExpanded] = useState(false);
+  useEffect(() => {
+    if (!cargaExpanded || listModal) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setCargaExpanded(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [cargaExpanded, listModal]);
+  const cargaSrc = fCargaComp === "ALL" ? filtered : filtered.filter((l) => compKey(l) === fCargaComp);
+  const carga = buildCarga(cargaSrc);
+  const cargaRows = onlyActive ? carga.rows.filter((r) => !isInactive(r.name)) : carga.rows;
+  const cargaMaxOpen = Math.max(1, ...cargaRows.map((r) => r.open));
+  const cargaTotals = {
+    open:     cargaRows.reduce((s, r) => s + r.open, 0),
+    won:      cargaRows.reduce((s, r) => s + r.won, 0),
+    lost:     cargaRows.reduce((s, r) => s + r.lost, 0),
+    pipeline: cargaRows.reduce((s, r) => s + r.pipeline, 0),
+    stale:    cargaRows.reduce((s, r) => s + r.stale, 0),
+    counts:   Object.fromEntries(carga.cols.map((c) => [c.key, cargaRows.reduce((s, r) => s + (r.counts[c.key] ?? 0), 0)])) as Record<string, number>,
+  };
+  const cargaRate = pct(cargaTotals.won, cargaTotals.won + cargaTotals.lost);
+  // con solo Internacional el pipeline está en USD; con SAS o todas, en COP (ver nota de monedas arriba)
+  const fmtCargaPipe = fCargaComp === "INT" ? fmtUSD : fmtCOP;
+
+  const cargaPills = (
+    <div className="flex items-center gap-1">
+      {([["SAS", "GROW DATA"], ["INT", "GROW DATA INTERNATIONAL"]] as const).map(([k, label]) => (
+        <button key={k} type="button" onClick={() => setFCargaComp(fCargaComp === k ? "ALL" : k)}
+          className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
+            fCargaComp === k ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.08] text-slate-400"
+          }`}>
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+
+  const renderCargaTable = (big: boolean) => cargaRows.length === 0 ? (
+    <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
+  ) : (
+    <div className="overflow-x-auto">
+      <table className={`w-full ${big ? "text-sm" : "text-xs"}`}>
+        <thead>
+          <tr className="text-[10px] uppercase tracking-wide text-slate-500">
+            <th className="text-left font-semibold pb-2 pr-3">Preventa</th>
+            <th className="text-left font-semibold pb-2 pr-3 w-36">Abiertos</th>
+            {carga.cols.map((c) => (
+              <th key={c.key} className="text-right font-semibold pb-2 px-2 whitespace-nowrap">{c.label}</th>
+            ))}
+            <th className="text-right font-semibold pb-2 px-2">Éxito</th>
+            <th className="text-right font-semibold pb-2 px-2">Pipeline</th>
+            <th className="text-right font-semibold pb-2 pl-2">Estancados</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-white/[0.05]">
+          {cargaRows.map((r) => {
+            const rate = pct(r.won, r.won + r.lost);
+            return (
+              <tr key={r.name}
+                onClick={() => setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
+                className="transition-colors cursor-pointer hover:bg-white/[0.05]">
+                <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
+                <td className={`${big ? "py-2.5" : "py-2"} pr-3`}>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
+                      <div className="h-full rounded-full bg-blue-500" style={{ width: `${(r.open / cargaMaxOpen) * 100}%` }} />
+                    </div>
+                    <span className="w-6 text-right tabular-nums text-slate-300">{r.open}</span>
+                  </div>
+                </td>
+                {carga.cols.map((c) => {
+                  const n = r.counts[c.key] ?? 0;
+                  return (
+                    <td key={c.key} className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums ${n === 0 ? "text-slate-600" : c.key === "ganado" ? "text-emerald-400" : "text-slate-300"}`}>{n}</td>
+                  );
+                })}
+                <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300`}>{rate === null ? "—" : `${rate}%`}</td>
+                <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300 whitespace-nowrap`}>{fmtCargaPipe(r.pipeline)}</td>
+                <td className={`${big ? "py-2.5" : "py-2"} pl-2 text-right tabular-nums ${r.stale > 0 ? "text-rose-400 font-semibold" : "text-slate-500"}`}>{r.stale}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+        <tfoot>
+          <tr
+            onClick={() => {
+              const names = new Set(cargaRows.map((r) => r.name));
+              setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Total" });
+            }}
+            className="border-t border-white/[0.14] font-semibold cursor-pointer hover:bg-white/[0.05] transition-colors">
+            <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
+            <td className="pt-2.5 pr-3">
+              <div className="flex items-center gap-2">
+                <div className="flex-1" />
+                <span className="w-6 text-right tabular-nums text-slate-100">{cargaTotals.open}</span>
+              </div>
+            </td>
+            {carga.cols.map((c) => (
+              <td key={c.key} className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.counts[c.key]}</td>
+            ))}
+            <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaRate === null ? "—" : `${cargaRate}%`}</td>
+            <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100 whitespace-nowrap">{fmtCargaPipe(cargaTotals.pipeline)}</td>
+            <td className="pt-2.5 pl-2 text-right tabular-nums text-slate-100">{cargaTotals.stale}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  );
 
   return (
     <div className="flex-1 overflow-auto p-5 space-y-4 relative">
@@ -474,78 +587,16 @@ export default function PresalesView({
           <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
             {/* carga por preventa */}
             <Card title="Carga por preventa" className="xl:col-span-3"
-              right={<span className="text-[10px] text-slate-500">Clic para ver los abiertos</span>}>
-              {tableRows.length === 0 ? (
-                <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="text-[10px] uppercase tracking-wide text-slate-500">
-                        <th className="text-left font-semibold pb-2 pr-3">Preventa</th>
-                        <th className="text-left font-semibold pb-2 pr-3 w-36">Abiertos</th>
-                        {etapaCols.map((c) => (
-                          <th key={c.key} className="text-right font-semibold pb-2 px-2 whitespace-nowrap">{c.label}</th>
-                        ))}
-                        <th className="text-right font-semibold pb-2 px-2">Éxito</th>
-                        <th className="text-right font-semibold pb-2 px-2">Pipeline</th>
-                        <th className="text-right font-semibold pb-2 pl-2">Estancados</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/[0.05]">
-                      {tableRows.map((r) => {
-                        const rate = pct(r.won, r.won + r.lost);
-                        return (
-                          <tr key={r.name}
-                            onClick={() => setListModal({ leads: filtered.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
-                            className="transition-colors cursor-pointer hover:bg-white/[0.05]">
-                            <td className={`py-2 pr-3 font-medium truncate max-w-[180px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
-                            <td className="py-2 pr-3">
-                              <div className="flex items-center gap-2">
-                                <div className="flex-1 h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
-                                  <div className="h-full rounded-full bg-blue-500" style={{ width: `${(r.open / maxOpen) * 100}%` }} />
-                                </div>
-                                <span className="w-6 text-right tabular-nums text-slate-300">{r.open}</span>
-                              </div>
-                            </td>
-                            {etapaCols.map((c) => {
-                              const n = r.counts[c.key] ?? 0;
-                              return (
-                                <td key={c.key} className={`py-2 px-2 text-right tabular-nums ${n === 0 ? "text-slate-600" : c.key === "ganado" ? "text-emerald-400" : "text-slate-300"}`}>{n}</td>
-                              );
-                            })}
-                            <td className="py-2 px-2 text-right tabular-nums text-slate-300">{rate === null ? "—" : `${rate}%`}</td>
-                            <td className="py-2 px-2 text-right tabular-nums text-slate-300 whitespace-nowrap">{fmtCOP(r.pipeline)}</td>
-                            <td className={`py-2 pl-2 text-right tabular-nums ${r.stale > 0 ? "text-rose-400 font-semibold" : "text-slate-500"}`}>{r.stale}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                    <tfoot>
-                      <tr
-                        onClick={() => {
-                          const names = new Set(tableRows.map((r) => r.name));
-                          setListModal({ leads: filtered.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Total" });
-                        }}
-                        className="border-t border-white/[0.14] font-semibold cursor-pointer hover:bg-white/[0.05] transition-colors">
-                        <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
-                        <td className="pt-2.5 pr-3">
-                          <div className="flex items-center gap-2">
-                            <div className="flex-1" />
-                            <span className="w-6 text-right tabular-nums text-slate-100">{totals.open}</span>
-                          </div>
-                        </td>
-                        {etapaCols.map((c) => (
-                          <td key={c.key} className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{totals.counts[c.key]}</td>
-                        ))}
-                        <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{totalRate === null ? "—" : `${totalRate}%`}</td>
-                        <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100 whitespace-nowrap">{fmtCOP(totals.pipeline)}</td>
-                        <td className="pt-2.5 pl-2 text-right tabular-nums text-slate-100">{totals.stale}</td>
-                      </tr>
-                    </tfoot>
-                  </table>
+              right={
+                <div className="flex items-center gap-2">
+                  {cargaPills}
+                  <button type="button" onClick={() => setCargaExpanded(true)} title="Ampliar"
+                    className="p-1 rounded-lg text-slate-500 hover:text-blue-400 hover:bg-white/[0.06] transition-colors">
+                    <Maximize2 size={13} />
+                  </button>
                 </div>
-              )}
+              }>
+              {renderCargaTable(false)}
             </Card>
 
             {/* embudo por etapa */}
@@ -700,6 +751,31 @@ export default function PresalesView({
           showEstadoPreventaChips={listModal.chips}
           onClose={() => setListModal(null)}
         />
+      )}
+      {cargaExpanded && createPortal(
+        <div className="dashboard-shell">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+            style={{ backgroundColor: "var(--app-modal-overlay)" }}
+            onClick={(e) => { if (e.target === e.currentTarget) setCargaExpanded(false); }}
+          >
+            <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-6xl max-h-[88vh] flex flex-col overflow-hidden">
+              <div className="app-bar modal-header flex items-center justify-between px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
+                <h2 className="font-semibold text-slate-100 uppercase tracking-wide text-sm">Carga por preventa</h2>
+                <button onClick={() => setCargaExpanded(false)} title="Cerrar"
+                  className="p-2 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-300 transition-colors">
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="flex items-center justify-between gap-3 px-6 py-3 border-b border-white/[0.05] bg-black/20 shrink-0">
+                <span className="text-xs font-medium text-slate-500">Compañía</span>
+                {cargaPills}
+              </div>
+              <div className="overflow-auto flex-1 px-6 py-4">{renderCargaTable(true)}</div>
+            </div>
+          </div>
+        </div>,
+        document.body,
       )}
       {showManage && (
         <PresalesManageModal people={people} statuses={statuses} onSave={saveStatuses} onClose={() => setShowManage(false)} />
