@@ -72,7 +72,7 @@ function Card({ title, right, children, className = "" }: { title: string; right
   );
 }
 
-function Kpi({ label, value, hint, onClick, split }: { label: string; value: string; hint?: string; onClick?: () => void; split?: { label: string; value: string; color: string }[] }) {
+function Kpi({ label, value, onClick, split }: { label: string; value: string; onClick?: () => void; split?: { label: string; value: string; color: string }[] }) {
   return (
     <div
       className={`${CARD} p-4 ${onClick ? "cursor-pointer hover:bg-white/[0.05] transition-colors" : ""}`}
@@ -85,7 +85,6 @@ function Kpi({ label, value, hint, onClick, split }: { label: string; value: str
       <div className="relative">
         <p className="text-xs font-semibold text-slate-300 uppercase tracking-[0.06em] leading-tight">{label}</p>
         <p className="text-2xl font-bold text-slate-100 mt-2 tabular-nums leading-none whitespace-nowrap">{value}</p>
-        {hint && <p className="text-[11px] text-slate-500 mt-1.5">{hint}</p>}
         {split && (
           <div className="mt-2.5 pt-2 border-t border-white/[0.08] space-y-1">
             {split.map((s) => (
@@ -553,29 +552,29 @@ export default function PresalesView({
         <>
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
-            <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)} hint="Total Leads en Preventa"
+            <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)}
               split={showSplit ? splitBy(enEtapaPreventa) : undefined}
               onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa", chips: true })} />
-            <Kpi label="Preventa abierta" value={String(totals.open)} hint="Total leads"
+            <Kpi label="Preventa abierta" value={String(totals.open)}
               split={showSplit ? splitBy(abiertosLeads) : undefined}
               onClick={() => setListModal({ leads: abiertosLeads, heading: "Preventa abierta" })} />
-            <Kpi label="Pipeline abierto" value={fmtPipeline} hint={fCompania === "ALL" ? "Ingresos esperados · COP (GROW DATA)" : "Ingresos esperados"}
+            <Kpi label="Pipeline abierto" value={fmtPipeline}
               split={showSplit ? [
                 { label: "GROW DATA", color: "bg-blue-400", value: fmtCOP(pipelineCOP) },
                 { label: "GD INTERNATIONAL", color: "bg-teal-400", value: fmtUSD(pipelineUSD) },
               ] : undefined} />
-            <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`}
+            <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`}
               split={showSplit ? splitBy([], () => "").map((s, i) => {
                 const k: CompKey = i === 0 ? "SAS" : "INT";
                 const w = stats.won.filter((l) => compKey(l) === k).length, lo = stats.lost.filter((l) => compKey(l) === k).length;
                 const r = pct(w, w + lo);
                 return { ...s, value: r === null ? "—" : `${r}% · ${w}/${w + lo}` };
               }) : undefined} />
-            <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)} hint="Abiertos sin responsable"
+            <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)}
               split={showSplit ? splitBy(stats.sinAsig) : undefined} />
-            <Kpi label="Estancados"      value={String(stats.stale.length)} hint={`Más de ${STALE_DAYS} días sin cambios`}
+            <Kpi label="Estancados"      value={String(stats.stale.length)}
               split={showSplit ? splitBy(stats.stale) : undefined} />
-            <Kpi label="Cierre próximo"  value={String(stats.soon.length)} hint={`En ${SOON_DAYS} días o menos`}
+            <Kpi label="Cierre próximo"  value={String(stats.soon.length)}
               split={showSplit ? splitBy(stats.soon) : undefined} />
           </div>
 
