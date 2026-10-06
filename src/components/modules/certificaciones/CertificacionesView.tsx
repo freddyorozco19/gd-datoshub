@@ -839,7 +839,7 @@ function QuestionCard({
               </table>
               {!verified && !showAns && q.dropdownOptions && Object.keys(mdRowAnswers).length === q.statements.length && (
                 <button
-                  onClick={() => setVerified(true)}
+                  onClick={() => { setVerified(true); setShowExpl(true); }}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/50 text-primary text-xs font-semibold hover:bg-primary/30 transition-colors"
                 >
                   <CheckCircle size={13} /> Verificar respuesta
@@ -851,7 +851,7 @@ function QuestionCard({
           <div className="flex items-center gap-2 flex-wrap">
             {hasOptions && selected !== null && !verified && (
               <button
-                onClick={() => setVerified(true)}
+                onClick={() => { setVerified(true); setShowExpl(true); }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/50 text-primary text-xs font-semibold hover:bg-primary/30 transition-colors"
               >
                 <CheckCircle size={13} /> Verificar respuesta
@@ -869,7 +869,7 @@ function QuestionCard({
 
             {(hasAnswer || !!q.explanation) && (
               <button
-                onClick={() => setShowAns(v => !v)}
+                onClick={() => { setShowAns(v => { const next = !v; if (next) setShowExpl(true); else setShowExpl(false); return next; }) }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-xs font-semibold hover:bg-white/5 transition-colors ml-auto"
               >
                 {showAns ? <><EyeOff size={12} /> Hide Answer</> : <><Eye size={12} /> Answer</>}
