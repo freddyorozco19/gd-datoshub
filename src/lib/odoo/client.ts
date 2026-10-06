@@ -23,7 +23,7 @@ const LEAD_FIELDS = [
   "x_studio_datos_cop", "x_studio_ti_cop", "x_studio_alcance",
   "x_studio_objeto", "date_deadline", "x_studio_fecha_efectiva_de_cierre",
   "date_closed", "write_date", "x_studio_tipo_de_producto",
-  "x_studio_proyecto", "won_status",
+  "x_studio_proyecto", "won_status", "company_id",
 ];
 
 /* ── POST genérico a /jsonrpc ──────────────────────────────────────── */
@@ -120,6 +120,7 @@ function normalize(raw: OdooLead): Lead {
         : raw.won_status === "lost"
         ? "Perdido"
         : "Pendiente",
+    compania: m2o(raw.company_id),
     adjuntos: 0, // se sobreescribe en fetchLeads
   };
 }

@@ -41,6 +41,21 @@ const fmtStamp = (utc: string) => {
 };
 const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : null);
 
+// Compañías de Odoo: GROW DATA SAS (COP) y GROW DATA INTERNATIONAL SA (USD) — las monedas difieren, no se pueden sumar
+type CompKey = "SAS" | "INT";
+const compKey = (l: Lead): CompKey => (normText(l.compania).includes("international") ? "INT" : "SAS");
+const fmtUSD = (v: number) => {
+  if (!v) return "—";
+  if (v >= 1e6) return `US$ ${(v / 1e6).toLocaleString("es-CO", { maximumFractionDigits: 1 })} M`;
+  if (v >= 1e3) return `US$ ${Math.round(v / 1e3)} mil`;
+  return `US$ ${Math.round(v)}`;
+};
+// conteo por compañía de un conjunto de leads, en formato de desglose para las tarjetas
+const splitBy = (arr: Lead[], fmt: (l: Lead[]) => string = (l) => String(l.length)) => [
+  { label: "SAS", color: "bg-blue-400", value: fmt(arr.filter((l) => compKey(l) === "SAS")) },
+  { label: "Internacional", color: "bg-teal-400", value: fmt(arr.filter((l) => compKey(l) === "INT")) },
+];
+
 const CARD = "relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden";
 
 function Card({ title, right, children, className = "" }: { title: string; right?: ReactNode; children: ReactNode; className?: string }) {
@@ -56,7 +71,7 @@ function Card({ title, right, children, className = "" }: { title: string; right
   );
 }
 
-function Kpi({ label, value, hint, tone = "blue", onClick }: { label: string; value: string; hint?: string; tone?: "blue" | "amber" | "rose" | "emerald"; onClick?: () => void }) {
+function Kpi({ label, value, hint, tone = "blue", onClick, split }: { label: string; value: string; hint?: string; tone?: "blue" | "amber" | "rose" | "emerald"; onClick?: () => void; split?: { label: string; value: string; color: string }[] }) {
   const dot = { blue: "bg-blue-400", amber: "bg-amber-400", rose: "bg-rose-400", emerald: "bg-emerald-400" }[tone];
   return (
     <div
@@ -74,6 +89,16 @@ function Kpi({ label, value, hint, tone = "blue", onClick }: { label: string; va
         </div>
         <p className="text-xl font-bold text-slate-100 mt-1.5 tabular-nums leading-none whitespace-nowrap">{value}</p>
         {hint && <p className="text-[11px] text-slate-500 mt-1.5">{hint}</p>}
+        {split && (
+          <div className="mt-2.5 pt-2 border-t border-white/[0.08] space-y-1">
+            {split.map((s) => (
+              <div key={s.label} className="flex items-center justify-between gap-2 text-[11px]">
+                <span className="flex items-center gap-1.5 text-slate-500"><i className={`w-2 h-2 rounded-sm ${s.color}`} />{s.label}</span>
+                <span className="text-slate-300 tabular-nums whitespace-nowrap">{s.value}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -154,7 +179,12 @@ export default function PresalesView({
 
   /* universo de preventa: leads con preventa asignado, con Estado Preventa, o en Etapa Actual = Preventa
      (este último evita que la tarjeta Estado preventa cuente leads que el resto de la vista no ve) */
-  const scope = useMemo(() => leads.filter((l) => l.preventa || l.etapaPreventa || normText(l.etapa) === "preventa"), [leads]);
+  // filtro Compañía: "ALL" o el nombre exacto de la compañía en Odoo
+  const [fCompania, setFCompania] = useState("ALL");
+  const companias = useMemo(() => ["ALL", ...Array.from(new Set(leads.map((l) => l.compania).filter(Boolean))).sort().reverse()], [leads]);
+  const leadsC = useMemo(() => (fCompania === "ALL" ? leads : leads.filter((l) => l.compania === fCompania)), [leads, fCompania]);
+
+  const scope = useMemo(() => leadsC.filter((l) => l.preventa || l.etapaPreventa || normText(l.etapa) === "preventa"), [leadsC]);
 
   const opts = useMemo(() => ({
     preventa:    unique(scope.map((l) => l.preventa).filter((n) => !onlyActive || statuses[n]?.active !== false)),
@@ -184,14 +214,14 @@ export default function PresalesView({
 
   // leads cuya Etapa Actual es "Preventa" — criterio propio de la primera tarjeta, por eso ignora los filtros
   // Etapa Actual y Estado Preventa (respeta Línea, Preventa, fecha y Solo activos)
-  const enEtapaPreventa = useMemo(() => leads.filter((l) =>
+  const enEtapaPreventa = useMemo(() => leadsC.filter((l) =>
     normText(l.etapa) === "preventa" &&
     (fPreventa === "ALL" || l.preventa === fPreventa) &&
     (fLinea    === "ALL" || l.linea === fLinea) &&
     (!dFrom || l.fechaCreacion >= dFrom) &&
     (!dTo   || l.fechaCreacion.substring(0, 10) <= dTo) &&
     (!onlyActive || !l.preventa || statuses[l.preventa]?.active !== false)
-  ), [leads, fPreventa, fLinea, dFrom, dTo, onlyActive, statuses]);
+  ), [leadsC, fPreventa, fLinea, dFrom, dTo, onlyActive, statuses]);
 
   /* límites del slider de fecha — del primer lead cargado a hoy (igual que Business) */
   const dateBounds = useMemo(() => {
@@ -205,8 +235,8 @@ export default function PresalesView({
     return { min: days[0], max: days[days.length - 1] > today ? days[days.length - 1] : today };
   }, [scope]);
 
-  const activeFilters = [fPreventa, fLinea, fEtapa, fEstado].filter((v) => v !== "ALL").length + (dFrom || dTo ? 1 : 0);
-  const clearFilters = () => { setFPreventa("ALL"); setFLinea("ALL"); setFEtapa("ALL"); setFEstado("ALL"); setDFrom(""); setDTo(""); };
+  const activeFilters = [fPreventa, fLinea, fEtapa, fEstado, fCompania].filter((v) => v !== "ALL").length + (dFrom || dTo ? 1 : 0);
+  const clearFilters = () => { setFPreventa("ALL"); setFLinea("ALL"); setFEtapa("ALL"); setFEstado("ALL"); setFCompania("ALL"); setDFrom(""); setDTo(""); };
 
   const [now] = useState(() => Date.now());
   const daysSince = (l: Lead) => {
@@ -277,6 +307,16 @@ export default function PresalesView({
   };
   const totalRate = pct(totals.won, totals.won + totals.lost);
 
+  /* tarjetas por compañía */
+  const showSplit = fCompania === "ALL";   // con una compañía filtrada, el número principal ya es solo de ella
+  // mismos leads que suma la columna Abiertos de la tabla (respeta filtros y Solo activos)
+  const abiertosNames = new Set(tableRows.map((r) => r.name));
+  const abiertosLeads = filtered.filter((l) => isOpen(l) && abiertosNames.has(l.preventa || "Sin asignar"));
+  // el pipeline NO se suma entre compañías: SAS está en COP e Internacional en USD
+  const pipelineCOP = stats.open.filter((l) => compKey(l) === "SAS").reduce((s, l) => s + l.ingresosEsperados, 0);
+  const pipelineUSD = stats.open.filter((l) => compKey(l) === "INT").reduce((s, l) => s + l.ingresosEsperados, 0);
+  const fmtPipeline = fCompania !== "ALL" && compKey({ compania: fCompania } as Lead) === "INT" ? fmtUSD(pipelineUSD) : fmtCOP(pipelineCOP);
+
   /* personas para la ventana de gestión: todos los preventas de ODOO, sin depender de los filtros */
   const people = useMemo(() => {
     const map = new Map<string, { name: string; open: number; total: number }>();
@@ -345,7 +385,8 @@ export default function PresalesView({
         <FilterSelect label="Línea"          value={fLinea}    onChange={setFLinea}    options={opts.linea} />
         <FilterSelect label="Preventa"       value={fPreventa} onChange={setFPreventa} options={opts.preventa} />
         <FilterSelect label="Etapa Actual"   value={fEstado}   onChange={setFEstado}   options={opts.etapaActual} />
-        <FilterSelect label="Estado Preventa" value={fEtapa}   onChange={setFEtapa}    options={opts.etapaPreventa}
+        <FilterSelect label="Estado Preventa" value={fEtapa}   onChange={setFEtapa}    options={opts.etapaPreventa} />
+        <FilterSelect label="Compañía"       value={fCompania} onChange={setFCompania} options={companias} widthClass="w-44"
           headerAction={activeFilters > 0 && (
             <button type="button" onClick={clearFilters} title={`Limpiar filtros (${activeFilters})`} className="text-slate-500 hover:text-rose-400 transition-colors">
               <X size={11} />
@@ -405,18 +446,29 @@ export default function PresalesView({
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
             <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)} hint="Total Leads en Preventa"
+              split={showSplit ? splitBy(enEtapaPreventa) : undefined}
               onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa", chips: true })} />
             <Kpi label="Preventa abierta" value={String(totals.open)} hint="Total leads"
-              onClick={() => {
-                // mismos leads que suma la columna Abiertos de la tabla (respeta filtros y Solo activos)
-                const names = new Set(tableRows.map((r) => r.name));
-                setListModal({ leads: filtered.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Preventa abierta" });
-              }} />
-            <Kpi label="Pipeline abierto" value={fmtCOP(stats.pipeline)} hint="Ingresos esperados" />
-            <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`} tone="emerald" />
-            <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)} hint="Abiertos sin responsable" tone="amber" />
-            <Kpi label="Estancados"      value={String(stats.stale.length)} hint={`Más de ${STALE_DAYS} días sin cambios`} tone="rose" />
-            <Kpi label="Cierre próximo"  value={String(stats.soon.length)} hint={`En ${SOON_DAYS} días o menos`} tone="amber" />
+              split={showSplit ? splitBy(abiertosLeads) : undefined}
+              onClick={() => setListModal({ leads: abiertosLeads, heading: "Preventa abierta" })} />
+            <Kpi label="Pipeline abierto" value={fmtPipeline} hint={fCompania === "ALL" ? "Ingresos esperados · COP (SAS)" : "Ingresos esperados"}
+              split={showSplit ? [
+                { label: "SAS", color: "bg-blue-400", value: fmtCOP(pipelineCOP) },
+                { label: "Internacional", color: "bg-teal-400", value: fmtUSD(pipelineUSD) },
+              ] : undefined} />
+            <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`} tone="emerald"
+              split={showSplit ? splitBy([], () => "").map((s, i) => {
+                const k: CompKey = i === 0 ? "SAS" : "INT";
+                const w = stats.won.filter((l) => compKey(l) === k).length, lo = stats.lost.filter((l) => compKey(l) === k).length;
+                const r = pct(w, w + lo);
+                return { ...s, value: r === null ? "—" : `${r}% · ${w}/${w + lo}` };
+              }) : undefined} />
+            <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)} hint="Abiertos sin responsable" tone="amber"
+              split={showSplit ? splitBy(stats.sinAsig) : undefined} />
+            <Kpi label="Estancados"      value={String(stats.stale.length)} hint={`Más de ${STALE_DAYS} días sin cambios`} tone="rose"
+              split={showSplit ? splitBy(stats.stale) : undefined} />
+            <Kpi label="Cierre próximo"  value={String(stats.soon.length)} hint={`En ${SOON_DAYS} días o menos`} tone="amber"
+              split={showSplit ? splitBy(stats.soon) : undefined} />
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">

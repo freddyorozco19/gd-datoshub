@@ -35,6 +35,7 @@ export interface OdooLead {
   x_studio_tipo_de_producto: string | false;
   x_studio_proyecto: string | false;
   won_status: "won" | "lost" | false;
+  company_id: [number, string] | false;
 }
 
 // Modelo normalizado para el frontend
@@ -68,4 +69,5 @@ export interface Lead {
   tipoVenta:   string;
   ganado:      string;
   adjuntos:    number;
+  compania:    string;   // company_id de Odoo: GROW DATA SAS (COP) o GROW DATA INTERNATIONAL SA (USD)
 }
