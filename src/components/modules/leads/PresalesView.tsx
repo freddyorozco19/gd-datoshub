@@ -60,15 +60,16 @@ const splitBy = (arr: Lead[], fmt: (l: Lead[]) => string = (l) => String(l.lengt
 
 const CARD = "relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden";
 
-function Card({ title, right, children, className = "" }: { title: string; right?: ReactNode; children: ReactNode; className?: string }) {
+// fill: la tarjeta se estira a la altura que le da su contenedor y el contenido ocupa el espacio sobrante
+function Card({ title, right, children, className = "", fill }: { title: string; right?: ReactNode; children: ReactNode; className?: string; fill?: boolean }) {
   return (
-    <div className={`${CARD} p-4 ${className}`}>
+    <div className={`${CARD} p-4 ${fill ? "flex flex-col" : ""} ${className}`}>
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
       <div className="relative flex items-center justify-between gap-2 mb-3">
         <h3 className="text-xs font-semibold text-slate-100 uppercase tracking-wide">{title}</h3>
         {right}
       </div>
-      <div className="relative">{children}</div>
+      <div className={`relative ${fill ? "flex-1 min-h-0 flex flex-col" : ""}`}>{children}</div>
     </div>
   );
 }
@@ -622,8 +623,9 @@ export default function PresalesView({
               {renderCargaTable(false)}
             </Card>
 
+            <div className="xl:col-span-2 flex flex-col gap-4">
             {/* embudo por etapa */}
-            <Card title="Leads en estado de preventa" className="xl:col-span-2"
+            <Card title="Leads en estado de preventa" className="flex-1" fill
               right={
                 <div className="flex gap-1">
                   {([["ALL", "Todos"], ["true", "Activo"], ["false", "Inactivo"]] as const).map(([v, label]) => (
@@ -656,51 +658,9 @@ export default function PresalesView({
                 </div>
               )}
             </Card>
-          </div>
-
-          <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
-            {/* cola de gestión operativa */}
-            <Card title="Cola de gestión" className="xl:col-span-3"
-              right={
-                <div className="flex gap-1">
-                  {(Object.keys(queues) as QueueKey[]).map((k) => (
-                    <button key={k} type="button" onClick={() => setQueue(k)}
-                      className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
-                        queue === k ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.08] text-slate-400"
-                      }`}>
-                      {queues[k].label} <span className="tabular-nums opacity-70">{queues[k].items.length}</span>
-                    </button>
-                  ))}
-                </div>
-              }>
-              {q.items.length === 0 ? (
-                <p className="text-xs text-slate-500 py-6 text-center">Nada pendiente en esta cola</p>
-              ) : (
-                <div className="divide-y divide-white/[0.05]">
-                  {q.items.slice(0, 8).map((l) => (
-                    <button key={l.id} type="button" onClick={() => setSelected(l)}
-                      className="w-full flex items-center gap-3 text-left px-1.5 py-2 hover:bg-white/[0.05] rounded-lg transition-colors">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</p>
-                        <p className="text-[11px] text-slate-500 truncate">
-                          {l.cliente || "—"}{l.preventa ? ` · ${l.preventa}` : ""}{l.etapaPreventa ? ` · ${l.etapaPreventa}` : ""}
-                        </p>
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <p className="text-[11px] text-slate-300 tabular-nums">{fmtCOP(l.ingresosEsperados)}</p>
-                        <p className="text-[10px] text-slate-500 whitespace-nowrap">{q.hint(l)}</p>
-                      </div>
-                    </button>
-                  ))}
-                  {q.items.length > 8 && (
-                    <p className="text-[10px] text-slate-500 text-center pt-2">+{q.items.length - 8} más — ajusta los filtros para acotar</p>
-                  )}
-                </div>
-              )}
-            </Card>
-
+            </div>
             {/* leads por mes */}
-            <Card title="Leads por mes" className="xl:col-span-2">
+            <Card title="Leads por mes" className="flex-1" fill>
               <div className="flex items-center justify-end gap-2 mb-3 flex-wrap">
                 <div className="flex gap-1">
                   {([6, 12] as const).map((n) => (
@@ -710,7 +670,7 @@ export default function PresalesView({
                 </div>
               </div>
 
-              <div className="flex items-stretch gap-1 h-40">
+              <div className="flex items-stretch gap-1 flex-1 min-h-[10rem]">
                 {monthly.map((m, i) => {
                   const c = m.created.length, w = m.won.length;
                   const tipPos = i < 2 ? "left-0" : i > monthly.length - 3 ? "right-0" : "left-1/2 -translate-x-1/2";
@@ -779,6 +739,48 @@ export default function PresalesView({
                 )}
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-emerald-400" /> Ganados (de los creados ese mes)</span>
               </div>
+            </Card>
+          </div>
+
+          <div>
+            {/* cola de gestión operativa */}
+            <Card title="Cola de gestión"
+              right={
+                <div className="flex gap-1">
+                  {(Object.keys(queues) as QueueKey[]).map((k) => (
+                    <button key={k} type="button" onClick={() => setQueue(k)}
+                      className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
+                        queue === k ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.08] text-slate-400"
+                      }`}>
+                      {queues[k].label} <span className="tabular-nums opacity-70">{queues[k].items.length}</span>
+                    </button>
+                  ))}
+                </div>
+              }>
+              {q.items.length === 0 ? (
+                <p className="text-xs text-slate-500 py-6 text-center">Nada pendiente en esta cola</p>
+              ) : (
+                <div className="divide-y divide-white/[0.05]">
+                  {q.items.slice(0, 8).map((l) => (
+                    <button key={l.id} type="button" onClick={() => setSelected(l)}
+                      className="w-full flex items-center gap-3 text-left px-1.5 py-2 hover:bg-white/[0.05] rounded-lg transition-colors">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</p>
+                        <p className="text-[11px] text-slate-500 truncate">
+                          {l.cliente || "—"}{l.preventa ? ` · ${l.preventa}` : ""}{l.etapaPreventa ? ` · ${l.etapaPreventa}` : ""}
+                        </p>
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <p className="text-[11px] text-slate-300 tabular-nums">{fmtCOP(l.ingresosEsperados)}</p>
+                        <p className="text-[10px] text-slate-500 whitespace-nowrap">{q.hint(l)}</p>
+                      </div>
+                    </button>
+                  ))}
+                  {q.items.length > 8 && (
+                    <p className="text-[10px] text-slate-500 text-center pt-2">+{q.items.length - 8} más — ajusta los filtros para acotar</p>
+                  )}
+                </div>
+              )}
             </Card>
           </div>
 
