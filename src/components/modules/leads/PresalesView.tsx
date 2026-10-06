@@ -659,17 +659,16 @@ export default function PresalesView({
               )}
             </Card>
             {/* leads por mes */}
-            <Card title="Leads por mes" className="flex-1" fill>
-              <div className="flex items-center justify-end gap-2 mb-3 flex-wrap">
+            <Card title="Leads por mes" className="flex-1" fill
+              right={
                 <div className="flex gap-1">
                   {([6, 12] as const).map((n) => (
                     <button key={n} type="button" onClick={() => setMRange(n)} data-active={mRange === n}
                       className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">{n} meses</button>
                   ))}
                 </div>
-              </div>
-
-              <div className="flex items-stretch gap-1 flex-1 min-h-[10rem]">
+              }>
+              <div className="flex items-stretch gap-1.5 flex-1 min-h-[10rem]">
                 {monthly.map((m, i) => {
                   const c = m.created.length, w = m.won.length;
                   const tipPos = i < 2 ? "left-0" : i > monthly.length - 3 ? "right-0" : "left-1/2 -translate-x-1/2";
@@ -696,7 +695,7 @@ export default function PresalesView({
                           ))}
                         </div>
                       )}
-                      <div className="h-4 text-center text-[10px] text-slate-400 tabular-nums leading-4">
+                      <div className="h-5 text-center text-[11px] font-medium text-slate-300 tabular-nums leading-5">
                         {mRange === 6 && c ? c : ""}
                       </div>
                       <div className="flex-1 flex items-end gap-0.5 min-h-0">
@@ -721,22 +720,22 @@ export default function PresalesView({
                           <div className="w-full rounded-t-md bg-emerald-400" style={{ height: `${(w / maxMonth) * 100}%`, minHeight: w ? 4 : 0 }} />
                         </button>
                       </div>
-                      <span className="mt-1 text-center text-[10px] text-slate-500 capitalize truncate">{m.label}</span>
+                      <span className="mt-2 text-center text-[11px] text-slate-400 capitalize truncate">{m.label}</span>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-3 text-[10px] text-slate-500">
+              <div className="shrink-0 flex items-center flex-wrap gap-x-4 gap-y-1.5 mt-4 pt-3 border-t border-white/[0.08] text-[11px] text-slate-400">
                 {stackMonth ? (
                   <>
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-blue-400" /> GROW DATA</span>
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-teal-400" /> GD INTL</span>
+                    <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-blue-400" /> GROW DATA</span>
+                    <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-teal-400" /> GD INTL</span>
                   </>
                 ) : (
-                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-blue-400" /> Creados</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-blue-400" /> Creados</span>
                 )}
-                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-emerald-400" /> Ganados (de los creados ese mes)</span>
+                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-emerald-400" /> Ganados (de los creados ese mes)</span>
               </div>
             </Card>
             </div>
