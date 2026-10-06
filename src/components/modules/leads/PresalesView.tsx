@@ -549,7 +549,7 @@ export default function PresalesView({
             </Card>
 
             {/* embudo por etapa */}
-            <Card title="Estado Preventa" className="xl:col-span-2"
+            <Card title="Leads en estado de preventa" className="xl:col-span-2"
               right={
                 <div className="flex gap-1">
                   {([["ALL", "Todos"], ["true", "Activo"], ["false", "Inactivo"]] as const).map(([v, label]) => (
