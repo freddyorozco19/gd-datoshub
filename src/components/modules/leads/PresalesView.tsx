@@ -53,8 +53,8 @@ const fmtUSD = (v: number) => {
 };
 // conteo por compañía de un conjunto de leads, en formato de desglose para las tarjetas
 const splitBy = (arr: Lead[], fmt: (l: Lead[]) => string = (l) => String(l.length)) => [
-  { label: "SAS", color: "bg-blue-400", value: fmt(arr.filter((l) => compKey(l) === "SAS")) },
-  { label: "Internacional", color: "bg-teal-400", value: fmt(arr.filter((l) => compKey(l) === "INT")) },
+  { label: "GROW DATA", color: "bg-blue-400", value: fmt(arr.filter((l) => compKey(l) === "SAS")) },
+  { label: "GD INTERNATIONAL", color: "bg-teal-400", value: fmt(arr.filter((l) => compKey(l) === "INT")) },
 ];
 
 const CARD = "relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden";
@@ -410,9 +410,8 @@ export default function PresalesView({
     <div className="flex items-center gap-1">
       {([["SAS", "GROW DATA"], ["INT", "GROW DATA INTERNATIONAL"]] as const).map(([k, label]) => (
         <button key={k} type="button" onClick={() => setFCargaComp(fCargaComp === k ? "ALL" : k)}
-          className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
-            fCargaComp === k ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.08] text-slate-400"
-          }`}>
+          data-active={fCargaComp === k}
+          className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
           {label}
         </button>
       ))}
@@ -564,10 +563,10 @@ export default function PresalesView({
             <Kpi label="Preventa abierta" value={String(totals.open)} hint="Total leads"
               split={showSplit ? splitBy(abiertosLeads) : undefined}
               onClick={() => setListModal({ leads: abiertosLeads, heading: "Preventa abierta" })} />
-            <Kpi label="Pipeline abierto" value={fmtPipeline} hint={fCompania === "ALL" ? "Ingresos esperados · COP (SAS)" : "Ingresos esperados"}
+            <Kpi label="Pipeline abierto" value={fmtPipeline} hint={fCompania === "ALL" ? "Ingresos esperados · COP (GROW DATA)" : "Ingresos esperados"}
               split={showSplit ? [
-                { label: "SAS", color: "bg-blue-400", value: fmtCOP(pipelineCOP) },
-                { label: "Internacional", color: "bg-teal-400", value: fmtUSD(pipelineUSD) },
+                { label: "GROW DATA", color: "bg-blue-400", value: fmtCOP(pipelineCOP) },
+                { label: "GD INTERNATIONAL", color: "bg-teal-400", value: fmtUSD(pipelineUSD) },
               ] : undefined} />
             <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`} tone="emerald"
               split={showSplit ? splitBy([], () => "").map((s, i) => {
@@ -606,9 +605,8 @@ export default function PresalesView({
                   {([["ALL", "Todos"], ["true", "Activo"], ["false", "Inactivo"]] as const).map(([v, label]) => (
                     <button key={v} type="button" onClick={() => setFLeadActivo(v)}
                       title="Filtra por el campo Activo del lead"
-                      className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
-                        fLeadActivo === v ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.08] text-slate-400"
-                      }`}>
+                      data-active={fLeadActivo === v}
+                      className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
                       {label}
                     </button>
                   ))}
