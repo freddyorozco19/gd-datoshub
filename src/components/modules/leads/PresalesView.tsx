@@ -408,8 +408,8 @@ export default function PresalesView({
 
   const cargaPills = (
     <div className="flex items-center gap-1">
-      {([["SAS", "GROW DATA"], ["INT", "GROW DATA INTERNATIONAL"]] as const).map(([k, label]) => (
-        <button key={k} type="button" onClick={() => setFCargaComp(fCargaComp === k ? "ALL" : k)}
+      {([["ALL", "Todos"], ["SAS", "GROW DATA"], ["INT", "GROW DATA INTERNATIONAL"]] as const).map(([k, label]) => (
+        <button key={k} type="button" onClick={() => setFCargaComp(k === "ALL" || fCargaComp === k ? "ALL" : k)}
           data-active={fCargaComp === k}
           className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
           {label}
