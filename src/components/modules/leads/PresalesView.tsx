@@ -538,9 +538,9 @@ export default function PresalesView({
               <UserCog size={13} /> Gestionar preventas
             </button>
           )}
-          <button onClick={onReload} disabled={loading} title="Actualizar"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.1] hover:bg-white/[0.05] disabled:opacity-60 transition-colors">
-            <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
+          <button onClick={onReload} disabled={loading} title="Actualizar" aria-label="Actualizar"
+            className="flex items-center justify-center p-2.5 rounded-lg text-slate-400 border border-white/[0.1] hover:bg-white/[0.05] hover:text-slate-200 disabled:opacity-60 transition-colors">
+            <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           </button>
         </>}
       />
