@@ -75,20 +75,24 @@ function Card({ title, right, children, className = "" }: { title: string; right
 function Kpi({ label, value, onClick, split }: { label: string; value: string; onClick?: () => void; split?: { label: string; short?: string; value: string; color: string }[] }) {
   return (
     <div
-      className={`${CARD} @container/k p-4 ${onClick ? "cursor-pointer hover:bg-white/[0.05] transition-colors" : ""}`}
+      className={`${CARD} @container/k min-w-0 ${onClick ? "cursor-pointer hover:bg-white/[0.05] transition-colors" : ""}`}
       {...(onClick ? {
         role: "button", tabIndex: 0, onClick,
         onKeyDown: (e: React.KeyboardEvent) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } },
       } : {})}
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
-      <div className="relative">
-        <p className="text-xs font-semibold text-slate-300 uppercase tracking-[0.06em] leading-tight whitespace-nowrap truncate" title={label}>{label}</p>
-        <p className="text-xl @[200px]/k:text-2xl font-bold text-slate-100 mt-2 tabular-nums leading-none whitespace-nowrap">{value}</p>
+      {/* Todo escala con el ancho de la propia tarjeta (cqw): la fila de 7 se mantiene en una línea
+          y los textos se reducen proporcionalmente, con un mínimo para no volverse ilegibles. */}
+      <div className="relative" style={{ padding: "clamp(8px, 7cqw, 16px)" }}>
+        <p className="font-semibold text-slate-300 uppercase leading-tight break-words" title={label}
+          style={{ fontSize: "clamp(9px, 6.4cqw, 12px)", letterSpacing: "0.05em" }}>{label}</p>
+        <p className="font-bold text-slate-100 tabular-nums leading-none whitespace-nowrap"
+          style={{ fontSize: "clamp(15px, 12.5cqw, 24px)", marginTop: "clamp(4px, 3.5cqw, 8px)" }}>{value}</p>
         {split && (
-          <div className="mt-2.5 pt-2 border-t border-white/[0.08] space-y-1">
+          <div className="border-t border-white/[0.08] space-y-1" style={{ marginTop: "clamp(6px, 5cqw, 10px)", paddingTop: "clamp(4px, 4cqw, 8px)" }}>
             {split.map((s) => (
-              <div key={s.label} className="flex items-center justify-between gap-2 text-[11px]">
+              <div key={s.label} className="flex items-center justify-between gap-2" style={{ fontSize: "clamp(9px, 5.8cqw, 11px)" }}>
                 <span className="flex items-center gap-1.5 text-slate-500 whitespace-nowrap min-w-0">
                   <i className={`w-2 h-2 rounded-sm shrink-0 ${s.color}`} />
                   {s.short && s.short !== s.label ? (
@@ -559,8 +563,8 @@ export default function PresalesView({
       ) : (
         <>
           {/* KPIs */}
-          <div className="@container">
-            <div className="grid grid-cols-2 @[640px]:grid-cols-4 @[1400px]:grid-cols-7 gap-3">
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-7 gap-2 xl:gap-3 min-w-[760px]">
             <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)}
               split={showSplit ? splitBy(enEtapaPreventa) : undefined}
               onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa", chips: true })} />
