@@ -91,7 +91,7 @@ export type LeadsListModalType = ComponentType<{ leads: Lead[]; title?: string; 
 export default function PresalesView({
   leads, loading, error, onReload, LeadsListModal,
 }: { leads: Lead[]; loading: boolean; error: string | null; onReload: () => void; LeadsListModal: LeadsListModalType }) {
-  const [listModal, setListModal] = useState<{ leads: Lead[]; heading: string } | null>(null);
+  const [listModal, setListModal] = useState<{ leads: Lead[]; heading: string; suffix?: string } | null>(null);
   const [fPreventa, setFPreventa] = useState("ALL");
   const [fLinea,    setFLinea]    = useState("ALL");
   // por defecto: Etapa Actual = Preventa, Estado Preventa = ABIERTO (se pueden cambiar libremente)
@@ -152,8 +152,9 @@ export default function PresalesView({
     setNeedsSetup(false);
   }
 
-  /* universo de preventa: leads con preventa asignado o con etapa de preventa */
-  const scope = useMemo(() => leads.filter((l) => l.preventa || l.etapaPreventa), [leads]);
+  /* universo de preventa: leads con preventa asignado, con Estado Preventa, o en Etapa Actual = Preventa
+     (este último evita que la tarjeta Estado preventa cuente leads que el resto de la vista no ve) */
+  const scope = useMemo(() => leads.filter((l) => l.preventa || l.etapaPreventa || normText(l.etapa) === "preventa"), [leads]);
 
   const opts = useMemo(() => ({
     preventa:    unique(scope.map((l) => l.preventa).filter((n) => !onlyActive || statuses[n]?.active !== false)),
@@ -403,7 +404,8 @@ export default function PresalesView({
         <>
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
-            <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)} hint="Total Leads en Preventa" />
+            <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)} hint="Total Leads en Preventa"
+              onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa" })} />
             <Kpi label="Preventa abierta" value={String(totals.open)} hint="Total leads"
               onClick={() => {
                 // mismos leads que suma la columna Abiertos de la tabla (respeta filtros y Solo activos)
@@ -515,7 +517,7 @@ export default function PresalesView({
                 <div className="space-y-2.5">
                   {byEtapa.map((r) => (
                     <button key={r.name} type="button"
-                      onClick={() => setListModal({ leads: etapaScope.filter((l) => (l.etapaPreventa || "Sin etapa") === r.name), heading: r.name })}
+                      onClick={() => setListModal({ leads: etapaScope.filter((l) => (l.etapaPreventa || "Sin etapa") === r.name), heading: r.name, suffix: " con ese Estado Preventa" })}
                       className="w-full text-left group">
                       <div className="flex items-baseline justify-between gap-2 text-xs mb-1">
                         <span className="text-slate-200 font-medium truncate group-hover:text-white transition-colors" title={r.name}>{r.name}</span>
@@ -642,7 +644,7 @@ export default function PresalesView({
           leads={listModal.leads}
           title="Leads de preventa"
           heading={listModal.heading}
-          suffix=" con Etapa Prev. abierta"
+          suffix={listModal.suffix ?? " con Etapa Prev. abierta"}
           onClose={() => setListModal(null)}
         />
       )}
