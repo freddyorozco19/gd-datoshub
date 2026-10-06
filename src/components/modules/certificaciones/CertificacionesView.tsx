@@ -117,6 +117,7 @@ const PROVIDERS: ProviderConfig[] = [
     bgGradient: 'from-purple-950 to-slate-900',
     logo: '⬡',
     exams: [
+      { id: 'cobit-2019', code: 'COBIT 2019', name: 'COBIT 2019 Foundation', dataFile: '/data/exam_cobit2019.json', questions: 149, level: 'Foundation' },
       { id: 'cisa', code: 'CISA', name: 'Certified Information Systems Auditor',  level: 'Professional' },
       { id: 'cism', code: 'CISM', name: 'Certified Information Security Manager', level: 'Professional' },
     ],
