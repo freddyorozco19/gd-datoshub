@@ -7,6 +7,7 @@ import type { Lead } from "@/lib/odoo/types";
 import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
+import FitRow from "./FitRow";
 import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesManageModal, { type PresalesStatusRow } from "./PresalesManageModal";
@@ -500,8 +501,9 @@ export default function PresalesView({
   return (
     <div className="flex-1 overflow-auto p-5 space-y-4 relative">
       {/* filtros */}
-      <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
-        <FilterSelect label="Línea"          value={fLinea}    onChange={setFLinea}    options={opts.linea} />
+      <FitRow
+        left={<>
+        <FilterSelect label="Línea"         value={fLinea}    onChange={setFLinea}    options={opts.linea} />
         <FilterSelect label="Preventa"       value={fPreventa} onChange={setFPreventa} options={opts.preventa} />
         <FilterSelect label="Etapa Actual"   value={fEstado}   onChange={setFEstado}   options={opts.etapaActual} />
         <FilterSelect label="Estado Preventa" value={fEtapa}   onChange={setFEtapa}    options={opts.etapaPreventa} />
@@ -521,8 +523,8 @@ export default function PresalesView({
           to={dTo}
           onChange={(from, to) => { setDFrom(from); setDTo(to); }}
         />
-
-        <div className="ml-auto flex items-center gap-2">
+        </>}
+        right={<>
           <button type="button" onClick={() => setOnlyActive((v) => !v)}
             title="Oculta a los preventas inactivos en la tabla de carga y en el filtro Preventa"
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${
@@ -540,8 +542,8 @@ export default function PresalesView({
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.1] hover:bg-white/[0.05] disabled:opacity-60 transition-colors">
             <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
           </button>
-        </div>
-      </div>
+        </>}
+      />
 
       {canManage && needsSetup && (
         <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
