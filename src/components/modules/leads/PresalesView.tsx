@@ -527,19 +527,18 @@ export default function PresalesView({
         right={<>
           <button type="button" onClick={() => setOnlyActive((v) => !v)}
             title="Oculta a los preventas inactivos en la tabla de carga y en el filtro Preventa"
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${
-              onlyActive ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.1] text-slate-400"
-            }`}>
+            data-active={onlyActive}
+            className="pill-option flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border">
             Solo activos
           </button>
           {canManage && (
             <button type="button" onClick={() => setShowManage(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 border border-white/[0.1] hover:bg-white/[0.05] transition-colors">
+              className="pill-option flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border">
               <UserCog size={13} /> Gestionar preventas
             </button>
           )}
           <button onClick={onReload} disabled={loading} title="Actualizar" aria-label="Actualizar"
-            className="flex items-center justify-center p-2.5 rounded-lg text-slate-400 border border-white/[0.1] hover:bg-white/[0.05] hover:text-slate-200 disabled:opacity-60 transition-colors">
+            className="pill-option flex items-center justify-center p-2.5 rounded-lg border disabled:opacity-60 disabled:cursor-default">
             <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           </button>
         </>}
