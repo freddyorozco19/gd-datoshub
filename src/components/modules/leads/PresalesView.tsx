@@ -56,10 +56,16 @@ function Card({ title, right, children, className = "" }: { title: string; right
   );
 }
 
-function Kpi({ label, value, hint, tone = "blue" }: { label: string; value: string; hint?: string; tone?: "blue" | "amber" | "rose" | "emerald" }) {
+function Kpi({ label, value, hint, tone = "blue", onClick }: { label: string; value: string; hint?: string; tone?: "blue" | "amber" | "rose" | "emerald"; onClick?: () => void }) {
   const dot = { blue: "bg-blue-400", amber: "bg-amber-400", rose: "bg-rose-400", emerald: "bg-emerald-400" }[tone];
   return (
-    <div className={`${CARD} p-4`}>
+    <div
+      className={`${CARD} p-4 ${onClick ? "cursor-pointer hover:bg-white/[0.05] transition-colors" : ""}`}
+      {...(onClick ? {
+        role: "button", tabIndex: 0, onClick,
+        onKeyDown: (e: React.KeyboardEvent) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } },
+      } : {})}
+    >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
       <div className="relative">
         <div className="flex items-center gap-1.5">
@@ -387,7 +393,12 @@ export default function PresalesView({
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
             <Kpi label="Estado preventa" value={String(stats.total)} hint="Total Leads" />
-            <Kpi label="Preventa abierta" value={String(totals.open)} hint="Total leads" />
+            <Kpi label="Preventa abierta" value={String(totals.open)} hint="Total leads"
+              onClick={() => {
+                // mismos leads que suma la columna Abiertos de la tabla (respeta filtros y Solo activos)
+                const names = new Set(tableRows.map((r) => r.name));
+                setListModal({ leads: filtered.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Preventa abierta" });
+              }} />
             <Kpi label="Pipeline abierto" value={fmtCOP(stats.pipeline)} hint="Ingresos esperados" />
             <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`} tone="emerald" />
             <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)} hint="Abiertos sin responsable" tone="amber" />
