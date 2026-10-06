@@ -658,7 +658,6 @@ export default function PresalesView({
                 </div>
               )}
             </Card>
-            </div>
             {/* leads por mes */}
             <Card title="Leads por mes" className="flex-1" fill>
               <div className="flex items-center justify-end gap-2 mb-3 flex-wrap">
@@ -740,6 +739,7 @@ export default function PresalesView({
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-emerald-400" /> Ganados (de los creados ese mes)</span>
               </div>
             </Card>
+            </div>
           </div>
 
           <div>
