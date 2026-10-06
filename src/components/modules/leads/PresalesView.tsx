@@ -72,8 +72,7 @@ function Card({ title, right, children, className = "" }: { title: string; right
   );
 }
 
-function Kpi({ label, value, hint, tone = "blue", onClick, split }: { label: string; value: string; hint?: string; tone?: "blue" | "amber" | "rose" | "emerald"; onClick?: () => void; split?: { label: string; value: string; color: string }[] }) {
-  const dot = { blue: "bg-blue-400", amber: "bg-amber-400", rose: "bg-rose-400", emerald: "bg-emerald-400" }[tone];
+function Kpi({ label, value, hint, onClick, split }: { label: string; value: string; hint?: string; onClick?: () => void; split?: { label: string; value: string; color: string }[] }) {
   return (
     <div
       className={`${CARD} p-4 ${onClick ? "cursor-pointer hover:bg-white/[0.05] transition-colors" : ""}`}
@@ -84,11 +83,8 @@ function Kpi({ label, value, hint, tone = "blue", onClick, split }: { label: str
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
       <div className="relative">
-        <div className="flex items-center gap-1.5">
-          <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
-          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">{label}</p>
-        </div>
-        <p className="text-xl font-bold text-slate-100 mt-1.5 tabular-nums leading-none whitespace-nowrap">{value}</p>
+        <p className="text-xs font-semibold text-slate-300 uppercase tracking-[0.06em] leading-tight">{label}</p>
+        <p className="text-2xl font-bold text-slate-100 mt-2 tabular-nums leading-none whitespace-nowrap">{value}</p>
         {hint && <p className="text-[11px] text-slate-500 mt-1.5">{hint}</p>}
         {split && (
           <div className="mt-2.5 pt-2 border-t border-white/[0.08] space-y-1">
@@ -568,18 +564,18 @@ export default function PresalesView({
                 { label: "GROW DATA", color: "bg-blue-400", value: fmtCOP(pipelineCOP) },
                 { label: "GD INTERNATIONAL", color: "bg-teal-400", value: fmtUSD(pipelineUSD) },
               ] : undefined} />
-            <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`} tone="emerald"
+            <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`} hint={`${stats.won.length} ganados · ${stats.lost.length} perdidos`}
               split={showSplit ? splitBy([], () => "").map((s, i) => {
                 const k: CompKey = i === 0 ? "SAS" : "INT";
                 const w = stats.won.filter((l) => compKey(l) === k).length, lo = stats.lost.filter((l) => compKey(l) === k).length;
                 const r = pct(w, w + lo);
                 return { ...s, value: r === null ? "—" : `${r}% · ${w}/${w + lo}` };
               }) : undefined} />
-            <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)} hint="Abiertos sin responsable" tone="amber"
+            <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)} hint="Abiertos sin responsable"
               split={showSplit ? splitBy(stats.sinAsig) : undefined} />
-            <Kpi label="Estancados"      value={String(stats.stale.length)} hint={`Más de ${STALE_DAYS} días sin cambios`} tone="rose"
+            <Kpi label="Estancados"      value={String(stats.stale.length)} hint={`Más de ${STALE_DAYS} días sin cambios`}
               split={showSplit ? splitBy(stats.stale) : undefined} />
-            <Kpi label="Cierre próximo"  value={String(stats.soon.length)} hint={`En ${SOON_DAYS} días o menos`} tone="amber"
+            <Kpi label="Cierre próximo"  value={String(stats.soon.length)} hint={`En ${SOON_DAYS} días o menos`}
               split={showSplit ? splitBy(stats.soon) : undefined} />
           </div>
 
