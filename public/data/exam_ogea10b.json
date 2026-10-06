@@ -1,6 +1,6 @@
 {
   "examTitle": "OGEA-10B: TOGAF Enterprise Architecture Bridge",
-  "totalQuestions": 13,
+  "totalQuestions": 10,
   "scrapedAt": "2026-10-06T15:29:51.577Z",
   "questions": [
     {
@@ -91,27 +91,6 @@
       "images": []
     },
     {
-      "number": "6",
-      "questionType": "mc",
-      "questionText": "In which DPBoK Standard context is Enterprise Architecture responsible for “Supporting the project to ensure effective and efficient delivery”?",
-      "translation": "",
-      "options": [
-        "A. Individual/Founder",
-        "B. Team",
-        "C. Enduring Enterprise",
-        "D. Team of Teams"
-      ],
-      "correctAnswer": "B",
-      "explanation": "Enterprise Architecture supports effective, efficient project delivery in the Team context, where a cohesive team has a single mission and requires enough structure to coordinate its work and deliver its product.",
-      "learnMore": [
-        {
-          "text": "Digital Practitioner Body of Knowledge™ Community Edition",
-          "url": "https://theopengroup.gitlab.io/dpbok-community-edition/html/DPBoK-CE.html"
-        }
-      ],
-      "images": []
-    },
-    {
       "number": "7",
       "questionType": "mc",
       "questionText": "Complete the sentence. The four organizational-evolution contexts toward a Digital enterprise, as identified by the DPBoK Standard, are: ________________________",
@@ -133,49 +112,7 @@
       "images": []
     },
     {
-      "number": "8",
-      "questionType": "mc",
-      "questionText": "Complete the sentence. The four organizational-evolution contexts toward a Digital enterprise, as identified by the DPBoK Standard, are: ________________________",
-      "translation": "",
-      "options": [
-        "A. Product, Work, Execution, Delivery",
-        "B. Project, Portfolio, Strategy, Solution",
-        "C. Individual/Founder, Team, Team of Teams, Enduring Enterprise",
-        "D. Startup, Team, Chapter, Guild"
-      ],
-      "correctAnswer": "C",
-      "explanation": "The DPBoK Standard organizes organizational evolution into four contexts: Individual/Founder, Team, Team of Teams, and Enduring Enterprise. These represent increasing organizational scale and complexity.",
-      "learnMore": [
-        {
-          "text": "Digital Practitioner Body of Knowledge™ Community Edition",
-          "url": "https://theopengroup.gitlab.io/dpbok-community-edition/html/DPBoK-CE.html"
-        }
-      ],
-      "images": []
-    },
-    {
       "number": "9",
-      "questionType": "mc",
-      "questionText": "How do the TOGAF Fundamental Content documents differ from the TOGAF Series Guides?",
-      "translation": "",
-      "options": [
-        "A. The concepts in the TOGAF Fundamental Content are considered to be universally applicable, whereas not all the TOGAF Series Guides are relevant in every situation.",
-        "B. The TOGAF Fundamental Content describes how Enterprise Architecture as a practice can be applied to the digital enterprise, whereas the TOGAF Series Guides address multiple use-cases.",
-        "C. The TOGAF Fundamental Content material must always be used in its entirety, whereas individual TOGAF Series Guides can be used as applicable.",
-        "D. The TOGAF Fundamental Content material is expected to expand to cover new needs more rapidly than the TOGAF Series Guides."
-      ],
-      "correctAnswer": "A",
-      "explanation": "TOGAF Fundamental Content establishes the universally applicable concepts of the TOGAF Standard. TOGAF Series Guides provide detailed guidance for using the framework in particular contexts, so individual guides are applicable only when their subject matter is relevant.",
-      "learnMore": [
-        {
-          "text": "TOGAF® Standards",
-          "url": "https://publications.opengroup.org/standards/togaf"
-        }
-      ],
-      "images": []
-    },
-    {
-      "number": "10",
       "questionType": "mc",
       "questionText": "How do the TOGAF Fundamental Content documents differ from the TOGAF Series Guides?",
       "translation": "",
@@ -248,7 +185,14 @@
       "learnMore": [
         "The TOGAF Standard, 10th Edition — Introduction and Core Concepts"
       ],
-      "images": []
+      "images": [
+        {
+          "path": "/data/images/ogea10b/q13_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null
+        }
+      ]
     }
   ]
 }
