@@ -181,6 +181,17 @@ export default function PresalesView({
     (!dTo   || l.fechaCreacion.substring(0, 10) <= dTo)
   ), [scope, fPreventa, fLinea, fEstado, dFrom, dTo]);
 
+  // leads cuya Etapa Actual es "Preventa" — criterio propio de la primera tarjeta, por eso ignora los filtros
+  // Etapa Actual y Estado Preventa (respeta Línea, Preventa, fecha y Solo activos)
+  const enEtapaPreventa = useMemo(() => leads.filter((l) =>
+    normText(l.etapa) === "preventa" &&
+    (fPreventa === "ALL" || l.preventa === fPreventa) &&
+    (fLinea    === "ALL" || l.linea === fLinea) &&
+    (!dFrom || l.fechaCreacion >= dFrom) &&
+    (!dTo   || l.fechaCreacion.substring(0, 10) <= dTo) &&
+    (!onlyActive || !l.preventa || statuses[l.preventa]?.active !== false)
+  ), [leads, fPreventa, fLinea, dFrom, dTo, onlyActive, statuses]);
+
   /* límites del slider de fecha — del primer lead cargado a hoy (igual que Business) */
   const dateBounds = useMemo(() => {
     const today = new Date().toISOString().substring(0, 10);
@@ -392,7 +403,7 @@ export default function PresalesView({
         <>
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
-            <Kpi label="Estado preventa" value={String(stats.total)} hint="Total Leads" />
+            <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)} hint="Total Leads en Preventa" />
             <Kpi label="Preventa abierta" value={String(totals.open)} hint="Total leads"
               onClick={() => {
                 // mismos leads que suma la columna Abiertos de la tabla (respeta filtros y Solo activos)
