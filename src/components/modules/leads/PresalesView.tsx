@@ -365,7 +365,6 @@ export default function PresalesView({
 
   /* leads por mes: 6 o 12 meses, por cantidad o pipeline; "ganados" = de los creados ese mes, los que hoy están ganados */
   const [mRange, setMRange] = useState<6 | 12>(6);
-  const [mMetric, setMMetric] = useState<"leads" | "pipeline">("leads");
   const [mHover, setMHover] = useState<string | null>(null);
   const monthly = useMemo(() => {
     const base = new Date();
@@ -388,16 +387,11 @@ export default function PresalesView({
     }
     return months;
   }, [filtered, mRange]);
-  // pipeline: SAS (COP) e Internacional (USD) no se suman; las barras usan una sola moneda (COP, o USD si se filtra Internacional)
-  const barUSD = fCompania !== "ALL" && compKey({ compania: fCompania } as Lead) === "INT";
-  const sumRev = (arr: Lead[], k: CompKey) => arr.filter((l) => compKey(l) === k).reduce((s, l) => s + l.ingresosEsperados, 0);
-  const barVal = (arr: Lead[]) => (mMetric === "leads" ? arr.length : sumRev(arr, barUSD ? "INT" : "SAS"));
-  const fmtBar = (v: number) => (mMetric === "leads" ? String(v) : barUSD ? fmtUSD(v) : fmtCOP(v));
-  const maxMonth = Math.max(1, ...monthly.flatMap((m) => [barVal(m.created), barVal(m.won)]));
-  const stackMonth = mMetric === "leads" && fCompania === "ALL";   // barra de creados apilada por compañía
+  const maxMonth = Math.max(1, ...monthly.flatMap((m) => [m.created.length, m.won.length]));
+  const stackMonth = fCompania === "ALL";   // barra de creados apilada por compañía
   const monthLines = (arr: Lead[]) => fCompania !== "ALL" ? [] : [
-    { label: "GROW DATA", value: mMetric === "leads" ? String(arr.filter((l) => compKey(l) === "SAS").length) : fmtCOP(sumRev(arr, "SAS")) },
-    { label: "GD INTL", value: mMetric === "leads" ? String(arr.filter((l) => compKey(l) === "INT").length) : fmtUSD(sumRev(arr, "INT")) },
+    { label: "GROW DATA", value: String(arr.filter((l) => compKey(l) === "SAS").length) },
+    { label: "GD INTL", value: String(arr.filter((l) => compKey(l) === "INT").length) },
   ];
 
   /* cola de gestión */
@@ -706,14 +700,8 @@ export default function PresalesView({
             </Card>
 
             {/* leads por mes */}
-            <Card title={mMetric === "leads" ? "Leads por mes" : "Pipeline por mes"} className="xl:col-span-2">
-              <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
-                <div className="flex gap-1">
-                  {([["leads", "Leads"], ["pipeline", "Pipeline"]] as const).map(([k, label]) => (
-                    <button key={k} type="button" onClick={() => setMMetric(k)} data-active={mMetric === k}
-                      className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">{label}</button>
-                  ))}
-                </div>
+            <Card title="Leads por mes" className="xl:col-span-2">
+              <div className="flex items-center justify-end gap-2 mb-3 flex-wrap">
                 <div className="flex gap-1">
                   {([6, 12] as const).map((n) => (
                     <button key={n} type="button" onClick={() => setMRange(n)} data-active={mRange === n}
@@ -724,7 +712,7 @@ export default function PresalesView({
 
               <div className="flex items-stretch gap-1 h-40">
                 {monthly.map((m, i) => {
-                  const c = barVal(m.created), w = barVal(m.won);
+                  const c = m.created.length, w = m.won.length;
                   const tipPos = i < 2 ? "left-0" : i > monthly.length - 3 ? "right-0" : "left-1/2 -translate-x-1/2";
                   const sasShare = stackMonth && c > 0 ? (m.created.filter((l) => compKey(l) === "SAS").length / c) * 100 : 100;
                   return (
@@ -738,7 +726,7 @@ export default function PresalesView({
                             <div key={lbl} className="mb-0.5">
                               <div className="flex items-center justify-between gap-4">
                                 <span className="flex items-center gap-1.5 text-slate-400"><i className={`w-2 h-2 rounded-sm ${color}`} />{lbl}</span>
-                                <span className="text-slate-100 tabular-nums font-medium">{mMetric === "leads" ? arr.length : fmtBar(barVal(arr))}</span>
+                                <span className="text-slate-100 tabular-nums font-medium">{arr.length}</span>
                               </div>
                               {monthLines(arr).map((ln) => (
                                 <div key={ln.label} className="flex items-center justify-between gap-4 pl-3.5 text-slate-400">
@@ -750,7 +738,7 @@ export default function PresalesView({
                         </div>
                       )}
                       <div className="h-4 text-center text-[10px] text-slate-400 tabular-nums leading-4">
-                        {mMetric === "leads" && mRange === 6 && c ? c : ""}
+                        {mRange === 6 && c ? c : ""}
                       </div>
                       <div className="flex-1 flex items-end gap-0.5 min-h-0">
                         <button type="button" disabled={m.created.length === 0}
@@ -790,7 +778,6 @@ export default function PresalesView({
                   <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-blue-400" /> Creados</span>
                 )}
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-emerald-400" /> Ganados (de los creados ese mes)</span>
-                {mMetric === "pipeline" && <span>· {barUSD ? "en USD" : "en COP (GROW DATA)"}</span>}
               </div>
             </Card>
           </div>
