@@ -563,8 +563,8 @@ export default function PresalesView({
       ) : (
         <>
           {/* KPIs */}
-          <div className="overflow-x-auto">
-            <div className="grid grid-cols-7 gap-2 xl:gap-3 min-w-[760px]">
+          <div>
+            <div className="grid grid-cols-7 gap-2 xl:gap-3">
             <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)}
               split={showSplit ? splitBy(enEtapaPreventa) : undefined}
               onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa", chips: true })} />
