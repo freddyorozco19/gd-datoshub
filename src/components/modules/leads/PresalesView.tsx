@@ -363,22 +363,42 @@ export default function PresalesView({
   }, [etapaScope]);
   const maxEtapa = Math.max(1, ...byEtapa.map((r) => r.count));
 
-  /* ingreso mensual de leads a preventa (últimos 6 meses) */
+  /* leads por mes: 6 o 12 meses, por cantidad o pipeline; "ganados" = de los creados ese mes, los que hoy están ganados */
+  const [mRange, setMRange] = useState<6 | 12>(6);
+  const [mMetric, setMMetric] = useState<"leads" | "pipeline">("leads");
+  const [mHover, setMHover] = useState<string | null>(null);
   const monthly = useMemo(() => {
     const base = new Date();
-    const months = Array.from({ length: 6 }, (_, i) => {
-      const d = new Date(base.getFullYear(), base.getMonth() - (5 - i), 1);
-      return { key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`, label: d.toLocaleDateString("es-CO", { month: "short" }).replace(".", ""), created: 0, won: 0 };
+    const months = Array.from({ length: mRange }, (_, i) => {
+      const d = new Date(base.getFullYear(), base.getMonth() - (mRange - 1 - i), 1);
+      const mon = d.toLocaleDateString("es-CO", { month: "short" }).replace(".", "");
+      return {
+        key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`,
+        label: mRange === 12 && (i === 0 || d.getMonth() === 0) ? `${mon} ${String(d.getFullYear()).slice(2)}` : mon,
+        full: d.toLocaleDateString("es-CO", { month: "long", year: "numeric" }),
+        created: [] as Lead[],
+        won: [] as Lead[],
+      };
     });
     for (const l of filtered) {
       const m = months.find((x) => x.key === l.fechaCreacion.substring(0, 7));
       if (!m) continue;
-      m.created++;
-      if (l.ganado === "Ganado") m.won++;
+      m.created.push(l);
+      if (l.ganado === "Ganado") m.won.push(l);
     }
     return months;
-  }, [filtered]);
-  const maxMonth = Math.max(1, ...monthly.map((m) => m.created));
+  }, [filtered, mRange]);
+  // pipeline: SAS (COP) e Internacional (USD) no se suman; las barras usan una sola moneda (COP, o USD si se filtra Internacional)
+  const barUSD = fCompania !== "ALL" && compKey({ compania: fCompania } as Lead) === "INT";
+  const sumRev = (arr: Lead[], k: CompKey) => arr.filter((l) => compKey(l) === k).reduce((s, l) => s + l.ingresosEsperados, 0);
+  const barVal = (arr: Lead[]) => (mMetric === "leads" ? arr.length : sumRev(arr, barUSD ? "INT" : "SAS"));
+  const fmtBar = (v: number) => (mMetric === "leads" ? String(v) : barUSD ? fmtUSD(v) : fmtCOP(v));
+  const maxMonth = Math.max(1, ...monthly.flatMap((m) => [barVal(m.created), barVal(m.won)]));
+  const stackMonth = mMetric === "leads" && fCompania === "ALL";   // barra de creados apilada por compañía
+  const monthLines = (arr: Lead[]) => fCompania !== "ALL" ? [] : [
+    { label: "GROW DATA", value: mMetric === "leads" ? String(arr.filter((l) => compKey(l) === "SAS").length) : fmtCOP(sumRev(arr, "SAS")) },
+    { label: "GD INTL", value: mMetric === "leads" ? String(arr.filter((l) => compKey(l) === "INT").length) : fmtUSD(sumRev(arr, "INT")) },
+  ];
 
   /* cola de gestión */
   const queues: Record<QueueKey, { label: string; items: Lead[]; hint: (l: Lead) => string }> = {
@@ -686,24 +706,91 @@ export default function PresalesView({
             </Card>
 
             {/* leads por mes */}
-            <Card title="Ingreso mensual" className="xl:col-span-2"
-              right={<span className="text-[10px] text-slate-500">Últimos 6 meses</span>}>
-              <div className="flex items-end gap-2 h-36">
-                {monthly.map((m) => (
-                  <div key={m.key} className="flex-1 flex flex-col items-center justify-end gap-1 h-full min-w-0">
-                    <span className="text-[10px] text-slate-400 tabular-nums">{m.created || ""}</span>
-                    <div className="w-full flex-1 flex items-end">
-                      <div className="w-full rounded-t-md bg-blue-500/70 relative overflow-hidden" style={{ height: `${(m.created / maxMonth) * 100}%`, minHeight: m.created ? 4 : 0 }}>
-                        {m.won > 0 && <div className="absolute bottom-0 inset-x-0 bg-emerald-400" style={{ height: `${(m.won / m.created) * 100}%` }} />}
-                      </div>
-                    </div>
-                    <span className="text-[10px] text-slate-500 capitalize">{m.label}</span>
-                  </div>
-                ))}
+            <Card title={mMetric === "leads" ? "Leads por mes" : "Pipeline por mes"} className="xl:col-span-2">
+              <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
+                <div className="flex gap-1">
+                  {([["leads", "Leads"], ["pipeline", "Pipeline"]] as const).map(([k, label]) => (
+                    <button key={k} type="button" onClick={() => setMMetric(k)} data-active={mMetric === k}
+                      className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">{label}</button>
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  {([6, 12] as const).map((n) => (
+                    <button key={n} type="button" onClick={() => setMRange(n)} data-active={mRange === n}
+                      className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">{n} meses</button>
+                  ))}
+                </div>
               </div>
-              <div className="flex items-center gap-3 mt-3 text-[10px] text-slate-500">
-                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-blue-500/70" /> Creados</span>
-                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-emerald-400" /> Ganados</span>
+
+              <div className="flex items-stretch gap-1 h-40">
+                {monthly.map((m, i) => {
+                  const c = barVal(m.created), w = barVal(m.won);
+                  const tipPos = i < 2 ? "left-0" : i > monthly.length - 3 ? "right-0" : "left-1/2 -translate-x-1/2";
+                  const sasShare = stackMonth && c > 0 ? (m.created.filter((l) => compKey(l) === "SAS").length / c) * 100 : 100;
+                  return (
+                    <div key={m.key}
+                      className="bar-col relative flex-1 min-w-0 flex flex-col rounded-md px-0.5"
+                      onMouseEnter={() => setMHover(m.key)} onMouseLeave={() => setMHover(null)}>
+                      {mHover === m.key && (
+                        <div className={`chart-tip absolute top-1 z-20 ${tipPos} rounded-lg px-3 py-2 text-[11px] whitespace-nowrap pointer-events-none`}>
+                          <p className="font-semibold text-slate-100 capitalize mb-1">{m.full}</p>
+                          {([["Creados", m.created, "bg-blue-400"], ["Ganados", m.won, "bg-emerald-400"]] as const).map(([lbl, arr, color]) => (
+                            <div key={lbl} className="mb-0.5">
+                              <div className="flex items-center justify-between gap-4">
+                                <span className="flex items-center gap-1.5 text-slate-400"><i className={`w-2 h-2 rounded-sm ${color}`} />{lbl}</span>
+                                <span className="text-slate-100 tabular-nums font-medium">{mMetric === "leads" ? arr.length : fmtBar(barVal(arr))}</span>
+                              </div>
+                              {monthLines(arr).map((ln) => (
+                                <div key={ln.label} className="flex items-center justify-between gap-4 pl-3.5 text-slate-400">
+                                  <span>{ln.label}</span><span className="tabular-nums text-slate-300">{ln.value}</span>
+                                </div>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <div className="h-4 text-center text-[10px] text-slate-400 tabular-nums leading-4">
+                        {mMetric === "leads" && mRange === 6 && c ? c : ""}
+                      </div>
+                      <div className="flex-1 flex items-end gap-0.5 min-h-0">
+                        <button type="button" disabled={m.created.length === 0}
+                          onClick={() => setListModal({ leads: m.created, heading: m.full, suffix: " creados ese mes" })}
+                          title={`Ver los creados en ${m.full}`}
+                          className="flex-1 h-full flex items-end disabled:cursor-default">
+                          <div className="w-full rounded-t-md overflow-hidden flex flex-col-reverse"
+                            style={{ height: `${(c / maxMonth) * 100}%`, minHeight: c ? 4 : 0 }}>
+                            {stackMonth ? (
+                              <>
+                                <div className="bg-blue-400" style={{ height: `${sasShare}%` }} />
+                                <div className="bg-teal-400" style={{ height: `${100 - sasShare}%` }} />
+                              </>
+                            ) : <div className="bg-blue-400 h-full" />}
+                          </div>
+                        </button>
+                        <button type="button" disabled={m.won.length === 0}
+                          onClick={() => setListModal({ leads: m.won, heading: m.full, suffix: " ganados, creados ese mes" })}
+                          title={`Ver los ganados creados en ${m.full}`}
+                          className="flex-1 h-full flex items-end disabled:cursor-default">
+                          <div className="w-full rounded-t-md bg-emerald-400" style={{ height: `${(w / maxMonth) * 100}%`, minHeight: w ? 4 : 0 }} />
+                        </button>
+                      </div>
+                      <span className="mt-1 text-center text-[10px] text-slate-500 capitalize truncate">{m.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-3 text-[10px] text-slate-500">
+                {stackMonth ? (
+                  <>
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-blue-400" /> GROW DATA</span>
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-teal-400" /> GD INTL</span>
+                  </>
+                ) : (
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-blue-400" /> Creados</span>
+                )}
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-sm bg-emerald-400" /> Ganados (de los creados ese mes)</span>
+                {mMetric === "pipeline" && <span>· {barUSD ? "en USD" : "en COP (GROW DATA)"}</span>}
               </div>
             </Card>
           </div>

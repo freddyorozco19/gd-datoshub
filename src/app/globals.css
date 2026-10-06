@@ -215,6 +215,22 @@ body {
 .light .dashboard-shell .pill-option[data-active="true"] { background-color: rgba(37, 99, 235, 0.14); border-color: rgba(37, 99, 235, 0.5); color: #1d4ed8; }
 .light .dashboard-shell .pill-option[data-active="true"]:hover { background-color: rgba(37, 99, 235, 0.24); border-color: rgba(37, 99, 235, 0.7); color: #1e40af; }
 
+/* ── Gráfico de barras de Presales (Leads por mes): columna con hover y tooltip, por tema ── */
+.bar-col { transition: background-color 0.15s; }
+.bar-col:hover { background-color: rgba(255, 255, 255, 0.07); }
+.light .dashboard-shell .bar-col:hover { background-color: rgba(15, 23, 42, 0.06); }
+
+.chart-tip {
+  background: rgba(15, 18, 32, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.light .dashboard-shell .chart-tip {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(15, 23, 42, 0.14);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+}
+
 /* ── Slider de rango doble (Desde/Hasta fusionados) ─────────────────────────
    Dos <input type="range"> superpuestos; el track es invisible/no interactivo
    y solo el thumb captura eventos, permitiendo arrastrar cada uno por separado.
