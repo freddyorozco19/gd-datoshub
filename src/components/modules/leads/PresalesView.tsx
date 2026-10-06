@@ -53,8 +53,8 @@ const fmtUSD = (v: number) => {
 };
 // conteo por compañía de un conjunto de leads, en formato de desglose para las tarjetas
 const splitBy = (arr: Lead[], fmt: (l: Lead[]) => string = (l) => String(l.length)) => [
-  { label: "GROW DATA", color: "bg-blue-400", value: fmt(arr.filter((l) => compKey(l) === "SAS")) },
-  { label: "GD INTERNATIONAL", color: "bg-teal-400", value: fmt(arr.filter((l) => compKey(l) === "INT")) },
+  { label: "GROW DATA", short: "GROW DATA", color: "bg-blue-400", value: fmt(arr.filter((l) => compKey(l) === "SAS")) },
+  { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmt(arr.filter((l) => compKey(l) === "INT")) },
 ];
 
 const CARD = "relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden";
@@ -72,10 +72,10 @@ function Card({ title, right, children, className = "" }: { title: string; right
   );
 }
 
-function Kpi({ label, value, onClick, split }: { label: string; value: string; onClick?: () => void; split?: { label: string; value: string; color: string }[] }) {
+function Kpi({ label, value, onClick, split }: { label: string; value: string; onClick?: () => void; split?: { label: string; short?: string; value: string; color: string }[] }) {
   return (
     <div
-      className={`${CARD} p-4 ${onClick ? "cursor-pointer hover:bg-white/[0.05] transition-colors" : ""}`}
+      className={`${CARD} @container/k p-4 ${onClick ? "cursor-pointer hover:bg-white/[0.05] transition-colors" : ""}`}
       {...(onClick ? {
         role: "button", tabIndex: 0, onClick,
         onKeyDown: (e: React.KeyboardEvent) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } },
@@ -83,13 +83,21 @@ function Kpi({ label, value, onClick, split }: { label: string; value: string; o
     >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
       <div className="relative">
-        <p className="text-xs font-semibold text-slate-300 uppercase tracking-[0.06em] leading-tight">{label}</p>
-        <p className="text-2xl font-bold text-slate-100 mt-2 tabular-nums leading-none whitespace-nowrap">{value}</p>
+        <p className="text-xs font-semibold text-slate-300 uppercase tracking-[0.06em] leading-tight whitespace-nowrap truncate" title={label}>{label}</p>
+        <p className="text-xl @[200px]/k:text-2xl font-bold text-slate-100 mt-2 tabular-nums leading-none whitespace-nowrap">{value}</p>
         {split && (
           <div className="mt-2.5 pt-2 border-t border-white/[0.08] space-y-1">
             {split.map((s) => (
               <div key={s.label} className="flex items-center justify-between gap-2 text-[11px]">
-                <span className="flex items-center gap-1.5 text-slate-500"><i className={`w-2 h-2 rounded-sm ${s.color}`} />{s.label}</span>
+                <span className="flex items-center gap-1.5 text-slate-500 whitespace-nowrap min-w-0">
+                  <i className={`w-2 h-2 rounded-sm shrink-0 ${s.color}`} />
+                  {s.short && s.short !== s.label ? (
+                    <>
+                      <span className="@[210px]/k:hidden" title={s.label}>{s.short}</span>
+                      <span className="hidden @[210px]/k:inline">{s.label}</span>
+                    </>
+                  ) : s.label}
+                </span>
                 <span className="text-slate-300 tabular-nums whitespace-nowrap">{s.value}</span>
               </div>
             ))}
@@ -551,7 +559,8 @@ export default function PresalesView({
       ) : (
         <>
           {/* KPIs */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+          <div className="@container">
+            <div className="grid grid-cols-2 @[640px]:grid-cols-4 @[1400px]:grid-cols-7 gap-3">
             <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)}
               split={showSplit ? splitBy(enEtapaPreventa) : undefined}
               onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa", chips: true })} />
@@ -560,8 +569,8 @@ export default function PresalesView({
               onClick={() => setListModal({ leads: abiertosLeads, heading: "Preventa abierta" })} />
             <Kpi label="Pipeline abierto" value={fmtPipeline}
               split={showSplit ? [
-                { label: "GROW DATA", color: "bg-blue-400", value: fmtCOP(pipelineCOP) },
-                { label: "GD INTERNATIONAL", color: "bg-teal-400", value: fmtUSD(pipelineUSD) },
+                { label: "GROW DATA", short: "GROW DATA", color: "bg-blue-400", value: fmtCOP(pipelineCOP) },
+                { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmtUSD(pipelineUSD) },
               ] : undefined} />
             <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`}
               split={showSplit ? splitBy([], () => "").map((s, i) => {
@@ -576,6 +585,7 @@ export default function PresalesView({
               split={showSplit ? splitBy(stats.stale) : undefined} />
             <Kpi label="Cierre próximo"  value={String(stats.soon.length)}
               split={showSplit ? splitBy(stats.soon) : undefined} />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
