@@ -1,0 +1,254 @@
+{
+  "examTitle": "OGEA-10B: TOGAF Enterprise Architecture Bridge",
+  "totalQuestions": 13,
+  "scrapedAt": "2026-10-06T15:29:51.577Z",
+  "questions": [
+    {
+      "number": "1",
+      "questionType": "mc",
+      "questionText": "Complete the following statement. ______________ own the architecture and the value preferences and priorities that the architecture is expected to enable. _____________ must fully submerge their preferences, biases, and priorities. Please select the best answer.",
+      "translation": "",
+      "options": [
+        "A. Stakeholders ‒ EA Practitioners",
+        "B. EA Practitioners ‒ Implementors",
+        "C. CxOs ‒ Stakeholders",
+        "D. Architecture Teams ‒ Product Managers"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Stakeholders own the desired business value, including the preferences and priorities that the architecture must enable. EA practitioners serve the stakeholders’ objectives and must remain impartial, setting aside personal preferences, biases, and priorities.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "2",
+      "questionType": "mc",
+      "questionText": "Consider the following statements: During implementation, stakeholders use Enterprise Architecture to govern change. The first part of governance is to direct change activity—aligning the change with the optimal path to realizing the expected value. In this context, what is the second part of governance?",
+      "translation": "",
+      "options": [
+        "A. The second part of governance is improvement.",
+        "B. The second part of governance is ensuring the change stays on the optimal path.",
+        "C. The second part of governance is realization.",
+        "D. The second part of governance is covered by Architecture change management."
+      ],
+      "correctAnswer": "B",
+      "explanation": "The second governance function is to control change activity, ensuring that the change remains on the optimal path for realizing the expected value.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "3",
+      "questionType": "mc",
+      "questionText": "Which of the following identifies information required for the Architecture Vision phase?",
+      "translation": "",
+      "options": [
+        "A. How does the current Enterprise fail to meet the preferences of the stakeholders.",
+        "B. Gaps between approved target, or preference, and realization from prior work.",
+        "C. Resources available to undertake the change.",
+        "D. The scope of the problem being addressed."
+      ],
+      "correctAnswer": "D",
+      "explanation": "The Architecture Vision establishes the high-level intent and boundaries of an architecture initiative. Defining the scope of the problem being addressed is necessary to set those boundaries and align the vision with the intended change.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "4",
+      "questionType": "mc",
+      "questionText": "Refer to the scenario. You have been asked how you would address the incompatibilities among key stakeholder preferences. Based on the TOGAF Standard, which of the following is the best answer?",
+      "translation": "",
+      "options": [
+        "A. You would seek to understand value preferences and priorities of the stakeholders. You would develop alternative Target Architectures, highlighting the gaps between current state and the alternatives. You would consider combining features from one or more alternatives in collaboration with the stakeholders. A formal stakeholder review should then be held to decide which alternative is fit for purpose and should be moved forward with. You will then secure the funding required.",
+        "B. You would use the Architecture Vision, Principles, and Requirements to define a set of criteria for alternatives and create a set of architecture views to illustrate the impact of the alternative Target Architectures. You would identify the impact on planned projects. You would understand the strengths and weaknesses of the alternatives. You would conduct a formal stakeholder review to decide which alternative to move forward with. You will determine the funding required.",
+        "C. You recommend that since the CEO has stated that the company must pivot, it is better to compromise on a full product range rather than time-to-market. You would develop just enough of the Target Architecture to demonstrate fitness of the proposed approach. You would limit the description to just where there is a gap between the current baseline. You would seek approval by the stakeholders to move forward with developing the Target Architecture in detail.",
+        "D. You would review the Stakeholder Map and ensure that you have addressed and represented the concerns of all department heads. You will involve them in resolving the incompatibilities. The Communications Plan should include a report that summarizes the key features of the architecture with and how incompatibilities were resolved to reflects the stakeholders' requirements. You will check with each key stakeholder they are satisfied with how the incompatibilities have been resolved."
+      ],
+      "correctAnswer": "B",
+      "explanation": "TOGAF trade-off analysis evaluates alternative Target Architectures using criteria based on the agreed Architecture Vision, Architecture Principles, and requirements. Architecture views communicate each alternative’s impacts, including effects on planned projects; their strengths and weaknesses are assessed before a formal stakeholder review selects the alternative to proceed with and its funding is determined.",
+      "learnMore": [
+        "The TOGAF Standard — ADM Techniques: Trade-Off Analysis"
+      ],
+      "images": []
+    },
+    {
+      "number": "5",
+      "questionType": "mc",
+      "questionText": "In which DPBoK Standard context is Enterprise Architecture responsible for “Supporting the project to ensure effective and efficient delivery”?",
+      "translation": "",
+      "options": [
+        "A. Individual/Founder",
+        "B. Team",
+        "C. Enduring Enterprise",
+        "D. Team of Teams"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Enterprise Architecture supports effective, efficient project delivery in the Team context, where a cohesive team has a single mission and requires enough structure to coordinate its work and deliver its product.",
+      "learnMore": [
+        {
+          "text": "Digital Practitioner Body of Knowledge™ Community Edition",
+          "url": "https://theopengroup.gitlab.io/dpbok-community-edition/html/DPBoK-CE.html"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "6",
+      "questionType": "mc",
+      "questionText": "In which DPBoK Standard context is Enterprise Architecture responsible for “Supporting the project to ensure effective and efficient delivery”?",
+      "translation": "",
+      "options": [
+        "A. Individual/Founder",
+        "B. Team",
+        "C. Enduring Enterprise",
+        "D. Team of Teams"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Enterprise Architecture supports effective, efficient project delivery in the Team context, where a cohesive team has a single mission and requires enough structure to coordinate its work and deliver its product.",
+      "learnMore": [
+        {
+          "text": "Digital Practitioner Body of Knowledge™ Community Edition",
+          "url": "https://theopengroup.gitlab.io/dpbok-community-edition/html/DPBoK-CE.html"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "7",
+      "questionType": "mc",
+      "questionText": "Complete the sentence. The four organizational-evolution contexts toward a Digital enterprise, as identified by the DPBoK Standard, are: ________________________",
+      "translation": "",
+      "options": [
+        "A. Product, Work, Execution, Delivery",
+        "B. Project, Portfolio, Strategy, Solution",
+        "C. Individual/Founder, Team, Team of Teams, Enduring Enterprise",
+        "D. Startup, Team, Chapter, Guild"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The DPBoK Standard organizes organizational evolution into four contexts: Individual/Founder, Team, Team of Teams, and Enduring Enterprise. These represent increasing organizational scale and complexity.",
+      "learnMore": [
+        {
+          "text": "Digital Practitioner Body of Knowledge™ Community Edition",
+          "url": "https://theopengroup.gitlab.io/dpbok-community-edition/html/DPBoK-CE.html"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "8",
+      "questionType": "mc",
+      "questionText": "Complete the sentence. The four organizational-evolution contexts toward a Digital enterprise, as identified by the DPBoK Standard, are: ________________________",
+      "translation": "",
+      "options": [
+        "A. Product, Work, Execution, Delivery",
+        "B. Project, Portfolio, Strategy, Solution",
+        "C. Individual/Founder, Team, Team of Teams, Enduring Enterprise",
+        "D. Startup, Team, Chapter, Guild"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The DPBoK Standard organizes organizational evolution into four contexts: Individual/Founder, Team, Team of Teams, and Enduring Enterprise. These represent increasing organizational scale and complexity.",
+      "learnMore": [
+        {
+          "text": "Digital Practitioner Body of Knowledge™ Community Edition",
+          "url": "https://theopengroup.gitlab.io/dpbok-community-edition/html/DPBoK-CE.html"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "9",
+      "questionType": "mc",
+      "questionText": "How do the TOGAF Fundamental Content documents differ from the TOGAF Series Guides?",
+      "translation": "",
+      "options": [
+        "A. The concepts in the TOGAF Fundamental Content are considered to be universally applicable, whereas not all the TOGAF Series Guides are relevant in every situation.",
+        "B. The TOGAF Fundamental Content describes how Enterprise Architecture as a practice can be applied to the digital enterprise, whereas the TOGAF Series Guides address multiple use-cases.",
+        "C. The TOGAF Fundamental Content material must always be used in its entirety, whereas individual TOGAF Series Guides can be used as applicable.",
+        "D. The TOGAF Fundamental Content material is expected to expand to cover new needs more rapidly than the TOGAF Series Guides."
+      ],
+      "correctAnswer": "A",
+      "explanation": "TOGAF Fundamental Content establishes the universally applicable concepts of the TOGAF Standard. TOGAF Series Guides provide detailed guidance for using the framework in particular contexts, so individual guides are applicable only when their subject matter is relevant.",
+      "learnMore": [
+        {
+          "text": "TOGAF® Standards",
+          "url": "https://publications.opengroup.org/standards/togaf"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "10",
+      "questionType": "mc",
+      "questionText": "How do the TOGAF Fundamental Content documents differ from the TOGAF Series Guides?",
+      "translation": "",
+      "options": [
+        "A. The concepts in the TOGAF Fundamental Content are considered to be universally applicable, whereas not all the TOGAF Series Guides are relevant in every situation.",
+        "B. The TOGAF Fundamental Content describes how Enterprise Architecture as a practice can be applied to the digital enterprise, whereas the TOGAF Series Guides address multiple use-cases.",
+        "C. The TOGAF Fundamental Content material must always be used in its entirety, whereas individual TOGAF Series Guides can be used as applicable.",
+        "D. The TOGAF Fundamental Content material is expected to expand to cover new needs more rapidly than the TOGAF Series Guides."
+      ],
+      "correctAnswer": "A",
+      "explanation": "TOGAF Fundamental Content establishes the universally applicable concepts of the TOGAF Standard. TOGAF Series Guides provide detailed guidance for using the framework in particular contexts, so individual guides are applicable only when their subject matter is relevant.",
+      "learnMore": [
+        {
+          "text": "TOGAF® Standards",
+          "url": "https://publications.opengroup.org/standards/togaf"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "11",
+      "questionType": "mc",
+      "questionText": "Complete the following statement. While managing several architecture states, the Enterprise Architect must track transition states across two characteristics: Time and a conformance test. The Architect must also, to the extent possible, _____________.",
+      "translation": "",
+      "options": [
+        "A. minimize transition states",
+        "B. document begin and target states",
+        "C. maximize agility",
+        "D. reduce the budget"
+      ],
+      "correctAnswer": "A",
+      "explanation": "TOGAF guidance recommends minimizing transition states where possible, because each intermediate architecture state adds complexity to planning, implementation, and governance.",
+      "learnMore": [
+        {
+          "text": "The TOGAF Standard",
+          "url": "https://www.opengroup.org/togaf"
+        }
+      ],
+      "images": []
+    },
+    {
+      "number": "12",
+      "questionType": "mc",
+      "questionText": "Complete the sentence below: Presenting different __________ and __________ to stakeholders helps architects uncover hidden agendas, principles, and requirements that may affect the final Target Architecture.",
+      "translation": "",
+      "options": [
+        "A. Architecture Views, Architecture Viewpoints",
+        "B. Business Scenarios, Business Models",
+        "C. Alternatives, Trade-offs",
+        "D. Solutions, Applications"
+      ],
+      "correctAnswer": "A",
+      "explanation": "TOGAF architecture development uses alternatives and trade-offs to compare multiple Target Architecture options and expose stakeholder concerns, including unstated agendas, principles, and requirements that could affect the selected Target Architecture.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "13",
+      "questionType": "mc",
+      "questionText": "Consider the following table: What is missing for this information to be used as a Service Delivery Model?",
+      "translation": "",
+      "options": [
+        "A. Service categories",
+        "B. Input",
+        "C. ADM activities",
+        "D. ADM phases"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A Service Delivery Model organizes enterprise architecture services into service categories. The listed fields describe who receives and provides a service, its deliverables, and intended outcome, but they do not classify the services into the categories that structure the model.",
+      "learnMore": [
+        "The TOGAF Standard, 10th Edition — Introduction and Core Concepts"
+      ],
+      "images": []
+    }
+  ]
+}

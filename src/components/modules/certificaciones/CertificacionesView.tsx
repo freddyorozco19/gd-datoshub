@@ -133,6 +133,16 @@ const PROVIDERS: ProviderConfig[] = [
     ],
   },
   {
+    id: 'the-open-group',
+    name: 'The Open Group',
+    color: '#00A9CE',
+    bgGradient: 'from-cyan-950 to-slate-900',
+    logo: '△',
+    exams: [
+      { id: 'ogea-10b', code: 'OGEA-10B', name: 'TOGAF Enterprise Architecture Bridge', dataFile: '/data/exam_ogea10b.json', questions: 13, level: 'Professional' },
+    ],
+  },
+  {
     id: 'fortinet',
     name: 'Fortinet',
     color: '#EE3124',
