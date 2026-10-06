@@ -444,7 +444,7 @@ export default function PresalesView({
   const renderCargaTable = (big: boolean) => cargaRows.length === 0 ? (
     <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
   ) : (
-    <div className="overflow-x-auto">
+    <div className={big ? "overflow-x-auto" : "overflow-auto flex-1 min-h-0"}>
       <table className={`w-full ${big ? "text-sm" : "text-xs"}`}>
         <thead>
           <tr className="text-[10px] uppercase tracking-wide text-slate-500">
@@ -608,9 +608,9 @@ export default function PresalesView({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 xl:grid-cols-5 gap-4 xl:h-[420px]">
             {/* carga por preventa */}
-            <Card title="Carga por preventa" className="xl:col-span-3"
+            <Card title="Carga por preventa" className="xl:col-span-3" fill
               right={
                 <div className="flex items-center gap-2">
                   {cargaPills}
@@ -623,7 +623,7 @@ export default function PresalesView({
               {renderCargaTable(false)}
             </Card>
 
-            <div className="xl:col-span-2 flex flex-col gap-4">
+            <div className="xl:col-span-2 flex flex-col gap-4 min-h-0">
             {/* embudo por etapa */}
             <Card title="Leads en estado de preventa" className="flex-1" fill
               right={
@@ -641,18 +641,16 @@ export default function PresalesView({
               {byEtapa.length === 0 ? (
                 <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
               ) : (
-                <div className="space-y-2.5">
+                <div className="flex-1 min-h-0 flex flex-col justify-between gap-1.5 xl:overflow-y-auto">
                   {byEtapa.map((r) => (
                     <button key={r.name} type="button"
                       onClick={() => setListModal({ leads: etapaScope.filter((l) => (l.etapaPreventa || "Sin etapa") === r.name), heading: r.name, suffix: " con ese Estado Preventa" })}
-                      className="w-full text-left group">
-                      <div className="flex items-baseline justify-between gap-2 text-xs mb-1">
-                        <span className="text-slate-200 font-medium truncate group-hover:text-white transition-colors" title={r.name}>{r.name}</span>
-                        <span className="shrink-0 text-slate-300 tabular-nums">{r.count}</span>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
+                      className="w-full text-left group flex items-center gap-3 text-xs">
+                      <span className="w-[8.5rem] shrink-0 text-slate-200 font-medium truncate group-hover:text-white transition-colors" title={r.name}>{r.name}</span>
+                      <div className="flex-1 h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
                         <div className="h-full rounded-full bg-blue-500" style={{ width: `${(r.count / maxEtapa) * 100}%` }} />
                       </div>
+                      <span className="w-8 shrink-0 text-right text-slate-300 tabular-nums">{r.count}</span>
                     </button>
                   ))}
                 </div>
@@ -668,7 +666,7 @@ export default function PresalesView({
                   ))}
                 </div>
               }>
-              <div className="flex items-stretch gap-1.5 flex-1 min-h-[10rem]">
+              <div className="flex items-stretch gap-1.5 flex-1 min-h-[9rem] xl:min-h-0">
                 {monthly.map((m, i) => {
                   const c = m.created.length, w = m.won.length;
                   const tipPos = i < 2 ? "left-0" : i > monthly.length - 3 ? "right-0" : "left-1/2 -translate-x-1/2";
@@ -695,7 +693,7 @@ export default function PresalesView({
                           ))}
                         </div>
                       )}
-                      <div className="h-5 text-center text-[11px] font-medium text-slate-300 tabular-nums leading-5">
+                      <div className="h-4 text-center text-[11px] font-medium text-slate-300 tabular-nums leading-4">
                         {mRange === 6 && c ? c : ""}
                       </div>
                       <div className="flex-1 flex items-end gap-0.5 min-h-0">
@@ -720,13 +718,13 @@ export default function PresalesView({
                           <div className="w-full rounded-t-md bg-emerald-400" style={{ height: `${(w / maxMonth) * 100}%`, minHeight: w ? 4 : 0 }} />
                         </button>
                       </div>
-                      <span className="mt-2 text-center text-[11px] text-slate-400 capitalize truncate">{m.label}</span>
+                      <span className="mt-1 text-center text-[11px] text-slate-400 capitalize truncate">{m.label}</span>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="shrink-0 flex items-center flex-wrap gap-x-4 gap-y-1.5 mt-4 pt-3 border-t border-white/[0.08] text-[11px] text-slate-400">
+              <div className="shrink-0 flex items-center flex-wrap gap-x-4 gap-y-1 mt-2 pt-2 border-t border-white/[0.08] text-[11px] text-slate-400">
                 {stackMonth ? (
                   <>
                     <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-blue-400" /> GROW DATA</span>
