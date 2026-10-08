@@ -1,7 +1,7 @@
 {
   "examTitle": "AWS Certified AI Practitioner",
-  "totalQuestions": 348,
-  "scrapedAt": "2026-10-08T21:32:30.885Z",
+  "totalQuestions": 358,
+  "scrapedAt": "2026-10-08T21:34:25.891Z",
   "questions": [
     {
       "number": "3",
@@ -6533,6 +6533,198 @@
       "learnMore": [
         "Block harmful words and conversations with content filters — Amazon Bedrock",
         "Block denied topics to help remove harmful content — Amazon Bedrock"
+      ],
+      "images": []
+    },
+    {
+      "number": "351",
+      "topic": "Guidelines for Responsible AI",
+      "questionType": "mc",
+      "questionText": "A company has deployed a large language model (LLM) solution using a pre-trained model. The company must ensure that the model’s responses are transparent and accurate. It wants to ground the model’s responses in factual information from the company’s authoritative data sources. Which technique should the company use to satisfy these requirements?",
+      "translation": "",
+      "options": [
+        "A. Prompt engineering",
+        "B. Reinforcement learning",
+        "C. Retrieval Augmented Generation (RAG)",
+        "D. Static knowledge base"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Retrieval Augmented Generation (RAG) retrieves relevant content from authoritative company data sources and includes that content in the LLM’s generation context. This produces responses grounded in current, domain-specific facts and can support source traceability and accuracy checking.",
+      "learnMore": [
+        "Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases",
+        "Understanding Retrieval Augmented Generation"
+      ],
+      "images": []
+    },
+    {
+      "number": "352",
+      "topic": "Fundamentals of AI and ML",
+      "questionType": "mc",
+      "questionText": "A healthcare company wants to develop a model that improves disease diagnostics by analyzing patient voices. The company has recorded hundreds of patient voices for this project. The company is currently filtering voice recordings based on duration and language. Which ML lifecycle phase describes the project’s current stage?",
+      "translation": "",
+      "options": [
+        "A. Data collection",
+        "B. Data preprocessing",
+        "C. Feature engineering",
+        "D. Model training"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Data preprocessing prepares collected raw data for modeling by cleaning, filtering, validating, and selecting appropriate records. Filtering voice recordings by duration and language is a preprocessing activity.",
+      "learnMore": [
+        "ML lifecycle: data processing (AWS)",
+        "Data preprocessing (AWS)"
+      ],
+      "images": []
+    },
+    {
+      "number": "353",
+      "topic": "Applications of Foundation Models",
+      "questionType": "mc",
+      "questionText": "A company wants to develop an AI application to help its employees check open customer claims, identify details for a specific claim, and access documents for a claim. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Use Agents for Amazon Bedrock with Amazon Fraud Detector to build the application.",
+        "B. Use Agents for Amazon Bedrock with Amazon Bedrock knowledge bases to build the application.",
+        "C. Use Amazon Personalize with Amazon Bedrock knowledge bases to build the application.",
+        "D. Use Amazon SageMaker to build the application by training a new ML model."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Agents for Amazon Bedrock combined with Amazon Bedrock knowledge bases provides the infrastructure to build conversational AI applications that can search, retrieve, and present claim information and documents. Agents handle natural language interaction with users, while knowledge bases store and retrieve claim data efficiently. Amazon Fraud Detector is for fraud detection, Amazon Personalize is for recommendations, and building a custom model with SageMaker is unnecessary and inefficient for this use case.",
+      "learnMore": [
+        "Automate tasks in your application using AI agents - Amazon Bedrock",
+        "Augment response generation for your agent with a knowledge base"
+      ],
+      "images": []
+    },
+    {
+      "number": "354",
+      "topic": "Fundamentals of AI and ML",
+      "questionType": "mc",
+      "questionText": "A company wants to build an ML model that detects abnormal patterns in sensor data. The company has no labeled training data. Which ML method meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Linear regression",
+        "B. Classification",
+        "C. Decision tree",
+        "D. Autoencoders"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Autoencoders support unsupervised anomaly detection by learning to reconstruct the prevalent normal sensor-data patterns. Observations that produce high reconstruction error can be treated as abnormal, so labeled anomaly examples are not required. Unsupervised methods are appropriate for anomaly-detection tasks involving unlabeled data.",
+      "learnMore": [
+        "Unsupervised Built-in SageMaker AI Algorithms",
+        "Types of Algorithms"
+      ],
+      "images": []
+    },
+    {
+      "number": "355",
+      "topic": "Guidelines for Responsible AI",
+      "questionType": "mc",
+      "questionText": "A company has policies for storing and deleting data. Which data-governance strategy is being described?",
+      "translation": "",
+      "options": [
+        "A. Data de-identification",
+        "B. Data quality standards",
+        "C. Data retention",
+        "D. Log storage"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Data retention establishes requirements for how long data must be kept and when it must be deleted or disposed of.",
+      "learnMore": [
+        "Data retention (Amazon Bedrock)"
+      ],
+      "images": []
+    },
+    {
+      "number": "356",
+      "topic": "Fundamentals of AI and ML",
+      "questionType": "mc",
+      "questionText": "A company built a deep learning model for object detection and deployed the model to production. Which AI process occurs when the model analyzes a new image to identify objects?",
+      "translation": "",
+      "options": [
+        "A. Training",
+        "B. Inference",
+        "C. Model deployment",
+        "D. Bias correction"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Inference is the process of using a trained model to make predictions on new, unseen data. When the deployed model analyzes a new image to identify objects, it is performing inference—applying learned patterns to generate predictions. Training builds the model; deployment puts it in production; bias correction adjusts model fairness after deployment.",
+      "learnMore": [
+        "Deploy models for inference (SageMaker AI)"
+      ],
+      "images": []
+    },
+    {
+      "number": "357",
+      "topic": "Fundamentals of GenAI",
+      "questionType": "mc",
+      "questionText": "Which statement accurately describes embeddings in generative AI?",
+      "translation": "",
+      "options": [
+        "A. Embeddings represent data as high-dimensional vectors that capture semantic relationships.",
+        "B. Embeddings is a technique that searches data to find the most helpful information to answer natural language questions.",
+        "C. Embeddings reduce the hardware requirements of a model by using a less precise data type for the weights and activations.",
+        "D. Embeddings provide the ability to store and retrieve data for generative AI applications."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Embeddings represent data as high-dimensional numerical vectors that capture semantic relationships, allowing related concepts or content to be close together in vector space.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "358",
+      "topic": "Guidelines for Responsible AI",
+      "questionType": "mc",
+      "questionText": "A company is developing a job-recommendation system using job-posting data and job-seeker user profiles. The system displays gender-based bias in job recommendations for user profiles that are otherwise equivalent. Which AWS responsible-AI best-practice principle should the company follow to resolve this issue?",
+      "translation": "",
+      "options": [
+        "A. Governance",
+        "B. Explainability",
+        "C. Controllability",
+        "D. Fairness"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Fairness addresses an AI system’s impact on different groups of stakeholders and requires detecting and mitigating biased outcomes, including gender-based differences for otherwise equivalent users.",
+      "learnMore": [
+        "Responsible AI - Generative AI Lens"
+      ],
+      "images": []
+    },
+    {
+      "number": "359",
+      "topic": "Security, Compliance, and Governance for AI Solutions",
+      "questionType": "mc",
+      "questionText": "A company uses the Generative AI Security Scoping Matrix to evaluate security responsibilities for its solutions. The company has identified four distinct solution scopes from the matrix. Which solution scope provides the company with the MOST ownership of security responsibilities?",
+      "translation": "",
+      "options": [
+        "A. Using a third-party enterprise application that has embedded generative AI features.",
+        "B. Building an application by using an existing third-party generative AI foundation model (FM).",
+        "C. Refining an existing third-party generative AI foundation model (FM) by fine-tuning the model by using data specific to the business.",
+        "D. Building and training a generative AI model from scratch by using specific data that a customer owns."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Building and training a generative AI model from scratch gives the company responsibility for securing the full model-development scope, including the customer-owned data and the training process. Higher-level consumption, application-building, and fine-tuning scopes leave more of the underlying model responsibilities with a third-party provider.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "360",
+      "topic": "Security, Compliance, and Governance for AI Solutions",
+      "questionType": "multi-answer",
+      "questionText": "A company plans to fine-tune a foundation model (FM) by using AWS services. The company must ensure that its data remains private, safe, and secure in the source AWS Region where the data is stored. Which combination of steps will satisfy these requirements in the MOST cost-effective way? Choose two",
+      "translation": "",
+      "options": [
+        "A. Host the model on premises by using AWS Outposts.",
+        "B. Use the Amazon Bedrock API.",
+        "C. Use AWS PrivateLink and a VPC.",
+        "D. Host the Amazon Bedrock API on premises.",
+        "E. Use Amazon CloudWatch logs and metrics."
+      ],
+      "correctAnswer": "BC",
+      "explanation": "Amazon Bedrock provides managed foundation-model fine-tuning, eliminating the cost and operational overhead of hosting model infrastructure. Configuring a VPC with AWS PrivateLink protects model-customization data and jobs by using private connectivity to Amazon Bedrock rather than public internet access.",
+      "learnMore": [
+        "Customize a model with fine-tuning in Amazon Bedrock",
+        "Protect your data using Amazon VPC and AWS PrivateLink"
       ],
       "images": []
     }
