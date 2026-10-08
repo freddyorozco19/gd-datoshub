@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Users, Shield, User as UserIcon, Loader2, AlertCircle, RefreshCw,
   History, Globe, Monitor, CheckCircle2, XCircle, UserPlus, X, Mail, Trash2, KeyRound,
@@ -60,22 +62,24 @@ const fmtDateTime = (s: string): string =>
 type Tab = "usuarios" | "trazabilidad";
 
 export default function UsuariosView() {
-  const [tab, setTab] = useState<Tab>("usuarios");
+  // la pestaña activa vive en la URL (/usuarios/cuentas, /usuarios/trazabilidad) para que sean enlaces reales
+  const pathname = usePathname();
+  const tab: Tab = pathname.endsWith("/trazabilidad") ? "trazabilidad" : "usuarios";
 
-  const tabItems: { id: Tab; label: string; icon: typeof Users }[] = [
-    { id: "usuarios",     label: "Usuarios",     icon: Users   },
-    { id: "trazabilidad", label: "Trazabilidad", icon: History },
+  const tabItems: { id: Tab; href: string; label: string; icon: typeof Users }[] = [
+    { id: "usuarios",     href: "/usuarios/cuentas",      label: "Usuarios",     icon: Users   },
+    { id: "trazabilidad", href: "/usuarios/trazabilidad", label: "Trazabilidad", icon: History },
   ];
 
   const topbarTabs = (
     <>
-      {tabItems.map(({ id, label, icon: Icon }) => {
+      {tabItems.map(({ id, href, label, icon: Icon }) => {
         const active = id === tab;
         return (
-          <button
+          <Link
             key={id}
-            onClick={() => setTab(id)}
-            className={`relative flex items-center gap-1.5 px-4 h-full text-xs font-medium transition-colors ${
+            href={href}
+            className={`relative flex items-center gap-1.5 px-4 h-full text-xs font-medium transition-colors hover:bg-white/[0.04] ${
               active
                 ? "text-blue-400"
                 : "text-slate-500 hover:text-slate-300"
@@ -91,7 +95,7 @@ export default function UsuariosView() {
                 boxShadow: active ? "0 0 8px rgba(96,165,250,0.6)" : "none",
               }}
             />
-          </button>
+          </Link>
         );
       })}
     </>

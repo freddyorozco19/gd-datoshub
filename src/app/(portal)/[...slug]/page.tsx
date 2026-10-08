@@ -312,6 +312,7 @@ export default function PortalPage() {
     VIEWS[pathname] ??
     (pathname.startsWith('/certificaciones/') ? CertificacionesView :
      pathname.startsWith('/leads/')           ? LeadsView :
+     pathname.startsWith('/usuarios/')        ? UsuariosView :
      DashboardView);
   return <View />;
 }
