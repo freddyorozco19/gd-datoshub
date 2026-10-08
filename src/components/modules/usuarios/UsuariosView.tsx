@@ -67,7 +67,7 @@ export default function UsuariosView() {
   const tab: Tab = pathname.endsWith("/trazabilidad") ? "trazabilidad" : "usuarios";
 
   const tabItems: { id: Tab; href: string; label: string; icon: typeof Users }[] = [
-    { id: "usuarios",     href: "/usuarios/cuentas",      label: "Usuarios",     icon: Users   },
+    { id: "usuarios",     href: "/usuarios/cuentas",      label: "Cuentas",      icon: Users   },
     { id: "trazabilidad", href: "/usuarios/trazabilidad", label: "Trazabilidad", icon: History },
   ];
 
