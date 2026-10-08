@@ -1,6 +1,6 @@
 {
   "examTitle": "OGEA-10B: TOGAF Enterprise Architecture Bridge",
-  "totalQuestions": 10,
+  "totalQuestions": 13,
   "scrapedAt": "2026-10-06T15:29:51.577Z",
   "questions": [
     {
@@ -91,6 +91,31 @@
       "images": []
     },
     {
+      "number": "6",
+      "questionType": "mc",
+      "questionText": "Consider the following diagram: Which of the following describes item 2?",
+      "translation": "",
+      "options": [
+        "A. The generally applicable approach to Enterprise Architecture.",
+        "B. Material describing how Enterprise Architecture as a practice can be applied to the digital enterprise, to improve a digital value proposition.",
+        "C. Guidance material that is expected to evolve more rapidly than the core content of the TOGAF Standard.",
+        "D. A portfolio of additional guidance material, known as the TOGAF Library, supporting the practical application of the standard."
+      ],
+      "correctAnswer": "D",
+      "explanation": "The TOGAF Library is a portfolio of supplementary guidance and reference material that supports the practical application of the TOGAF Standard. It includes resources such as guidelines, templates, patterns, white papers, and related material.",
+      "learnMore": [
+        "The TOGAF® Standard, a Standard of The Open Group"
+      ],
+      "images": [
+        {
+          "path": "/data/images/ogea10b/q6_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null
+        }
+      ]
+    },
+    {
       "number": "7",
       "questionType": "mc",
       "questionText": "Complete the sentence. The four organizational-evolution contexts toward a Digital enterprise, as identified by the DPBoK Standard, are: ________________________",
@@ -112,6 +137,22 @@
       "images": []
     },
     {
+      "number": "8",
+      "questionType": "mc",
+      "questionText": "Refer to the scenario. You have been asked to describe the risk and security considerations that you would include in the current phase of architecture development. Based on the TOGAF Standard, which of the following is the best answer?",
+      "translation": "",
+      "options": [
+        "A. You will focus on the relationship with the third parties required for the travel assistance systems and define a trust framework. This will describe the relationship with each party. Digital certificates are a key part of the framework and will be used to create trust between parties. You will monitor legal and regulatory changes across all the countries to keep the trust framework in compliance.",
+        "B. You will create a security domain model so that assets with the same level can be managed under one security policy. Since data is being shared across partners, you will establish a security federation to include them. This would include contractual arrangements, and a definition of the responsibility areas for the data exchanged, as well as security implications. You would undertake a risk assessment determining risks relevant to specific data assets.",
+        "C. You will perform a qualitative risk assessment for the data assets exchanged with partners. This will deliver a set of priorities, high to medium to low, based on identified threats, the likelihood of occurrence, and the impact if it did occur. Using the priorities, you would then develop a Business Risk Model which will detail the risk strategy including classifications to determine what mitigation is enough.",
+        "D. You will focus on data quality as it is a key factor in risk management. You will identify the datasets that need to be safeguarded. For each dataset, you will assign ownership and responsibility for the quality of data needs. A security classification will be defined and applied to each dataset. The dataset owner will then be able to authorize processes that are trusted for a certain activity on the dataset under certain circumstances."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Security domains allow assets with comparable security requirements to be governed by a common security policy. Where data is exchanged with external partners, a security federation defines the participating parties, contractual arrangements, responsibilities for exchanged data, and associated security implications. A risk assessment should identify risks relevant to the specific data assets, including the privacy-sensitive vehicle and journey data.",
+      "learnMore": [],
+      "images": []
+    },
+    {
       "number": "9",
       "questionType": "mc",
       "questionText": "How do the TOGAF Fundamental Content documents differ from the TOGAF Series Guides?",
@@ -130,6 +171,22 @@
           "url": "https://publications.opengroup.org/standards/togaf"
         }
       ],
+      "images": []
+    },
+    {
+      "number": "10",
+      "questionType": "mc",
+      "questionText": "Refer to the scenario. You have been asked to describe how you would initiate the architecture project. Based on the TOGAF Standard, which of the following is the best answer?",
+      "translation": "",
+      "options": [
+        "A. You would conduct a pilot project that will enable vendors to demonstrate potential off-the-shelf solutions that address the concerns of the stakeholders. Running a pilot project will save time and money later in the process. Based on the findings of that pilot project, a complete set of requirements can then be developed that will drive the evolution of the architecture. Once the requirements are completed, a formal stakeholder review should be held, and permission sought to proceed to develop the target architecture.",
+        "B. You would hold a series of interviews at each of the manufacturing plants using the business scenarios technique. This will allow you to understand the systems and integrations with local partners. You would use stakeholder analysis to identify key players in the engagement, and to understand their concerns. You will then identify and document the key high-level stakeholder requirements for the architecture. You will then generate high level definitions of the baseline and target architectures.",
+        "C. You would develop baseline and target Architectures for each of the manufacturing plants, ensuring that the views corresponding to selected viewpoints address key concerns of the stakeholders. A business case, together with performance metrics and measures should be defined to ensure the architecture meets the business needs. A consolidated gap analysis between the architectures will then validate the approach and determine the capability increments needed to achieve the target state.",
+        "D. You would research vendor literature and conduct a series of briefings with vendors that are on the current approved supplier list. Based on the findings from the research, you would define a preliminary Architecture Vision including summary views, high-level requirements, and high-level definitions of the baseline and target environments from a business, information systems, and technology perspective. You would then use that to build consensus among the key stakeholders."
+      ],
+      "correctAnswer": "B",
+      "explanation": "",
+      "learnMore": [],
       "images": []
     },
     {
