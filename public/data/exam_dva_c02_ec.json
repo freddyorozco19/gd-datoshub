@@ -1,7 +1,7 @@
 {
   "examTitle": "AWS Certified Developer - Associate",
-  "totalQuestions": 556,
-  "scrapedAt": "2026-10-09T20:41:38.433Z",
+  "totalQuestions": 557,
+  "scrapedAt": "2026-10-09T20:43:46.270Z",
   "questions": [
     {
       "number": "1",
@@ -40,6 +40,24 @@
         "What is Amazon Kinesis Data Streams?",
         "Kinesis Data Streams consumers"
       ],
+      "images": []
+    },
+    {
+      "number": "3",
+      "topic": "Deployment",
+      "questionType": "multi-answer",
+      "questionText": "A developer has created a large AWS Lambda function. Deployment of the function is failing because of an InvalidParameterValueException error. The error message indicates that the unzipped size of the function exceeds the maximum supported value. Which actions can the developer take to resolve this error? Choose two",
+      "translation": "",
+      "options": [
+        "A. Submit a quota increase request to AWS Support to increase the function to the required size.",
+        "B. Use a compression algorithm that is more efficient than ZIP.",
+        "C. Break up the function into multiple smaller functions.",
+        "D. Zip the .zip file twice to compress the file more.",
+        "E. Move common libraries, function dependencies, and custom runtimes into Lambda layers."
+      ],
+      "correctAnswer": "CE",
+      "explanation": "Lambda has a hard 250 MB unzipped size limit; quota increases cannot override this architectural constraint (A is invalid). Breaking functions into modules (C) reduces individual package sizes and aligns with microservices patterns. Moving dependencies and runtimes to Lambda layers (E) keeps deployment packages lightweight while sharing common libraries across functions. Double-zipping (D) offers no benefit since decompression still yields the same unzipped size.",
+      "learnMore": [],
       "images": []
     },
     {
