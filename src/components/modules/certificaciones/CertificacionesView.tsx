@@ -652,15 +652,6 @@ function QuestionCard({
           </div>
         </div>
 
-        {/* Fila 2: tags */}
-        <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-          {tags.slice(0, 4).map(tag => (
-            <TagChip key={tag.label} tag={tag} active={activeTag === tag.label} onClick={onTagClick} />
-          ))}
-          {tags.length > 4 && (
-            <span className="text-[10px] text-slate-600">+{tags.length - 4} más</span>
-          )}
-        </div>
       </button>
 
       {/* ── Contenido expandido ── */}
