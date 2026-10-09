@@ -1,7 +1,7 @@
 {
   "examTitle": "AWS Certified Developer - Associate",
-  "totalQuestions": 536,
-  "scrapedAt": "2026-10-09T20:05:05.058Z",
+  "totalQuestions": 552,
+  "scrapedAt": "2026-10-09T20:20:01.569Z",
   "questions": [
     {
       "number": "1",
@@ -325,14 +325,56 @@
     },
     {
       "number": "10",
-      "topic": "",
+      "topic": "Security",
       "questionType": "mc",
-      "questionText": "",
+      "questionText": "A company built a new application in the AWS Cloud. The company automated the bootstrapping of new resources with an Auto Scaling group by using AWS CloudFormation templates. The bootstrap scripts contain sensitive data. The company needs a solution that is integrated with CloudFormation to manage the sensitive data in the bootstrap scripts. Which solution will meet these requirements in the MOST secure way?",
       "translation": "",
-      "options": [],
-      "correctAnswer": "",
-      "explanation": "",
-      "learnMore": [],
+      "options": [
+        "A. Put the sensitive data into a CloudFormation parameter. Encrypt the CloudFormation templates by using an AWS Key Management Service (AWS KMS) key.",
+        "B. Put the sensitive data into an Amazon S3 bucket. Update the CloudFormation templates to download the object from Amazon S3 during bootstrap.",
+        "C. Put the sensitive data into AWS Systems Manager Parameter Store as a secure string parameter. Update the CloudFormation templates to use dynamic references to specify template values.",
+        "D. Put the sensitive data into Amazon Elastic File System (Amazon EFS). Enforce EFS encryption after file system creation. Update the CloudFormation templates to retrieve data from Amazon EFS."
+      ],
+      "correctAnswer": "C",
+      "explanation": "AWS Systems Manager Parameter Store with secure string parameters encrypts sensitive data using KMS, and CloudFormation dynamic references allow templates to retrieve the parameters without exposing secrets in the template. This integrates seamlessly with CloudFormation and is the most secure approach. CloudFormation parameters do not provide the same level of security, S3 storage exposes bootstrap data, and EFS is not designed for secret management.",
+      "learnMore": [
+        "Get a secure string value from Parameter Store (ssm-secure dynamic reference)"
+      ],
+      "images": []
+    },
+    {
+      "number": "10",
+      "topic": "Troubleshooting and Optimization",
+      "questionType": "mc",
+      "questionText": "An organization is storing large files in Amazon S3, and is writing a web application to display meta-data about the files to end-users. Based on the metadata a user selects an object to download. The organization needs a mechanism to index the files and provide single-digit millisecond latency retrieval for the metadata. What AWS service should be used to accomplish this?",
+      "translation": "",
+      "options": [
+        "A. Amazon DynamoDB",
+        "B. Amazon EC2",
+        "C. AWS Lambda",
+        "D. Amazon RDS",
+        "A. Add a listener rule to the listener to return a fixed response if the Authorization header is missing. Set the fixed response to 401 Unauthorized.",
+        "B. Create an authentication action for the listener rules of the ALSet the rule action type to authenticate-cognito. Set the OnUnauthenticatedRequest field to “deny.”",
+        "C. Create an Amazon API Gateway API. Configure all API methods to be forwarded to the ALB endpoint. Create an authorizer of the COGNITO_USER_POOLS type. Configure every API method to use that authorizer.",
+        "D. Create a new target group that includes an AWS Lambda function target that validates the Authorization header by using Amazon Cognito. Associate the target group with the listener.",
+        "A. Ensure that the deployment group is using the correct role name for the CodeDeploy service role.",
+        "B. Attach the AWSCodeDeployRoleECS policy to the CodeDeploy service role.",
+        "C. Attach the AWSCodeDeployRole policy to the CodeDeploy service role.",
+        "D. Ensure the CodeDeploy agent is installed and running on all instances in the deployment group.",
+        "A. Create an IAM role that has administrative access to AWS. Attach the role to the EC2 instance.",
+        "B. Create an IAM user. Attach the AdministratorAccess policy. Copy the generated access key and secret key. Within the application code, use the access key and secret key along with the AWS SDK to communicate with Amazon S3.",
+        "C. Create an IAM role that has the necessary access to Amazon S3. Attach the role to the EC2 instance.",
+        "D. Create an IAM user. Attach a policy that provides the necessary access to Amazon S3. Copy the generated access key and secret key. Within the application code, use the access key and secret key along with the AWS SDK to communicate with Amazon S3.",
+        "A. CloudFormation serverless intrinsic functions",
+        "B. AWS Elastic Beanstalk",
+        "C. AWS Serverless Application Model (AWS SAM)",
+        "D. AWS Cloud Development Kit (AWS CDK)"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Amazon DynamoDB provides consistent single-digit millisecond latency for data retrieval and scales seamlessly to support millions of requests. It is ideal for indexing file metadata and enabling fast lookups by users to locate and download specific S3 objects.",
+      "learnMore": [
+        "Understanding Amazon DynamoDB latency"
+      ],
       "images": []
     },
     {
@@ -6888,6 +6930,62 @@
       "images": []
     },
     {
+      "number": "336",
+      "topic": "Troubleshooting and Optimization",
+      "questionType": "mc",
+      "questionText": "An ecommerce company is using an AWS Lambda function behind Amazon API Gateway as its application tier. To process orders during checkout, the application calls a POST API from the frontend. The POST API invokes the Lambda function asynchronously. In rare situations, the application has not processed orders. The Lambda application logs show no errors or failures. What should a developer do to solve this problem?",
+      "translation": "",
+      "options": [
+        "A. Inspect the frontend logs for API failures. Call the POST API manually by using the requests from the log file.",
+        "B. Create and inspect the Lambda dead-letter queue. Troubleshoot the failed functions. Reprocess the events.",
+        "C. Inspect the Lambda logs in Amazon CloudWatch for possible errors. Fix the errors.",
+        "D. Make sure that caching is disabled for the POST API in API Gateway."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Because the checkout API invokes the function asynchronously, API Gateway hands the event to the Lambda service and returns immediately; if that asynchronous invocation is throttled or otherwise never executes, the function code never runs and nothing is written to its CloudWatch logs. Configuring a dead-letter queue captures these dropped events once Lambda's automatic retries are exhausted, letting the developer find and reprocess the missed orders. Inspecting frontend or Lambda logs (A, C) cannot reveal invocations that never ran, and API Gateway response caching (D) does not apply to POST requests. Learn more: Asynchronous invocation - AWS Lambda",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "337",
+      "topic": "Troubleshooting and Optimization",
+      "questionType": "mc",
+      "questionText": "A company provides APIs as an internet service for unauthenticated read access to statistical information that is updated daily. The company uses Amazon API Gateway and AWS Lambda to develop the APIs. The service has become popular, and the company wants to improve the APIs’ responsiveness. Which action can help the company accomplish this goal?",
+      "translation": "",
+      "options": [
+        "A. Enable API caching in API Gateway.",
+        "B. Configure API Gateway to use an interface VPC endpoint.",
+        "C. Enable cross-origin resource sharing (CORS) for the APIs.",
+        "D. Configure usage plans and API keys in API Gateway."
+      ],
+      "correctAnswer": "A",
+      "explanation": "API Gateway caching stores endpoint responses for a configured time-to-live and serves cache hits without calling the Lambda-backed endpoint. For frequently requested, read-only information that changes daily, this reduces backend requests and improves API request latency.",
+      "learnMore": [
+        "Cache settings for REST APIs in API Gateway",
+        "Optimize performance of REST APIs"
+      ],
+      "images": []
+    },
+    {
+      "number": "338",
+      "topic": "Development with AWS Services",
+      "questionType": "mc",
+      "questionText": "A developer is integrating Amazon ElastiCache in an application. The cache will store data from a database. The cached data must populate real-time dashboards. Which caching strategy will meet these requirements?",
+      "translation": "",
+      "options": [
+        "A. A read-through cache",
+        "B. A write-behind cache",
+        "C. A lazy-loading cache",
+        "D. A write-through cache"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A write-through cache immediately writes data to both cache and database simultaneously, ensuring the cache always contains the most recent data. For real-time dashboards requiring up-to-date information, this strategy prevents serving stale data that could occur with read-through or lazy-loading approaches.",
+      "learnMore": [
+        "Caching strategies (write-through) - ElastiCache"
+      ],
+      "images": []
+    },
+    {
       "number": "339",
       "topic": "Deployment",
       "questionType": "mc",
@@ -7921,6 +8019,232 @@
       "explanation": "AWS CodeDeploy's in-place deployment hooks execute in the documented order: ApplicationStop (stop existing services), BeforeInstall (prepare), AfterInstall (post-install tasks), and ApplicationStart (restart services). This sequence ensures services stop before installation to prevent corruption, then restart cleanly afterward.",
       "learnMore": [
         "AppSpec 'hooks' section - AWS CodeDeploy"
+      ],
+      "images": []
+    },
+    {
+      "number": "390",
+      "topic": "Security",
+      "questionType": "mc",
+      "questionText": "A company uses an AWS CloudFormation template to deploy and manage its AWS infrastructure. The CloudFormation template creates Amazon VPC security groups and Amazon EC2 security groups. A manager finds out that some engineers modified the security groups of a few EC2 instances for testing purposes. A developer needs to determine what modifications occurred. Which solution will meet this requirement?",
+      "translation": "",
+      "options": [
+        "A. Add a Conditions section statement in the source YAML file of the template. Run the CloudFormation stack.",
+        "B. Perform a drift detection operation on the CloudFormation stack.",
+        "C. Execute a change set for the CloudFormation stack.",
+        "D. Use Amazon Detective to detect the modifications."
+      ],
+      "correctAnswer": "B",
+      "explanation": "CloudFormation drift detection identifies resources that have been modified outside of CloudFormation management. Running a drift detection operation compares the current actual state of resources against their expected state defined in the CloudFormation template, revealing any manual changes made by engineers.",
+      "learnMore": [
+        "CloudFormation drift detection",
+        "Detect drift on a stack"
+      ],
+      "images": []
+    },
+    {
+      "number": "391",
+      "topic": "Troubleshooting and Optimization",
+      "questionType": "mc",
+      "questionText": "A developer is building an application that invokes AWS Lambda functions asynchronously to process events. The developer notices that a Lambda function fails to process some events at random times. The developer needs to investigate the failed events and capture the events that the Lambda function fails to process. Which solution will meet these requirements?",
+      "translation": "",
+      "options": [
+        "A. Add an Amazon EventBridge rule for the Lambda function. Configure the EventBridge rule to react to failed events and to store the events in an Amazon DynamoDB table.",
+        "B. Configure the Lambda function with a dead-letter queue based in Amazon Kinesis. Update the Lambda function's execution role with the required permissions.",
+        "C. Configure the Lambda function with an Amazon Simple Queue Service (Amazon SQS) dead-letter queue. Update the Lambda function's execution role with the required permissions.",
+        "D. Configure the Lambda function with an Amazon Simple Queue Service (Amazon SQS) FIFO dead-letter queue. Update the Lambda function's execution role with the required permissions."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Lambda dead-letter queues capture events that fail processing after retries, enabling diagnosis. Standard SQS queues are the established pattern for Lambda DLQs, offering simple storage and replay of failed messages. Kinesis (B) has no built-in DLQ construct; DynamoDB (A) adds unnecessary overhead; FIFO queues (D) add ordering constraints when simple capture is sufficient. AWS Lambda documentation explicitly recommends SQS standard queues for dead-letter handling.",
+      "learnMore": [
+        "Capturing records of Lambda asynchronous invocations (DLQ)"
+      ],
+      "images": []
+    },
+    {
+      "number": "392",
+      "topic": "Development with AWS Services",
+      "questionType": "mc",
+      "questionText": "A company has an application that runs on Amazon EC2 instances. The application needs to use dynamic feature flags that will be shared with other applications. The application must poll on an interval for new feature flag values. The values must be cached when they are retrieved. Which solution will meet these requirements in the MOST operationally efficient way?",
+      "translation": "",
+      "options": [
+        "A. Store the feature flag values in AWS Secrets Manager. Configure an Amazon ElastiCache node to cache the values by using a lazy loading strategy in the application. Update the application to poll for the values on an interval from ElastiCache.",
+        "B. Store the feature flag values in an Amazon DynamoDB table. Configure DynamoDB Accelerator (DAX) to cache the values by using a lazy loading strategy in the application. Update the application to poll for the values on an interval from DynamoDB.",
+        "C. Store the feature flag values in AWS AppConfig. Configure AWS AppConfig Agent on the EC2 instances to poll for the values on an interval. Update the application to retrieve the values from the AppConfig Agent localhost endpoint.",
+        "D. Store the feature flag values in AWS Systems Manager Parameter Store. Configure the application to poll on an interval. Configure the application to use the AWS SDK to retrieve the values from Parameter Store and to store the values in memory."
+      ],
+      "correctAnswer": "C",
+      "explanation": "AWS AppConfig with the AppConfig Agent on EC2 instances is purpose-built for managing application configuration and feature flags. The agent automatically polls for updates and caches values locally, while the application retrieves values from the localhost endpoint—requiring no application code changes for caching logic.",
+      "learnMore": [
+        "Using AWS AppConfig Agent with EC2",
+        "What is AWS AppConfig Agent?"
+      ],
+      "images": []
+    },
+    {
+      "number": "393",
+      "topic": "Deployment",
+      "questionType": "mc",
+      "questionText": "A developer is building a three-tier web application that should be able to handle a minimum of 5000 requests per minute. Requirements state that the web tier should be completely stateless while the application maintains session state for the users. How can session data be externalized, keeping latency at the LOWEST possible value?",
+      "translation": "",
+      "options": [
+        "A. Create an Amazon RDS instance, then implement session handling at the application level to leverage a database inside the RDS database instance for session data storage.",
+        "B. Implement a shared file system solution across the underlying Amazon EC2 instances, then implement session handling at the application level to leverage the shared file system for session data storage.",
+        "C. Create an Amazon ElastiCache (Memcached) cluster, then implement session handling at the application level to leverage the cluster for session data storage.",
+        "D. Create an Amazon DynamoDB table, then implement session handling at the application level to leverage the table for session data storage."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Amazon ElastiCache for Memcached provides an in-memory, distributed cache that can store session state outside the web tier with the lowest possible latency at high request volumes, letting the web tier remain stateless while sessions are shared across instances. Storing session data in RDS or DynamoDB introduces higher latency than an in-memory cache, and a shared file system adds complexity and is not built for high-throughput key-value session access.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "394",
+      "topic": "Troubleshooting and Optimization",
+      "questionType": "mc",
+      "questionText": "A developer is troubleshooting an application in an integration environment. In the application, an Amazon Simple Queue Service (Amazon SQS) queue consumes messages and then an AWS Lambda function processes the messages. The Lambda function transforms the messages and makes an API call to a third-party service. There has been an increase in application usage. The third-party API frequently returns an HTTP 429 Too Many Requests error message. The error message prevents a significant number of messages from being processed successfully. How can the developer resolve this issue?",
+      "translation": "",
+      "options": [
+        "A. Increase the SQS event source’s batch size setting.",
+        "B. Configure provisioned concurrency for the Lambda function based on the third-party API’s documented rate limits.",
+        "C. Increase the retry attempts and maximum event age in the Lambda function’s asynchronous configuration.",
+        "D. Configure maximum concurrency on the SQS event source based on the third-party service’s documented rate limits."
+      ],
+      "correctAnswer": "D",
+      "explanation": "AWS Lambda supports setting a maximum concurrency limit directly on an SQS event source mapping, which caps how many concurrent function invocations can be triggered from that queue. Configuring this limit to align with the third-party API's documented rate limit directly throttles the outbound call rate and prevents HTTP 429 responses. Provisioned concurrency (B) only guarantees a number of pre-initialized execution environments to reduce cold starts; it does not cap or throttle how many functions run concurrently, so it would not by itself prevent exceeding a third-party rate limit. Increasing batch size (A) or retries/max event age (C) do not reduce the rate of outbound API calls. Learn more: Maximum concurrency for Lambda functions with SQS event sources",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "395",
+      "topic": "Development with AWS Services",
+      "questionType": "mc",
+      "questionText": "A developer is writing an application, which stores data in an Amazon DynamoDB table. The developer wants to query the DynamoDB table by using the partition key and a different sort key value. The developer needs the latest data with all recent write operations. How should the developer write the DynamoDB query?",
+      "translation": "",
+      "options": [
+        "A. Add a local secondary index (LSI) during table creation. Query the LSI by using eventually consistent reads.",
+        "B. Add a local secondary index (LSI) during table creation. Query the LSI by using strongly consistent reads.",
+        "C. Add a global secondary index (GSI) during table creation. Query the GSI by using eventually consistent reads.",
+        "D. Add a global secondary index (GSI) during table creation. Query the GSI by using strongly consistent reads."
+      ],
+      "correctAnswer": "B",
+      "explanation": "A local secondary index shares the base table's partition key but allows an alternate sort key, which matches the requirement to query by the same partition key with a different sort key value. Only LSIs (and the base table) support strongly consistent reads; global secondary indexes only ever return eventually consistent results, so a GSI could never guarantee the latest writes are reflected. Learn more: Read consistency for DynamoDB",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "396",
+      "topic": "Deployment",
+      "questionType": "mc",
+      "questionText": "A developer built an application that calls an external API to obtain data, processes the data, and saves the result to Amazon S3. The developer built a container image with all of the necessary dependencies to run the application as a container. The application runs locally and requires minimal CPU and RAM resources. The developer has created an Amazon ECS cluster. The developer needs to run the application hourly in Amazon Elastic Container Service (Amazon ECS). Which solution will meet these requirements with the LEAST amount of infrastructure management overhead?",
+      "translation": "",
+      "options": [
+        "A. Add a capacity provider to manage instances.",
+        "B. Add an Amazon EC2 instance that runs the application.",
+        "C. Define a task definition with an AWS Fargate launch type.",
+        "D. Create an Amazon ECS cluster and add the managed node groups feature to run the application."
+      ],
+      "correctAnswer": "C",
+      "explanation": "AWS Fargate is the serverless container service that requires no infrastructure management, automatically provisioning and scaling resources. For hourly batch workloads with minimal resource requirements, Fargate eliminates operational overhead by removing EC2 instance management. Capacity providers (A) manage EC2; EC2 instances (B) require management; managed node groups (D) still require EC2 management.",
+      "learnMore": [
+        "Fargate launch type for Amazon ECS",
+        "Architect for AWS Fargate for Amazon ECS"
+      ],
+      "images": []
+    },
+    {
+      "number": "397",
+      "topic": "Development with AWS Services",
+      "questionType": "mc",
+      "questionText": "A company is building a serverless application that uses AWS Lambda functions. The company needs to create a set of test events to test Lambda functions in a development environment. The test events will be created once and then will be used by all the developers in an IAM developer group. The test events must be editable by any of the IAM users in the IAM developer group. Which solution will meet these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create and store the test events in Amazon S3 as JSON objects. Allow S3 bucket access to all IAM users.",
+        "B. Create the test events. Configure the event sharing settings to make the test events shareable.",
+        "C. Create and store the test events in Amazon DynamoDB. Allow access to DynamoDB by using IAM roles.",
+        "D. Create the test events. Configure the event sharing settings to make the test events private."
+      ],
+      "correctAnswer": "B",
+      "explanation": "AWS Lambda's native shareable test events feature allows developers to create test events once and configure them to be shareable with all IAM users in the same account. This is built directly into the Lambda console under the Test tab and is the simplest solution without external storage or permission systems.",
+      "learnMore": [
+        "Testing Lambda functions in the console"
+      ],
+      "images": []
+    },
+    {
+      "number": "398",
+      "topic": "Security",
+      "questionType": "mc",
+      "questionText": "A developer is creating an AWS Lambda function that will connect to an Amazon RDS for MySQL instance. The developer wants to store the database credentials. The database credentials need to be encrypted and the database password needs to be automatically rotated. Which solution will meet these requirements?",
+      "translation": "",
+      "options": [
+        "A. Store the database credentials as environment variables for the Lambda function. Set the environment variables to rotate automatically.",
+        "B. Store the database credentials in AWS Secrets Manager. Set up managed rotation on the database credentials.",
+        "C. Store the database credentials in AWS Systems Manager Parameter Store as secure string parameters. Set up managed rotation on the parameters.",
+        "D. Store the database credentials in the X-Amz-Security-Token parameter. Set up managed rotation on the parameter."
+      ],
+      "correctAnswer": "B",
+      "explanation": "AWS Secrets Manager is purpose-built for storing and rotating secrets, including automatic rotation of database credentials. It provides encryption at rest and encrypts secrets in transit, meeting both encryption and automatic rotation requirements.",
+      "learnMore": [
+        "Set up automatic rotation for Amazon RDS secrets",
+        "Managed rotation for AWS Secrets Manager secrets"
+      ],
+      "images": []
+    },
+    {
+      "number": "399",
+      "topic": "Deployment",
+      "questionType": "mc",
+      "questionText": "A developer needs to deploy the code for a new application on an AWS Lambda function. The application needs a dependency file that is 500 MB to run the business logic. Which solution will meet these requirements?",
+      "translation": "",
+      "options": [
+        "A. Compress the application code and dependencies into a .zip file. Directly upload the .zip file as a deployment package for the Lambda function instead of copying the code.",
+        "B. Compress the application code and dependencies into a .zip file. Upload the .zip file to an Amazon S3 bucket. Configure the Lambda function to run the code from the .zip file in the S3 bucket.",
+        "C. Package the application code and dependencies into a container image. Upload the image to an Amazon S3 bucket. Configure the Lambda function to run the code in the image.",
+        "D. Package the application code and dependencies into a container image. Push the image to an Amazon Elastic Container Registry (Amazon ECR) repository. Deploy the image to the Lambda function."
+      ],
+      "correctAnswer": "D",
+      "explanation": "AWS Lambda's deployment package size quota is 250 MB uncompressed (including layers), regardless of whether the .zip is uploaded directly or staged in S3, so a 500 MB dependency will not fit through the .zip deployment path at all. Packaging the code and dependency as a container image and deploying it via Amazon ECR supports images up to 10 GB, making it the only viable option. Learn more: Lambda quotas",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "400",
+      "topic": "Troubleshooting and Optimization",
+      "questionType": "mc",
+      "questionText": "A developer is creating an AWS Lambda function that consumes messages from an Amazon Simple Queue Service (Amazon SQS) standard queue. The developer notices that the Lambda function processes some messages multiple times. How should developer resolve this issue MOST cost-effectively?",
+      "translation": "",
+      "options": [
+        "A. Change the Amazon SQS standard queue to an Amazon SQS FIFO queue by using the Amazon SQS message deduplication ID.",
+        "B. Set up a dead-letter queue.",
+        "C. Set the maximum concurrency limit of the AWS Lambda function to 1.",
+        "D. Change the message processing to use Amazon Kinesis Data Streams instead of Amazon SQS."
+      ],
+      "correctAnswer": "A",
+      "explanation": "SQS FIFO queues with message deduplication prevent duplicate processing by deduplicating messages within a 5-minute window, providing the proper architectural solution. Dead-letter queues (B) capture failures but don't prevent reprocessing; maximum concurrency = 1 (C) prevents duplicates but severely limits throughput; Kinesis (D) is more complex and expensive. While option C is free, option A addresses the root cause properly.",
+      "learnMore": [
+        "Exactly-once processing in Amazon SQS",
+        "Using the message deduplication ID"
+      ],
+      "images": []
+    },
+    {
+      "number": "401",
+      "topic": "Troubleshooting and Optimization",
+      "questionType": "mc",
+      "questionText": "A developer is receiving HTTP 400: ThrottlingException errors intermittently when calling the Amazon CloudWatch API. When a call fails, no data is retrieved. What best practice should first be applied to address this issue?",
+      "translation": "",
+      "options": [
+        "A. Contact AWS Support for a limit increase.",
+        "B. Use the AWS CLI to get the metrics.",
+        "C. Analyze the applications and remove the API call.",
+        "D. Retry the call with exponential backoff."
+      ],
+      "correctAnswer": "D",
+      "explanation": "ThrottlingException indicates rate limiting by the API. Exponential backoff is the AWS-recommended best practice for handling throttling: retry failed requests with progressively increasing wait times to smooth the request rate and avoid hitting the rate limit again.",
+      "learnMore": [
+        "Retry behavior - AWS SDKs and Tools",
+        "Retry with backoff pattern - AWS Prescriptive Guidance"
       ],
       "images": []
     },
