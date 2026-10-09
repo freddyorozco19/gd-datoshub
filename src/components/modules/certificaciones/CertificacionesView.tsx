@@ -93,7 +93,7 @@ const PROVIDERS: ProviderConfig[] = [
     exams: [
       { id: 'clf-c02', code: 'CLF-C02', name: 'Cloud Practitioner',    dataFile: '/data/exam_clf_c02.json', questions: 718, level: 'Fundamental' },
       { id: 'saa-c03', code: 'SAA-C03', name: 'Solutions Architect',      dataFile: '/data/exam_saa_c03.json',  questions: 1019, level: 'Associate'   },
-      { id: 'dva-c02', code: 'DVA-C02', name: 'Developer Associate',      dataFile: '/data/exam_dva_c02.json',  questions: 556,  level: 'Associate'   },
+      { id: 'dva-c02', code: 'DVA-C02', name: 'Developer Associate',      dataFile: '/data/exam_dva_c02_ec.json',  questions: 536,  level: 'Associate'   },
       { id: 'dea-c01', code: 'DEA-C01', name: 'Data Engineer Associate',  dataFile: '/data/exam_dea_c01.json',  questions: 366,  level: 'Associate'   },
       { id: 'aif-c01', code: 'AIF-C01', name: 'AI Practitioner',           dataFile: '/data/exam_aifc01.json',   questions: 488,  level: 'Fundamental' },
     ],
