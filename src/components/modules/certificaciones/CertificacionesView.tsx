@@ -180,6 +180,7 @@ interface Question {
   learnMore?: Array<string | { text: string; url: string }>
   images?: (string | QuestionImage)[]
   topic?: string
+  dropdowns?: { label: string; options: string[]; correct: string }[]
 }
 
 interface ExamData {
@@ -757,6 +758,27 @@ function QuestionCard({
                 ? <><CheckCircle size={15} /> ¡Correcto!</>
                 : <><XCircle     size={15} /> Incorrecto — la respuesta correcta está resaltada en verde</>
               }
+            </div>
+          )}
+
+          {q.questionType === 'ordering' && q.dropdowns?.length && (
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-violet-400/80 bg-violet-900/20 border border-violet-700/30 rounded px-2.5 py-1 inline-block mb-1">
+                Ordenar pasos
+              </p>
+              {q.dropdowns.map((dd, i) => (
+                <div key={i} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border text-sm transition-colors ${
+                  showAns
+                    ? 'bg-emerald-900/20 border-emerald-700/40'
+                    : 'bg-slate-800/50 border-slate-700/50'
+                }`}>
+                  <span className="text-xs font-mono text-slate-500 shrink-0 w-12">{dd.label}</span>
+                  {showAns
+                    ? <><CheckCircle size={13} className="shrink-0 text-emerald-400" /><span className="text-emerald-300">{dd.correct}</span></>
+                    : <span className="text-slate-500 italic text-xs">SELECT…</span>
+                  }
+                </div>
+              ))}
             </div>
           )}
 
