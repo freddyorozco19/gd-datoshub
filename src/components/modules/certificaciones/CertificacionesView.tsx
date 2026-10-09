@@ -179,6 +179,7 @@ interface Question {
   dropdownOptions?: string[]
   learnMore?: Array<string | { text: string; url: string }>
   images?: (string | QuestionImage)[]
+  topic?: string
 }
 
 interface ExamData {
@@ -561,10 +562,18 @@ function QuestionCard({
       >
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">
-            <span className="text-xs font-mono text-slate-500 shrink-0">#{q.number}</span>
-            <span className="text-sm text-slate-300 truncate">
-              {(() => { const t = shown.questionText?.split('\n')[0] || shown.number; return t.length > 110 ? t.slice(0, 110) + '…' : t })()}
-            </span>
+            <span className="text-sm font-semibold text-slate-200 shrink-0">Question {q.number}</span>
+            {q.topic && (
+              <>
+                <span className="text-slate-600 shrink-0">/</span>
+                <span className="text-sm text-primary truncate">{q.topic}</span>
+              </>
+            )}
+            {!q.topic && (
+              <span className="text-sm text-slate-400 truncate">
+                {(() => { const t = shown.questionText?.split('\n')[0] || ''; return t.length > 90 ? t.slice(0, 90) + '…' : t })()}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
             {verified && (
