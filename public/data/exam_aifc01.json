@@ -82,16 +82,38 @@
     {
       "number": "5",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company wants to build an ML application.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Define business goal and frame ML problem → Develop model → Deploy model → Monitor model",
       "explanation": "The ML lifecycle starts by identifying the business outcome and framing it as an ML problem. The model is then built, trained, tuned, and evaluated; the validated model is deployed to production; and its production performance is monitored for degradation or drift.",
       "learnMore": [
         "Well-Architected machine learning lifecycle - Machine Learning Lens"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Define business goal and frame ML problem"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Develop model"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Deploy model"
+        },
+        {
+          "label": "Step 4",
+          "options": [],
+          "correct": "Monitor model"
+        }
+      ]
     },
     {
       "number": "6",
@@ -214,14 +236,31 @@
     {
       "number": "12",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company regularly refreshes its product database by manually uploading digital product guides. The guides include text and images. The company wants to automate this work with generative AI.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Upload the digital text and image files to an Amazon S3 bucket. → Use Amazon Nova multimodal models to process the digital text and image files. → Insert data into the product database.",
       "explanation": "Amazon S3 provides the object storage location for the digital guides. Amazon Nova multimodal models can analyze both text and image inputs, allowing the product data to be extracted or structured after the files are available. That processed output can then be used to insert records into the product database.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Upload the digital text and image files to an Amazon S3 bucket."
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Use Amazon Nova multimodal models to process the digital text and image files."
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Insert data into the product database."
+        }
+      ]
     },
     {
       "number": "13",
@@ -439,17 +478,39 @@
     {
       "number": "24",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
-      "questionText": "A company plans to develop ML applications to improve business operations and efficiency.",
+      "questionType": "ordering",
+      "questionText": "A company plans to develop ML applications to improve business operations and efficiency. For each use case, select the appropriate ML paradigm. Each ML paradigm may be selected one or more times.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Supervised learning → Supervised learning → Unsupervised learning → Unsupervised learning",
       "explanation": "Binary and multi-class classification predict labeled class values and therefore use supervised learning. K-means clustering groups unlabeled observations, and dimensionality reduction generally discovers a lower-dimensional representation without labels; both are unsupervised learning.",
       "learnMore": [
         "Supervised vs Unsupervised Learning",
         "K-Means Algorithm - Amazon SageMaker AI"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Supervised learning"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Supervised learning"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Unsupervised learning"
+        },
+        {
+          "label": "Step 4",
+          "options": [],
+          "correct": "Unsupervised learning"
+        }
+      ]
     },
     {
       "number": "25",
@@ -836,14 +897,31 @@
     {
       "number": "45",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company wants to enhance multiple ML models.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Retrieval Augmented Generation (RAG) → Zero-shot learning → Few-shot learning",
       "explanation": "RAG retrieves relevant external data and supplies it as context to an LLM at inference time. Zero-shot learning performs a task without task-specific examples, whereas few-shot learning relies on a small number of examples. Fine-tuning instead updates a pretrained model using additional training data.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Retrieval Augmented Generation (RAG)"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Zero-shot learning"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Few-shot learning"
+        }
+      ]
     },
     {
       "number": "46",
@@ -1026,17 +1104,34 @@
     {
       "number": "55",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company developed a large language model (LLM) and wants to make it available to several internal teams. The company must choose the appropriate inference mode for each team.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Real-time inference → Batch transform → Real-time inference",
       "explanation": "Real-time inference serves interactive requests with low latency, so it fits both the chatbot and the API that processes small text payloads. Batch transform is intended for offline inference on large datasets and does not require a persistent endpoint, so it fits processing gigabytes of files on weekends.",
       "learnMore": [
         "Supported features - Amazon SageMaker AI",
         "Batch transform for inference with Amazon SageMaker AI"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Real-time inference"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Batch transform"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Real-time inference"
+        }
+      ]
     },
     {
       "number": "56",
@@ -1270,16 +1365,33 @@
     {
       "number": "68",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company is developing an AI solution using Amazon SageMaker AI and wants to use SageMaker AI features to support application development.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Model Cards → Data Wrangler → Clarify",
       "explanation": "SageMaker Model Cards documents a model’s intended use, evaluation results, and business-goal alignment. Data Wrangler provides visual data preparation with little to no coding. SageMaker Clarify measures bias in raw training data, including class and label imbalance.",
       "learnMore": [
         "Prepare ML Data with Amazon SageMaker Data Wrangler"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Model Cards"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Data Wrangler"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Clarify"
+        }
+      ]
     },
     {
       "number": "69",
@@ -1493,16 +1605,33 @@
     {
       "number": "80",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company uses Amazon Bedrock AgentCore to build, deploy, and implement agents at scale. For each description, select the correct AgentCore resource. Select each resource once or not at all.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Observability → Code Interpreter → Browser tool",
       "explanation": "AgentCore Observability provides dashboards and telemetry to trace, debug, and monitor agent behavior. AgentCore Code Interpreter executes code securely in isolated sandbox environments and supports multiple programming languages. AgentCore Browser Tool provides a secure, managed browser environment for agent web interactions.",
       "learnMore": [
         "Observe your agent applications on Amazon Bedrock AgentCore Observability"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Observability"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Code Interpreter"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Browser tool"
+        }
+      ]
     },
     {
       "number": "81",
@@ -1657,17 +1786,34 @@
     {
       "number": "89",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "An ecommerce company is developing a generative AI solution that creates personalized product recommendations for application users. The company wants to measure how effectively the AI solution improves product sales and user engagement in the application.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Click-through rate (CTR) → Average order value (AOV) → Retention rate",
       "explanation": "Click-through rate measures engagement with recommendation links or placements. Average order value measures the monetary value of purchases per order, and retention rate measures whether users return over time.",
       "learnMore": [
         "Measure the business impact of Amazon Personalize recommendations",
         "Measuring recommendation impact with A/B testing"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Click-through rate (CTR)"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Average order value (AOV)"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Retention rate"
+        }
+      ]
     },
     {
       "number": "90",
@@ -1804,17 +1950,39 @@
     {
       "number": "97",
       "topic": "Fundamentals of GenAI",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "An AI practitioner uses an Amazon Nova text model and wants to apply prompt-engineering techniques that support iterative refinement.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Task → Role → Response style → Success criteria",
       "explanation": "A task defines the intended use case; a role establishes the model persona; response style controls tone, format, and structure; and success criteria define how output quality is evaluated.",
       "learnMore": [
         "Prompt engineering guidelines",
         "Design a prompt"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Task"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Role"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Response style"
+        },
+        {
+          "label": "Step 4",
+          "options": [],
+          "correct": "Success criteria"
+        }
+      ]
     },
     {
       "number": "98",
@@ -1917,17 +2085,34 @@
     {
       "number": "103",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company is developing a generative AI application and evaluating foundation models (FMs). It must consider several FM characteristics.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Context windows → Latency → Concurrency",
       "explanation": "A context window is the maximum amount of input context a model can process in a prompt. Latency measures the time taken to return generated output. Concurrency is the number of simultaneous requests or users an endpoint can serve.",
       "learnMore": [
         "Model availability & compatibility - Amazon Bedrock",
         "Optimize model inference for latency - Amazon Bedrock"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Context windows"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Latency"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Concurrency"
+        }
+      ]
     },
     {
       "number": "104",
@@ -2164,14 +2349,31 @@
     {
       "number": "116",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
-      "questionText": "A company applies ML techniques to build applications.",
+      "questionType": "ordering",
+      "questionText": "A company applies ML techniques to build applications. Choose the appropriate ML technique for each task. Use each ML technique one time.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Binary classification → Regression → Multiclass classification",
       "explanation": "Binary classification predicts one of two labels, such as correct or incorrect. Regression predicts a numeric value, such as a species count. Multiclass classification selects one label from multiple possible categories, such as car models.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Binary classification"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Regression"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Multiclass classification"
+        }
+      ]
     },
     {
       "number": "117",
@@ -2474,17 +2676,39 @@
     {
       "number": "133",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company wants to use Amazon Bedrock to create a knowledge base from existing documents. The documents include text, tables, and images.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Parse the documents. → Divide the data into chunks. → Convert the chunks into vector embeddings. → Write the vector embeddings to the vector store.",
       "explanation": "Amazon Bedrock re-ingestion includes parsing, chunking, generating embeddings, and indexing into the vector store. RAG is a retrieval pattern used after the knowledge base has been ingested, not an ingestion step.",
       "learnMore": [
         "Sync your data with your Amazon Bedrock knowledge base",
         "How content chunking works for knowledge bases"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Parse the documents."
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Divide the data into chunks."
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Convert the chunks into vector embeddings."
+        },
+        {
+          "label": "Step 4",
+          "options": [],
+          "correct": "Write the vector embeddings to the vector store."
+        }
+      ]
     },
     {
       "number": "134",
@@ -2622,14 +2846,36 @@
     {
       "number": "141",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "Select and arrange the steps from the following list to correctly describe the ML lifecycle for a new custom model. Select each step once.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Define the business objective. → Process the data. → Develop and train the model. → Deploy the model.",
       "explanation": "A custom ML project starts by identifying the business objective, followed by processing and preparing the data needed for learning. The model can then be developed and trained, after which the trained model is deployed for use.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Define the business objective."
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Process the data."
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Develop and train the model."
+        },
+        {
+          "label": "Step 4",
+          "options": [],
+          "correct": "Deploy the model."
+        }
+      ]
     },
     {
       "number": "142",
@@ -3229,17 +3475,34 @@
     {
       "number": "173",
       "topic": "Fundamentals of GenAI",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "Select the appropriate prompt-engineering technique for each description. Use each technique once or not at all.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Few-shot prompting → Chain-of-thought prompting → Zero-shot prompting",
       "explanation": "Few-shot prompting supplies several examples that demonstrate the desired task. Chain-of-thought prompting asks for intermediate step-by-step reasoning. Zero-shot prompting requests task completion without example demonstrations.",
       "learnMore": [
         "Prompt engineering concepts (Amazon Bedrock)",
         "What is prompt engineering?"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Few-shot prompting"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Chain-of-thought prompting"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Zero-shot prompting"
+        }
+      ]
     },
     {
       "number": "174",
@@ -3417,17 +3680,34 @@
     {
       "number": "183",
       "topic": "Guidelines for Responsible AI",
-      "questionType": "mc",
-      "questionText": "A company is building an AI application to help approve or deny personal loans. The application must comply with responsible AI principles.",
+      "questionType": "ordering",
+      "questionText": "A company is building an AI application to help approve or deny personal loans. The application must comply with responsible AI principles. For each action, select the appropriate responsible AI principle. Each principle may be selected once or not at all.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Privacy and security → Fairness → Robustness",
       "explanation": "Privacy and security protects sensitive data and the systems handling it. Fairness requires assessing and mitigating unequal impacts across demographic groups. Robustness concerns reliable, resilient performance when encountering unexpected inputs or conditions.",
       "learnMore": [
         "What is Responsible AI? - Azure Machine Learning",
         "Govern AI - Cloud Adoption Framework"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Privacy and security"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Fairness"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Robustness"
+        }
+      ]
     },
     {
       "number": "184",
@@ -3928,17 +4208,34 @@
     {
       "number": "210",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
-      "questionText": "A company wants more tailored responses to prompts from its generative AI models.",
+      "questionType": "ordering",
+      "questionText": "A company wants more tailored responses to prompts from its generative AI models. For each use case, select the appropriate customization method from the list. Choose each use case once.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Model fine-tuning → Data augmentation → Continued pre-training",
       "explanation": "Model fine-tuning adapts a pretrained model to perform a specific target task with labeled examples. Data augmentation increases the amount and diversity of labeled training data. Continued pre-training uses unlabeled domain data to further adapt a pretrained model’s knowledge and language patterns before downstream tuning.",
       "learnMore": [
         "Customize your model to improve performance (Amazon Bedrock)",
         "Customize models with fine-tuning and continued pre-training"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Model fine-tuning"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Data augmentation"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Continued pre-training"
+        }
+      ]
     },
     {
       "number": "211",
@@ -4230,16 +4527,33 @@
     {
       "number": "226",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "Select the appropriate AWS service or tool from the list for each use case. Select each AWS service or tool once, or do not select it.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Amazon SageMaker Ground Truth → Amazon Bedrock Guardrails → Amazon SageMaker Clarify",
       "explanation": "Amazon SageMaker Ground Truth supports human-in-the-loop labeling to produce high-quality ML training data. Amazon Bedrock Guardrails provides configurable safety and privacy safeguards for generative AI applications. Amazon SageMaker Clarify detects and measures bias in pre-training data and models.",
       "learnMore": [
         "Training data labeling using humans with Amazon SageMaker Ground Truth"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Amazon SageMaker Ground Truth"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Amazon Bedrock Guardrails"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Amazon SageMaker Clarify"
+        }
+      ]
     },
     {
       "number": "227",
@@ -4756,17 +5070,24 @@
     {
       "number": "254",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "Choose the correct AI term from the list for each statement. Use each AI term one time.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Deep learning",
       "explanation": "Artificial intelligence simulates human-like problem-solving. Machine learning learns patterns from data to make predictions, while deep learning is a machine-learning approach based on multilayer neural networks.",
       "learnMore": [
         "What is Machine Learning? - AWS",
         "Deep Learning vs Machine Learning - AWS"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Deep learning"
+        }
+      ]
     },
     {
       "number": "255",
@@ -5044,16 +5365,38 @@
     {
       "number": "269",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company plans to build a new ML solution. It already has data and needs to understand the ML lifecycle before it builds the solution.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Prepare the data for training. → Train the model. → Test the model. → Deploy the model.",
       "explanation": "An ML solution is built by preparing suitable training data, training the model, testing/evaluating its performance, and then deploying the validated model for use.",
       "learnMore": [
         "Well-Architected machine learning lifecycle (AWS)"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Prepare the data for training."
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Train the model."
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Test the model."
+        },
+        {
+          "label": "Step 4",
+          "options": [],
+          "correct": "Deploy the model."
+        }
+      ]
     },
     {
       "number": "270",
@@ -5362,16 +5705,28 @@
     {
       "number": "286",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
-      "questionText": "A company uses Amazon SageMaker to develop AI models.",
+      "questionType": "ordering",
+      "questionText": "A company uses Amazon SageMaker to develop AI models. For each step in the AI model lifecycle workflow, choose the appropriate SageMaker feature or resource from the list. Each SageMaker feature or resource can be selected once or not at all.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "SageMaker Model Registry → SageMaker Serverless Inference",
       "explanation": "SageMaker Model Registry tracks model packages and their versions through approval and deployment workflows. SageMaker Serverless Inference hosts a model behind an endpoint for on-demand predictions without provisioning or managing servers. SageMaker Clarify is for bias detection and model explainability, not model versioning or inference hosting.",
       "learnMore": [
         "Deploy models with Amazon SageMaker Serverless Inference"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "SageMaker Model Registry"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "SageMaker Serverless Inference"
+        }
+      ]
     },
     {
       "number": "287",
@@ -5451,17 +5806,34 @@
     {
       "number": "291",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
-      "questionText": "A company wants to build a generative-AI solution that produces product-advertisement content, including sample images and slogans.",
+      "questionType": "ordering",
+      "questionText": "A company wants to build a generative-AI solution that produces product-advertisement content, including sample images and slogans. For each action, select the correct model type. Use every model type one time.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Diffusion model → Transformer-based model → Object detection model",
       "explanation": "Diffusion models generate images from text prompts. Transformer-based language models generate relevant natural-language content such as slogans. Object-detection models identify and locate objects in an image, enabling validation of the placement of brand elements.",
       "learnMore": [
         "Windows ML samples",
         "Develop a generative AI application"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Diffusion model"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Transformer-based model"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Object detection model"
+        }
+      ]
     },
     {
       "number": "292",
@@ -5598,17 +5970,34 @@
     {
       "number": "299",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
-      "questionText": "A company needs to customize a base model hosted on Amazon Bedrock.",
+      "questionType": "ordering",
+      "questionText": "A company needs to customize a base model hosted on Amazon Bedrock. For each company requirement, select the appropriate model-customization method. A method may be selected one or more times.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Fine-tuning → Continued pre-training → Continued pre-training",
       "explanation": "Fine-tuning trains a model with labeled examples to improve performance on specific tasks. Continued pre-training extends pre-training with raw, unlabeled documents, enabling the model to acquire domain knowledge and to incorporate additional unlabeled data over time.",
       "learnMore": [
         "Customize your model to improve its performance for your use case - Amazon Bedrock",
         "Continued pre-training (CPT) - Amazon Nova"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Fine-tuning"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Continued pre-training"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Continued pre-training"
+        }
+      ]
     },
     {
       "number": "300",
@@ -6222,17 +6611,34 @@
     {
       "number": "332",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
-      "questionText": "A company plans to use Amazon SageMaker features for several use cases.",
+      "questionType": "ordering",
+      "questionText": "A company plans to use Amazon SageMaker features for several use cases. Choose the appropriate SageMaker feature from the list for each use case. Each SageMaker feature can be selected once or not at all.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "SageMaker Canvas → SageMaker JumpStart → SageMaker Ground Truth",
       "explanation": "SageMaker Canvas provides visual, no-code data preparation. SageMaker JumpStart offers prebuilt end-to-end solution templates, including fraud detection. SageMaker Ground Truth creates labeled training datasets using human workforces.",
       "learnMore": [
         "Prepare data for model building — Amazon SageMaker AI",
         "End-to-end JumpStart solution templates — Amazon SageMaker AI"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "SageMaker Canvas"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "SageMaker JumpStart"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "SageMaker Ground Truth"
+        }
+      ]
     },
     {
       "number": "333",
@@ -6350,17 +6756,34 @@
     {
       "number": "339",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
-      "questionText": "A company has several datasets containing historical data and wants to use ML technologies to process each one.",
+      "questionType": "ordering",
+      "questionText": "A company has several datasets containing historical data and wants to use ML technologies to process each one. Choose the appropriate ML technology for every dataset. Each technology may be selected once or not at all.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Natural language processing (NLP) → Computer vision → Time series forecasting",
       "explanation": "Natural language processing analyzes and derives meaning from text such as customer reviews. Computer vision supports image classification using labeled animal images. Time series forecasting predicts values from time-ordered observations such as daily product sales volumes. Reinforcement learning is intended for learning actions from rewards in an environment, which these datasets do not describe.",
       "learnMore": [
         "What is Amazon Comprehend? (NLP)",
         "What is Amazon Forecast? (time series)"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Natural language processing (NLP)"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Computer vision"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Time series forecasting"
+        }
+      ]
     },
     {
       "number": "340",
@@ -6561,17 +6984,39 @@
     {
       "number": "350",
       "topic": "Security, Compliance, and Governance for AI Solutions",
-      "questionType": "mc",
-      "questionText": "A company uses a generative AI model to build a digital assistant. The model’s responses sometimes contain undesirable and potentially harmful material.",
+      "questionType": "ordering",
+      "questionText": "A company uses a generative AI model to build a digital assistant. The model’s responses sometimes contain undesirable and potentially harmful material. For each mitigation action, choose the appropriate Amazon Bedrock filter policy from the list. Use every filter policy once.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Content filters → Denied topics → Word filters → Contextual grounding check",
       "explanation": "Content filters cover harmful categories such as hate, insults, violence, and misconduct in prompts and responses. Denied topics prevent discussion of defined subject areas such as investment or legal advice. Word filters block specified undesirable words or phrases. Contextual grounding checks identify model-response content that is not supported by a supplied grounding source.",
       "learnMore": [
         "Block harmful words and conversations with content filters — Amazon Bedrock",
         "Block denied topics to help remove harmful content — Amazon Bedrock"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Content filters"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Denied topics"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Word filters"
+        },
+        {
+          "label": "Step 4",
+          "options": [],
+          "correct": "Contextual grounding check"
+        }
+      ]
     },
     {
       "number": "351",
@@ -6844,16 +7289,38 @@
     {
       "number": "365",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "multi-dropdown",
+      "questionType": "ordering",
       "questionText": "Match each AI/ML use case with the correct data type or AI task category. (Sentiment analysis, traffic-sign recognition, demographic data, historical stock prices)",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Text data → Image data → Tabular data → Time series data",
       "explanation": "Sentiment analysis extracts meaning and sentiment from written posts, making it a text-data task. Traffic-sign recognition is a computer-vision task using images. Demographic attributes and purchase records are structured tabular data. Historical stock prices are chronologically ordered observations, which are time-series data.",
       "learnMore": [
         "Content Domain 1: Fundamentals of AI and ML - AWS Certification"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Text data"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Image data"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Tabular data"
+        },
+        {
+          "label": "Step 4",
+          "options": [],
+          "correct": "Time series data"
+        }
+      ]
     },
     {
       "number": "366",
@@ -7175,17 +7642,34 @@
     {
       "number": "383",
       "topic": "Fundamentals of GenAI",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company is training employees to structure prompts for foundation models.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Zero-shot learning → Few-shot learning → Chain-of-thought reasoning",
       "explanation": "Zero-shot learning performs a task from instructions alone. Few-shot learning includes labeled examples that demonstrate the intended task. Chain-of-thought reasoning prompts the model to work through the task step by step.",
       "learnMore": [
         "Prompt engineering concepts (Amazon Bedrock)",
         "What is prompt engineering?"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Zero-shot learning"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Few-shot learning"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Chain-of-thought reasoning"
+        }
+      ]
     },
     {
       "number": "384",
@@ -7226,29 +7710,68 @@
     {
       "number": "386",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
-      "questionText": "A company wants to customize a foundation model (FM) and wants to understand the available customization methods and data types.",
+      "questionType": "ordering",
+      "questionText": "A company wants to customize a foundation model (FM) and wants to understand the available customization methods and data types. For each description, select the appropriate customization method from the list. Use each customization method once.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Fine-tuning → Continued pre-training → Distillation",
       "explanation": "Fine-tuning uses labeled training examples to improve performance on defined tasks. Continued pre-training uses unlabeled data to adapt a foundation model to a domain. Distillation transfers knowledge from a larger teacher model to a smaller student model.",
       "learnMore": [
         "Customize your model to improve its performance for your use case – Amazon Bedrock",
         "Customize a model with distillation in Amazon Bedrock"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Fine-tuning"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Continued pre-training"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Distillation"
+        }
+      ]
     },
     {
       "number": "387",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company plans to build generative AI applications by using Amazon Bedrock and wants to minimize development effort.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Prompt engineering → Retrieval Augmented Generation (RAG) → Fine-tuning → Continued pre-training",
       "explanation": "Prompt engineering uses the existing foundation model without training or a retrieval data pipeline. RAG adds a knowledge source and retrieval workflow but does not alter model parameters. Fine-tuning requires labeled training data and a customization job. Continued pre-training requires further training on a substantial domain corpus, making it the most development-intensive option.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Prompt engineering"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Retrieval Augmented Generation (RAG)"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Fine-tuning"
+        },
+        {
+          "label": "Step 4",
+          "options": [],
+          "correct": "Continued pre-training"
+        }
+      ]
     },
     {
       "number": "388",
@@ -7367,17 +7890,34 @@
     {
       "number": "394",
       "topic": "Fundamentals of AI and ML",
-      "questionType": "mc",
-      "questionText": "Unsupervised built-in SageMaker algorithms",
+      "questionType": "ordering",
+      "questionText": "Fundamentals of AI and ML A company wants to use ML to improve customer engagement and sales. It has collected a large dataset containing customer demographics, purchase history, browsing patterns, and product ratings. For each use case, select the appropriate ML approach. Use each ML approach one time.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Regression → Classification → Clustering",
       "explanation": "Regression predicts a continuous numeric value such as lifetime revenue. Classification predicts a discrete churn outcome or its probability. Clustering discovers unlabeled groups of customers with similar behaviors and preferences.",
       "learnMore": [
         "AI Practitioner exam guide - Domain 1: Fundamentals of AI and ML",
         "Unsupervised built-in SageMaker algorithms"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Regression"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Classification"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Clustering"
+        }
+      ]
     },
     {
       "number": "395",
@@ -8176,17 +8716,34 @@
     {
       "number": "437",
       "topic": "Guidelines for Responsible AI",
-      "questionType": "mc",
+      "questionType": "ordering",
       "questionText": "A company is developing an AI assistant application and must implement a core governance process for the development project. The company must ensure that the application follows responsible AI practices.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Determine governance goals, risks, and policies. → Put together a cross-functional AI governance group. → Set up model monitoring mechanisms.",
       "explanation": "Responsible-AI governance begins by translating principles into concrete goals, assessing risks, and defining policies. A cross-functional group then provides ownership and oversight across legal, security, product, and engineering concerns. Continuous model monitoring follows to identify operational, safety, fairness, and compliance issues and to improve governance over the application lifecycle.",
       "learnMore": [
         "Govern AI - Cloud Adoption Framework",
         "Responsible AI Policies - Cloud Adoption Framework"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Determine governance goals, risks, and policies."
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Put together a cross-functional AI governance group."
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Set up model monitoring mechanisms."
+        }
+      ]
     },
     {
       "number": "438",
@@ -8460,16 +9017,33 @@
     {
       "number": "452",
       "topic": "Guidelines for Responsible AI",
-      "questionType": "mc",
-      "questionText": "A company is designing a customer-service chatbot using a fine-tuned large language model (LLM). The company wants the chatbot to use responsible AI characteristics.",
+      "questionType": "ordering",
+      "questionText": "A company is designing a customer-service chatbot using a fine-tuned large language model (LLM). The company wants the chatbot to use responsible AI characteristics. For each application design action, select the appropriate responsible AI characteristic. Each characteristic can be selected once or not at all.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "Privacy and security → Transparency → Safety",
       "explanation": "Anonymizing personal data protects training data, which is part of privacy and security. Explainable decisions let stakeholders understand and evaluate system outputs, which is transparency. Amazon Bedrock Guardrails filters harmful inputs and outputs and helps prevent misuse, which is safety.",
       "learnMore": [
         "Detect and filter harmful content by using Amazon Bedrock Guardrails"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "Privacy and security"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "Transparency"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "Safety"
+        }
+      ]
     },
     {
       "number": "453",
@@ -8602,17 +9176,34 @@
     {
       "number": "460",
       "topic": "Applications of Foundation Models",
-      "questionType": "mc",
-      "questionText": "A company is building an AI assistant using Amazon Q Developer with the Model Context Protocol (MCP). The company needs to understand MCP components and their functions.",
+      "questionType": "ordering",
+      "questionText": "A company is building an AI assistant using Amazon Q Developer with the Model Context Protocol (MCP). The company needs to understand MCP components and their functions. For each MCP component, select the correct function from the list. Select each function once.",
       "translation": "",
       "options": [],
-      "correctAnswer": "",
+      "correctAnswer": "MCP host → MCP client → MCP server",
       "explanation": "In MCP architecture, the host is the AI application environment and coordinator. The host creates MCP clients, which establish and manage isolated connections to servers. MCP servers provide the specialized context and capabilities, exposing resources, prompts, and tools.",
       "learnMore": [
         "Model Context Protocol architecture",
         "Model Context Protocol specification"
       ],
-      "images": []
+      "images": [],
+      "dropdowns": [
+        {
+          "label": "Step 1",
+          "options": [],
+          "correct": "MCP host"
+        },
+        {
+          "label": "Step 2",
+          "options": [],
+          "correct": "MCP client"
+        },
+        {
+          "label": "Step 3",
+          "options": [],
+          "correct": "MCP server"
+        }
+      ]
     },
     {
       "number": "461",
