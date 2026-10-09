@@ -1,103 +1,38 @@
 {
   "examTitle": "AWS Certified Developer - Associate",
-  "totalQuestions": 552,
-  "scrapedAt": "2026-10-09T20:20:01.569Z",
+  "totalQuestions": 556,
+  "scrapedAt": "2026-10-09T20:41:38.433Z",
   "questions": [
     {
       "number": "1",
-      "topic": "MODES",
-      "questionType": "multi-answer",
-      "questionText": "",
+      "topic": "Deployment",
+      "questionType": "mc",
+      "questionText": "A company is developing an ecommerce application that uses Amazon API Gateway APIs. The application uses AWS Lambda as a backend. The company needs to test the code in a dedicated, monitored test environment before the company releases the code to the production environment. Which solution will meet these requirements?",
       "translation": "",
       "options": [
         "A. Use a single stage in API Gateway. Create a Lambda function for each environment. Configure API clients to send a query parameter that indicates the environment and the specific Lambda function.",
         "B. Use multiple stages in API Gateway. Create a single Lambda function for all environments. Add different code blocks for different environments in the Lambda function based on Lambda environment variables.",
         "C. Use multiple stages in API Gateway. Create a Lambda function for each environment. Configure API Gateway stage variables to route traffic to the Lambda function in different environments.",
-        "D. Use a single stage in API Gateway. Configure API clients to send a query parameter that indicates the environment. Add different code blocks for different environments in the Lambda function to match the value of the query parameter.",
-        "A. cdk synth",
-        "B. cdk bootstrap",
-        "C. cdk init",
-        "D. cdk destroy",
-        "A. Submit a quota increase request to AWS Support to increase the function to the required size.",
-        "B. Use a compression algorithm that is more efficient than ZIP.",
-        "C. Break up the function into multiple smaller functions.",
-        "D. Zip the .zip file twice to compress the file more.",
-        "E. Move common libraries, function dependencies, and custom runtimes into Lambda layers.",
-        "A. Specify the CAPABILITY_AUTO_EXPAND capability in the CloudFormation stack.",
-        "B. Use an administrators role to deploy IAM resources with CloudFormation.",
-        "C. Specify the CAPABILITY_IAM capability in the CloudFormation stack.",
-        "D. Specify the CAPABILITY_NAMED_IAM capability in the CloudFormation stack.",
-        "A. Configure AWS CloudTrail logging to investigate the invocation failures.",
-        "B. Configure Dead Letter Queues by sending events to Amazon SQS for investigation.",
-        "C. Configure Amazon Simple Workflow Service to process any direct unprocessed events.",
-        "D. Configure AWS Config to process any direct unprocessed events."
+        "D. Use a single stage in API Gateway. Configure API clients to send a query parameter that indicates the environment. Add different code blocks for different environments in the Lambda function to match the value of the query parameter."
       ],
       "correctAnswer": "C",
       "explanation": "The best-practice approach is multiple API Gateway stages (test and production), a dedicated Lambda function for each environment, and API Gateway stage variables to route traffic to the appropriate Lambda. This provides true environment isolation, cleaner separation of concerns, and better auditability. Single-stage approaches (A, D) mix concerns; a single Lambda with environment variables (B) is less isolated and harder to troubleshoot independently.",
       "learnMore": [
-        "Last updated July 6, 2026 at 8:37 AM",
-        "TOPIC FILTER",
-        "ALL TOPICS",
-        "RETIRED QUESTIONS",
-        "SHOW ALL",
-        "QUESTION SORT",
-        "QUESTION NUMBER",
-        "QUESTIONS PER PAGE",
-        "25 QUESTIONS",
-        "Question",
-        "Deployment",
-        "Which solution will meet these requirements?",
-        "HIDE ANSWER",
-        "EXPLANATION",
-        "LEARN MORE",
         "Use stage variables for a REST API in API Gateway"
       ],
-      "images": [
-        {
-          "path": "/data/images/dva_c02/q1_img0.png",
-          "alt": "",
-          "inOption": false,
-          "optionLetter": null,
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q1_img1.png",
-          "alt": "",
-          "inOption": false,
-          "optionLetter": null,
-          "inAnswer": false
-        }
-      ]
+      "images": []
     },
     {
       "number": "2",
       "topic": "Development with AWS Services",
-      "questionType": "multi-answer",
+      "questionType": "mc",
       "questionText": "A developer is building an application that processes a stream of user-supplied data. The data stream must be consumed by multiple Amazon EC2 based processing applications in parallel and in real time. Each processor must be able to resume without losing data if there is a service interruption. The application architect plans to add other processors in the near future, and wants to minimize the amount of data duplication involved. Which solution will satisfy these requirements?",
       "translation": "",
       "options": [
         "A. Publish the data to Amazon Simple Queue Service (Amazon SQS).",
         "B. Publish the data to Amazon Data Firehose.",
         "C. Publish the data to Amazon EventBridge.",
-        "D. Publish the data to Amazon Kinesis Data Streams.",
-        "A. Add a CloudFormation Deletion Policy attribute with the Retain value to the database resource.",
-        "B. Update the CloudFormation stack policy to prevent updates to the database.",
-        "C. Modify the database to use a Multi-AZ deployment.",
-        "D. Create a CloudFormation stack set for the web application and database deployments.",
-        "E. Add a Cloud Formation DeletionPolicy attribute with the Retain value to the stack.",
-        "A. Create a new method on the API. Name the method production. Configure the method to include a stage variable that points to the prod Lambda function alias.",
-        "B. Create a new method on the API. Name the method production. Configure an integration request on the API’s development stage that points to the prod Lambda function alias.",
-        "C. Deploy the API to a new stage named production. Configure the stage to include a stage variable that points to the prod Lambda function alias.",
-        "D. Deploy the API to a new stage named production. Configure an integration request on the API’s production stage that points to the prod Lambda function alias.",
-        "A. Configure the Lambda function to use an Amazon RDS proxy.",
-        "B. Configure a NAT gateway. Attach the NAT gateway to the Lambda function.",
-        "C. Enable public access on the Aurora database. Configure a security group on the database to allow outbound access for the database engine’s port.",
-        "D. Enable VPC access for the Lambda function. Attach the Lambda function to a new security group that does not have rules.",
-        "A. Check whether the policy that is assigned to the IAM role that is attached to the EC2 instances grants access to Amazon S3.",
-        "B. Check the S3 bucket policy to validate the access permissions for the S3 bucket.",
-        "C. Check whether the policy that is assigned to the IAM user that is attached to the EC2 instances grants access to Amazon S3.",
-        "D. Check the S3 Lifecycle policy to validate the permissions that are assigned to the S3 bucket.",
-        "E. Check the security groups that are assigned to the EC2 instances. Make sure that a rule is not blocking the access to Amazon S3."
+        "D. Publish the data to Amazon Kinesis Data Streams."
       ],
       "correctAnswer": "D",
       "explanation": "Kinesis Data Streams is designed for real-time processing with multiple concurrent consumers per shard, allowing independent processors to consume the same data stream in parallel without message loss. Shards provide automatic failover and replay capability, and new processors can be added dynamically without message duplication.",
@@ -105,131 +40,27 @@
         "What is Amazon Kinesis Data Streams?",
         "Kinesis Data Streams consumers"
       ],
-      "images": [
-        {
-          "path": "/data/images/dva_c02/q2_img0.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": null,
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q2_img1.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": null,
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q2_img2.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": null,
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q2_img3.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": null,
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q2_img4.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": null,
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q2_img5.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": null,
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q2_img6.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": null,
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q2_img7.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": null,
-          "inAnswer": false
-        }
-      ]
+      "images": []
     },
     {
       "number": "4",
       "topic": "Deployment",
-      "questionType": "multi-answer",
-      "questionText": "A developer is creating a video search application for a global company. The video files have an average size of 2.5 TB. The video storage system must provide instant access to the video files for the first 90 days. After the first 90 days, the video files can take more than 10 minutes to load. Which solution will meet these requirements MOST cost-effectively?",
+      "questionType": "mc",
+      "questionText": "A developer is creating an AWS CloudFormation stack. The stack contains IAM resources with custom names. When the developer tries to deploy the stack, they receive an InsufficientCapabilities error. What should the developer do to resolve this issue?",
       "translation": "",
       "options": [
-        "A. Upload the video files to the Amazon Elastic File System (Amazon EFS) Standard storage class for the first 90 days. After 90 days, transition the video files to the EFS Standard-Infrequent Access (Standard-IA) storage class.",
-        "B. Upload the video files to Amazon S3. Use the S3 Glacier Deep Archive storage class for the first 90 days. After 90 days, transition the video file to the S3 Glacier Flexible Retrieval storage class.",
-        "C. Use Amazon Elastic Block Store (Amazon EBS) to store the video files for the first 90 days. After 90 days, transition the video files to the Amazon S3 Glacier Deep Archive storage class.",
-        "D. Upload the video files to Amazon S3. Use the S3 Glacier Instant Retrieval storage class for the first 90 days. After 90 days, transition the video files to the S3 Glacier Flexible Retrieval storage class.",
-        "A. Add the signature to an HTTP header that is named Authorization.",
-        "B. Add the signature to a session cookie.",
-        "C. Add the signature to an HTTP header that is named Authentication.",
-        "D. Add the signature to a query string parameter that is named X-Amz-Signature.",
-        "E. Add the signature to an HTTP header that is named WWW-Authenticate.",
-        "A. Use long polling to query the queue for new messages.",
-        "B. Use short polling to query the queue for new messages.",
-        "C. Use message batching to retrieve messages from the queue.",
-        "D. Use Amazon ElastiCache to cache messages in the queue.",
-        "E. Use an SQS FIFO queue to manage the messages.",
-        "A. Create a separate API Gateway and separate Lambda function for each environment in the same Region.",
-        "B. Assign a Region for each environment and deploy API Gateway and Lambda to each Region.",
-        "C. Create one API Gateway with multiple stages with one Lambda function with multiple aliases.",
-        "D. Create one API Gateway and one Lambda function, and use a REST parameter to identify the environment.",
-        "A.",
-        "B.",
-        "C.",
-        "D."
+        "A. Specify the CAPABILITY_AUTO_EXPAND capability in the CloudFormation stack.",
+        "B. Use an administrators role to deploy IAM resources with CloudFormation.",
+        "C. Specify the CAPABILITY_IAM capability in the CloudFormation stack.",
+        "D. Specify the CAPABILITY_NAMED_IAM capability in the CloudFormation stack."
       ],
       "correctAnswer": "D",
-      "explanation": "S3 Glacier Instant Retrieval (previously Glacier IR) provides immediate access to data at lower cost than S3 Standard for the first 90 days. After 90 days, transitioning to S3 Glacier Flexible Retrieval allows retrieval times of 1-5 minutes to 12 hours, well within the 10+ minute tolerance. EFS and EBS are not suitable for this use case; Deep Archive has unacceptable retrieval delays.",
+      "explanation": "CAPABILITY_NAMED_IAM is required when deploying IAM resources with custom (user-defined) names in CloudFormation. CAPABILITY_IAM alone permits only unnamed IAM resources. Custom resource names require explicit acknowledgment that the user understands the implications of custom naming.",
       "learnMore": [
-        "Understanding S3 Glacier storage classes for long-term data storage",
-        "S3 Glacier Instant Retrieval storage class"
+        "Control CloudFormation access with AWS Identity and Access Management",
+        "CreateStack API Reference"
       ],
-      "images": [
-        {
-          "path": "/data/images/dva_c02/q4_img0.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": "A",
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q4_img1.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": "B",
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q4_img2.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": "C",
-          "inAnswer": false
-        },
-        {
-          "path": "/data/images/dva_c02/q4_img3.png",
-          "alt": "",
-          "inOption": true,
-          "optionLetter": "D",
-          "inAnswer": false
-        }
-      ]
+      "images": []
     },
     {
       "number": "5",
@@ -339,41 +170,6 @@
       "explanation": "AWS Systems Manager Parameter Store with secure string parameters encrypts sensitive data using KMS, and CloudFormation dynamic references allow templates to retrieve the parameters without exposing secrets in the template. This integrates seamlessly with CloudFormation and is the most secure approach. CloudFormation parameters do not provide the same level of security, S3 storage exposes bootstrap data, and EFS is not designed for secret management.",
       "learnMore": [
         "Get a secure string value from Parameter Store (ssm-secure dynamic reference)"
-      ],
-      "images": []
-    },
-    {
-      "number": "10",
-      "topic": "Troubleshooting and Optimization",
-      "questionType": "mc",
-      "questionText": "An organization is storing large files in Amazon S3, and is writing a web application to display meta-data about the files to end-users. Based on the metadata a user selects an object to download. The organization needs a mechanism to index the files and provide single-digit millisecond latency retrieval for the metadata. What AWS service should be used to accomplish this?",
-      "translation": "",
-      "options": [
-        "A. Amazon DynamoDB",
-        "B. Amazon EC2",
-        "C. AWS Lambda",
-        "D. Amazon RDS",
-        "A. Add a listener rule to the listener to return a fixed response if the Authorization header is missing. Set the fixed response to 401 Unauthorized.",
-        "B. Create an authentication action for the listener rules of the ALSet the rule action type to authenticate-cognito. Set the OnUnauthenticatedRequest field to “deny.”",
-        "C. Create an Amazon API Gateway API. Configure all API methods to be forwarded to the ALB endpoint. Create an authorizer of the COGNITO_USER_POOLS type. Configure every API method to use that authorizer.",
-        "D. Create a new target group that includes an AWS Lambda function target that validates the Authorization header by using Amazon Cognito. Associate the target group with the listener.",
-        "A. Ensure that the deployment group is using the correct role name for the CodeDeploy service role.",
-        "B. Attach the AWSCodeDeployRoleECS policy to the CodeDeploy service role.",
-        "C. Attach the AWSCodeDeployRole policy to the CodeDeploy service role.",
-        "D. Ensure the CodeDeploy agent is installed and running on all instances in the deployment group.",
-        "A. Create an IAM role that has administrative access to AWS. Attach the role to the EC2 instance.",
-        "B. Create an IAM user. Attach the AdministratorAccess policy. Copy the generated access key and secret key. Within the application code, use the access key and secret key along with the AWS SDK to communicate with Amazon S3.",
-        "C. Create an IAM role that has the necessary access to Amazon S3. Attach the role to the EC2 instance.",
-        "D. Create an IAM user. Attach a policy that provides the necessary access to Amazon S3. Copy the generated access key and secret key. Within the application code, use the access key and secret key along with the AWS SDK to communicate with Amazon S3.",
-        "A. CloudFormation serverless intrinsic functions",
-        "B. AWS Elastic Beanstalk",
-        "C. AWS Serverless Application Model (AWS SAM)",
-        "D. AWS Cloud Development Kit (AWS CDK)"
-      ],
-      "correctAnswer": "A",
-      "explanation": "Amazon DynamoDB provides consistent single-digit millisecond latency for data retrieval and scales seamlessly to support millions of requests. It is ideal for indexing file metadata and enabling fast lookups by users to locate and download specific S3 objects.",
-      "learnMore": [
-        "Understanding Amazon DynamoDB latency"
       ],
       "images": []
     },
@@ -11207,6 +11003,97 @@
       "explanation": "DynamoDB Accelerator (DAX) is an in-memory cache specifically designed for DynamoDB that delivers microsecond-level latency. It provides the sub-millisecond performance required for high-frequency trading with minimal additional effort compared to other approaches like LSIs or exponential backoff, which don't directly improve retrieval latency.",
       "learnMore": [
         "In-memory acceleration with DynamoDB Accelerator (DAX)"
+      ],
+      "images": []
+    },
+    {
+      "number": "553",
+      "topic": "Troubleshooting and Optimization",
+      "questionType": "mc",
+      "questionText": "A company has an application that runs across multiple AWS Regions. The application is experiencing performance issues at irregular intervals. A developer must use AWS X-Ray to implement distributed tracing for the application to troubleshoot the root cause of the performance issues. What should the developer do to meet this requirement?",
+      "translation": "",
+      "options": [
+        "A. Use the X-Ray console to add annotations for AWS services and user-defined services.",
+        "B. Use Region annotation that X-Ray adds automatically for AWS services. Add Region annotation for user-defined services.",
+        "C. Use the X-Ray daemon to add annotations for AWS services and user-defined services.",
+        "D. Use Region annotation that X-Ray adds automatically for user-defined services. Configure X-Ray to add Region annotation for AWS services."
+      ],
+      "correctAnswer": "B",
+      "explanation": "X-Ray automatically adds Region annotations for AWS services. User-defined services require manual instrumentation via the X-Ray SDK to add Region annotations. This hybrid approach ensures consistent region tracking across all service types without requiring manual annotation of AWS services.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "554",
+      "topic": "Deployment",
+      "questionType": "mc",
+      "questionText": "A developer needs to use a code template to create an automated deployment of an application onto Amazon EC2 instances. The template must be configured to repeat deployment, installation, and updates of resources for the application. The template must be able to create identical environments and roll back to previous versions. Which solution will meet these requirements?",
+      "translation": "",
+      "options": [
+        "A. Use AWS Amplify for automatic deployment templates. Use a traffic-splitting deployment to copy any deployments. Modify any resources created by Amplify, if necessary.",
+        "B. Use AWS CodeBuild for automatic deployment. Upload the required AppSpec file template. Save the appspec.yml file in the root directory folder of the revision. Specify the deployment group that includes the EC2 instances for the deployment.",
+        "C. Use AWS CloudFormation to create an infrastructure template in JSON format to deploy the EC2 instances. Use CloudFormation helper scripts to install the necessary software and to start the application. Call the scripts directly from the template.",
+        "D. Use AWS AppSync to deploy the application. Upload the template as a GraphQL schema. Specify the EC2 instances for deployment of the application. Use resolvers as a version control mechanism and to make any updates to the deployments."
+      ],
+      "correctAnswer": "C",
+      "explanation": "AWS CloudFormation is the infrastructure-as-code service that meets all requirements: JSON/YAML templates define infrastructure declaratively, CloudFormation helper scripts automate installation and updates, stack versioning enables rollback to previous versions, and templates ensure identical environments. Amplify (A) is for application deployment, CodeBuild (B) is for building code, and AppSync (D) is for GraphQL APIs.",
+      "learnMore": [
+        "Deploy applications on EC2 with CloudFormation",
+        "cfn-init helper script"
+      ],
+      "images": []
+    },
+    {
+      "number": "555",
+      "topic": "Security",
+      "questionType": "mc",
+      "questionText": "A company is developing an application that will be accessed through the Amazon API Gateway REST API. Registered users should be the only ones who can access certain resources of this API. The token being used should expire automatically and needs to be refreshed periodically. How can a developer meet these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create an Amazon Cognito identity pool, configure the Amazon Cognito Authorizer in API Gateway, and use the temporary credentials generated by the identity pool.",
+        "B. Create and maintain a database record for each user with a corresponding token and use an AWS Lambda authorizer in API Gateway.",
+        "C. Create an Amazon Cognito user pool, configure the Cognito Authorizer in API Gateway, and use the identity or access token.",
+        "D. Create an IAM user for each API user, attach an invoke permissions policy to the API, and use an IAM authorizer in API Gateway."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Amazon Cognito User Pools are designed for user authentication and generate ID/access tokens with built-in expiration mechanisms and automatic refresh capabilities. The Cognito Authorizer in API Gateway seamlessly integrates to verify these tokens and enforce access control.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "556",
+      "topic": "Deployment",
+      "questionType": "mc",
+      "questionText": "A company receives food orders from multiple partners. The company has a microservices application that uses Amazon API Gateway APIs with AWS Lambda integration. Each partner sends orders by calling a customized API that is exposed through API Gateway. The API call invokes a shared Lambda function to process the orders. Partners need to be notified after the Lambda function processes the orders. Each partner must receive updates for only the partner's own orders. The company wants to add new partners in the future with the fewest code changes possible. Which solution will meet these requirements in the MOST scalable way?",
+      "translation": "",
+      "options": [
+        "A. Create a different Amazon Simple Notification Service (Amazon SNS) topic for each partner. Configure the Lambda function to publish messages for each partner to the partner's SNS topic.",
+        "B. Create a different Lambda function for each partner. Configure the Lambda function to notify each partner's service endpoint directly.",
+        "C. Create an Amazon Simple Notification Service (Amazon SNS) topic. Configure the Lambda function to publish messages with specific attributes to the SNS topic. Subscribe each partner to the SNS topic. Apply the appropriate filter policy to the topic subscriptions.",
+        "D. Create one Amazon Simple Notification Service (Amazon SNS) topic. Subscribe all partners to the SNS topic."
+      ],
+      "correctAnswer": "C",
+      "explanation": "A single SNS topic with message filtering policies (based on partner attributes) provides the most scalable architecture for multi-tenant notifications. Each partner subscribes once with a filter policy to receive only their own orders. This approach minimizes code changes when adding new partners compared to creating a topic per partner (option A) which becomes unwieldy at scale.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "557",
+      "topic": "Development with AWS Services",
+      "questionType": "mc",
+      "questionText": "A developer is writing an application to encrypt files outside of AWS before uploading the files to an Amazon S3 bucket. The encryption must be symmetric and must be performed inside the application. How can the developer implement the encryption in the application to meet these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create a data key in AWS Key Management Service (AWS KMS). Use the AWS Encryption SDK to encrypt the files.",
+        "B. Create a Hash-Based Message Authentication Code (HMAC) key in AWS Key Management Service (AWS KMS). Use the AWS Encryption SDK to encrypt the files.",
+        "C. Create a data key pair in AWS Key Management Service (AWS KMS). Use the AWS CLI to encrypt the files.",
+        "D. Create a data key in AWS Key Management Service (AWS KMS). Use the AWS CLI to encrypt the files."
+      ],
+      "correctAnswer": "A",
+      "explanation": "AWS KMS data keys provide symmetric encryption suitable for encrypting data outside AWS. The AWS Encryption SDK is specifically designed for application-level encryption and works seamlessly with KMS keys for this use case.",
+      "learnMore": [
+        "What is the AWS Encryption SDK?",
+        "Generate data keys - AWS KMS"
       ],
       "images": []
     }
