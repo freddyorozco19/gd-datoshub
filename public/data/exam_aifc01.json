@@ -1,7 +1,7 @@
 {
   "examTitle": "AWS Certified AI Practitioner",
-  "totalQuestions": 483,
-  "scrapedAt": "2026-10-09T11:47:11.562Z",
+  "totalQuestions": 486,
+  "scrapedAt": "2026-10-09T11:47:46.525Z",
   "questions": [
     {
       "number": "3",
@@ -9040,6 +9040,63 @@
       ],
       "correctAnswer": "C",
       "explanation": "Deployment releases a generative AI model into a live environment so end users can access and use it.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "486",
+      "topic": "Security, Compliance, and Governance for AI Solutions",
+      "questionType": "mc",
+      "questionText": "A financial company plans to use generative AI (GenAI) tools in multiple departments. Before using these tools, the company must create a strong AI-governance foundation to support responsible, compliant adoption. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Begin developing and testing GenAI systems. Create governance policies as needed.",
+        "B. Deploy technical monitoring tools to track AI system outputs.",
+        "C. Assemble a cross- functional team to develop clear policies and guidelines for AI use, oversight, and compliance.",
+        "D. Hire external consultants to audit all AI systems."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Organization-wide AI governance requires clear policies, defined oversight, and documented management of legal and regulatory requirements before AI use. A cross-functional team is positioned to establish guidance that integrates business, technical, risk, legal, and compliance perspectives across departments.",
+      "learnMore": [
+        "NIST AI RMF Playbook — Govern",
+        "NIST AI RMF Core"
+      ],
+      "images": []
+    },
+    {
+      "number": "487",
+      "topic": "Fundamentals of GenAI",
+      "questionType": "mc",
+      "questionText": "A company wants to use a large language model (LLM) in its internal AI assistant. The company wants to customize the LLM by using medical papers to familiarize it with medical topics. Which technique meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Continuous pre-training",
+        "B. Supervised learning",
+        "C. Reinforcement learning",
+        "D. Boosting"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Continuous pre-training further trains an existing LLM on a large corpus of unlabeled, domain-specific text, enabling it to acquire specialized knowledge and terminology. Medical papers are an appropriate domain corpus for this technique; supervised learning instead requires labeled input-output examples.",
+      "learnMore": [
+        "Continued pre-training (CPT) - Amazon Nova"
+      ],
+      "images": []
+    },
+    {
+      "number": "488",
+      "topic": "Guidelines for Responsible AI",
+      "questionType": "multi-answer",
+      "questionText": "A company is building its first generative AI (GenAI) application and wants to establish a responsible AI policy before moving to production. The company is concerned about explainability and transparency when selecting models for the application. Which techniques or tools address these concerns? Choose two",
+      "translation": "",
+      "options": [
+        "A. Model evaluation",
+        "B. Guardrails",
+        "C. AI model service cards",
+        "D. Data encryption",
+        "E. Automated reasoning"
+      ],
+      "correctAnswer": "AC",
+      "explanation": "Model evaluation supports informed, explainable model selection by measuring model behavior and performance against relevant criteria. AI model service cards provide transparent documentation of a model’s intended use, machine-learning approach, performance considerations, and responsible-use limitations. AWS lists model cards and Amazon Bedrock Model Evaluations as tools for identifying transparent and explainable models.",
       "learnMore": [],
       "images": []
     }
