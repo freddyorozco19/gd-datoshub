@@ -1,8 +1,45 @@
 {
   "examTitle": "AWS Certified AI Practitioner",
-  "totalQuestions": 486,
+  "totalQuestions": 488,
   "scrapedAt": "2026-10-09T11:47:46.525Z",
   "questions": [
+    {
+      "number": "1",
+      "topic": "Security, Compliance, and Governance for AI Solutions",
+      "questionType": "mc",
+      "questionText": "An ML research team develops custom ML models. The model artifacts are shared with other teams for integration into products and services. The ML team retains the model training code and data. The ML team wants to build a mechanism that the ML team can use to audit models. Which solution should the ML team use when publishing the custom ML models?",
+      "translation": "",
+      "options": [
+        "A. Create documents with the relevant information. Store the documents in Amazon S3.",
+        "B. Use AWS AI Service Cards for transparency and understanding models.",
+        "C. Create Amazon SageMaker Model Cards with intended uses and training and inference details.",
+        "D. Create model training scripts. Commit the model training scripts to a Git repository."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Amazon SageMaker Model Cards provide a standardized, structured format to document model details including intended use cases, training methodology, performance metrics, evaluation results, ethical considerations, and version history. This facilitates comprehensive auditing, transparency, and accountability when sharing models across teams. Other options lack the standardization and audit-specific features needed for model governance.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "2",
+      "topic": "Security, Compliance, and Governance for AI Solutions",
+      "questionType": "mc",
+      "questionText": "A company has deployed an AI application to production on AWS, and the application's responses have grown less accurate over time. The company requires a solution that sends alerts when application performance drifts. Which AWS service or feature meets this requirement?",
+      "translation": "",
+      "options": [
+        "A. Amazon Augmented AI (Amazon A2I)",
+        "B. Amazon SageMaker Model Monitor",
+        "C. Amazon Rekognition",
+        "D. AWS Trusted Advisor"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Amazon SageMaker Model Monitor continuously monitors ML models in production, including model-quality metrics such as accuracy. It detects deviations from configured baselines or thresholds and supports alerts when model performance drifts.",
+      "learnMore": [
+        "Data and model quality monitoring with Amazon SageMaker Model Monitor",
+        "Model quality metrics and Amazon CloudWatch monitoring"
+      ],
+      "images": []
+    },
     {
       "number": "3",
       "topic": "Fundamentals of AI and ML",
