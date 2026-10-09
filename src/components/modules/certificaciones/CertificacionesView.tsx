@@ -770,7 +770,7 @@ function QuestionCard({
             const allFilled = q.dropdowns!.every((_, i) => !!orderingAnswers[i])
             const revealed  = showAns || verified
             return (
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 max-w-md">
                 {/* cabecera de columnas */}
                 <div className="flex items-center gap-3 px-1 mb-0.5">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 w-16 shrink-0">Paso</span>
