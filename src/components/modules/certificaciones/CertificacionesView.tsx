@@ -471,8 +471,10 @@ function QuestionCard({
   const [selected,    setSelected]    = useState<number | null>(null)
   const [verified,    setVerified]    = useState(false)
   const [showAns,     setShowAns]     = useState(false)
-  const [mdRowAnswers, setMdRowAnswers] = useState<Record<number, string>>({})
-  const [ynRowAnswers, setYnRowAnswers] = useState<Record<number, 'Yes' | 'No'>>({})
+  const [mdRowAnswers,      setMdRowAnswers]      = useState<Record<number, string>>({})
+  const [ynRowAnswers,      setYnRowAnswers]      = useState<Record<number, 'Yes' | 'No'>>({})
+  const [orderingAnswers,   setOrderingAnswers]   = useState<Record<number, string>>({})
+  const [orderingOpenIdx,   setOrderingOpenIdx]   = useState<number | null>(null)
   const [showExpl,      setShowExpl]      = useState(false)
   const [explEs,        setExplEs]        = useState(false)
   const [explEsText,    setExplEsText]    = useState<string | null>(null)
@@ -498,7 +500,7 @@ function QuestionCard({
     setSelected(prev => prev === i ? null : i)
   }
 
-  const reset = () => { setSelected(null); setVerified(false); setShowAns(false); setShowExpl(false); setExplEs(false); setMdRowAnswers({}); setYnRowAnswers({}) }
+  const reset = () => { setSelected(null); setVerified(false); setShowAns(false); setShowExpl(false); setExplEs(false); setMdRowAnswers({}); setYnRowAnswers({}); setOrderingAnswers({}); setOrderingOpenIdx(null) }
 
   const toggleExplEs = async () => {
     if (explEs) { setExplEs(false); return }
@@ -761,26 +763,93 @@ function QuestionCard({
             </div>
           )}
 
-          {q.questionType === 'ordering' && q.dropdowns?.length && (
-            <div className="space-y-2">
-              <p className="text-xs font-medium text-violet-400/80 bg-violet-900/20 border border-violet-700/30 rounded px-2.5 py-1 inline-block mb-1">
-                Ordenar pasos
-              </p>
-              {q.dropdowns.map((dd, i) => (
-                <div key={i} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border text-sm transition-colors ${
-                  showAns
-                    ? 'bg-emerald-900/20 border-emerald-700/40'
-                    : 'bg-slate-800/50 border-slate-700/50'
-                }`}>
-                  <span className="text-xs font-mono text-slate-500 shrink-0 w-12">{dd.label}</span>
-                  {showAns
-                    ? <><CheckCircle size={13} className="shrink-0 text-emerald-400" /><span className="text-emerald-300">{dd.correct}</span></>
-                    : <span className="text-slate-500 italic text-xs">SELECT…</span>
-                  }
-                </div>
-              ))}
-            </div>
-          )}
+          {q.questionType === 'ordering' && q.dropdowns?.length && (() => {
+            const ddOpts = q.dropdowns![0].options?.length
+              ? q.dropdowns![0].options
+              : q.dropdowns!.map(d => d.correct).filter(Boolean)
+            const allFilled = q.dropdowns!.every((_, i) => !!orderingAnswers[i])
+            const revealed  = showAns || verified
+            return (
+              <div className="space-y-2">
+                <p className="text-xs font-medium text-violet-400/80 bg-violet-900/20 border border-violet-700/30 rounded px-2.5 py-1 inline-block mb-1">
+                  Ordenar pasos
+                </p>
+                {q.dropdowns!.map((dd, i) => {
+                  const sel       = orderingAnswers[i] ?? ''
+                  const isCorrect = sel.trim().toLowerCase() === dd.correct.trim().toLowerCase()
+                  const isOpen    = orderingOpenIdx === i
+                  return (
+                    <div key={i} className="relative">
+                      <div className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border text-sm transition-colors ${
+                        revealed
+                          ? isCorrect
+                            ? 'bg-emerald-900/20 border-emerald-600/50'
+                            : sel
+                              ? 'bg-red-900/20 border-red-600/50'
+                              : 'bg-emerald-900/20 border-emerald-600/50'
+                          : 'bg-slate-800/50 border-slate-700/50'
+                      }`}>
+                        <span className="text-xs font-mono text-slate-500 shrink-0 w-14">{dd.label}:</span>
+                        {revealed ? (
+                          <>
+                            <CheckCircle size={13} className="shrink-0 text-emerald-400" />
+                            <span className="text-emerald-300 flex-1">{dd.correct}</span>
+                            {sel && !isCorrect && (
+                              <span className="text-xs text-red-400 line-through ml-auto">{sel}</span>
+                            )}
+                          </>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setOrderingOpenIdx(isOpen ? null : i)}
+                            className={`flex-1 flex items-center justify-between gap-2 text-sm transition-colors ${
+                              sel ? 'text-white' : 'text-slate-500 italic'
+                            }`}
+                          >
+                            <span>{sel || 'SELECT…'}</span>
+                            <ChevronDown size={13} className={`shrink-0 text-slate-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                          </button>
+                        )}
+                      </div>
+                      {isOpen && !revealed && (
+                        <div className="absolute z-20 left-0 right-0 mt-1 bg-[#1a1a2e] border border-white/10 rounded-lg shadow-2xl overflow-hidden">
+                          <button
+                            type="button"
+                            onClick={() => { setOrderingAnswers(prev => { const n = {...prev}; delete n[i]; return n }); setOrderingOpenIdx(null) }}
+                            className="w-full text-left px-4 py-2.5 text-sm text-slate-500 hover:bg-white/5 transition-colors"
+                          >
+                            Select…
+                          </button>
+                          {ddOpts.map((opt, oi) => (
+                            <button
+                              key={oi}
+                              type="button"
+                              onClick={() => { setOrderingAnswers(prev => ({ ...prev, [i]: opt })); setOrderingOpenIdx(null) }}
+                              className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                                sel === opt
+                                  ? 'bg-primary/20 text-white'
+                                  : 'text-slate-200 hover:bg-white/5'
+                              }`}
+                            >
+                              {opt}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+                {!revealed && allFilled && (
+                  <button
+                    onClick={() => { setVerified(true); setShowExpl(true) }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/50 text-primary text-xs font-semibold hover:bg-primary/30 transition-colors mt-1"
+                  >
+                    <CheckCircle size={13} /> Verificar respuesta
+                  </button>
+                )}
+              </div>
+            )
+          })()}
 
           {q.questionType === 'yes-no' && q.statements?.length && (
             <table className="w-full text-sm border-collapse">
