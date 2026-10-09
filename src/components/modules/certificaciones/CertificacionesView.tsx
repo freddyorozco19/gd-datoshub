@@ -770,79 +770,108 @@ function QuestionCard({
             const allFilled = q.dropdowns!.every((_, i) => !!orderingAnswers[i])
             const revealed  = showAns || verified
             return (
-              <div className="space-y-2">
-                <p className="text-xs font-medium text-violet-400/80 bg-violet-900/20 border border-violet-700/30 rounded px-2.5 py-1 inline-block mb-1">
-                  Ordenar pasos
-                </p>
+              <div className="space-y-1.5">
+                {/* cabecera de columnas */}
+                <div className="flex items-center gap-3 px-1 mb-0.5">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 w-16 shrink-0">Paso</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">Selección</span>
+                </div>
+
                 {q.dropdowns!.map((dd, i) => {
                   const sel       = orderingAnswers[i] ?? ''
                   const isCorrect = sel.trim().toLowerCase() === dd.correct.trim().toLowerCase()
                   const isOpen    = orderingOpenIdx === i
+
+                  // color del row
+                  const rowCls = revealed
+                    ? isCorrect
+                      ? 'bg-emerald-900/20 border-emerald-600/40 shadow-emerald-900/20'
+                      : sel
+                        ? 'bg-red-900/20 border-red-600/40'
+                        : 'bg-emerald-900/20 border-emerald-600/40'
+                    : isOpen
+                      ? 'bg-primary/10 border-primary/50 shadow-primary/10'
+                      : sel
+                        ? 'bg-white/[0.05] border-white/15'
+                        : 'bg-slate-800/40 border-slate-700/40 hover:border-slate-600/60'
+
                   return (
                     <div key={i} className="relative">
-                      <div className={`flex items-center gap-3 px-3 py-2.5 rounded-lg border text-sm transition-colors ${
-                        revealed
-                          ? isCorrect
-                            ? 'bg-emerald-900/20 border-emerald-600/50'
-                            : sel
-                              ? 'bg-red-900/20 border-red-600/50'
-                              : 'bg-emerald-900/20 border-emerald-600/50'
-                          : 'bg-slate-800/50 border-slate-700/50'
-                      }`}>
-                        <span className="text-xs font-mono text-slate-500 shrink-0 w-14">{dd.label}:</span>
+                      <div className={`flex items-center gap-3 px-3 py-0 rounded-xl border shadow-sm transition-all duration-150 ${rowCls}`}>
+                        {/* número del paso */}
+                        <div className={`flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold shrink-0 transition-colors ${
+                          revealed
+                            ? isCorrect ? 'bg-emerald-500/20 text-emerald-400' : sel ? 'bg-red-500/20 text-red-400' : 'bg-emerald-500/20 text-emerald-400'
+                            : isOpen ? 'bg-primary/20 text-primary' : sel ? 'bg-white/10 text-white' : 'bg-slate-700/50 text-slate-500'
+                        }`}>
+                          {i + 1}
+                        </div>
+
+                        {/* selector / respuesta */}
                         {revealed ? (
-                          <>
-                            <CheckCircle size={13} className="shrink-0 text-emerald-400" />
-                            <span className="text-emerald-300 flex-1">{dd.correct}</span>
+                          <div className="flex-1 flex items-center gap-2 py-3">
+                            <CheckCircle size={14} className="shrink-0 text-emerald-400" />
+                            <span className="text-sm text-emerald-300 font-medium">{dd.correct}</span>
                             {sel && !isCorrect && (
-                              <span className="text-xs text-red-400 line-through ml-auto">{sel}</span>
+                              <span className="text-xs text-red-400/70 line-through ml-2">{sel}</span>
                             )}
-                          </>
+                          </div>
                         ) : (
                           <button
                             type="button"
                             onClick={() => setOrderingOpenIdx(isOpen ? null : i)}
-                            className={`flex-1 flex items-center justify-between gap-2 text-sm transition-colors ${
-                              sel ? 'text-white' : 'text-slate-500 italic'
-                            }`}
+                            className="flex-1 flex items-center justify-between gap-2 py-3 text-left"
                           >
-                            <span>{sel || 'SELECT…'}</span>
-                            <ChevronDown size={13} className={`shrink-0 text-slate-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                            <span className={`text-sm font-medium transition-colors ${sel ? 'text-white' : 'text-slate-500'}`}>
+                              {sel || 'SELECT…'}
+                            </span>
+                            <ChevronDown
+                              size={15}
+                              className={`shrink-0 transition-all duration-200 ${
+                                isOpen ? 'rotate-180 text-primary' : sel ? 'text-slate-400' : 'text-slate-600'
+                              }`}
+                            />
                           </button>
                         )}
                       </div>
+
+                      {/* dropdown panel */}
                       {isOpen && !revealed && (
-                        <div className="absolute z-20 left-0 right-0 mt-1 bg-[#1a1a2e] border border-white/10 rounded-lg shadow-2xl overflow-hidden">
-                          <button
-                            type="button"
-                            onClick={() => { setOrderingAnswers(prev => { const n = {...prev}; delete n[i]; return n }); setOrderingOpenIdx(null) }}
-                            className="w-full text-left px-4 py-2.5 text-sm text-slate-500 hover:bg-white/5 transition-colors"
-                          >
-                            Select…
-                          </button>
-                          {ddOpts.map((opt, oi) => (
-                            <button
-                              key={oi}
-                              type="button"
-                              onClick={() => { setOrderingAnswers(prev => ({ ...prev, [i]: opt })); setOrderingOpenIdx(null) }}
-                              className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                                sel === opt
-                                  ? 'bg-primary/20 text-white'
-                                  : 'text-slate-200 hover:bg-white/5'
-                              }`}
-                            >
-                              {opt}
-                            </button>
-                          ))}
+                        <div className="absolute z-30 left-0 right-0 mt-1.5 rounded-xl border border-white/10 shadow-2xl shadow-black/60 overflow-hidden"
+                          style={{ background: 'linear-gradient(135deg, #13131f 0%, #1a1a2e 100%)' }}>
+                          <div className="px-3 pt-2.5 pb-1.5">
+                            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">Opciones</span>
+                          </div>
+                          <div className="px-1.5 pb-1.5 space-y-0.5">
+                            {ddOpts.map((opt, oi) => {
+                              const picked = sel === opt
+                              return (
+                                <button
+                                  key={oi}
+                                  type="button"
+                                  onClick={() => { setOrderingAnswers(prev => ({ ...prev, [i]: opt })); setOrderingOpenIdx(null) }}
+                                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-left transition-all duration-100 ${
+                                    picked
+                                      ? 'bg-primary/25 text-white font-medium'
+                                      : 'text-slate-300 hover:bg-white/[0.07] hover:text-white'
+                                  }`}
+                                >
+                                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${picked ? 'bg-primary' : 'bg-slate-700'}`} />
+                                  {opt}
+                                </button>
+                              )
+                            })}
+                          </div>
                         </div>
                       )}
                     </div>
                   )
                 })}
+
                 {!revealed && allFilled && (
                   <button
                     onClick={() => { setVerified(true); setShowExpl(true) }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/20 border border-primary/50 text-primary text-xs font-semibold hover:bg-primary/30 transition-colors mt-1"
+                    className="mt-2 flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary/20 border border-primary/50 text-primary text-xs font-semibold hover:bg-primary/30 transition-colors"
                   >
                     <CheckCircle size={13} /> Verificar respuesta
                   </button>
