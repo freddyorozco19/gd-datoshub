@@ -21,7 +21,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.3/administration-guide/450337/fsso"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Fortinet Single Sign-On (FSSO)"
     },
     {
       "number": "2",
@@ -48,7 +49,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Routing"
     },
     {
       "number": "3",
@@ -68,7 +70,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.3/administration-guide/450337/fsso"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Fortinet Single Sign-On (FSSO)"
     },
     {
       "number": "4",
@@ -95,7 +98,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "SD-WAN Configuration and Monitoring"
     },
     {
       "number": "5",
@@ -132,7 +136,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Web Filtering"
     },
     {
       "number": "6",
@@ -152,7 +157,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.6/hardware-acceleration/896174/nturbo-offloads-flow-based-processing"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Antivirus"
     },
     {
       "number": "7",
@@ -172,7 +178,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.6.0/administration-guide/25967/equal-cost-multi-path"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Routing"
     },
     {
       "number": "8",
@@ -210,7 +217,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Intrusion Prevention and Application Control"
     },
     {
       "number": "9",
@@ -225,7 +233,8 @@
       "correctAnswer": "C",
       "explanation": "FortiGate On Idle DPD sends liveness probes after the tunnel has no inbound traffic for the configured interval. Receiving inbound traffic demonstrates that the peer is active, so probes are not needed until the tunnel becomes idle.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "IPsec VPN"
     },
     {
       "number": "10",
@@ -274,7 +283,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Policies And Nat"
     },
     {
       "number": "11",
@@ -294,7 +304,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.10/cli-reference/277229215/config-authentication-setting"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Firewall Authentication"
     },
     {
       "number": "12",
@@ -337,7 +348,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Policies And Nat"
     },
     {
       "number": "13",
@@ -361,7 +373,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.0.8/administration-guide/604285/phase-2-configuration"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Ipsec Vpn"
     },
     {
       "number": "14",
@@ -381,7 +394,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.2.11/administration-guide/996846/ha-primary-unit-selection-criteria"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "High Availability"
     },
     {
       "number": "15",
@@ -412,7 +426,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Fortigate In The Cloud"
     },
     {
       "number": "16",
@@ -432,7 +447,8 @@
           "url": "https://docs.fortinet.com/document/fortisase/latest/architecture-guide/834810/sia-for-agentless-remote-users"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Fortisase"
     },
     {
       "number": "17",
@@ -456,7 +472,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/795593/use-active-directory-objects-directly-in-policies"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Logging And Monitoring"
     },
     {
       "number": "18",
@@ -480,7 +497,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.6.2/administration-guide/801136/category-usage-quota"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Web Filtering"
     },
     {
       "number": "19",
@@ -511,7 +529,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Diagnostics and Troubleshooting"
     },
     {
       "number": "20",
@@ -535,7 +554,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.8/administration-guide/450337/fsso"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Fortinet Single Sign-On (FSSO)"
     },
     {
       "number": "21",
@@ -568,7 +588,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Diagnostics and Troubleshooting"
     },
     {
       "number": "22",
@@ -593,7 +614,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.6.6/administration-guide/164602"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Antivirus"
     },
     {
       "number": "23",
@@ -617,7 +639,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.9/administration-guide/503764/fsso-polling-connector-agent-installation"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Fortinet Single Sign-On (FSSO)"
     },
     {
       "number": "24",
@@ -639,7 +662,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Routing"
     },
     {
       "number": "25",
@@ -682,7 +706,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Web Filtering"
     },
     {
       "number": "26",
@@ -721,7 +746,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "High Availability"
     },
     {
       "number": "27",
@@ -746,7 +772,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/latest/administration-guide/144044/policy-routes"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "SD-WAN Configuration and Monitoring"
     },
     {
       "number": "28",
@@ -773,7 +800,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "High Availability"
     },
     {
       "number": "29",
@@ -788,7 +816,8 @@
       "correctAnswer": "B",
       "explanation": "For dial-up IPsec VPNs in aggressive mode, the peer ID identifies the initiating client and allows the FortiGate to match it to the appropriate Phase 1 tunnel configuration.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Ipsec Vpn"
     },
     {
       "number": "30",
@@ -827,7 +856,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Policies And Nat"
     },
     {
       "number": "31",
@@ -870,7 +900,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Intrusion Prevention And Application Control"
     },
     {
       "number": "32",
@@ -894,7 +925,8 @@
           "url": "https://docs.fortinet.com/document/fortisase/latest/feature-ssa-inline-casb-deployment-guide/891466/deployment-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Fortisase"
     },
     {
       "number": "33",
@@ -918,7 +950,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/790613/phase-1-configuration"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Ipsec Vpn"
     },
     {
       "number": "34",
@@ -938,7 +971,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.0.0/new-features/92199"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "System And Network Settings"
     },
     {
       "number": "35",
@@ -969,7 +1003,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Authentication"
     },
     {
       "number": "36",
@@ -1000,7 +1035,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Logging And Monitoring"
     },
     {
       "number": "37",
@@ -1037,7 +1073,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Intrusion Prevention and Application Control"
     },
     {
       "number": "38",
@@ -1052,7 +1089,8 @@
       "correctAnswer": "AC",
       "explanation": "FortiGate antivirus requires decrypted HTTPS content to inspect the downloaded file. A certificate-inspection profile does not decrypt the payload, and an SSL-inspection exemption bypasses inspection for the website; either condition prevents antivirus scanning of the HTTPS file content.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Antivirus"
     },
     {
       "number": "39",
@@ -1072,7 +1110,8 @@
           "url": "https://docs.fortinet.com/document/fortimanager/6.0.0/managing-fortios-and-fsso/869241/dc-agent-mode-and-polling-mode"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Fortinet Single Sign-On (FSSO)"
     },
     {
       "number": "40",
@@ -1092,7 +1131,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.6.5/administration-guide/849059"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "High Availability"
     },
     {
       "number": "41",
@@ -1114,7 +1154,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Diagnostics and Troubleshooting"
     },
     {
       "number": "42",
@@ -1145,7 +1186,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Web Filtering"
     },
     {
       "number": "43",
@@ -1165,7 +1207,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.2.5/administration-guide/194558/conserve-mode"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Diagnostics and Troubleshooting"
     },
     {
       "number": "44",
@@ -1196,7 +1239,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Authentication"
     },
     {
       "number": "45",
@@ -1223,7 +1267,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Policies and NAT"
     },
     {
       "number": "46",
@@ -1243,7 +1288,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.99/administration-guide/419589/ips-configuration-options"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Intrusion Prevention And Application Control"
     },
     {
       "number": "47",
@@ -1286,7 +1332,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Policies And Nat"
     },
     {
       "number": "48",
@@ -1317,7 +1364,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Diagnostics And Troubleshooting"
     },
     {
       "number": "49",
@@ -1344,7 +1392,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "System And Network Settings"
     },
     {
       "number": "50",
@@ -1375,7 +1424,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Fortigate In The Cloud"
     },
     {
       "number": "51",
@@ -1395,7 +1445,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/8.0.0/administration-guide/888827/poll-active-directory-server"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Fortinet Single Sign On Fsso"
     },
     {
       "number": "52",
@@ -1419,7 +1470,8 @@
           "url": "https://pressbooks.bccampus.ca/fortigatefirewall/chapter/application-profile/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Intrusion Prevention And Application Control"
     },
     {
       "number": "53",
@@ -1458,7 +1510,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "High Availability"
     },
     {
       "number": "54",
@@ -1485,7 +1538,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Certificate Operations"
     },
     {
       "number": "55",
@@ -1509,7 +1563,8 @@
           "url": "https://docs.fortinet.com/document/fortisase/latest/architecture-guide/834810/sia-for-agentless-remote-users"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "FortiSASE"
     },
     {
       "number": "56",
@@ -1540,7 +1595,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Logging and Monitoring"
     },
     {
       "number": "57",
@@ -1561,7 +1617,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.6.5/administration-guide/708464/load-balancing-strategy"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "SD-WAN Configuration and Monitoring"
     },
     {
       "number": "58",
@@ -1588,7 +1645,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "IPsec VPN"
     },
     {
       "number": "59",
@@ -1631,7 +1689,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Policies and NAT"
     },
     {
       "number": "60",
@@ -1662,7 +1721,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Diagnostics and Troubleshooting"
     },
     {
       "number": "61",
@@ -1693,7 +1753,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Web Filtering"
     },
     {
       "number": "62",
@@ -1724,7 +1785,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Antivirus"
     },
     {
       "number": "63",
@@ -1744,7 +1806,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.9/administration-guide/656084/firewall-policy"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Firewall Policies and NAT"
     },
     {
       "number": "64",
@@ -1787,7 +1850,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Antivirus"
     },
     {
       "number": "65",
@@ -1818,7 +1882,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "System And Network Settings"
     },
     {
       "number": "66",
@@ -1845,7 +1910,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Routing"
     },
     {
       "number": "67",
@@ -1876,7 +1942,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Authentication"
     },
     {
       "number": "68",
@@ -1900,7 +1967,8 @@
           "url": "https://docs.fortinet.com/document/fortimanager/7.0.15/administration-guide/295297/view-logs-related-to-a-policy-rule"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Logging And Monitoring"
     },
     {
       "number": "69",
@@ -1925,7 +1993,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.9/administration-guide/867342/performance-sla-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Sd Wan Configuration And Monitoring"
     },
     {
       "number": "70",
@@ -1945,7 +2014,8 @@
           "url": "https://docs.fortinet.com/document/fortisase/latest/architecture-guide/744715"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Fortisase"
     },
     {
       "number": "71",
@@ -1972,7 +2042,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Sd Wan Configuration And Monitoring"
     },
     {
       "number": "72",
@@ -1999,7 +2070,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Intrusion Prevention And Application Control"
     },
     {
       "number": "73",
@@ -2023,7 +2095,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.6.1/administration-guide/357558/ha-active-active-cluster-setup"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "High Availability"
     },
     {
       "number": "74",
@@ -2047,7 +2120,8 @@
           "url": "https://community.fortinet.com/fortigate-3/technical-tip-types-of-ha-sync-98742"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "High Availability"
     },
     {
       "number": "75",
@@ -2074,7 +2148,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Firewall Authentication"
     },
     {
       "number": "76",
@@ -2096,7 +2171,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Logging and Monitoring"
     },
     {
       "number": "77",
@@ -2120,7 +2196,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.0.1/administration-guide/139692/routing-concepts"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Firewall Policies and NAT"
     },
     {
       "number": "78",
@@ -2144,7 +2221,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.4.0/new-features/185823"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Firewall Policies and NAT"
     },
     {
       "number": "79",
@@ -2171,7 +2249,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Intrusion Prevention and Application Control"
     },
     {
       "number": "80",
@@ -2195,7 +2274,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/latest/administration-guide/277729/xauth-user-authentication"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "IPsec VPN"
     },
     {
       "number": "81",
@@ -2222,7 +2302,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Intrusion Prevention and Application Control"
     },
     {
       "number": "82",
@@ -2242,7 +2323,8 @@
           "url": "https://docs.fortinet.com/document/fortigate/7.6.1/administration-guide/122078/deep-inspection"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Certificate Operations"
     },
     {
       "number": "83",
@@ -2291,7 +2373,8 @@
           "inOption": true,
           "optionLetter": "D"
         }
-      ]
+      ],
+      "topic": "Logging And Monitoring"
     },
     {
       "number": "84",
@@ -2318,7 +2401,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Intrusion Prevention And Application Control"
     }
   ]
 }

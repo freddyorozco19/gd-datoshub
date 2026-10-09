@@ -25,7 +25,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/employing-cobit-2019-for-enterprise-governance-strategy"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "2",
@@ -40,7 +41,8 @@
       "correctAnswer": "C",
       "explanation": "Governance includes evaluating stakeholder needs, conditions, and options to establish balanced, agreed-upon enterprise objectives. This is the evaluation portion of the Evaluate, Direct, and Monitor (EDM) governance model.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "3",
@@ -60,7 +62,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2016/cobit-5-mapping-exercise-for-establishing-enterprise-it-strategy"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "4",
@@ -80,7 +83,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/cobit-2019-and-the-iia-2019-guiding-principles-of-corporate-governance"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "5",
@@ -95,7 +99,8 @@
       "correctAnswer": "B",
       "explanation": "The relationships among governance-framework components should be identified so that the components operate cohesively and consistently. Governance components are interrelated rather than independent, and their interactions must be considered to support effective governance.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "6",
@@ -115,7 +120,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2021/a-systematic-approach-to-implementing-a-governance-system-using-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Framework Introduction"
     },
     {
       "number": "7",
@@ -130,7 +136,8 @@
       "correctAnswer": "C",
       "explanation": "The Accountable role has ultimate ownership and answerability for an outcome. To preserve clear ownership, accountability cannot be shared.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "8",
@@ -145,7 +152,8 @@
       "correctAnswer": "B",
       "explanation": "COBIT defines stakeholder value creation as balancing benefits realization with risk optimization and resource optimization; this is expressed as realizing benefits at an optimal resource cost while optimizing risk.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "9",
@@ -169,7 +177,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/employing-cobit-2019-for-enterprise-governance-strategy"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "10",
@@ -193,7 +202,8 @@
           "url": "https://www.isaca.org/resources/isaca-journal/issues/2025/volume-3/optimizing-crypto-custody-operations-with-cobit"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "11",
@@ -213,7 +223,8 @@
           "url": "https://www.isaca.org/resources/cobit"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Framework Introduction"
     },
     {
       "number": "12",
@@ -233,7 +244,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/cobit-design-factors"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing a Tailored Governance System"
     },
     {
       "number": "13",
@@ -248,7 +260,8 @@
       "correctAnswer": "C",
       "explanation": "Organizational structures define decision-making authority, accountability, roles, and escalation paths, enabling governance decisions to be made effectively.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System and Components"
     },
     {
       "number": "14",
@@ -263,7 +276,8 @@
       "correctAnswer": "C",
       "explanation": "COBIT 2019 classifies Innovation/Differentiation as an Enterprise Strategy design factor, representing an organization’s strategic positioning and business approach.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "15",
@@ -278,7 +292,8 @@
       "correctAnswer": "C",
       "explanation": "A cost-leadership strategy prioritizes immediate minimization of costs to sustain a lower-cost position than competitors. This supports operational efficiency and low-cost delivery rather than merely matching costs or pursuing a broader long-term optimization objective.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "16",
@@ -293,7 +308,8 @@
       "correctAnswer": "B",
       "explanation": "Stakeholder drivers and needs provide the input for defining alignment goals through the goals cascade. External laws and regulations can influence those needs, whereas governance and management objectives are derived after alignment goals are established.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "17",
@@ -308,7 +324,8 @@
       "correctAnswer": "A",
       "explanation": "Roles and organizational structure are primarily divided between governance and management. Governance provides oversight and direction, while management executes activities in alignment with that direction.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System and Components"
     },
     {
       "number": "18",
@@ -328,7 +345,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/a-new-cobit-is-in-town-and-i-really-like-how-it-looks"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing A Tailored Governance System"
     },
     {
       "number": "19",
@@ -352,7 +370,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/newsletters/atisaca/2022/volume-36/strategies-to-customize-and-implement-cobit-best-practices"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "20",
@@ -367,7 +386,8 @@
       "correctAnswer": "B",
       "explanation": "When IT is strategic and vital to business success, IT-related roles must have strong involvement in organizational structures so that IT priorities, decisions, and governance are integrated with business direction.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "21",
@@ -391,7 +411,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/designing-your-organizations-custom-cobit"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing A Tailored Governance System"
     },
     {
       "number": "22",
@@ -406,7 +427,8 @@
       "correctAnswer": "A",
       "explanation": "A process capability assessment measures current process performance against its target or specification requirements, enabling management to understand the existing state and any performance gap.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "23",
@@ -421,7 +443,8 @@
       "correctAnswer": "A",
       "explanation": "The chief information officer leads and directs the enterprise I&T function and ensures that the board receives information on significant I&T decisions and value delivery so those decisions remain aligned with enterprise strategy.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "24",
@@ -436,7 +459,8 @@
       "correctAnswer": "B",
       "explanation": "Reviewing an operating IT governance system identifies whether governance processes, controls, roles, and decision-making mechanisms need refinement or additional requirements. This supports continual improvement of the governance framework.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "25",
@@ -451,7 +475,8 @@
       "correctAnswer": "B",
       "explanation": "Risk management identifies, assesses, and treats uncertainty that could harm objectives, helping safeguard existing organizational value.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "26",
@@ -471,7 +496,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/cobit-design-factors"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing A Tailored Governance System"
     },
     {
       "number": "27",
@@ -486,7 +512,8 @@
       "correctAnswer": "A",
       "explanation": "Organizational structures are the enterprise’s key decision-making entities. They allocate authority and responsibility for governance and management decisions, whereas people and competencies supply capabilities and principles and policies provide guidance.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System and Components"
     },
     {
       "number": "28",
@@ -501,7 +528,8 @@
       "correctAnswer": "C",
       "explanation": "A portfolio of competitive services is evaluated by whether its services attain revenue and market-share targets, since those measures indicate market performance and competitive success.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "29",
@@ -521,7 +549,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/cobit-2019-and-cobit-5-comparison"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing a Tailored Governance System"
     },
     {
       "number": "30",
@@ -536,7 +565,8 @@
       "correctAnswer": "A",
       "explanation": "A capabilities assessment establishes the current state and baseline of a process, including its strengths, gaps, and level of performance. That baseline is necessary to define relevant measures and targets for a process-improvement initiative.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "31",
@@ -556,7 +586,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/evaluating-business-service-continuity-and-availability-using-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "32",
@@ -571,7 +602,8 @@
       "correctAnswer": "C",
       "explanation": "The Customer dimension evaluates how well IT meets business-user needs. Quality of management information is a user-facing outcome, whereas on-time/on-budget delivery measures project execution and product/business innovation measures future orientation.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "33",
@@ -586,7 +618,8 @@
       "correctAnswer": "C",
       "explanation": "The number of confidentiality incidents that cause financial loss, business disruption, or public embarrassment directly measures the effectiveness of protecting sensitive information and preserving privacy.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "34",
@@ -601,7 +634,8 @@
       "correctAnswer": "A",
       "explanation": "Stakeholder satisfaction with program/project quality measures whether delivered programs meet expected quality standards and requirements, making it directly aligned with the stated program-delivery goal.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "35",
@@ -621,7 +655,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/evaluating-business-service-continuity-and-availability-using-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "36",
@@ -636,7 +671,8 @@
       "correctAnswer": "C",
       "explanation": "A managed system of internal controls provides ongoing assurance over operations and objective achievement by identifying, operating, monitoring, and improving controls. It also supports assessment of the risk that remains after controls are applied, which is residual risk.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "37",
@@ -651,7 +687,8 @@
       "correctAnswer": "A",
       "explanation": "Process capability Level 5 emphasizes optimizing the process through ongoing, continuous improvement. Full achievement of the process purpose characterizes a lower capability level, and quantitative performance measures are central to Level 4 management.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "38",
@@ -671,7 +708,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/transitioning-an-enterprise-from-cobit-5-to-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing A Tailored Governance System"
     },
     {
       "number": "39",
@@ -691,7 +729,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/isaca-now-blog/2022/risk-appetite-vs-risk-tolerance-what-is-the-difference"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "40",
@@ -706,7 +745,8 @@
       "correctAnswer": "A",
       "explanation": "Quantified benefits establish measurable expected outcomes, enabling senior leadership to evaluate whether the IT governance program delivers the intended value and succeeds over time.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Business Case"
     },
     {
       "number": "41",
@@ -721,7 +761,8 @@
       "correctAnswer": "A",
       "explanation": "A well-developed business case documents the intended benefits, their justification, and the measures used to track realization over the project life cycle. It provides the basis for ongoing benefits management.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "42",
@@ -745,7 +786,8 @@
           "url": "https://www.isaca.org/resources/isaca-journal/issues/2015/volume-3/the-time-for-sustainable-business-is-now-leveraging-cobit-5-in-sustainable-businesses"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "43",
@@ -765,7 +807,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/cobit-design-factors"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "44",
@@ -789,7 +832,8 @@
           "url": "https://www.isaca.org/about-us/newsroom/press-releases/2018/new-cobit-2019-resources-help-organizations-design-and-implement-tailored-governance-systems"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing A Tailored Governance System"
     },
     {
       "number": "45",
@@ -804,7 +848,8 @@
       "correctAnswer": "B",
       "explanation": "Principles, policies, and frameworks translate expected or desired behavior into practical guidance that can be applied across the enterprise.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System and Components"
     },
     {
       "number": "46",
@@ -819,7 +864,8 @@
       "correctAnswer": "B",
       "explanation": "The Strategic role of IT positions IT as a driver of business-process and service innovation.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Designing a Tailored Governance System"
     },
     {
       "number": "47",
@@ -834,7 +880,8 @@
       "correctAnswer": "C",
       "explanation": "The EDM domain covers governance activities that evaluate strategic options, direct senior management by setting priorities and decisions, and monitor outcomes. Its purpose is therefore to assess strategic alternatives and guide senior management on the options selected.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "48",
@@ -854,7 +901,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2021/a-systematic-approach-to-implementing-a-governance-system-using-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance System and Components"
     },
     {
       "number": "49",
@@ -875,7 +923,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/isaca-now-blog/2022/a-cobit-2019-use-case-financial-institutions-in-georgia"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Framework Introduction"
     },
     {
       "number": "50",
@@ -890,7 +939,8 @@
       "correctAnswer": "C",
       "explanation": "A customer-oriented service culture is classified as an enterprise goal in the COBIT goals cascade because it reflects a business outcome focused on customers and service delivery.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "51",
@@ -910,7 +960,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2021/using-cobit-2019-to-proactively-mitigate-the-impact-of-covid-19"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance System and Components"
     },
     {
       "number": "52",
@@ -934,7 +985,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2016/implementing-cobit-5-at-entso-e"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "53",
@@ -949,7 +1001,8 @@
       "correctAnswer": "C",
       "explanation": "Business processing hours lost as a result of unplanned service interruptions directly measures the operational impact of outages and therefore indicates business service continuity and availability.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "54",
@@ -969,7 +1022,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/evaluating-business-service-continuity-and-availability-using-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "55",
@@ -984,7 +1038,8 @@
       "correctAnswer": "B",
       "explanation": "COBIT APO04 (Managed Innovation) aims to create competitive advantage, improve customer experience, and enhance operational effectiveness through the use of I&T developments and emerging technologies.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "56",
@@ -1004,7 +1059,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2021/a-systematic-approach-to-implementing-a-governance-system-using-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "57",
@@ -1019,7 +1075,8 @@
       "correctAnswer": "A",
       "explanation": "Process activities are part of the process component of a COBIT governance or management objective, whose documented information includes the expected capability level. Alignment goals link enterprise goals to IT-related goals, while organizational structures define decision-making entities and responsibilities.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "58",
@@ -1039,7 +1096,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/cobit-and-it-audit-a-partnership-for-eternity"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "59",
@@ -1063,7 +1121,8 @@
           "url": "https://cmmiinstitute.com/learning/appraisals/levels?source=post_page-----a9f68d143039--------------------------------"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "60",
@@ -1078,7 +1137,8 @@
       "correctAnswer": "C",
       "explanation": "A clearly understood, well-documented mandate establishes an organizational structure’s purpose, scope, authority, and accountability. This enables members to act consistently and makes supporting practices such as resource allocation and escalation procedures effective.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "61",
@@ -1093,7 +1153,8 @@
       "correctAnswer": "C",
       "explanation": "Principles, policies and frameworks provide the directives and practical guidance that drive corrective actions required to achieve governance or management objectives.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "62",
@@ -1108,7 +1169,8 @@
       "correctAnswer": "C",
       "explanation": "Early improvement work should favor achievable initiatives that deliver business benefits, creating value quickly and building support for further improvement. Cost alone is not a sufficient prioritization criterion when expected business value is unknown or disregarded.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "63",
@@ -1123,7 +1185,8 @@
       "correctAnswer": "A",
       "explanation": "The Responsible (R) role carries out and drives the work associated with the task or process. The Accountable role has ultimate ownership, and the Informed role is kept updated.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System and Components"
     },
     {
       "number": "64",
@@ -1143,7 +1206,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/cobit-design-factors"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing a Tailored Governance System"
     },
     {
       "number": "65",
@@ -1163,7 +1227,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/cobit-2019-and-cobit-5-comparison"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "66",
@@ -1183,7 +1248,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/cobit-2019-and-cobit-5-comparison"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "67",
@@ -1198,7 +1264,8 @@
       "correctAnswer": "C",
       "explanation": "Reassessing an IT strategic plan after sustained satisfactory performance primarily supports continual improvement by identifying opportunities to improve the plan, its alignment, and its effectiveness over time.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "68",
@@ -1213,7 +1280,8 @@
       "correctAnswer": "C",
       "explanation": "The Build, Acquire and Implement (BAI) domain covers the identification and definition of IT solutions, their acquisition or development, and their implementation and integration into business processes.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "69",
@@ -1228,7 +1296,8 @@
       "correctAnswer": "B",
       "explanation": "Board oversight of technology and innovation is essential to governance because it provides strategic direction and helps ensure I&T-related decisions support the enterprise’s strategies and objectives. Compliance validation and independent audit assurance address conformance and control assurance rather than strategic alignment.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "70",
@@ -1243,7 +1312,8 @@
       "correctAnswer": "C",
       "explanation": "Performance metrics provide measurable, objective evidence for evaluating whether an organizational structure is effective and supports the intended organizational outcomes.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "71",
@@ -1258,7 +1328,8 @@
       "correctAnswer": "B",
       "explanation": "Involving business line managers in improvement planning creates shared ownership of priorities, costs, and expected business value. Their participation helps ensure that governance improvements are appropriately scoped and aligned with business needs, reducing the perception that the expense is imposed without sufficient value.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Business Case"
     },
     {
       "number": "72",
@@ -1282,7 +1353,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/cobit-2019-and-the-iia-2019-guiding-principles-of-corporate-governance"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "73",
@@ -1302,7 +1374,8 @@
           "url": "https://www.iso.org/standard/78526.html"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "74",
@@ -1326,7 +1399,8 @@
           "url": "https://www.isaca.org/resources/isaca-journal/issues/2019/volume-3/developing-the-it-audit-plan-using-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing A Tailored Governance System"
     },
     {
       "number": "75",
@@ -1350,7 +1424,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/using-cobit-2019-performance-management-model-to-assess-governance-and-management-objectives"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "76",
@@ -1365,7 +1440,8 @@
       "correctAnswer": "C",
       "explanation": "The learning and growth dimension covers employee skills, motivation, knowledge sharing, and the organizational capabilities needed to improve and support business objectives.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "77",
@@ -1385,7 +1461,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2014/improving-the-rfp-and-contracts-process-with-cobit-5"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "78",
@@ -1405,7 +1482,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/cobit-2019-and-the-iia-2019-guiding-principles-of-corporate-governance"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "79",
@@ -1425,7 +1503,8 @@
           "url": "https://isaca.info/pages/resources/frameworks/cobit.php"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "80",
@@ -1445,7 +1524,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/designing-your-organizations-custom-cobit"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "81",
@@ -1469,7 +1549,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/introducing-cobit-2019-the-motivation-for-the-update"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "82",
@@ -1489,7 +1570,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/introducing-cobit-2019-the-motivation-for-the-update"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing a Tailored Governance System"
     },
     {
       "number": "83",
@@ -1509,7 +1591,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/introducing-cobit-2019-the-motivation-for-the-update"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "84",
@@ -1524,7 +1607,8 @@
       "correctAnswer": "A",
       "explanation": "In the COBIT enterprise-goals cascade, compliance with external laws and regulations is an enterprise goal in the Financial balanced-scorecard dimension.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "85",
@@ -1539,7 +1623,8 @@
       "correctAnswer": "A",
       "explanation": "A governance system achieves governance and management objectives through multiple interrelated components operating together holistically. Culture and behavior, and organizational structures for decision-making, are important individual components but are not sufficient as the primary basis by themselves.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "86",
@@ -1554,7 +1639,8 @@
       "correctAnswer": "A",
       "explanation": "A higher process capability level requires successful performance of all activities defined for that level; demonstrating effective execution for only a relevant or selected subset does not establish that level of capability.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "87",
@@ -1569,7 +1655,8 @@
       "correctAnswer": "A",
       "explanation": "COBIT groups relevant governance components within governance and management objectives that organizations can manage and assess to the required capability level.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System and Components"
     },
     {
       "number": "88",
@@ -1589,7 +1676,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/cobit-2019-hot-off-the-press"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "89",
@@ -1604,7 +1692,8 @@
       "correctAnswer": "B",
       "explanation": "COBIT 2019 treats DevOps as a focus area because it is a current governance and management topic requiring tailored guidance. It also uses DevOps as an example of a component variant, since a DevOps focus area can adapt core-model components such as processes and organizational structures.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "90",
@@ -1624,7 +1713,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/newsletters/atisaca/2022/volume-36/strategies-to-customize-and-implement-cobit-best-practices"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "91",
@@ -1644,7 +1734,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/digital-transformation-realized-through-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "92",
@@ -1659,7 +1750,8 @@
       "correctAnswer": "A",
       "explanation": "Managed strategy provides a roadmap of incremental changes that guides the organization toward delivering its desired value.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "93",
@@ -1679,7 +1771,8 @@
           "url": "https://www.isaca.org/resources/cobit"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Framework Introduction"
     },
     {
       "number": "94",
@@ -1703,7 +1796,8 @@
           "url": "https://www.isaca.org/resources/glossary"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing A Tailored Governance System"
     },
     {
       "number": "95",
@@ -1718,7 +1812,8 @@
       "correctAnswer": "B",
       "explanation": "Managed innovation focuses on identifying, evaluating, and adopting relevant technological advances so the organization remains current and avoids technological obsolescence. Customer experience and brand reputation may improve as secondary outcomes, but neither defines the practice’s primary objective.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "96",
@@ -1738,7 +1833,8 @@
           "url": "https://www.isaca.org/resources/isaca-journal/issues/2020/volume-5/applying-agile-to-digital-audit-transformation"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "97",
@@ -1753,7 +1849,8 @@
       "correctAnswer": "C",
       "explanation": "The board provides enterprise-level oversight of the governance structures and mechanisms that direct and monitor information and technology in support of organizational objectives.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "98",
@@ -1773,7 +1870,8 @@
           "url": "https://www.isaca.org/resources/isaca-journal/issues/2016/volume-5/holistic-it-governance-risk-management-security-and-privacy-needed-for-effective-implementation-and"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Implementation"
     },
     {
       "number": "99",
@@ -1788,7 +1886,8 @@
       "correctAnswer": "A",
       "explanation": "Achievement of intended IT-governance outcomes is best determined by evaluating the performance measurements defined in the business case, because those measures provide the agreed criteria for success.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "100",
@@ -1808,7 +1907,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/isaca-now-blog/2022/a-cobit-2019-use-case-financial-institutions-in-georgia"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "101",
@@ -1832,7 +1932,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/a-new-cobit-is-in-town-and-i-really-like-how-it-looks"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing a Tailored Governance System"
     },
     {
       "number": "102",
@@ -1847,7 +1948,8 @@
       "correctAnswer": "C",
       "explanation": "COBIT organizes enterprise goals according to the Balanced Scorecard dimensions, linking governance and management objectives to financial, customer, internal, and learning-and-growth perspectives.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "103",
@@ -1867,7 +1969,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2019/cobit-design-factors"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing a Tailored Governance System"
     },
     {
       "number": "104",
@@ -1882,7 +1985,8 @@
       "correctAnswer": "C",
       "explanation": "Business service continuity and availability is a COBIT enterprise goal because it addresses the organization’s ability to keep its business services operating and available. Managed IT-related risks and IT compliance with internal policies are IT/alignment-oriented goals.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "105",
@@ -1897,7 +2001,8 @@
       "correctAnswer": "B",
       "explanation": "Each capability maturity level indicates how effectively a process has been implemented and is performing at that level, progressing from less mature and less controlled processes to more managed, measured, and optimized ones.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "106",
@@ -1921,7 +2026,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/cobit-tool-kit-enhancements"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Designing a Tailored Governance System"
     },
     {
       "number": "107",
@@ -1941,7 +2047,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/a-new-cobit-is-in-town-and-i-really-like-how-it-looks"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Implementation"
     },
     {
       "number": "108",
@@ -1961,7 +2068,8 @@
           "url": "https://www.isaca.org/credentialing/cobit-design-and-implementation"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Implementation"
     },
     {
       "number": "109",
@@ -1985,7 +2093,8 @@
           "url": "https://www.isaca.org/resources/isaca-journal/issues/2018/volume-4/integrating-kris-and-kpis-for-effective-technology-risk-management"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "110",
@@ -2005,7 +2114,8 @@
           "url": "https://www.isaca.org/about-us/newsroom/press-releases/2018/new-cobit-2019-resources-help-organizations-design-and-implement-tailored-governance-systems"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Business Case"
     },
     {
       "number": "111",
@@ -2029,7 +2139,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2016/cobit-5-mapping-exercise-for-establishing-enterprise-it-strategy"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "112",
@@ -2053,7 +2164,8 @@
           "url": "https://www.isaca.org/resources/glossary"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "113",
@@ -2073,7 +2185,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/a-new-cobit-is-in-town-and-i-really-like-how-it-looks"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "114",
@@ -2093,7 +2206,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/a-new-cobit-is-in-town-and-i-really-like-how-it-looks"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "115",
@@ -2108,7 +2222,8 @@
       "correctAnswer": "B",
       "explanation": "The Responsible (R) role performs the work required by the practice and creates its intended outcome. The Accountable role retains ownership, and Consulted roles provide input.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "116",
@@ -2128,7 +2243,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/a-new-cobit-is-in-town-and-i-really-like-how-it-looks"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "117",
@@ -2143,7 +2259,8 @@
       "correctAnswer": "C",
       "explanation": "IT governance is evaluated primarily by whether it has produced the expected benefits and business value. Risk reduction and lessons learned may be supporting indicators, but benefits realization is the key outcome measure.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "118",
@@ -2163,7 +2280,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/isaca-now-blog/2022/a-cobit-2019-use-case-financial-institutions-in-georgia"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "119",
@@ -2178,7 +2296,8 @@
       "correctAnswer": "C",
       "explanation": "COBIT is an enterprise-wide framework for the governance and management of information and technology, designed to support I&T goals throughout the entire enterprise.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Framework Introduction"
     },
     {
       "number": "120",
@@ -2198,7 +2317,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/isaca-now-blog/2022/a-cobit-2019-use-case-financial-institutions-in-georgia"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "121",
@@ -2213,7 +2333,8 @@
       "correctAnswer": "C",
       "explanation": "An effective governance framework needs sufficient flexibility to address emerging issues, evolving risks, and changing organizational requirements. It should not be restricted solely to existing issues or a single governing standard.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "122",
@@ -2233,7 +2354,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2018/introducing-cobit-2019-the-motivation-for-the-update"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Framework Introduction"
     },
     {
       "number": "123",
@@ -2253,7 +2375,8 @@
           "url": "https://learn.microsoft.com/en-us/devops/what-is-devops"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Implementation"
     },
     {
       "number": "124",
@@ -2268,7 +2391,8 @@
       "correctAnswer": "B",
       "explanation": "Enabling and supporting business processes through application and technology integration concerns the effectiveness of internal IT operations and processes. It therefore aligns with the Internal IT balanced scorecard dimension.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "125",
@@ -2292,7 +2416,8 @@
           "url": "https://www.isaca.org/resources/glossary"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "126",
@@ -2307,7 +2432,8 @@
       "correctAnswer": "C",
       "explanation": "COBIT’s Goals Cascade translates enterprise goals into alignment goals, and governance or management objectives support those alignment goals. The alignment goals therefore relate to broader enterprise goals.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "127",
@@ -2322,7 +2448,8 @@
       "correctAnswer": "C",
       "explanation": "COBIT 2019 defines Product Manager as the role accountable for managing the development, implementation, evaluation, and ongoing maintenance of both new and existing products and services, providing lifecycle ownership that is distinct from the Business Process Owner's accountability for individual business-process outcomes and the Service Manager's accountability for delivering services per agreed levels.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "128",
@@ -2337,7 +2464,8 @@
       "correctAnswer": "C",
       "explanation": "Organizational meeting reports and minutes should be available and meaningful because they document decisions, actions, and accountability, supporting transparency in governance.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "129",
@@ -2357,7 +2485,8 @@
           "url": "https://www.isaca.org/career-center/career-journey/it-governance"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "130",
@@ -2377,7 +2506,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/newsletters/atisaca/2021/volume-19/3-things-cobit-is-3-things-it-isnt"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Framework Introduction"
     },
     {
       "number": "131",
@@ -2392,7 +2522,8 @@
       "correctAnswer": "C",
       "explanation": "An I&T governance board is a group of relevant stakeholders and experts accountable for directing and overseeing information-and-technology-related matters and decisions across the enterprise.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "132",
@@ -2416,7 +2547,8 @@
           "url": "https://www.isaca.org/resources/isaca-journal/issues/2015/volume-2/selected-cobit-5-processes-for-essential-enterprise-security"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "133",
@@ -2431,7 +2563,8 @@
       "correctAnswer": "C",
       "explanation": "IT governance objectives must align IT decision-making, investments, risk management, and performance with the enterprise’s overall goals. Profitability and IT-risk reduction may be objectives in particular circumstances, but enterprise-goal alignment is the overarching requirement.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "134",
@@ -2446,7 +2579,8 @@
       "correctAnswer": "A",
       "explanation": "The board is responsible for governing and overseeing enterprise information and technology, including the governance structures and mechanisms used to ensure stakeholder needs are evaluated and organizational objectives are pursued.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "135",
@@ -2470,7 +2604,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2020/achieving-operational-excellence-using-cobit-2019"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Framework Introduction"
     },
     {
       "number": "136",
@@ -2485,7 +2620,8 @@
       "correctAnswer": "A",
       "explanation": "A governance system should be dynamic because changes in enterprise strategy, technology, and other design factors can affect the governance system and may require adjustments to it.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Principles"
     },
     {
       "number": "137",
@@ -2500,7 +2636,8 @@
       "correctAnswer": "B",
       "explanation": "A maturity level represents a defined stage of process improvement achieved across the applicable set of process areas, whereas a capability level measures improvement for an individual process area.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "138",
@@ -2515,7 +2652,8 @@
       "correctAnswer": "A",
       "explanation": "IT governance implementation risk should be identified, assessed, monitored, and addressed throughout the life cycle because risks evolve across planning, implementation, transition, and ongoing operation.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Implementation"
     },
     {
       "number": "139",
@@ -2535,7 +2673,8 @@
           "url": "https://www.isaca.org/resources/isaca-journal/issues/2016/volume-5/holistic-it-governance-risk-management-security-and-privacy-needed-for-effective-implementation-and"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Implementation"
     },
     {
       "number": "140",
@@ -2550,7 +2689,8 @@
       "correctAnswer": "B",
       "explanation": "The enterprise strategy defines the business objectives, priorities, and desired outcomes that the IT governance system must support. Governance design is therefore anchored in strategic alignment before considering more specific inputs such as risk profile or current IT-related issues.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Framework Introduction"
     },
     {
       "number": "141",
@@ -2565,7 +2705,8 @@
       "correctAnswer": "B",
       "explanation": "Time-to-market measures the speed at which products and services reach the market. Faster delivery strengthens an enterprise’s ability to offer and sustain a competitive portfolio of products and services.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "142",
@@ -2580,7 +2721,8 @@
       "correctAnswer": "A",
       "explanation": "Defining operational costs and expected benefits for I&T services provides reliable, complete technology-related financial information for planning, oversight, and value assessment.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance and Management Objectives"
     },
     {
       "number": "143",
@@ -2595,7 +2737,8 @@
       "correctAnswer": "C",
       "explanation": "Senior leadership commitment provides the authority, direction, and organizational priority needed for key staff to participate in IT-governance planning. Without executive sponsorship, governance activities are unlikely to receive the necessary engagement and support.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Implementation"
     },
     {
       "number": "144",
@@ -2610,7 +2753,8 @@
       "correctAnswer": "B",
       "explanation": "Managed Risk is COBIT objective APO12. The APO prefix identifies the Align, Plan and Organize domain.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "145",
@@ -2630,7 +2774,8 @@
           "url": "https://www.isaca.org/resources/news-and-trends/industry-news/2021/using-cobit-2019-to-proactively-mitigate-the-impact-of-covid-19"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     },
     {
       "number": "146",
@@ -2645,7 +2790,8 @@
       "correctAnswer": "B",
       "explanation": "Processes are a governance-system component because they establish the practices and activities used to achieve governance and management objectives. Legal and regulatory requirements are design factors or external obligations, while performance metrics measure outcomes.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "147",
@@ -2660,7 +2806,8 @@
       "correctAnswer": "ABC",
       "explanation": "COBIT defines people, skills and competencies; processes; and principles, policies and frameworks as governance system components. Each contributes to the effective execution of governance and management activities.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Governance System And Components"
     },
     {
       "number": "148",
@@ -2675,7 +2822,8 @@
       "correctAnswer": "C",
       "explanation": "In COBIT 2019, alignment goal AG09—delivery of programs on time, within budget, and to requirements and quality standards—is classified under the Internal IT balanced-scorecard dimension. It concerns the effectiveness and quality of internal I&T program-delivery processes.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Performance Management"
     },
     {
       "number": "149",
@@ -2695,7 +2843,8 @@
           "url": "https://www.isaca.org/resources/isaca-journal/issues/2018/volume-2/helpsource-qa"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Governance And Management Objectives"
     }
   ]
 }

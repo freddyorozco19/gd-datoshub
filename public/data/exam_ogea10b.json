@@ -17,7 +17,8 @@
       "correctAnswer": "A",
       "explanation": "Stakeholders own the desired business value, including the preferences and priorities that the architecture must enable. EA practitioners serve the stakeholders’ objectives and must remain impartial, setting aside personal preferences, biases, and priorities.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understanding Key Concepts Of Togaf Standard"
     },
     {
       "number": "2",
@@ -33,7 +34,8 @@
       "correctAnswer": "B",
       "explanation": "The second governance function is to control change activity, ensuring that the change remains on the optimal path for realizing the expected value.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understanding Key Concepts Of Togaf Standard"
     },
     {
       "number": "3",
@@ -49,7 +51,8 @@
       "correctAnswer": "D",
       "explanation": "The Architecture Vision establishes the high-level intent and boundaries of an architecture initiative. Defining the scope of the problem being addressed is necessary to set those boundaries and align the vision with the intended change.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understanding Key Concepts Of Togaf Standard"
     },
     {
       "number": "4",
@@ -67,7 +70,8 @@
       "learnMore": [
         "The TOGAF Standard — ADM Techniques: Trade-Off Analysis"
       ],
-      "images": []
+      "images": [],
+      "topic": "Applying The Togaf Standard In Enterprise Architecture Proje"
     },
     {
       "number": "5",
@@ -88,7 +92,8 @@
           "url": "https://theopengroup.gitlab.io/dpbok-community-edition/html/DPBoK-CE.html"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understanding Key Concepts Of Togaf Standard"
     },
     {
       "number": "6",
@@ -113,7 +118,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Understanding Key Concepts Of Togaf Standard"
     },
     {
       "number": "7",
@@ -134,7 +140,8 @@
           "url": "https://theopengroup.gitlab.io/dpbok-community-edition/html/DPBoK-CE.html"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understanding Key Concepts of TOGAF Standard"
     },
     {
       "number": "8",
@@ -150,7 +157,8 @@
       "correctAnswer": "B",
       "explanation": "Security domains allow assets with comparable security requirements to be governed by a common security policy. Where data is exchanged with external partners, a security federation defines the participating parties, contractual arrangements, responsibilities for exchanged data, and associated security implications. A risk assessment should identify risks relevant to the specific data assets, including the privacy-sensitive vehicle and journey data.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Applying the TOGAF Standard in Enterprise Architecture Projects"
     },
     {
       "number": "9",
@@ -171,7 +179,8 @@
           "url": "https://publications.opengroup.org/standards/togaf"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understanding Key Concepts of TOGAF Standard"
     },
     {
       "number": "10",
@@ -187,7 +196,8 @@
       "correctAnswer": "B",
       "explanation": "",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Applying the TOGAF Standard in Enterprise Architecture Projects"
     },
     {
       "number": "11",
@@ -208,7 +218,8 @@
           "url": "https://www.opengroup.org/togaf"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understanding Key Concepts of TOGAF Standard"
     },
     {
       "number": "12",
@@ -224,7 +235,8 @@
       "correctAnswer": "A",
       "explanation": "TOGAF architecture development uses alternatives and trade-offs to compare multiple Target Architecture options and expose stakeholder concerns, including unstated agendas, principles, and requirements that could affect the selected Target Architecture.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understanding Key Concepts of TOGAF Standard"
     },
     {
       "number": "13",
@@ -249,7 +261,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Understanding Key Concepts of TOGAF Standard"
     }
   ]
 }

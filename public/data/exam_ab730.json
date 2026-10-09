@@ -31,7 +31,8 @@
           "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/manage-public-web-access"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "2",
@@ -52,7 +53,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/image-generator"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Draft and analyze business content by using AI"
     },
     {
       "number": "3",
@@ -80,7 +82,8 @@
           "text": "You generate a report by using the Researcher agent in Microsoft 365 Copilot. You can use [___] to save and edit the response.",
           "answer": "a page"
         }
-      ]
+      ],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "4",
@@ -114,7 +117,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture-data-protection-auditing"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "5",
@@ -135,7 +139,8 @@
           "url": "https://learn.microsoft.com/en-us/power-apps/user/use-microsoft-365-copilot-model-driven-apps"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "6",
@@ -156,7 +161,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-analyst-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Draft and analyze business content by using AI"
     },
     {
       "number": "7",
@@ -178,7 +184,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/get-started-writing-prompts-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "8",
@@ -199,7 +206,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-search-in-the-microsoft-365-copilot-app"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "9",
@@ -220,7 +228,8 @@
           "url": "https://support.microsoft.com/en-US/teams/meetings/recap-in-microsoft-teams"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "10",
@@ -241,7 +250,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/get-started-writing-prompts-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Draft And Analyze Business Content By Using Ai"
     },
     {
       "number": "11",
@@ -262,7 +272,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/what-is-the-microsoft-365-copilot-app"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "12",
@@ -301,7 +312,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/researcher-agent"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "13",
@@ -321,7 +333,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/how-microsoft-365-copilot-notebooks-works"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "14",
@@ -342,7 +355,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-researcher-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Draft and analyze business content by using AI"
     },
     {
       "number": "15",
@@ -370,7 +384,8 @@
           "text": "Choose the answer that correctly finishes the sentence. Overreliance is a common risk associated with generative AI, where [___]",
           "answer": "users accept the AI-generated output without verifying its accuracy."
         }
-      ]
+      ],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "16",
@@ -386,7 +401,8 @@
       "correctAnswer": "BD",
       "explanation": "Copilot in PowerPoint generates slide layouts optimized for presentation content, improving visual organization and flow. It also creates summary slides that distill key points from the full deck into a single consolidated slide. Object animations and corporate design theme customization require manual work beyond Copilot's content-generation and presentation-optimization capabilities.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Draft and analyze business content by using AI"
     },
     {
       "number": "17",
@@ -411,7 +427,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/personalize-what-microsoft-365-copilot-remembers"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "18",
@@ -433,7 +450,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/azure-openai-human-review"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "19",
@@ -467,7 +485,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/how-microsoft-365-copilot-chat-history-works"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "20",
@@ -495,7 +514,8 @@
           "text": "You are creating an agent in the Microsoft 365 Copilot app. The agent persona must be warm and friendly. To set the persona, you should modify the [___]",
           "answer": "instructions."
         }
-      ]
+      ],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "21",
@@ -523,7 +543,8 @@
           "alt": "Microsoft 365 Copilot with Standings conversation",
           "inOption": false
         }
-      ]
+      ],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "22",
@@ -544,7 +565,8 @@
           "url": "https://support.microsoft.com/en-us/Microsoft-365-Copilot/customize-how-microsoft-365-copilot-responds-to-you"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "23",
@@ -565,7 +587,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/ai-m365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Draft And Analyze Business Content By Using Ai"
     },
     {
       "number": "24",
@@ -593,7 +616,8 @@
           "text": "In Microsoft 365 Copilot, [___] ensures that business data stays within a Microsoft 365 tenant and is NOT used to train AI models.",
           "answer": "Enterprise data protection (EDP)"
         }
-      ]
+      ],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "25",
@@ -614,7 +638,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/how-microsoft-365-copilot-chat-history-works"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "26",
@@ -639,7 +664,8 @@
           "url": "https://support.microsoft.com/en-us/teams/meetings/recap-in-microsoft-teams"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "27",
@@ -673,7 +699,8 @@
           "url": "https://support.microsoft.com/en-us/teams/copilot/how-to-use-microsoft-365-copilot-in-teams-chats-and-channels"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "28",
@@ -707,7 +734,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/retention-policies-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "29",
@@ -728,7 +756,8 @@
           "url": "https://support.microsoft.com/en-US/Privacy/delete-your-microsoft-365-copilot-activity-history"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "30",
@@ -758,7 +787,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/customize-how-microsoft-365-copilot-responds-to-you"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "31",
@@ -793,7 +823,8 @@
           "url": "https://news.microsoft.com/signal/articles/the-prompt-tidying-up-your-digital-clutter/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "32",
@@ -821,7 +852,8 @@
           "text": "From Microsoft 365, you [___] the Researcher agent.",
           "answer": "cannot modify the settings of"
         }
-      ]
+      ],
+      "topic": "Draft and analyze business content by using AI"
     },
     {
       "number": "33",
@@ -855,7 +887,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "34",
@@ -889,7 +922,8 @@
           "url": "https://learn.microsoft.com/en-us/copilot/manage"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "35",
@@ -928,7 +962,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-analyst-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "36",
@@ -948,7 +983,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/add-references-to-your-microsoft-365-copilot-notebook"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "37",
@@ -973,7 +1009,8 @@
           "url": "https://support.microsoft.com/en-us/loop/get-started-with-the-loop-mobile-app"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "38",
@@ -994,7 +1031,8 @@
           "url": "https://support.microsoft.com/en-us/teams/copilot/catch-up-on-meetings-with-microsoft-365-copilot-in-teams"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "39",
@@ -1024,7 +1062,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/ai-m365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "40",
@@ -1058,7 +1097,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/how-to-share-your-agent"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "41",
@@ -1084,7 +1124,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/how-microsoft-365-copilot-chat-history-works"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "42",
@@ -1109,7 +1150,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "43",
@@ -1135,7 +1177,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/add-references-to-your-microsoft-365-copilot-notebook"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "44",
@@ -1156,7 +1199,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/manage-copilot-memory-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "45",
@@ -1190,7 +1234,8 @@
           "url": "https://learn.microsoft.com/en-us/copilot/faq"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "46",
@@ -1211,7 +1256,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/code-interpreter"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "47",
@@ -1245,7 +1291,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-share-manage-agents"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "48",
@@ -1271,7 +1318,8 @@
           "url": "https://support.microsoft.com/en-us/office/learn-about-copilot-prompts/sharing-prompts-with-a-team"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "49",
@@ -1296,7 +1344,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-writing-prompts-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "50",
@@ -1322,7 +1371,8 @@
           "url": "https://support.microsoft.com/en-US/Office/learn-about-copilot-prompts/sharing-prompts-with-a-team"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "51",
@@ -1356,7 +1406,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "52",
@@ -1372,7 +1423,8 @@
       "correctAnswer": "CD",
       "explanation": "Copilot in Excel analyzes datasets to extract key patterns, trends, and correlations, generating natural-language summaries of important insights. Copilot also generates PivotTables from raw data, structuring it into a pivot layout without manual configuration. Conditional formatting customization and custom chart formatting require precise manual styling that Copilot cannot perform reliably.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "53",
@@ -1397,7 +1449,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/what-information-does-copilot-use-to-answer-my-prompt"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "54",
@@ -1412,7 +1465,8 @@
       "correctAnswer": "B",
       "explanation": "Copilot Pages is available in both Microsoft 365 Copilot and the standalone Microsoft 365 Copilot Chat experience, allowing users to turn responses into a shared, editable canvas. Notebooks and the Researcher agent require a paid Microsoft 365 Copilot license and are not part of the Copilot Chat offering.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "55",
@@ -1446,7 +1500,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/build-your-own-agent-with-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "56",
@@ -1476,7 +1531,8 @@
           "url": "https://learn.microsoft.com/en-us/copilot/faq"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "57",
@@ -1497,7 +1553,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-microsoft-365-copilot-notebooks"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "58",
@@ -1527,7 +1584,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/how-microsoft-365-copilot-chat-history-works"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "59",
@@ -1552,7 +1610,8 @@
           "url": "https://learn.microsoft.com/en-us/training/modules/explore-possibilities-microsoft-365-copilot/3-summarize-draft-emails-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "60",
@@ -1582,7 +1641,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/get-started-writing-prompts-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "61",
@@ -1616,7 +1676,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-an-audio-overview-of-your-microsoft-365-copilot-notebook"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "62",
@@ -1650,7 +1711,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/use-copilot-in-shared-mailboxes-and-delegate-mailboxes"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "63",
@@ -1671,7 +1733,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-studio/concepts/content-filtering"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "64",
@@ -1699,7 +1762,8 @@
           "text": "Document1.docx [___]",
           "answer": "has a sensitivity label applied."
         }
-      ]
+      ],
+      "topic": "Draft And Analyze Business Content By Using Ai"
     },
     {
       "number": "65",
@@ -1733,7 +1797,8 @@
           "url": "https://learn.microsoft.com/en-us/security/zero-trust/sfi/defend-indirect-prompt-injection"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "66",
@@ -1754,7 +1819,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/save-your-favorite-prompts-to-use-again"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "67",
@@ -1779,7 +1845,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "68",
@@ -1800,7 +1867,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/how-microsoft-365-copilot-notebooks-works"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "69",
@@ -1822,7 +1890,8 @@
           "alt": "",
           "inOption": false
         }
-      ]
+      ],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "70",
@@ -1847,7 +1916,8 @@
           "url": "https://support.microsoft.com/en-us/word/copilot/create-a-summary-of-your-document-with-copilot-in-word"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Draft and analyze business content by using AI"
     },
     {
       "number": "71",
@@ -1872,7 +1942,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "72",
@@ -1904,7 +1975,8 @@
           "text": "You are using Microsoft 365 Copilot during a Microsoft Teams meeting. After the meeting, you can only [___] if the meeting was transcribed.",
           "answer": "generate a recap of what was discussed during the meeting"
         }
-      ]
+      ],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "73",
@@ -1925,7 +1997,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-share-manage-agents"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "74",
@@ -1953,7 +2026,8 @@
           "text": "From the Microsoft 365 My Account portal, if you select Delete history for the Copilot activity history, you can delete [___]",
           "answer": "all the Microsoft 365 Copilot activity."
         }
-      ]
+      ],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "75",
@@ -1987,7 +2061,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/release-notes"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "76",
@@ -2014,7 +2089,8 @@
           "alt": "Microsoft 365 Copilot signed in with work account",
           "inOption": false
         }
-      ]
+      ],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "77",
@@ -2035,7 +2111,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/frequently-asked-questions-about-microsoft-365-copilot-chat"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "78",
@@ -2065,7 +2142,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-add-knowledge"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "79",
@@ -2086,7 +2164,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/what-information-does-copilot-use-to-answer-my-prompt"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "80",
@@ -2107,7 +2186,8 @@
           "url": "https://support.microsoft.com/en-us/Microsoft-365-Copilot/validate-copilot-output"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Draft And Analyze Business Content By Using Ai"
     },
     {
       "number": "81",
@@ -2137,7 +2217,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/get-started-with-microsoft-365-copilot-notebooks"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "82",
@@ -2165,7 +2246,8 @@
           "text": "From Microsoft 365 Copilot, you can use [___] to help users begin conversations with an agent and guide the users to use the agent more effectively.",
           "answer": "suggested prompts"
         }
-      ]
+      ],
+      "topic": "Understand Generative Ai Fundamentals"
     },
     {
       "number": "83",
@@ -2186,7 +2268,8 @@
           "url": "https://support.microsoft.com/en-US/Microsoft-365-Copilot/what-information-does-copilot-use-to-answer-my-prompt"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "84",
@@ -2211,7 +2294,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-build-agents"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage Prompts And Conversations By Using Ai"
     },
     {
       "number": "85",
@@ -2245,7 +2329,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "86",
@@ -2269,7 +2354,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/add-references-to-your-microsoft-365-copilot-notebook"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "87",
@@ -2297,7 +2383,8 @@
           "text": "From Microsoft 365 Copilot, if you want to aggregate data and produce charts from the data, you should use [___]",
           "answer": "the Analyst agent."
         }
-      ]
+      ],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "88",
@@ -2331,7 +2418,8 @@
           "url": "https://support.microsoft.com/en-us/teams/copilot/catch-up-on-meetings-with-microsoft-365-copilot-in-teams"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "89",
@@ -2359,7 +2447,8 @@
           "text": "When you are creating an agent in Microsoft 365 Copilot, you can leverage generative AI to build the agent by using [___].",
           "answer": "the Describe tab"
         }
-      ]
+      ],
+      "topic": "Understand generative AI fundamentals"
     },
     {
       "number": "90",
@@ -2381,7 +2470,8 @@
           "url": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "91",
@@ -2409,7 +2499,8 @@
           "text": "[___] enables organizations to apply governance policies to conversations generated by using Microsoft 365 Copilot.",
           "answer": "Microsoft Purview"
         }
-      ]
+      ],
+      "topic": "Manage prompts and conversations by using AI"
     },
     {
       "number": "92",
@@ -2437,7 +2528,8 @@
           "text": "If you start a temporary chat in Microsoft 365 Copilot, and then start a new chat, all the prompts and responses from the temporary chat will be [___]",
           "answer": "deleted immediately."
         }
-      ]
+      ],
+      "topic": "Understand generative AI fundamentals"
     }
   ]
 }

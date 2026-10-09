@@ -23,7 +23,8 @@
           "text": "The primary goal of generative AI is [___]",
           "answer": "to create new content, such as text, images, or code."
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "2",
@@ -53,7 +54,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai?view=azureml-api-2"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "3",
@@ -69,7 +71,8 @@
       "correctAnswer": "C",
       "explanation": "A pretrained generative AI model is trained on a large, broad, general-purpose dataset to learn general patterns, language structure, and knowledge. Fine-tuning takes that pretrained model and continues training it on a smaller, narrower, domain- or task-specific dataset so it performs better on specialized tasks. This is why option C is correct: it accurately reflects that pretraining establishes broad general capability while fine-tuning adapts the model to a specific domain or use case.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "4",
@@ -90,7 +93,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "5",
@@ -111,7 +115,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "6",
@@ -137,7 +142,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-fundamentals-agents-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "7",
@@ -163,7 +169,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/ai/govern"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "8",
@@ -188,7 +195,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/retrieval-augmented-generation"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "9",
@@ -214,7 +222,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoftsearch/connectors-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "10",
@@ -236,7 +245,8 @@
           "text": "Effective prompt engineering increases the [___]",
           "answer": "accuracy and relevance of AI-generated responses."
         }
-      ]
+      ],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "11",
@@ -270,7 +280,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "12",
@@ -300,7 +311,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "13",
@@ -325,7 +337,8 @@
           "url": "https://azure.microsoft.com/en-us/products/ai-foundry/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "14",
@@ -347,7 +360,8 @@
           "text": "The main difference between generative AI and predictive AI is that generative AI [___]",
           "answer": "can produce new and original content."
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "15",
@@ -373,7 +387,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-auto-train"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "16",
@@ -407,7 +422,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "17",
@@ -437,7 +453,8 @@
           "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "18",
@@ -465,7 +482,8 @@
           "text": "Microsoft 365 Copilot can be used to [___]",
           "answer": "create a Microsoft Word document."
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "19",
@@ -486,7 +504,8 @@
           "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "20",
@@ -511,7 +530,8 @@
           "url": "https://www.microsoft.com/en-us/microsoft-365/blog/2025/06/02/researcher-and-analyst-are-now-generally-available-in-microsoft-365-copilot/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "21",
@@ -545,7 +565,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-chat-requirements"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "22",
@@ -570,7 +591,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "23",
@@ -591,7 +613,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/ai-microsoft-purview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "24",
@@ -612,7 +635,8 @@
           "url": "https://techcommunity.microsoft.com/blog/educatordeveloperblog/ai-900-microsoft-azure-ai-fundamentals-study-guide/3737182"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "25",
@@ -633,7 +657,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/autonomous-agents"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "26",
@@ -658,7 +683,8 @@
           "url": "https://learn.microsoft.com/en-us/training/modules/choose-microsoft-365-copilot-extensibility-path/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "27",
@@ -685,7 +711,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai?view=azureml-api-2"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "28",
@@ -719,7 +746,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365-copilot/microsoft-365-copilot-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "29",
@@ -735,7 +763,8 @@
       "correctAnswer": "A",
       "explanation": "A chatbot built on generative AI is designed to hold natural-language conversations with users, ask follow-up questions to clarify their needs, and hand off (escalate) the conversation to a human agent when the request exceeds its capabilities. This matches the requirement for interactive dialogue, needs discovery, and escalation. Predictive AI focuses on forecasting future outcomes from historical data, a recommendation engine suggests items based on user/item similarity or behavior patterns, and computer vision analyzes visual data — none of these are designed for conversational, question-driven customer interaction with human escalation.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "30",
@@ -763,7 +792,8 @@
           "text": "An organization that runs continuous, large-scale workloads with Azure OpenAI models should choose the [___] pricing model.",
           "answer": "Provisioned (PTUs)"
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "31",
@@ -797,7 +827,8 @@
           "url": "https://learn.microsoft.com/en-us/dotnet/ai/conceptual/prompt-engineering-dotnet"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "32",
@@ -822,7 +853,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "33",
@@ -847,7 +879,8 @@
       ],
       "explanation": "Security and accuracy concerns are consistently ranked among the top barriers preventing organizations from scaling AI solutions, as trust issues around data protection, model reliability, and output accuracy create hesitancy among decision-makers. High-quality, well-governed data is foundational to AI success because model outputs are only as reliable as the data used to train and operate them; poor data quality leads to biased, inaccurate, or unsafe AI outcomes and is a leading cause of failed AI initiatives. Successful AI adoption requires cross-functional collaboration, including business stakeholders to ensure the solution addresses real organizational needs and compliance stakeholders to ensure adherence to regulatory, privacy, and risk management requirements, particularly in regulated industries.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "34",
@@ -881,7 +914,8 @@
           "url": "https://techcommunity.microsoft.com/blog/microsoft-security-blog/microsoft-copilot-studio-vs-microsoft-foundry-building-ai-agents-and-apps/4483160"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "35",
@@ -906,7 +940,8 @@
           "url": "https://www.microsoft.com/en-us/ai/principles-and-approach"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "36",
@@ -940,7 +975,8 @@
           "url": "https://azure.microsoft.com/en-us/products/ai-foundry/tools/translator"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "37",
@@ -965,7 +1001,8 @@
           "url": "https://azure.microsoft.com/en-us/solutions/knowledge-mining"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "38",
@@ -997,7 +1034,8 @@
           "text": "An effective way to scale AI proficiency and adoption amongst employees is to [___]",
           "answer": "establish a champions program for your company."
         }
-      ]
+      ],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "39",
@@ -1022,7 +1060,8 @@
       ],
       "explanation": "Data limitations — such as poor data quality, fragmented or siloed data, and insufficient data governance — combined with a shortage of AI skills and organizational readiness are consistently identified as leading barriers to enterprise AI adoption. Organizations that select AI tools and platforms before defining a clear business use case and measurable value proposition frequently fail to realize value, since strategy and outcome definition must precede technology selection for successful adoption. Finally, AI initiatives require coordination across IT, data science, legal/compliance, and business units; when this cross-functional collaboration is missing, the result is fragmented governance, duplicated investment, and misaligned initiatives — a recognized and common barrier to scaling AI within organizations.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "40",
@@ -1056,7 +1095,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/key-phrase-extraction/overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "41",
@@ -1077,7 +1117,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "42",
@@ -1102,7 +1143,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "43",
@@ -1141,7 +1183,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "44",
@@ -1175,7 +1218,8 @@
           "url": "https://services.northwestern.edu/TDClient/30/Portal/KB/ArticleDet?ID=2875"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "45",
@@ -1209,7 +1253,8 @@
           "url": "https://services.northwestern.edu/TDClient/30/Portal/KB/ArticleDet?ID=2875"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "46",
@@ -1229,7 +1274,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/cost-considerations"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "47",
@@ -1254,7 +1300,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/provisioned-throughput"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "48",
@@ -1279,7 +1326,8 @@
           "url": "https://support.microsoft.com/en-us/excel/copilot/get-started-with-copilot-in-excel"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "49",
@@ -1300,7 +1348,8 @@
           "url": "https://www.microsoft.com/en-us/microsoft-365-copilot/copilot-vs-chatgpt-enterprise"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "50",
@@ -1323,7 +1372,8 @@
           "text": "When a generative AI model produces output that seems realistic but contains incorrect information, the behavior is known as [___]",
           "answer": "model inaccuracy."
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "51",
@@ -1348,7 +1398,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "52",
@@ -1373,7 +1424,8 @@
           "url": "https://www.microsoft.com/en-us/ai/ai-101/generative-ai-vs-other-types-of-ai"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the business value of generative AI solutions"
     },
     {
       "number": "53",
@@ -1398,7 +1450,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/invoice"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "54",
@@ -1423,7 +1476,8 @@
           "url": "https://www.nist.gov/itl/ai-risk-management-framework"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "55",
@@ -1457,7 +1511,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "56",
@@ -1481,7 +1536,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-monitoring"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "57",
@@ -1502,7 +1558,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/grounding-llms"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "58",
@@ -1525,7 +1582,8 @@
           "text": "Using high-quality grounding data in a generative AI solution [___]",
           "answer": "improves the accuracy and reliability of the predictions and outputs of AI."
         }
-      ]
+      ],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "59",
@@ -1553,7 +1611,8 @@
           "text": "The Analyst agent in Microsoft 365 Copilot [___]",
           "answer": "uses structured data and provides insights by using text, charts, tables, and other visuals."
         }
-      ]
+      ],
+      "topic": "Identify The Business Value Of Generative Ai Solutions"
     },
     {
       "number": "60",
@@ -1575,7 +1634,8 @@
           "text": "You use [___] to train a model that will forecast product demand based on historical sales data.",
           "answer": "Azure Machine Learning"
         }
-      ]
+      ],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "61",
@@ -1600,7 +1660,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-declarative-agent"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "62",
@@ -1616,7 +1677,8 @@
       "correctAnswer": "C",
       "explanation": "Effective AI adoption requires cross-functional collaboration from the outset. Including legal, leadership, and business unit representatives ensures that AI initiatives are aligned with organizational priorities, regulatory obligations, and risk management from the start, rather than treating governance, compliance, or business alignment as an afterthought. Limiting initial team composition to a single function (such as IT, procurement, or data science/engineering) and adding other stakeholders later risks misalignment with business goals, compliance failures, and costly rework once broader input is finally incorporated.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "63",
@@ -1644,7 +1706,8 @@
           "text": "Adopting Microsoft responsible AI principles is important for your organization because the principles [___]",
           "answer": "promote the ethical and accountable use of AI."
         }
-      ]
+      ],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "64",
@@ -1672,7 +1735,8 @@
           "text": "When Microsoft 365 Copilot accesses company data using the principle of least privilege, this is an example of a [___] control.",
           "answer": "data security"
         }
-      ]
+      ],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "65",
@@ -1695,7 +1759,8 @@
           "text": "The cost of using generative AI language models is based typically on the number of [___] processed.",
           "answer": "tokens"
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "66",
@@ -1723,7 +1788,8 @@
           "text": "An organization’s AI champions program includes [___]",
           "answer": "users who advocate for the value of AI by learning, sharing, and identifying use cases."
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "67",
@@ -1757,7 +1823,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/read?view=doc-intel-4.0.0"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "68",
@@ -1791,7 +1858,8 @@
           "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-machine-learning/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "69",
@@ -1825,7 +1893,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/content-filter"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "70",
@@ -1851,7 +1920,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "71",
@@ -1873,7 +1943,8 @@
           "text": "[___] AI solution recognizes patterns in large and complex datasets to create new and original content.",
           "answer": "generative"
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "72",
@@ -1894,7 +1965,8 @@
           "url": "https://adoption.microsoft.com/en-us/copilot/ai-council/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "73",
@@ -1922,7 +1994,8 @@
           "text": "The Researcher agent in Microsoft 365 Copilot [___]",
           "answer": "uses reasoning capabilities to generate deep insights based on organizational data and the web."
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "74",
@@ -1956,7 +2029,8 @@
           "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/microsoft-foundry-an-end-to-end-platform-for-building-governing-and-scaling-ai/4496736"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "75",
@@ -1984,7 +2058,8 @@
           "text": "When you use Microsoft 365 Copilot, [___] connects your organizational data to the AI model.",
           "answer": "Microsoft Graph"
         }
-      ]
+      ],
+      "topic": "Identify The Business Value Of Generative Ai Solutions"
     },
     {
       "number": "76",
@@ -2014,7 +2089,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "77",
@@ -2030,7 +2106,8 @@
       "correctAnswer": "A",
       "explanation": "Generative AI models are designed to produce new, coherent content from structured or unstructured input, making them particularly well suited to automatically writing product descriptions from a set of product specifications. This directly supports the goal of populating a product showcase website with informative, human-readable text at scale. Designing new products from customer requirements is a product-design/ideation task rather than content generation for an existing catalog. Translating descriptions is a valid but secondary generative AI use case, less central to the core task described. Analyzing sales data to find patterns and trends is a predictive analytics task, which relies on statistical/ML pattern recognition rather than the generative (content-creation) capability of generative AI.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify The Business Value Of Generative Ai Solutions"
     },
     {
       "number": "78",
@@ -2064,7 +2141,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "79",
@@ -2098,7 +2176,8 @@
           "url": "https://en.wikipedia.org/wiki/Generative_AI"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "80",
@@ -2114,7 +2193,8 @@
       "correctAnswer": "A",
       "explanation": "A multi-modal generative AI solution can jointly process both visual content (images of blueprints) and textual content, enabling it to interpret diagrams, layouts, and symbols alongside any accompanying text. This capability allows it to summarize building designs, answer natural-language questions about the design, and extract specific information (such as the locations of electrical, heating, and plumbing systems) directly from the visual blueprint data — none of which is possible with OCR alone (which only extracts text), a text-completion model (which only continues text prompts), or a document summarization tool (which only condenses existing text content).",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify The Business Value Of Generative Ai Solutions"
     },
     {
       "number": "81",
@@ -2148,7 +2228,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-plan-manage-cost"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "82",
@@ -2169,7 +2250,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai?view=azureml-api-2"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "83",
@@ -2203,7 +2285,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "84",
@@ -2233,7 +2316,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/prompt-engineering"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "85",
@@ -2258,7 +2342,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "86",
@@ -2292,7 +2377,8 @@
           "url": "https://support.microsoft.com/en-us/office/frequently-asked-questions-about-editing-with-copilot-in-excel-1cfd906d-40b4-46be-8e2d-65b893e28a02"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "87",
@@ -2313,7 +2399,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the business value of generative AI solutions"
     },
     {
       "number": "88",
@@ -2347,7 +2434,8 @@
           "url": "https://support.microsoft.com/en-us/office/summarize-an-email-thread-with-copilot-in-outlook-a79873f2-396b-46dc-b852-7fe5947ab640"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "89",
@@ -2374,7 +2462,8 @@
           "text": "To ensure that your organization follows trustworthy AI principles, the organization should establish an AI governance council to [___]",
           "answer": "guide AI strategy, ensure responsible AI oversight, and promote alignment across business units."
         }
-      ]
+      ],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "90",
@@ -2400,7 +2489,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai?view=azureml-api-2"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify an implementation and adoption strategy for Microsoft’s AI apps and services"
     },
     {
       "number": "91",
@@ -2425,7 +2515,8 @@
           "url": "https://www.microsoft.com/en-us/microsoft-copilot/blog/copilot-studio/transform-hr-with-ai-powered-agents/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify benefits, capabilities, and opportunities for Microsoft’s AI apps and services"
     },
     {
       "number": "92",
@@ -2450,7 +2541,8 @@
           "url": "https://cloud.google.com/use-cases/grounding-ai"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Business Value Of Generative Ai Solutions"
     },
     {
       "number": "93",
@@ -2477,7 +2569,8 @@
           "text": "[___] is a unified platform for enterprise AI development, where you can build, customize, evaluate, and manage AI apps and models.",
           "answer": "Microsoft Foundry"
         }
-      ]
+      ],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "94",
@@ -2498,7 +2591,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "95",
@@ -2537,7 +2631,8 @@
           "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/concepts/prebuilt-analyzers"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify Benefits Capabilities And Opportunities For Microso"
     },
     {
       "number": "96",
@@ -2567,7 +2662,8 @@
           "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "97",
@@ -2596,7 +2692,8 @@
           "text": "[___] can analyze internal documents to detect Personally Identifiable Information (PII) and redact the PII from the output.",
           "answer": "Azure Language in Foundry Tools"
         }
-      ]
+      ],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "98",
@@ -2619,7 +2716,8 @@
           "text": "Prompt engineering is the process of [___]",
           "answer": "crafting clear instructions to guide generative AI solutions in generating context-appropriate content."
         }
-      ]
+      ],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     },
     {
       "number": "99",
@@ -2640,7 +2738,8 @@
           "url": "https://learn.microsoft.com/en-us/training/modules/fundamentals-generative-ai/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Business Value Of Generative Ai Solutions"
     },
     {
       "number": "100",
@@ -2661,7 +2760,8 @@
           "url": "https://aws.amazon.com/what-is/prompt-engineering/"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify An Implementation And Adoption Strategy For Microso"
     }
   ]
 }

@@ -22,7 +22,8 @@
           "url": "https://learn.microsoft.com/en-us/defender-xdr/microsoft-365-defender-portal"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "2",
@@ -46,7 +47,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/assign-licenses-to-users?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "3",
@@ -66,7 +68,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/insider-risk-management"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "4",
@@ -87,7 +90,8 @@
           "url": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "5",
@@ -121,7 +125,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture-data-protection-auditing"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "6",
@@ -141,7 +146,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/code-interpreter"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Perform basic administrative tasks for Copilot and agents"
     },
     {
       "number": "7",
@@ -175,7 +181,8 @@
           "url": "https://learn.microsoft.com/en-ca/purview/ai-m365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "8",
@@ -195,7 +202,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/data-classification-activity-explorer"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "9",
@@ -223,7 +231,8 @@
           "text": "From the SharePoint admin center, you can create a [___]",
           "answer": "site."
         }
-      ]
+      ],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "10",
@@ -250,7 +259,8 @@
           "alt": "",
           "inOption": false
         }
-      ]
+      ],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "11",
@@ -272,7 +282,8 @@
           "alt": "",
           "inOption": false
         }
-      ]
+      ],
+      "topic": "Perform Basic Administrative Tasks For Copilot And Agents"
     },
     {
       "number": "12",
@@ -287,7 +298,8 @@
       "correctAnswer": "B",
       "explanation": "Zero Trust rests on three principles: verify explicitly, use least-privileged access, and assume breach, so every request is authenticated and authorized rather than trusted by default. Treating traffic from the corporate network as inherently trustworthy or reducing authentication prompts and access reviews runs counter to this model.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "13",
@@ -323,7 +335,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/dlp-create-policy-spo-odb-external"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "14",
@@ -355,7 +368,8 @@
           "inOption": false,
           "optionLetter": null
         }
-      ]
+      ],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "15",
@@ -374,7 +388,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/assign-licenses-to-users?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "16",
@@ -408,7 +423,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/communication-compliance-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "17",
@@ -442,7 +458,8 @@
           "url": "https://learn.microsoft.com/en-us/defender-for-identity/what-is"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "18",
@@ -457,7 +474,8 @@
       "correctAnswer": "B",
       "explanation": "Failed sign-in attempts are logged in Microsoft Entra (formerly Azure AD) admin center, accessible via the Identity > Monitoring & health > Sign-in logs path or via individual user sign-in logs. These logs show authentication failures, multi-factor authentication failures, and other sign-in issues. Other admin centers (Microsoft 365, Defender, Purview) do not provide detailed sign-in diagnostics.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "19",
@@ -472,7 +490,8 @@
       "correctAnswer": "A",
       "explanation": "The Analyst agent in Microsoft 365 Copilot is specifically designed to work across multiple data files simultaneously, performing advanced data analysis including trend identification, generating charts and visual insights automatically, surfacing anomalies and patterns, and producing written summaries of findings. This directly matches the stated requirements for identifying performance trends, generating visual insights, and summarizing anomalies across multiple datasets.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "20",
@@ -492,7 +511,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels-teams-groups-sites"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "21",
@@ -526,7 +546,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/sensitivity-labels-teams-groups-sites"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "22",
@@ -546,7 +567,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/schedule-your-most-used-copilot-prompts"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Perform basic administrative tasks for Copilot and agents"
     },
     {
       "number": "23",
@@ -580,7 +602,8 @@
           "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-content-discovery"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "24",
@@ -614,7 +637,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/manage-group-licenses?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "25",
@@ -641,7 +665,8 @@
           "alt": "",
           "inOption": false
         }
-      ]
+      ],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "26",
@@ -675,7 +700,8 @@
           "url": "https://learn.microsoft.com/en-us/security/zero-trust/microsoft-365-zero-trust"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "27",
@@ -700,7 +726,8 @@
           "url": "https://support.microsoft.com/en-us/microsoft-365-copilot/get-started-with-analyst-in-microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "28",
@@ -720,7 +747,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/ediscovery-search-for-content"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "29",
@@ -735,7 +763,8 @@
       "correctAnswer": "C",
       "explanation": "Data access governance in the SharePoint admin center provides comprehensive visibility into file permissions and active sharing links across OneDrive and SharePoint. It reports on external sharing, permission assignments, and overshared content, enabling compliance audits. Audit logs, general reports, and eDiscovery serve different purposes but lack the integrated permissions and sharing-link visibility.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "30",
@@ -759,7 +788,8 @@
           "url": "https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "31",
@@ -774,7 +804,8 @@
       "correctAnswer": "B",
       "explanation": "Data Lifecycle Management in Microsoft Purview automates retention policies and deletion schedules. Administrators define retention periods (7 years in this case) and specify deletion actions that execute automatically when the retention period expires. Information Protection handles sensitivity; Data Loss Prevention prevents unauthorized sharing; Insider Risk Management detects risky user behaviors—none address automated retention and deletion.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "32",
@@ -789,7 +820,8 @@
       "correctAnswer": "A",
       "explanation": "Access to Microsoft 365 Copilot and its built-in agents, including Researcher and Analyst, is granted and managed from the Microsoft 365 admin center under Copilot settings, where administrators assign licenses and control which users can use specific agents. Purview, Entra, and Defender govern data protection, identity, and security workloads rather than Copilot licensing and agent access.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Perform basic administrative tasks for Copilot and agents"
     },
     {
       "number": "34",
@@ -814,7 +846,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoftteams/rooms/rooms-manage"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "35",
@@ -848,7 +881,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/configure-starter-prompts"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "36",
@@ -863,7 +897,8 @@
       "correctAnswer": "D",
       "explanation": "Pay-as-you-go billing for Microsoft 365 Copilot allows organizations to extend Copilot capabilities to unlicensed users without purchasing full per-user licenses. This model is specifically used when making custom agents available to users who do not have a Copilot license, billing based on consumption rather than per-user licensing. The other options (Researcher agent, Teams meeting recaps, and Word editing) are included in standard Copilot licensing.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Perform basic administrative tasks for Copilot and agents"
     },
     {
       "number": "37",
@@ -897,7 +932,8 @@
           "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/copilot-prompt-gallery"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "38",
@@ -921,7 +957,8 @@
           "inOption": false,
           "inAnswer": true
         }
-      ]
+      ],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "39",
@@ -940,7 +977,8 @@
         "39 / 88",
         "QUESTION 40"
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "40",
@@ -955,7 +993,8 @@
       "correctAnswer": "C",
       "explanation": "Authorization determines what an authenticated user is allowed to access and do within a system. After identity is verified (authentication), authorization policies grant or deny access to specific resources. Option A describes authentication; option B describes multi-factor authentication; option D describes identity federation or external identity validation.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "41",
@@ -976,7 +1015,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/get-help-with-domains/information-for-dns-records?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "42",
@@ -991,7 +1031,8 @@
       "correctAnswer": "D",
       "explanation": "Image generation is a product feature within Microsoft 365 Copilot, not a security or compliance control. Therefore, it must be managed through the Microsoft 365 admin center where administrators can enable or disable product-specific features for the organization. The Defender portal manages security threats, Entra admin center manages identity and access, and Purview handles compliance—none of which are appropriate for controlling a productivity feature like image generation.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "43",
@@ -1015,7 +1056,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/knowledge-sources"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Perform Basic Administrative Tasks For Copilot And Agents"
     },
     {
       "number": "44",
@@ -1049,7 +1091,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/audit-log-activities"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Perform Basic Administrative Tasks For Copilot And Agents"
     },
     {
       "number": "45",
@@ -1070,7 +1113,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/data-classification-data-explorer"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "46",
@@ -1104,7 +1148,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/compliance-manager-scoring"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "47",
@@ -1125,7 +1170,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/security/strengthen-security-posture-configure-capabilities?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "48",
@@ -1145,7 +1191,8 @@
           "url": "https://learn.microsoft.com/en-us/sharepoint/site-ownership-policy"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "49",
@@ -1160,7 +1207,8 @@
       "correctAnswer": "BC",
       "explanation": "The Exchange admin center is where mail flow (transport) rules are created and managed, and it is also one of the places administrators create and configure shared mailboxes. Assigning licenses and adding a custom domain are tenant-wide setup tasks handled in the Microsoft 365 admin center, not the Exchange admin center.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "50",
@@ -1194,7 +1242,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/communication-compliance-plan"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "51",
@@ -1228,7 +1277,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-app-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "52",
@@ -1249,7 +1299,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/activity-reports/microsoft-365-copilot-credits?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Perform basic administrative tasks for Copilot and agents"
     },
     {
       "number": "53",
@@ -1283,7 +1334,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-setup"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "54",
@@ -1317,7 +1369,8 @@
           "url": "https://learn.microsoft.com/en-us/office365/servicedescriptions/office-365-platform-service-description/microsoft-365-copilot"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "55",
@@ -1347,7 +1400,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/activity-reports/microsoft-365-copilot-usage?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "56",
@@ -1367,7 +1421,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "57",
@@ -1401,7 +1456,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/faq-researcher"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "58",
@@ -1425,7 +1481,8 @@
           "url": "https://learn.microsoft.com/en-us/sharepoint/understanding-permission-levels"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "59",
@@ -1462,7 +1519,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/information-protection"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "60",
@@ -1496,7 +1554,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/manage-access-permissions"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "61",
@@ -1523,7 +1582,8 @@
           "inOption": false,
           "inAnswer": false
         }
-      ]
+      ],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "62",
@@ -1539,7 +1599,8 @@
       "correctAnswer": "A",
       "explanation": "Accountability requires people to oversee AI systems and remain responsible for their decisions and outcomes, ensuring that humans retain control.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "63",
@@ -1560,7 +1621,8 @@
           "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "64",
@@ -1581,7 +1643,8 @@
           "url": "https://learn.microsoft.com/en-us/sharepoint/restricted-sharepoint-search"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "65",
@@ -1596,7 +1659,8 @@
       "correctAnswer": "D",
       "explanation": "Microsoft Entra Privileged Identity Management enables just-in-time privileged access: eligible users activate assigned roles when needed for a defined, time-limited duration.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "66",
@@ -1619,7 +1683,8 @@
           "inOption": false,
           "inAnswer": false
         }
-      ]
+      ],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "67",
@@ -1639,7 +1704,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/activity-reports/microsoft-copilot-usage"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Perform basic administrative tasks for Copilot and agents"
     },
     {
       "number": "68",
@@ -1654,7 +1720,8 @@
       "correctAnswer": "B",
       "explanation": "Microsoft Entra ID Protection detects risky sign-in behavior and automatically enforces risk policies, including blocking access or requiring password changes when suspicious activity is detected. This is the dedicated identity-risk tool within the Microsoft security stack. Defender for Identity focuses on on-premises threats; Defender for Office 365 protects email; PIM manages privileged access.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "69",
@@ -1675,7 +1742,8 @@
           "url": "https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-how-to-activate-role"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "70",
@@ -1690,7 +1758,8 @@
       "correctAnswer": "C",
       "explanation": "Pay-as-you-go billing for Microsoft 365 Copilot specifically applies to messages consumed by custom agents built in Copilot Studio that are grounded in organizational or work data. This consumption-based model allows organizations to pay per message rather than purchasing per-user licenses, making it suitable for scenarios with variable or broad audiences accessing custom agents. The other options represent core M365 Copilot licensed features requiring per-user licenses.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Perform basic administrative tasks for Copilot and agents"
     },
     {
       "number": "71",
@@ -1724,7 +1793,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "72",
@@ -1745,7 +1815,8 @@
           "url": "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-overview"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "73",
@@ -1768,7 +1839,8 @@
           "inOption": false,
           "inAnswer": false
         }
-      ]
+      ],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     },
     {
       "number": "74",
@@ -1803,7 +1875,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/pay-as-you-go/setup"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Perform Basic Administrative Tasks For Copilot And Agents"
     },
     {
       "number": "75",
@@ -1827,7 +1900,8 @@
           "url": "https://learn.microsoft.com/en-us/defender-endpoint/investigate-machines"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "76",
@@ -1847,7 +1921,8 @@
           "url": "https://learn.microsoft.com/en-us/viva/insights/org-team-insights/copilot-dashboard"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Perform Basic Administrative Tasks For Copilot And Agents"
     },
     {
       "number": "77",
@@ -1871,7 +1946,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-registry?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Perform Basic Administrative Tasks For Copilot And Agents"
     },
     {
       "number": "78",
@@ -1886,7 +1962,8 @@
       "correctAnswer": "B",
       "explanation": "A custom Microsoft 365 Copilot agent can be scoped so its knowledge comes only from Site1, and it can be configured with a curated set of starter prompts covering the common HR policy questions users ask. The Researcher agent and the personal assistant in Copilot in Word are not restricted to a single SharePoint site, and a notebook is a personal workspace rather than a shared, discoverable tool for other users.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Perform Basic Administrative Tasks For Copilot And Agents"
     },
     {
       "number": "79",
@@ -1920,7 +1997,8 @@
           "url": "https://learn.microsoft.com/en-us/sharepoint/customize-sharepoint-site-permissions"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify The Core Features And Objects Of Microsoft 365 Serv"
     },
     {
       "number": "80",
@@ -1940,7 +2018,8 @@
           "url": "https://learn.microsoft.com/en-us/entra/identity/monitoring-health/concept-identity-secure-score"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "81",
@@ -1959,7 +2038,8 @@
         "81 / 88",
         "QUESTION 82"
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "82",
@@ -1983,7 +2063,8 @@
           "url": "https://learn.microsoft.com/en-us/defender-xdr/investigate-incidents"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "83",
@@ -2014,7 +2095,8 @@
           "alt": "",
           "inOption": false
         }
-      ]
+      ],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "84",
@@ -2035,7 +2117,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/dspm-for-ai"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "85",
@@ -2059,7 +2142,8 @@
           "url": "https://learn.microsoft.com/en-sg/microsoft-365/admin/create-groups/manage-guest-access-in-groups?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "86",
@@ -2083,7 +2167,8 @@
           "url": "https://learn.microsoft.com/en-us/purview/dspm-for-ai"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "87",
@@ -2102,7 +2187,8 @@
         "87 / 88",
         "QUESTION 88"
       ],
-      "images": []
+      "images": [],
+      "topic": "Understand data protection and governance tasks for Microsoft 365 and Copilot"
     },
     {
       "number": "88",
@@ -2123,7 +2209,8 @@
           "url": "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/agent-actions?view=o365-worldwide"
         }
       ],
-      "images": []
+      "images": [],
+      "topic": "Identify the core features and objects of Microsoft 365 services"
     },
     {
       "number": "89",
@@ -2138,7 +2225,8 @@
       "correctAnswer": "A",
       "explanation": "Data Explorer in Microsoft Purview displays files and emails matching sensitive information type definitions, including built-in patterns for U.S. Social Security Numbers and credit card numbers. It shows where sensitive data is stored across SharePoint, OneDrive, Exchange, and Teams. Information Protection policies and Activity Explorer serve different functions; Information Protection reports lack the granular file/email visibility.",
       "learnMore": [],
-      "images": []
+      "images": [],
+      "topic": "Understand Data Protection And Governance Tasks For Microsof"
     }
   ]
 }
