@@ -34,7 +34,7 @@ export default function WonLeadsModal({ leads, company, periodLabel, onOpenLead,
       style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)" }}
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div role="dialog" aria-modal="true" aria-label={`Leads ganados ${periodLabel}`}
-        className="relative w-full max-w-4xl max-h-[85vh] flex flex-col rounded-2xl border border-white/[0.10] shadow-2xl overflow-hidden"
+        className="relative w-full max-w-6xl max-h-[85vh] flex flex-col rounded-2xl border border-white/[0.10] shadow-2xl overflow-hidden"
         style={{ background: "rgba(10,10,20,0.98)" }}>
 
         <div className="relative px-6 pt-6 pb-5 border-b border-white/[0.06] shrink-0"
@@ -68,6 +68,9 @@ export default function WonLeadsModal({ leads, company, periodLabel, onOpenLead,
                   <th className="text-left font-semibold px-4 py-2.5 hidden md:table-cell">Cliente</th>
                   <th className="text-left font-semibold px-4 py-2.5 hidden md:table-cell">Comercial</th>
                   <th className="text-left font-semibold px-4 py-2.5 hidden lg:table-cell">Línea</th>
+                  <th className="text-left font-semibold px-4 py-2.5 whitespace-nowrap">Etapa actual</th>
+                  <th className="text-left font-semibold px-4 py-2.5">Activo</th>
+                  <th className="text-left font-semibold px-4 py-2.5">Ganado</th>
                   <th className="text-right font-semibold px-4 py-2.5">Ingreso</th>
                 </tr>
               </thead>
@@ -81,6 +84,13 @@ export default function WonLeadsModal({ leads, company, periodLabel, onOpenLead,
                     <td className="px-4 py-2.5 text-slate-400 hidden md:table-cell max-w-[180px] truncate">{l.cliente || "—"}</td>
                     <td className="px-4 py-2.5 text-slate-400 hidden md:table-cell whitespace-nowrap">{l.comercial || "—"}</td>
                     <td className="px-4 py-2.5 text-slate-400 hidden lg:table-cell">{l.linea || "—"}</td>
+                    <td className="px-4 py-2.5 text-slate-300 whitespace-nowrap">{l.etapa || "—"}</td>
+                    <td className="px-4 py-2.5">
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${l.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-400"}`}>{l.activo ? "Sí" : "No"}</span>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${l.ganado === "Ganado" ? "bg-emerald-500/10 text-emerald-400" : l.ganado === "Perdido" ? "bg-rose-500/10 text-rose-400" : "bg-white/[0.06] text-slate-400"}`}>{l.ganado}</span>
+                    </td>
                     <td className="px-4 py-2.5 text-right tabular-nums text-white">{l.ingresosEsperados ? fmtMoney(l.ingresosEsperados, company) : "—"}</td>
                   </tr>
                 ))}
