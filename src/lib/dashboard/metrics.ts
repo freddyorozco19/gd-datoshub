@@ -95,6 +95,12 @@ export function computeKpis(leads: Lead[], r: Range): Kpis {
   };
 }
 
+/** Leads ganados con fecha de venta dentro del rango, del más reciente al más antiguo. */
+export function computeWonLeads(leads: Lead[], r: Range): Lead[] {
+  const time = (l: Lead) => closeDateOf(l)?.getTime() ?? 0;
+  return leads.filter((l) => isWon(l) && inRange(closeDateOf(l), r.start, r.end)).sort((a, b) => time(b) - time(a));
+}
+
 /* ── embudo ─────────────────────────────────────────────────────────── */
 export interface FunnelRow { etapa: string; count: number; value: number }
 export function computeFunnel(leads: Lead[], stageOrder: string[]): FunnelRow[] {

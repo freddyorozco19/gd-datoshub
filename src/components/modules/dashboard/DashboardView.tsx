@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { Lead } from "@/lib/odoo/types";
 import {
   DEFAULT_FILTERS, applyFilters, computeAttention, computeFunnel, computeKpis, computeMix,
-  computePresales, computeSparks, computeRanking, computeRevenue, computeUpcoming, periodRange,
+  computePresales, computeSparks, computeRanking, computeRevenue, computeWonLeads, computeUpcoming, periodRange,
   type Company, type Filters, type Period,
 } from "@/lib/dashboard/metrics";
 import { ETAPA_ORDER } from "@/components/modules/leads/etapaOrder";
@@ -20,6 +20,7 @@ import RevenueChart from "./RevenueChart";
 import { MixByLine, PresalesLoad, SalesRanking } from "./Breakdowns";
 import { AttentionList, UpcomingCloses } from "./Lists";
 import ModulesStrip from "./ModulesStrip";
+import WonLeadsModal from "./WonLeadsModal";
 
 const PERIODS: Period[] = ["month", "quarter", "year"];
 const COMPANIES: Company[] = ["COP", "USD"];
@@ -54,6 +55,7 @@ export default function DashboardView() {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [userName, setUserName] = useState("");
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [wonOpen, setWonOpen] = useState(false);
   const [now, setNow] = useState(() => new Date());
 
   // sincroniza con la URL una sola vez al montar (window no existe en SSR)
@@ -85,6 +87,7 @@ export default function DashboardView() {
 
   const scoped = useMemo(() => applyFilters(leads, filters), [leads, filters]);
   const kpis = useMemo(() => computeKpis(scoped, range), [scoped, range]);
+  const wonLeads = useMemo(() => computeWonLeads(scoped, range), [scoped, range]);
   const sparks = useMemo(() => computeSparks(scoped, now), [scoped, now]);
   const funnel = useMemo(() => computeFunnel(applyFilters(leads, { ...filters, etapa: "ALL" }), ETAPA_ORDER), [leads, filters]);
   const revenue = useMemo(() => computeRevenue(scoped, now, kpis.forecast), [scoped, now, kpis.forecast]);
@@ -121,7 +124,7 @@ export default function DashboardView() {
           </div>
         )}
 
-        <KpiRow kpis={kpis} sparks={sparks} company={filters.company} attentionCount={attention.length} periodLabel={range.label} loading={loading} />
+        <KpiRow kpis={kpis} sparks={sparks} onOpenWon={() => setWonOpen(true)} company={filters.company} attentionCount={attention.length} periodLabel={range.label} loading={loading} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
           <Funnel rows={funnel} company={filters.company} selected={filters.etapa} onSelect={(etapa) => update({ etapa })} />
@@ -143,6 +146,10 @@ export default function DashboardView() {
         <ModulesStrip />
       </div>
 
+      {wonOpen && (
+        <WonLeadsModal leads={wonLeads} company={filters.company} periodLabel={range.label}
+          onOpenLead={setSelectedLead} onClose={() => setWonOpen(false)} escDisabled={!!selectedLead} />
+      )}
       {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} />}
     </div>
   );
