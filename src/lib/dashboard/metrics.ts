@@ -25,9 +25,12 @@ export const companyOf = (l: Lead): Company => (/international|usd/i.test(l.comp
 export const isWon  = (l: Lead) => l.ganado === "Ganado";
 export const isLost = (l: Lead) => l.ganado === "Perdido";
 export const isOpen = (l: Lead) => l.activo && !isWon(l) && !isLost(l) && !CLOSED_STAGES.includes(l.etapa);
+/** Fecha de venta/cierre: primero "Fecha de venta" (x_studio_fecha_efectiva_de_cierre, solo fecha),
+ *  y si no existe, date_closed de ODOO. La primera se lee como fecha local para no correrla un día por zona horaria. */
 export const closeDateOf = (l: Lead): Date | null => {
-  const raw = l.fechaCierre || l.fechaEfectivaCierre;
-  const d = raw ? new Date(raw) : null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(l.fechaEfectivaCierre || "");
+  if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  const d = l.fechaCierre ? new Date(l.fechaCierre) : null;
   return d && !isNaN(d.getTime()) ? d : null;
 };
 const parseDate = (s: string): Date | null => {
