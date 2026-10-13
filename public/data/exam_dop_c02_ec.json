@@ -1,7 +1,7 @@
 {
   "examTitle": "AWS Certified DevOps Engineer - Professional",
-  "totalQuestions": 400,
-  "scrapedAt": "2026-10-13T16:00:25.717Z",
+  "totalQuestions": 459,
+  "scrapedAt": "2026-10-13T16:09:20.435Z",
   "questions": [
     {
       "number": "1",
@@ -8120,6 +8120,1204 @@
       "learnMore": [
         "What is Amazon CodeGuru Reviewer?",
         "Find unprotected secrets in your code with Amazon CodeGuru Reviewer"
+      ],
+      "images": []
+    },
+    {
+      "number": "402",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A United States–based online retail company plans to expand its operations into Europe and Asia within the next six months. Its product currently runs on Amazon EC2 instances behind an Application Load Balancer. The instances run in an Amazon EC2 Auto Scaling group across multiple Availability Zones. All data is stored in an Amazon Aurora database instance. When the product is deployed across multiple Regions, the company requires a single product catalog in all Regions, but, for compliance, customer information and purchases must remain in their respective Regions. How should the company meet these requirements with the LEAST amount of application changes?",
+      "translation": "",
+      "options": [
+        "A. Use Amazon Redshift for the product catalog and Amazon DynamoDB tables for the customer information and purchases.",
+        "B. Use Amazon DynamoDB global tables for the product catalog and regional tables for the customer information and purchases.",
+        "C. Use Aurora with read replicas for the product catalog and additional local Aurora instances in each region for the customer information and purchases.",
+        "D. Use Aurora for the product catalog and Amazon DynamoDB global tables for the customer information and purchases."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Amazon Aurora can maintain one globally replicated product catalog through a primary Aurora cluster and read-only secondary clusters in other Regions. Separate local Aurora instances in each Region keep customer information and purchase records isolated from cross-Region replication. Retaining Aurora for both workloads minimizes application changes compared with migrating to DynamoDB or Amazon Redshift.",
+      "learnMore": [
+        "Using Amazon Aurora Global Database"
+      ],
+      "images": []
+    },
+    {
+      "number": "403",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A company hosts a web application in an AWS Region. For disaster-recovery purposes, it uses a second Region as a standby. The disaster-recovery requirements specify that session data must replicate between Regions in near real time and that 1% of requests must be routed to the secondary Region to continuously validate system functionality. In addition, if service in the primary Region is disrupted, traffic must automatically route to the secondary Region, which must be able to scale up to serve all traffic. How should a DevOps engineer fulfill these requirements?",
+      "translation": "",
+      "options": [
+        "A. In both regions, deploy the application on AWS Elastic Beanstalk and use Amazon DynamoDB global tables for session data. Use an Amazon Route 53 weighted routing policy with health checks to distribute the traffic across the regions.",
+        "B. In both regions, launch the application in Auto Scaling groups and use DynamoDB for session data. Use a Route 53 failover routing policy with health checks to distribute the traffic across the regions.",
+        "C. In both regions, deploy the application in AWS Lambda, exposed by Amazon API Gateway, and use Amazon RDS for PostgreSQL with cross-region replication for session data. Deploy the web application with client-side logic to call the API Gateway directly.",
+        "D. In both regions, launch the application in Auto Scaling groups and use DynamoDB global tables for session data. Enable an Amazon CloudFront weighted distribution across regions. Point the Amazon Route 53 DNS record at the CloudFront distribution."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Amazon DynamoDB global tables replicate session data across Regions, with multi-Region eventual-consistency replication typically completing within a second or less. Amazon Route 53 weighted routing can direct a small percentage of DNS responses to the secondary endpoint, and health checks cause Route 53 to stop returning an unhealthy primary endpoint. AWS Elastic Beanstalk manages application environments backed by Auto Scaling capacity, enabling the secondary environment to scale when it receives failover traffic.",
+      "learnMore": [
+        "How DynamoDB global tables work",
+        "Active-active and active-passive failover with Amazon Route 53"
+      ],
+      "images": []
+    },
+    {
+      "number": "404",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company uses AWS Organizations and needs to implement a governance strategy that meets these requirements: AWS resource access is restricted to the same two Regions across all accounts. AWS services are restricted to a specified set of authorized services across all accounts. Active Directory provides authentication. Access permissions are arranged by job function and are the same in every account. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Establish an organizational unit (OU) with group policies in the management account to restrict Regions and authorized services. Use AWS CloudFormation StackSets to provision roles with permissions for each job function, including an IAM trust policy for IAM identity provider authentication in each account.",
+        "B. Establish a permission boundary in the management account to restrict Regions and authorized services. Use AWS CloudFormation StackSets to provision roles with permissions for each job function, including an IAM trust policy for IAM identity provider authentication in each account.",
+        "C. Establish a service control policy in the management account to restrict Regions and authorized services. Use AWS Resource Access Manager (AWS RAM) to share management account roles with permissions for each job function, including AWS IAM Identity Center for authentication in each account.",
+        "D. Establish a service control policy in the management account to restrict Regions and authorized services. Use AWS CloudFormation StackSets to provision roles with permissions for each job function, including an IAM trust policy for IAM identity provider authentication in each account."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Service control policies provide centralized permission guardrails for AWS Organizations and can limit the AWS services, Regions, and request conditions available to IAM principals in member accounts. CloudFormation StackSets can deploy identical IAM role definitions and permission policies across multiple accounts. An IAM SAML identity provider, such as Active Directory Federation Services, can be named as the principal in each role’s trust policy, enabling federated Active Directory authentication. AWS RAM does not share IAM roles, and a permissions boundary is not an organization-wide control.",
+      "learnMore": [
+        "Service control policies (SCPs)",
+        "Terminology and concepts for AWS Organizations"
+      ],
+      "images": []
+    },
+    {
+      "number": "405",
+      "topic": "Security and Compliance",
+      "questionType": "multi-answer",
+      "questionText": "A company needs to deploy a workload across several hundred Amazon EC2 instances. The company will provision the EC2 instances in an Auto Scaling group by using a launch template. The workload will retrieve files from an Amazon S3 bucket, process the data, and write the results to a separate S3 bucket. The EC2 instances must use least-privilege permissions and temporary security credentials. Which combination of steps meets these requirements? Choose two",
+      "translation": "",
+      "options": [
+        "A. Create an IAM role that has the appropriate permissions for S3 buckets Add the IAM role to an instance profile.",
+        "B. Update the launch template to include the IAM instance profile.",
+        "C. Create an IAM user that has the appropriate permissions for Amazon S3 Generate a secret key and token.",
+        "D. Create a trust anchor and profile Attach the IAM role to the profile.",
+        "E. Update the launch template Modify the user data to use the new secret key and token."
+      ],
+      "correctAnswer": "AB",
+      "explanation": "An IAM role with an S3 policy scoped only to the required source-bucket read and destination-bucket write operations provides least-privilege access. Adding that role to an instance profile and specifying the instance profile in the launch template causes each Auto Scaling instance to receive temporary role credentials through Amazon EC2, rather than using long-lived IAM user credentials.",
+      "learnMore": [
+        "IAM role for applications that run on Amazon EC2 instances"
+      ],
+      "images": []
+    },
+    {
+      "number": "406",
+      "topic": "Security and Compliance",
+      "questionType": "multi-answer",
+      "questionText": "A DevOps engineer is implementing governance controls for a company that requires its infrastructure to reside within the United States. The engineer must restrict the AWS Regions that can be used and ensure that an alert is sent as quickly as possible if activity occurs outside the governance policy. The controls must automatically be enabled in any new Region outside the United States (US). Which combination of actions meets these requirements? Choose two",
+      "translation": "",
+      "options": [
+        "A. Create an AWS Organizations SCP that denies access to all non-global services in non-US Regions. Attach the policy to the root of the organization.",
+        "B. Configure AWS CloudTrail to send logs to Amazon CloudWatch Logs and enable it for all Regions. Use a CloudWatch Logs metric filter to send an alert on any service activity in non-US Regions.",
+        "C. Use an AWS Lambda function that checks for AWS service activity and deploy it to all Regions. Write an Amazon EventBridge rule that runs the Lambda function every hour, sending an alert if activity is found in a non-US Region.",
+        "D. Use an AWS Lambda function to query Amazon Inspector to look for service activity in non-US Regions and send alerts if any activity is found.",
+        "E. Write an SCP using the aws:RequestedRegion condition key limiting access to US Regions. Apply the policy to all users, groups, and roles."
+      ],
+      "correctAnswer": "AB",
+      "explanation": "An SCP attached to the organization root applies an explicit deny throughout the organization, preventing use of non-global AWS services in non-US Regions while preserving access to global services. A multi-Region CloudTrail trail records activity in all enabled Regions, including newly enabled opt-in Regions, and can send events to CloudWatch Logs. A CloudWatch Logs metric filter and alarm can therefore notify on activity occurring in non-US Regions. SCPs are attached to an organization root, organizational unit, or account—not to individual IAM users, groups, and roles.",
+      "learnMore": [
+        "SCP syntax — AWS Organizations",
+        "Understanding multi-Region trails and opt-in Regions — AWS CloudTrail"
+      ],
+      "images": []
+    },
+    {
+      "number": "407",
+      "topic": "Security and Compliance",
+      "questionType": "multi-answer",
+      "questionText": "A company manages hundreds of AWS accounts by using AWS Organizations. The company has a team responsible for AWS Identity and Access Management (IAM). The IAM team wants to deploy AWS IAM Identity Center. It must have only the minimum permissions needed to manage IAM Identity Center and must not be able to obtain unnecessary access to the Organizations management account. The team must be able to provision new IAM Identity Center permission sets and assignments for both new and existing member accounts. Which combination of steps meets these requirements? Choose three",
+      "translation": "",
+      "options": [
+        "A. Create a new AWS account for the IAM team. Enable IAM Identity Center in the new account. In the Organizations management account, register the new account as a delegated administrator for IAM Identity Center.",
+        "B. Create a new AWS account for the IAM team. Enable IAM Identity Center in the Organizations management account. In the Organizations management account, register the new account as a delegated administrator for IAM Identity Center.",
+        "C. Create an SCP in Organizations. Create a new OU for the Organizations management account, and link the new SCP to the OU. Configure the SCP to deny all access to IAM Identity Center.",
+        "D. Create IAM users and an IAM group for the IAM team in IAM Identity Center. Add the users to the group. Create a new permission set. Attach the AWSSSOMemberAccountAdministrator managed IAM policy to the group.",
+        "E. Assign the new permission set to the Organizations management account. Allow the IAM team's group to use the permission set."
+      ],
+      "correctAnswer": "",
+      "explanation": "An IAM Identity Center organization instance is enabled in the AWS Organizations management account, but administration can be delegated to a member account. A delegated administrator can manage permission sets and assignments for member accounts without receiving management-account access. Granting the IAM team a permission set with the AWSSSOMemberAccountAdministrator managed policy and assigning it to that delegated administrator account provides the required IAM Identity Center administrative permissions. SCPs do not restrict principals in the management account, and a delegated administrator cannot manage permission sets provisioned in that account.",
+      "learnMore": [
+        "Delegated administration - AWS IAM Identity Center",
+        "Configure access to AWS accounts - AWS IAM Identity Center"
+      ],
+      "images": []
+    },
+    {
+      "number": "408",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A company operates a microservices application on Amazon Elastic Kubernetes Service (Amazon EKS). Users have recently reported substantial delays when accessing an account summary feature, especially during peak business hours. A DevOps engineer used Amazon CloudWatch metrics and logs to troubleshoot the problem. The logs showed normal CPU and memory utilization on the EKS nodes. The DevOps engineer could not determine where in the microservices architecture the delays were occurring. The DevOps engineer needs to improve the application's observability to identify where the delays are occurring. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Deploy the AWS X-Ray daemon as a DaemonSet in the EKS cluster. Use the X-Ray SDK to instrument the application code. Redeploy the application",
+        "B. Enable CloudWatch Container Insights for the EKS cluster. Use the Container Insights data to diagnose the delays.",
+        "C. Create alarms based on the existing CloudWatch metrics. Set up an Amazon Simple Notification Service (Amazon SNS) topic to send email alerts.",
+        "D. Increase the timeout settings in the application code for network operations to allow more time for operations to finish."
+      ],
+      "correctAnswer": "A",
+      "explanation": "AWS X-Ray distributed tracing records request segments and downstream subsegments across instrumented services, allowing latency to be attributed to a specific service or dependency. The X-Ray SDK sends this trace data to the X-Ray daemon, which relays it to X-Ray; running the daemon as a DaemonSet makes it available throughout the EKS cluster. Node and container metrics alone do not reveal latency along a cross-service request path.",
+      "learnMore": [
+        "Instrumenting your application for AWS X-Ray",
+        "What is AWS X-Ray?"
+      ],
+      "images": []
+    },
+    {
+      "number": "409",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A company operates a microservices application on Amazon Elastic Kubernetes Service (Amazon EKS). Users have recently reported substantial delays when accessing an account summary feature, especially during peak business hours. A DevOps engineer used Amazon CloudWatch metrics and logs to troubleshoot the problem. The logs showed normal CPU and memory utilization on the EKS nodes. The DevOps engineer could not determine where in the microservices architecture the delays were occurring. The DevOps engineer needs to improve the application's observability to identify where the delays are occurring. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Deploy the AWS X-Ray daemon as a DaemonSet in the EKS cluster. Use the X-Ray SDK to instrument the application code. Redeploy the application",
+        "B. Enable CloudWatch Container Insights for the EKS cluster. Use the Container Insights data to diagnose the delays.",
+        "C. Create alarms based on the existing CloudWatch metrics. Set up an Amazon Simple Notification Service (Amazon SNS) topic to send email alerts.",
+        "D. Increase the timeout settings in the application code for network operations to allow more time for operations to finish."
+      ],
+      "correctAnswer": "",
+      "explanation": "AWS X-Ray distributed tracing records request segments and downstream subsegments across instrumented services, allowing latency to be attributed to a specific service or dependency. The X-Ray SDK sends this trace data to the X-Ray daemon, which relays it to X-Ray; running the daemon as a DaemonSet makes it available throughout the EKS cluster. Node and container metrics alone do not reveal latency along a cross-service request path.",
+      "learnMore": [
+        "Instrumenting your application for AWS X-Ray",
+        "What is AWS X-Ray?"
+      ],
+      "images": []
+    },
+    {
+      "number": "410",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A video platform company is migrating its video catalog to AWS. It will store MP4 video files in an Amazon S3 bucket and use Amazon CloudFront and Amazon EC2 instances to deliver the video files. Users initially connect to a frontend application that redirects them to a video URL. The video URL includes an authorization token in CloudFront. Caching is enabled on the CloudFront distribution. Authorization-token validation activity must be logged in Amazon CloudWatch. The company needs to prevent direct access to video files through CloudFront and Amazon S3, and it needs to validate the authorization token supplied by the frontend application. The company also needs to perform regular rolling updates to the code that validates the authorization-token signature. Which solution meets these requirements with the LEAST operational effort?",
+      "translation": "",
+      "options": [
+        "A. Implement an authorization token check in Lambda@Edge as a trigger on the CloudFront distribution. Enable CloudWatch logging for the Lambda@Edge function. Attach the Lambda@Edge function to the CloudFront distribution. Implement CloudFront continuous deployment to perform updates.",
+        "B. Implement an authorization token check in CloudFront Functions. Enable CloudWatch logging for the CloudFront function. Attach the CloudFront function to the CloudFront distribution. Implement CloudFront continuous deployment to perform updates.",
+        "C. Implement an authorization token check in the application code that is installed on the EC2 instances. Install the CloudWatch agent on the EC2 instances. Configure the application to log to the CloudWatch agent. Implement a second CloudFront distribution. Migrate the traffic from the first CloudFront distribution by using Amazon Route 53 weighted routing.",
+        "D. Implement an authorization token check in CloudFront Functions. Enable CloudWatch logging for the CloudFront function. Attach the CloudFront function to the CloudFront distribution. Implement a second CloudFront distribution. Migrate the traffic from the first CloudFront distribution by using Amazon Route 53 weighted routing."
+      ],
+      "correctAnswer": "",
+      "explanation": "A CloudFront Function associated with the viewer request can validate the authorization token before CloudFront returns a cached video object, preventing unauthenticated direct requests from being served. CloudFront Functions can send console.log() output to CloudWatch Logs. CloudFront continuous deployment supports testing a staging distribution configuration with a portion of production traffic and promoting it after validation, including updates to referenced CloudFront Functions. This avoids Lambda@Edge management and manual multi-distribution Route 53 traffic migration.",
+      "learnMore": [
+        "Learn how continuous deployment works - Amazon CloudFront",
+        "Edge function logs - Amazon CloudFront"
+      ],
+      "images": []
+    },
+    {
+      "number": "411",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A DevOps team administers infrastructure for an application. The application uses long-running processes to handle items from an Amazon Simple Queue Service (Amazon SQS) queue. The application is deployed in an Auto Scaling group. The application recently had an issue in which items took substantially longer to process. The queue grew beyond its expected size, preventing several business processes from operating correctly. The application sends all logs to a third-party tool. The team currently subscribes to an Amazon Simple Notification Service (Amazon SNS) topic that it uses for alerts. The team must receive an alert if the queue grows beyond its expected size. Which solution meets these requirements with the MOST operational efficiency?",
+      "translation": "",
+      "options": [
+        "A. Create an Amazon CloudWatch metric alarm with a period of 1 hour and a static threshold to alarm if the average of the ApproximateNumberOfMessagesDelayed metric is greater than the expected value. Configure the alarm to notify the SNS topic.",
+        "B. Create an Amazon CloudWatch metric alarm with a period of 1 hour and a static threshold to alarm if the sum of the ApproximateNumberOfMessagesVisible metric is greater than the expected value. Configure the alarm to notify the SNS topic.",
+        "C. Create an AWS Lambda function that retrieves the ApproximateNumberOfMessages SQS queue attribute value and publishes the value as a new CloudWatch custom metric. Create an Amazon EventBridge rule that is scheduled to run every 5 minutes and that invokes the Lambda function. Configure a CloudWatch metrics alarm with a period of 1 hour and a static threshold to alarm if the sum of the new custom metric is greater than the expected value.",
+        "D. Create an AWS Lambda function that checks the ApproximateNumberOfMessagesDelayed SQS queue attribute and compares the value to a defined expected size in the function. Create an Amazon EventBridge rule that is scheduled to run every 5 minutes and that invokes the Lambda function. When the ApproximateNumberOfMessagesDelayed SQS queue attribute exceeds the expected size, send a notification the SNS topic."
+      ],
+      "correctAnswer": "",
+      "explanation": "ApproximateNumberOfMessagesVisible is the Amazon SQS CloudWatch metric for messages currently available for retrieval and processing, so it represents the queue backlog caused by consumers processing too slowly. Amazon SQS publishes this metric natively to CloudWatch, and a CloudWatch metric alarm can directly notify an Amazon SNS topic without custom polling, Lambda code, or EventBridge scheduling. ApproximateNumberOfMessagesDelayed measures messages intentionally delayed before becoming available, not the normal processing backlog.",
+      "learnMore": [
+        "Available CloudWatch metrics for Amazon SQS",
+        "Recommended alarms for Amazon SQS"
+      ],
+      "images": []
+    },
+    {
+      "number": "412",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company runs a security-auditing application in an AWS account. The auditing application uses an IAM role to access other AWS accounts. All accounts belong to the same organization in AWS Organizations. A recent security audit found that users in the audited AWS accounts could change or delete the auditing application's IAM role. The company must prevent any entity other than a trusted administrator IAM role from modifying the auditing application's IAM role. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create an SCP that includes a Deny statement for changes to the auditing application's IAM role. Include a condition that allows the trusted administrator IAM role to make changes. Attach the SCP to the root of the organization.",
+        "B. Create an SCP that includes an Allow statement for changes to the auditing application's IAM role by the trusted administrator IAM role. Include a Deny statement for changes by all other IAM principals. Attach the SCP to the IAM service in each AWS account where the auditing application has an IAM role.",
+        "C. Create an IAM permissions boundary that includes a Deny statement for changes to the auditing application's IAM role. Include a condition that allows the trusted administrator IAM role to make changes. Attach the permissions boundary to the audited AWS accounts.",
+        "D. Create an IAM permissions boundary that includes a Deny statement for changes to the auditing application’s IAM role. Include a condition that allows the trusted administrator IAM role to make changes. Attach the permissions boundary to the auditing application's IAM role in the AWS accounts."
+      ],
+      "correctAnswer": "A",
+      "explanation": "An SCP attached to the organization root can apply an explicit deny to IAM actions that modify or delete the specified auditing role across all member accounts. A condition that excludes the trusted administrator IAM role from that deny preserves only that role's ability to make changes. SCP explicit denies override permissions granted through IAM policies, whereas a permissions boundary limits only the effective permissions of the IAM entity to which the boundary is attached.",
+      "learnMore": [
+        "Service control policies (SCPs)",
+        "SCP syntax"
+      ],
+      "images": []
+    },
+    {
+      "number": "413",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company has one AWS account that operates hundreds of Amazon EC2 instances in a single AWS Region. New EC2 instances are launched and terminated hourly in the account. The account also contains existing EC2 instances that have been running for more than a week. The company’s security policy requires every running EC2 instance to use an EC2 instance profile. If an EC2 instance has no attached instance profile, it must use a default instance profile with no IAM permissions assigned. A DevOps engineer reviews the account and finds EC2 instances running without an instance profile. During the review, the DevOps engineer also sees new EC2 instances being launched without an instance profile. Which solution will ensure that an instance profile is attached to all existing and future EC2 instances in the Region?",
+      "translation": "",
+      "options": [
+        "A. Configure an Amazon EventBridge rule that reacts to EC2 RunInstances API calls. Configure the rule to invoke an AWS Lambda function to attach the default instance profile to the EC2 instances.",
+        "B. Configure the ec2-instance-profile-attached AWS Config managed rule with a trigger type of configuration changes. Configure an automatic remediation action that invokes an AWS Systems Manager Automation runbook to attach the default instance profile to the EC2 instances.",
+        "C. Configure an Amazon EventBridge rule that reacts to EC2 StartInstances API calls. Configure the rule to invoke an AWS Systems Manager Automation runbook to attach the default instance profile to the EC2 instances",
+        "D. Configure the iam-role-managed-policy-check AWS Config managed rule with a trigger type of configuration changes. Configure an automatic remediation action that invokes an AWS Lambda function to attach the default instance profile to the EC2 instances."
+      ],
+      "correctAnswer": "",
+      "explanation": "The AWS Config managed rule ec2-instance-profile-attached evaluates AWS::EC2::Instance resources and marks an instance noncompliant when no IAM instance profile is attached. It is triggered by configuration changes, so it detects newly launched noncompliant instances. AWS Config automatic remediation uses Systems Manager Automation documents and can remediate the rule’s existing noncompliant resources as well, allowing the default instance profile to be attached consistently.",
+      "learnMore": [
+        "ec2-instance-profile-attached - AWS Config",
+        "Setting Up Auto Remediation for AWS Config"
+      ],
+      "images": []
+    },
+    {
+      "number": "414",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company relies on Amazon EC2 as its primary compute platform. A DevOps team needs to audit the company's EC2 instances to determine whether any prohibited applications have been installed on those instances. Which solution will satisfy these requirements with the MOST operational efficiency?",
+      "translation": "",
+      "options": [
+        "A. Configure AWS Systems Manager on each instance. Use AWS Systems Manager Inventory. Use Systems Manager resource data sync to synchronize and store findings in an Amazon S3 bucket. Create an AWS Lambda function that runs when new objects are added to the S3 bucket. Configure the Lambda function to identify prohibited applications.",
+        "B. Configure AWS Systems Manager on each instance. Use Systems Manager Inventory Create AWS Config rules that monitor changes from Systems Manager Inventory to identify prohibited applications.",
+        "C. Configure AWS Systems Manager on each instance. Use Systems Manager Inventory. Filter a trail in AWS CloudTrail for Systems Manager Inventory events to identify prohibited applications.",
+        "D. Designate Amazon CloudWatch Logs as the log destination for all application instances. Run an automated script across all instances to create an inventory of installed applications. Configure the script to forward the results to CloudWatch Logs. Create a CloudWatch alarm that uses filter patterns to search log data to identify prohibited applications."
+      ],
+      "correctAnswer": "B",
+      "explanation": "AWS Systems Manager Inventory collects metadata about installed applications on managed instances. AWS Config can record changes to Systems Manager managed-instance inventory, including application inventory, and a Config rule can evaluate that data to flag instances with prohibited applications as noncompliant. This provides managed, continuous compliance evaluation without maintaining custom scripts or event-processing code.",
+      "learnMore": [
+        "Recording Software Configuration for Managed Instances with AWS Config"
+      ],
+      "images": []
+    },
+    {
+      "number": "415",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company uses an organization in AWS Organizations to manage its AWS accounts. The company’s DevOps team developed an AWS Lambda function that calls the Organizations API to create new AWS accounts. The Lambda function runs in the organization’s management account. The DevOps team must move the Lambda function from the management account to a dedicated AWS account. Before deploying the Lambda function to the new account, the team must ensure that it can create new AWS accounts only in Organizations. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. In the management account, create a new IAM role that has the necessary permission to create new accounts in Organizations. Allow the role to be assumed by the Lambda execution role in the new AWS account. Update the Lambda function code to assume the role when the Lambda function creates new AWS accounts. Update the Lambda execution role to ensure that it has permission to assume the new role.",
+        "B. In the management account, turn on delegated administration for Organizations. Create a new delegation policy that grants the new AWS account permission to create new AWS accounts in Organizations. Ensure that the Lambda execution role has the organizations:CreateAccount permission.",
+        "C. In the management account, create a new IAM role that has the necessary permission to create new accounts in Organizations. Allow the role to be assumed by the Lambda service principal. Update the Lambda function code to assume the role when the Lambda function creates new AWS accounts. Update the Lambda execution role to ensure that it has permission to assume the new role.",
+        "D. In the management account, enable AWS Control Tower. Turn on delegated administration for AWS Control Tower. Create a resource policy that allows the new AWS account to create new AWS accounts in AWS Control Tower. Update the Lambda function code to use the AWS Control Tower API in the new AWS account. Ensure that the Lambda execution role has the controltower:CreateManagedAccount permission."
+      ],
+      "correctAnswer": "A",
+      "explanation": "AWS Organizations CreateAccount can be invoked only from the organization’s management account. A cross-account IAM role in that account can grant only the required Organizations permissions and trust the Lambda execution role in the dedicated account. The execution role assumes that role with sts:AssumeRole, so the function uses management-account credentials only for account creation. AWS Organizations CreateAccount CLI reference",
+      "learnMore": [
+        "Create a member account in an organization with AWS Organizations"
+      ],
+      "images": []
+    },
+    {
+      "number": "416",
+      "topic": "Configuration Management and IaC",
+      "questionType": "mc",
+      "questionText": "A company's DevOps engineer must deploy a software package to 30 on-premises VMs and 15 Amazon EC2 instances. The DevOps engineer must ensure that every VM receives the package through an auditable process, and that any VM configuration drift is automatically detected and generates an alert. The company uses AWS Direct Connect to link its on-premises data center with AWS. Which solution satisfies these requirements with the MOST operational efficiency?",
+      "translation": "",
+      "options": [
+        "A. Write a script that iterates through the list of VMs once a week. Configure the script to check for the package and install the package if the package is not found. Configure the script to send an email message notification to the system administrator if the package is not found.",
+        "B. Install the AWS Systems Manager Agent (SSM Agent) on all VMs. Use the SSM Agent to install the package. Use AWS Config to monitor for configuration drift. Use Amazon Simple Notification Service (Amazon SNS) to notify the system administrator if any drift is found.",
+        "C. Write a script that checks if the package is installed across the environment. Configure the script to create a list of all VMs that are noncompliant. Configure the script to send the list to the system administrator, who will install the package on the noncompliant VMs.",
+        "D. Log in to each VM. Use a local package manager to install the package. Use AWS Config to monitor the AWS resources for configuration changes. Write a script to monitor the on-premises resources."
+      ],
+      "correctAnswer": "B",
+      "explanation": "AWS Systems Manager, through SSM Agent and hybrid managed-node registration, centrally manages both Amazon EC2 instances and on-premises VMs and provides auditable remote execution for package deployment. AWS Config can record managed-instance software inventory for EC2 and on-premises servers, evaluate compliance rules for required software, and use Amazon SNS to notify an administrator when a managed node is noncompliant.",
+      "learnMore": [
+        "Working with SSM Agent",
+        "Recording Software Configuration for Managed Instances"
+      ],
+      "images": []
+    },
+    {
+      "number": "417",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "multi-answer",
+      "questionText": "A company uses an organization in AWS Organizations to manage multiple AWS accounts. The company’s development team wants to use AWS Lambda functions to satisfy resiliency requirements and is rewriting all applications to use Lambda functions deployed in a VPC. The development team uses Amazon Elastic File System (Amazon EFS) as shared storage in Account A in the organization. The company wants to keep using Amazon EFS with Lambda. Company policy requires that all serverless projects be deployed in Account B. A DevOps engineer must reconfigure an existing EFS file system so that Lambda functions can access the data through an existing EFS access point. Which combination of steps should the DevOps engineer take to meet these requirements? Choose three",
+      "translation": "",
+      "options": [
+        "A. Update the EFS file system policy to provide Account B with access to mount and write to the EFS file system in Account A.",
+        "B. Create SCPs to set permission guardrails with fine-grained control for Amazon EFS.",
+        "C. Create a new EFS file system in Account B. Use AWS Database Migration Service (AWS DMS) to keep data from Account A and Account B synchronized.",
+        "D. Update the Lambda execution roles with permission to access the VPC and the EFS file system.",
+        "E. Create a VPC peering connection to connect Account A to Account B."
+      ],
+      "correctAnswer": "",
+      "explanation": "An EFS file system policy can grant a principal in Account B elasticfilesystem:ClientMount and elasticfilesystem:ClientWrite access to the file system in Account A, including access constrained to the existing access point. The Lambda execution role needs EFS client permissions and permissions to connect to its VPC. Lambda functions access resources in another account’s VPC through a VPC peering connection, which provides the network path to the EFS mount targets.",
+      "learnMore": [
+        "Configuring Amazon EFS file system access - AWS Lambda"
+      ],
+      "images": []
+    },
+    {
+      "number": "418",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A company operates its container workloads in AWS App Runner. A DevOps engineer manages the company's container repository in Amazon Elastic Container Registry (Amazon ECR). The DevOps engineer needs to implement a solution that continuously monitors the container repository. The solution must create a new container image whenever it detects an operating system vulnerability or a language package vulnerability. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Use EC2 Image Builder to create a container image pipeline. Use Amazon ECR as the target repository. Turn on enhanced scanning on the ECR repository. Create an Amazon EventBridge rule to capture an Inspector? finding event. Use the event to invoke the image pipeline. Re-upload the container to the repository.",
+        "B. Use EC2 Image Builder to create a container image pipeline. Use Amazon ECR as the target repository. Enable Amazon GuardDuty Malware Protection on the container workload. Create an Amazon EventBridge rule to capture a GuardDuty finding event. Use the event to invoke the image pipeline.",
+        "C. Create an AWS CodeBuild project to create a container image. Use Amazon ECR as the target repository. Turn on basic scanning on the repository. Create an Amazon EventBridge rule to capture an ECR image action event. Use the event to invoke the CodeBuild project. Re-upload the container to the repository.",
+        "D. Create an AWS CodeBuild project to create a container image. Use Amazon ECR as the target repository. Configure AWS Systems Manager Compliance to scan all managed nodes. Create an Amazon EventBridge rule to capture a configuration compliance state change event. Use the event to invoke the CodeBuild project."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Amazon ECR enhanced scanning integrates with Amazon Inspector to continuously scan container images for operating-system and programming-language package vulnerabilities. Amazon Inspector emits EventBridge events when an ECR image scan finding is created, updated, or closed, so an EventBridge rule can invoke an EC2 Image Builder container-image pipeline to rebuild and publish the remediated image to Amazon ECR. Basic scanning does not provide continuous scanning or programming-language package vulnerability scanning.",
+      "learnMore": [
+        "Scan images for software vulnerabilities in Amazon ECR",
+        "EventBridge events sent for enhanced scanning in Amazon ECR"
+      ],
+      "images": []
+    },
+    {
+      "number": "419",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A company operates its container workloads in AWS App Runner. A DevOps engineer manages the company's container repository in Amazon Elastic Container Registry (Amazon ECR). The DevOps engineer needs to implement a solution that continuously monitors the container repository. The solution must create a new container image whenever it detects an operating system vulnerability or a language package vulnerability. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Use EC2 Image Builder to create a container image pipeline. Use Amazon ECR as the target repository. Turn on enhanced scanning on the ECR repository. Create an Amazon EventBridge rule to capture an Inspector? finding event. Use the event to invoke the image pipeline. Re-upload the container to the repository.",
+        "B. Use EC2 Image Builder to create a container image pipeline. Use Amazon ECR as the target repository. Enable Amazon GuardDuty Malware Protection on the container workload. Create an Amazon EventBridge rule to capture a GuardDuty finding event. Use the event to invoke the image pipeline.",
+        "C. Create an AWS CodeBuild project to create a container image. Use Amazon ECR as the target repository. Turn on basic scanning on the repository. Create an Amazon EventBridge rule to capture an ECR image action event. Use the event to invoke the CodeBuild project. Re-upload the container to the repository.",
+        "D. Create an AWS CodeBuild project to create a container image. Use Amazon ECR as the target repository. Configure AWS Systems Manager Compliance to scan all managed nodes. Create an Amazon EventBridge rule to capture a configuration compliance state change event. Use the event to invoke the CodeBuild project."
+      ],
+      "correctAnswer": "",
+      "explanation": "Amazon ECR enhanced scanning integrates with Amazon Inspector to continuously scan container images for operating-system and programming-language package vulnerabilities. Amazon Inspector emits EventBridge events when an ECR image scan finding is created, updated, or closed, so an EventBridge rule can invoke an EC2 Image Builder container-image pipeline to rebuild and publish the remediated image to Amazon ECR. Basic scanning does not provide continuous scanning or programming-language package vulnerability scanning.",
+      "learnMore": [
+        "Scan images for software vulnerabilities in Amazon ECR",
+        "EventBridge events sent for enhanced scanning in Amazon ECR"
+      ],
+      "images": []
+    },
+    {
+      "number": "420",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company administers AWS accounts for application teams by using AWS Control Tower. Each application team is responsible for securing its own AWS accounts. A DevOps engineer must enable Amazon GuardDuty for every AWS account in which the application teams have not already enabled GuardDuty. The DevOps engineer is using AWS CloudFormation StackSets from the AWS Control Tower management account. How should the DevOps engineer configure the CloudFormation template to avoid failure during the StackSets deployment?",
+      "translation": "",
+      "options": [
+        "A. Create a CloudFormation custom resource that invokes an AWS Lambda function. Configure the Lambda function to conditionally enable GuardDuty if GuardDuty is not already enabled in the accounts.",
+        "B. Use the Conditions section of the CloudFormation template to enable GuardDuty in accounts where GuardDuty is not already enabled.",
+        "C. Use the CloudFormation Fn::GetAtt intrinsic function to check whether GuardDuty is already enabled. If GuardDuty is not already enabled, use the Resources section of the CloudFormation template to enable GuardDuty.",
+        "D. Manually discover the list of AWS account IDs where GuardDuty is not enabled. Use the CloudFormation Fn::ImportValue intrinsic function to import the list of account IDs into the CloudFormation template to skip deployment for the listed AWS accounts."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Amazon GuardDuty allows only one detector per account per Region, and the CloudFormation AWS::GuardDuty::Detector resource creates a new detector. A Lambda-backed CloudFormation custom resource can query GuardDuty in each target account and conditionally create or enable the detector only when it is absent or disabled. CloudFormation conditions cannot inspect existing resource state, and Fn::GetAtt retrieves an attribute only from a resource defined in the template.",
+      "learnMore": [
+        "CreateDetector - Amazon GuardDuty API Reference"
+      ],
+      "images": []
+    },
+    {
+      "number": "421",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "Exams / Amazon / AWS Certified DevOps Engineer - Professional DOP-C02 / A company has deployed an application in a production VPC within a single AWS account. Question 421 / Monitoring and Logging A company has deployed an application in a production VPC within a single AWS account. The application is popular and is receiving heavy use. The company’s security team wants to add extra security, such as AWS WAF, to the application deployment. However, the application's product manager is worried about cost and will not approve the change unless the security team can demonstrate that the additional security is needed. The security team believes that some application demand might originate from users whose IP addresses are on a deny list. The security team gives the deny list to a DevOps engineer. If any IP addresses on the deny list access the application, the security team wants an automated notification in near real time so it can document that the application requires additional security. The DevOps engineer creates a VPC flow log for the production VPC. Which additional set of steps should the DevOps engineer take to meet these requirements in the MOST cost-effective way?",
+      "translation": "",
+      "options": [
+        "A. Create a log group in Amazon CloudWatch Logs. Configure the VPC flow log to capture accepted traffic and to send the data to the log group. Create an Amazon CloudWatch metric filter for IP addresses on the deny list. Create a CloudWatch alarm with the metric filter as input. Set the period to 5 minutes and the datapoints to alarm to 1. Use an Amazon Simple Notification Service (Amazon SNS) topic to send alarm notices to the security team.",
+        "B. Create an Amazon S3 bucket for log files. Configure the VPC flow log to capture all traffic and to send the data to the S3 bucket. Configure Amazon Athena to return all log files in the S3 bucket for IP addresses on the deny list. Configure Amazon QuickSight to accept data from Athena and to publish the data as a dashboard that the security team can access. Create a threshold alert of 1 for successful access. Configure the alert to automatically notify the security team as frequently as possible when the alert threshold is met.",
+        "C. Create an Amazon S3 bucket for log files. Configure the VPC flow log to capture accepted traffic and to send the data to the S3 bucket. Configure an Amazon OpenSearch Service cluster and domain for the log files. Create an AWS Lambda function to retrieve the logs from the S3 bucket, format the logs, and load the logs into the OpenSearch Service cluster. Schedule the Lambda function to run every 5 minutes. Configure an alert and condition in OpenSearch Service to send alerts to the security team through an Amazon Simple Notification Service (Amazon SNS) topic when access from the IP addresses on the deny list is detected.",
+        "D. Create a log group in Amazon CloudWatch Logs. Create an Amazon S3 bucket to hold query results. Configure the VPC flow log to capture all traffic and to send the data to the log group. Deploy an Amazon Athena CloudWatch connector in AWS Lambda. Connect the connector to the log group. Configure Athena to periodically query for all accepted traffic from the IP addresses on the deny list and to store the results in the S3 bucket. Configure an S3 event notification to automatically notify the security team through an Amazon Simple Notification Service (Amazon SNS) topic when new objects are added to the S3 bucket."
+      ],
+      "correctAnswer": "A",
+      "explanation": "VPC Flow Logs can deliver accepted traffic directly to CloudWatch Logs, where a metric filter can match the deny-listed source IP addresses. A CloudWatch alarm can evaluate the resulting metric and notify an Amazon SNS topic, providing automated alerting without the additional storage, query, dashboard, Lambda, or OpenSearch infrastructure. Logging only accepted traffic captures actual application access while reducing unnecessary log volume.",
+      "learnMore": [
+        "Process flow log records in CloudWatch Logs",
+        "Create a flow log that publishes to CloudWatch Logs"
+      ],
+      "images": []
+    },
+    {
+      "number": "422",
+      "topic": "Configuration Management and IaC",
+      "questionType": "mc",
+      "questionText": "A company that uses electronic health records operates a fleet of Amazon EC2 instances running the Amazon Linux operating system. To meet patient-privacy requirements, the company must maintain continuous compliance for patches to the operating system and applications running on the EC2 instances. How can deployments of operating-system and application patches be automated by using a default and custom repository?",
+      "translation": "",
+      "options": [
+        "A. Use AWS Systems Manager to create a new patch baseline including the custom repository. Run the AWS-RunPatchBaseline document using the run command to verify and install patches.",
+        "B. Use AWS Direct Connect to integrate the corporate repository and deploy the patches using Amazon CloudWatch scheduled events, then use the CloudWatch dashboard to create reports.",
+        "C. Use yum-config-manager to add the custom repository under /etc/yum.repos.d and run yum-config-manager-enable to activate the repository.",
+        "D. Use AWS Systems Manager to create a new patch baseline including the corporate repository. Run the AWS-AmazonLinuxDefaultPatchBaseline document using the run command to verify and install patches."
+      ],
+      "correctAnswer": "A",
+      "explanation": "AWS Systems Manager Patch Manager supports custom Linux patch baselines that specify alternative patch source repositories. Running the AWS-RunPatchBaseline document through Run Command performs Scan or Install operations and can apply approved operating-system and application patches on Amazon Linux managed nodes. This supports patch compliance while using both the default and corporate repositories.",
+      "learnMore": [
+        "How to specify an alternative patch source repository (Linux)",
+        "SSM Command document for patching: AWS-RunPatchBaseline"
+      ],
+      "images": []
+    },
+    {
+      "number": "423",
+      "topic": "Configuration Management and IaC",
+      "questionType": "mc",
+      "questionText": "A company that uses electronic health records operates a fleet of Amazon EC2 instances running the Amazon Linux operating system. To meet patient-privacy requirements, the company must maintain continuous compliance for patches to the operating system and applications running on the EC2 instances. How can deployments of operating-system and application patches be automated by using a default and custom repository?",
+      "translation": "",
+      "options": [
+        "A. Use AWS Systems Manager to create a new patch baseline including the custom repository. Run the AWS-RunPatchBaseline document using the run command to verify and install patches.",
+        "B. Use AWS Direct Connect to integrate the corporate repository and deploy the patches using Amazon CloudWatch scheduled events, then use the CloudWatch dashboard to create reports.",
+        "C. Use yum-config-manager to add the custom repository under /etc/yum.repos.d and run yum-config-manager-enable to activate the repository.",
+        "D. Use AWS Systems Manager to create a new patch baseline including the corporate repository. Run the AWS-AmazonLinuxDefaultPatchBaseline document using the run command to verify and install patches."
+      ],
+      "correctAnswer": "",
+      "explanation": "AWS Systems Manager Patch Manager supports custom Linux patch baselines that specify alternative patch source repositories. Running the AWS-RunPatchBaseline document through Run Command performs Scan or Install operations and can apply approved operating-system and application patches on Amazon Linux managed nodes. This supports patch compliance while using both the default and corporate repositories.",
+      "learnMore": [
+        "How to specify an alternative patch source repository (Linux)",
+        "SSM Command document for patching: AWS-RunPatchBaseline"
+      ],
+      "images": []
+    },
+    {
+      "number": "424",
+      "topic": "Incident and Event Response",
+      "questionType": "multi-answer",
+      "questionText": "A DevOps engineer has automated deployment of a web service using AWS CodePipeline with these steps: An AWS CodeBuild project builds the deployment artifact and executes unit tests. An AWS CodeDeploy deployment group deploys the web service to Amazon EC2 instances in the staging environment. A CodeDeploy deployment group deploys the web service to EC2 instances in the production environment. The quality assurance (QA) team requests authorization to inspect the build artifact before deployment to the production environment takes place. The QA team wants to invoke an internal penetration-testing tool through a REST API call to perform manual tests. Which combination of actions should the DevOps engineer take to meet this request? Choose two",
+      "translation": "",
+      "options": [
+        "A. Insert a manual approval action between the test actions and deployment actions of the pipeline.",
+        "B. Modify the buildspec.yml file for the compilation stage to require manual approval before completion.",
+        "C. Update the CodeDeploy deployment groups so that they require manual approval to proceed.",
+        "D. Update the pipeline to directly call the REST API for the penetration testing tool.",
+        "E. Update the pipeline to invoke an AWS Lambda function that calls the REST API for the penetration testing tool."
+      ],
+      "correctAnswer": "AE",
+      "explanation": "A CodePipeline manual approval action pauses execution until an authorized reviewer approves it, allowing QA to review and test the artifact before the production deployment proceeds. A CodePipeline AWS Lambda invoke action can execute custom code that calls the internal tool's REST API and returns the test result to the pipeline.",
+      "learnMore": [
+        "Add a manual approval action to a pipeline in CodePipeline"
+      ],
+      "images": []
+    },
+    {
+      "number": "425",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A company is moving its web application to AWS. The application uses WebSocket connections for real-time updates and needs sticky sessions. A DevOps engineer must implement a highly available architecture for the application. Users worldwide must be able to access the application with the lowest possible latency. Which solution meets these requirements with the LEAST operational overhead?",
+      "translation": "",
+      "options": [
+        "A. Deploy an Application Load Balancer (ALB). Deploy another ALB in a different AWS Region. Enable cross-zone load balancing and sticky sessions on the ALBs. Integrate the ALBs with Amazon Route 53 latency-based routing.",
+        "B. Deploy a Network Load Balancer (NLB). Deploy another NLB in a different AWS Region. Enable cross-zone load balancing and sticky sessions on the NLBs. Integrate the NLBs with Amazon Route 53 geolocation routing.",
+        "C. Deploy a Network Load Balancer (NLB) with cross-zone load balancing enabled. Configure the NLB with IP-based targets in multiple Availability Zones. Use Amazon CloudFront for global content delivery. Implement sticky sessions by using source IP address preservation on the NLB.",
+        "D. Deploy an Application Load Balancer (ALB) for HTTP traffic. Deploy a Network Load Balancer (NLB) in each of the company’s AWS Regions for WebSocket connections. Enable sticky sessions on the ALB. Configure the ALB to forward requests to the NLB."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Application Load Balancers provide native WebSocket support and can use target-group stickiness. ALBs deployed across multiple Availability Zones provide regional high availability, while deploying one in each of two Regions adds regional resilience. Amazon Route 53 latency-based routing directs users to the Region that provides the lowest latency; cross-zone load balancing distributes traffic across healthy targets in all enabled Availability Zones.",
+      "learnMore": [
+        "Listeners for your Application Load Balancers",
+        "Edit target group attributes for your Application Load Balancer"
+      ],
+      "images": []
+    },
+    {
+      "number": "426",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A company's applications run on Amazon EC2 instances and use AWS Lambda functions across multiple AWS accounts. Every EC2 instance has the Amazon CloudWatch agent installed. All accounts are members of the same AWS Organizations organization. The company has created a dedicated central log account. All logs produced by the applications must be sent to a central location. The logs must be encrypted with company-managed keys. Which solution fulfills these requirements with the LEAST operational overhead?",
+      "translation": "",
+      "options": [
+        "A. In the central log account, enable logs as the data source in CloudWatch. Add the organization ID to the source account list. Create a CloudFormation StackSet by using the template provided by CloudWatch to enable central monitoring in all the organization's accounts.",
+        "B. Create an Amazon S3 bucket in the central log account. Create an Amazon Data Firehose stream in the central log account. Set the S3 bucket as the destination of the Firehose stream. Create a log subscription in the central log account. Set the Firehose stream as a target of the subscription. Store the subscription log ARN in AWS Systems Manager Parameter Store for each project to use to send logs to the S3 bucket.",
+        "C. Create an Amazon S3 bucket in each account. Create an Amazon OpenSearch Service cluster in the central log account. Create an Amazon Simple Queue Service (Amazon SQS) queue in the central log account. Create an S3 trigger that sends events to the SQS queue each time a new file is uploaded to the S3 bucket. Create a Lambda function that processes each file and sends each file to the OpenSearch Service cluster.",
+        "D. Create an Amazon S3 bucket in the central log account. Create an Amazon Data Firehose stream in each account. Set the S3 bucket as the destination of the Firehose streams. Create a log subscription in each account with the Firehose streams as a target."
+      ],
+      "correctAnswer": "D",
+      "explanation": "CloudWatch Logs subscription filters in each source account can send application log events to Amazon Data Firehose, which delivers them to a single Amazon S3 bucket in the central log account. The bucket can be configured with SSE-KMS using a customer-managed KMS key. CloudWatch cross-account observability only shares access to source-account telemetry; it does not move the telemetry to the monitoring account.",
+      "learnMore": [
+        "Cross-account cross-Region log data sharing using Firehose",
+        "Monitor across accounts and Regions"
+      ],
+      "images": []
+    },
+    {
+      "number": "427",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A company runs an application that uploads access logs to an Amazon CloudWatch Logs log group. The log-line fields include the response code and the application name. The company needs to create a CloudWatch metric that tracks the number of requests by response code within a specified range and for a specified application name. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create a CloudWatch Logs log event filter on the CloudWatch Logs log stream to match the response code range. Configure the log event filter to increment a metric. Set the response code and application name as dimensions.",
+        "B. Create a CloudWatch Logs metric filter on the CloudWatch Logs log group to match the response code range. Configure the metric filter to increment a metric. Set the response code and application name as dimensions.",
+        "C. Create a CloudWatch Contributor Insights rule on the CloudWatch Logs log stream with a filter to match the response code range. Configure the Contributor Insights rule to increment a CloudWatch metric with the response code and application name as dimensions.",
+        "D. Create a CloudWatch Logs Insights query on the CloudWatch Logs log group to match the response code range. Configure the Logs Insights query to increment a CloudWatch metric with the response code and application name as dimensions."
+      ],
+      "correctAnswer": "B",
+      "explanation": "CloudWatch Logs metric filters are attached to log groups and transform matching incoming log events into CloudWatch metrics. A filter pattern can match the required response-code range, a metric value of 1 counts each matching request, and response-code and application-name fields can be published as metric dimensions for JSON or space-delimited logs.",
+      "learnMore": [
+        "Create a metric filter for a log group",
+        "Filter pattern syntax for metric filters"
+      ],
+      "images": []
+    },
+    {
+      "number": "428",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "Exams / Amazon / AWS Certified DevOps Engineer - Professional DOP-C02 / A company has several AWS accounts and uses AWS IAM Identity Center integrated with a third-party SAML 2.0 id… Question 428 / Security and Compliance A company has several AWS accounts and uses AWS IAM Identity Center integrated with a third-party SAML 2.0 identity provider (IdP). The Attributes for access control feature is enabled in IAM Identity Center. The attribute-mapping list maps the department key from the IdP to the $\\{path:enterprise.department\\} attribute. All existing Amazon EC2 instances have a department tag of d1, d2, or d3, corresponding to the company’s three departments. A DevOps engineer must create policies based on matching attributes. The policies must grant each user access only to the EC2 instances tagged with that user’s respective department name. Which condition key should the DevOps engineer include in the custom permissions policies to meet these requirements?",
+      "translation": "",
+      "options": [
+        "A.",
+        "B.",
+        "C.",
+        "D."
+      ],
+      "correctAnswer": "C",
+      "explanation": "IAM Identity Center passes configured access-control attributes as session tags, which permission policies reference through aws:PrincipalTag/department. Attribute-based access control for EC2 compares that principal tag with the instance tag using StringEquals and ec2:ResourceTag/department, so access is allowed only when both department values match.",
+      "learnMore": [
+        "Create permission policies for ABAC in IAM Identity Center",
+        "Attributes for access control in IAM Identity Center"
+      ],
+      "images": [
+        {
+          "path": "/data/images/dop_c02/q428_img0.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "A",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/dop_c02/q428_img1.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "B",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/dop_c02/q428_img2.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "C",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/dop_c02/q428_img3.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "D",
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "429",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company uses Amazon Elastic Kubernetes Service (Amazon EKS) to operate its applications. Its EKS cluster is successfully running several pods, and the company stores the pod images in Amazon Elastic Container Registry (Amazon ECR). The company must configure Pod Identity access for the EKS cluster. It has already updated the node IAM role with the permissions required for Pod Identity access. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create an IAM OpenID Connect (OIDC) provider for the EKS cluster.",
+        "B. Ensure that the nodes can reach the EKS Auth API. Add and configure the EKS Pod Identity Agent add-on for the EKS cluster.",
+        "C. Create an EKS access entry that uses the API_AND-CONFIG_MAP cluster authentication mode.",
+        "D. Configure the AWS Security Token Service (AWS STS) endpoint for the Kubernetes service account that the pods in the EKS cluster use."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Amazon EKS Pod Identity requires the EKS Pod Identity Agent add-on, which runs on the cluster nodes and obtains pod credentials through the EKS Auth API. Therefore, the nodes must be able to reach the EKS Auth API and the agent add-on must be installed and configured. An IAM OIDC provider and AWS STS web-identity configuration are used for IAM roles for service accounts (IRSA), not Pod Identity.",
+      "learnMore": [
+        "Set up the Amazon EKS Pod Identity Agent",
+        "Understand how EKS Pod Identity works"
+      ],
+      "images": []
+    },
+    {
+      "number": "430",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company mandates that all employees access secrets and parameters by using AWS Systems Manager Parameter Store. Every secret must rotate automatically every 60 days. A DevOps engineer needs to add a new secret that allows an application to access an Amazon ElastiCache (Redis OSS) cluster. Which solution satisfies these requirements with the LEAST operational overhead?",
+      "translation": "",
+      "options": [
+        "A. Create the secret in AWS Secrets Manager. Enable managed rotation. Set the rotation frequency to 60 days. Configure the application to reference the secret value by using the fully qualified path in Parameter Store.",
+        "B. Create the secret in Parameter Store. Enable automatic rotation. Set the rotation frequency to 60 days. Configure the application to reference the secret value by using the fully qualified path in Parameter Store.",
+        "C. Create the secret in Parameter Store. Create an AWS Lambda function to rotate the secret. Configure an Amazon EventBridge event to invoke the Lambda function every 60 days. Configure the application to provide the unique secret name to Parameter Store to retrieve the secret.",
+        "D. Create the secret in AWS Secrets Manager. Enable rotation by AWS Lambda function. Use the Secrets Manager provided Lambda template for ElastiCache (Redis OSS) secrets. Set the rotation schedule to 60 days. Set a rotation window duration in Secrets Manager. Configure the application to provide the full reserved path to Parameter Store when the application accesses the secret."
+      ],
+      "correctAnswer": "D",
+      "explanation": "AWS Systems Manager Parameter Store does not automatically rotate stored secrets, but it can retrieve AWS Secrets Manager secrets through the reserved /aws/reference/secretsmanager/ path. AWS Secrets Manager supports Amazon ElastiCache credential rotation by invoking a Lambda rotation function, and provides the SecretsManagerElasticacheUserRotation template to reduce implementation effort. A 60-day Secrets Manager rotation schedule therefore fulfills the automatic-rotation requirement while preserving Parameter Store access.",
+      "learnMore": [
+        "Use AWS Secrets Manager secrets in Parameter Store"
+      ],
+      "images": []
+    },
+    {
+      "number": "431",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company mandates that all employees access secrets and parameters by using AWS Systems Manager Parameter Store. Every secret must rotate automatically every 60 days. A DevOps engineer needs to add a new secret that allows an application to access an Amazon ElastiCache (Redis OSS) cluster. Which solution satisfies these requirements with the LEAST operational overhead?",
+      "translation": "",
+      "options": [
+        "A. Create the secret in AWS Secrets Manager. Enable managed rotation. Set the rotation frequency to 60 days. Configure the application to reference the secret value by using the fully qualified path in Parameter Store.",
+        "B. Create the secret in Parameter Store. Enable automatic rotation. Set the rotation frequency to 60 days. Configure the application to reference the secret value by using the fully qualified path in Parameter Store.",
+        "C. Create the secret in Parameter Store. Create an AWS Lambda function to rotate the secret. Configure an Amazon EventBridge event to invoke the Lambda function every 60 days. Configure the application to provide the unique secret name to Parameter Store to retrieve the secret.",
+        "D. Create the secret in AWS Secrets Manager. Enable rotation by AWS Lambda function. Use the Secrets Manager provided Lambda template for ElastiCache (Redis OSS) secrets. Set the rotation schedule to 60 days. Set a rotation window duration in Secrets Manager. Configure the application to provide the full reserved path to Parameter Store when the application accesses the secret."
+      ],
+      "correctAnswer": "",
+      "explanation": "AWS Systems Manager Parameter Store does not automatically rotate stored secrets, but it can retrieve AWS Secrets Manager secrets through the reserved /aws/reference/secretsmanager/ path. AWS Secrets Manager supports Amazon ElastiCache credential rotation by invoking a Lambda rotation function, and provides the SecretsManagerElasticacheUserRotation template to reduce implementation effort. A 60-day Secrets Manager rotation schedule therefore fulfills the automatic-rotation requirement while preserving Parameter Store access.",
+      "learnMore": [
+        "Use AWS Secrets Manager secrets in Parameter Store"
+      ],
+      "images": []
+    },
+    {
+      "number": "432",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A DevOps engineer is designing a solution to centrally ingest and process a large volume of Amazon CloudWatch logs produced by multiple applications. The solution must gather all CloudWatch logs from multiple AWS accounts, process the logs in real time, and store the processed logs in an Amazon S3 bucket. Which solution meets these requirements with the LEAST implementation effort?",
+      "translation": "",
+      "options": [
+        "A. Create an S3 bucket in a single AWS account. Create an export task for each CloudWatch Logs log group and set the S3 bucket as the destination. Create an Amazon EventBridge rule that invokes the export task every hour.",
+        "B. Create an S3 bucket, an Amazon Kinesis data stream, and an Amazon Data Firehose delivery stream in a single AWS account. Create a CloudWatch Logs subscription filter for each CloudWatch Logs log group. Set the Kinesis data stream as the destination of the subscription filter. Set the Kinesis data stream as the source for the S3 bucket and as the destination for the Firehose delivery stream.",
+        "C. Create an S3 bucket and an Amazon Data Firehose delivery stream in a single AWS account. Create a CloudWatch Logs subscription filter for each CloudWatch Logs log group and set the Firehose delivery stream as the destination. Set the S3 bucket as the destination for the Firehose delivery stream.",
+        "D. Create an S3 bucket and an Amazon Data Firehose delivery stream in a single AWS account. Create an account-level CloudWatch Logs subscription filter and set the Firehose delivery stream as the destination. Set the S3 bucket as the destination for the Firehose delivery stream."
+      ],
+      "correctAnswer": "D",
+      "explanation": "An account-level CloudWatch Logs subscription filter automatically applies to the log groups in an account, eliminating the need to configure a subscription filter on every log group. CloudWatch Logs can deliver the real-time subscription stream to Amazon Data Firehose, and Firehose can deliver the processed data to Amazon S3. A centralized multi-account implementation uses a shared CloudWatch Logs destination for the Firehose delivery stream and account-level subscription policies in the sending accounts.",
+      "learnMore": [
+        "Account-level subscription filters - Amazon CloudWatch Logs"
+      ],
+      "images": []
+    },
+    {
+      "number": "433",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A DevOps engineer is designing a solution to centrally ingest and process a large volume of Amazon CloudWatch logs produced by multiple applications. The solution must gather all CloudWatch logs from multiple AWS accounts, process the logs in real time, and store the processed logs in an Amazon S3 bucket. Which solution meets these requirements with the LEAST implementation effort?",
+      "translation": "",
+      "options": [
+        "A. Create an S3 bucket in a single AWS account. Create an export task for each CloudWatch Logs log group and set the S3 bucket as the destination. Create an Amazon EventBridge rule that invokes the export task every hour.",
+        "B. Create an S3 bucket, an Amazon Kinesis data stream, and an Amazon Data Firehose delivery stream in a single AWS account. Create a CloudWatch Logs subscription filter for each CloudWatch Logs log group. Set the Kinesis data stream as the destination of the subscription filter. Set the Kinesis data stream as the source for the S3 bucket and as the destination for the Firehose delivery stream.",
+        "C. Create an S3 bucket and an Amazon Data Firehose delivery stream in a single AWS account. Create a CloudWatch Logs subscription filter for each CloudWatch Logs log group and set the Firehose delivery stream as the destination. Set the S3 bucket as the destination for the Firehose delivery stream.",
+        "D. Create an S3 bucket and an Amazon Data Firehose delivery stream in a single AWS account. Create an account-level CloudWatch Logs subscription filter and set the Firehose delivery stream as the destination. Set the S3 bucket as the destination for the Firehose delivery stream."
+      ],
+      "correctAnswer": "",
+      "explanation": "An account-level CloudWatch Logs subscription filter automatically applies to the log groups in an account, eliminating the need to configure a subscription filter on every log group. CloudWatch Logs can deliver the real-time subscription stream to Amazon Data Firehose, and Firehose can deliver the processed data to Amazon S3. A centralized multi-account implementation uses a shared CloudWatch Logs destination for the Firehose delivery stream and account-level subscription policies in the sending accounts.",
+      "learnMore": [
+        "Account-level subscription filters - Amazon CloudWatch Logs"
+      ],
+      "images": []
+    },
+    {
+      "number": "434",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "An ecommerce company runs a web application on Amazon EC2 instances in an Auto Scaling group. The company deploys the application across multiple Availability Zones. Application users report intermittent application performance issues. The company enables basic Amazon CloudWatch monitoring for the EC2 instances. The company identifies and implements a fix for the performance issues. After the issues are resolved, the company wants to implement a monitoring solution that will rapidly alert the company about future performance issues. Which solution will meet this requirement?",
+      "translation": "",
+      "options": [
+        "A. Enable detailed monitoring for the EC2 instances. Create custom CloudWatch metrics for application-specific performance indicators. Set up CloudWatch alarms based on the custom metrics. Use CloudWatch Logs Insights to analyze application logs for error patterns.",
+        "B. Use AWS X-Ray to implement distributed tracing. Integrate X-Ray with Amazon CloudWatch RUM. Use Amazon EventBridge to trigger automatic scaling actions based on custom events.",
+        "C. Use Amazon CloudFront to deliver the application. Use AWS CloudTrail to monitor API calls. Use AWS Trusted Advisor to generate recommendations to optimize performance. Use Amazon GuardDuty to detect potential performance issues.",
+        "D. Enable VPC Flow Logs. Use Amazon Data Firehose to stream flow logs to Amazon S3. Use Amazon Athena to analyze the logs and to send alerts to the company."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Amazon EC2 detailed monitoring publishes instance metrics at one-minute intervals rather than the five-minute intervals used for basic monitoring, enabling faster detection. Publishing application-specific custom metrics captures performance indicators that EC2 metrics alone do not provide, and CloudWatch alarms can notify or take action when those metrics breach defined thresholds. CloudWatch Logs Insights can additionally investigate error patterns in application logs.",
+      "learnMore": [
+        "Monitor your instances using CloudWatch",
+        "Metrics concepts - Amazon CloudWatch"
+      ],
+      "images": []
+    },
+    {
+      "number": "435",
+      "topic": "SDLC Automation",
+      "questionType": "mc",
+      "questionText": "A software-as-a-service (SaaS) company uses an Amazon Elastic Container Service (Amazon ECS) cluster behind an Application Load Balancer (ALB) to deliver real-time analytics services to clients. The company uses AWS CodePipeline and AWS CodeDeploy to establish a blue/green deployment process for the solution. The company requires the deployment process to automatically shift traffic in equal increments across a specified total deployment time, with no manual intervention. The deployment process must ensure zero downtime and seamless updates. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Set the TrafficRoutingConfig parameter to TimeBasedLinear in the appspec.yaml file of the CodeDeploy application that the company uses to deploy the ECS services. Set values for the linearPercentage parameter and the linearInterval parameter.",
+        "B. Update the TrafficRoutingConfig parameter of the appspec.yaml file of the CodeDeploy application that the company uses to deploy the ECS services to the AllAtOnce type.",
+        "C. Create a deployment group configuration. Set the TrafficRoutingConfig parameter to the TimeBasedCanary type. Configure listener rules on the ALB to forward traffic to the target groups based on specified weights.",
+        "D. Set up a deployment configuration in CodeDeploy. Configure weighted routing on the ALB during deployment."
+      ],
+      "correctAnswer": "D",
+      "explanation": "For an Amazon ECS blue/green deployment, CodeDeploy deployment configurations determine how traffic is shifted to the replacement ECS task set. A linear deployment configuration shifts a fixed percentage of traffic at fixed time intervals, allowing the rollout duration to be controlled while the ALB routes traffic between task sets. Traffic-routing settings are part of the CodeDeploy deployment configuration, not the ECS AppSpec file; the AppSpec file identifies the task definition and load-balancer mapping.",
+      "learnMore": [
+        "Working with deployment configurations in CodeDeploy",
+        "TimeBasedLinear - AWS CodeDeploy"
+      ],
+      "images": []
+    },
+    {
+      "number": "436",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A company operates an application on Amazon Elastic Kubernetes Service (Amazon EKS) clusters in the company’s primary AWS Region and secondary Region. The company uses Auto Scaling groups to spread each EKS cluster’s worker nodes across multiple Availability Zones. Each EKS cluster also uses an Application Load Balancer (ALB) to distribute inbound traffic. The company plans to deploy a new stateless application to this infrastructure. The company requires a fault-tolerant, multi-Region solution. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Deploy the new application to both EKS clusters. Create Amazon Route 53 records with health checks for both ALBs. Use a failover routing policy. Implement Kubernetes readiness and liveness probes.",
+        "B. Deploy the new application to the EKS cluster in the primary Region. Create Amazon Route 53 records with health checks for the primary Region ALUse a simple routing policy.",
+        "C. Deploy the new application to both EKS clusters. Create Amazon Route 53 records with a weighted routing policy that evenly splits traffic between both ALBs. Implement Kubernetes readiness and liveness probes.",
+        "D. Deploy the new application to the EKS cluster in the primary Region. Create Amazon Route 53 records with health checks for the primary Region ALB. Use a failover routing policy."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Deploying the stateless application in both Regional EKS clusters provides a Regional application replica. Amazon Route 53 failover routing uses health status to send traffic to the primary ALB while it is healthy and to the secondary ALB when the primary becomes unhealthy. Kubernetes readiness probes prevent unready Pods from receiving traffic, and liveness probes enable recovery of unhealthy containers. Together, these controls provide multi-Region, fault-tolerant service delivery.",
+      "learnMore": [
+        "Failover routing - Amazon Route 53"
+      ],
+      "images": []
+    },
+    {
+      "number": "437",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A company operates an application on Amazon Elastic Kubernetes Service (Amazon EKS) clusters in the company’s primary AWS Region and secondary Region. The company uses Auto Scaling groups to spread each EKS cluster’s worker nodes across multiple Availability Zones. Each EKS cluster also uses an Application Load Balancer (ALB) to distribute inbound traffic. The company plans to deploy a new stateless application to this infrastructure. The company requires a fault-tolerant, multi-Region solution. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Deploy the new application to both EKS clusters. Create Amazon Route 53 records with health checks for both ALBs. Use a failover routing policy. Implement Kubernetes readiness and liveness probes.",
+        "B. Deploy the new application to the EKS cluster in the primary Region. Create Amazon Route 53 records with health checks for the primary Region ALUse a simple routing policy.",
+        "C. Deploy the new application to both EKS clusters. Create Amazon Route 53 records with a weighted routing policy that evenly splits traffic between both ALBs. Implement Kubernetes readiness and liveness probes.",
+        "D. Deploy the new application to the EKS cluster in the primary Region. Create Amazon Route 53 records with health checks for the primary Region ALB. Use a failover routing policy."
+      ],
+      "correctAnswer": "",
+      "explanation": "Deploying the stateless application in both Regional EKS clusters provides a Regional application replica. Amazon Route 53 failover routing uses health status to send traffic to the primary ALB while it is healthy and to the secondary ALB when the primary becomes unhealthy. Kubernetes readiness probes prevent unready Pods from receiving traffic, and liveness probes enable recovery of unhealthy containers. Together, these controls provide multi-Region, fault-tolerant service delivery.",
+      "learnMore": [
+        "Failover routing - Amazon Route 53"
+      ],
+      "images": []
+    },
+    {
+      "number": "438",
+      "topic": "Incident and Event Response",
+      "questionType": "mc",
+      "questionText": "A company uses AWS CodePipeline and AWS CodeDeploy to deploy application code to Amazon EC2 instances. The EC2 instances send application and CodeDeploy logs to Amazon CloudWatch. Recently, the company manually rolled back a deployment due to application errors. The company wants to automate the rollback process when application errors occur. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create a CloudWatch metric based on the application logs. Create a CloudWatch alarm based on the metric that will activate when application errors occur. Change the deployment group settings to use the CloudWatch alarm configuration. Configure the deployment group to use an auto rollback configuration.",
+        "B. Configure a CloudWatch alarm that uses a custom metric for application errors that are recorded in the CodeDeploy agent logs. Configure the current deployment to use the CloudWatch alarm for its alarm configuration. Configure the deployment to use an auto rollback configuration.",
+        "C. Create an AWS Lambda function that will create a new deployment by using the last successful application deployment. Create an Amazon EventBridge rule that matches events from CodeDeploy that have a deployment status of FAILURE. Configure the EventBridge rule to target the Lambda function.",
+        "D. Create an AWS Lambda function that will create a new deployment group for the application deployment. Create a CloudWatch alarm based on metrics from the application logs. Configure the alarm to activate when an application error occurs on an EC2 instance. Configure the CloudWatch alarm to invoke the Lambda function."
+      ],
+      "correctAnswer": "A",
+      "explanation": "A CloudWatch metric can be created from application logs and used by an alarm to detect application errors. Associating that alarm with the CodeDeploy deployment group causes CodeDeploy to stop the deployment when the alarm enters the ALARM state. Enabling automatic rollback for a deployment stopped on an alarm redeploys the last known good application revision.",
+      "learnMore": [
+        "Monitoring deployments with CloudWatch alarms in CodeDeploy",
+        "Redeploy and roll back a deployment with CodeDeploy"
+      ],
+      "images": []
+    },
+    {
+      "number": "439",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A DevOps engineer operates a web application deployed on an Amazon Elastic Container Service (Amazon ECS) service behind an Application Load Balancer (ALB). Recent service updates caused application downtime because of problems in the application code. The DevOps engineer must design a solution that tests updates with a small portion of traffic before deploying to the remainder of the service. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create a new pipeline in AWS CodePipeline. Connect the pipeline to an AWS CodeConnections compatible Git repository. Configure the pipeline with an ECRBuildAndPublish action and an Amazon ECS standard deployment action. Configure the ECS service to use the rolling update deployment type.",
+        "B. Update the ECS service to use AWS CodeDeploy as the deployment controller. Create a second target group for the ALCreate a CodeDeploy application and deployment group for the application. Use CodeDeploy to deploy updates by using the CodeDeployDefault.ECSCanary10Percent15Minutes deployment configuration.",
+        "C. Create a new AWS CodeBuild project that uses AWS Lambda compute and that includes an IAM role that has permissions to update the ECS task definition. Update the project buildspec file to call the Amazon ECS RegisterTaskDefinition API for deployments. Configure the ECS service to use the rolling update deployment type.",
+        "D. Create a new AWS CodeBuild project. Connect the project to an AWS CodeConnections compatible Git repository. Create a buildspec.yml file in the Git repository that contains commands to call the Amazon ECS UpdateService API. Set a slow start duration of 2 minutes on the ALB target group."
+      ],
+      "correctAnswer": "B",
+      "explanation": "An Amazon ECS blue/green deployment with AWS CodeDeploy and an ALB routes traffic between the original and replacement task sets through separate target groups. The CodeDeployDefault.ECSCanary10Percent15Minutes configuration sends 10% of traffic to the updated task set initially and shifts the remaining 90% after 15 minutes, providing a canary test period before full deployment.",
+      "learnMore": [
+        "CodeDeploy blue/green deployments for Amazon ECS",
+        "Working with deployment configurations in CodeDeploy"
+      ],
+      "images": []
+    },
+    {
+      "number": "440",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company uses an AWS Organizations organization with all features enabled to manage multiple AWS accounts. AWS Config is enabled in every account. The company requires developers to create AWS CloudFormation stacks in a new AWS account to test features for a new application the developers are building. The company needs to ensure that developers can use only approved Amazon EC2 instance types for the application. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create an AWS Lambda function that returns SUCCESS when the EC2 instance type property matches a value from a list of approved instance types. Activate a CloudFormation Guard Hook in the new AWS account to run the Lambda function.",
+        "B. Create an AWS config rule that uses the desired-instance-type rule in the new AWS account. Provide the list of approved instance types in the rule configuration. Create a remediation for the AWS config rule that uses the AWS-StopEC2Instance remediation action.",
+        "C. Create an SCP that includes a Deny effect for ec2:RunInstnaces when the ec2:InstanceType property does not match a value from a list of approved instance types. Attach the SCP to the root of the organization.",
+        "D. Create a CloudFormation Guard rule to ensure that the EC2 instance type matches a value from a list of approved instance types. Activate a Guard Hook in the new AWS account to run the Guard rule."
+      ],
+      "correctAnswer": "D",
+      "explanation": "AWS CloudFormation Guard Hooks evaluate CloudFormation resource configurations before stack operations are allowed. A Guard rule can check an AWS::EC2::Instance resource’s instance type against an approved list, and the Guard Hook can be configured to fail noncompliant stack operations in the new account. AWS Config remediation occurs after a resource is evaluated, while a Lambda function requires a Lambda Hook rather than a Guard Hook.",
+      "learnMore": [
+        "Guard Hooks",
+        "Creating and managing CloudFormation Hooks"
+      ],
+      "images": []
+    },
+    {
+      "number": "441",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "Exams / Amazon / AWS Certified DevOps Engineer - Professional DOP-C02 / A company is migrating an application to Amazon Elastic Container Service (Amazon ECS). Question 441 / Monitoring and Logging A company is migrating an application to Amazon Elastic Container Service (Amazon ECS). The company wants to centralize log data in Amazon CloudWatch in the us-west-2 Region. No Amazon ECS CloudWatch log groups currently exist. The company receives the following error when an ECS task tries to launch: service my-service-name was unable to place a task because no container instance met all of its requirements. The ECS task definition contains this container log configuration: The ECS cluster uses an Amazon EC2 Auto Scaling group to supply task capacity. The EC2 instances launch an Amazon ECS-optimized AMI. Which solution will resolve the problem?",
+      "translation": "",
+      "options": [
+        "A. Modify the ECS infrastructure IAM role to add the logs:CreateLogStream and logs:PutLogEvents permissions.",
+        "B. Modify the ECS log configuration to use blocking mode.",
+        "C. Modify the ECS container instance IAM role to add the logs:CreateLogStream and logs:PutLogEvents permissions.",
+        "D. Modify the ECS log configuration by setting the awslogs-create-group option to false."
+      ],
+      "correctAnswer": "C",
+      "explanation": "For Amazon ECS tasks running on EC2 with the awslogs log driver, the Amazon ECS container instances need logs:CreateLogStream and logs:PutLogEvents permissions on the IAM role used to launch those instances. Those permissions allow the logging driver to create CloudWatch Logs streams and publish container log events.",
+      "learnMore": [
+        "Send Amazon ECS logs to CloudWatch"
+      ],
+      "images": [
+        {
+          "path": "/data/images/dop_c02/q441_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "442",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A software engineering team uses AWS CodeDeploy to deploy a new application version. The team needs the deployment process to automatically roll back to the prior version if any issues occur. During deployment, a health check validates the application's stability. If that health check fails, the deployment must automatically revert. Which solution satisfies these requirements?",
+      "translation": "",
+      "options": [
+        "A. Implement lifecycle event hooks in the deployment configuration.",
+        "B. Use AWS CloudFormation to monitor the health of the deployment.",
+        "C. Set up alarms in Amazon CloudWatch to start a rollback.",
+        "D. Configure automatic rollback settings in AWS CodeDeploy."
+      ],
+      "correctAnswer": "D",
+      "explanation": "AWS CodeDeploy automatic rollback settings can redeploy the last known good application revision when a deployment fails. A health-check failure marks the deployment as failed, so this configuration provides the required automatic reversion.",
+      "learnMore": [
+        "Redeploy and roll back a deployment with CodeDeploy",
+        "Configure advanced options for a deployment group"
+      ],
+      "images": []
+    },
+    {
+      "number": "443",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A video-sharing company stores its videos in an Amazon S3 bucket. The company must analyze user-access patterns, such as the number of users who access a particular video each month. Which solution meets these requirements with the LEAST development effort?",
+      "translation": "",
+      "options": [
+        "A. Enable Amazon S3 server access logging. Load the access logs into an Amazon Aurora database. Run SQL queries on the Aurora database to analyze the user access patterns.",
+        "B. Enable Amazon S3 server access logging. Use Amazon Athena to create an external table that contains the access logs. Run SQL queries on the Athena table to analyze the user access patterns.",
+        "C. Invoke an AWS Lambda function for every S3 object access event. Configure the Lambda function to write the file access information, including user ID, S3 bucket ID, and file key, to an Amazon Aurora database. Run SQL queries on the Aurora database to analyze the user access patterns.",
+        "D. Record a log message in Amazon CloudWatch Logs for every S3 object access event. Configure a log stream in CloudWatch Logs to write the file access information, including user ID, S3 bucket ID, and file key, to an Amazon Managed Service for Apache Flink application. Perform a sliding window analysis on the user access patterns."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Amazon S3 server access logs provide request-level records, and Amazon Athena can query those logs in Amazon S3 through an external table using SQL. This supports aggregating access activity by object and month without building a data-loading pipeline, application code, or a database. AWS documents querying S3 access logs with Athena, including queries that filter requesters, object keys, and time periods.",
+      "learnMore": [
+        "Using Amazon S3 server access logs to identify requests",
+        "Enabling Amazon S3 server access logging"
+      ],
+      "images": []
+    },
+    {
+      "number": "444",
+      "topic": "SDLC Automation",
+      "questionType": "mc",
+      "questionText": "A company is building a web application and uses AWS CodeBuild for its CI/CD pipeline. The company must produce multiple artifacts from one build process and must be able to identify which build generated each artifact. The artifacts must be stored in an Amazon S3 bucket for subsequent processing and deployment. Builds run frequently and use a large Git repository. The company needs to optimize build times. Which solution meets these requirements with the MOST operational efficiency?",
+      "translation": "",
+      "options": [
+        "A. Configure the buildspec.yml file to specify multiple artifacts with different file sets. Enable local caching for the build process by using source cache mode. Use environment variables to dynamically name artifacts based on the build ID.",
+        "B. Configure the buildspec.yml file to output all files as a single artifact. Enable local caching for the build process by using custom cache mode. Create an AWS Lambda function that is invoked by CodeBuild completion. Program the Lambda function to split the artifact into multiple files and to upload the files to the S3 bucket with dynamic names based on build ID.",
+        "C. Create separate CodeBuild projects for each artifact type. Enable local caching for the build process by using Docker layer cache mode. Configure each project to output a single artifact to the S3 bucket with a dynamic name based on build ID. Use AWS Step Functions to orchestrate the projects in parallel.",
+        "D. Set up CodeBuild to generate a single ZIP artifact that contains all files. Enable S3 caching for the build process. Use AWS CodePipeline with a custom action to extract the files and reorganize the files into multiple artifacts in the S3 bucket. Configure the custom action to dynamically name the files based on the time of the build."
+      ],
+      "correctAnswer": "A",
+      "explanation": "AWS CodeBuild supports multiple secondary artifacts in a buildspec, each with its own file set. Local source caching caches Git metadata and lets later builds retrieve only changes between commits, which is suited to frequent builds of a large Git repository. A build-ID-based artifact name provides a direct association between every S3 artifact and its generating build without requiring separate projects or post-build processing.",
+      "learnMore": [
+        "Build specification reference for CodeBuild",
+        "Local caching - AWS CodeBuild"
+      ],
+      "images": []
+    },
+    {
+      "number": "445",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company in a highly regulated industry is building an artifact with AWS CodeBuild and AWS CodePipeline. During the build process, the company must connect to an external authenticated API. The company’s DevOps engineer must encrypt the build outputs using an AWS Key Management Service (AWS KMS) key. The external API credentials must be reset monthly. The DevOps engineer has created a new AWS KMS key. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Store the API credentials in AWS Systems Manager Parameter Store. Update the key policy for the CodeBuild IAM service role to have access to the KMS key. Set CODEBUILD_KMS_KEY_ID as the new key ID.",
+        "B. Store the API credentials in AWS Systems Manager Parameter Store. Update the key policy for the CodePipeline IAM service role to have access to the KMS key. Add the key to the pipeline.",
+        "C. Store the API credentials in AWS Secrets Manager. Update the key policy for the CodeBuild IAM service role to have access to the KMS key. Set CODEBUILD_KMS_KEY_ID as the new key ID.",
+        "D. Store the API credentials in AWS Secrets Manager. Update the key policy for the CodePipeline IAM service role to have access to the KMS key. Add the key to the pipeline."
+      ],
+      "correctAnswer": "C",
+      "explanation": "AWS Secrets Manager is designed to store sensitive API credentials and supports scheduled automatic rotation, including monthly schedules. AWS CodeBuild encrypts build output artifacts with the KMS key identified by CODEBUILD_KMS_KEY_ID; its service role must be permitted by the KMS key policy to use that customer managed key.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "446",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company uses Amazon Elastic Container Registry (Amazon ECR) for all images in the company’s containerized infrastructure. The company uses pull-through cache functionality with the /external prefix to avoid throttling when retrieving images from external image registries. The company uses AWS Organizations for its accounts. Every image in the registry must be encrypted with a specific, pre-provisioned AWS Key Management Service (AWS KMS) key. The company’s internally created images already comply with this policy. However, cached external images use server-side encryption with Amazon S3 managed keys (SSE-S3). The company must remove the noncompliant cache repositories. The company must also implement a secure solution so that all new pull-through cache repositories are automatically encrypted with the required KMS key. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Configure AWS Config. Add a custom rule that uses Guard syntax. Write the rule to enable KMS encryption for new repositories.",
+        "B. Configure an ECR repository creation template for the prefix. Specify the KMS key. Wait for the repositories to repopulate.",
+        "C. Configure an SCP for all AWS accounts that requires all ECR repositories to be KMS encrypted.",
+        "D. Create a new Amazon EventBridge rule that triggers on all \"ECR Pull Through Cache Action\" events. Set AWS KMS as the rule target."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Amazon ECR repository creation templates apply encryption settings when ECR creates repositories for pull-through cache actions. A template that matches the /external prefix and specifies the pre-provisioned KMS key ensures recreated and future cache repositories use that key. The template affects only newly created repositories, so the existing SSE-S3 repositories must be removed before they can be repopulated with compliant encryption.",
+      "learnMore": [
+        "Create an Amazon ECR repository creation template"
+      ],
+      "images": []
+    },
+    {
+      "number": "447",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A DevOps team adds automated load- and stress-testing capabilities to a CI/CD pipeline by using AWS CodeBuild. The team uses an Amazon Aurora MySQL DB cluster in a testing environment for load testing. The team configured the testing DB cluster with a minimum capacity of 1. The team uses 10 DB clusters in a production environment. All DB clusters are configured to automatically scale up to a maximum capacity of 15 Aurora Replicas. During load testing, the configuration of the Aurora DB cluster in the testing environment does not allow the cluster to scale quickly enough to satisfy transient demand, causing the load test to fail. The DevOps team must configure the DB cluster in the testing environment to satisfy the load-testing demand. Which solution will meet this requirement MOST cost-effectively?",
+      "translation": "",
+      "options": [
+        "A. Set the minimum capacity to 10. Reduce the scale-in cooldown period in the PRE_BUILD phase of the CodeBuild configuration.",
+        "B. Set the minimum capacity to 10 in the PRE_BUILD phase of the CodeBuild configuration. Reset the capacity to 1 in the POST_BUILD phase.",
+        "C. Set the minimum capacity to 10 in the POST_BUILD phase of the CodeBuild configuration. Reset the capacity to 1 in the same POST_BUILD phase.",
+        "D. Add an Amazon RDS Proxy in front of the testing Aurora DB cluster. Set the RDS Proxy endpoint in the PRE_BUILD phase of the CodeBuild configuration."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Aurora Auto Scaling maintains the configured minimum number of Aurora Replicas. Increasing the testing cluster’s minimum capacity to 10 before load testing ensures that reader capacity is available for the transient workload, and resetting the minimum to 1 after the build minimizes the cost outside the test window. Scale-in cooldown settings do not accelerate initial scale-out, and RDS Proxy manages connections rather than pre-provisioning Aurora Replicas.",
+      "learnMore": [
+        "Adding an auto scaling policy to an Amazon Aurora DB cluster"
+      ],
+      "images": []
+    },
+    {
+      "number": "448",
+      "topic": "Configuration Management and IaC",
+      "questionType": "mc",
+      "questionText": "A company uses an AWS Organizations organization to manage multiple AWS accounts across multiple OUs. The company plans to implement a comprehensive account-management solution and needs consistent baseline configurations. A DevOps engineer is developing a solution that automatically deploys AWS CloudFormation templates to new AWS accounts. The particular CloudFormation template deployed must differ according to the organizational unit (OU) into which each new account is placed. Which solution meets these requirements with the LEAST operational overhead?",
+      "translation": "",
+      "options": [
+        "A. Enable AWS Control Tower. Use Customizations for AWS Control Tower (CfCT) to deploy each CloudFormation template from a centralized account. Create a CodeCommit repository to store the entire configuration package, including the CloudFormation templates and a manifest file that maps each CloudFormation template to its corresponding OU.",
+        "B. Enable AWS Control Tower. Build a pipeline in AWS CodePipeline to deploy the CloudFormation deployment from a centralized account. Create a CodeCommit repository to store the entire configuration package, including the CloudFormation templates and a manifest file that maps each CloudFormation template to its corresponding OU. After the code is updated in CodeCommit, initiate the pipeline and deploy the CloudFormation templates to the new AWS accounts.",
+        "C. Store the CloudFormation templates in an Amazon S3 bucket by using a separate prefix for each AWS account. Create an AWS Lambda function that deploys a specific CloudFormation template to each new AWS account based on the prefix path that indicates where each template is located in the S3 bucket.",
+        "D. Store CloudFormation templates in an Amazon S3 bucket. Create an AWS Lambda function that deploys a specific CloudFormation template to the new AWS accounts based on the OU each new account is in. Create an Amazon EventBridge rule that matches \"eventName\": \"CreateAccountResult\" and \"state\": \"SUCCEEDED.\" Set the Lambda function as the target of the EventBridge rule."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Customizations for AWS Control Tower (CfCT) provides a managed, lifecycle-integrated mechanism for deploying CloudFormation customizations to accounts in specified OUs. Its configuration package includes CloudFormation templates and a manifest that defines OU deployment targets, and it automatically deploys resources when new accounts are created through AWS Control Tower Account Factory. This avoids maintaining separate custom pipeline or Lambda/EventBridge orchestration.",
+      "learnMore": [
+        "Customizations for AWS Control Tower (CfCT) overview",
+        "The resources section of the CfCT manifest file"
+      ],
+      "images": []
+    },
+    {
+      "number": "449",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company keeps a large volume of data in Amazon S3 buckets across multiple AWS Regions and multiple AWS accounts. The company uses an AWS Organizations organization with all features enabled to manage those AWS accounts. A DevOps engineer must deliver an overview of potential security risks associated with the data stored in the S3 buckets. The company must be able to review the findings from one central location. Which solution meets these requirements in the MOST operationally efficient manner?",
+      "translation": "",
+      "options": [
+        "A. Enable Amazon Macie in each AWS account and Region. Enable automated discovery and configure custom data identifiers. In each account, designate a central Region and configure AWS Security Hub to perform cross-Region aggregation.",
+        "B. Configure an account as the delegated Amazon Macie administrator account in the organization. Enable Macie in each Region in the delegated administrator account. Enable automated discovery and configure AWS Security Hub to perform cross-Region aggregation.",
+        "C. Designate an account as a central Amazon Macie administrator account and enable Macie in each Region. Send and accept a Macie membership request in each account in the organization. Configure AWS Security Hub to perform cross-Region aggregation in the administrator account.",
+        "D. Activate Amazon Macie in each Region in each AWS account and enable automated discovery. Designate a Macie administrator account. Send and accept membership invitations in all other accounts. In the administrator account, activate AWS Security Hub in each Region."
+      ],
+      "correctAnswer": "B",
+      "explanation": "A delegated Amazon Macie administrator can centrally manage Macie for an AWS Organization and enable automated sensitive data discovery across member accounts’ S3 buckets. Enabling Macie in each relevant Region ensures regional S3 data is assessed. AWS Security Hub cross-Region aggregation consolidates findings from linked Regions into a single home Region, providing a central review location without manually configuring Macie memberships in every account.",
+      "learnMore": [
+        "Configuring automated sensitive data discovery"
+      ],
+      "images": []
+    },
+    {
+      "number": "450",
+      "topic": "SDLC Automation",
+      "questionType": "multi-answer",
+      "questionText": "A company uses a Git provider that is compatible with AMS Code services that support credential authentication as version control for application code. The company wants to package the code and make it available when it is merged. The packaged code must be available as an upstream source for future packaged code. Which combination of steps will satisfy these requirements? Choose two",
+      "translation": "",
+      "options": [
+        "A. Create an AWS Secrets Manager secret that holds the Git provider credentials. Create an AWS CodeBuild project that integrates with the Git repository by using the Secrets Manager secret and a corresponding webhook.",
+        "B. Create an AWS Parameter Store secure string parameter that holds the Git provider credentials. Create an AWS CodeBuild project that integrates with the Git repository by using the secure string parameter and a corresponding webhook.",
+        "C. Create an AWS Secrets Manager secret that holds the Git provider credentials. Create an AWS CodeBuild project that define a Secrets Manager environment variable in the buildspec. Use the environment variable to configure a mirror of the Git repository during the install phase.",
+        "D. Create an AWS CodeArtifact domain and repository. Configure the AWS CodeBuild project to package the CodeBuild project's output artifact and upload the artifact to the CodeArtifact repository.",
+        "E. Create an Amazon S3 bucket. Configure the AWS CodeBuild project to package and upload the artifact to the S3 bucket."
+      ],
+      "correctAnswer": "AD",
+      "explanation": "AWS CodeBuild can use a Secrets Manager secret for supported Git source-provider credentials and use a webhook to start builds from repository changes. AWS CodeArtifact repositories store published software packages and can be configured as upstream repositories, allowing future package builds to consume those packages through a repository endpoint.",
+      "learnMore": [
+        "Access your source provider in CodeBuild",
+        "What is AWS CodeArtifact?"
+      ],
+      "images": []
+    },
+    {
+      "number": "451",
+      "topic": "SDLC Automation",
+      "questionType": "mc",
+      "questionText": "A company uses AWS CodePipeline to automate the release process for a container-based application. The company hosts the application on an Amazon Elastic Container Service (Amazon ECS) cluster. Each time the company updates its code, the pipeline automatically builds and deploys the new version. The company uses AWS CodeDeploy for some deployments. Some deployments create issues for many users. A DevOps engineer must update the application delivery solution to add a step that validates changes with a subset of customers. The updated solution must support reverting failed deployments. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Update the CodeDeploy deployment group to use a blue/green deployment strategy. Create a custom canary deployment configuration. Turn on rollback configuration overrides when alarm thresholds are met.",
+        "B. Update the CodeDeploy deployment group to use a canary deployment strategy. Turn on rollback configuration overrides in the deployment configuration.",
+        "C. Update the CodePipeline deployment configuration to use a canary deployment strategy. Turn on rollback configuration overrides in the pipeline.",
+        "D. Update the CodeDeploy deployment group to use a linear deployment strategy. Turn on rollback configuration overrides when alarm thresholds are met."
+      ],
+      "correctAnswer": "A",
+      "explanation": "For Amazon ECS deployments, CodeDeploy uses a blue/green deployment model and can apply a custom canary configuration to shift only an initial portion of traffic to the replacement task set before routing the remaining traffic. The CodeDeploy deployment group can also use CloudWatch alarm thresholds to automatically roll back by redeploying the last known good revision.",
+      "learnMore": [
+        "CodeDeploy blue/green deployments for Amazon ECS",
+        "Working with deployment configurations in CodeDeploy"
+      ],
+      "images": []
+    },
+    {
+      "number": "452",
+      "topic": "Security and Compliance",
+      "questionType": "mc",
+      "questionText": "A company uses AWS Systems Manager to manage a large fleet of Amazon EC2 Linux instances in its production AWS account. The EC2 instances must adhere to a list of compliance requirements. The company’s DevOps engineers developed Chef cookbooks to identify and remediate configuration deviations. The company does not want to manage Chef server and agent infrastructure. The DevOps engineers must configure the Chef cookbooks to run periodically on the EC2 instances. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Create a Systems Manager State Manager association. Associate the AWS-ApplyChefRecipes document with all EC2 instances. Configure the association to retrieve the Chef cookbooks from a source repository and to run every hour.",
+        "B. Store the Chef agent installation package in an Amazon S3 bucket. Configure a Systems Manager Run Command to invoke the AWS-InstallApplication command on all instances and to run the repair action. Schedule the Run Command to run every hour.",
+        "C. Create a Systems Manager State Manager association that applies the AWS-RefreshAssociation document to all EC2 instances. Configure the association to run every hour.",
+        "D. Configure a Systems Manager patch policy to run the scan and install operation every hour. Create a patch baseline for the EC2 instances. Configure the instance IAM profile with permissions for patch operations."
+      ],
+      "correctAnswer": "A",
+      "explanation": "AWS Systems Manager State Manager can create a scheduled association for the AWS-ApplyChefRecipes document on Linux managed nodes. That document retrieves Chef cookbooks from supported repositories, runs the specified recipes, and can automatically install the Chef client, so a separate Chef server and managed agent infrastructure are unnecessary. An hourly association provides the required recurring compliance detection and remediation.",
+      "learnMore": [
+        "Creating associations that run Chef recipes",
+        "Understanding how State Manager works"
+      ],
+      "images": []
+    },
+    {
+      "number": "453",
+      "topic": "Monitoring and Logging",
+      "questionType": "mc",
+      "questionText": "A company uses Amazon Elastic Container Service (Amazon ECS) with the Amazon EC2 launch type. The company requires all log data to be centralized in Amazon CloudWatch. The company’s ECS tasks include a LogConfiguration object that specifies awslogs as the log driver name. The company’s ECS tasks failed to deploy. An error message states that a missing permission caused the failure. The company verified that the IAM role used to launch container instances includes the logs:CreateLogGroup, logs:CreateLogStream, and logs:PutLogEvents permissions. Which solution will resolve the problem?",
+      "translation": "",
+      "options": [
+        "A. Add an IAM trust policy to the IAM role that establishes Amazon ECS as a trusted service.",
+        "B. Add the logs:PutDestination permission to the policy applied to the IAM role.",
+        "C. Remove the logs:CreateLogStream permission from the policy applied to the IAM role.",
+        "D. Add an IAM trust policy to the IAM role that establishes CloudWatch as a trusted service."
+      ],
+      "correctAnswer": "A",
+      "explanation": "An ECS task execution role must trust the Amazon ECS service so that ECS can assume it and perform the authorized actions on the task’s behalf. CloudWatch Logs API permissions do not by themselves permit role assumption; the role trust policy must include Amazon ECS as a trusted service principal.",
+      "learnMore": [
+        "IAM roles for Amazon ECS",
+        "Send Amazon ECS logs to CloudWatch"
+      ],
+      "images": []
+    },
+    {
+      "number": "454",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A DevOps engineer is updating an existing service in an Amazon Elastic Container Service (Amazon ECS) cluster. The service uses the rolling update deployment type. All cluster updates are deployed by using AWS CloudFormation. Currently, no automated remediation takes place when a deployment fails. The service stays in a FAILED state until the DevOps team manually resolves the identified issues. The DevOps engineer must configure an automatic solution to remediate a deployment failure caused by the service task failing to start. The service must automatically roll back to its most recently completed deployment. Which solution meets these requirements with the LEAST operational overhead?",
+      "translation": "",
+      "options": [
+        "A. Configure Amazon CloudWatch alarms that check the service's runtime metrics. Update the service deployment configuration to reference the new alarms.",
+        "B. Set an Amazon EventBridge rule that uses the SERVICE_DEPLOYMENT_FAILED event name. Add an AWS Lambda function target that rolls the service back to the most recent deployment that is in a COMPLETED state.",
+        "C. Update the service to use the ECS deployment circuit breaker failure detection support. Configure the service to roll back on failures.",
+        "D. Use an AWS CodeDeploy deployment group for all ECS service updates. Configure automatic rollbacks on the deployment group to roll back to the most recent successful deployment when a deployment fails."
+      ],
+      "correctAnswer": "C",
+      "explanation": "The Amazon ECS deployment circuit breaker detects failed rolling deployments when tasks cannot reach a steady state, including failures to start. With rollback enabled, ECS automatically restores the service to the most recent successfully completed deployment. This native ECS capability is supported for rolling-update services and can be declared through the ECS service deployment configuration in AWS CloudFormation.",
+      "learnMore": [
+        "How the Amazon ECS deployment circuit breaker detects failures"
+      ],
+      "images": []
+    },
+    {
+      "number": "455",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A software-as-a-service (SaaS) company needs to implement customer file uploads. Industry standards require the company to provide OpenAPI specifications to customers. The company will use Amazon S3 for file storage. Which solution meets these requirements in the MOST cost-effective way?",
+      "translation": "",
+      "options": [
+        "A. Create an Application Load Balancer. Create an Amazon Elastic Container Service (Amazon ECS) cluster for the application to process uploads to Amazon S3. Generate the OpenAPI definitions separately.",
+        "B. Create an Amazon API Gateway REST API. Set up an AWS service integration for the upload. Create mapping templates to transform the requests and responses to match AWS API requirements. Export the OpenAPI definition.",
+        "C. Create an AWS Verified Access instance. Deploy an Amazon EC2 instance with the application to process uploads. Connect the instance as a network interface endpoint. Generate the OpenAPI definitions separately.",
+        "D. Create an Amazon CloudFront distribution. Create a Lambda@Edge function as an authorizer. Configure the S3 bucket for the uploads. Write an AWS Lambda function to periodically export the OpenAPI definition from CloudFront."
+      ],
+      "correctAnswer": "B",
+      "explanation": "Amazon API Gateway REST APIs support AWS service integrations with Amazon S3, allowing upload requests to be mapped to the required S3 API format without running application servers or containers. API Gateway can export the configured REST API as an OpenAPI definition, so it meets both the upload and specification requirements with managed, pay-per-use services.",
+      "learnMore": [
+        "Tutorial: Create a REST API as an Amazon S3 proxy",
+        "Export a REST API from API Gateway"
+      ],
+      "images": []
+    },
+    {
+      "number": "456",
+      "topic": "SDLC Automation",
+      "questionType": "mc",
+      "questionText": "A company is developing a web application on AWS. The application uses AWS CodeConnections to access a Git repository. The company configures an AWS CodePipeline pipeline that automatically builds and deploys the application to a staging environment whenever code is pushed to the main branch. Bugs and integration issues occasionally occur in the main branch because no automated testing is integrated into the pipeline. The company wants tests to run automatically when code merges occur in the Git repository and wants to stop deployments from reaching the staging environment if any test fails. Tests can run for up to 20 minutes. Which solution meets these requirements?",
+      "translation": "",
+      "options": [
+        "A. Add an AWS CodeBuild action to the pipeline. Add a buildspec.yml file to the Git repository to define commands to run tests. Configure the pipeline to stop the deployment if a test fails.",
+        "B. Configure Git webhooks to initiate an AWS Lambda function during each code merge. Configure the Lambda function to run tests programmatically and to stop the pipeline if a test fails.",
+        "C. Configure AWS Batch to use Docker images of test environments. Integrate AWS Batch into the pipeline. Add an AWS Lambda function to the pipeline that submits the batch jobs and reverts the code merge if a test fails.",
+        "D. Configure the Git repository to push code to an Amazon S3 bucket during each code merge. Use S3 Event Notifications to initiate tests and to revert the code merge if a test fails."
+      ],
+      "correctAnswer": "A",
+      "explanation": "AWS CodeBuild provides build and test actions for CodePipeline and runs the commands specified in a buildspec file. A failed CodeBuild test action causes the pipeline to fail before its subsequent deployment action can run. CodeBuild supports the required 20-minute test duration, whereas an AWS Lambda invocation has a maximum timeout of 15 minutes.",
+      "learnMore": [
+        "Configure a Lambda function timeout"
+      ],
+      "images": []
+    },
+    {
+      "number": "457",
+      "topic": "Configuration Management and IaC",
+      "questionType": "mc",
+      "questionText": "Exams / Amazon / AWS Certified DevOps Engineer - Professional DOP-C02 / A company uses AWS CodeDeploy to deploy an application to Amazon EC2 instances in an Auto Scaling group. Question 457 / Configuration Management and IaC A company uses AWS CodeDeploy to deploy an application to Amazon EC2 instances in an Auto Scaling group. The company configures the Auto Scaling group by using an EC2 launch template that references a custom AMI with the CodeDeploy agent installed. The company updates the AMI weekly, and replaces all EC2 instances with new instances launched from the updated AMI. The company requires each EC2 instance to have an application tag that identifies the application deployed on that instance. Currently, the company tags the EC2 instances manually. To deploy the application, the company creates a CodeDeploy application and a deployment group. The company sets a custom resource tag in the deployment group and configures the deployment group to target the Auto Scaling group. The company must ensure that every instance in the Auto Scaling group is tagged with the appropriate application tag. Which solution meets this requirement?",
+      "translation": "",
+      "options": [
+        "A. Create a tag specification in the EC2 launch template and set the resource type to applications. Configure the tag specification to apply the custom resource tag. Update the Auto Scaling group to use the most recent version of the EC2 launch template. Perform an instance refresh in the Auto Scaling group.",
+        "B. Configure the process that creates the custom AMI to tag the AMI with the custom resource tag. Create a new version of the AMI. Update the Auto Scaling group to use the new version of the AMI. Perform an instance refresh in the Auto Scaling group.",
+        "C. Configure the CodeDeploy deployment group to include a tag specification that applies the custom resource tag. Configure the Auto Scaling group to propagate the tag when instances are launched. Create a new deployment in the deployment group that specifies the EC2 instance IDs as target instances.",
+        "D. Create a tag specification in the EC2 launch template and set the resource type to instances. Configure the tag specification to apply the custom resource tag. Update the Auto Scaling group to use the most recent version of the EC2 launch template. Perform an instance refresh in the Auto Scaling group."
+      ],
+      "correctAnswer": "D",
+      "explanation": "An EC2 launch template tag specification with resource type instance applies the application tag to every EC2 instance created by the Auto Scaling group. Updating the group to use the launch-template version and performing an instance refresh replaces the existing fleet, ensuring all instances receive the tag. Launch-template tag specifications support instance, volume, network-interface, and spot-instances-request resource types; applications is not supported. CodeDeploy deployment-group tags are used to identify deployment targets, not to tag EC2 instances.",
+      "learnMore": [
+        "Tagging instances for deployment groups in CodeDeploy"
+      ],
+      "images": []
+    },
+    {
+      "number": "458",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A company runs an application as an Amazon Elastic Container Service (Amazon ECS) task that processes messages from an Amazon Simple Queue Service (Amazon SQS) queue. The ECS task operates on a schedule, processing the SQS queue every 10 minutes. A large volume of messages was delivered to the SQS queue. The application required several hours to process every message. The company's new service level objective (SLO) requires the application to process messages within 10 minutes of delivery. A DevOps engineer must configure the application to meet the SLO while minimizing idle running resources. Which solution satisfies these requirements with the MOST operational efficiency?",
+      "translation": "",
+      "options": [
+        "A. Configure a step scaling policy for the ECS task. Configure the step scaling policy to use the ECSServiceAverageMemoryUtilization metric. Set the maximum number of tasks to equal the number of messages the application receives at peak hours.",
+        "B. Configure a target tracking scaling policy for the ECS task. Calculate the number of messages for each task by using the SQS ApproximateNumberOfMessagesVisible metric and the ECS RunningTaskCount metric. Scale the number of tasks based on the calculated attribute.",
+        "C. Create a scheduled scaling policy to increase the number of ECS tasks available during peak volume periods. Set the schedule as a cron for the application's peak hours. Set the maximum number of tasks to equal the number of messages the application receives at peak hours.",
+        "D. Create a predictive scaling policy to increase the number of available ECS tasks during peak volume periods. Configure the predictive scaling policy to use the ECSServiceAverageCPUUtilization metric. Set the maximum number of tasks to equal the number of messages the application receives at peak hours."
+      ],
+      "correctAnswer": "B",
+      "explanation": "A target tracking policy using a custom backlog-per-task metric scales ECS tasks from the actual amount of immediately available SQS work and scales them back in as the backlog drains. The backlog-per-task calculation is ApproximateNumberOfMessagesVisible / RunningTaskCount; its target can be set from the acceptable processing time and each task's message-processing rate. This directly accommodates bursty arrivals while avoiding capacity that remains idle outside demand.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "459",
+      "topic": "Resilient Cloud Solutions",
+      "questionType": "mc",
+      "questionText": "A company runs an application on 20 Amazon EC2 instances. The application uses the AWS CodeDeploy CodeDeployDefault.HalfAtATime deployment configuration to deploy application updates to the instances. During recent deployments, the load has exceeded the capacity of the available instances. Consequently, the application has become unstable during deployments. A DevOps engineer must ensure that at least 75% of instances remain available at all times and that deployments finish as quickly as possible. Which solution satisfies these requirements?",
+      "translation": "",
+      "options": [
+        "A. Modify the deployment group to use the CodeDeployDefault.OneAtATime deployment configuration.",
+        "B. Modify the CodeDeploy deployment group to use a MinimumHealthyHosts deployment configuration with a FLEET_PERCENT value of 75.",
+        "C. Modify the CodeDeploy deployment group to use a MinimumHealthyHosts deployment configuration with a FLEET_PERCENT value of 25.",
+        "D. Modify the CodeDeploy deployment group to use a TimeBasedLinear deployment configuration with a LinearInterval value of 5 minutes and a LinearPercentage value of 25."
+      ],
+      "correctAnswer": "B",
+      "explanation": "For EC2/on-premises deployments, a CodeDeploy MinimumHealthyHosts setting defines the number or percentage of instances that must remain healthy throughout a deployment. FLEET_PERCENT with a value of 75 keeps at least 75% of the fleet healthy; with 20 instances, this permits deployment to up to 5 instances concurrently, the fastest batch size that preserves the required availability. AWS CodeDeploy deployment configurations",
+      "learnMore": [
+        "Working with deployment configurations in CodeDeploy",
+        "Create a deployment configuration with CodeDeploy"
+      ],
+      "images": []
+    },
+    {
+      "number": "460",
+      "topic": "Security and Compliance",
+      "questionType": "multi-answer",
+      "questionText": "A DevOps engineer is developing a photo-sharing website that lets users upload photos and view photos shared by other users. Users upload photos to an Amazon S3 bucket by using presigned URLs. The DevOps engineer must ensure that photos are scanned for malware before the website makes the photos available to other users. Which combination of steps meets these requirements? Choose two",
+      "translation": "",
+      "options": [
+        "A. Enable Amazon GuardDuty S3 Protection. Create an AWS Lambda function to process S3 Protection findings and block access to any referenced objects.",
+        "B. Create a bucket policy for the S3 bucket. Update the IAM role that the website uses to restrict access to uploaded photos by using tag-based access control (TBAC).",
+        "C. Create a resource-based policy for the S3 bucket. Restrict access to uploaded photos by using the aws:SecureTransport condition key.",
+        "D. Enable Amazon Macie. Create an AWS Lambda function to process Macie findings and delete any referenced objects that contain malware.",
+        "E. Enable Amazon GuardDuty Malware Protection for S3 with object tagging."
+      ],
+      "correctAnswer": "BE",
+      "explanation": "Amazon GuardDuty Malware Protection for S3 automatically scans newly uploaded S3 objects. When object tagging is enabled, it applies the GuardDutyMalwareScanStatus tag with the scan result. Tag-based access control in the S3 bucket policy and the website's IAM role can allow the website to return only objects whose tag indicates that no threats were found, preventing access to unscanned or malicious uploads.",
+      "learnMore": [
+        "GuardDuty Malware Protection for S3",
+        "Using tag-based access control with Malware Protection for S3"
       ],
       "images": []
     }
