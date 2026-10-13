@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { Lead } from "@/lib/odoo/types";
 import {
   DEFAULT_FILTERS, applyFilters, computeAttention, computeFunnel, computeKpis, computeMix,
-  computePresales, computeRanking, computeRevenue, computeUpcoming, periodRange,
+  computePresales, computeSparks, computeRanking, computeRevenue, computeUpcoming, periodRange,
   type Company, type Filters, type Period,
 } from "@/lib/dashboard/metrics";
 import { ETAPA_ORDER } from "@/components/modules/leads/etapaOrder";
@@ -85,6 +85,7 @@ export default function DashboardView() {
 
   const scoped = useMemo(() => applyFilters(leads, filters), [leads, filters]);
   const kpis = useMemo(() => computeKpis(scoped, range), [scoped, range]);
+  const sparks = useMemo(() => computeSparks(scoped, now), [scoped, now]);
   const funnel = useMemo(() => computeFunnel(applyFilters(leads, { ...filters, etapa: "ALL" }), ETAPA_ORDER), [leads, filters]);
   const revenue = useMemo(() => computeRevenue(scoped, now, kpis.forecast), [scoped, now, kpis.forecast]);
   const mix = useMemo(() => computeMix(scoped), [scoped]);
@@ -120,7 +121,7 @@ export default function DashboardView() {
           </div>
         )}
 
-        <KpiRow kpis={kpis} company={filters.company} attentionCount={attention.length} periodLabel={range.label} loading={loading} />
+        <KpiRow kpis={kpis} sparks={sparks} company={filters.company} attentionCount={attention.length} periodLabel={range.label} loading={loading} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5">
           <Funnel rows={funnel} company={filters.company} selected={filters.etapa} onSelect={(etapa) => update({ etapa })} />

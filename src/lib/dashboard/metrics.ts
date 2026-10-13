@@ -194,3 +194,22 @@ export function computeUpcoming(leads: Lead[], now: Date): Lead[] {
     .filter((l) => { const d = parseDate(l.cierreEsperado); return isOpen(l) && !!d && d >= now && d <= limit; })
     .sort((a, b) => a.cierreEsperado.localeCompare(b.cierreEsperado));
 }
+
+/* ── sparklines (últimos 7 meses, datos reales) ─────────────────────── */
+export interface Sparks { pipeline: number[]; forecast: number[]; won: number[]; winRate: number[] }
+
+export function computeSparks(leads: Lead[], now: Date): Sparks {
+  const months = Array.from({ length: 7 }, (_, i) => {
+    const start = new Date(now.getFullYear(), now.getMonth() - (6 - i), 1);
+    return { start, end: new Date(start.getFullYear(), start.getMonth() + 1, 1) };
+  });
+  const val = (l: Lead) => l.ingresosEsperados || 0;
+  const created = (l: Lead, s: Date, e: Date) => inRange(parseDate(l.fechaCreacion), s, e);
+  return {
+    // valor de las oportunidades abiertas hoy, según el mes en que se crearon
+    pipeline: months.map(({ start, end }) => leads.filter((l) => isOpen(l) && created(l, start, end)).reduce((a, l) => a + val(l), 0)),
+    forecast: months.map(({ start, end }) => leads.filter((l) => isOpen(l) && created(l, start, end)).reduce((a, l) => a + val(l) * probOf(l), 0)),
+    won: months.map(({ start, end }) => leads.filter((l) => isWon(l) && inRange(closeDateOf(l), start, end)).reduce((a, l) => a + val(l), 0)),
+    winRate: months.map(({ start, end }) => winRateIn(leads, start, end) ?? 0),
+  };
+}
