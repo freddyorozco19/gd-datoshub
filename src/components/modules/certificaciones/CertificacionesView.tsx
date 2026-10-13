@@ -96,7 +96,7 @@ const PROVIDERS: ProviderConfig[] = [
       { id: 'dva-c02', code: 'DVA-C02', name: 'Developer Associate',       dataFile: '/data/exam_dva_c02_ec.json',    questions: 557,  level: 'Associate'    },
       { id: 'dea-c01', code: 'DEA-C01', name: 'Data Engineer Associate',   dataFile: '/data/exam_dea_c01.json',       questions: 366,  level: 'Associate'    },
       { id: 'saa-c03', code: 'SAA-C03', name: 'Solutions Architect',       dataFile: '/data/exam_saa_c03.json',       questions: 1019, level: 'Associate'    },
-      { id: 'dop-c02', code: 'DOP-C02', name: 'DevOps Engineer',           questions: 460,  level: 'Professional'  },
+      { id: 'dop-c02', code: 'DOP-C02', name: 'DevOps Engineer',           dataFile: '/data/exam_dop_c02_ec.json', questions: 460,  level: 'Professional'  },
     ],
   },
   {
