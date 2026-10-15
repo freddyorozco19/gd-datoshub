@@ -377,7 +377,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
     <button
       onClick={onClick}
       className="prov-card group relative w-full text-left overflow-hidden rounded-2xl border transition-all duration-200"
-      style={{ aspectRatio: '16/9' }}
+      style={{ height: 120 }}
     >
       {/* logo grande sangrando en esquina superior izquierda */}
       {p.logoImg ? (
