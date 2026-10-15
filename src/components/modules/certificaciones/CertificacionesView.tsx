@@ -130,7 +130,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#14B8A6',
     bgGradient: 'from-teal-950 to-slate-900',
     logo: '◭',
-    logoImg: 'https://images.seeklogo.com/logo-png/3/1/dama-logo-png_seeklogo-38340.png',
+    logoImg: 'https://hubble-live-assets.s3.eu-west-1.amazonaws.com/dama-uk/image_asset/file/348/content_560x292.png',
     exams: [
       { id: 'dmf', code: 'DMF', name: 'Data Management Fundamentals', dataFile: '/data/exam_dmf.json', questions: 295, level: 'Fundamental', examTopicsPath: 'cdmp/dmf' },
     ],
