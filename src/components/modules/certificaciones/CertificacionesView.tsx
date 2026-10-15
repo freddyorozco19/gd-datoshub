@@ -117,6 +117,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#8B5CF6',
     bgGradient: 'from-purple-950 to-slate-900',
     logo: '⬡',
+    logoImg: 'https://upload.wikimedia.org/wikipedia/commons/a/a1/ISACA_logo.png',
     exams: [
       { id: 'cobit-2019', code: 'COBIT 2019', name: 'COBIT 2019 Foundation', dataFile: '/data/exam_cobit2019.json', questions: 149, level: 'Fundamental' },
       { id: 'cisa', code: 'CISA', name: 'Certified Information Systems Auditor',  level: 'Professional' },
