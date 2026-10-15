@@ -645,8 +645,8 @@ export default function PresalesView({
                   {byEtapa.map((r) => (
                     <button key={r.name} type="button"
                       onClick={() => setListModal({ leads: etapaScope.filter((l) => (l.etapaPreventa || "Sin etapa") === r.name), heading: r.name, suffix: " con ese Estado Preventa" })}
-                      className="w-full text-left group flex items-center gap-3 text-xs">
-                      <span className="w-[8.5rem] shrink-0 text-slate-200 font-medium truncate group-hover:text-white transition-colors" title={r.name}>{r.name}</span>
+                      className="row-hover w-full text-left group flex items-center gap-3 text-xs rounded-lg px-2 -mx-2 py-1 cursor-pointer">
+                      <span className="lead-name w-[8.5rem] shrink-0 font-medium truncate" title={r.name}>{r.name}</span>
                       <div className="flex-1 h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
                         <div className="h-full rounded-full bg-blue-500" style={{ width: `${(r.count / maxEtapa) * 100}%` }} />
                       </div>
