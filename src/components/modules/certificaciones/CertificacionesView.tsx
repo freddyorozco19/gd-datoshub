@@ -31,6 +31,7 @@ interface ProviderConfig {
   bgGradient: string      // gradiente de la card
   logo: string            // emoji o texto corto (fallback)
   logoImg?: string        // URL de logo de imagen (opcional, tiene prioridad)
+  logoDarkInvert?: boolean // logo oscuro/transparente: se invierte a blanco en tema dark
   alias?: string          // ej: "Azure" para Microsoft
   exams: ExamConfig[]
 }
@@ -165,6 +166,7 @@ const PROVIDERS: ProviderConfig[] = [
     bgGradient: 'from-orange-950 to-slate-900',
     logo: '🤖',
     logoImg: 'https://download.logo.wine/logo/Anthropic/Anthropic-Logo.wine.png',
+    logoDarkInvert: true,
     exams: [],
   },
   {
@@ -428,7 +430,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
           src={p.logoImg}
           alt=""
           aria-hidden
-          className="absolute -top-3 -left-3 h-[90%] w-auto object-contain pointer-events-none opacity-100 transition-transform duration-500 ease-out group-hover:scale-110 origin-top-left"
+          className={`absolute -top-3 -left-3 h-[90%] w-auto object-contain pointer-events-none opacity-100 transition-transform duration-500 ease-out group-hover:scale-110 origin-top-left ${p.logoDarkInvert ? 'prov-logo-invert' : ''}`}
           onError={e => { e.currentTarget.style.display = 'none' }}
         />
       ) : (
