@@ -367,7 +367,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
               <thead className="sticky top-0 z-10 bg-[#0D0D1A] border-b border-white/[0.07]">
                 <tr>
                   {([
-                    ["nombre","Nombre"], ["cliente","Cliente"], ["comercial","Comercial"], ["linea","Línea"], ["etapa","Etapa"],
+                    ["id","ID"], ["nombre","Nombre"], ["cliente","Cliente"], ["comercial","Comercial"], ["linea","Línea"], ["etapa","Etapa"],
                     ...(showCloseDate ? [["etapa","Etapa Actual"]] as [keyof Lead, string][] : []),
                     ["tipoOportunidad","Tipo Oportunidad"], ["preventa","Preventa"], ["fechaCreacion","Fecha Creación"], ["ingresosEsperados","Ingresos Esp."],
                     ...(showCloseDate ? [["fechaCierre","Fecha Cierre"]] as [keyof Lead, string][] : []),
@@ -389,6 +389,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                 {mFiltered.map((lead) => (
                   <tr key={lead.id} onClick={() => setDetailLead(lead)}
                     className="row-hover cursor-pointer group">
+                    <td className="px-4 py-3 text-slate-600 whitespace-nowrap tabular-nums">{lead.id}</td>
                     <td className="px-4 py-3">
                       <p className="lead-name font-medium max-w-[180px] truncate" title={lead.nombre}>{lead.nombre}</p>
                       {lead.correo && <p className="text-slate-400 truncate max-w-[180px] text-[10px]">{lead.correo}</p>}
