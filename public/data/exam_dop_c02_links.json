@@ -1,0 +1,1842 @@
+[
+  {
+    "num": 1,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/1-security-and-compliance"
+  },
+  {
+    "num": 2,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/2-sdlc-automation"
+  },
+  {
+    "num": 3,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/3-security-and-compliance"
+  },
+  {
+    "num": 4,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/4-monitoring-and-logging"
+  },
+  {
+    "num": 5,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/5-resilient-cloud-solutions"
+  },
+  {
+    "num": 6,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/6-resilient-cloud-solutions"
+  },
+  {
+    "num": 7,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/7-sdlc-automation"
+  },
+  {
+    "num": 8,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/8-security-and-compliance"
+  },
+  {
+    "num": 9,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/9-security-and-compliance"
+  },
+  {
+    "num": 10,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/10-resilient-cloud-solutions"
+  },
+  {
+    "num": 11,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/11-security-and-compliance"
+  },
+  {
+    "num": 12,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/12-monitoring-and-logging"
+  },
+  {
+    "num": 13,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/13-security-and-compliance"
+  },
+  {
+    "num": 14,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/14-security-and-compliance"
+  },
+  {
+    "num": 15,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/15-sdlc-automation"
+  },
+  {
+    "num": 16,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/16-sdlc-automation"
+  },
+  {
+    "num": 17,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/17-resilient-cloud-solutions"
+  },
+  {
+    "num": 18,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/18-resilient-cloud-solutions"
+  },
+  {
+    "num": 19,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/19-security-and-compliance"
+  },
+  {
+    "num": 20,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/20-incident-and-event-response"
+  },
+  {
+    "num": 21,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/21-incident-and-event-response"
+  },
+  {
+    "num": 22,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/22-security-and-compliance"
+  },
+  {
+    "num": 23,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/23-configuration-management-and-iac"
+  },
+  {
+    "num": 24,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/24-security-and-compliance"
+  },
+  {
+    "num": 25,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/25-resilient-cloud-solutions"
+  },
+  {
+    "num": 26,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/26-sdlc-automation"
+  },
+  {
+    "num": 27,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/27-sdlc-automation"
+  },
+  {
+    "num": 28,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/28-resilient-cloud-solutions"
+  },
+  {
+    "num": 29,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/29-security-and-compliance"
+  },
+  {
+    "num": 30,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/30-resilient-cloud-solutions"
+  },
+  {
+    "num": 31,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/31-monitoring-and-logging"
+  },
+  {
+    "num": 32,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/32-monitoring-and-logging"
+  },
+  {
+    "num": 33,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/33-incident-and-event-response"
+  },
+  {
+    "num": 34,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/34-security-and-compliance"
+  },
+  {
+    "num": 35,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/35-sdlc-automation"
+  },
+  {
+    "num": 36,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/36-security-and-compliance"
+  },
+  {
+    "num": 37,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/37-security-and-compliance"
+  },
+  {
+    "num": 38,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/38-security-and-compliance"
+  },
+  {
+    "num": 39,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/39-resilient-cloud-solutions"
+  },
+  {
+    "num": 40,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/40-security-and-compliance"
+  },
+  {
+    "num": 41,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/41-configuration-management-and-iac"
+  },
+  {
+    "num": 42,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/42-monitoring-and-logging"
+  },
+  {
+    "num": 43,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/43-security-and-compliance"
+  },
+  {
+    "num": 44,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/44-resilient-cloud-solutions"
+  },
+  {
+    "num": 45,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/45-sdlc-automation"
+  },
+  {
+    "num": 46,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/46-resilient-cloud-solutions"
+  },
+  {
+    "num": 47,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/47-resilient-cloud-solutions"
+  },
+  {
+    "num": 48,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/48-resilient-cloud-solutions"
+  },
+  {
+    "num": 49,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/49-security-and-compliance"
+  },
+  {
+    "num": 50,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/50-sdlc-automation"
+  },
+  {
+    "num": 51,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/51-sdlc-automation"
+  },
+  {
+    "num": 52,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/52-configuration-management-and-iac"
+  },
+  {
+    "num": 53,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/53-resilient-cloud-solutions"
+  },
+  {
+    "num": 54,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/54-resilient-cloud-solutions"
+  },
+  {
+    "num": 55,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/55-resilient-cloud-solutions"
+  },
+  {
+    "num": 56,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/56-sdlc-automation"
+  },
+  {
+    "num": 57,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/57-resilient-cloud-solutions"
+  },
+  {
+    "num": 58,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/58-security-and-compliance"
+  },
+  {
+    "num": 59,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/59-sdlc-automation"
+  },
+  {
+    "num": 60,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/60-security-and-compliance"
+  },
+  {
+    "num": 61,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/61-security-and-compliance"
+  },
+  {
+    "num": 62,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/62-security-and-compliance"
+  },
+  {
+    "num": 63,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/63-security-and-compliance"
+  },
+  {
+    "num": 64,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/64-incident-and-event-response"
+  },
+  {
+    "num": 65,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/65-configuration-management-and-iac"
+  },
+  {
+    "num": 66,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/66-sdlc-automation"
+  },
+  {
+    "num": 67,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/67-resilient-cloud-solutions"
+  },
+  {
+    "num": 68,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/68-security-and-compliance"
+  },
+  {
+    "num": 69,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/69-security-and-compliance"
+  },
+  {
+    "num": 70,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/70-monitoring-and-logging"
+  },
+  {
+    "num": 71,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/71-resilient-cloud-solutions"
+  },
+  {
+    "num": 72,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/72-security-and-compliance"
+  },
+  {
+    "num": 73,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/73-monitoring-and-logging"
+  },
+  {
+    "num": 74,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/74-resilient-cloud-solutions"
+  },
+  {
+    "num": 75,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/75-configuration-management-and-iac"
+  },
+  {
+    "num": 76,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/76-configuration-management-and-iac"
+  },
+  {
+    "num": 77,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/77-resilient-cloud-solutions"
+  },
+  {
+    "num": 78,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/78-security-and-compliance"
+  },
+  {
+    "num": 79,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/79-incident-and-event-response"
+  },
+  {
+    "num": 80,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/80-resilient-cloud-solutions"
+  },
+  {
+    "num": 81,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/81-configuration-management-and-iac"
+  },
+  {
+    "num": 82,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/82-sdlc-automation"
+  },
+  {
+    "num": 83,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/83-monitoring-and-logging"
+  },
+  {
+    "num": 84,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/84-configuration-management-and-iac"
+  },
+  {
+    "num": 85,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/85-sdlc-automation"
+  },
+  {
+    "num": 86,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/86-resilient-cloud-solutions"
+  },
+  {
+    "num": 87,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/87-resilient-cloud-solutions"
+  },
+  {
+    "num": 88,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/88-resilient-cloud-solutions"
+  },
+  {
+    "num": 89,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/89-security-and-compliance"
+  },
+  {
+    "num": 90,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/90-configuration-management-and-iac"
+  },
+  {
+    "num": 91,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/91-security-and-compliance"
+  },
+  {
+    "num": 92,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/92-monitoring-and-logging"
+  },
+  {
+    "num": 93,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/93-sdlc-automation"
+  },
+  {
+    "num": 94,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/94-monitoring-and-logging"
+  },
+  {
+    "num": 95,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/95-sdlc-automation"
+  },
+  {
+    "num": 96,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/96-security-and-compliance"
+  },
+  {
+    "num": 97,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/97-security-and-compliance"
+  },
+  {
+    "num": 98,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/98-incident-and-event-response"
+  },
+  {
+    "num": 99,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/99-security-and-compliance"
+  },
+  {
+    "num": 100,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/100-resilient-cloud-solutions"
+  },
+  {
+    "num": 101,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/101-resilient-cloud-solutions"
+  },
+  {
+    "num": 102,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/102-security-and-compliance"
+  },
+  {
+    "num": 103,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/103-resilient-cloud-solutions"
+  },
+  {
+    "num": 104,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/104-configuration-management-and-iac"
+  },
+  {
+    "num": 105,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/105-monitoring-and-logging"
+  },
+  {
+    "num": 106,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/106-security-and-compliance"
+  },
+  {
+    "num": 107,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/107-security-and-compliance"
+  },
+  {
+    "num": 108,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/108-security-and-compliance"
+  },
+  {
+    "num": 109,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/109-security-and-compliance"
+  },
+  {
+    "num": 110,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/110-security-and-compliance"
+  },
+  {
+    "num": 111,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/111-sdlc-automation"
+  },
+  {
+    "num": 112,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/112-security-and-compliance"
+  },
+  {
+    "num": 113,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/113-configuration-management-and-iac"
+  },
+  {
+    "num": 114,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/114-resilient-cloud-solutions"
+  },
+  {
+    "num": 115,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/115-monitoring-and-logging"
+  },
+  {
+    "num": 116,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/116-incident-and-event-response"
+  },
+  {
+    "num": 117,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/117-sdlc-automation"
+  },
+  {
+    "num": 118,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/118-security-and-compliance"
+  },
+  {
+    "num": 119,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/119-resilient-cloud-solutions"
+  },
+  {
+    "num": 120,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/120-security-and-compliance"
+  },
+  {
+    "num": 121,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/121-security-and-compliance"
+  },
+  {
+    "num": 122,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/122-configuration-management-and-iac"
+  },
+  {
+    "num": 123,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/123-sdlc-automation"
+  },
+  {
+    "num": 124,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/124-resilient-cloud-solutions"
+  },
+  {
+    "num": 125,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/125-configuration-management-and-iac"
+  },
+  {
+    "num": 126,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/126-resilient-cloud-solutions"
+  },
+  {
+    "num": 127,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/127-incident-and-event-response"
+  },
+  {
+    "num": 128,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/128-resilient-cloud-solutions"
+  },
+  {
+    "num": 129,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/129-security-and-compliance"
+  },
+  {
+    "num": 130,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/130-configuration-management-and-iac"
+  },
+  {
+    "num": 131,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/131-resilient-cloud-solutions"
+  },
+  {
+    "num": 132,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/132-configuration-management-and-iac"
+  },
+  {
+    "num": 133,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/133-security-and-compliance"
+  },
+  {
+    "num": 134,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/134-resilient-cloud-solutions"
+  },
+  {
+    "num": 135,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/135-security-and-compliance"
+  },
+  {
+    "num": 136,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/136-resilient-cloud-solutions"
+  },
+  {
+    "num": 137,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/137-security-and-compliance"
+  },
+  {
+    "num": 138,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/138-resilient-cloud-solutions"
+  },
+  {
+    "num": 139,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/139-monitoring-and-logging"
+  },
+  {
+    "num": 140,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/140-sdlc-automation"
+  },
+  {
+    "num": 141,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/141-incident-and-event-response"
+  },
+  {
+    "num": 142,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/142-monitoring-and-logging"
+  },
+  {
+    "num": 143,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/143-monitoring-and-logging"
+  },
+  {
+    "num": 144,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/144-configuration-management-and-iac"
+  },
+  {
+    "num": 145,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/145-security-and-compliance"
+  },
+  {
+    "num": 146,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/146-security-and-compliance"
+  },
+  {
+    "num": 147,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/147-monitoring-and-logging"
+  },
+  {
+    "num": 148,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/148-monitoring-and-logging"
+  },
+  {
+    "num": 149,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/149-configuration-management-and-iac"
+  },
+  {
+    "num": 150,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/150-configuration-management-and-iac"
+  },
+  {
+    "num": 151,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/151-incident-and-event-response"
+  },
+  {
+    "num": 152,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/152-sdlc-automation"
+  },
+  {
+    "num": 153,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/153-security-and-compliance"
+  },
+  {
+    "num": 154,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/154-sdlc-automation"
+  },
+  {
+    "num": 155,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/155-sdlc-automation"
+  },
+  {
+    "num": 156,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/156-resilient-cloud-solutions"
+  },
+  {
+    "num": 157,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/157-resilient-cloud-solutions"
+  },
+  {
+    "num": 158,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/158-sdlc-automation"
+  },
+  {
+    "num": 159,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/159-resilient-cloud-solutions"
+  },
+  {
+    "num": 160,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/160-security-and-compliance"
+  },
+  {
+    "num": 161,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/161-monitoring-and-logging"
+  },
+  {
+    "num": 162,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/162-resilient-cloud-solutions"
+  },
+  {
+    "num": 163,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/163-configuration-management-and-iac"
+  },
+  {
+    "num": 164,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/164-resilient-cloud-solutions"
+  },
+  {
+    "num": 165,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/165-resilient-cloud-solutions"
+  },
+  {
+    "num": 166,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/166-security-and-compliance"
+  },
+  {
+    "num": 167,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/167-resilient-cloud-solutions"
+  },
+  {
+    "num": 168,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/168-configuration-management-and-iac"
+  },
+  {
+    "num": 169,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/169-configuration-management-and-iac"
+  },
+  {
+    "num": 170,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/170-resilient-cloud-solutions"
+  },
+  {
+    "num": 171,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/171-monitoring-and-logging"
+  },
+  {
+    "num": 172,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/172-security-and-compliance"
+  },
+  {
+    "num": 173,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/173-security-and-compliance"
+  },
+  {
+    "num": 174,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/174-configuration-management-and-iac"
+  },
+  {
+    "num": 175,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/175-sdlc-automation"
+  },
+  {
+    "num": 176,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/176-configuration-management-and-iac"
+  },
+  {
+    "num": 177,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/177-security-and-compliance"
+  },
+  {
+    "num": 178,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/178-resilient-cloud-solutions"
+  },
+  {
+    "num": 179,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/179-resilient-cloud-solutions"
+  },
+  {
+    "num": 180,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/180-configuration-management-and-iac"
+  },
+  {
+    "num": 181,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/181-security-and-compliance"
+  },
+  {
+    "num": 182,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/182-incident-and-event-response"
+  },
+  {
+    "num": 183,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/183-incident-and-event-response"
+  },
+  {
+    "num": 184,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/184-monitoring-and-logging"
+  },
+  {
+    "num": 185,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/185-security-and-compliance"
+  },
+  {
+    "num": 186,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/186-configuration-management-and-iac"
+  },
+  {
+    "num": 187,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/187-sdlc-automation"
+  },
+  {
+    "num": 188,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/188-security-and-compliance"
+  },
+  {
+    "num": 189,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/189-configuration-management-and-iac"
+  },
+  {
+    "num": 190,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/190-sdlc-automation"
+  },
+  {
+    "num": 191,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/191-sdlc-automation"
+  },
+  {
+    "num": 192,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/192-security-and-compliance"
+  },
+  {
+    "num": 193,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/193-sdlc-automation"
+  },
+  {
+    "num": 194,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/194-configuration-management-and-iac"
+  },
+  {
+    "num": 195,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/195-security-and-compliance"
+  },
+  {
+    "num": 196,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/196-security-and-compliance"
+  },
+  {
+    "num": 197,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/197-configuration-management-and-iac"
+  },
+  {
+    "num": 198,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/198-resilient-cloud-solutions"
+  },
+  {
+    "num": 199,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/199-sdlc-automation"
+  },
+  {
+    "num": 200,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/200-resilient-cloud-solutions"
+  },
+  {
+    "num": 201,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/201-configuration-management-and-iac"
+  },
+  {
+    "num": 202,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/202-monitoring-and-logging"
+  },
+  {
+    "num": 203,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/203-resilient-cloud-solutions"
+  },
+  {
+    "num": 204,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/204-security-and-compliance"
+  },
+  {
+    "num": 205,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/205-resilient-cloud-solutions"
+  },
+  {
+    "num": 206,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/206-incident-and-event-response"
+  },
+  {
+    "num": 207,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/207-security-and-compliance"
+  },
+  {
+    "num": 208,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/208-configuration-management-and-iac"
+  },
+  {
+    "num": 209,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/209-sdlc-automation"
+  },
+  {
+    "num": 210,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/210-resilient-cloud-solutions"
+  },
+  {
+    "num": 211,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/211-resilient-cloud-solutions"
+  },
+  {
+    "num": 212,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/212-resilient-cloud-solutions"
+  },
+  {
+    "num": 213,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/213-sdlc-automation"
+  },
+  {
+    "num": 214,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/214-security-and-compliance"
+  },
+  {
+    "num": 215,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/215-configuration-management-and-iac"
+  },
+  {
+    "num": 216,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/216-sdlc-automation"
+  },
+  {
+    "num": 217,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/217-resilient-cloud-solutions"
+  },
+  {
+    "num": 218,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/218-security-and-compliance"
+  },
+  {
+    "num": 219,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/219-monitoring-and-logging"
+  },
+  {
+    "num": 220,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/220-monitoring-and-logging"
+  },
+  {
+    "num": 221,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/221-security-and-compliance"
+  },
+  {
+    "num": 222,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/222-security-and-compliance"
+  },
+  {
+    "num": 223,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/223-resilient-cloud-solutions"
+  },
+  {
+    "num": 224,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/224-sdlc-automation"
+  },
+  {
+    "num": 225,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/225-sdlc-automation"
+  },
+  {
+    "num": 226,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/226-security-and-compliance"
+  },
+  {
+    "num": 227,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/227-security-and-compliance"
+  },
+  {
+    "num": 228,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/228-sdlc-automation"
+  },
+  {
+    "num": 229,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/229-security-and-compliance"
+  },
+  {
+    "num": 230,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/230-configuration-management-and-iac"
+  },
+  {
+    "num": 231,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/231-security-and-compliance"
+  },
+  {
+    "num": 232,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/232-resilient-cloud-solutions"
+  },
+  {
+    "num": 233,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/233-monitoring-and-logging"
+  },
+  {
+    "num": 234,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/234-resilient-cloud-solutions"
+  },
+  {
+    "num": 235,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/235-resilient-cloud-solutions"
+  },
+  {
+    "num": 236,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/236-security-and-compliance"
+  },
+  {
+    "num": 237,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/237-configuration-management-and-iac"
+  },
+  {
+    "num": 238,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/238-resilient-cloud-solutions"
+  },
+  {
+    "num": 239,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/239-resilient-cloud-solutions"
+  },
+  {
+    "num": 240,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/240-security-and-compliance"
+  },
+  {
+    "num": 241,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/241-sdlc-automation"
+  },
+  {
+    "num": 242,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/242-security-and-compliance"
+  },
+  {
+    "num": 243,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/243-security-and-compliance"
+  },
+  {
+    "num": 244,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/244-resilient-cloud-solutions"
+  },
+  {
+    "num": 245,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/245-security-and-compliance"
+  },
+  {
+    "num": 246,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/246-security-and-compliance"
+  },
+  {
+    "num": 247,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/247-monitoring-and-logging"
+  },
+  {
+    "num": 248,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/248-configuration-management-and-iac"
+  },
+  {
+    "num": 249,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/249-monitoring-and-logging"
+  },
+  {
+    "num": 250,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/250-monitoring-and-logging"
+  },
+  {
+    "num": 251,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/251-security-and-compliance"
+  },
+  {
+    "num": 252,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/252-security-and-compliance"
+  },
+  {
+    "num": 253,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/253-security-and-compliance"
+  },
+  {
+    "num": 254,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/254-resilient-cloud-solutions"
+  },
+  {
+    "num": 255,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/255-monitoring-and-logging"
+  },
+  {
+    "num": 256,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/256-security-and-compliance"
+  },
+  {
+    "num": 257,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/257-resilient-cloud-solutions"
+  },
+  {
+    "num": 258,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/258-resilient-cloud-solutions"
+  },
+  {
+    "num": 259,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/259-resilient-cloud-solutions"
+  },
+  {
+    "num": 260,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/260-resilient-cloud-solutions"
+  },
+  {
+    "num": 261,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/261-incident-and-event-response"
+  },
+  {
+    "num": 262,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/262-monitoring-and-logging"
+  },
+  {
+    "num": 263,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/263-resilient-cloud-solutions"
+  },
+  {
+    "num": 264,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/264-incident-and-event-response"
+  },
+  {
+    "num": 265,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/265-security-and-compliance"
+  },
+  {
+    "num": 266,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/266-resilient-cloud-solutions"
+  },
+  {
+    "num": 267,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/267-security-and-compliance"
+  },
+  {
+    "num": 268,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/268-configuration-management-and-iac"
+  },
+  {
+    "num": 269,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/269-configuration-management-and-iac"
+  },
+  {
+    "num": 270,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/270-incident-and-event-response"
+  },
+  {
+    "num": 271,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/271-monitoring-and-logging"
+  },
+  {
+    "num": 272,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/272-resilient-cloud-solutions"
+  },
+  {
+    "num": 273,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/273-monitoring-and-logging"
+  },
+  {
+    "num": 274,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/274-resilient-cloud-solutions"
+  },
+  {
+    "num": 275,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/275-incident-and-event-response"
+  },
+  {
+    "num": 276,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/276-incident-and-event-response"
+  },
+  {
+    "num": 277,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/277-security-and-compliance"
+  },
+  {
+    "num": 278,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/278-sdlc-automation"
+  },
+  {
+    "num": 279,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/279-sdlc-automation"
+  },
+  {
+    "num": 280,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/280-monitoring-and-logging"
+  },
+  {
+    "num": 281,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/281-security-and-compliance"
+  },
+  {
+    "num": 282,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/282-security-and-compliance"
+  },
+  {
+    "num": 283,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/283-security-and-compliance"
+  },
+  {
+    "num": 284,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/284-security-and-compliance"
+  },
+  {
+    "num": 285,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/285-configuration-management-and-iac"
+  },
+  {
+    "num": 286,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/286-resilient-cloud-solutions"
+  },
+  {
+    "num": 287,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/287-configuration-management-and-iac"
+  },
+  {
+    "num": 288,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/288-sdlc-automation"
+  },
+  {
+    "num": 289,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/289-security-and-compliance"
+  },
+  {
+    "num": 290,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/290-security-and-compliance"
+  },
+  {
+    "num": 291,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/291-security-and-compliance"
+  },
+  {
+    "num": 292,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/292-security-and-compliance"
+  },
+  {
+    "num": 293,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/293-resilient-cloud-solutions"
+  },
+  {
+    "num": 294,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/294-monitoring-and-logging"
+  },
+  {
+    "num": 295,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/295-incident-and-event-response"
+  },
+  {
+    "num": 296,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/296-security-and-compliance"
+  },
+  {
+    "num": 297,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/297-configuration-management-and-iac"
+  },
+  {
+    "num": 298,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/298-security-and-compliance"
+  },
+  {
+    "num": 299,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/299-resilient-cloud-solutions"
+  },
+  {
+    "num": 300,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/300-sdlc-automation"
+  },
+  {
+    "num": 301,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/301-configuration-management-and-iac"
+  },
+  {
+    "num": 302,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/302-security-and-compliance"
+  },
+  {
+    "num": 303,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/303-security-and-compliance"
+  },
+  {
+    "num": 304,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/304-resilient-cloud-solutions"
+  },
+  {
+    "num": 305,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/305-security-and-compliance"
+  },
+  {
+    "num": 306,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/306-resilient-cloud-solutions"
+  },
+  {
+    "num": 307,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/307-monitoring-and-logging"
+  },
+  {
+    "num": 308,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/308-security-and-compliance"
+  },
+  {
+    "num": 309,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/309-configuration-management-and-iac"
+  },
+  {
+    "num": 310,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/310-monitoring-and-logging"
+  },
+  {
+    "num": 311,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/311-resilient-cloud-solutions"
+  },
+  {
+    "num": 312,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/312-configuration-management-and-iac"
+  },
+  {
+    "num": 313,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/313-resilient-cloud-solutions"
+  },
+  {
+    "num": 314,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/314-incident-and-event-response"
+  },
+  {
+    "num": 315,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/315-security-and-compliance"
+  },
+  {
+    "num": 316,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/316-configuration-management-and-iac"
+  },
+  {
+    "num": 317,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/317-configuration-management-and-iac"
+  },
+  {
+    "num": 318,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/318-monitoring-and-logging"
+  },
+  {
+    "num": 319,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/319-resilient-cloud-solutions"
+  },
+  {
+    "num": 320,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/320-sdlc-automation"
+  },
+  {
+    "num": 321,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/321-configuration-management-and-iac"
+  },
+  {
+    "num": 322,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/322-configuration-management-and-iac"
+  },
+  {
+    "num": 323,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/323-resilient-cloud-solutions"
+  },
+  {
+    "num": 324,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/324-security-and-compliance"
+  },
+  {
+    "num": 325,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/325-monitoring-and-logging"
+  },
+  {
+    "num": 326,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/326-resilient-cloud-solutions"
+  },
+  {
+    "num": 327,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/327-monitoring-and-logging"
+  },
+  {
+    "num": 328,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/328-security-and-compliance"
+  },
+  {
+    "num": 329,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/329-resilient-cloud-solutions"
+  },
+  {
+    "num": 330,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/330-configuration-management-and-iac"
+  },
+  {
+    "num": 331,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/331-sdlc-automation"
+  },
+  {
+    "num": 332,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/332-configuration-management-and-iac"
+  },
+  {
+    "num": 333,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/333-monitoring-and-logging"
+  },
+  {
+    "num": 334,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/334-configuration-management-and-iac"
+  },
+  {
+    "num": 335,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/335-security-and-compliance"
+  },
+  {
+    "num": 336,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/336-resilient-cloud-solutions"
+  },
+  {
+    "num": 337,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/337-monitoring-and-logging"
+  },
+  {
+    "num": 338,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/338-sdlc-automation"
+  },
+  {
+    "num": 339,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/339-incident-and-event-response"
+  },
+  {
+    "num": 340,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/340-incident-and-event-response"
+  },
+  {
+    "num": 341,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/341-configuration-management-and-iac"
+  },
+  {
+    "num": 342,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/342-security-and-compliance"
+  },
+  {
+    "num": 343,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/343-monitoring-and-logging"
+  },
+  {
+    "num": 344,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/344-resilient-cloud-solutions"
+  },
+  {
+    "num": 345,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/345-resilient-cloud-solutions"
+  },
+  {
+    "num": 346,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/346-sdlc-automation"
+  },
+  {
+    "num": 347,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/347-monitoring-and-logging"
+  },
+  {
+    "num": 348,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/348-resilient-cloud-solutions"
+  },
+  {
+    "num": 349,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/349-resilient-cloud-solutions"
+  },
+  {
+    "num": 350,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/350-configuration-management-and-iac"
+  },
+  {
+    "num": 351,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/351-incident-and-event-response"
+  },
+  {
+    "num": 352,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/352-resilient-cloud-solutions"
+  },
+  {
+    "num": 353,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/353-resilient-cloud-solutions"
+  },
+  {
+    "num": 354,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/354-sdlc-automation"
+  },
+  {
+    "num": 355,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/355-configuration-management-and-iac"
+  },
+  {
+    "num": 356,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/356-security-and-compliance"
+  },
+  {
+    "num": 357,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/357-sdlc-automation"
+  },
+  {
+    "num": 358,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/358-resilient-cloud-solutions"
+  },
+  {
+    "num": 359,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/359-configuration-management-and-iac"
+  },
+  {
+    "num": 360,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/360-incident-and-event-response"
+  },
+  {
+    "num": 361,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/361-resilient-cloud-solutions"
+  },
+  {
+    "num": 362,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/362-incident-and-event-response"
+  },
+  {
+    "num": 363,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/363-incident-and-event-response"
+  },
+  {
+    "num": 364,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/364-sdlc-automation"
+  },
+  {
+    "num": 365,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/365-configuration-management-and-iac"
+  },
+  {
+    "num": 366,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/366-resilient-cloud-solutions"
+  },
+  {
+    "num": 367,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/367-security-and-compliance"
+  },
+  {
+    "num": 368,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/368-sdlc-automation"
+  },
+  {
+    "num": 369,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/369-configuration-management-and-iac"
+  },
+  {
+    "num": 370,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/370-sdlc-automation"
+  },
+  {
+    "num": 371,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/371-security-and-compliance"
+  },
+  {
+    "num": 372,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/372-resilient-cloud-solutions"
+  },
+  {
+    "num": 373,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/373-security-and-compliance"
+  },
+  {
+    "num": 374,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/374-security-and-compliance"
+  },
+  {
+    "num": 375,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/375-resilient-cloud-solutions"
+  },
+  {
+    "num": 376,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/376-resilient-cloud-solutions"
+  },
+  {
+    "num": 377,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/377-security-and-compliance"
+  },
+  {
+    "num": 378,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/378-monitoring-and-logging"
+  },
+  {
+    "num": 379,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/379-monitoring-and-logging"
+  },
+  {
+    "num": 380,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/380-configuration-management-and-iac"
+  },
+  {
+    "num": 381,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/381-resilient-cloud-solutions"
+  },
+  {
+    "num": 382,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/382-security-and-compliance"
+  },
+  {
+    "num": 383,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/383-resilient-cloud-solutions"
+  },
+  {
+    "num": 384,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/384-resilient-cloud-solutions"
+  },
+  {
+    "num": 385,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/385-sdlc-automation"
+  },
+  {
+    "num": 386,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/386-monitoring-and-logging"
+  },
+  {
+    "num": 387,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/387-configuration-management-and-iac"
+  },
+  {
+    "num": 388,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/388-monitoring-and-logging"
+  },
+  {
+    "num": 389,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/389-sdlc-automation"
+  },
+  {
+    "num": 390,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/390-monitoring-and-logging"
+  },
+  {
+    "num": 391,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/391-configuration-management-and-iac"
+  },
+  {
+    "num": 392,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/392-monitoring-and-logging"
+  },
+  {
+    "num": 393,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/393-sdlc-automation"
+  },
+  {
+    "num": 394,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/394-resilient-cloud-solutions"
+  },
+  {
+    "num": 395,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/395-configuration-management-and-iac"
+  },
+  {
+    "num": 396,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/396-configuration-management-and-iac"
+  },
+  {
+    "num": 397,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/397-sdlc-automation"
+  },
+  {
+    "num": 398,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/398-sdlc-automation"
+  },
+  {
+    "num": 399,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/399-configuration-management-and-iac"
+  },
+  {
+    "num": 400,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/400-monitoring-and-logging"
+  },
+  {
+    "num": 401,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/401-security-and-compliance"
+  },
+  {
+    "num": 402,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/402-resilient-cloud-solutions"
+  },
+  {
+    "num": 403,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/403-resilient-cloud-solutions"
+  },
+  {
+    "num": 404,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/404-security-and-compliance"
+  },
+  {
+    "num": 405,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/405-security-and-compliance"
+  },
+  {
+    "num": 406,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/406-security-and-compliance"
+  },
+  {
+    "num": 407,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/407-security-and-compliance"
+  },
+  {
+    "num": 408,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/408-monitoring-and-logging"
+  },
+  {
+    "num": 409,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/409-security-and-compliance"
+  },
+  {
+    "num": 410,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/410-monitoring-and-logging"
+  },
+  {
+    "num": 411,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/411-monitoring-and-logging"
+  },
+  {
+    "num": 412,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/412-security-and-compliance"
+  },
+  {
+    "num": 413,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/413-security-and-compliance"
+  },
+  {
+    "num": 414,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/414-security-and-compliance"
+  },
+  {
+    "num": 415,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/415-security-and-compliance"
+  },
+  {
+    "num": 416,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/416-configuration-management-and-iac"
+  },
+  {
+    "num": 417,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/417-resilient-cloud-solutions"
+  },
+  {
+    "num": 418,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/418-monitoring-and-logging"
+  },
+  {
+    "num": 419,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/419-resilient-cloud-solutions"
+  },
+  {
+    "num": 420,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/420-security-and-compliance"
+  },
+  {
+    "num": 421,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/421-monitoring-and-logging"
+  },
+  {
+    "num": 422,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/422-configuration-management-and-iac"
+  },
+  {
+    "num": 423,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/423-security-and-compliance"
+  },
+  {
+    "num": 424,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/424-incident-and-event-response"
+  },
+  {
+    "num": 425,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/425-resilient-cloud-solutions"
+  },
+  {
+    "num": 426,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/426-monitoring-and-logging"
+  },
+  {
+    "num": 427,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/427-monitoring-and-logging"
+  },
+  {
+    "num": 428,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/428-security-and-compliance"
+  },
+  {
+    "num": 429,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/429-security-and-compliance"
+  },
+  {
+    "num": 430,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/430-security-and-compliance"
+  },
+  {
+    "num": 431,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/431-sdlc-automation"
+  },
+  {
+    "num": 432,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/432-monitoring-and-logging"
+  },
+  {
+    "num": 433,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/433-resilient-cloud-solutions"
+  },
+  {
+    "num": 434,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/434-monitoring-and-logging"
+  },
+  {
+    "num": 435,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/435-sdlc-automation"
+  },
+  {
+    "num": 436,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/436-resilient-cloud-solutions"
+  },
+  {
+    "num": 437,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/437-resilient-cloud-solutions"
+  },
+  {
+    "num": 438,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/438-incident-and-event-response"
+  },
+  {
+    "num": 439,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/439-resilient-cloud-solutions"
+  },
+  {
+    "num": 440,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/440-security-and-compliance"
+  },
+  {
+    "num": 441,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/441-monitoring-and-logging"
+  },
+  {
+    "num": 442,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/442-resilient-cloud-solutions"
+  },
+  {
+    "num": 443,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/443-monitoring-and-logging"
+  },
+  {
+    "num": 444,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/444-sdlc-automation"
+  },
+  {
+    "num": 445,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/445-security-and-compliance"
+  },
+  {
+    "num": 446,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/446-security-and-compliance"
+  },
+  {
+    "num": 447,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/447-resilient-cloud-solutions"
+  },
+  {
+    "num": 448,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/448-configuration-management-and-iac"
+  },
+  {
+    "num": 449,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/449-security-and-compliance"
+  },
+  {
+    "num": 450,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/450-sdlc-automation"
+  },
+  {
+    "num": 451,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/451-sdlc-automation"
+  },
+  {
+    "num": 452,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/452-security-and-compliance"
+  },
+  {
+    "num": 453,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/453-monitoring-and-logging"
+  },
+  {
+    "num": 454,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/454-resilient-cloud-solutions"
+  },
+  {
+    "num": 455,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/455-resilient-cloud-solutions"
+  },
+  {
+    "num": 456,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/456-sdlc-automation"
+  },
+  {
+    "num": 457,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/457-configuration-management-and-iac"
+  },
+  {
+    "num": 458,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/458-resilient-cloud-solutions"
+  },
+  {
+    "num": 459,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/459-resilient-cloud-solutions"
+  },
+  {
+    "num": 460,
+    "href": "https://examcademy.com/exams/amazon/aws-certified-devops-engineer-professional-dop-c02/q/460-security-and-compliance"
+  }
+]
