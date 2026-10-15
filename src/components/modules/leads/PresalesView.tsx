@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type ComponentType, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { RefreshCw, AlertCircle, Loader2, X, UserCog, Maximize2 } from "lucide-react";
+import { RefreshCw, AlertCircle, Loader2, X, UserCog, Maximize2, Settings } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 import FilterSelect from "./FilterSelect";
@@ -10,11 +10,12 @@ import DateRangeSlider from "./DateRangeSlider";
 import FitRow from "./FitRow";
 import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
+import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow } from "./PresalesManageModal";
 
 /* ── constantes de gestión ───────────────────────────────────────────── */
 const DAY_MS     = 86400000;
-const STALE_DAYS = 14;   // sin modificaciones → estancado
+const SETTINGS_KEY = "presales-settings-v1";
 const SOON_DAYS  = 15;   // cierre esperado dentro de N días → próximo
 
 /* ── helpers ─────────────────────────────────────────────────────────── */
@@ -58,8 +59,7 @@ const splitBy = (arr: Lead[], fmt: (l: Lead[]) => string = (l) => String(l.lengt
   { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmt(arr.filter((l) => compKey(l) === "INT")) },
 ];
 
-/* capacidad de leads abiertos por preventa: base de la columna Ocupación */
-const CARGA_LIMIT = 10;
+/* color de la barra de Ocupación según el porcentaje */
 const ocupColor = (p: number) => (p >= 100 ? "bg-rose-500" : p >= 70 ? "bg-amber-500" : "bg-blue-500");
 
 const CARD = "relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden";
@@ -145,7 +145,19 @@ export default function PresalesView({
   const [statuses,   setStatuses]   = useState<Record<string, PresalesStatusRow>>({});
   const [canManage,  setCanManage]  = useState(false);
   const [needsSetup, setNeedsSetup] = useState(false);
-  const [onlyActive, setOnlyActive] = useState(true);
+  // configuración de la vista (días para estancado, ocupación máxima, ocultar inactivos): se guarda en este navegador
+  const [settings, setSettings] = useState<PresalesSettings>(() => {
+    try {
+      const raw = typeof window !== "undefined" ? window.localStorage.getItem(SETTINGS_KEY) : null;
+      return raw ? { ...DEFAULT_PRESALES_SETTINGS, ...JSON.parse(raw) } : DEFAULT_PRESALES_SETTINGS;
+    } catch { return DEFAULT_PRESALES_SETTINGS; }
+  });
+  const [showSettings, setShowSettings] = useState(false);
+  const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive } = settings;
+  const saveSettings = (next: PresalesSettings) => {
+    setSettings(next);
+    try { window.localStorage.setItem(SETTINGS_KEY, JSON.stringify(next)); } catch { /* sin almacenamiento: queda solo en memoria */ }
+  };
   const [showManage, setShowManage] = useState(false);
 
   useEffect(() => {
@@ -543,11 +555,9 @@ export default function PresalesView({
         />
         </>}
         right={<>
-          <button type="button" onClick={() => setOnlyActive((v) => !v)}
-            title="Oculta a los preventas inactivos en la tabla de carga y en el filtro Preventa"
-            data-active={onlyActive}
+          <button type="button" onClick={() => setShowSettings(true)}
             className="pill-option flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border">
-            Solo activos
+            <Settings size={13} /> Configuración
           </button>
           {canManage && (
             <button type="button" onClick={() => setShowManage(true)}
@@ -828,6 +838,7 @@ export default function PresalesView({
       )}
 
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
+      {showSettings && <PresalesSettingsPanel settings={settings} onSave={saveSettings} onClose={() => setShowSettings(false)} />}
       {listModal && (
         <LeadsListModal
           leads={listModal.leads}
