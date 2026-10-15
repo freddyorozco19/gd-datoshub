@@ -445,3 +445,22 @@ body {
 
 /* Popup del usuario en el Sidebar (bg-[#15151f]) — se queda oscuro, no claro */
 .light .dashboard-shell .app-bar .bg-\[\#15151f\] { background-color: #0b1638 !important; }
+
+/* Header de los modales en tema claro: degradé de claro a azul (en vez de oscuro a azul).
+   Los textos sobre la parte clara pasan a oscuro; los botones (cerrar, etc.) quedan blancos sobre el azul. */
+.light .dashboard-shell .modal-header {
+  background: linear-gradient(100deg, rgba(232, 240, 255, 0.97) 0%, rgba(199, 218, 253, 0.97) 45%, rgba(47, 102, 224, 0.95) 100%);
+  border-color: rgba(15, 23, 42, 0.1);
+}
+.light .dashboard-shell .modal-header .text-white,
+.light .dashboard-shell .modal-header .text-slate-100,
+.light .dashboard-shell .modal-header .text-slate-200 { color: #0f172a !important; }
+.light .dashboard-shell .modal-header .text-slate-300 { color: #1e293b !important; }
+.light .dashboard-shell .modal-header .text-slate-400,
+.light .dashboard-shell .modal-header .text-slate-500 { color: #475569 !important; }
+.light .dashboard-shell .modal-header .text-blue-300,
+.light .dashboard-shell .modal-header .text-blue-400 { color: #1d4ed8 !important; }
+.light .dashboard-shell .modal-header .text-cyan-400 { color: #0e7490 !important; }
+.light .dashboard-shell .modal-header .text-emerald-400 { color: #047857 !important; }
+.light .dashboard-shell .modal-header button,
+.light .dashboard-shell .modal-header button * { color: #ffffff !important; }
