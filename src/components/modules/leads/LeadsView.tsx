@@ -374,7 +374,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                     ["ganado","Estado"],
                   ] as [keyof Lead, string][]).map(([key, label]) => (
                     <th key={`${key}-${label}`} onClick={() => mToggleSort(key)}
-                      className="text-left px-4 py-3 font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap cursor-pointer hover:text-white select-none transition-colors">
+                      className="th-sort text-left px-4 py-3 font-semibold uppercase tracking-wide whitespace-nowrap cursor-pointer select-none">
                       <span className="flex items-center gap-1">
                         {label}
                         {mSort.key === key

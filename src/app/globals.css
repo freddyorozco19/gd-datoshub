@@ -457,6 +457,12 @@ body {
 .light .dashboard-shell .lead-name { color: #0f172a; }
 .light .dashboard-shell .row-hover:hover .lead-name { color: #1d4ed8; }
 
+/* Encabezados de columna ordenables en tablas de popups: reposo y hover por tema */
+.th-sort { color: #64748b; transition: color 0.15s; }
+.th-sort:hover { color: #ffffff; }
+.light .dashboard-shell .th-sort { color: #64748b; }
+.light .dashboard-shell .th-sort:hover { color: #1d4ed8; }
+
 /* Header de los modales en tema claro: degradé de claro a azul (en vez de oscuro a azul).
    Los textos sobre la parte clara pasan a oscuro; los botones (cerrar, etc.) quedan blancos sobre el azul. */
 .light .dashboard-shell .modal-header {
