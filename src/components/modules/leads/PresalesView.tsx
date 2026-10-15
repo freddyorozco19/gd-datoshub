@@ -602,9 +602,11 @@ export default function PresalesView({
             <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)}
               split={showSplit ? splitBy(stats.sinAsig) : undefined} />
             <Kpi label="Estancados"      value={String(stats.stale.length)}
-              split={showSplit ? splitBy(stats.stale) : undefined} />
+              split={showSplit ? splitBy(stats.stale) : undefined}
+              onClick={() => setListModal({ leads: stats.stale, heading: "Estancados" })} />
             <Kpi label="Cierre próximo"  value={String(stats.soon.length)}
-              split={showSplit ? splitBy(stats.soon) : undefined} />
+              split={showSplit ? splitBy(stats.soon) : undefined}
+              onClick={() => setListModal({ leads: stats.soon, heading: "Cierre próximo" })} />
             </div>
           </div>
 
