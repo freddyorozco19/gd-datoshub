@@ -396,14 +396,14 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                     <td className="px-4 py-3 text-slate-600 max-w-[140px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.comercial || "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      {lead.linea ? <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-medium">{lead.linea}</span> : "—"}
+                      <span className="text-slate-600">{lead.linea || "—"}</span>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`px-2 py-0.5 rounded-full font-medium ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa || "—"}</span>
+                      <span className="text-slate-600">{lead.etapa || "—"}</span>
                     </td>
                     {showCloseDate && (
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className={`px-2 py-0.5 rounded-full font-medium ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa || "—"}</span>
+                        <span className="text-slate-600">{lead.etapa || "—"}</span>
                       </td>
                     )}
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.tipoOportunidad || "—"}</td>
@@ -413,7 +413,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                       <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.fechaCierre ? lead.fechaCierre.substring(0, 10) : "—"}</td>
                     )}
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`px-2 py-0.5 rounded-full font-medium ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
+                      <span className="text-slate-600">{lead.ganado}</span>
                     </td>
                   </tr>
                 ))}
