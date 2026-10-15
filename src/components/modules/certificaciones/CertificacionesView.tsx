@@ -376,8 +376,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
   return (
     <button
       onClick={onClick}
-      className="group relative w-full text-left overflow-hidden rounded-2xl bg-[#0e0e12] border border-white/[0.08] transition-all duration-200
-        hover:border-white/15 hover:shadow-2xl hover:shadow-black/70"
+      className="prov-card group relative w-full text-left overflow-hidden rounded-2xl border transition-all duration-200"
       style={{ aspectRatio: '16/9' }}
     >
       {/* logo grande sangrando en esquina superior izquierda */}
@@ -395,15 +394,15 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
         </span>
       )}
 
-      {/* sombra: negro desde abajo cubriendo cuadrantes inferiores */}
-      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.96) 23%, rgba(0,0,0,0.7) 38%, rgba(0,0,0,0.27) 55%, transparent 68%)' }} />
-      {/* oscurecer cuadrantes superiores (rojo y verde) */}
-      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(120deg, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.43) 30%, transparent 51%)' }} />
+      {/* sombra desde abajo (negra en dark, blanca en light; ver .prov-card en globals.css) */}
+      <span className="prov-shade-bottom absolute inset-0 pointer-events-none" />
+      {/* atenuar el logo en la esquina superior izquierda */}
+      <span className="prov-shade-corner absolute inset-0 pointer-events-none" />
 
       {/* texto superpuesto sobre el logo, en la parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
-        <h3 className="text-[17px] font-bold text-white leading-tight tracking-tight drop-shadow-lg">{p.name}</h3>
-        <p className="text-[12px] text-slate-400 mt-0.5 drop-shadow-lg">{p.exams.length} exams</p>
+        <h3 className="prov-title text-[17px] font-bold leading-tight tracking-tight">{p.name}</h3>
+        <p className="prov-sub text-[12px] mt-0.5">{p.exams.length} exams</p>
       </div>
     </button>
   )

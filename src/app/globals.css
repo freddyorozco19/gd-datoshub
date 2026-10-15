@@ -231,6 +231,27 @@ body {
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
 }
 
+/* ── Cards de proveedor (Certificaciones): misma sombra degradada en ambos temas ──
+   Dark: sombra negra sobre fondo oscuro. Light: sombra blanca sobre fondo blanco y texto oscuro. */
+.prov-card {
+  --shade: 0 0 0;
+  background-color: #0e0e12;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.prov-card:hover { border-color: rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
+.prov-shade-bottom {
+  background: linear-gradient(to top, rgb(var(--shade) / 0.96) 0%, rgb(var(--shade) / 0.96) 23%, rgb(var(--shade) / 0.7) 38%, rgb(var(--shade) / 0.27) 55%, transparent 68%);
+}
+.prov-shade-corner {
+  background: linear-gradient(120deg, rgb(var(--shade) / 0.58) 0%, rgb(var(--shade) / 0.43) 30%, transparent 51%);
+}
+.prov-title { color: #ffffff; }
+.prov-sub   { color: #94a3b8; }
+.light .dashboard-shell .prov-card { --shade: 255 255 255; background-color: #ffffff; border-color: rgba(15, 23, 42, 0.12); }
+.light .dashboard-shell .prov-card:hover { border-color: rgba(15, 23, 42, 0.28); box-shadow: 0 18px 40px -12px rgba(15, 23, 42, 0.25); }
+.light .dashboard-shell .prov-title { color: #0f172a; }
+.light .dashboard-shell .prov-sub   { color: #475569; }
+
 /* ── Slider de rango doble (Desde/Hasta fusionados) ─────────────────────────
    Dos <input type="range"> superpuestos; el track es invisible/no interactivo
    y solo el thumb captura eventos, permitiendo arrastrar cada uno por separado.
