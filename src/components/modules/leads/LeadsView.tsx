@@ -390,7 +390,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                   <tr key={lead.id} onClick={() => setDetailLead(lead)}
                     className="row-hover cursor-pointer group">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-slate-100 max-w-[180px] truncate group-hover:text-blue-400 transition-colors" title={lead.nombre}>{lead.nombre}</p>
+                      <p className="lead-name font-medium max-w-[180px] truncate" title={lead.nombre}>{lead.nombre}</p>
                       {lead.correo && <p className="text-slate-400 truncate max-w-[180px] text-[10px]">{lead.correo}</p>}
                     </td>
                     <td className="px-4 py-3 text-slate-600 max-w-[140px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>

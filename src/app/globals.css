@@ -451,10 +451,16 @@ body {
 .row-hover:hover { background-color: rgba(59, 130, 246, 0.12); }
 .light .dashboard-shell .row-hover:hover { background-color: rgba(37, 99, 235, 0.09); }
 
+/* Nombre del lead en las tablas de popups: resalta al pasar el mouse sobre la fila */
+.lead-name { color: #f1f5f9; transition: color 0.15s; }
+.row-hover:hover .lead-name { color: #60a5fa; }
+.light .dashboard-shell .lead-name { color: #0f172a; }
+.light .dashboard-shell .row-hover:hover .lead-name { color: #1d4ed8; }
+
 /* Header de los modales en tema claro: degradé de claro a azul (en vez de oscuro a azul).
    Los textos sobre la parte clara pasan a oscuro; los botones (cerrar, etc.) quedan blancos sobre el azul. */
 .light .dashboard-shell .modal-header {
-  background: linear-gradient(100deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.94) 25%, rgba(191, 211, 252, 0.96) 62%, rgba(47, 102, 224, 0.95) 100%);
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.94) 25%, rgba(176, 192, 232, 0.96) 62%, var(--app-topbar-bg) 100%);
   border-color: rgba(15, 23, 42, 0.1);
 }
 .light .dashboard-shell .modal-header .text-white,
