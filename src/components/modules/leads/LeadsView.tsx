@@ -369,7 +369,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                   {([
                     ["nombre","Nombre"], ["cliente","Cliente"], ["comercial","Comercial"], ["linea","Línea"], ["etapa","Etapa"],
                     ...(showCloseDate ? [["etapa","Etapa Actual"]] as [keyof Lead, string][] : []),
-                    ["tipoOportunidad","Tipo Oportunidad"], ["preventa","Preventa"], ["ingresosEsperados","Ingresos Esp."],
+                    ["tipoOportunidad","Tipo Oportunidad"], ["preventa","Preventa"], ["fechaCreacion","Fecha Creación"], ["ingresosEsperados","Ingresos Esp."],
                     ...(showCloseDate ? [["fechaCierre","Fecha Cierre"]] as [keyof Lead, string][] : []),
                     ["ganado","Estado"],
                   ] as [keyof Lead, string][]).map(([key, label]) => (
@@ -408,6 +408,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                     )}
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.tipoOportunidad || "—"}</td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.preventa || "—"}</td>
+                    <td className="px-4 py-3 text-slate-600 whitespace-nowrap tabular-nums">{lead.fechaCreacion ? lead.fechaCreacion.substring(0, 10) : "—"}</td>
                     <td className="px-4 py-3 text-right font-medium text-slate-200 whitespace-nowrap">{lead.ingresosEsperados ? COP(lead.ingresosEsperados) : "—"}</td>
                     {showCloseDate && (
                       <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.fechaCierre ? lead.fechaCierre.substring(0, 10) : "—"}</td>
