@@ -130,6 +130,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#14B8A6',
     bgGradient: 'from-teal-950 to-slate-900',
     logo: '◭',
+    logoImg: 'https://media.badges.parchment.com/uploads/issuers/issuer_logo_d4edfb28-a023-4e8a-827f-c9d54389b755.png',
     exams: [
       { id: 'dmf', code: 'DMF', name: 'Data Management Fundamentals', dataFile: '/data/exam_dmf.json', questions: 295, level: 'Fundamental', examTopicsPath: 'cdmp/dmf' },
     ],
