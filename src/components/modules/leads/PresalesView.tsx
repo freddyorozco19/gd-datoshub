@@ -58,6 +58,10 @@ const splitBy = (arr: Lead[], fmt: (l: Lead[]) => string = (l) => String(l.lengt
   { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmt(arr.filter((l) => compKey(l) === "INT")) },
 ];
 
+/* capacidad de leads abiertos por preventa: base de la columna Ocupación */
+const CARGA_LIMIT = 10;
+const ocupColor = (p: number) => (p >= 100 ? "bg-rose-500" : p >= 70 ? "bg-amber-500" : "bg-blue-500");
+
 const CARD = "relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden";
 
 // fill: la tarjeta se estira a la altura que le da su contenedor y el contenido ocupa el espacio sobrante
@@ -416,7 +420,6 @@ export default function PresalesView({
   const cargaSrc = fCargaComp === "ALL" ? filtered : filtered.filter((l) => compKey(l) === fCargaComp);
   const carga = buildCarga(cargaSrc);
   const cargaRows = onlyActive ? carga.rows.filter((r) => !isInactive(r.name)) : carga.rows;
-  const cargaMaxOpen = Math.max(1, ...cargaRows.map((r) => r.open));
   const cargaTotals = {
     open:     cargaRows.reduce((s, r) => s + r.open, 0),
     won:      cargaRows.reduce((s, r) => s + r.won, 0),
@@ -425,7 +428,7 @@ export default function PresalesView({
     stale:    cargaRows.reduce((s, r) => s + r.stale, 0),
     counts:   Object.fromEntries(carga.cols.map((c) => [c.key, cargaRows.reduce((s, r) => s + (r.counts[c.key] ?? 0), 0)])) as Record<string, number>,
   };
-  const cargaRate = pct(cargaTotals.won, cargaTotals.won + cargaTotals.lost);
+  const cargaOcup = cargaRows.length ? Math.round((cargaTotals.open / (CARGA_LIMIT * cargaRows.length)) * 100) : 0;
   // con solo Internacional el pipeline está en USD; con SAS o todas, en COP (ver nota de monedas arriba)
   const fmtCargaPipe = fCargaComp === "INT" ? fmtUSD : fmtCOP;
 
@@ -449,29 +452,30 @@ export default function PresalesView({
         <thead>
           <tr className="text-[10px] uppercase tracking-wide text-slate-500">
             <th className="text-left font-semibold pb-2 pr-3">Preventa</th>
-            <th className="text-left font-semibold pb-2 pr-3 w-36">Abiertos</th>
+            <th className="text-right font-semibold pb-2 px-2">Abiertos</th>
+            <th className="text-left font-semibold pb-2 pl-3 pr-3 w-44">Ocupación</th>
             {carga.cols.map((c) => (
               <th key={c.key} className="text-right font-semibold pb-2 px-2 whitespace-nowrap">{c.label}</th>
             ))}
-            <th className="text-right font-semibold pb-2 px-2">Éxito</th>
             <th className="text-right font-semibold pb-2 px-2">Pipeline</th>
             <th className="text-right font-semibold pb-2 pl-2">Estancados</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-white/[0.05]">
           {cargaRows.map((r) => {
-            const rate = pct(r.won, r.won + r.lost);
+            const ocup = Math.round((r.open / CARGA_LIMIT) * 100);
             return (
               <tr key={r.name}
                 onClick={() => setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
                 className="transition-colors cursor-pointer hover:bg-white/[0.05]">
                 <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
-                <td className={`${big ? "py-2.5" : "py-2"} pr-3`}>
-                  <div className="flex items-center gap-2">
+                <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300`}>{r.open}</td>
+                <td className={`${big ? "py-2.5" : "py-2"} pl-3 pr-3`}>
+                  <div className="flex items-center gap-2" title={`${r.open} de ${CARGA_LIMIT} leads abiertos`}>
                     <div className="flex-1 h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
-                      <div className="h-full rounded-full bg-blue-500" style={{ width: `${(r.open / cargaMaxOpen) * 100}%` }} />
+                      <div className={`h-full rounded-full ${ocupColor(ocup)}`} style={{ width: `${Math.min(100, ocup)}%` }} />
                     </div>
-                    <span className="w-6 text-right tabular-nums text-slate-300">{r.open}</span>
+                    <span className="w-10 text-right tabular-nums text-slate-300">{ocup}%</span>
                   </div>
                 </td>
                 {carga.cols.map((c) => {
@@ -480,7 +484,6 @@ export default function PresalesView({
                     <td key={c.key} className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums ${n === 0 ? "text-slate-600" : c.key === "ganado" ? "text-emerald-400" : "text-slate-300"}`}>{n}</td>
                   );
                 })}
-                <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300`}>{rate === null ? "—" : `${rate}%`}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300 whitespace-nowrap`}>{fmtCargaPipe(r.pipeline)}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} pl-2 text-right tabular-nums ${r.stale > 0 ? "text-rose-400 font-semibold" : "text-slate-500"}`}>{r.stale}</td>
               </tr>
@@ -495,16 +498,16 @@ export default function PresalesView({
             }}
             className="border-t border-white/[0.14] font-semibold cursor-pointer hover:bg-white/[0.05] transition-colors">
             <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
-            <td className="pt-2.5 pr-3">
-              <div className="flex items-center gap-2">
+            <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.open}</td>
+            <td className="pt-2.5 pl-3 pr-3">
+              <div className="flex items-center gap-2" title={`Ocupación global: ${cargaTotals.open} de ${CARGA_LIMIT * cargaRows.length}`}>
                 <div className="flex-1" />
-                <span className="w-6 text-right tabular-nums text-slate-100">{cargaTotals.open}</span>
+                <span className="w-10 text-right tabular-nums text-slate-100">{cargaOcup}%</span>
               </div>
             </td>
             {carga.cols.map((c) => (
               <td key={c.key} className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.counts[c.key]}</td>
             ))}
-            <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaRate === null ? "—" : `${cargaRate}%`}</td>
             <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100 whitespace-nowrap">{fmtCargaPipe(cargaTotals.pipeline)}</td>
             <td className="pt-2.5 pl-2 text-right tabular-nums text-slate-100">{cargaTotals.stale}</td>
           </tr>
