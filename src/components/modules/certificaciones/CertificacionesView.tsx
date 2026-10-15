@@ -158,6 +158,46 @@ const PROVIDERS: ProviderConfig[] = [
       { id: 'nse7', code: 'NSE 7', name: 'Network Security Architect',              level: 'Professional' },
     ],
   },
+  {
+    id: 'anthropic',
+    name: 'Anthropic',
+    color: '#D97757',
+    bgGradient: 'from-orange-950 to-slate-900',
+    logo: '🤖',
+    exams: [],
+  },
+  {
+    id: 'comptia',
+    name: 'CompTIA',
+    color: '#C8202F',
+    bgGradient: 'from-red-950 to-slate-900',
+    logo: '💻',
+    exams: [],
+  },
+  {
+    id: 'huawei',
+    name: 'Huawei',
+    color: '#CF0A2C',
+    bgGradient: 'from-red-950 to-slate-900',
+    logo: '📱',
+    exams: [],
+  },
+  {
+    id: 'nutanix',
+    name: 'Nutanix',
+    color: '#024DA1',
+    bgGradient: 'from-blue-950 to-slate-900',
+    logo: '☁️',
+    exams: [],
+  },
+  {
+    id: 'ibm',
+    name: 'IBM',
+    color: '#1F70C1',
+    bgGradient: 'from-indigo-950 to-slate-900',
+    logo: '🖥️',
+    exams: [],
+  },
 ]
 
 // ─── Types de preguntas ───────────────────────────────────────────────────────
