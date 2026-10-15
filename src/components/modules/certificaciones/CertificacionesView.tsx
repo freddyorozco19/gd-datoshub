@@ -175,6 +175,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#C8202F',
     bgGradient: 'from-red-950 to-slate-900',
     logo: '💻',
+    logoImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwicPNCOBmvfIO3h0Z2q04MgiGX1y-BnmPt3CnF0wAKw&s=10',
     exams: [],
   },
   {
