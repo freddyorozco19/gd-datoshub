@@ -177,7 +177,7 @@ const PROVIDERS: ProviderConfig[] = [
     bgGradient: 'from-red-950 to-slate-900',
     logo: '💻',
     logoImg: '/comptiaEA.png',
-    logoClass: 'max-w-[82%] object-left-top',
+    logoWordmark: true,
     exams: [
       { id: 'da0-002', code: 'DA0-002', name: 'Data+ V2', dataFile: '/data/exam_da0_002_ec.json', questions: 148, level: 'Associate' },
     ],
