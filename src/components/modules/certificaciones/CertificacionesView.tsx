@@ -433,7 +433,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
           src={p.logoImg}
           alt=""
           aria-hidden
-          className={`absolute w-auto object-contain pointer-events-none opacity-100 transition-transform duration-500 ease-out group-hover:scale-110 ${p.logoWordmark ? 'left-4 top-0 h-[68px] max-w-[75%] object-left origin-left' : '-top-3 -left-3 h-[90%] origin-top-left'} ${p.logoDarkInvert ? 'prov-logo-invert' : ''}`}
+          className={`absolute w-auto object-contain pointer-events-none opacity-100 transition-transform duration-500 ease-out group-hover:scale-110 ${p.logoWordmark ? 'left-4 top-[10px] h-[68px] max-w-[75%] object-left origin-left' : '-top-3 -left-3 h-[90%] origin-top-left'} ${p.logoDarkInvert ? 'prov-logo-invert' : ''}`}
           onError={e => { e.currentTarget.style.display = 'none' }}
         />
       ) : (
