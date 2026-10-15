@@ -249,6 +249,13 @@ body {
 .prov-sub   { color: #94a3b8; }
 .light .dashboard-shell .prov-card { --shade: 255 255 255; background-color: #ffffff; border-color: rgba(15, 23, 42, 0.12); }
 .light .dashboard-shell .prov-card:hover { border-color: rgba(15, 23, 42, 0.28); box-shadow: 0 18px 40px -12px rgba(15, 23, 42, 0.25); }
+/* en light el logo debe verse muy lavado (como las cards de referencia): sombra blanca más densa */
+.light .dashboard-shell .prov-shade-bottom {
+  background: linear-gradient(to top, rgb(var(--shade) / 0.97) 0%, rgb(var(--shade) / 0.97) 25%, rgb(var(--shade) / 0.85) 40%, rgb(var(--shade) / 0.5) 58%, transparent 74%);
+}
+.light .dashboard-shell .prov-shade-corner {
+  background: linear-gradient(120deg, rgb(var(--shade) / 0.86) 0%, rgb(var(--shade) / 0.78) 30%, rgb(var(--shade) / 0.4) 48%, transparent 64%);
+}
 .light .dashboard-shell .prov-title { color: #0f172a; }
 .light .dashboard-shell .prov-sub   { color: #475569; }
 
