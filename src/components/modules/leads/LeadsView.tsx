@@ -389,7 +389,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                 {mFiltered.map((lead) => (
                   <tr key={lead.id} onClick={() => setDetailLead(lead)}
                     className="row-hover cursor-pointer group">
-                    <td className="px-4 py-3 text-slate-600 whitespace-nowrap tabular-nums">{lead.id}</td>
+                    <td className="lead-name px-4 py-3 font-medium whitespace-nowrap tabular-nums">{lead.id}</td>
                     <td className="px-4 py-3">
                       <p className="lead-name font-medium max-w-[180px] truncate" title={lead.nombre}>{lead.nombre}</p>
                       {lead.correo && <p className="text-slate-400 truncate max-w-[180px] text-[10px]">{lead.correo}</p>}
