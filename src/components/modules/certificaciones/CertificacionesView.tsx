@@ -164,6 +164,7 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#D97757',
     bgGradient: 'from-orange-950 to-slate-900',
     logo: '🤖',
+    logoImg: 'https://download.logo.wine/logo/Anthropic/Anthropic-Logo.wine.png',
     exams: [],
   },
   {
