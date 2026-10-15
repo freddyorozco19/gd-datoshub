@@ -1,0 +1,594 @@
+[
+  {
+    "num": 1,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/1-data-concepts-and-environments"
+  },
+  {
+    "num": 2,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/2-visualization-and-reporting"
+  },
+  {
+    "num": 3,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/3-data-concepts-and-environments"
+  },
+  {
+    "num": 4,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/4-data-analysis"
+  },
+  {
+    "num": 5,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/5-data-governance"
+  },
+  {
+    "num": 6,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/6-visualization-and-reporting"
+  },
+  {
+    "num": 7,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/7-data-concepts-and-environments"
+  },
+  {
+    "num": 8,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/8-data-analysis"
+  },
+  {
+    "num": 9,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/9-data-concepts-and-environments"
+  },
+  {
+    "num": 10,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/10-data-analysis"
+  },
+  {
+    "num": 11,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/11-data-acquisition-and-preparation"
+  },
+  {
+    "num": 12,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/12-data-acquisition-and-preparation"
+  },
+  {
+    "num": 13,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/13-visualization-and-reporting"
+  },
+  {
+    "num": 14,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/14-data-concepts-and-environments"
+  },
+  {
+    "num": 15,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/15-visualization-and-reporting"
+  },
+  {
+    "num": 16,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/16-data-governance"
+  },
+  {
+    "num": 17,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/17-data-governance"
+  },
+  {
+    "num": 18,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/18-visualization-and-reporting"
+  },
+  {
+    "num": 19,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/19-data-governance"
+  },
+  {
+    "num": 20,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/20-data-concepts-and-environments"
+  },
+  {
+    "num": 21,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/21-data-concepts-and-environments"
+  },
+  {
+    "num": 22,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/22-data-concepts-and-environments"
+  },
+  {
+    "num": 23,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/23-data-analysis"
+  },
+  {
+    "num": 24,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/24-data-analysis"
+  },
+  {
+    "num": 25,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/25-data-analysis"
+  },
+  {
+    "num": 26,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/26-data-governance"
+  },
+  {
+    "num": 27,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/27-data-acquisition-and-preparation"
+  },
+  {
+    "num": 28,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/28-data-analysis"
+  },
+  {
+    "num": 29,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/29-data-acquisition-and-preparation"
+  },
+  {
+    "num": 30,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/30-data-analysis"
+  },
+  {
+    "num": 31,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/31-visualization-and-reporting"
+  },
+  {
+    "num": 32,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/32-data-analysis"
+  },
+  {
+    "num": 33,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/33-data-concepts-and-environments"
+  },
+  {
+    "num": 34,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/34-data-concepts-and-environments"
+  },
+  {
+    "num": 35,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/35-visualization-and-reporting"
+  },
+  {
+    "num": 36,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/36-data-governance"
+  },
+  {
+    "num": 37,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/37-visualization-and-reporting"
+  },
+  {
+    "num": 38,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/38-data-concepts-and-environments"
+  },
+  {
+    "num": 39,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/39-data-analysis"
+  },
+  {
+    "num": 40,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/40-data-analysis"
+  },
+  {
+    "num": 41,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/41-data-acquisition-and-preparation"
+  },
+  {
+    "num": 42,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/42-data-analysis"
+  },
+  {
+    "num": 43,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/43-data-analysis"
+  },
+  {
+    "num": 44,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/44-data-governance"
+  },
+  {
+    "num": 45,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/45-data-governance"
+  },
+  {
+    "num": 46,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/46-visualization-and-reporting"
+  },
+  {
+    "num": 47,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/47-data-acquisition-and-preparation"
+  },
+  {
+    "num": 48,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/48-data-concepts-and-environments"
+  },
+  {
+    "num": 49,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/49-data-acquisition-and-preparation"
+  },
+  {
+    "num": 50,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/50-visualization-and-reporting"
+  },
+  {
+    "num": 51,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/51-data-analysis"
+  },
+  {
+    "num": 52,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/52-data-analysis"
+  },
+  {
+    "num": 53,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/53-data-concepts-and-environments"
+  },
+  {
+    "num": 54,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/54-visualization-and-reporting"
+  },
+  {
+    "num": 55,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/55-data-analysis"
+  },
+  {
+    "num": 56,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/56-data-analysis"
+  },
+  {
+    "num": 57,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/57-data-acquisition-and-preparation"
+  },
+  {
+    "num": 58,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/58-data-analysis"
+  },
+  {
+    "num": 59,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/59-data-concepts-and-environments"
+  },
+  {
+    "num": 60,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/60-data-analysis"
+  },
+  {
+    "num": 61,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/61-data-analysis"
+  },
+  {
+    "num": 62,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/62-data-analysis"
+  },
+  {
+    "num": 63,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/63-data-analysis"
+  },
+  {
+    "num": 64,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/64-data-analysis"
+  },
+  {
+    "num": 65,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/65-data-concepts-and-environments"
+  },
+  {
+    "num": 66,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/66-data-analysis"
+  },
+  {
+    "num": 67,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/67-data-concepts-and-environments"
+  },
+  {
+    "num": 68,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/68-data-concepts-and-environments"
+  },
+  {
+    "num": 69,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/69-data-analysis"
+  },
+  {
+    "num": 70,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/70-data-governance"
+  },
+  {
+    "num": 71,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/71-visualization-and-reporting"
+  },
+  {
+    "num": 72,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/72-data-analysis"
+  },
+  {
+    "num": 73,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/73-data-governance"
+  },
+  {
+    "num": 74,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/74-data-concepts-and-environments"
+  },
+  {
+    "num": 75,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/75-data-analysis"
+  },
+  {
+    "num": 76,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/76-data-concepts-and-environments"
+  },
+  {
+    "num": 77,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/77-data-governance"
+  },
+  {
+    "num": 78,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/78-data-analysis"
+  },
+  {
+    "num": 79,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/79-data-analysis"
+  },
+  {
+    "num": 80,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/80-data-governance"
+  },
+  {
+    "num": 81,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/81-data-concepts-and-environments"
+  },
+  {
+    "num": 82,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/82-data-analysis"
+  },
+  {
+    "num": 83,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/83-data-analysis"
+  },
+  {
+    "num": 84,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/84-visualization-and-reporting"
+  },
+  {
+    "num": 85,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/85-visualization-and-reporting"
+  },
+  {
+    "num": 86,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/86-visualization-and-reporting"
+  },
+  {
+    "num": 87,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/87-data-analysis"
+  },
+  {
+    "num": 88,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/88-data-analysis"
+  },
+  {
+    "num": 89,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/89-data-concepts-and-environments"
+  },
+  {
+    "num": 90,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/90-data-concepts-and-environments"
+  },
+  {
+    "num": 91,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/91-visualization-and-reporting"
+  },
+  {
+    "num": 92,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/92-data-analysis"
+  },
+  {
+    "num": 93,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/93-data-acquisition-and-preparation"
+  },
+  {
+    "num": 94,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/94-data-analysis"
+  },
+  {
+    "num": 95,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/95-data-acquisition-and-preparation"
+  },
+  {
+    "num": 96,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/96-data-governance"
+  },
+  {
+    "num": 97,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/97-visualization-and-reporting"
+  },
+  {
+    "num": 98,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/98-data-acquisition-and-preparation"
+  },
+  {
+    "num": 99,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/99-visualization-and-reporting"
+  },
+  {
+    "num": 100,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/100-data-acquisition-and-preparation"
+  },
+  {
+    "num": 101,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/101-data-analysis"
+  },
+  {
+    "num": 102,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/102-data-acquisition-and-preparation"
+  },
+  {
+    "num": 103,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/103-data-concepts-and-environments"
+  },
+  {
+    "num": 104,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/104-visualization-and-reporting"
+  },
+  {
+    "num": 105,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/105-data-governance"
+  },
+  {
+    "num": 106,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/106-data-concepts-and-environments"
+  },
+  {
+    "num": 107,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/107-data-analysis"
+  },
+  {
+    "num": 108,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/108-data-acquisition-and-preparation"
+  },
+  {
+    "num": 109,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/109-data-governance"
+  },
+  {
+    "num": 110,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/110-visualization-and-reporting"
+  },
+  {
+    "num": 111,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/111-data-governance"
+  },
+  {
+    "num": 112,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/112-data-analysis"
+  },
+  {
+    "num": 113,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/113-data-acquisition-and-preparation"
+  },
+  {
+    "num": 114,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/114-data-concepts-and-environments"
+  },
+  {
+    "num": 115,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/115-data-analysis"
+  },
+  {
+    "num": 116,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/116-data-concepts-and-environments"
+  },
+  {
+    "num": 117,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/117-data-analysis"
+  },
+  {
+    "num": 118,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/118-data-governance"
+  },
+  {
+    "num": 119,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/119-data-acquisition-and-preparation"
+  },
+  {
+    "num": 120,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/120-data-acquisition-and-preparation"
+  },
+  {
+    "num": 121,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/121-data-analysis"
+  },
+  {
+    "num": 122,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/122-data-analysis"
+  },
+  {
+    "num": 123,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/123-data-governance"
+  },
+  {
+    "num": 124,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/124-data-concepts-and-environments"
+  },
+  {
+    "num": 125,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/125-data-analysis"
+  },
+  {
+    "num": 126,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/126-data-analysis"
+  },
+  {
+    "num": 127,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/127-visualization-and-reporting"
+  },
+  {
+    "num": 128,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/128-data-acquisition-and-preparation"
+  },
+  {
+    "num": 129,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/129-data-concepts-and-environments"
+  },
+  {
+    "num": 130,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/130-visualization-and-reporting"
+  },
+  {
+    "num": 131,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/131-data-acquisition-and-preparation"
+  },
+  {
+    "num": 132,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/132-data-governance"
+  },
+  {
+    "num": 133,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/133-data-analysis"
+  },
+  {
+    "num": 134,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/134-data-analysis"
+  },
+  {
+    "num": 135,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/135-data-governance"
+  },
+  {
+    "num": 136,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/136-data-analysis"
+  },
+  {
+    "num": 137,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/137-visualization-and-reporting"
+  },
+  {
+    "num": 138,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/138-data-concepts-and-environments"
+  },
+  {
+    "num": 139,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/139-data-analysis"
+  },
+  {
+    "num": 140,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/140-visualization-and-reporting"
+  },
+  {
+    "num": 141,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/141-data-analysis"
+  },
+  {
+    "num": 142,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/142-data-analysis"
+  },
+  {
+    "num": 143,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/143-visualization-and-reporting"
+  },
+  {
+    "num": 144,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/144-data-analysis"
+  },
+  {
+    "num": 145,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/145-data-concepts-and-environments"
+  },
+  {
+    "num": 146,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/146-data-concepts-and-environments"
+  },
+  {
+    "num": 147,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/147-data-analysis"
+  },
+  {
+    "num": 148,
+    "href": "https://examcademy.com/exams/comptia/da0-002/q/148-visualization-and-reporting"
+  }
+]

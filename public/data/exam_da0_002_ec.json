@@ -1,0 +1,2926 @@
+{
+  "examTitle": "CompTIA Data+ V2",
+  "totalQuestions": 148,
+  "scrapedAt": "2026-10-15T20:23:49.968Z",
+  "questions": [
+    {
+      "number": "1",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "A company’s complete server environment is located at its headquarters. Which of the following characterizes this type of environment?",
+      "translation": "",
+      "options": [
+        "A. Cloud",
+        "B. On premises",
+        "C. Public",
+        "D. Hybrid"
+      ],
+      "correctAnswer": "B",
+      "explanation": "An on-premises environment hosts servers at an organization’s own physical location, such as its headquarters, rather than in a cloud provider’s infrastructure or a hybrid arrangement.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "2",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data engineer must create a reporting solution with preset filters and the capability to download .csv files. Which option is the best solution?",
+      "translation": "",
+      "options": [
+        "A. Developing a dynamic dashboard that refreshes daily",
+        "B. Generating a weekly executive summary",
+        "C. Creating a self-service portal on the company's intranet",
+        "D. Building an email template to request ad hoc reports"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A self-service portal on the company intranet can provide predefined report filters for users and enable them to export the resulting data as CSV files.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "3",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following file formats separates data with a delimiter?",
+      "translation": "",
+      "options": [
+        "A. XML",
+        "B. HTML",
+        "C. JSON",
+        "D. CSV"
+      ],
+      "correctAnswer": "D",
+      "explanation": "CSV files store tabular data as delimited text, with a comma commonly separating individual fields.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "4",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst produces a report that identifies the middle 50% of the collected data. Which option best describes the analyst’s findings?",
+      "translation": "",
+      "options": [
+        "A. Interquartile range",
+        "B. The difference between mode and median",
+        "C. Mean variance",
+        "D. Skewness from the slope"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The interquartile range measures the spread of the middle 50% of observations, from the first quartile (Q1) through the third quartile (Q3).",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "5",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "Which option best explains the purpose of data lineage?",
+      "translation": "",
+      "options": [
+        "A. To see the steps and path of data flow through different systems",
+        "B. To better understand the granularity of data variable relationships",
+        "C. To track data transformations from acquisition through reporting",
+        "D. To look up data definitions, ensuring consistent use across business units"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Data lineage tracks data from its origin through the transformations applied to it and its downstream reporting or consumption. It provides an end-to-end record of how data changes and moves throughout its lifecycle. LEARN MORE Microsoft Purview Data Governance glossary Data lineage in classic Microsoft Purview Data Catalog",
+      "learnMore": [
+        "Microsoft Purview Data Governance glossary",
+        "Data lineage in classic Microsoft Purview Data Catalog"
+      ],
+      "images": []
+    },
+    {
+      "number": "6",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A financial firm provides an analyst with requirements for a sales dashboard. Using sample data and other components, the analyst creates a product to show the firm what the finished product will most likely look like. Which option best describes the analyst’s approach?",
+      "translation": "",
+      "options": [
+        "A. Designing a mock-up to gather feedback and ensure requirements are understood",
+        "B. Creating an accessibility product to ensure the firm can access the sales dashboard",
+        "C. Developing a sample dashboard to show the level of detail required for the product",
+        "D. Ensuring that all of the colors and graphics align with the firm's requirements"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A mock-up uses representative content and design elements to communicate a proposed product’s expected appearance, validate that requirements are understood, and obtain stakeholder feedback before full development.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "7",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "A data scientist is delivering a summary presentation on current AI trends in the data industry to local high school students. Which factor should the data scientist consider first when creating the presentation?",
+      "translation": "",
+      "options": [
+        "A. The technical knowledge of the audience",
+        "B. The frequency of reporting",
+        "C. The accessibility of the slide deck",
+        "D. The sensitivity of the data"
+      ],
+      "correctAnswer": "A",
+      "explanation": "An effective presentation must match the audience’s technical knowledge so that its concepts, vocabulary, examples, and level of detail are understandable to the intended high school audience.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "8",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst must combine results from two separate queries with similar data and an equal number of columns. The output must contain distinct rows. Which of the following should the data analyst use?",
+      "translation": "",
+      "options": [
+        "A. Outer join",
+        "B. Aggregate",
+        "C. Union",
+        "D. Concatenate"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The SQL UNION operation combines the results of independent queries with compatible columns and, by default, excludes duplicate rows. UNION ALL would retain duplicates. LEARN MORE UNION operation (Microsoft Access SQL)",
+      "learnMore": [
+        "UNION operation (Microsoft Access SQL)"
+      ],
+      "images": []
+    },
+    {
+      "number": "9",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "While working with a data set, a data analyst discovers that copies of the data are distributed across several data repositories worldwide. Which concept best describes this practice?",
+      "translation": "",
+      "options": [
+        "A. Redundancy",
+        "B. High availability",
+        "C. Replication",
+        "D. Duplication"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Data replication is the practice of maintaining copies of data across multiple repositories or locations, often to support availability, resilience, and geographic distribution.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "10",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analysis team must segment customers according to their spending behavior. Given one million rows of data like the information in the following sales order table: Which of the following techniques should the team use for this task?",
+      "translation": "",
+      "options": [
+        "A. Standardization",
+        "B. Concatenate",
+        "C. Binning",
+        "D. Appending"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Binning groups continuous numeric spending values, such as Amount_spent, into defined ranges. Those ranges create customer spending segments such as low, medium, and high spenders.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q10_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "11",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "An engineer must build an ETL process to calculate the average sales for individual stores. Each store submits its sales data in .csv files. Which action would the engineer most likely perform on the data?",
+      "translation": "",
+      "options": [
+        "A. Parse the files to create individual data sets",
+        "B. Convert the values to different data types",
+        "C. Impute any missing date values",
+        "D. Merge the files with an open-source data set"
+      ],
+      "correctAnswer": "A",
+      "explanation": "CSV sales files must be parsed into structured individual datasets before their sales values can be processed and aggregated to calculate store-level averages.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "12",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "Which of the following best characterizes the method for combining files, software, and libraries for use across different operating systems and environments?",
+      "translation": "",
+      "options": [
+        "A. Package manager",
+        "B. Code repository",
+        "C. Virtual machine",
+        "D. Containerization"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Containerization packages an application and its required files, binaries, libraries, configuration, and dependencies into a standardized container image. This provides a portable, consistent runtime environment across compatible systems and deployment environments. LEARN MORE Docker Docs: What is an image? Docker Docs: Multi-platform builds",
+      "learnMore": [
+        "Docker Docs: What is an image?",
+        "Docker Docs: Multi-platform builds"
+      ],
+      "images": []
+    },
+    {
+      "number": "13",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A manager wants to understand how the company’s sales have improved during the past year. The manager asks a data analyst to prepare a report containing the necessary information. Which of the following approaches should the analyst use?",
+      "translation": "",
+      "options": [
+        "A. Granular",
+        "B. Mock-up",
+        "C. Key performance indicators",
+        "D. Accessibility"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Key performance indicators (KPIs) are measurable values used to evaluate business performance against objectives over time. Sales KPIs can show year-over-year improvement through measures such as revenue, sales growth rate, conversion rate, or units sold.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "14",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which data repository should a company use to store structured data for the entire company in a predefined data structure?",
+      "translation": "",
+      "options": [
+        "A. Data mart",
+        "B. Data warehouse",
+        "C. Data silo",
+        "D. Data lake"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A data warehouse centrally consolidates structured data from multiple sources and stores it in defined schemas, supporting organization-wide reporting and analytics. A data mart is a smaller, subject-specific subset; a data silo is isolated; and a data lake commonly retains raw structured, semi-structured, and unstructured data. LEARN MORE AWS Data Warehouse Architecture",
+      "learnMore": [
+        "AWS Data Warehouse Architecture"
+      ],
+      "images": []
+    },
+    {
+      "number": "15",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst is creating a report for external users. The analyst must make sure that visuals are identifiable as belonging to the organization. What should the analyst add to the report to best satisfy this requirement?",
+      "translation": "",
+      "options": [
+        "A. Legal disclaimer",
+        "B. Infographic",
+        "C. Subtitle",
+        "D. Watermark"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A watermark places an organization’s identifying branding or mark directly on visuals, helping establish that they belong to that organization.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "16",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "An analyst must create a collection of dashboards for several teams across the organization. Which action should the analyst take first before beginning the project?",
+      "translation": "",
+      "options": [
+        "A. Evaluate the user persona type for the dashboards.",
+        "B. Determine the number of team members who need to access the dashboards.",
+        "C. Determine the delivery method of the dashboards.",
+        "D. Evaluate the KPIs for the dashboards."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Dashboard projects should begin with identifying the target user personas. Their roles, decisions, information needs, and preferred ways of using dashboards determine the relevant KPIs, access requirements, and delivery method.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "17",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "Which of the following describes the purpose of UAT?",
+      "translation": "",
+      "options": [
+        "A. To begin the software application development process to enhance user experience",
+        "B. To ensure all parts of the software application work together after each sprint",
+        "C. To review software application crashes, create patches, and deploy to users",
+        "D. To validate and verify that a software application meets the needs and requirements of users"
+      ],
+      "correctAnswer": "D",
+      "explanation": "User acceptance testing validates that a software application fulfills its users’ needs and requirements before acceptance or release.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "18",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A business intelligence analyst is building an employee-retention dashboard using data from the last five years. The analyst wants to identify patterns that can be examined further. Which of the following is the best method to apply to the dashboard?",
+      "translation": "",
+      "options": [
+        "A. Predictive",
+        "B. Prescriptive",
+        "C. Diagnostic",
+        "D. Descriptive"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Descriptive analytics summarizes historical data to reveal trends and patterns. A dashboard based on five years of employee-retention data is intended to show what has occurred and highlight patterns for later investigation.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "19",
+      "topic": "Data governance",
+      "questionType": "multi-answer",
+      "questionText": "A data analyst worked on a project containing medical content and a list of requirements. Which of the following were most likely reasons the privacy team flagged the analyst’s report?",
+      "translation": "",
+      "options": [
+        "A. The exclusion of data occurred only after a participant invoked a right to withdraw.",
+        "B. The method used to anonymize identifying values in the data was insufficient.",
+        "C. The practice of data masking was irreversible and all PII was lost.",
+        "D. The directive did not mention that it was vital for PHI to be encrypted in the data set.",
+        "E. The retention policy did not allow data to be used beyond one year after the project.",
+        "F. The collection of data was stored according to protocols that are too strict."
+      ],
+      "correctAnswer": "BD",
+      "explanation": "Health information must be de-identified so that it neither identifies an individual nor leaves a reasonable basis to identify one; an insufficient anonymization method therefore creates a privacy risk. Encryption is an important safeguard for electronic PHI, rendering it unreadable to unauthorized parties when implemented appropriately. LEARN MORE HHS: Guidance Regarding Methods for De-identification of Protected Health Information HHS: Guidance to Render Unsecured Protected Health Information Unusable, Unreadable, or Indecipherable",
+      "learnMore": [
+        "HHS: Guidance Regarding Methods for De-identification of Protected Health Information",
+        "HHS: Guidance to Render Unsecured Protected Health Information Unusable, Unreadable, or Indecipherable"
+      ],
+      "images": []
+    },
+    {
+      "number": "20",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following best characterizes a Boolean?",
+      "translation": "",
+      "options": [
+        "A. Must be a character",
+        "B. Must be two values only",
+        "C. Must be numeric",
+        "D. Must be system-created"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A Boolean represents a logical value with exactly two possible states: true or false.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "21",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following enables isolated applications to be transferred across multiple environments?",
+      "translation": "",
+      "options": [
+        "A. Virtualization",
+        "B. Version control",
+        "C. Continuous integration",
+        "D. Containerization"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Containerization packages an application and its dependencies into an isolated unit that can run consistently across different environments.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "22",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which option best describes a type of infrastructure in which a company must purchase and maintain all of its own servers?",
+      "translation": "",
+      "options": [
+        "A. Private",
+        "B. Cloud",
+        "C. Hybrid",
+        "D. Public"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Private infrastructure is owned and managed by the organization itself, including purchasing, operating, and maintaining its server hardware.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "23",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to analyze sales data for potential customer patterns. Which of the following should the analyst use to accomplish this task?",
+      "translation": "",
+      "options": [
+        "A. Standardizing",
+        "B. Clustering",
+        "C. Merging",
+        "D. Scaling"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Clustering groups customers or sales records with similar characteristics, helping identify customer segments and patterns in sales data.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "24",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A report that had been working previously now returns the following error: > The column FullName is invalid or does not exist. Which action should a data analyst take to investigate this issue?",
+      "translation": "",
+      "options": [
+        "A. Consult the data flow diagram to view the table definition.",
+        "B. Check report logs for other column errors.",
+        "C. Rerun the report to see if the column error is transient.",
+        "D. Query the table to determine the valid column names."
+      ],
+      "correctAnswer": "D",
+      "explanation": "A missing or invalid column reference is investigated by checking the current table schema for its valid column names. Querying table metadata provides the authoritative column list and identifies whether FullName was renamed, removed, or referenced incorrectly.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "25",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst finds that a field storing customer IDs in a specified format contains invalid values. Which of the following could help the analyst identify the problem?",
+      "translation": "",
+      "options": [
+        "A. Outliers",
+        "B. Validation",
+        "C. Redundancy",
+        "D. Completeness"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Validation checks whether data values conform to defined rules, such as the required format for customer IDs, and can identify improperly formatted values.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "26",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "Which of the following types of information would create a data privacy violation if it were made public?",
+      "translation": "",
+      "options": [
+        "A. Gender",
+        "B. Driver’s license",
+        "C. Age",
+        "D. Employment status"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A driver’s license is government-issued personally identifiable information that can uniquely identify an individual and may enable identity theft or other misuse if publicly disclosed.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "27",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A database administrator is trying to load a collection of database logs into a software system. When the data is processed, the administrator receives a notification that the process failed because the data size exceeds the system memory. Which of the following is the best way for the administrator to resolve this issue?",
+      "translation": "",
+      "options": [
+        "A. Use internal storage for processing.",
+        "B. Analyze the logs for errors.",
+        "C. Perform chunking on the data.",
+        "D. Increase the memory size of the system."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Chunking splits a large log data set into smaller, manageable portions so each portion can be processed within the system's available memory.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "28",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "Which of the following distinguishes stress testing from UAT?",
+      "translation": "",
+      "options": [
+        "A. Stress testing engages end users in the testing process",
+        "B. Stress testing gathers feedback to share with developers",
+        "C. Stress testing identifies potential failures and optimizes performance",
+        "D. Stress testing detects flaws missed during design and development"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Stress testing subjects a system to unusually high or extreme workloads to expose potential failures, capacity limits, and performance bottlenecks. UAT validates that the system meets end-user and business requirements.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "29",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to create a report that analyzes the flow of services from call receipt through service completion by using established time points. Which technique should the analyst use to create the required variables?",
+      "translation": "",
+      "options": [
+        "A. Binning",
+        "B. Calculating",
+        "C. Scaling",
+        "D. Parsing"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Calculating creates derived variables from established time points, including elapsed durations between call receipt and service completion.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "30",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is examining the following data set: Which method should the analyst use to calculate the total cost of each transaction?",
+      "translation": "",
+      "options": [
+        "A. Parsing",
+        "B. Scaling",
+        "C. Compressing",
+        "D. Deriving"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Deriving creates a new calculated value from existing fields. The total cost for each transaction is derived by multiplying the quantity by the item price.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q30_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "31",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst must modify a dashboard created by another employee. When opening the dashboard, the analyst observes that the information is not loading correctly. Which action should the analyst take to troubleshoot this error?",
+      "translation": "",
+      "options": [
+        "A. Review the data layer and data source",
+        "B. Validate that the database is up to date",
+        "C. Check that the program is updated to the latest version.",
+        "D. Ensure the correct filters are displaying on the dashboard"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Dashboard content depends on the data layer and its connected data source. Reviewing them can reveal broken connections, unavailable source data, permission issues, failed queries, or refresh failures that prevent information from loading.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "32",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "Given the following dataset: Which of the following is the median?",
+      "translation": "",
+      "options": [
+        "A. 59",
+        "B. 67",
+        "C. 70",
+        "D. 74"
+      ],
+      "correctAnswer": "D",
+      "explanation": "For an even number of values, the median is the average of the two middle values after sorting the data. The middle scores are 72 and 76, whose average is 74.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q32_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "33",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Given the following table: Which data type should an analyst use for the numeric values in the Value column?",
+      "translation": "",
+      "options": [
+        "A. Double",
+        "B. Float",
+        "C. Boolean",
+        "D. Integer"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A Double data type stores decimal values with substantially greater precision than a Float, making it appropriate for large fractional values, including values expressed in scientific notation.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q33_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "34",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following best illustrates a slowly changing dimension in a data warehouse?",
+      "translation": "",
+      "options": [
+        "A. A customer table that is overwritten every morning without keeping history",
+        "B. A piece of historical customer data that is removed from the table",
+        "C. A new table created each day with updated customer data",
+        "D. An address from the customer table that is overwritten when changed"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A customer address is a dimensional attribute that may change infrequently. Replacing its existing value when it changes is a Type 1 slowly changing dimension method; it updates the current value without preserving history.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "35",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst is developing a dashboard for a group of stakeholders with visual impairments. Which of the following communication approaches is most appropriate?",
+      "translation": "",
+      "options": [
+        "A. Inform the supervisor that the stakeholders need assistance during the meeting.",
+        "B. Partner with the human resources department to advocate on behalf of the stakeholders.",
+        "C. Incorporate audio accessibility functions into graphics for all instances of the interface.",
+        "D. Present a custom slide presentation with interactive sound effects."
+      ],
+      "correctAnswer": "C",
+      "explanation": "Accessible dashboards should incorporate audio accessibility features into graphical interface elements so that people with visual impairments can access the information throughout the interface.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "36",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A data analyst built a dashboard showing the traffic volume and average response time for a call center. The traffic data is current, but the average response time has not been updated for over an hour. Which of the following is the best method to verify the data's freshness?",
+      "translation": "",
+      "options": [
+        "A. Refactoring the code base",
+        "B. Testing for network connectivity issues",
+        "C. Checking the last time the calculation script ran",
+        "D. Determining the number of calls with no time stamps"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The freshness of a derived metric such as mean response time is verified by checking when the script or process that calculates it most recently ran. This directly confirms whether the calculation has been refreshed.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "37",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst is assisting a company in achieving its strategic goals. Which type of analytics should the analyst include in the dashboards and tools provided to the company?",
+      "translation": "",
+      "options": [
+        "A. Prescriptive",
+        "B. Predictive",
+        "C. Diagnostic",
+        "D. Descriptive"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Prescriptive analytics uses available information, forecasts, and constraints to recommend actions that best support specified business objectives and strategic goals.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "38",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "A data analyst is designing a report for a grocery chain and needs to include stores, product placement, and SKUs. Which option best describes the data-management concept the analyst is considering?",
+      "translation": "",
+      "options": [
+        "A. Versioning",
+        "B. Hierarchy",
+        "C. Monitoring",
+        "D. Lineage"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A hierarchy organizes related data into ordered levels or parent-child relationships, such as stores, product placement, and individual SKUs.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "39",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A Chief Executive Officer (CEO) reviews sales-report results and observes that the company’s performance declined in the last quarter. The CEO requires more information to understand the reason. Which of the following is the best analysis method for a data analyst to use?",
+      "translation": "",
+      "options": [
+        "A. Prescriptive",
+        "B. Descriptive",
+        "C. Diagnostic",
+        "D. Predictive"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Diagnostic analysis examines historical data to identify the factors and root causes behind an observed outcome, such as a decline in sales performance during the prior quarter.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "40",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data professional needs to identify every customer who made a purchase in January. Given the following table: Which type of function should the professional use to flag those customers?",
+      "translation": "",
+      "options": [
+        "A. Statistical",
+        "B. Logical",
+        "C. Mathematical",
+        "D. Date"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Logical functions evaluate conditions and return results based on whether a condition is true or false. A condition such as whether the Month value equals January can be used to flag the applicable customers.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q40_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "41",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst is developing a user sentiment analysis for a new product. Which of the following is the best way to obtain the data?",
+      "translation": "",
+      "options": [
+        "A. Surveying customers",
+        "B. Sampling sources",
+        "C. Querying databases",
+        "D. Downloading open data"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Customer surveys directly collect users’ opinions, attitudes, and feedback about a product, making them the most appropriate source for sentiment analysis.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "42",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst produces a report on the time elapsed between sequential events. The dataset contains several rows with negative integers in the elapsed-time column. What is the best way to address this issue?",
+      "translation": "",
+      "options": [
+        "A. Analyze the data set as collected",
+        "B. Validate the data set before analysis",
+        "C. Delete the rows in the data set with negative values",
+        "D. Convert the negative values to positive values"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Negative elapsed-time values indicate a potential data-quality or event-ordering problem. Validating the dataset before analysis identifies the source of the invalid values and supports an appropriate corrective action without discarding or altering data prematurely.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "43",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is asked for the current employee head count and executes this SQL statement: The resulting head count is higher than anticipated because employees may hold multiple jobs. Which of the following should return an accurate employee head count?",
+      "translation": "",
+      "options": [
+        "A. SELECT JOB_TYPE, COUNT DISTINCT(EMPLOYEE_ID)FROM JOBS",
+        "B. SELECT DISTINCT COUNT(EMPLOYEE_ID)FROM JOBS",
+        "C. SELECT JOB_TYPE, COUNT(DISTINCT EMPLOYEE_ID)FROM JOBS",
+        "D. SELECT COUNT(DISTINCT EMPLOYEE_ID)FROM JOBS"
+      ],
+      "correctAnswer": "D",
+      "explanation": "COUNT(DISTINCT EMPLOYEE_ID) counts every unique employee identifier once, preventing employees with multiple job records from being counted multiple times.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "44",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A manager wants a report showing the days off for every direct report. The manager requires the report to always be current with the latest data. Which of the following describes the refresh frequency the manager is requesting?",
+      "translation": "",
+      "options": [
+        "A. Real-time",
+        "B. Ad hoc",
+        "C. Snapshot",
+        "D. Dynamic"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Real-time reporting uses current underlying data when the report is accessed, so changes to employees’ days-off information are reflected without relying on a previously captured snapshot.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "45",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A company grants users sufficient data-access permissions to perform their duties, but no more. Which of the following concepts most accurately describes this practice?",
+      "translation": "",
+      "options": [
+        "A. Active Directory",
+        "B. Hierarchical access",
+        "C. Zero Trust",
+        "D. Least privilege"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Least privilege restricts users to the minimum permissions necessary to perform their job responsibilities, reducing unnecessary access and associated security risk. LEARN MORE Enhance security with the principle of least privilege",
+      "learnMore": [
+        "Enhance security with the principle of least privilege"
+      ],
+      "images": []
+    },
+    {
+      "number": "46",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst is creating a report for the business review team. The team identifies these requirements for the report: Specific data points Color branding Labels and terminology Suggested charts and tables Which of the following components is absent from the requirements?",
+      "translation": "",
+      "options": [
+        "A. Source validation",
+        "B. Design elements",
+        "C. Delivery method",
+        "D. Report type"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A delivery method specifies how report consumers will receive or access the output—such as a static file, email distribution, or an interactive dashboard. That requirement affects the report’s format, capabilities, and implementation. The listed items already cover data content and visual design.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "47",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst is cleaning a data set that contains images. The analyst wants to retain everything produced within the past 12 months. Which option best identifies where the analyst should look for each product’s creation date?",
+      "translation": "",
+      "options": [
+        "A. The data dictionary of the data set",
+        "B. The metadata of each item in the data set",
+        "C. The data set creation date on the database",
+        "D. The folder creation date on the filesystem"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Individual images’ creation dates are stored in the metadata associated with each item. Dataset, database, and folder creation dates describe their respective containers rather than the production date of every image within them.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "48",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following data repositories stores both unstructured and structured data?",
+      "translation": "",
+      "options": [
+        "A. Data store",
+        "B. Data silo",
+        "C. Data mart",
+        "D. Data lake"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A data lake stores raw data in many formats, including structured data such as relational tables and unstructured data such as documents, images, audio, and logs.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "49",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data engineer needs to add a process that runs after an employee table has been loaded. The engineer does not know the name of the process that loads the employee data. Which of the following is the best document to review to find this information?",
+      "translation": "",
+      "options": [
+        "A. Data flow diagram",
+        "B. Data dictionary",
+        "C. Data explainability report",
+        "D. Data lineage report"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A data lineage report documents the flow of data and the processes that create, load, or transform it. It can identify the upstream process responsible for loading the employee table, allowing a dependent process to be added afterward.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "50",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "An analyst is preparing a presentation for a corporate meeting. Which of the following is the most important consideration?",
+      "translation": "",
+      "options": [
+        "A. Engaging visuals",
+        "B. Knowing the audience",
+        "C. Level of detail",
+        "D. Dynamic storytelling"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Understanding the audience is the foundational consideration because it guides the appropriate message, level of detail, terminology, visuals, and presentation approach for the meeting participants.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "51",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "Given the following data set: Which of the following values is the mode?",
+      "translation": "",
+      "options": [
+        "A. 35",
+        "B. 37",
+        "C. 41",
+        "D. 43"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The mode is the value with the highest frequency in a data set. The value 41 occurs twice, whereas each other value occurs only once.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q51_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "52",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst calculated each student's average score without first modifying the following table: Which exploration technique should the analyst have considered before calculating the average?",
+      "translation": "",
+      "options": [
+        "A. Duplication",
+        "B. Redundancy",
+        "C. Binning",
+        "D. Grouping"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Duplicate records can cause particular student-subject scores to be counted more than once, biasing the calculated average. The data should be checked for duplication before aggregation.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q52_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "53",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which option best describes the purpose of a data flow diagram?",
+      "translation": "",
+      "options": [
+        "A. To show how data has changed over time",
+        "B. To show how data is acquired, processed, and output",
+        "C. To show how data is audited for integrity and consistency",
+        "D. To show how data is managed among business units"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A data flow diagram depicts how data moves through a system, from inputs through processing to outputs.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "54",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A Chief Executive Officer requests a report that must: Summarize company metrics simply Be clear and concise Be easily understood at every company level Remain accessible and updated without manual intervention Which communication approach best fulfills these requirements?",
+      "translation": "",
+      "options": [
+        "A. Executive summary",
+        "B. Slide presentation",
+        "C. Key performance indicator dashboard",
+        "D. Open data portal"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A key performance indicator dashboard provides a concise, visual summary of the metrics most relevant to organizational performance. It can be made broadly accessible and connected to underlying data sources so that metrics refresh automatically, avoiding manual report updates.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "55",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is preparing a forecast for a product line that was introduced early last year. Which of the following should the analyst use to develop projected sales and customer satisfaction for next year?",
+      "translation": "",
+      "options": [
+        "A. Standard deviation and constraints",
+        "B. Mean and median",
+        "C. Boolean data and an array",
+        "D. Numerical and ordinal attributes"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Sales are numerical measurements, and customer-satisfaction ratings have an inherent order (for example, from very dissatisfied to very satisfied), so they are ordinal attributes.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "56",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is examining a new data source containing employee IDs, job titles, dates of birth, addresses, years of service, and employees’ birth months. Which of the following inconsistencies should the analyst identify?",
+      "translation": "",
+      "options": [
+        "A. Redundancy",
+        "B. Completeness",
+        "C. Outliers",
+        "D. Duplication"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Birth month is derivable from an employee’s date of birth. Keeping both fields stores the same underlying information twice, creating redundancy and the risk that the two values become inconsistent.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "57",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst receives a report from a dashboard user indicating that the user's report is taking longer than usual to load. The user requires five components for the dashboard. However, during the investigation, the analyst observes that ten components are attempting to load. Which of the following actions should the analyst take to correct this issue?",
+      "translation": "",
+      "options": [
+        "A. Check the refresh rate on the report server.",
+        "B. Check with the network team for stale network connections.",
+        "C. Check with administrators to review the logs of the report server.",
+        "D. Check the filters to include only the required information."
+      ],
+      "correctAnswer": "D",
+      "explanation": "Filters should limit the dashboard report to the information required by the user. Loading ten components when only five are needed causes unnecessary processing and can increase load time.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "58",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is assessing every condition in a query. Which of the following logical functions is best suited to accomplish this task?",
+      "translation": "",
+      "options": [
+        "A. OR",
+        "B. NOT",
+        "C. AND",
+        "D. IF"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The AND logical function evaluates to true only when all specified conditions are true, making it appropriate for requiring every query condition to be satisfied.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "59",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following is the most suitable language to use in a notebook?",
+      "translation": "",
+      "options": [
+        "A. Haskell",
+        "B. Python",
+        "C. JavaScript",
+        "D. SAS"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Python is the standard language for notebook-based work because notebook platforms have broad Python support and its ecosystem is well suited to interactive analysis, visualization, and machine learning.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "60",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is developing a statistical table containing basic information about a data set. Which of the following is the most appropriate statistical method for this scenario?",
+      "translation": "",
+      "options": [
+        "A. Descriptive",
+        "B. Predictive",
+        "C. Inferential",
+        "D. Prescriptive"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Descriptive statistics organize and summarize the basic characteristics of a data set, commonly through tables, measures of central tendency, and measures of variability.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "61",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "An analyst needs to combine the following two tables. The analyst must retain all records in the Medals table and only matching records from the Country table. Which of the following methods should the analyst use for this task?",
+      "translation": "",
+      "options": [
+        "A. Join",
+        "B. Insert",
+        "C. Union",
+        "D. Append"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A left outer join retains every record from the Medals table and adds Country data only where the Person_ID values match. A join is the table-combination operation that matches records by a common key.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q61_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "62",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is creating a new report with data from a sales column. During review, the analyst determines that the sales date is stored as a character type. Which of the following function types should be used to filter for a particular month?",
+      "translation": "",
+      "options": [
+        "A. Mathematical",
+        "B. String",
+        "C. Logical",
+        "D. Table"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A sales date stored as a character value must be handled with string functions to extract or compare the month portion of its textual representation. Date calculations generally require a value to be converted to a date type first; absent that conversion, month-based filtering operates on the string content. LEARN MORE Tableau Type Conversion",
+      "learnMore": [
+        "Tableau Type Conversion"
+      ],
+      "images": []
+    },
+    {
+      "number": "63",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to create a new field that flags sales occurring in the month of January from the following sales table: Which type of function should the analyst use to produce the desired results?",
+      "translation": "",
+      "options": [
+        "A. Logical",
+        "B. Date",
+        "C. Aggregate",
+        "D. String"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Logical functions evaluate conditions and return values based on whether those conditions are true or false. A January-sales flag can be created with an expression such as IF([Month] = \"January\", 1, 0).",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q63_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "64",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to group service calls into low-, medium-, and high-priority levels to analyze organizational responses. Which technique should the analyst use for this task?",
+      "translation": "",
+      "options": [
+        "A. Augmentation",
+        "B. Imputation",
+        "C. Scaling",
+        "D. Binning"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Binning groups data values into discrete categories or ranges, such as low, medium, and high priority.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "65",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following data repositories retains data in its unaltered form?",
+      "translation": "",
+      "options": [
+        "A. Data lake",
+        "B. Data warehouse",
+        "C. Data table",
+        "D. Data factory"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A data lake stores raw data in its original form, including structured, semi-structured, and unstructured data. Data warehouses typically contain transformed and curated data for analysis.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "66",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to eliminate all duplicate values across two tables, \"Employees\" and \"Managers,\" with SQL SELECT statements. Which of the following should the analyst use for this task?",
+      "translation": "",
+      "options": [
+        "A. SELECT * FROM Employees -UNION ALL -SELECT * FROM Managers",
+        "B. SELECT * FROM Employees -UNION -SELECT * FROM Managers",
+        "C. SELECT * FROM Employees -JOIN -SELECT * FROM Managers",
+        "D. SELECT * FROM Employees -CROSS JOIN -SELECT * FROM Managers"
+      ],
+      "correctAnswer": "B",
+      "explanation": "UNION combines the results of compatible SELECT statements while removing duplicate rows. UNION ALL preserves duplicates, and JOIN or CROSS JOIN combines rows rather than performing duplicate elimination.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "67",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which option best describes the storage type that supplies a unique identifier and metadata information?",
+      "translation": "",
+      "options": [
+        "A. Block storage",
+        "B. Object storage",
+        "C. File storage",
+        "D. Shared storage"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Object storage represents data as objects that include the data itself, metadata describing it, and a unique key or identifier used to retrieve it. LEARN MORE What is Amazon S3?",
+      "learnMore": [
+        "What is Amazon S3?"
+      ],
+      "images": []
+    },
+    {
+      "number": "68",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following file formats uses curly braces to enclose objects?",
+      "translation": "",
+      "options": [
+        "A. XML",
+        "B. JSON",
+        "C. CSV",
+        "D. TXT"
+      ],
+      "correctAnswer": "B",
+      "explanation": "JSON uses curly braces ({}) to delimit objects, which contain zero or more key-value pairs.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "69",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A company has a data breach that exposes information for some customers. A data analyst must classify the customer data as fully affected, partially affected, or not affected. Which technique is best for quantifying the scope of the breach?",
+      "translation": "",
+      "options": [
+        "A. Standardizing",
+        "B. Appending",
+        "C. Binning",
+        "D. Parsing"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Binning groups data records into defined categories, enabling the affected customer population to be counted by impact level: fully affected, partially affected, and not affected.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "70",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A data breach takes place at a company. Which of the following actions should be taken?",
+      "translation": "",
+      "options": [
+        "A. Make an announcement on social media so customers are aware as soon as possible.",
+        "B. Tell the company management team and then tell regulatory agencies.",
+        "C. Keep the incident a secret until the issue is resolved.",
+        "D. Inform the entire IT sector, but ask for discretion."
+      ],
+      "correctAnswer": "B",
+      "explanation": "A data breach requires prompt internal escalation to management so the incident can be managed, investigated, contained, and assessed. The organization must also notify applicable regulatory agencies in accordance with relevant legal and regulatory reporting requirements.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "71",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data company requires a visualization showing the availability zones from the past ten years and any future availability zones it will use over the next five years. Which of the following is the most appropriate visualization for displaying this information?",
+      "translation": "",
+      "options": [
+        "A. Bar chart",
+        "B. Mosaic plot",
+        "C. Map",
+        "D. Pie chart"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A map is appropriate for presenting availability zones because it conveys their geographic locations and distribution. Historical and planned future zones can be distinguished through map layers, symbols, or time-based styling.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "72",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst retrieves a table similar to the following: Which option best explains the data issue with TypeID?",
+      "translation": "",
+      "options": [
+        "A. Redundancy",
+        "B. Outlier",
+        "C. Missing data",
+        "D. Duplication"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The TypeID values embed the Type description as well as an identifier, repeating information already stored in the Type column. This unnecessary repetition is data redundancy.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q72_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "73",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A manager requests a report that returns results according to a user's profile. Which option best describes this report type?",
+      "translation": "",
+      "options": [
+        "A. Real-time",
+        "B. Static",
+        "C. Dynamic",
+        "D. Snapshot"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A dynamic report tailors returned results to the viewing user's profile or context, so different users can receive different results.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "74",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following data repositories keeps unformatted data in its original, raw form?",
+      "translation": "",
+      "options": [
+        "A. Data warehouse",
+        "B. Data silo",
+        "C. Data mart",
+        "D. Data lake"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A data lake stores data in its original, raw format and can hold structured, semi-structured, and unstructured data until it is needed for processing or analysis.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "75",
+      "topic": "Data analysis",
+      "questionType": "multi-answer",
+      "questionText": "Which of the following programming languages are most efficient for conducting data mining and statistical analysis?",
+      "translation": "",
+      "options": [
+        "A. Java",
+        "B. R",
+        "C. Python",
+        "D. Ruby",
+        "E. Julia",
+        "F. C++"
+      ],
+      "correctAnswer": "BC",
+      "explanation": "R is a language and environment specifically designed for statistical computing, with techniques such as statistical testing, classification, and clustering. Python is widely used for data mining through its scientific ecosystem; scikit-learn provides efficient tools for predictive data analysis and machine-learning tasks. LEARN MORE R: What is R? scikit-learn: Machine Learning in Python",
+      "learnMore": [
+        "R: What is R?",
+        "scikit-learn: Machine Learning in Python"
+      ],
+      "images": []
+    },
+    {
+      "number": "76",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following is most efficient to use when programming repetitive tasks?",
+      "translation": "",
+      "options": [
+        "A. LLM",
+        "B. Deep learning",
+        "C. NLP",
+        "D. RPA"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Robotic process automation (RPA) is purpose-built to automate repeatable, rules-based tasks through defined workflows and software bots.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "77",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A data analyst is producing a document that describes the guidelines and transformation of the suite of sales dashboards they are responsible for delivering. Which of the following is the analyst most likely producing?",
+      "translation": "",
+      "options": [
+        "A. Data flow diagram",
+        "B. Data lineage",
+        "C. Data dictionary",
+        "D. Data versioning"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Data lineage documents where dashboard data originates, how it moves through systems, and the transformations applied before it is used in reporting and dashboards.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "78",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A teaching administrator wants to assess the distribution of student scores in a class. Which of the following statistical measures should the administrator use?",
+      "translation": "",
+      "options": [
+        "A. Standard deviation",
+        "B. Geometric progression",
+        "C. t-test",
+        "D. Variance"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Standard deviation measures the spread of student scores around their mean and is expressed in the same units as the scores, making it an appropriate measure for describing score distribution.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "79",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is creating a new report using sales data. The analyst needs the total sales for each channel, but only for channels with total sales greater than 20.0. Given the following: Which of the following should the analyst use?",
+      "translation": "",
+      "options": [
+        "A.",
+        "B.",
+        "C.",
+        "D."
+      ],
+      "correctAnswer": "A",
+      "explanation": "GROUP BY CHANNEL creates one group per sales channel, SUM(VALUE) calculates each channel’s total, and HAVING SUM(VALUE) > 20.0 filters those grouped totals. HAVING filters groups after aggregation, whereas WHERE filters individual input rows before grouping. LEARN MORE PostgreSQL Documentation: SELECT",
+      "learnMore": [
+        "PostgreSQL Documentation: SELECT"
+      ],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q79_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q79_img1.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "A",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q79_img2.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "B",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q79_img3.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "C",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q79_img4.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "D",
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "80",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A data analyst receives an email from the IT department requiring an update to their company password, and the analyst follows the password-reset link as instructed. Later that week, the analyst receives the following notification while running a recurring analysis that connects to the database: Log-in failed for user '[username]' Which of the following is the most likely reason for this issue?",
+      "translation": "",
+      "options": [
+        "A. The company changed its database authentication method",
+        "B. The password expiration process locked the account",
+        "C. The analyst did not change the password used to launch the report",
+        "D. The company is experiencing issues with password replication."
+      ],
+      "correctAnswer": "C",
+      "explanation": "A recurring database analysis commonly stores the database password used by its connection or report configuration. After the company password is reset, that stored credential remains the old password until it is updated, causing the database login to fail.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "81",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following data sources makes consuming online data easier?",
+      "translation": "",
+      "options": [
+        "A. Data mart",
+        "B. Web scraping",
+        "C. Database",
+        "D. Application programming interface"
+      ],
+      "correctAnswer": "D",
+      "explanation": "An application programming interface (API) provides a structured, programmatic way for online applications to request and consume data.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "82",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst must use data from one table to narrow the data selected from a second table. Which option is the most efficient approach?",
+      "translation": "",
+      "options": [
+        "A. Subquery",
+        "B. Aggregate",
+        "C. Union",
+        "D. Join"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A subquery returns a result set that can be used to filter the rows selected from another table, commonly through predicates such as IN or EXISTS. Aggregates summarize values, unions combine result sets, and joins combine related table rows.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "83",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A sales analyst uses the following table to create a report on January sales data: Which of the following data-set inconsistencies is present?",
+      "translation": "",
+      "options": [
+        "A. Duplication",
+        "B. Redundancy",
+        "C. Missing values",
+        "D. Outliers"
+      ],
+      "correctAnswer": "A",
+      "explanation": "An identical record for Table in January, with sales of 23345 in 2024, occurs twice. Repeated identical rows are duplicate records.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q83_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "84",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A company’s analytics manager wants every report delivered once every seven days. Which delivery method is the best choice?",
+      "translation": "",
+      "options": [
+        "A. Recurring",
+        "B. Ad hoc",
+        "C. Custom",
+        "D. Snapshot"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Recurring delivery is intended for reports that must be sent automatically on a regular schedule, such as every seven days.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "85",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A sales manager needs a dashboard that displays sales aggregated by region and identifies high-volume sales by salesperson within each region. Which technique best presents this information?",
+      "translation": "",
+      "options": [
+        "A. Defined parameters",
+        "B. Filter options",
+        "C. Level of detail",
+        "D. User persona"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Level-of-detail calculations let sales be aggregated at the region level while also evaluating salesperson-level sales within each region, enabling identification of high-volume salespeople without changing the required calculation granularity.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "86",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst is preparing a report named \"Product Category Sales Performance Summary Report\" based on the following table: Which of the following charts is most appropriate?",
+      "translation": "",
+      "options": [
+        "A. Gantt",
+        "B. Waterfall",
+        "C. Column",
+        "D. Area"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A column chart clearly compares aggregated sales values across discrete product categories, making differences in category performance easy to see.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q86_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "87",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "Given the following tables: Which of the following is the best option for displaying the output from FirstName and LastName as FullName?",
+      "translation": "",
+      "options": [
+        "A. Concatenate",
+        "B. Filter",
+        "C. Join",
+        "D. Group"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Concatenation combines text values from columns into a single string, allowing FirstName and LastName to be displayed as FullName.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q87_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "88",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to extract a serial number from a code string. Which data transformation technique should the analyst use?",
+      "translation": "",
+      "options": [
+        "A. Exploding",
+        "B. Appending",
+        "C. Merging",
+        "D. Parsing"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Parsing separates or extracts components from a text string, such as a serial number contained within a code.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "89",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following data structures is a data engineer most likely to receive when using a GET command?",
+      "translation": "",
+      "options": [
+        "A. HTML",
+        "B. XLSM",
+        "C. CSS",
+        "D. JSON"
+      ],
+      "correctAnswer": "D",
+      "explanation": "GET requests to web APIs commonly return structured data encoded as JSON, which is designed for exchanging data between systems.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "90",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following is the best reason for a company to share data using a CSV file instead of an Excel file?",
+      "translation": "",
+      "options": [
+        "A. CSV files can store different types of encoding",
+        "B. CSV files are not vendor specific",
+        "C. CSV files are smaller in size",
+        "D. CSV files are easier to change in text editors"
+      ],
+      "correctAnswer": "B",
+      "explanation": "CSV is a vendor-neutral plain-text format that can be opened and processed by many different applications and platforms, making it well suited for data exchange.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "91",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "The human resources department wants to understand the relationship between the ages and incomes of all employees. Which graphic is most appropriate for presenting the analysis?",
+      "translation": "",
+      "options": [
+        "A. Scatter plot",
+        "B. Area plot",
+        "C. Bar chart",
+        "D. Pie chart"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A scatter plot displays each employee’s age and income as a paired numeric observation, making the relationship, correlation, and any trend between the two variables visible.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "92",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst must produce a list of employees who currently reside in Dade, FL. Given the following table: Which SQL statement should the analyst use to complete this task?",
+      "translation": "",
+      "options": [
+        "A. SELECT * FROM Employee WHERE emp_city LIKE 'D%';",
+        "B. SELECT * FROM Employee WHERE emp_city IN ('Dade', 'FL');",
+        "C. SELECT * FROM Employee WHERE emp_city = 'Dade' OR emp_st = 'FL';",
+        "D. SELECT * FROM Employee WHERE emp_city = 'Dade' AND emp_st = 'FL';"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A row must have emp_city equal to Dade and emp_st equal to FL. Combining these predicates with AND returns only employees who satisfy both location requirements.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q92_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "93",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A company must show sales numbers on its intranet. The solution must be updated each day before the workday begins. Which of the following is the best solution for meeting this objective?",
+      "translation": "",
+      "options": [
+        "A. Enhancing the current self-service portal with new download options",
+        "B. Running an ad hoc query that extracts data from the warehouse",
+        "C. Building a report that is emailed every morning",
+        "D. Developing a dynamic dashboard that refreshes nightly"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A dynamic dashboard hosted for intranet access can present sales numbers continuously and refresh overnight, ensuring that updated data is available before employees begin work each day.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "94",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst receives a flat file containing dates. The analyst must calculate the number of days from the dates in the file to the current date. Which of the following is the best way to perform this task?",
+      "translation": "",
+      "options": [
+        "A. Convert data to date format and use date functions.",
+        "B. Validate the date format with logical functions and use date functions to analyze.",
+        "C. Use date functions to analyze the data with no conversion.",
+        "D. Transform data to a numerical value and use mathematical functions."
+      ],
+      "correctAnswer": "A",
+      "explanation": "Converting imported date values to a date format allows date functions to correctly calculate the number of days between each date and the current date.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "95",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst is creating a survey for Paralympic Game athletes. Which of the following should the analyst consider when designing this survey?",
+      "translation": "",
+      "options": [
+        "A. Idioms",
+        "B. Color contrast",
+        "C. Refresh speed",
+        "D. Granularity"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Sufficient color contrast improves survey accessibility by making text, controls, and other visual elements easier to perceive for respondents with visual impairments.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "96",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A data analyst is troubleshooting a dashboard daily for one week. Which of the following techniques best addresses validating the data going forward?",
+      "translation": "",
+      "options": [
+        "A. Inquiring about structure changes",
+        "B. Setting up monitoring alerts",
+        "C. Reaching out to users daily",
+        "D. Rebuilding the dashboard"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Monitoring alerts provide an ongoing, automated way to detect data anomalies, failed refreshes, or unexpected changes that could affect dashboard validity.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "97",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst must deliver a weekly sales report to the Chief Financial Officer. Which of the following delivery methods is most appropriate?",
+      "translation": "",
+      "options": [
+        "A. A granular daily report in a dashboard",
+        "B. A detailed text document",
+        "C. A spreadsheet with raw data",
+        "D. A high-level email"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A weekly sales update for a Chief Financial Officer should communicate the most important results and trends concisely at an executive level. A high-level email is therefore the most suitable delivery method.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "98",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst is creating a new data set that requires combining the following data sets: Which of the following would be the output if the data analyst performs a FULL JOIN?",
+      "translation": "",
+      "options": [
+        "A.",
+        "B.",
+        "C.",
+        "D."
+      ],
+      "correctAnswer": "D",
+      "explanation": "A FULL JOIN returns all rows from both data sets. Matching IDs are combined, while an ID found in only one data set remains in the result with null values for the other data set’s columns. The output therefore includes the matched records for IDs 23525 and 11290, Ellen (ID 12141) with no address data, and ID 11040 with no name or date-of-birth data. LEARN MORE FROM clause plus JOIN, APPLY, PIVOT (T-SQL)",
+      "learnMore": [
+        "FROM clause plus JOIN, APPLY, PIVOT (T-SQL)"
+      ],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q98_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q98_img1.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "A",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q98_img2.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "B",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q98_img3.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "C",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q98_img4.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "D",
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "99",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "An analyst is creating a reporting deck. It must track and visualize metrics and include row-level security. Which action should the analyst take after the initial requirements have been gathered?",
+      "translation": "",
+      "options": [
+        "A. Show a mock-up to the team.",
+        "B. Explain the desired level of reporting detail.",
+        "C. Present an analysis of the data.",
+        "D. Find out the project due date."
+      ],
+      "correctAnswer": "A",
+      "explanation": "A mock-up lets stakeholders review and validate the proposed report layout, metrics, visualizations, and security-driven user experience before the reporting deck is fully developed.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "100",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst’s code fails when the analyst tries to perform a large batch upload to a cloud database. The analyst verifies the following: The database key is accurate and embedded in the code. All classes and objects are defined and invoked. The text editor’s coding format maintains syntax consistency. Built-in and custom exceptions respond correctly. Print statements correctly show the line on which an error occurs. Online coding forums contain no comparable issue with a solution. Which of the following is the most appropriate next step for continued troubleshooting?",
+      "translation": "",
+      "options": [
+        "A. Developing a new code for this process",
+        "B. Asking a senior engineer for peer review of the code",
+        "C. Scheduling a team meeting and getting help from the entire group",
+        "D. Converting the code to a different language"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A senior engineer’s peer review is an efficient next escalation after standard debugging checks have not isolated the fault. An experienced reviewer can identify subtle defects in program logic, database-client usage, request sizing, batching behavior, or error handling that automated checks and general online searches may not reveal.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "101",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "Which of the following AI types is the most appropriate option for time-series forecasting?",
+      "translation": "",
+      "options": [
+        "A. Generative AI",
+        "B. Foundational models",
+        "C. Natural language processing",
+        "D. Robotic process automation"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Foundation models can be pretrained on vast amounts of time-series data to capture broad temporal features and patterns, then used for forecasting tasks. Microsoft Learn identifies TimeGEN-1 as an example of a time-series foundation model for this purpose. LEARN MORE How to deploy TimeGEN-1 model with Azure Machine Learning",
+      "learnMore": [
+        "How to deploy TimeGEN-1 model with Azure Machine Learning"
+      ],
+      "images": []
+    },
+    {
+      "number": "102",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A developer creates an online survey that requires an answer for every question. Which of the following inconsistencies is prevented by this setting?",
+      "translation": "",
+      "options": [
+        "A. Missing values",
+        "B. Duplication",
+        "C. Data corruption",
+        "D. Completeness"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Making every survey question required prevents respondents from leaving fields unanswered, thereby preventing missing values.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "103",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "An analyst uses a server's storage to retain a large volume of files, images, and videos. Which of the following describes this storage type?",
+      "translation": "",
+      "options": [
+        "A. GUID",
+        "B. BLOB",
+        "C. UUID",
+        "D. OLAP"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Blob storage is designed to store large quantities of unstructured data, including files, images, and videos.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "104",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "The director of operations at a power company needs data to identify where company resources should be allocated to monitor outage activity and power restoration throughout the state. The director wants to view the following: County outages Status Overall trend of outages Select each visualization that fits the appropriate dashboard space. After selecting all visualizations, use the drop-down menus to choose the appropriate dashboard title and axis labels, where applicable. HIDE ANSWER Answer: EXPLANATION Use the statewide dashboard title Power Outages Region-wide. Display county outages with the county map and label it County, because a map shows the geographic distribution of outages. Display status with the clustered column chart and label it County, because it compares incident statuses by county. Display the overall outage trend with the time-series line chart and label it Date, because trends are evaluated over time.",
+      "translation": "",
+      "options": [],
+      "correctAnswer": "",
+      "explanation": "Use the statewide dashboard title Power Outages Region-wide. Display county outages with the county map and label it County, because a map shows the geographic distribution of outages. Display status with the clustered column chart and label it County, because it compares incident statuses by county. Display the overall outage trend with the time-series line chart and label it Date, because trends are evaluated over time.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q104_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q104_img1.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q104_img2.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q104_img3.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "105",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A database administrator is investigating why a reporting job failed. The target-layer schema was unchanged since the previous run, the database server is scalable, and all users have default execute privileges on the report. Which attribute change most likely caused this incident?",
+      "translation": "",
+      "options": [
+        "A. Data lineage",
+        "B. Data type",
+        "C. Data volume",
+        "D. Data access"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A data-lineage change can alter or break an upstream source or transformation dependency used by the reporting job without changing the target-layer schema, exhausting scalable server capacity, or removing users’ execute privileges.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "106",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of these is the most suitable tool for managing databases?",
+      "translation": "",
+      "options": [
+        "A. Anaconda",
+        "B. RStudio",
+        "C. VS Code",
+        "D. Toad"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Toad is a database management tool that provides capabilities for database administration, SQL development, querying, and managing database objects.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "107",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst must join data from two tables so that every row from one table appears even when no corresponding row exists in the other table. Which option should the analyst use to produce the required output?",
+      "translation": "",
+      "options": [
+        "A. INNER JOIN",
+        "B. CROSS JOIN",
+        "C. RIGHT OUTER JOIN",
+        "D. FULL OUTER JOIN"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A RIGHT OUTER JOIN returns all rows from the right-hand table and includes matching rows from the other table when available. Where no match exists, the columns from the other table are returned as NULL.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "108",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to combine a table data source and a web API data source using Python. Which of the following is the best way to accomplish this task?",
+      "translation": "",
+      "options": [
+        "A. Convert the data from the API and database to a varchar format and convert them to pandas DataFrames that are then merged together",
+        "B. Convert the data from the API and database to a JSON format and convert them to pandas DataFrames that are then merged together.",
+        "C. Convert the data from the API and database to a TXT format and convert them to pandas DataFrames that are then merged together.",
+        "D. Convert the data from the API and database to a string format and convert them to pandas DataFrames that are then merged together."
+      ],
+      "correctAnswer": "B",
+      "explanation": "JSON preserves structured, named data records from a web API and can be converted into pandas DataFrames. Pandas supports database-style joins by merging DataFrames, so representing the sources as JSON-derived DataFrames provides an appropriate structured workflow for combining them. LEARN MORE pandas.read_json documentation pandas.merge documentation",
+      "learnMore": [
+        "pandas.read_json documentation",
+        "pandas.merge documentation"
+      ],
+      "images": []
+    },
+    {
+      "number": "109",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A data analyst has deployed a report for public access. A user says the report is not displaying the most current information, although the user updated the source one hour ago. What should the data analyst check first?",
+      "translation": "",
+      "options": [
+        "A. Event log",
+        "B. User privileges",
+        "C. Database connection",
+        "D. Report corruption"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A report can display stale information when its connection to the underlying database or source is unavailable, misconfigured, or not retrieving refreshed data. Verifying the database connection is therefore the appropriate first check.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "110",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst must identify outliers in a given data set. Which of the following visualizations is best for identifying outliers?",
+      "translation": "",
+      "options": [
+        "A. Box plot",
+        "B. Scatter plot",
+        "C. Gantt chart",
+        "D. Waterfall chart"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A box plot displays the distribution’s quartiles and whiskers, and observations outside the whiskers are shown as potential outliers.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "111",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "Which of the following renders data unreadable unless the required key is available?",
+      "translation": "",
+      "options": [
+        "A. Anonymization",
+        "B. Role-based access control",
+        "C. Encryption",
+        "D. Masking"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Encryption converts plaintext into unreadable ciphertext and requires the appropriate decryption key to recover the original data.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "112",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is performing an initial analysis of the dataset in the following table: Which of the following issues should the analyst flag in the data report?",
+      "translation": "",
+      "options": [
+        "A. Completeness",
+        "B. Outlier",
+        "C. Mismatch",
+        "D. Duplication"
+      ],
+      "correctAnswer": "B",
+      "explanation": "An outlier is a value that differs substantially from the other observations. A count of 245 is markedly higher than the remaining counts of 12, 13, and 12.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q112_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "113",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst is preparing a report on cars sold during the previous twelve months. The current dataset includes information for only the past ten months. Which of the following is the most appropriate method for completing this task?",
+      "translation": "",
+      "options": [
+        "A. Join the records from the last two months of the previous year and append them to the data table.",
+        "B. Parse the records from the last two months of the previous year and append them to the data table.",
+        "C. Merge the records from the last two months of the previous year and append them to the data table.",
+        "D. Extract the records from the last two months of the previous year and append them to the data table."
+      ],
+      "correctAnswer": "D",
+      "explanation": "The two missing months of historical sales records should be extracted from the prior-year data and appended as rows to the current data table, producing a dataset that covers the full twelve-month period.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "114",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following data-warehouse terms refers to a data set specifically created for drill-down reporting?",
+      "translation": "",
+      "options": [
+        "A. Dimension",
+        "B. Measure",
+        "C. Cube",
+        "D. Cluster"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A cube is a multidimensional analytical data set designed for reporting and exploration at different levels of detail, including drill-down operations.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "115",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst must create a report that forecasts the number of calls received each day. Which of the following is the most appropriate statistical method to use?",
+      "translation": "",
+      "options": [
+        "A. Predictive",
+        "B. Diagnostic",
+        "C. Inferential",
+        "D. Descriptive"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Predictive methods use historical patterns and relevant variables to forecast future values, such as the number of calls expected each day.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "116",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which statement explains the difference between a char and an nchar data field?",
+      "translation": "",
+      "options": [
+        "A. char is a fixed-size data type, and nchar is a varying-size data type",
+        "B. Even though both are fixed-size data types, nchar is compressed and char is not",
+        "C. nchar stores fixed-size, compressed Unicode characters and char stores varying-size, non-Unicode characters",
+        "D. Both are fixed-size data types, but nchar stores Unicode characters and uses twice the space"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Both types are fixed-length character fields. nchar stores Unicode characters and uses two bytes per character, while char stores non-Unicode characters.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "117",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "Following a database upgrade, a report that uses datetime calculations fails to complete because of an arithmetic overflow error. Which of the following is the best approach for a data analyst to troubleshoot the problem?",
+      "translation": "",
+      "options": [
+        "A. Changing the report filter",
+        "B. Reviewing error logs",
+        "C. Verifying the columns' data types",
+        "D. Checking that the data has refreshed"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Arithmetic overflow during datetime calculations can occur when a column’s data type, range, precision, or implicit conversion is incompatible with the calculation after an upgrade. Reviewing the data types of the columns used in the calculation directly identifies whether the values and operations exceed the supported range.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "118",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A reporting team must revise communication decks that were distributed internally so the decks can be shared with external partners. Which element is the most important to update?",
+      "translation": "",
+      "options": [
+        "A. Watermark",
+        "B. Presentation date",
+        "C. Company name",
+        "D. Font choice"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A watermark communicates a deck’s distribution status and confidentiality classification. Material prepared for internal use may require an internal-only watermark to be removed or replaced before it is shared externally.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "119",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "Which of the following tools would a data analyst be most likely to use to change a simple data-connection property in a configuration file?",
+      "translation": "",
+      "options": [
+        "A. RStudio",
+        "B. SSMS",
+        "C. Notepad++",
+        "D. Toad"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Configuration files containing simple data-connection properties are commonly edited as plain text. Notepad++ is a text editor designed for this purpose.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "120",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst must access data from the past ten years to create a report. Which action should the analyst take to develop the report without impacting system performance?",
+      "translation": "",
+      "options": [
+        "A. Connect to the production database and create a query that retrieves only the required data",
+        "B. Create a snapshot of the selected period and work on the data analysis in an isolated environment",
+        "C. Restore annual backups of the database in a local computer and query the current year's data in production",
+        "D. Download data from each month as independent flat files and create a local repository for further review"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A snapshot of the required historical period provides a separate, consistent data copy for analysis. Performing reporting queries in an isolated environment prevents analytical workload from consuming resources on the production system.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "121",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to create a combined report that contains information from the following two tables: Which of the following query methods should the analyst use for this task?",
+      "translation": "",
+      "options": [
+        "A. Group",
+        "B. Join",
+        "C. Union",
+        "D. Nested"
+      ],
+      "correctAnswer": "C",
+      "explanation": "UNION combines the result sets of two queries with compatible, corresponding columns into one result set. It is appropriate for appending the manager and non-manager records, which share the same column structure. A join instead creates result rows from columns in related tables. LEARN MORE Set Operators - UNION (Transact-SQL)",
+      "learnMore": [
+        "Set Operators - UNION (Transact-SQL)"
+      ],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q121_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "122",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst creates a report in which some fields are blank. Which condition should the analyst add to a query to list every record with empty fields?",
+      "translation": "",
+      "options": [
+        "A. WHERE [ColumnName] = NULL",
+        "B. WHERE [ColumnName] IS NULL",
+        "C. WHERE [ColumnName] IS NOT NULL",
+        "D. WHERE [ColumnName] = 'NULL'"
+      ],
+      "correctAnswer": "B",
+      "explanation": "SQL uses the IS NULL predicate to filter for records whose specified column contains a NULL (missing) value. Equality comparisons such as = NULL do not match NULL values.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "123",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "Given the following tables: Which data privacy practice is used to protect employees’ email addresses when creating a report?",
+      "translation": "",
+      "options": [
+        "A. Anonymization",
+        "B. Hashing",
+        "C. Masking",
+        "D. Encryption"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Masking conceals sensitive portions of a value while retaining a limited, recognizable format for reporting. Replacing the email usernames with xxxxx while leaving @company.com visible is data masking.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q123_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "124",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following best explains why an analyst would consult a data dictionary rather than a source’s metadata?",
+      "translation": "",
+      "options": [
+        "A. To gather information and resources about the data",
+        "B. To find the content and specific attributes for a data set",
+        "C. To find a summary of basic information about the data set",
+        "D. To gather information about the availability of the data"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A data dictionary describes the individual fields or elements in a dataset and their specific attributes, such as definitions, data types, formats, and permitted values. Metadata instead commonly provides high-level descriptive information about the dataset.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "125",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to find the mean score students received in science classes. Given the following tables: Which of the following will produce the desired results?",
+      "translation": "",
+      "options": [
+        "A. COUNT and GROUP",
+        "B. SUM and GROUP",
+        "C. AVERAGE and WHERE",
+        "D. CONCAT and WHERE"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Filtering the records to science classes requires a WHERE clause, and calculating the mean of the corresponding numeric scores requires the AVERAGE aggregate function.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q125_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "126",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is preparing a pivot table for a large data set for an upcoming board meeting. What is the purpose of the pivot table?",
+      "translation": "",
+      "options": [
+        "A. To visualize the data in a dashboard",
+        "B. To retrieve and clean data from several sources",
+        "C. To summarize and analyze the data",
+        "D. To organize the data for reporting"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A pivot table aggregates and reorganizes source data into summaries, enabling analysis through calculations, comparisons, patterns, and trends. Microsoft describes PivotTables as tools to calculate, summarize, and analyze data. LEARN MORE Overview of PivotTables and PivotCharts",
+      "learnMore": [
+        "Overview of PivotTables and PivotCharts"
+      ],
+      "images": []
+    },
+    {
+      "number": "127",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A project manager asks for an unscheduled report that lists clients. Which frequency is most appropriate for this report?",
+      "translation": "",
+      "options": [
+        "A. Annual",
+        "B. Daily",
+        "C. Weekly",
+        "D. Ad hoc"
+      ],
+      "correctAnswer": "D",
+      "explanation": "An ad hoc report is generated on demand for an unplanned or one-time request, rather than according to a recurring schedule.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "128",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "The human resources department needs to determine how many employees earn $125,000 or more, but it is concerned about duplicate records in the data set. Given the following table: Which of the following SQL statements resolves this issue?",
+      "translation": "",
+      "options": [
+        "A.",
+        "B.",
+        "C.",
+        "D."
+      ],
+      "correctAnswer": "B",
+      "explanation": "COUNT(DISTINCT Employee_ID) counts each qualifying employee identifier only once, preventing duplicate rows from inflating the result. Salary >= 125000 includes salaries equal to $125,000 as well as higher salaries.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q128_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q128_img1.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "A",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q128_img2.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "B",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q128_img3.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "C",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q128_img4.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "D",
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "129",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "A data analyst is designing a new data warehouse for sales analysis. One requirement is to analyze sales by region. Which of the following best characterizes the region table?",
+      "translation": "",
+      "options": [
+        "A. Fact",
+        "B. Dimensional",
+        "C. Bridge",
+        "D. Snowflake"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A region table contains descriptive business attributes used to group, filter, and analyze sales facts. That role is a dimension in a dimensional model; the sales transactions and numeric measures belong in a fact table.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "130",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A grocery store wants to view revenue from the previous year, with individual departments highlighted. Which chart is most appropriate for communicating this information?",
+      "translation": "",
+      "options": [
+        "A. Gantt",
+        "B. Pie",
+        "C. Area",
+        "D. Line"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A pie chart communicates the proportion of total annual revenue attributable to each department, making the departmental breakdown easy to compare.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "131",
+      "topic": "Data acquisition and preparation",
+      "questionType": "mc",
+      "questionText": "A data analyst is collecting data from several tables in a database and needs particular columns from each table. Which of the following is the best way to accomplish this task?",
+      "translation": "",
+      "options": [
+        "A. Aggregate",
+        "B. Union",
+        "C. Nest",
+        "D. Join"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A join combines data from multiple related tables into one result set, allowing the analyst to select the required columns from each table.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "132",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "A data analyst is querying a database but does not know the table names, field names, data types, or field definitions. Which of the following is the best place to find this information?",
+      "translation": "",
+      "options": [
+        "A. Data dictionary",
+        "B. Data explainability report",
+        "C. Data lineage",
+        "D. Data flow diagram"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A data dictionary documents database metadata, including table and field names, data types, and definitions.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "133",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A table contains multiple cellular-number rows with call timestamps, durations, called numbers, and the carriers for those called numbers. Which option lets a data analyst sort cellular numbers by the carriers of the called numbers while including total call durations?",
+      "translation": "",
+      "options": [
+        "A.",
+        "B.",
+        "C.",
+        "D."
+      ],
+      "correctAnswer": "C",
+      "explanation": "An aggregate query must group by each selected column that is not aggregated. Grouping by cellular_number and called_number_carrier produces totals with SUM(call_duration) for each cellular-number/carrier combination, and the carrier can be used for sorting.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q133_img0.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "A",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q133_img1.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "B",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q133_img2.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "C",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q133_img3.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "D",
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "134",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst queries the Customers table, which has a name column. Which option is the best way to return customers whose names begin with the letters ANT?",
+      "translation": "",
+      "options": [
+        "A.",
+        "B.",
+        "C.",
+        "D."
+      ],
+      "correctAnswer": "D",
+      "explanation": "In a SQL LIKE pattern, % matches zero or more characters. Therefore, name LIKE 'ANT%' requires ANT at the start of the name and permits any remaining characters. Microsoft Learn: Percent character wildcard LEARN MORE Microsoft Learn: Percent character wildcard (Transact-SQL)",
+      "learnMore": [
+        "Microsoft Learn: Percent character wildcard (Transact-SQL)"
+      ],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q134_img0.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "A",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q134_img1.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "B",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q134_img2.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "C",
+          "inAnswer": false
+        },
+        {
+          "path": "/data/images/da0_002/q134_img3.png",
+          "alt": "",
+          "inOption": true,
+          "optionLetter": "D",
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "135",
+      "topic": "Data governance",
+      "questionType": "mc",
+      "questionText": "An organization is experiencing increased requests to view its online dashboard, and granting access is time-consuming. Which action should the data team take to provide access while ensuring the online portal remains secure?",
+      "translation": "",
+      "options": [
+        "A. Implement a self-service portal with user credentials.",
+        "B. Designate one person to handle user requests for portal access.",
+        "C. Set up a specific help desk for users to request access.",
+        "D. Enable open access to the portal."
+      ],
+      "correctAnswer": "A",
+      "explanation": "A self-service portal using individual user credentials enables scalable access management while requiring authenticated, traceable user access to the portal.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "136",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst is building a report that displays each university student's major. The first character in the CategoryCD field from the Students table determines the major. Given the following tables: Which of the following steps should the analyst perform first?",
+      "translation": "",
+      "options": [
+        "A. Convert the CategoryCD to a numeric value",
+        "B. Use a string function on the CategoryCD.",
+        "C. Append the MajorCD to the CategoryCD column",
+        "D. Join both the tables using the CategoryCD and MajorCD columns"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The CategoryCD values contain the major identifier as their first character, whereas MajorCD stores that identifier by itself. A string function is needed to extract the first character before it can be used to associate each student with the corresponding major.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q136_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "137",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst is engaged in a three-year project to deliver monthly sales reports. The client requests a detailed analysis of customer profiles for a particular region and month. Which delivery method best meets this request?",
+      "translation": "",
+      "options": [
+        "A. Dynamic",
+        "B. Self-service",
+        "C. Ad hoc",
+        "D. Dashboard"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Ad hoc reporting is intended for targeted, on-demand analysis of a specific business need, such as detailed customer-profile analysis for one region and one month.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "138",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following most accurately describes the purpose of a primary key?",
+      "translation": "",
+      "options": [
+        "A. To provide a helper index that allows the database to find subsets of data easily",
+        "B. To organize data so that the database has an efficient way to find data in a table",
+        "C. To eliminate the need to join tables",
+        "D. To create a unique way to identify each row in a table"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A primary key uniquely identifies every row in a table, preventing duplicate key values and providing a stable identifier for each record.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "139",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to summarize the number of customers who contacted the business during the last year, grouped by contact type. The Contact_Type table is stored in a file and contains one million rows. Based on the following sample: Which of the following is most efficient for the analyst to use?",
+      "translation": "",
+      "options": [
+        "A. Math function",
+        "B. Query",
+        "C. Filter",
+        "D. Pivot table"
+      ],
+      "correctAnswer": "D",
+      "explanation": "A pivot table efficiently groups records by Contact_Type and aggregates the customer records into counts for each contact type, which is well suited to summarizing a million-row file.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q139_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "140",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "A data analyst is developing a report that provides information to parents and residents about the school district and its individual schools. Which statistical method is best suited to report this information?",
+      "translation": "",
+      "options": [
+        "A. Predictive",
+        "B. Prescriptive",
+        "C. Descriptive",
+        "D. Inferential"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Descriptive statistics organize, summarize, and present existing data about a population or its groups, making them appropriate for reporting information about a school district and its individual schools.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "141",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "The following SQL code produces an error in the program console: Which of the following modifications allows this SQL code to run?",
+      "translation": "",
+      "options": [
+        "A. SELECT firstName, lastName, SUM(income)FROM companyRoster -HAVING SUM(income)> 10000000",
+        "B. SELECT firstName, lastName, SUM(income)FROM companyRoster -GROUP BY firstName, lastName",
+        "C. SELECT firstName, lastName, SUM(income)FROM companyRoster -ORDER BY firstName, income",
+        "D. SELECT firstName, lastName, SUM(income)FROM companyRoster"
+      ],
+      "correctAnswer": "B",
+      "explanation": "When an aggregate such as SUM(income) is selected together with nonaggregated columns, each nonaggregated selected column must be included in the GROUP BY clause. Grouping by firstName and lastName makes the aggregate defined for each name group. Microsoft Learn: GROUP BY (Transact-SQL) LEARN MORE GROUP BY (Transact-SQL) - SQL Server | Microsoft Learn",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "142",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "Which of the following is the best way to ensure that a procedure performs appropriately under heavy use?",
+      "translation": "",
+      "options": [
+        "A. Requirements test",
+        "B. Stress test",
+        "C. Network throughput test",
+        "D. User acceptance test"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A stress test assesses performance and stability under heavy or extreme workload conditions, revealing whether the procedure continues to operate appropriately when demand is high.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "143",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "Given the following cloud service provider data: Which option is the best way to represent this information?",
+      "translation": "",
+      "options": [
+        "A. Donut chart",
+        "B. Scatter plot",
+        "C. Area chart",
+        "D. Gantt chart"
+      ],
+      "correctAnswer": "A",
+      "explanation": "A donut chart clearly represents each cloud provider’s market-share percentage as a proportion of the total market.",
+      "learnMore": [],
+      "images": [
+        {
+          "path": "/data/images/da0_002/q143_img0.png",
+          "alt": "",
+          "inOption": false,
+          "optionLetter": null,
+          "inAnswer": false
+        }
+      ]
+    },
+    {
+      "number": "144",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to join two tables with different content that share one common field. Which action should the analyst take to meet this requirement most efficiently?",
+      "translation": "",
+      "options": [
+        "A. Match the records of the related columns and merge the tables.",
+        "B. Create a cluster to facilitate data integration between the tables.",
+        "C. Explode both tables to identify unique values and reorder the fields in one table.",
+        "D. Append the values of the matching columns and concatenate the other data fields."
+      ],
+      "correctAnswer": "A",
+      "explanation": "A merge operation joins two tables by matching values in one or more corresponding columns, preserving the related fields from each table in a single result. Appending is for stacking rows from similarly structured tables, not for combining different attributes through a shared key. LEARN MORE Merge Queries Overview - Power Query",
+      "learnMore": [
+        "Merge Queries Overview - Power Query"
+      ],
+      "images": []
+    },
+    {
+      "number": "145",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "Which of the following can be found in metadata?",
+      "translation": "",
+      "options": [
+        "A. Transformations",
+        "B. Data lineage",
+        "C. Syntax",
+        "D. Variable types"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Data lineage is metadata that records data’s origin, transformations, and movement through systems, supporting traceability and impact analysis.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "146",
+      "topic": "Data concepts and environments",
+      "questionType": "mc",
+      "questionText": "A data analyst needs to understand several datasets at the variable level. Which of the following should the analyst consult to obtain this information?",
+      "translation": "",
+      "options": [
+        "A. Data lineage",
+        "B. Data dictionary",
+        "C. Data flow diagram",
+        "D. Data versioning"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A data dictionary provides variable-level metadata, such as field names, definitions, data types, formats, and permissible values.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "147",
+      "topic": "Data analysis",
+      "questionType": "mc",
+      "questionText": "A product becomes viral on social media, resulting in high demand. Distribution channels are experiencing supply-chain problems because the testing and training models used for sales forecasting have not encountered comparable demand. Which option best describes this situation?",
+      "translation": "",
+      "options": [
+        "A. Model bias",
+        "B. Data drift",
+        "C. Incorrect sizing",
+        "D. Skewing"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Data drift occurs when the real-world input data distribution changes from the data on which a model was trained and tested. An unprecedented viral-demand pattern makes the sales-forecasting model operate on conditions not represented in its prior data.",
+      "learnMore": [],
+      "images": []
+    },
+    {
+      "number": "148",
+      "topic": "Visualization and reporting",
+      "questionType": "mc",
+      "questionText": "An analyst must create a collection of sales dashboards for C-suite members, managers, and salespeople. Which of the following should the analyst consider when designing these dashboards?",
+      "translation": "",
+      "options": [
+        "A. Branding",
+        "B. Accessibility",
+        "C. User persona type",
+        "D. Sensitive information"
+      ],
+      "correctAnswer": "C",
+      "explanation": "User persona type determines the audience’s decision-making needs, required metrics, preferred level of detail, and dashboard layout. Executive, management, and salesperson dashboards should therefore be tailored to their distinct roles and information needs. Microsoft’s dashboard-design guidance specifically recommends considering how the audience uses a dashboard and which metrics and information it needs to succeed. LEARN MORE Tips for designing a great Power BI dashboard",
+      "learnMore": [
+        "Tips for designing a great Power BI dashboard"
+      ],
+      "images": []
+    }
+  ]
+}
