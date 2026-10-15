@@ -31,6 +31,7 @@ interface ProviderConfig {
   bgGradient: string      // gradiente de la card
   logo: string            // emoji o texto corto (fallback)
   logoImg?: string        // URL de logo de imagen (opcional, tiene prioridad)
+  logoClass?: string       // clases extra para la imagen de la card (ej. limitar el ancho)
   logoDarkInvert?: boolean // logo oscuro/transparente: se invierte a blanco en tema dark
   alias?: string          // ej: "Azure" para Microsoft
   exams: ExamConfig[]
@@ -175,7 +176,8 @@ const PROVIDERS: ProviderConfig[] = [
     color: '#C8202F',
     bgGradient: 'from-red-950 to-slate-900',
     logo: '💻',
-    logoImg: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwicPNCOBmvfIO3h0Z2q04MgiGX1y-BnmPt3CnF0wAKw&s=10',
+    logoImg: '/comptiaEA.png',
+    logoClass: 'max-w-[82%] object-left-top',
     exams: [],
   },
   {
@@ -431,7 +433,7 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
           src={p.logoImg}
           alt=""
           aria-hidden
-          className={`absolute -top-3 -left-3 h-[90%] w-auto object-contain pointer-events-none opacity-100 transition-transform duration-500 ease-out group-hover:scale-110 origin-top-left ${p.logoDarkInvert ? 'prov-logo-invert' : ''}`}
+          className={`absolute -top-3 -left-3 h-[90%] w-auto object-contain pointer-events-none opacity-100 transition-transform duration-500 ease-out group-hover:scale-110 origin-top-left ${p.logoDarkInvert ? 'prov-logo-invert' : ''} ${p.logoClass ?? ''}`}
           onError={e => { e.currentTarget.style.display = 'none' }}
         />
       ) : (
