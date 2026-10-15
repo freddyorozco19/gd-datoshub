@@ -388,7 +388,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
               <tbody className="divide-y divide-white/[0.04]">
                 {mFiltered.map((lead) => (
                   <tr key={lead.id} onClick={() => setDetailLead(lead)}
-                    className="hover:bg-blue-500/10/40 transition-colors cursor-pointer group">
+                    className="row-hover cursor-pointer group">
                     <td className="px-4 py-3">
                       <p className="font-medium text-slate-100 max-w-[180px] truncate group-hover:text-blue-400 transition-colors" title={lead.nombre}>{lead.nombre}</p>
                       {lead.correo && <p className="text-slate-400 truncate max-w-[180px] text-[10px]">{lead.correo}</p>}
