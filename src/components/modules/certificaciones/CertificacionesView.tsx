@@ -396,9 +396,9 @@ function ProviderCard({ p, onClick }: { p: ProviderConfig; onClick: () => void }
       )}
 
       {/* sombra: negro desde abajo cubriendo cuadrantes inferiores */}
-      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, black 0%, black 25%, rgba(0,0,0,0.75) 40%, rgba(0,0,0,0.3) 57%, transparent 70%)' }} />
+      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.96) 23%, rgba(0,0,0,0.7) 38%, rgba(0,0,0,0.27) 55%, transparent 68%)' }} />
       {/* oscurecer cuadrantes superiores (rojo y verde) */}
-      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(120deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.5) 30%, transparent 52%)' }} />
+      <span className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(120deg, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.43) 30%, transparent 51%)' }} />
 
       {/* texto superpuesto sobre el logo, en la parte inferior */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
