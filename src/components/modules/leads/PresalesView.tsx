@@ -81,7 +81,7 @@ function Card({ title, right, children, className = "", fill }: { title: string;
 function Kpi({ label, value, onClick, split }: { label: string; value: string; onClick?: () => void; split?: { label: string; short?: string; value: string; color: string }[] }) {
   return (
     <div
-      className={`${CARD} @container/k min-w-0 ${onClick ? "cursor-pointer hover:bg-white/[0.05] transition-colors" : ""}`}
+      className={`${CARD} @container/k min-w-0 ${onClick ? "kpi-click cursor-pointer" : ""}`}
       {...(onClick ? {
         role: "button", tabIndex: 0, onClick,
         onKeyDown: (e: React.KeyboardEvent) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } },
@@ -479,7 +479,7 @@ export default function PresalesView({
             return (
               <tr key={r.name}
                 onClick={() => setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
-                className="transition-colors cursor-pointer hover:bg-white/[0.05]">
+                className="row-hover cursor-pointer">
                 <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300`}>{r.open}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} pl-3 pr-3`}>
@@ -508,7 +508,7 @@ export default function PresalesView({
               const names = new Set(cargaRows.map((r) => r.name));
               setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Total" });
             }}
-            className="border-t border-white/[0.14] font-semibold cursor-pointer hover:bg-white/[0.05] transition-colors">
+            className="border-t border-white/[0.14] font-semibold cursor-pointer row-hover">
             <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
             <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.open}</td>
             <td className="pt-2.5 pl-3 pr-3">
@@ -775,7 +775,7 @@ export default function PresalesView({
                 <div className="divide-y divide-white/[0.05]">
                   {q.items.slice(0, 8).map((l) => (
                     <button key={l.id} type="button" onClick={() => setSelected(l)}
-                      className="w-full flex items-center gap-3 text-left px-1.5 py-2 hover:bg-white/[0.05] rounded-lg transition-colors">
+                      className="w-full flex items-center gap-3 text-left px-1.5 py-2 row-hover rounded-lg">
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</p>
                         <p className="text-[11px] text-slate-500 truncate">
@@ -815,7 +815,7 @@ export default function PresalesView({
                     <button key={`${h.leadId}-${h.date}-${i}`} type="button"
                       disabled={!lead}
                       onClick={() => lead && setSelected(lead)}
-                      className={`w-full flex items-center gap-3 text-left px-1.5 py-2 rounded-lg transition-colors ${lead ? "hover:bg-white/[0.05] cursor-pointer" : "cursor-default"}`}>
+                      className={`w-full flex items-center gap-3 text-left px-1.5 py-2 rounded-lg transition-colors ${lead ? "row-hover cursor-pointer" : "cursor-default"}`}>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-semibold text-slate-100 truncate" title={h.leadName}>{h.leadName}</p>
                         <p className="text-[11px] text-slate-500 mt-0.5">
