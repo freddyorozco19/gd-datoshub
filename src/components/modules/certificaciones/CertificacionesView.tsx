@@ -468,9 +468,8 @@ function ExamCard({ exam, provider, onClick }: { exam: ExamConfig; provider: Pro
       data-available={available}
       data-level={exam.level}
       style={{ ["--prov" as string]: provider.color }}
-      className={`exam-card relative w-full text-left rounded-lg p-3 pl-4 overflow-hidden transition-all duration-200 ${available ? "cursor-pointer group" : "cursor-not-allowed"}`}
+      className={`exam-card relative w-full text-left rounded-xl p-3 overflow-hidden transition-all duration-200 ${available ? "cursor-pointer group" : "cursor-not-allowed"}`}
     >
-      <span aria-hidden className="exam-stripe absolute left-0 top-0 bottom-0 w-1" />
       <div className="flex items-start justify-between mb-1.5">
         <span className="exam-code text-xs font-mono font-extrabold tracking-tight">{exam.code}</span>
         {available
