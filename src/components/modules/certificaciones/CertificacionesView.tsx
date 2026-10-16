@@ -465,29 +465,28 @@ function ExamCard({ exam, provider, onClick }: { exam: ExamConfig; provider: Pro
   return (
     <button
       onClick={available ? onClick : undefined}
-      style={{ backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)' }}
-      className={`relative w-full text-left bg-white/[0.05] border rounded-lg p-3 shadow-lg shadow-black/20 transition-all duration-200 ${
-        available
-          ? 'border-white/[0.1] hover:border-white/25 hover:bg-white/[0.08] cursor-pointer group'
-          : 'border-white/[0.06] opacity-50 cursor-not-allowed'
-      }`}
+      data-available={available}
+      data-level={exam.level}
+      style={{ ["--prov" as string]: provider.color }}
+      className={`exam-card relative w-full text-left rounded-lg p-3 pl-4 overflow-hidden transition-all duration-200 ${available ? "cursor-pointer group" : "cursor-not-allowed"}`}
     >
+      <span aria-hidden className="exam-stripe absolute left-0 top-0 bottom-0 w-1" />
       <div className="flex items-start justify-between mb-1.5">
-        <span className="text-[11px] font-mono font-bold" style={{ color: provider.color }}>{exam.code}</span>
+        <span className="exam-code text-xs font-mono font-extrabold tracking-tight">{exam.code}</span>
         {available
-          ? <ChevronRight size={13} className="text-slate-600 group-hover:text-slate-300 transition-colors" />
-          : <Lock size={11} className="text-slate-700" />
+          ? <ChevronRight size={14} className="exam-icon group-hover:translate-x-0.5 transition-transform" />
+          : <Lock size={12} className="exam-icon" />
         }
       </div>
-      <h4 className="text-xs font-semibold text-slate-200 mb-1.5 leading-snug line-clamp-2">{exam.name}</h4>
-      <span className={`inline-block text-[9px] font-semibold px-1.5 py-0.5 rounded-full border ${LEVEL_COLOR[exam.level]}`}>
+      <h4 className="exam-title text-xs font-semibold mb-1.5 leading-snug line-clamp-2">{exam.name}</h4>
+      <span className="exam-level inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full border">
         {exam.level}
       </span>
       {available && exam.questions && (
-        <p className="text-[10px] text-slate-500 mt-1.5">{exam.questions} preguntas</p>
+        <p className="exam-meta text-[10px] mt-1.5">{exam.questions} preguntas</p>
       )}
       {!available && (
-        <p className="text-[10px] text-slate-600 italic mt-1.5">Próximamente</p>
+        <p className="exam-meta text-[10px] italic mt-1.5">Próximamente</p>
       )}
     </button>
   )
@@ -3133,6 +3132,7 @@ export default function CertificacionesView() {
   const pathname  = usePathname()
   const router    = useRouter()
   const [mainTab, setMainTab] = useState<MainTab>('catalogo')
+  const [onlyAvailable, setOnlyAvailable] = useState(false)
 
   // Derivar estado desde la URL: /certificaciones[/providerId[/examId]]
   const segments       = pathname.replace(/^\/certificaciones\/?/, '').split('/').filter(Boolean)
@@ -3222,13 +3222,43 @@ export default function CertificacionesView() {
                 {selectedProvider.alias && <span className="text-slate-500 font-normal"> ({selectedProvider.alias})</span>}
               </h2>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5">
-              {[...selectedProvider.exams]
-                .sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level])
-                .map(e => (
-                  <ExamCard key={e.id} exam={e} provider={selectedProvider} onClick={() => selectExam(e)} />
-                ))}
-            </div>
+            {(() => {
+              const sorted = [...selectedProvider.exams].sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level])
+              const avail = sorted.filter(e => !!e.dataFile)
+              const soon  = sorted.filter(e => !e.dataFile)
+              const gridCls = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5"
+              return (
+                <>
+                  {soon.length > 0 && (
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[11px] text-slate-500">{avail.length} disponibles · {soon.length} próximamente</p>
+                      <button type="button" onClick={() => setOnlyAvailable(v => !v)} data-active={onlyAvailable}
+                        className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
+                        Solo disponibles
+                      </button>
+                    </div>
+                  )}
+                  {avail.length > 0 && (
+                    <div className={gridCls}>
+                      {avail.map(e => <ExamCard key={e.id} exam={e} provider={selectedProvider} onClick={() => selectExam(e)} />)}
+                    </div>
+                  )}
+                  {!onlyAvailable && soon.length > 0 && (
+                    <>
+                      {avail.length > 0 && (
+                        <div className="exam-sep flex items-center gap-3 pt-1">
+                          <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">Próximamente</span>
+                          <span className="exam-sep-line flex-1 h-px" />
+                        </div>
+                      )}
+                      <div className={gridCls}>
+                        {soon.map(e => <ExamCard key={e.id} exam={e} provider={selectedProvider} onClick={() => selectExam(e)} />)}
+                      </div>
+                    </>
+                  )}
+                </>
+              )
+            })()}
           </>
         )}
 
