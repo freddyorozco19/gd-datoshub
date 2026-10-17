@@ -10,6 +10,7 @@ import DateRangeSlider from "./DateRangeSlider";
 import FitRow from "./FitRow";
 import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
+import PresalesOcupacionModal from "./PresalesOcupacionModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow } from "./PresalesManageModal";
 
@@ -153,6 +154,7 @@ export default function PresalesView({
     } catch { return DEFAULT_PRESALES_SETTINGS; }
   });
   const [showSettings, setShowSettings] = useState(false);
+  const [showOcup, setShowOcup] = useState(false);
   const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive } = settings;
   const saveSettings = (next: PresalesSettings) => {
     setSettings(next);
@@ -340,6 +342,10 @@ export default function PresalesView({
   // mismos leads que suma la columna Abiertos de la tabla (respeta filtros y Solo activos)
   const abiertosNames = new Set(tableRows.map((r) => r.name));
   const abiertosLeads = filtered.filter((l) => isOpen(l) && abiertosNames.has(l.preventa || "Sin asignar"));
+  // ocupación: misma base que la columna Ocupación de la tabla (preventas listados × límite de Configuración)
+  const ocupGlobal = tableRows.length ? Math.round((totals.open / (CARGA_LIMIT * tableRows.length)) * 100) : 0;
+  const ocupAlerta = tableRows.filter((r) => (r.open / CARGA_LIMIT) >= 0.7).length;
+  const ocupLimite = tableRows.filter((r) => (r.open / CARGA_LIMIT) >= 1).length;
   // el pipeline NO se suma entre compañías: SAS está en COP e Internacional en USD
   const pipelineCOP = stats.open.filter((l) => compKey(l) === "SAS").reduce((s, l) => s + l.ingresosEsperados, 0);
   const pipelineUSD = stats.open.filter((l) => compKey(l) === "INT").reduce((s, l) => s + l.ingresosEsperados, 0);
@@ -605,13 +611,12 @@ export default function PresalesView({
                 { label: "GROW DATA", short: "GROW DATA", color: "bg-blue-400", value: fmtCOP(pipelineCOP) },
                 { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmtUSD(pipelineUSD) },
               ] : undefined} />
-            <Kpi label="Tasa de éxito"   value={stats.winRate === null ? "—" : `${stats.winRate}%`}
-              split={showSplit ? splitBy([], () => "").map((s, i) => {
-                const k: CompKey = i === 0 ? "SAS" : "INT";
-                const w = stats.won.filter((l) => compKey(l) === k).length, lo = stats.lost.filter((l) => compKey(l) === k).length;
-                const r = pct(w, w + lo);
-                return { ...s, value: r === null ? "—" : `${r}% · ${w}/${w + lo}` };
-              }) : undefined} />
+            <Kpi label="Ocupación" value={`${ocupGlobal}%`}
+              split={[
+                { label: "En alerta (≥ 70 %)", short: "Alerta ≥ 70 %", color: "bg-amber-400", value: String(ocupAlerta) },
+                { label: "Al límite (≥ 100 %)", short: "Al límite", color: "bg-rose-400", value: String(ocupLimite) },
+              ]}
+              onClick={() => setShowOcup(true)} />
             <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)}
               split={showSplit ? splitBy(stats.sinAsig) : undefined} />
             <Kpi label="Estancados"      value={String(stats.stale.length)}
@@ -839,6 +844,16 @@ export default function PresalesView({
 
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
       {showSettings && <PresalesSettingsPanel settings={settings} onSave={saveSettings} onClose={() => setShowSettings(false)} />}
+      {showOcup && (
+        <PresalesOcupacionModal
+          rows={tableRows.map((r) => ({ name: r.name, open: r.open }))}
+          leads={abiertosLeads}
+          limit={CARGA_LIMIT}
+          blocked={!!listModal}
+          onClose={() => setShowOcup(false)}
+          onList={(ls, heading) => setListModal({ leads: ls, heading })}
+        />
+      )}
       {listModal && (
         <LeadsListModal
           leads={listModal.leads}
