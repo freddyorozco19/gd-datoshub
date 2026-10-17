@@ -11,7 +11,7 @@ import FitRow from "./FitRow";
 import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesOcupacionModal from "./PresalesOcupacionModal";
-import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings } from "./PresalesSettingsPanel";
+import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow } from "./PresalesManageModal";
 
 /* ── constantes de gestión ───────────────────────────────────────────── */
@@ -154,6 +154,7 @@ export default function PresalesView({
     } catch { return DEFAULT_PRESALES_SETTINGS; }
   });
   const [showSettings, setShowSettings] = useState(false);
+  const [settingsSection, setSettingsSection] = useState<SectionId | undefined>(undefined);
   const [showOcup, setShowOcup] = useState(false);
   const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive } = settings;
   const saveSettings = (next: PresalesSettings) => {
@@ -561,7 +562,7 @@ export default function PresalesView({
         />
         </>}
         right={<>
-          <button type="button" onClick={() => setShowSettings(true)}
+          <button type="button" onClick={() => { setSettingsSection(undefined); setShowSettings(true); }}
             className="pill-option flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border">
             <Settings size={13} /> Configuración
           </button>
@@ -843,7 +844,7 @@ export default function PresalesView({
       )}
 
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
-      {showSettings && <PresalesSettingsPanel settings={settings} onSave={saveSettings} onClose={() => setShowSettings(false)} />}
+      {showSettings && <PresalesSettingsPanel settings={settings} initialSection={settingsSection} onSave={saveSettings} onClose={() => setShowSettings(false)} />}
       {showOcup && (
         <PresalesOcupacionModal
           rows={tableRows.map((r) => ({ name: r.name, open: r.open }))}
@@ -852,6 +853,7 @@ export default function PresalesView({
           blocked={!!listModal}
           onClose={() => setShowOcup(false)}
           onList={(ls, heading) => setListModal({ leads: ls, heading })}
+          onOpenSettings={() => { setShowOcup(false); setSettingsSection("ocupacion"); setShowSettings(true); }}
         />
       )}
       {listModal && (

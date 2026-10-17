@@ -16,13 +16,13 @@ export type PresalesSettings = {
 
 export const DEFAULT_PRESALES_SETTINGS: PresalesSettings = { staleDays: 14, maxOcupacion: 10, onlyActive: true };
 
-type SectionId = "estancados" | "ocupacion" | "preventas";
+export type SectionId = "estancados" | "ocupacion" | "preventas";
 
 export default function PresalesSettingsPanel({
-  settings, onSave, onClose,
-}: { settings: PresalesSettings; onSave: (s: PresalesSettings) => void; onClose: () => void }) {
+  settings, onSave, onClose, initialSection,
+}: { settings: PresalesSettings; onSave: (s: PresalesSettings) => void; onClose: () => void; initialSection?: SectionId }) {
   const [draft, setDraft] = useState<PresalesSettings>(settings);
-  const [section, setSection] = useState<SectionId | null>(null);
+  const [section, setSection] = useState<SectionId | null>(initialSection ?? null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { const t = requestAnimationFrame(() => setMounted(true)); return () => cancelAnimationFrame(t); }, []);

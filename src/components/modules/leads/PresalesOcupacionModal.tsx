@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
-import { X } from "lucide-react";
+import { X, Settings } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 
 /* Detalle de la card Ocupación (Presales): desglosa los leads abiertos por preventa, línea y compañía.
@@ -15,7 +15,7 @@ const isInt = (l: Lead) => (l.compania || "").toLowerCase().includes("internatio
 type Row = { name: string; open: number };
 
 export default function PresalesOcupacionModal({
-  rows, leads, limit, blocked, onClose, onList,
+  rows, leads, limit, blocked, onClose, onList, onOpenSettings,
 }: {
   rows: Row[];                       // preventas listados con su cantidad de leads abiertos
   leads: Lead[];                     // leads abiertos de esos preventas
@@ -23,6 +23,7 @@ export default function PresalesOcupacionModal({
   blocked: boolean;                  // hay otro popup encima: no cerrar con Esc
   onClose: () => void;
   onList: (leads: Lead[], heading: string) => void;
+  onOpenSettings: () => void;         // abre la configuración (sección Ocupación máxima)
 }) {
   useEffect(() => {
     if (blocked) return;
@@ -81,9 +82,14 @@ export default function PresalesOcupacionModal({
               <h2 className="font-semibold text-slate-100 uppercase tracking-wide text-sm">Ocupación de preventas</h2>
               <p className="text-[11px] text-slate-400 truncate">Leads abiertos frente al máximo de {limit} por preventa</p>
             </div>
-            <button type="button" onClick={onClose} title="Cerrar" aria-label="Cerrar" className="p-2 rounded-lg hover:bg-white/[0.12] transition-colors">
-              <X size={18} />
-            </button>
+            <div className="flex items-center gap-1">
+              <button type="button" onClick={onOpenSettings} title="Configurar la ocupación máxima" aria-label="Configuración" className="p-2 rounded-lg hover:bg-white/[0.12] transition-colors">
+                <Settings size={17} />
+              </button>
+              <button type="button" onClick={onClose} title="Cerrar" aria-label="Cerrar" className="p-2 rounded-lg hover:bg-white/[0.12] transition-colors">
+                <X size={18} />
+              </button>
+            </div>
           </div>
 
           <div className="flex-1 overflow-auto p-6 space-y-6">
