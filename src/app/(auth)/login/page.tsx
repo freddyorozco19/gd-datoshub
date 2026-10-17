@@ -78,7 +78,7 @@ export default function LoginPage() {
             height={56}
             className="rounded-xl shadow-[0_0_24px_-4px_rgba(37,99,235,0.5)]"
           />
-          <h1 className="text-lg font-bold text-slate-100 tracking-widest uppercase">GD-DatosHub</h1>
+          <h1 className="text-lg font-bold text-slate-100 tracking-widest uppercase">Grow Data Hub</h1>
         </div>
 
         {/* ── MODO RESET ── */}

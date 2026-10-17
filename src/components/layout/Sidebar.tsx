@@ -23,24 +23,24 @@ const SECTIONS: NavSection[] = [
     items: [
       { label: "Dashboard",     href: "/dashboard",     icon: LayoutDashboard },
       { label: "Leads",         href: "/leads",         icon: Users           },
-      { label: "Productos",     href: "/productos",     icon: Package         },
-      { label: "Reuniones",     href: "/reuniones",     icon: CalendarDays    },
-      { label: "Integraciones", href: "/integraciones", icon: Plug2           },
+      { label: "Products",      href: "/productos",     icon: Package         },
+      { label: "Meetings",      href: "/reuniones",     icon: CalendarDays    },
+      { label: "Integrations",  href: "/integraciones", icon: Plug2           },
     ],
   },
   {
     id: "analisis",
-    header: "Análisis",
+    header: "Analysis",
     items: [
       { label: "CMMI",            href: "/cmmi",            icon: ShieldCheck },
-      { label: "Certificaciones", href: "/certificaciones", icon: BookOpen    },
+      { label: "Certifications", href: "/certificaciones", icon: BookOpen    },
     ],
   },
   {
     id: "admin",
-    header: "Administración",
+    header: "Administration",
     items: [
-      { label: "Usuarios", href: "/usuarios", icon: UserCog, adminOnly: true },
+      { label: "Users", href: "/usuarios", icon: UserCog, adminOnly: true },
     ],
   },
 ];
@@ -137,7 +137,7 @@ export default function Sidebar() {
               <Image src="/growdata-icon.webp" alt="GrowData" width={32} height={32} className="w-full h-full object-contain" />
             </div>
             {!collapsed && (
-              <span className="text-sm font-bold tracking-wide text-white truncate block">GD-DatosHub</span>
+              <span className="text-sm font-bold tracking-wide text-white truncate block">Grow Data Hub</span>
             )}
           </div>
         </div>

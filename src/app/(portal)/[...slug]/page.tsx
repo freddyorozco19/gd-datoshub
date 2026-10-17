@@ -164,7 +164,7 @@ function IntegracionesView() {
   };
   return (
     <div className="flex flex-col h-full overflow-auto">
-      <Topbar title="Integraciones" subtitle="Fuentes de datos conectadas a GD-DatosHub" />
+      <Topbar title="Integraciones" subtitle="Fuentes de datos conectadas a Grow Data Hub" />
       <main className="flex-1 p-6 space-y-4">
         <div className="flex justify-end">
           <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-500 transition-colors">

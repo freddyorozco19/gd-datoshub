@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap", weight: ["300","400","500","600","700","800"] });
 
 export const metadata: Metadata = {
-  title: "GD-DatosHub | GrowData",
+  title: "Grow Data Hub | GrowData",
   description: "Hub central de datos y sistemas de información de GrowData",
   icons: { icon: "/growdata-icon.webp" },
 };

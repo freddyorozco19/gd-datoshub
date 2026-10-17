@@ -87,7 +87,7 @@ export default function SetPasswordPage() {
             <Database size={24} className="text-white" />
           </div>
           <div className="text-center">
-            <h1 className="text-xl font-bold text-slate-900">GD-DatosHub</h1>
+            <h1 className="text-xl font-bold text-slate-900">Grow Data Hub</h1>
             <p className="text-sm text-slate-500 mt-0.5">Crea tu contraseña</p>
           </div>
         </div>
