@@ -297,6 +297,11 @@ export default function PresalesView({
 
   /* carga por preventa */
   // Una columna por cada valor real del campo Etapa Prev. (además de Abierto), en vez de valores supuestos.
+  // todos los preventas conocidos (los de cualquier lead y los de la tabla de estados): aparecen en la tabla aunque tengan 0 leads
+  const allPreventas = useMemo(
+    () => Array.from(new Set([...leads.map((l) => l.preventa), ...Object.keys(statuses)].filter(Boolean))).sort(),
+    [leads, statuses],
+  );
   type CargaRow = { name: string; open: number; won: number; lost: number; pipeline: number; stale: number; counts: Record<string, number> };
   function buildCarga(src: Lead[]) {
     const map = new Map<string, CargaRow>();
@@ -319,6 +324,11 @@ export default function PresalesView({
       .sort((a, b) => (totals.get(b) ?? 0) - (totals.get(a) ?? 0))
       .map((k) => ({ key: k, label: labels.get(k) ?? k }));
     const rows = [...map.values()].sort((a, b) => b.open - a.open || Object.values(b.counts).reduce((s, n) => s + n, 0) - Object.values(a.counts).reduce((s, n) => s + n, 0));
+    // preventas sin ningún lead en este alcance: se agregan con carga 0 (respetando el filtro Preventa)
+    for (const name of allPreventas) {
+      if (map.has(name) || (fPreventa !== "ALL" && name !== fPreventa)) continue;
+      rows.push({ name, open: 0, won: 0, lost: 0, pipeline: 0, stale: 0, counts: {} });
+    }
     return { rows, cols };
   }
   const { byPreventa, etapaCols } = useMemo(() => {
