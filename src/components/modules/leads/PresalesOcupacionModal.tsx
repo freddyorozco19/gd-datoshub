@@ -12,7 +12,8 @@ const ocupColor = (p: number) => (p >= 100 ? "bg-rose-500" : p >= 70 ? "bg-amber
 const ocupText  = (p: number) => (p >= 100 ? "text-rose-500" : p >= 70 ? "text-amber-500" : "text-slate-300");
 const isInt = (l: Lead) => (l.compania || "").toLowerCase().includes("international");
 
-type Row = { name: string; open: number };
+type Row = { name: string; open: number; kind: "profesional" | "lider" | "gerente" };
+const KIND_TXT = { profesional: "Profesional", lider: "Líder", gerente: "Gerente" } as const;
 
 export default function PresalesOcupacionModal({
   rows, leads, limit, blocked, onClose, onList, onOpenSettings,
@@ -33,12 +34,14 @@ export default function PresalesOcupacionModal({
   }, [blocked, onClose]);
 
   const d = useMemo(() => {
-    const capacity = limit * rows.length;
-    const totalOpen = rows.reduce((s, r) => s + r.open, 0);
+    // la ocupación global solo cuenta a los profesionales
+    const prof = rows.filter((r) => r.kind === "profesional");
+    const capacity = limit * prof.length;
+    const totalOpen = prof.reduce((s, r) => s + r.open, 0);
     const global = capacity ? Math.round((totalOpen / capacity) * 100) : 0;
     const pctOf = (n: number) => Math.round((n / limit) * 100);
-    const alerta = rows.filter((r) => pctOf(r.open) >= 70).length;
-    const limite = rows.filter((r) => pctOf(r.open) >= 100).length;
+    const alerta = prof.filter((r) => pctOf(r.open) >= 70).length;
+    const limite = prof.filter((r) => pctOf(r.open) >= 100).length;
 
     const byLinea = new Map<string, Lead[]>();
     for (const l of leads) { const k = l.linea || "Sin línea"; byLinea.set(k, [...(byLinea.get(k) ?? []), l]); }
@@ -80,7 +83,7 @@ export default function PresalesOcupacionModal({
           <div className="app-bar modal-header flex items-center justify-between px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
             <div className="min-w-0">
               <h2 className="font-semibold text-slate-100 uppercase tracking-wide text-sm">Ocupación de preventas</h2>
-              <p className="text-[11px] text-slate-400 truncate">Leads abiertos frente al máximo de {limit} por preventa</p>
+              <p className="text-[11px] text-slate-400 truncate">Leads abiertos frente al máximo de {limit} por preventa · la ocupación global solo cuenta a los profesionales</p>
             </div>
             <div className="flex items-center gap-1">
               <button type="button" onClick={onOpenSettings} title="Configurar la ocupación máxima" aria-label="Configuración" className="p-2 rounded-lg hover:bg-white/[0.12] transition-colors">
@@ -121,7 +124,7 @@ export default function PresalesOcupacionModal({
                       const mine = leadsOf(r.name);
                       return (
                         <tr key={r.name} onClick={() => onList(mine, r.name)} className="row-hover cursor-pointer">
-                          <td className="px-4 py-2.5 font-medium text-slate-200 whitespace-nowrap">{r.name}</td>
+                          <td className="px-4 py-2.5 font-medium text-slate-200 whitespace-nowrap">{r.name}{r.kind !== "profesional" && <span className="kind-badge ml-2 align-middle text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide">{KIND_TXT[r.kind]}</span>}</td>
                           <td className="px-3 py-2.5 text-right tabular-nums text-slate-300">{r.open}</td>
                           <td className="px-3 py-2.5 text-right tabular-nums text-slate-400">{Math.max(0, limit - r.open)}</td>
                           <td className="px-3 py-2.5">

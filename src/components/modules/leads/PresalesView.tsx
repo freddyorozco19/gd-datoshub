@@ -12,7 +12,7 @@ import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesOcupacionModal from "./PresalesOcupacionModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
-import PresalesManageModal, { type PresalesStatusRow } from "./PresalesManageModal";
+import PresalesManageModal, { type PresalesStatusRow, type PresalesKind, KIND_LABEL } from "./PresalesManageModal";
 
 /* ── constantes de gestión ───────────────────────────────────────────── */
 const DAY_MS     = 86400000;
@@ -146,6 +146,7 @@ export default function PresalesView({
   const [statuses,   setStatuses]   = useState<Record<string, PresalesStatusRow>>({});
   const [canManage,  setCanManage]  = useState(false);
   const [needsSetup, setNeedsSetup] = useState(false);
+  const [needsKind,  setNeedsKind]  = useState(false);
   // configuración de la vista (días para estancado, ocupación máxima, ocultar inactivos): se guarda en este navegador
   const [settings, setSettings] = useState<PresalesSettings>(() => {
     try {
@@ -171,6 +172,7 @@ export default function PresalesView({
         setStatuses(Object.fromEntries((d.statuses as PresalesStatusRow[]).map((s) => [s.name, s])));
         setCanManage(!!d.canManage);
         setNeedsSetup(!!d.needsSetup);
+        setNeedsKind(!!d.needsKind);
       })
       .catch(() => {});
   }, []);
@@ -192,8 +194,12 @@ export default function PresalesView({
   }, []);
 
   const isInactive = (name: string) => statuses[name]?.active === false;
+  const kindOf = (name: string): PresalesKind => statuses[name]?.kind ?? "profesional";
+  // la ocupación global solo cuenta a los preventas profesionales (líderes y gerentes se muestran pero no suman)
+  const isProf = (name: string) => kindOf(name) === "profesional";
+  const kindBadge = (name: string) => (kindOf(name) === "profesional" ? null : <span className="kind-badge ml-2 align-middle text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide">{KIND_LABEL[kindOf(name)]}</span>);
 
-  async function saveStatuses(changes: { name: string; active: boolean }[]) {
+  async function saveStatuses(changes: { name: string; active: boolean; kind: PresalesKind }[]) {
     const res = await fetch("/api/presales/status", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -202,8 +208,10 @@ export default function PresalesView({
     const json = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
     const saved = json.statuses as PresalesStatusRow[];
-    setStatuses((prev) => ({ ...prev, ...Object.fromEntries(saved.map((s) => [s.name, s])) }));
+    const kindByName = new Map(changes.map((c) => [c.name, c.kind]));
+    setStatuses((prev) => ({ ...prev, ...Object.fromEntries(saved.map((s) => [s.name, { ...s, kind: kindByName.get(s.name) ?? s.kind ?? "profesional" }])) }));
     setNeedsSetup(false);
+    if (json.kindSaved === false) setNeedsKind(true);
   }
 
   /* universo de preventa: leads con preventa asignado, con Estado Preventa, o en Etapa Actual = Preventa
@@ -354,9 +362,11 @@ export default function PresalesView({
   const abiertosNames = new Set(tableRows.map((r) => r.name));
   const abiertosLeads = filtered.filter((l) => isOpen(l) && abiertosNames.has(l.preventa || "Sin asignar"));
   // ocupación: misma base que la columna Ocupación de la tabla (preventas listados × límite de Configuración)
-  const ocupGlobal = tableRows.length ? Math.round((totals.open / (CARGA_LIMIT * tableRows.length)) * 100) : 0;
-  const ocupAlerta = tableRows.filter((r) => (r.open / CARGA_LIMIT) >= 0.7).length;
-  const ocupLimite = tableRows.filter((r) => (r.open / CARGA_LIMIT) >= 1).length;
+  const profRows = tableRows.filter((r) => isProf(r.name));
+  const profOpen = profRows.reduce((s, r) => s + r.open, 0);
+  const ocupGlobal = profRows.length ? Math.round((profOpen / (CARGA_LIMIT * profRows.length)) * 100) : 0;
+  const ocupAlerta = profRows.filter((r) => (r.open / CARGA_LIMIT) >= 0.7).length;
+  const ocupLimite = profRows.filter((r) => (r.open / CARGA_LIMIT) >= 1).length;
   // el pipeline NO se suma entre compañías: SAS está en COP e Internacional en USD
   const pipelineCOP = stats.open.filter((l) => compKey(l) === "SAS").reduce((s, l) => s + l.ingresosEsperados, 0);
   const pipelineUSD = stats.open.filter((l) => compKey(l) === "INT").reduce((s, l) => s + l.ingresosEsperados, 0);
@@ -457,7 +467,8 @@ export default function PresalesView({
     stale:    cargaRows.reduce((s, r) => s + r.stale, 0),
     counts:   Object.fromEntries(carga.cols.map((c) => [c.key, cargaRows.reduce((s, r) => s + (r.counts[c.key] ?? 0), 0)])) as Record<string, number>,
   };
-  const cargaOcup = cargaRows.length ? Math.round((cargaTotals.open / (CARGA_LIMIT * cargaRows.length)) * 100) : 0;
+  const cargaProf = cargaRows.filter((r) => isProf(r.name));
+  const cargaOcup = cargaProf.length ? Math.round((cargaProf.reduce((s, r) => s + r.open, 0) / (CARGA_LIMIT * cargaProf.length)) * 100) : 0;
   // con solo Internacional el pipeline está en USD; con SAS o todas, en COP (ver nota de monedas arriba)
   const fmtCargaPipe = fCargaComp === "INT" ? fmtUSD : fmtCOP;
 
@@ -497,7 +508,7 @@ export default function PresalesView({
               <tr key={r.name}
                 onClick={() => setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
                 className="row-hover cursor-pointer">
-                <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
+                <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}{kindBadge(r.name)}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300`}>{r.open}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} pl-3 pr-3`}>
                   <div className="flex items-center gap-2" title={`${r.open} de ${CARGA_LIMIT} leads abiertos`}>
@@ -529,7 +540,7 @@ export default function PresalesView({
             <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
             <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.open}</td>
             <td className="pt-2.5 pl-3 pr-3">
-              <div className="flex items-center gap-2" title={`Ocupación global: ${cargaTotals.open} de ${CARGA_LIMIT * cargaRows.length}`}>
+              <div className="flex items-center gap-2" title={`Ocupación global (solo profesionales): ${cargaProf.reduce((s, r) => s + r.open, 0)} de ${CARGA_LIMIT * cargaProf.length}`}>
                 <div className="flex-1" />
                 <span className="w-10 text-right tabular-nums text-slate-100">{cargaOcup}%</span>
               </div>
@@ -589,6 +600,12 @@ export default function PresalesView({
         </>}
       />
 
+      {canManage && needsKind && !needsSetup && (
+        <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
+          <AlertCircle size={16} className="shrink-0 mt-0.5" />
+          El tipo de preventa (Profesional, Líder, Gerente) aún no se puede guardar: falta la columna kind en Supabase. Ejecuta supabase/migrations/20261018_presales_status_kind.sql en el SQL Editor.
+        </div>
+      )}
       {canManage && needsSetup && (
         <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
           <AlertCircle size={16} className="shrink-0 mt-0.5" />
@@ -857,7 +874,7 @@ export default function PresalesView({
       {showSettings && <PresalesSettingsPanel settings={settings} initialSection={settingsSection} onSave={saveSettings} onClose={() => setShowSettings(false)} />}
       {showOcup && (
         <PresalesOcupacionModal
-          rows={tableRows.map((r) => ({ name: r.name, open: r.open }))}
+          rows={tableRows.map((r) => ({ name: r.name, open: r.open, kind: kindOf(r.name) }))}
           leads={abiertosLeads}
           limit={CARGA_LIMIT}
           blocked={!!listModal}

@@ -108,7 +108,7 @@ export default function PresalesSettingsPanel({
               <div className="space-y-4">
                 <p className="text-sm text-slate-400">Cantidad de leads abiertos que equivale al <span className="font-medium text-slate-200">100 % de ocupación</span> de un preventa.</p>
                 {numInput("maxOcupacion", 1, 100, "leads abiertos")}
-                <p className="text-[11px] text-slate-500">Se usa en la columna Ocupación de Carga por preventa: con {Number.isFinite(draft.maxOcupacion) && draft.maxOcupacion > 0 ? draft.maxOcupacion : "—"} leads abiertos, un preventa está al 100 %. Valor por defecto: {DEFAULT_PRESALES_SETTINGS.maxOcupacion}.</p>
+                <p className="text-[11px] text-slate-500">La ocupación global solo cuenta a los preventas de tipo Profesional. Se usa en la columna Ocupación de Carga por preventa: con {Number.isFinite(draft.maxOcupacion) && draft.maxOcupacion > 0 ? draft.maxOcupacion : "—"} leads abiertos, un preventa está al 100 %. Valor por defecto: {DEFAULT_PRESALES_SETTINGS.maxOcupacion}.</p>
               </div>
             ) : (
               <div className="space-y-4">

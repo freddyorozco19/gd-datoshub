@@ -4,9 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Users, X, Search, AlertCircle, Loader2 } from "lucide-react";
 
+export type PresalesKind = "profesional" | "lider" | "gerente";
+export const KIND_LABEL: Record<PresalesKind, string> = { profesional: "Profesional", lider: "Líder", gerente: "Gerente" };
 export interface PresalesStatusRow {
   name: string;
   active: boolean;
+  kind?: PresalesKind;
   updated_by: string | null;
   updated_at: string | null;
 }
@@ -25,7 +28,7 @@ export default function PresalesManageModal({
 }: {
   people: PresalesPerson[];
   statuses: Record<string, PresalesStatusRow>;
-  onSave: (changes: { name: string; active: boolean }[]) => Promise<void>;
+  onSave: (changes: { name: string; active: boolean; kind: PresalesKind }[]) => Promise<void>;
   onClose: () => void;
 }) {
   const [query, setQuery]   = useState("");
@@ -34,12 +37,16 @@ export default function PresalesManageModal({
   // cambios pendientes (aún no guardados): nombre → activo
   const [draft, setDraft]   = useState<Record<string, boolean>>({});
 
+  const [kindDraft, setKindDraft] = useState<Record<string, PresalesKind>>({});
   const effective = (name: string) => draft[name] ?? (statuses[name] ? statuses[name].active : true);
+  const savedKind = (name: string): PresalesKind => statuses[name]?.kind ?? "profesional";
+  const effectiveKind = (name: string): PresalesKind => kindDraft[name] ?? savedKind(name);
   // al confirmar se guardan los cambios y también los "Nuevos" (quedan revisados con su estado actual)
   const toSave = people
-    .filter((p) => (statuses[p.name] ? effective(p.name) !== statuses[p.name].active : true))
-    .map((p) => ({ name: p.name, active: effective(p.name) }));
-  const pendingChanges = Object.keys(draft).filter((n) => statuses[n] && draft[n] !== statuses[n].active).length;
+    .filter((p) => (statuses[p.name] ? effective(p.name) !== statuses[p.name].active || effectiveKind(p.name) !== savedKind(p.name) : true))
+    .map((p) => ({ name: p.name, active: effective(p.name), kind: effectiveKind(p.name) }));
+  const pendingChanges = people.filter((p) => statuses[p.name]
+    && (effective(p.name) !== statuses[p.name].active || effectiveKind(p.name) !== savedKind(p.name))).length;
 
   // el orden se fija al abrir (nuevos → activos → inactivos) para que las filas no salten al cambiar un interruptor
   const [order] = useState(() =>
@@ -95,7 +102,7 @@ export default function PresalesManageModal({
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-white leading-none">Gestionar preventas</h3>
-                <p className="text-[10px] text-slate-400 mt-1">Marca quién sigue activo en la compañía</p>
+                <p className="text-[10px] text-slate-400 mt-1">Marca quién sigue activo y de qué tipo es</p>
               </div>
             </div>
             <button onClick={onClose} title="Cerrar"
@@ -142,6 +149,12 @@ export default function PresalesManageModal({
                           )}
                         </p>
                       </div>
+                      <select
+                        value={effectiveKind(name)} disabled={saving} aria-label={`Tipo de ${name}`}
+                        onChange={(e) => setKindDraft((d) => ({ ...d, [name]: e.target.value as PresalesKind }))}
+                        className="shrink-0 text-[11px] rounded-md bg-white/[0.06] border border-white/[0.1] text-slate-300 px-2 py-1 focus:outline-none focus:border-blue-500/60">
+                        {(Object.keys(KIND_LABEL) as PresalesKind[]).map((k) => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}
+                      </select>
                       <span className="text-[10px] text-slate-500 w-14 text-right">{active ? "Activo" : "Inactivo"}</span>
                       <button
                         type="button" role="switch" aria-checked={active} disabled={saving}

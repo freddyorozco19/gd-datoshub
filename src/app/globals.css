@@ -527,6 +527,10 @@ body {
 .light .dashboard-shell .exam-card[data-level="Expert"]       { --lv-t: #b45309; --lv-bg: #fef3c7; --lv-b: #fcd34d; }
 .light .dashboard-shell .exam-card[data-level="Specialty"]    { --lv-t: #be123c; --lv-bg: #ffe4e6; --lv-b: #fda4af; }
 
+/* Etiqueta de tipo de preventa (Líder / Gerente) junto al nombre */
+.kind-badge { background-color: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+.light .dashboard-shell .kind-badge { background-color: #ede9fe; color: #6d28d9; }
+
 /* Header de los modales en tema claro: degradé de claro a azul (en vez de oscuro a azul).
    Los textos sobre la parte clara pasan a oscuro; los botones (cerrar, etc.) quedan blancos sobre el azul. */
 .light .dashboard-shell .modal-header {
