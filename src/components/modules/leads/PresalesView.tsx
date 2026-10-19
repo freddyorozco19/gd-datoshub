@@ -12,7 +12,7 @@ import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesOcupacionModal from "./PresalesOcupacionModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
-import PresalesManageModal, { type PresalesStatusRow, type PresalesKind, KIND_LABEL } from "./PresalesManageModal";
+import PresalesManageModal, { type PresalesStatusRow, type PresalesRole, ROLE_LABEL } from "./PresalesManageModal";
 
 /* ── constantes de gestión ───────────────────────────────────────────── */
 const DAY_MS     = 86400000;
@@ -146,7 +146,7 @@ export default function PresalesView({
   const [statuses,   setStatuses]   = useState<Record<string, PresalesStatusRow>>({});
   const [canManage,  setCanManage]  = useState(false);
   const [needsSetup, setNeedsSetup] = useState(false);
-  const [needsKind,  setNeedsKind]  = useState(false);
+  const [needsRole,  setNeedsRole]  = useState(false);
   // configuración de la vista (días para estancado, ocupación máxima, ocultar inactivos): se guarda en este navegador
   const [settings, setSettings] = useState<PresalesSettings>(() => {
     try {
@@ -172,7 +172,7 @@ export default function PresalesView({
         setStatuses(Object.fromEntries((d.statuses as PresalesStatusRow[]).map((s) => [s.name, s])));
         setCanManage(!!d.canManage);
         setNeedsSetup(!!d.needsSetup);
-        setNeedsKind(!!d.needsKind);
+        setNeedsRole(!!d.needsRole);
       })
       .catch(() => {});
   }, []);
@@ -194,12 +194,12 @@ export default function PresalesView({
   }, []);
 
   const isInactive = (name: string) => statuses[name]?.active === false;
-  const kindOf = (name: string): PresalesKind => statuses[name]?.kind ?? "profesional";
+  const roleOf = (name: string): PresalesRole => statuses[name]?.role ?? "profesional";
   // la ocupación global solo cuenta a los preventas profesionales (líderes y gerentes se muestran pero no suman)
-  const isProf = (name: string) => kindOf(name) === "profesional";
-  const kindBadge = (name: string) => (kindOf(name) === "profesional" ? null : <span className="kind-badge ml-2 align-middle text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide">{KIND_LABEL[kindOf(name)]}</span>);
+  const isProf = (name: string) => roleOf(name) === "profesional";
+  const roleBadge = (name: string) => (roleOf(name) === "profesional" ? null : <span className="role-badge ml-2 align-middle text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide">{ROLE_LABEL[roleOf(name)]}</span>);
 
-  async function saveStatuses(changes: { name: string; active: boolean; kind: PresalesKind }[]) {
+  async function saveStatuses(changes: { name: string; active: boolean; role: PresalesRole }[]) {
     const res = await fetch("/api/presales/status", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -208,10 +208,10 @@ export default function PresalesView({
     const json = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
     const saved = json.statuses as PresalesStatusRow[];
-    const kindByName = new Map(changes.map((c) => [c.name, c.kind]));
-    setStatuses((prev) => ({ ...prev, ...Object.fromEntries(saved.map((s) => [s.name, { ...s, kind: kindByName.get(s.name) ?? s.kind ?? "profesional" }])) }));
+    const roleByName = new Map(changes.map((c) => [c.name, c.role]));
+    setStatuses((prev) => ({ ...prev, ...Object.fromEntries(saved.map((s) => [s.name, { ...s, role: roleByName.get(s.name) ?? s.role ?? "profesional" }])) }));
     setNeedsSetup(false);
-    if (json.kindSaved === false) setNeedsKind(true);
+    if (json.roleSaved === false) setNeedsRole(true);
   }
 
   /* universo de preventa: leads con preventa asignado, con Estado Preventa, o en Etapa Actual = Preventa
@@ -508,7 +508,7 @@ export default function PresalesView({
               <tr key={r.name}
                 onClick={() => setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
                 className="row-hover cursor-pointer">
-                <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}{kindBadge(r.name)}</td>
+                <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}{roleBadge(r.name)}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300`}>{r.open}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} pl-3 pr-3`}>
                   <div className="flex items-center gap-2" title={`${r.open} de ${CARGA_LIMIT} leads abiertos`}>
@@ -600,10 +600,10 @@ export default function PresalesView({
         </>}
       />
 
-      {canManage && needsKind && !needsSetup && (
+      {canManage && needsRole && !needsSetup && (
         <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
           <AlertCircle size={16} className="shrink-0 mt-0.5" />
-          El tipo de preventa (Profesional, Líder, Gerente) aún no se puede guardar: falta la columna kind en Supabase. Ejecuta supabase/migrations/20261018_presales_status_kind.sql en el SQL Editor.
+          El tipo de preventa (Profesional, Líder, Gerente) aún no se puede guardar: falta la columna role en Supabase. Ejecuta supabase/migrations/20261018_presales_status_role.sql en el SQL Editor.
         </div>
       )}
       {canManage && needsSetup && (
@@ -874,7 +874,7 @@ export default function PresalesView({
       {showSettings && <PresalesSettingsPanel settings={settings} initialSection={settingsSection} onSave={saveSettings} onClose={() => setShowSettings(false)} />}
       {showOcup && (
         <PresalesOcupacionModal
-          rows={tableRows.map((r) => ({ name: r.name, open: r.open, kind: kindOf(r.name) }))}
+          rows={tableRows.map((r) => ({ name: r.name, open: r.open, role: roleOf(r.name) }))}
           leads={abiertosLeads}
           limit={CARGA_LIMIT}
           blocked={!!listModal}
