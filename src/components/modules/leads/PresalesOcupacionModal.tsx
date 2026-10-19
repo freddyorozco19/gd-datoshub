@@ -12,8 +12,8 @@ const ocupColor = (p: number) => (p >= 100 ? "bg-rose-500" : p >= 70 ? "bg-amber
 const ocupText  = (p: number) => (p >= 100 ? "text-rose-500" : p >= 70 ? "text-amber-500" : "text-slate-300");
 const isInt = (l: Lead) => (l.compania || "").toLowerCase().includes("international");
 
-type Row = { name: string; open: number; role: "profesional" | "lider" | "gerente" };
-const ROLE_TXT = { profesional: "Profesional", lider: "Líder", gerente: "Gerente" } as const;
+type Row = { name: string; open: number; kind: "profesional" | "lider" | "gerente" };
+const KIND_TXT = { profesional: "Profesional", lider: "Líder", gerente: "Gerente" } as const;
 
 export default function PresalesOcupacionModal({
   rows, leads, limit, blocked, onClose, onList, onOpenSettings,
@@ -35,7 +35,7 @@ export default function PresalesOcupacionModal({
 
   const d = useMemo(() => {
     // la ocupación global solo cuenta a los profesionales
-    const prof = rows.filter((r) => r.role === "profesional");
+    const prof = rows.filter((r) => r.kind === "profesional");
     const capacity = limit * prof.length;
     const totalOpen = prof.reduce((s, r) => s + r.open, 0);
     const global = capacity ? Math.round((totalOpen / capacity) * 100) : 0;
@@ -124,7 +124,7 @@ export default function PresalesOcupacionModal({
                       const mine = leadsOf(r.name);
                       return (
                         <tr key={r.name} onClick={() => onList(mine, r.name)} className="row-hover cursor-pointer">
-                          <td className="px-4 py-2.5 font-medium text-slate-200 whitespace-nowrap">{r.name}{r.role !== "profesional" && <span className="role-badge ml-2 align-middle text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide">{ROLE_TXT[r.role]}</span>}</td>
+                          <td className="px-4 py-2.5 font-medium text-slate-200 whitespace-nowrap">{r.name}{r.kind !== "profesional" && <span className="kind-badge ml-2 align-middle text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide">{KIND_TXT[r.kind]}</span>}</td>
                           <td className="px-3 py-2.5 text-right tabular-nums text-slate-300">{r.open}</td>
                           <td className="px-3 py-2.5 text-right tabular-nums text-slate-400">{Math.max(0, limit - r.open)}</td>
                           <td className="px-3 py-2.5">
