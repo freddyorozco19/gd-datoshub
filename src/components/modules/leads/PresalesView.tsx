@@ -12,7 +12,7 @@ import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesOcupacionModal from "./PresalesOcupacionModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
-import PresalesManageModal, { type PresalesStatusRow, type PresalesKind, KIND_LABEL } from "./PresalesManageModal";
+import PresalesManageModal, { type PresalesStatusRow, type PresalesKind } from "./PresalesManageModal";
 
 /* ── constantes de gestión ───────────────────────────────────────────── */
 const DAY_MS     = 86400000;
@@ -197,7 +197,6 @@ export default function PresalesView({
   const kindOf = (name: string): PresalesKind => statuses[name]?.kind ?? "profesional";
   // la ocupación global solo cuenta a los preventas profesionales (líderes y gerentes se muestran pero no suman)
   const isProf = (name: string) => kindOf(name) === "profesional";
-  const kindBadge = (name: string) => (kindOf(name) === "profesional" ? null : <span className="kind-badge ml-2 align-middle text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide">{KIND_LABEL[kindOf(name)]}</span>);
 
   async function saveStatuses(changes: { name: string; active: boolean; kind: PresalesKind }[]) {
     const res = await fetch("/api/presales/status", {
@@ -508,7 +507,7 @@ export default function PresalesView({
               <tr key={r.name}
                 onClick={() => setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
                 className="row-hover cursor-pointer">
-                <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}{kindBadge(r.name)}</td>
+                <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300`}>{r.open}</td>
                 <td className={`${big ? "py-2.5" : "py-2"} pl-3 pr-3`}>
                   <div className="flex items-center gap-2" title={`${r.open} de ${CARGA_LIMIT} leads abiertos`}>

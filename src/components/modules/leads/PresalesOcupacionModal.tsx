@@ -13,7 +13,6 @@ const ocupText  = (p: number) => (p >= 100 ? "text-rose-500" : p >= 70 ? "text-a
 const isInt = (l: Lead) => (l.compania || "").toLowerCase().includes("international");
 
 type Row = { name: string; open: number; kind: "profesional" | "lider" | "gerente" };
-const KIND_TXT = { profesional: "Profesional", lider: "Líder", gerente: "Gerente" } as const;
 
 export default function PresalesOcupacionModal({
   rows, leads, limit, blocked, onClose, onList, onOpenSettings,
@@ -124,7 +123,7 @@ export default function PresalesOcupacionModal({
                       const mine = leadsOf(r.name);
                       return (
                         <tr key={r.name} onClick={() => onList(mine, r.name)} className="row-hover cursor-pointer">
-                          <td className="px-4 py-2.5 font-medium text-slate-200 whitespace-nowrap">{r.name}{r.kind !== "profesional" && <span className="kind-badge ml-2 align-middle text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide">{KIND_TXT[r.kind]}</span>}</td>
+                          <td className="px-4 py-2.5 font-medium text-slate-200 whitespace-nowrap">{r.name}</td>
                           <td className="px-3 py-2.5 text-right tabular-nums text-slate-300">{r.open}</td>
                           <td className="px-3 py-2.5 text-right tabular-nums text-slate-400">{Math.max(0, limit - r.open)}</td>
                           <td className="px-3 py-2.5">
