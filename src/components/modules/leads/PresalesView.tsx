@@ -107,16 +107,16 @@ function Kpi({ label, value, onClick, split }: { label: string; value: string; o
             {split.map((s) => {
               const inner = (
                 <>
-                  <span className="flex items-center gap-1.5 text-slate-500 whitespace-nowrap min-w-0">
+                  <span className="flex items-center gap-1.5 text-slate-500 whitespace-nowrap min-w-0 flex-1 overflow-hidden">
                     <i className={`w-2 h-2 rounded-sm shrink-0 ${s.color}`} />
                     {s.short && s.short !== s.label ? (
                       <>
-                        <span className="@[210px]/k:hidden" title={s.label}>{s.short}</span>
-                        <span className="hidden @[210px]/k:inline">{s.label}</span>
+                        <span className="@[210px]/k:hidden truncate" title={s.label}>{s.short}</span>
+                        <span className="hidden @[210px]/k:inline truncate">{s.label}</span>
                       </>
-                    ) : s.label}
+                    ) : <span className="truncate" title={s.label}>{s.label}</span>}
                   </span>
-                  <span className="text-slate-300 tabular-nums whitespace-nowrap">{s.value}</span>
+                  <span className="text-slate-300 tabular-nums whitespace-nowrap shrink-0">{s.value}</span>
                 </>
               );
               const style = { fontSize: "clamp(9px, 5.8cqw, 11px)" };
