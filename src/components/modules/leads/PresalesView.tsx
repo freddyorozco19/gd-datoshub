@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { RefreshCw, AlertCircle, Loader2, X, UserCog, Maximize2, Settings } from "lucide-react";
+import { RefreshCw, AlertCircle, Loader2, X, Maximize2, Settings } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 import FilterSelect from "./FilterSelect";
@@ -630,12 +630,6 @@ export default function PresalesView({
             className="pill-option flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border">
             <Settings size={13} /> Configuración
           </button>
-          {canManage && (
-            <button type="button" onClick={() => setShowManage(true)}
-              className="pill-option flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border">
-              <UserCog size={13} /> Gestionar preventas
-            </button>
-          )}
           <button onClick={onReload} disabled={loading} title="Actualizar" aria-label="Actualizar"
             className="pill-option flex items-center justify-center p-2.5 rounded-lg border disabled:opacity-60 disabled:cursor-default">
             <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
@@ -914,7 +908,12 @@ export default function PresalesView({
       )}
 
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
-      {showSettings && <PresalesSettingsPanel settings={settings} initialSection={settingsSection} onSave={saveSettings} onClose={() => setShowSettings(false)} />}
+      {showSettings && (
+        <PresalesSettingsPanel
+          settings={settings} initialSection={settingsSection} onSave={saveSettings} onClose={() => setShowSettings(false)}
+          onManagePreventas={canManage ? () => setShowManage(true) : undefined} blocked={showManage}
+        />
+      )}
       {showOcup && (
         <PresalesOcupacionModal
           rows={tableRows.map((r) => ({ name: r.name, open: r.open, kind: kindOf(r.name) }))}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, ChevronRight, ArrowLeft, Clock, Gauge, UserCheck } from "lucide-react";
+import { X, ChevronRight, ArrowLeft, Clock, Gauge, UserCheck, UserCog } from "lucide-react";
 
 /* Configuración de la vista Presales — panel lateral estilo Azure ("blade"):
    lista de opciones → al elegir una se abre su detalle con botón de volver, y los cambios
@@ -19,18 +19,23 @@ export const DEFAULT_PRESALES_SETTINGS: PresalesSettings = { staleDays: 14, maxO
 export type SectionId = "estancados" | "ocupacion" | "preventas";
 
 export default function PresalesSettingsPanel({
-  settings, onSave, onClose, initialSection,
-}: { settings: PresalesSettings; onSave: (s: PresalesSettings) => void; onClose: () => void; initialSection?: SectionId }) {
+  settings, onSave, onClose, initialSection, onManagePreventas, blocked,
+}: {
+  settings: PresalesSettings; onSave: (s: PresalesSettings) => void; onClose: () => void; initialSection?: SectionId;
+  onManagePreventas?: () => void;   // abre Gestionar preventas (solo para quien puede gestionarlos)
+  blocked?: boolean;                // hay otro popup encima: no cerrar con Esc
+}) {
   const [draft, setDraft] = useState<PresalesSettings>(settings);
   const [section, setSection] = useState<SectionId | null>(initialSection ?? null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { const t = requestAnimationFrame(() => setMounted(true)); return () => cancelAnimationFrame(t); }, []);
   useEffect(() => {
+    if (blocked) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { if (section) setSection(null); else onClose(); } };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [section, onClose]);
+  }, [section, onClose, blocked]);
 
   const dirty = draft.staleDays !== settings.staleDays || draft.maxOcupacion !== settings.maxOcupacion || draft.onlyActive !== settings.onlyActive;
   const valid = Number.isInteger(draft.staleDays) && draft.staleDays >= 1 && draft.staleDays <= 365
@@ -97,6 +102,17 @@ export default function PresalesSettingsPanel({
                     <ChevronRight size={15} className="shrink-0 text-slate-500" />
                   </button>
                 ))}
+                {onManagePreventas && (
+                  <button type="button" onClick={onManagePreventas}
+                    className="row-hover w-full text-left flex items-center gap-3 rounded-xl border border-white/[0.08] px-4 py-3.5 cursor-pointer">
+                    <span className="shrink-0 flex items-center justify-center w-9 h-9 rounded-lg bg-blue-500/10 text-blue-500"><UserCog size={17} /></span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-medium text-slate-200">Gestionar preventas</span>
+                      <span className="block text-[11px] text-slate-500 mt-0.5">Define quién sigue activo y de qué tipo es: Profesional, Líder o Gerente.</span>
+                    </span>
+                    <ChevronRight size={15} className="shrink-0 text-slate-500" />
+                  </button>
+                )}
               </div>
             ) : section === "estancados" ? (
               <div className="space-y-4">
