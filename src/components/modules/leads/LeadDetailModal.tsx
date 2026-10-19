@@ -3,7 +3,8 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { ExternalLink, X, Paperclip, FileText, FileImage, File, History, Loader2 } from "lucide-react";
-import type { Lead, OdooAttachment } from "@/lib/odoo/types";
+import type { Lead, OdooAttachment, LeadNote } from "@/lib/odoo/types";
+import LeadNotesPanel from "./LeadNotesPanel";
 import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 
 const ODOO_BASE = "https://grow-data.odoo.com";
@@ -58,7 +59,7 @@ const ETAPA_STYLE: Record<string, string> = {
 type HistoryField = "estadoPreventa" | "etapaActual";
 interface Props { lead: Lead; onClose: () => void; historyField?: HistoryField }
 
-type Tab = "detalle" | "historial";
+type Tab = "detalle" | "historial" | "notas";
 
 export default function LeadDetailModal({ lead, onClose, historyField = "estadoPreventa" }: Props) {
   const [tab, setTab] = useState<Tab>("detalle");
@@ -67,6 +68,22 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
   const [history,        setHistory]        = useState<PreventaHistoryEntry[] | null>(null);
   const [loadingHistory, setLoadingHistory]  = useState(false);
+  // notas (chatter de Odoo): se cargan al abrir la pestaña
+  const [notes,        setNotes]        = useState<LeadNote[] | null>(null);
+  const [notesError,   setNotesError]   = useState<string | null>(null);
+  const loadingNotes = tab === "notas" && notes === null && notesError === null;
+  useEffect(() => {
+    if (tab !== "notas" || notes !== null || notesError !== null) return;
+    let cancelled = false;
+    fetch(`/api/odoo/leads/${lead.id}/notes`)
+      .then(async (r) => {
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || `Error ${r.status}`);
+        if (!cancelled) setNotes(j.notes as LeadNote[]);
+      })
+      .catch((e) => { if (!cancelled) setNotesError(e instanceof Error ? e.message : "No se pudieron leer las notas."); });
+    return () => { cancelled = true; };
+  }, [tab, notes, notesError, lead.id]);
   const hasHistoryData = historyField === "etapaActual" ? !!lead.etapa : !!(lead.preventa || lead.etapaPreventa);
   const historyLabel = historyField === "etapaActual" ? "Historial de Etapa Actual" : "Historial de Estado Preventa";
 
@@ -141,11 +158,12 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
         </div>
 
         {/* tabs */}
-        {hasHistoryData && (
+        {(
           <div className="flex items-center gap-1 px-6 pt-3 border-b border-white/[0.07] shrink-0">
             {([
               { id: "detalle" as const, label: "Detalle" },
-              { id: "historial" as const, label: "Historial" },
+              ...(hasHistoryData ? [{ id: "historial" as const, label: "Historial" }] : []),
+              { id: "notas" as const, label: "Notas" },
             ]).map(({ id, label }) => (
               <button
                 key={id}
@@ -170,7 +188,9 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
         {/* body */}
         <div className="overflow-y-auto flex-1 px-6 py-5 space-y-6">
-        {tab === "historial" && hasHistoryData ? (
+        {tab === "notas" ? (
+          <LeadNotesPanel notes={notes} loading={loadingNotes} error={notesError} />
+        ) : tab === "historial" && hasHistoryData ? (
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
               <History size={10} /> {historyLabel}

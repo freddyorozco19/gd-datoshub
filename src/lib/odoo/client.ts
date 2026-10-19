@@ -381,3 +381,100 @@ export async function fetchDatasetFacet(model: DatasetModel, field: string): Pro
     return { value: EMPTY_FILTER_VALUE, label: "", count };
   });
 }
+
+/* ── Chatter de una oportunidad: notas, mensajes, correos y cambios ── */
+function htmlToText(html: string): string {
+  return html
+    .replace(/<(script|style)[\s\S]*?<\/\1>/gi, "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|li|tr|h[1-6]|blockquote)>/gi, "\n")
+    .replace(/<li[^>]*>/gi, "• ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'").replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&amp;/g, "&")
+    .replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+export async function fetchLeadNotes(leadId: number): Promise<import("./types").LeadNote[]> {
+  const uid = await login();
+  const msgs = await executeKw<{
+    id: number; date: string; author_id: [number, string] | false; email_from: string | false; subject: string | false;
+    body: string | false; message_type: string; subtype_id: [number, string] | false;
+    tracking_value_ids: number[]; attachment_ids: number[]; parent_id: [number, string] | false; is_internal: boolean;
+  }[]>(uid, "mail.message", "search_read", [[["model", "=", "crm.lead"], ["res_id", "=", leadId]]], {
+    fields: ["id", "date", "author_id", "email_from", "subject", "body", "message_type", "subtype_id", "tracking_value_ids", "attachment_ids", "parent_id", "is_internal"],
+    order: "date desc, id desc", limit: 300,
+  });
+  if (!msgs.length) return [];
+
+  // cambios de campo (tracking) con la etiqueta y el tipo de cada campo
+  const trIds = msgs.flatMap((m) => m.tracking_value_ids);
+  type Tr = {
+    id: number; field_id: [number, string] | false; old_value_char: string | false; new_value_char: string | false;
+    old_value_text: string | false; new_value_text: string | false; old_value_datetime: string | false; new_value_datetime: string | false;
+    old_value_float: number; new_value_float: number; old_value_integer: number; new_value_integer: number;
+  };
+  const tracking = trIds.length ? await executeKw<Tr[]>(uid, "mail.tracking.value", "read", [trIds, [
+    "field_id", "old_value_char", "new_value_char", "old_value_text", "new_value_text",
+    "old_value_datetime", "new_value_datetime", "old_value_float", "new_value_float", "old_value_integer", "new_value_integer",
+  ]]) : [];
+  const fieldIds = [...new Set(tracking.flatMap((t) => (t.field_id ? [t.field_id[0]] : [])))];
+  const fieldInfo = fieldIds.length
+    ? await executeKw<{ id: number; field_description: string; ttype: string }[]>(uid, "ir.model.fields", "read", [fieldIds, ["field_description", "ttype"]])
+    : [];
+  const fieldById = new Map(fieldInfo.map((f) => [f.id, f]));
+  const trById = new Map(tracking.map((t) => [t.id, t]));
+  const fmtTr = (t: Tr, which: "old" | "new", ttype: string): string => {
+    const g = (name: string) => (t as unknown as Record<string, unknown>)[`${which}_${name}`];
+    if (ttype === "boolean") return g("value_integer") ? "Sí" : "No";
+    if (ttype === "integer") return String(g("value_integer") ?? "");
+    if (ttype === "float" || ttype === "monetary") return String(g("value_float") ?? "");
+    if (ttype === "datetime" || ttype === "date") {
+      const v = g("value_datetime") as string | false;
+      return v ? (ttype === "date" ? v.substring(0, 10) : v.substring(0, 16)) : "";
+    }
+    return String((g("value_char") as string | false) || (g("value_text") as string | false) || "");
+  };
+
+  // adjuntos
+  const attIds = [...new Set(msgs.flatMap((m) => m.attachment_ids))];
+  const atts = attIds.length
+    ? await executeKw<{ id: number; name: string }[]>(uid, "ir.attachment", "read", [attIds, ["name"]])
+    : [];
+  const attById = new Map(atts.map((a) => [a.id, a.name]));
+
+  const mapped = msgs.map((m) => {
+    const changes = m.tracking_value_ids.flatMap((id) => {
+      const t = trById.get(id);
+      if (!t) return [];
+      const f = t.field_id ? fieldById.get(t.field_id[0]) : undefined;
+      return [{ field: f?.field_description ?? (t.field_id ? t.field_id[1] : "Campo"), from: fmtTr(t, "old", f?.ttype ?? "char"), to: fmtTr(t, "new", f?.ttype ?? "char") }];
+    });
+    const body = m.body ? htmlToText(m.body) : "";
+    const st = m.subtype_id ? m.subtype_id[1] : "";
+    let kind: import("./types").LeadNoteKind;
+    let kindLabel: string;
+    if (m.message_type === "comment") { kind = m.is_internal || st === "Note" ? "note" : "message"; kindLabel = kind === "note" ? "Nota" : "Mensaje"; }
+    else if (m.message_type === "email" || m.message_type === "email_outgoing") { kind = "email"; kindLabel = m.message_type === "email" ? "Correo recibido" : "Correo enviado"; }
+    else if (changes.length && !body) { kind = "change"; kindLabel = "Cambio"; }
+    else if (st === "Note" && body) { kind = "note"; kindLabel = "Nota"; }
+    else { kind = "system"; kindLabel = st || "Sistema"; }
+    return {
+      id: m.id,
+      date: m.date,
+      author: m.author_id ? m.author_id[1].replace(/^.*,\s*/, "") : (m.email_from || "—"),
+      kind, kindLabel,
+      subject: m.subject || "",
+      body,
+      changes,
+      attachments: m.attachment_ids.map((id) => ({ id, name: attById.get(id) ?? `Adjunto ${id}` })),
+      replyTo: m.parent_id ? m.parent_id[0] : null,
+    };
+  });
+  // Odoo genera un correo por destinatario: se colapsan los idénticos y consecutivos
+  return mapped.filter((n, i, arr) => i === 0 || !(
+    n.kind === "email" && arr[i - 1].kind === "email" && arr[i - 1].date === n.date
+    && arr[i - 1].author === n.author && arr[i - 1].subject === n.subject && arr[i - 1].body === n.body
+  ));
+}

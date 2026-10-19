@@ -85,3 +85,18 @@ export interface OdooFieldMeta {
   custom: boolean;                    // campo personalizado de Odoo Studio (x_…)
   heavy: boolean;                     // binario: se excluye por defecto
 }
+
+// Entrada del chatter de una oportunidad (mail.message): nota, mensaje, correo, cambio de campos o evento del sistema
+export type LeadNoteKind = "note" | "message" | "email" | "change" | "system";
+export interface LeadNote {
+  id: number;
+  date: string;                 // fecha en UTC tal como la entrega Odoo ("YYYY-MM-DD HH:mm:ss")
+  author: string;               // sin la razón social que Odoo antepone
+  kind: LeadNoteKind;
+  kindLabel: string;            // "Nota", "Mensaje", "Correo enviado", "Cambio", "Opportunity Created"…
+  subject: string;
+  body: string;                 // texto plano (el HTML de Odoo se convierte en el servidor)
+  changes: { field: string; from: string; to: string }[];
+  attachments: { id: number; name: string }[];
+  replyTo: number | null;       // id del mensaje al que responde
+}
