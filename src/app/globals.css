@@ -527,6 +527,21 @@ body {
 .light .dashboard-shell .exam-card[data-level="Expert"]       { --lv-t: #b45309; --lv-bg: #fef3c7; --lv-b: #fcd34d; }
 .light .dashboard-shell .exam-card[data-level="Specialty"]    { --lv-t: #be123c; --lv-bg: #ffe4e6; --lv-b: #fda4af; }
 
+/* Tabla Carga por preventa: encabezado arriba y fila Total abajo siempre visibles cuando la tabla hace scroll */
+.carga-table thead th,
+.carga-table tfoot td {
+  position: sticky;
+  z-index: 10;
+  background-color: rgba(14, 18, 30, 0.95);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.carga-table thead th { top: 0; }
+.carga-table tfoot td { bottom: 0; box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.14); }
+.light .dashboard-shell .carga-table thead th,
+.light .dashboard-shell .carga-table tfoot td { background-color: rgba(248, 250, 252, 0.96); }
+.light .dashboard-shell .carga-table tfoot td { box-shadow: 0 -1px 0 rgba(15, 23, 42, 0.14); }
+
 /* Header de los modales en tema claro: degradé de claro a azul (en vez de oscuro a azul).
    Los textos sobre la parte clara pasan a oscuro; los botones (cerrar, etc.) quedan blancos sobre el azul. */
 .light .dashboard-shell .modal-header {

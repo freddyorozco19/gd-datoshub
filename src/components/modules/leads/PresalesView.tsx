@@ -487,7 +487,7 @@ export default function PresalesView({
     <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
   ) : (
     <div className={big ? "overflow-x-auto" : "overflow-auto flex-1 min-h-0"}>
-      <table className={`w-full ${big ? "text-sm" : "text-xs"}`}>
+      <table className={`carga-table w-full ${big ? "text-sm" : "text-xs"}`}>
         <thead>
           <tr className="text-[10px] uppercase tracking-wide text-slate-500">
             <th className="text-left font-semibold pb-2 pr-3">Preventa</th>
@@ -535,7 +535,7 @@ export default function PresalesView({
               const names = new Set(cargaRows.map((r) => r.name));
               setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Total" });
             }}
-            className="border-t border-white/[0.14] font-semibold cursor-pointer row-hover">
+            className="font-semibold cursor-pointer row-hover">
             <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
             <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.open}</td>
             <td className="pt-2.5 pl-3 pr-3">
