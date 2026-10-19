@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ComponentType, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { RefreshCw, AlertCircle, Loader2, X, UserCog, Maximize2, Settings } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
@@ -483,77 +483,121 @@ export default function PresalesView({
     </div>
   );
 
-  const renderCargaTable = (big: boolean) => cargaRows.length === 0 ? (
-    <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>
-  ) : (
-    <div className={big ? "overflow-x-auto" : "overflow-auto flex-1 min-h-0"}>
-      <table className={`carga-table w-full ${big ? "text-sm" : "text-xs"}`}>
-        <thead>
-          <tr className="text-[10px] uppercase tracking-wide text-slate-500">
-            <th className="text-left font-semibold pb-2 pr-3">Preventa</th>
-            <th className="text-right font-semibold pb-2 px-2">Abiertos</th>
-            <th className="text-left font-semibold pb-2 pl-3 pr-3 w-44">Ocupación</th>
-            {carga.cols.map((c) => (
-              <th key={c.key} className="text-right font-semibold pb-2 px-2 whitespace-nowrap">{c.label}</th>
-            ))}
-            <th className="text-right font-semibold pb-2 px-2">Pipeline</th>
-            <th className="text-right font-semibold pb-2 pl-2">Estancados</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-white/[0.05]">
-          {cargaRows.map((r) => {
-            const ocup = Math.round((r.open / CARGA_LIMIT) * 100);
-            return (
-              <tr key={r.name}
-                onClick={() => setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
-                className="row-hover cursor-pointer">
-                <td className={`${big ? "py-2.5" : "py-2"} pr-3 font-medium truncate max-w-[220px] ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
-                <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300`}>{r.open}</td>
-                <td className={`${big ? "py-2.5" : "py-2"} pl-3 pr-3`}>
-                  <div className="flex items-center gap-2" title={`${r.open} de ${CARGA_LIMIT} leads abiertos`}>
-                    <div className="flex-1 h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
-                      <div className={`h-full rounded-full ${ocupColor(ocup)}`} style={{ width: `${Math.min(100, ocup)}%` }} />
-                    </div>
-                    <span className="w-10 text-right tabular-nums text-slate-300">{ocup}%</span>
+  // En el panel, encabezado y Total quedan fuera del área con scroll (tres bloques con las mismas columnas);
+  // el ancho de la barra de scroll se mide para que las columnas de los tres bloques sigan alineadas.
+  const cargaBodyRef = useRef<HTMLDivElement>(null);
+  const [cargaSbw, setCargaSbw] = useState(0);
+  useLayoutEffect(() => {
+    const el = cargaBodyRef.current;
+    if (!el) return;
+    const measure = () => setCargaSbw(el.offsetWidth - el.clientWidth);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [cargaRows.length, fCargaComp]);
+
+  const renderCargaTable = (big: boolean) => {
+    if (cargaRows.length === 0) return <p className="text-xs text-slate-500 py-6 text-center">Sin datos</p>;
+    const py = big ? "py-2.5" : "py-2";
+    const extra = carga.cols.length * 9;
+    const wPrev = Math.max(22, 34 - extra);
+    const colgroup = (
+      <colgroup>
+        <col style={{ width: `${wPrev}%` }} />
+        <col style={{ width: "11%" }} />
+        <col style={{ width: "27%" }} />
+        {carga.cols.map((c) => <col key={c.key} style={{ width: "9%" }} />)}
+        <col style={{ width: "15%" }} />
+        <col style={{ width: "13%" }} />
+      </colgroup>
+    );
+    const head = (
+      <thead>
+        <tr className="text-[10px] uppercase tracking-wide text-slate-500">
+          <th className="text-left font-semibold pb-2 pr-3">Preventa</th>
+          <th className="text-right font-semibold pb-2 px-2">Abiertos</th>
+          <th className="text-left font-semibold pb-2 pl-3 pr-3">Ocupación</th>
+          {carga.cols.map((c) => (
+            <th key={c.key} className="text-right font-semibold pb-2 px-2 whitespace-nowrap">{c.label}</th>
+          ))}
+          <th className="text-right font-semibold pb-2 px-2">Pipeline</th>
+          <th className="text-right font-semibold pb-2 pl-2">Estancados</th>
+        </tr>
+      </thead>
+    );
+    const body = (
+      <tbody className="divide-y divide-white/[0.05]">
+        {cargaRows.map((r) => {
+          const ocup = Math.round((r.open / CARGA_LIMIT) * 100);
+          return (
+            <tr key={r.name}
+              onClick={() => setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
+              className="row-hover cursor-pointer">
+              <td className={`${py} pr-3 font-medium truncate ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
+              <td className={`${py} px-2 text-right tabular-nums text-slate-300`}>{r.open}</td>
+              <td className={`${py} pl-3 pr-3`}>
+                <div className="flex items-center gap-2" title={`${r.open} de ${CARGA_LIMIT} leads abiertos`}>
+                  <div className="flex-1 h-1.5 rounded-full bg-white/[0.08] overflow-hidden">
+                    <div className={`h-full rounded-full ${ocupColor(ocup)}`} style={{ width: `${Math.min(100, ocup)}%` }} />
                   </div>
-                </td>
-                {carga.cols.map((c) => {
-                  const n = r.counts[c.key] ?? 0;
-                  return (
-                    <td key={c.key} className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums ${n === 0 ? "text-slate-600" : c.key === "ganado" ? "text-emerald-400" : "text-slate-300"}`}>{n}</td>
-                  );
-                })}
-                <td className={`${big ? "py-2.5" : "py-2"} px-2 text-right tabular-nums text-slate-300 whitespace-nowrap`}>{fmtCargaPipe(r.pipeline)}</td>
-                <td className={`${big ? "py-2.5" : "py-2"} pl-2 text-right tabular-nums ${r.stale > 0 ? "text-rose-400 font-semibold" : "text-slate-500"}`}>{r.stale}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-        <tfoot>
-          <tr
-            onClick={() => {
-              const names = new Set(cargaRows.map((r) => r.name));
-              setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Total" });
-            }}
-            className="font-semibold cursor-pointer row-hover">
-            <td className="pt-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
-            <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.open}</td>
-            <td className="pt-2.5 pl-3 pr-3">
-              <div className="flex items-center gap-2" title={`Ocupación global (solo profesionales): ${cargaProf.reduce((s, r) => s + r.open, 0)} de ${CARGA_LIMIT * cargaProf.length}`}>
-                <div className="flex-1" />
-                <span className="w-10 text-right tabular-nums text-slate-100">{cargaOcup}%</span>
-              </div>
-            </td>
-            {carga.cols.map((c) => (
-              <td key={c.key} className="pt-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.counts[c.key]}</td>
-            ))}
-            <td className="pt-2.5 px-2 text-right tabular-nums text-slate-100 whitespace-nowrap">{fmtCargaPipe(cargaTotals.pipeline)}</td>
-            <td className="pt-2.5 pl-2 text-right tabular-nums text-slate-100">{cargaTotals.stale}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-  );
+                  <span className="w-10 text-right tabular-nums text-slate-300">{ocup}%</span>
+                </div>
+              </td>
+              {carga.cols.map((c) => {
+                const n = r.counts[c.key] ?? 0;
+                return (
+                  <td key={c.key} className={`${py} px-2 text-right tabular-nums ${n === 0 ? "text-slate-600" : c.key === "ganado" ? "text-emerald-400" : "text-slate-300"}`}>{n}</td>
+                );
+              })}
+              <td className={`${py} px-2 text-right tabular-nums text-slate-300 whitespace-nowrap`}>{fmtCargaPipe(r.pipeline)}</td>
+              <td className={`${py} pl-2 text-right tabular-nums ${r.stale > 0 ? "text-rose-400 font-semibold" : "text-slate-500"}`}>{r.stale}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    );
+    const foot = (
+      <tfoot>
+        <tr
+          onClick={() => {
+            const names = new Set(cargaRows.map((r) => r.name));
+            setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Total" });
+          }}
+          className="border-t border-white/[0.14] font-semibold cursor-pointer row-hover">
+          <td className="py-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
+          <td className="py-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.open}</td>
+          <td className="py-2.5 pl-3 pr-3">
+            <div className="flex items-center gap-2" title={`Ocupación global (solo profesionales): ${cargaProf.reduce((s, r) => s + r.open, 0)} de ${CARGA_LIMIT * cargaProf.length}`}>
+              <div className="flex-1" />
+              <span className="w-10 text-right tabular-nums text-slate-100">{cargaOcup}%</span>
+            </div>
+          </td>
+          {carga.cols.map((c) => (
+            <td key={c.key} className="py-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.counts[c.key]}</td>
+          ))}
+          <td className="py-2.5 px-2 text-right tabular-nums text-slate-100 whitespace-nowrap">{fmtCargaPipe(cargaTotals.pipeline)}</td>
+          <td className="py-2.5 pl-2 text-right tabular-nums text-slate-100">{cargaTotals.stale}</td>
+        </tr>
+      </tfoot>
+    );
+    const tbl = "w-full table-fixed " + (big ? "text-sm" : "text-xs");
+
+    if (big) {
+      return (
+        <div className="overflow-x-auto">
+          <table className={tbl}>{colgroup}{head}{body}{foot}</table>
+        </div>
+      );
+    }
+    return (
+      <div className="flex flex-col flex-1 min-h-0">
+        <div className="shrink-0" style={{ paddingRight: cargaSbw }}><table className={tbl}>{colgroup}{head}</table></div>
+        <div ref={cargaBodyRef} className="flex-1 min-h-0 overflow-y-auto"><table className={tbl}>{colgroup}{body}</table></div>
+        <div className="shrink-0" style={{ paddingRight: cargaSbw }}><table className={tbl}>{colgroup}{foot}</table></div>
+      </div>
+    );
+  };
 
   return (
     <div className="flex-1 overflow-auto p-5 space-y-4 relative">
