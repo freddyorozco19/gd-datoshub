@@ -152,7 +152,7 @@ export default function PresalesManageModal({
                       <select
                         value={effectiveKind(name)} disabled={saving} aria-label={`Tipo de ${name}`}
                         onChange={(e) => setKindDraft((d) => ({ ...d, [name]: e.target.value as PresalesKind }))}
-                        className="shrink-0 text-[11px] rounded-md bg-white/[0.06] border border-white/[0.1] text-slate-300 px-2 py-1 focus:outline-none focus:border-blue-500/60">
+                        className="cmmi-select shrink-0 text-[11px] rounded-md bg-white/[0.06] border border-white/[0.1] text-slate-300 px-2 py-1 focus:outline-none focus:border-blue-500/60">
                         {(Object.keys(KIND_LABEL) as PresalesKind[]).map((k) => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}
                       </select>
                       <span className="text-[10px] text-slate-500 w-14 text-right">{active ? "Activo" : "Inactivo"}</span>
