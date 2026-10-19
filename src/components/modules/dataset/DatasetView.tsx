@@ -18,6 +18,7 @@ import { uniqueEtapaActual } from "@/components/modules/leads/etapaOrder";
 const MODEL = "crm.lead";
 const PAGE_SIZE = 50;
 const ETAPA_FIELD = "x_studio_etapa_actual";
+const PREVENTA_FIELD = "x_studio_preventa";
 const EMPTY_VALUE = "__empty__";
 const COLS_KEY = "dataset-columns-v1";
 const DEFAULT_COLS = [
@@ -93,13 +94,21 @@ export default function DatasetView() {
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState<Sort>({ field: "id", dir: "desc" });
   const [reload, setReload] = useState(0);
-  const [etapa, setEtapa] = useState("ALL");   // filtro por Etapa Actual (x_studio_etapa_actual)
-  const [etapaOpts, setEtapaOpts] = useState<{ value: string; count: number }[]>([]);
+  // filtros: Etapa actual (x_studio_etapa_actual), Preventa (x_studio_preventa) y Activo (active, nativo de Odoo)
+  const [etapa, setEtapa] = useState("ALL");
+  const [preventa, setPreventa] = useState("ALL");
+  const [activo, setActivo] = useState<"ALL" | "true" | "false">("ALL");
+  type Facet = { value: string; label: string; count: number };
+  const [etapaOpts, setEtapaOpts] = useState<Facet[]>([]);
+  const [preventaOpts, setPreventaOpts] = useState<Facet[]>([]);
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/odoo/dataset?model=${MODEL}&facet=${ETAPA_FIELD}`)
-      .then(async (r) => { const j = await r.json(); if (r.ok && !cancelled) setEtapaOpts(j.values as { value: string; count: number }[]); })
-      .catch(() => {});
+    const load = (field: string, set: (v: Facet[]) => void) =>
+      fetch(`/api/odoo/dataset?model=${MODEL}&facet=${field}`)
+        .then(async (r) => { const j = await r.json(); if (r.ok && !cancelled) set(j.values as Facet[]); })
+        .catch(() => {});
+    load(ETAPA_FIELD, setEtapaOpts);
+    load(PREVENTA_FIELD, setPreventaOpts);
     return () => { cancelled = true; };
   }, []);
   const etapaList = useMemo(() => {
@@ -107,12 +116,16 @@ export default function DatasetView() {
     const names = uniqueEtapaActual(etapaOpts.map((o) => o.value).filter((v) => v !== EMPTY_VALUE)).filter((v) => v !== "ALL");
     return [...names, ...(byValue.has(EMPTY_VALUE) ? [EMPTY_VALUE] : [])].map((v) => ({ value: v, count: byValue.get(v) ?? 0 }));
   }, [etapaOpts]);
+  const preventaList = useMemo(
+    () => [...preventaOpts].sort((a, b) => (a.value === EMPTY_VALUE ? 1 : b.value === EMPTY_VALUE ? -1 : a.label.localeCompare(b.label, "es"))),
+    [preventaOpts],
+  );
   useEffect(() => {
     const t = setTimeout(() => { setQ(qInput); setPage(0); }, 350);
     return () => clearTimeout(t);
   }, [qInput]);
 
-  const key = `${visibleCols.join(",")}|${q}|${etapa}|${page}|${sort.field}:${sort.dir}|${reload}`;
+  const key = `${visibleCols.join(",")}|${q}|${etapa}|${preventa}|${activo}|${page}|${sort.field}:${sort.dir}|${reload}`;
   const [dataRes, setDataRes] = useState<{ key: string; rows?: Row[]; total?: number; error?: string } | null>(null);
   useEffect(() => {
     if (tab !== "datos" || !metaRes?.fields) return;
@@ -121,7 +134,12 @@ export default function DatasetView() {
       model: MODEL, fields: visibleCols.join(","), offset: String(page * PAGE_SIZE), limit: String(PAGE_SIZE),
       q, sort: `${sort.field}:${sort.dir}`,
     });
-    if (etapa !== "ALL") { params.set("ff", ETAPA_FIELD); params.set("fv", etapa); }
+    const filters = [
+      ...(etapa !== "ALL" ? [{ field: ETAPA_FIELD, value: etapa }] : []),
+      ...(preventa !== "ALL" ? [{ field: PREVENTA_FIELD, value: preventa }] : []),
+      ...(activo !== "ALL" ? [{ field: "active", value: activo }] : []),
+    ];
+    if (filters.length) params.set("filters", JSON.stringify(filters));
     fetch(`/api/odoo/dataset?${params}`)
       .then(async (r) => {
         const j = await r.json();
@@ -231,6 +249,25 @@ export default function DatasetView() {
                   ))}
                 </select>
               </label>
+              <label className="flex items-center gap-2 text-xs text-slate-400">
+                Preventa
+                <select value={preventa} onChange={(e) => { setPreventa(e.target.value); setPage(0); }} aria-label="Filtrar por Preventa"
+                  className={`cmmi-select ${inputCls} max-w-[260px]`}>
+                  <option value="ALL">Todos</option>
+                  {preventaList.map((o) => (
+                    <option key={o.value} value={o.value}>{o.value === EMPTY_VALUE ? "Sin preventa" : o.label} ({o.count.toLocaleString("es-CO")})</option>
+                  ))}
+                </select>
+              </label>
+              <label className="flex items-center gap-2 text-xs text-slate-400">
+                Active
+                <select value={activo} onChange={(e) => { setActivo(e.target.value as "ALL" | "true" | "false"); setPage(0); }} aria-label="Filtrar por Active"
+                  className={`cmmi-select ${inputCls}`}>
+                  <option value="ALL">Todos</option>
+                  <option value="true">Activos</option>
+                  <option value="false">Archivados</option>
+                </select>
+              </label>
               <div className="relative">
                 <button type="button" onClick={() => setPickerOpen((v) => !v)} className="pill-option inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border" data-active={pickerOpen}>
                   <Columns3 size={13} /> Columnas · {visibleCols.length} de {meta.length || "…"}
@@ -322,7 +359,7 @@ export default function DatasetView() {
                 {!loading && !rows.length && !dataError && <p className="text-xs text-slate-500 text-center py-10">Sin resultados</p>}
               </div>
               <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-t border-white/[0.08] text-xs text-slate-500">
-                <span>{total ? `Mostrando ${from}–${to} de ${total.toLocaleString("es-CO")}` : "—"}{etapa !== "ALL" ? ` · Etapa actual: ${etapa === EMPTY_VALUE ? "Sin etapa" : etapa}` : ""} · ordenado por {metaByName.get(sort.field)?.label ?? sort.field} {sort.dir === "asc" ? "↑" : "↓"}</span>
+                <span>{total ? `Mostrando ${from}–${to} de ${total.toLocaleString("es-CO")}` : "—"}{etapa !== "ALL" ? ` · Etapa actual: ${etapa === EMPTY_VALUE ? "Sin etapa" : etapa}` : ""}{preventa !== "ALL" ? ` · Preventa: ${preventa === EMPTY_VALUE ? "Sin preventa" : preventaList.find((o) => o.value === preventa)?.label ?? preventa}` : ""}{activo !== "ALL" ? ` · ${activo === "true" ? "Activos" : "Archivados"}` : ""} · ordenado por {metaByName.get(sort.field)?.label ?? sort.field} {sort.dir === "asc" ? "↑" : "↓"}</span>
                 <span className="flex items-center gap-1.5">
                   <button type="button" disabled={page === 0 || loading} onClick={() => setPage((p) => Math.max(0, p - 1))} aria-label="Página anterior" className="pill-option p-1.5 rounded-lg border disabled:opacity-40 disabled:cursor-default"><ChevronLeft size={14} /></button>
                   <span className="tabular-nums">Pág. {page + 1} de {lastPage + 1}</span>

@@ -2,12 +2,24 @@ import type { NextRequest } from "next/server";
 import { requireAdmin } from "@/lib/auth/roles";
 import { fetchDatasetPage, fetchDatasetRecord, fetchDatasetFacet, DATASET_MODELS, type DatasetModel } from "@/lib/odoo/client";
 
+function parseFilters(raw: string | null): { field: string; value: string }[] {
+  if (!raw) return [];
+  try {
+    const arr = JSON.parse(raw);
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .filter((x) => x && typeof x.field === "string" && typeof x.value === "string")
+      .slice(0, 8)
+      .map((x) => ({ field: x.field.slice(0, 80), value: x.value.slice(0, 200) }));
+  } catch { return []; }
+}
+
 /**
  * GET — datos de un modelo de Odoo (solo administradores).
  *  ?model=crm.lead&fields=a,b&offset=0&limit=50&q=texto&sort=campo:asc   → página de registros
  *  ?model=crm.lead&id=123                                                  → todos los campos de un registro
  *  ?model=crm.lead&facet=campo                                             → valores distintos de un campo (para filtros)
- *  Filtro exacto en la página: &ff=campo&fv=valor
+ *  Filtros exactos en la página: &filters=[{"field":"campo","value":"valor"}]  (valor "__empty__" = campo vacío)
  */
 export async function GET(req: NextRequest) {
   if (!(await requireAdmin())) {
@@ -34,7 +46,7 @@ export async function GET(req: NextRequest) {
     const limit  = Math.min(200, Math.max(1, Number(sp.get("limit") ?? 50) || 50));
     const offset = Math.max(0, Number(sp.get("offset") ?? 0) || 0);
     const data = await fetchDatasetPage({ model, fields, offset, limit, q: (sp.get("q") ?? "").slice(0, 100), sort: sp.get("sort") ?? "id:desc",
-      filterField: sp.get("ff") ?? undefined, filterValue: (sp.get("fv") ?? "").slice(0, 200) });
+      filters: parseFilters(sp.get("filters")) });
     return Response.json(data);
   } catch (e) {
     return Response.json({ error: e instanceof Error ? e.message : "No se pudo leer el dataset." }, { status: 502 });

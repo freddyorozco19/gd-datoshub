@@ -313,7 +313,7 @@ export const EMPTY_FILTER_VALUE = "__empty__";   // filtra los registros donde e
 
 export async function fetchDatasetPage(opts: {
   model: DatasetModel; fields: string[]; offset: number; limit: number; q: string; sort: string;
-  filterField?: string; filterValue?: string;
+  filters?: { field: string; value: string }[];
 }): Promise<{ total: number; records: Record<string, unknown>[] }> {
   const meta = await fetchModelFields(opts.model);
   const known = new Map(meta.map((f) => [f.name, f]));
@@ -329,11 +329,19 @@ export async function fetchDatasetPage(opts: {
     ? ["|", "|", ["id", "=", Number(q)], ["name", "ilike", q], ["email_from", "ilike", q]]
     : ["|", ["name", "ilike", q], ["email_from", "ilike", q]];
 
-  // filtro exacto por un campo de texto o de lista (solo campos con columna propia)
-  if (opts.filterField && opts.filterValue !== undefined && opts.filterValue !== "") {
-    const ff = known.get(opts.filterField);
-    if (!ff || !ff.stored || !["char", "selection"].includes(ff.type)) throw new Error("Campo de filtro no permitido.");
-    domain.push([ff.name, "=", opts.filterValue === EMPTY_FILTER_VALUE ? false : opts.filterValue]);
+  // filtros exactos (se combinan con Y): texto/lista por valor, many2one por ID y booleanos (solo campos con columna propia)
+  for (const flt of (opts.filters ?? []).slice(0, 8)) {
+    const ff = known.get(flt.field);
+    if (!ff || !ff.stored) throw new Error("Campo de filtro no permitido.");
+    const empty = flt.value === EMPTY_FILTER_VALUE;
+    if (ff.type === "char" || ff.type === "selection") domain.push([ff.name, "=", empty ? false : flt.value]);
+    else if (ff.type === "many2one") {
+      if (!empty && !/^\d+$/.test(flt.value)) throw new Error("Valor de filtro inválido.");
+      domain.push([ff.name, "=", empty ? false : Number(flt.value)]);
+    } else if (ff.type === "boolean") {
+      if (flt.value !== "true" && flt.value !== "false") throw new Error("Valor de filtro inválido.");
+      domain.push([ff.name, "=", flt.value === "true"]);
+    } else throw new Error("Tipo de campo no permitido para filtrar.");
   }
 
   const uid = await login();
@@ -357,16 +365,19 @@ export async function fetchDatasetRecord(model: DatasetModel, id: number): Promi
 }
 
 /** Valores distintos de un campo de texto/lista con su cantidad de registros (para armar filtros). */
-export async function fetchDatasetFacet(model: DatasetModel, field: string): Promise<{ value: string; count: number }[]> {
+export async function fetchDatasetFacet(model: DatasetModel, field: string): Promise<{ value: string; label: string; count: number }[]> {
   const meta = await fetchModelFields(model);
   const f = meta.find((m) => m.name === field);
-  if (!f || !f.stored || !["char", "selection"].includes(f.type)) throw new Error("Campo no permitido para filtrar.");
+  if (!f || !f.stored || !["char", "selection", "many2one"].includes(f.type)) throw new Error("Campo no permitido para filtrar.");
   const uid = await login();
   const groups = await executeKw<Record<string, unknown>[]>(uid, model, "read_group", [[], [field], [field]], {
     lazy: false, context: { active_test: false },
   });
   return groups.map((g) => {
     const v = g[field];
-    return { value: typeof v === "string" && v ? v : EMPTY_FILTER_VALUE, count: Number(g.__count ?? g[field + "_count"] ?? 0) };
+    const count = Number(g.__count ?? g[field + "_count"] ?? 0);
+    if (Array.isArray(v) && v.length === 2) return { value: String(v[0]), label: String(v[1]), count };   // many2one: [id, nombre]
+    if (typeof v === "string" && v) return { value: v, label: v, count };
+    return { value: EMPTY_FILTER_VALUE, label: "", count };
   });
 }
