@@ -13,7 +13,7 @@ const headers = {
 const ROLES = ["profesional", "lider", "gerente"] as const;
 type Role = (typeof ROLES)[number];
 // la columna role puede no existir todavía (migración 20261018_presales_status_role.sql): se degrada sin romper
-const missingRole = (detail: string) => /broleb/i.test(detail);
+const missingRole = (detail: string) => /role/i.test(detail);
 
 /** GET — estado activo/inactivo y tipo de cada preventa + si quien llama puede gestionarlo. */
 export async function GET() {
