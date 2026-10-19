@@ -55,10 +55,16 @@ const fmtUSD = (v: number) => {
   return `US$ ${Math.round(v)}`;
 };
 // conteo por compañía de un conjunto de leads, en formato de desglose para las tarjetas
-const splitBy = (arr: Lead[], fmt: (l: Lead[]) => string = (l) => String(l.length)) => [
-  { label: "GROW DATA", short: "GROW DATA", color: "bg-blue-400", value: fmt(arr.filter((l) => compKey(l) === "SAS")) },
-  { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmt(arr.filter((l) => compKey(l) === "INT")) },
-];
+type KpiSplit = { label: string; short?: string; value: string; color: string; onClick?: () => void };
+// onOpen: si se pasa, cada compañía queda clicable y abre el listado de sus leads
+const splitBy = (arr: Lead[], fmt: (l: Lead[]) => string = (l) => String(l.length), onOpen?: (leads: Lead[], company: string) => void): KpiSplit[] => {
+  const sas = arr.filter((l) => compKey(l) === "SAS");
+  const int = arr.filter((l) => compKey(l) === "INT");
+  return [
+    { label: "GROW DATA", short: "GROW DATA", color: "bg-blue-400", value: fmt(sas), onClick: onOpen ? () => onOpen(sas, "GROW DATA") : undefined },
+    { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmt(int), onClick: onOpen ? () => onOpen(int, "GD INTERNATIONAL") : undefined },
+  ];
+};
 
 /* color de la barra de Ocupación según el porcentaje */
 const ocupColor = (p: number) => (p >= 100 ? "bg-rose-500" : p >= 70 ? "bg-amber-500" : "bg-blue-500");
@@ -79,7 +85,7 @@ function Card({ title, right, children, className = "", fill }: { title: string;
   );
 }
 
-function Kpi({ label, value, onClick, split }: { label: string; value: string; onClick?: () => void; split?: { label: string; short?: string; value: string; color: string }[] }) {
+function Kpi({ label, value, onClick, split }: { label: string; value: string; onClick?: () => void; split?: KpiSplit[] }) {
   return (
     <div
       className={`${CARD} @container/k min-w-0 ${onClick ? "kpi-click cursor-pointer" : ""}`}
@@ -98,20 +104,33 @@ function Kpi({ label, value, onClick, split }: { label: string; value: string; o
           style={{ fontSize: "clamp(15px, 12.5cqw, 24px)", marginTop: "clamp(4px, 3.5cqw, 8px)" }}>{value}</p>
         {split && (
           <div className="border-t border-white/[0.08] space-y-1" style={{ marginTop: "clamp(6px, 5cqw, 10px)", paddingTop: "clamp(4px, 4cqw, 8px)" }}>
-            {split.map((s) => (
-              <div key={s.label} className="flex items-center justify-between gap-2" style={{ fontSize: "clamp(9px, 5.8cqw, 11px)" }}>
-                <span className="flex items-center gap-1.5 text-slate-500 whitespace-nowrap min-w-0">
-                  <i className={`w-2 h-2 rounded-sm shrink-0 ${s.color}`} />
-                  {s.short && s.short !== s.label ? (
-                    <>
-                      <span className="@[210px]/k:hidden" title={s.label}>{s.short}</span>
-                      <span className="hidden @[210px]/k:inline">{s.label}</span>
-                    </>
-                  ) : s.label}
-                </span>
-                <span className="text-slate-300 tabular-nums whitespace-nowrap">{s.value}</span>
-              </div>
-            ))}
+            {split.map((s) => {
+              const inner = (
+                <>
+                  <span className="flex items-center gap-1.5 text-slate-500 whitespace-nowrap min-w-0">
+                    <i className={`w-2 h-2 rounded-sm shrink-0 ${s.color}`} />
+                    {s.short && s.short !== s.label ? (
+                      <>
+                        <span className="@[210px]/k:hidden" title={s.label}>{s.short}</span>
+                        <span className="hidden @[210px]/k:inline">{s.label}</span>
+                      </>
+                    ) : s.label}
+                  </span>
+                  <span className="text-slate-300 tabular-nums whitespace-nowrap">{s.value}</span>
+                </>
+              );
+              const style = { fontSize: "clamp(9px, 5.8cqw, 11px)" };
+              return s.onClick ? (
+                <button key={s.label} type="button" title={`Ver los leads de ${s.label}`}
+                  onClick={(e) => { e.stopPropagation(); s.onClick!(); }}
+                  onKeyDown={(e) => e.stopPropagation()}
+                  className="kpi-split flex w-full items-center justify-between gap-2 text-left rounded-md px-1.5 -mx-1.5 py-0.5 cursor-pointer" style={style}>
+                  {inner}
+                </button>
+              ) : (
+                <div key={s.label} className="flex items-center justify-between gap-2" style={style}>{inner}</div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -366,6 +385,7 @@ export default function PresalesView({
   const ocupGlobal = profRows.length ? Math.round((profOpen / (CARGA_LIMIT * profRows.length)) * 100) : 0;
   const ocupAlerta = profRows.filter((r) => (r.open / CARGA_LIMIT) >= 0.7).length;
   const ocupLimite = profRows.filter((r) => (r.open / CARGA_LIMIT) >= 1).length;
+  const ocupNames = (min: number) => new Set(profRows.filter((r) => (r.open / CARGA_LIMIT) >= min).map((r) => r.name));
   // el pipeline NO se suma entre compañías: SAS está en COP e Internacional en USD
   const pipelineCOP = stats.open.filter((l) => compKey(l) === "SAS").reduce((s, l) => s + l.ingresosEsperados, 0);
   const pipelineUSD = stats.open.filter((l) => compKey(l) === "INT").reduce((s, l) => s + l.ingresosEsperados, 0);
@@ -666,29 +686,34 @@ export default function PresalesView({
           <div>
             <div className="grid grid-cols-7 gap-2 xl:gap-3">
             <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)}
-              split={showSplit ? splitBy(enEtapaPreventa) : undefined}
+              split={showSplit ? splitBy(enEtapaPreventa, undefined, (ls, c) => setListModal({ leads: ls, heading: `Estado preventa · ${c}`, suffix: " con Etapa Actual Preventa", chips: true })) : undefined}
               onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa", chips: true })} />
             <Kpi label="Preventa abierta" value={String(totals.open)}
-              split={showSplit ? splitBy(abiertosLeads) : undefined}
+              split={showSplit ? splitBy(abiertosLeads, undefined, (ls, c) => setListModal({ leads: ls, heading: `Preventa abierta · ${c}` })) : undefined}
               onClick={() => setListModal({ leads: abiertosLeads, heading: "Preventa abierta" })} />
             <Kpi label="Pipeline abierto" value={fmtPipeline}
               split={showSplit ? [
-                { label: "GROW DATA", short: "GROW DATA", color: "bg-blue-400", value: fmtCOP(pipelineCOP) },
-                { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmtUSD(pipelineUSD) },
+                { label: "GROW DATA", short: "GROW DATA", color: "bg-blue-400", value: fmtCOP(pipelineCOP),
+                  onClick: () => setListModal({ leads: stats.open.filter((l) => compKey(l) === "SAS"), heading: "Pipeline abierto · GROW DATA" }) },
+                { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmtUSD(pipelineUSD),
+                  onClick: () => setListModal({ leads: stats.open.filter((l) => compKey(l) === "INT"), heading: "Pipeline abierto · GD INTERNATIONAL" }) },
               ] : undefined} />
             <Kpi label="Ocupación" value={`${ocupGlobal}%`}
               split={[
-                { label: "En alerta (≥ 70 %)", short: "Alerta ≥ 70 %", color: "bg-amber-400", value: String(ocupAlerta) },
-                { label: "Al límite (≥ 100 %)", short: "Al límite", color: "bg-rose-400", value: String(ocupLimite) },
+                { label: "En alerta (≥ 70 %)", short: "Alerta ≥ 70 %", color: "bg-amber-400", value: String(ocupAlerta),
+                  onClick: () => setListModal({ leads: abiertosLeads.filter((l) => ocupNames(0.7).has(l.preventa || "Sin asignar")), heading: "Ocupación · preventas en alerta (≥ 70 %)" }) },
+                { label: "Al límite (≥ 100 %)", short: "Al límite", color: "bg-rose-400", value: String(ocupLimite),
+                  onClick: () => setListModal({ leads: abiertosLeads.filter((l) => ocupNames(1).has(l.preventa || "Sin asignar")), heading: "Ocupación · preventas al límite (≥ 100 %)" }) },
               ]}
               onClick={() => setShowOcup(true)} />
             <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)}
-              split={showSplit ? splitBy(stats.sinAsig) : undefined} />
+              split={showSplit ? splitBy(stats.sinAsig, undefined, (ls, c) => setListModal({ leads: ls, heading: `Sin preventa · ${c}` })) : undefined}
+              onClick={() => setListModal({ leads: stats.sinAsig, heading: "Sin preventa" })} />
             <Kpi label="Estancados"      value={String(stats.stale.length)}
-              split={showSplit ? splitBy(stats.stale) : undefined}
+              split={showSplit ? splitBy(stats.stale, undefined, (ls, c) => setListModal({ leads: ls, heading: `Estancados · ${c}` })) : undefined}
               onClick={() => setListModal({ leads: stats.stale, heading: "Estancados" })} />
             <Kpi label="Cierre próximo"  value={String(stats.soon.length)}
-              split={showSplit ? splitBy(stats.soon) : undefined}
+              split={showSplit ? splitBy(stats.soon, undefined, (ls, c) => setListModal({ leads: ls, heading: `Cierre próximo · ${c}` })) : undefined}
               onClick={() => setListModal({ leads: stats.soon, heading: "Cierre próximo" })} />
             </div>
           </div>

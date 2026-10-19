@@ -456,6 +456,13 @@ body {
 .kpi-click:hover { background-color: rgba(59, 130, 246, 0.14); border-color: rgba(59, 130, 246, 0.35); }
 .light .dashboard-shell .kpi-click:hover { background-color: rgba(37, 99, 235, 0.10); border-color: rgba(37, 99, 235, 0.4) !important; }
 
+/* Filas por compañía dentro de las metric cards: clicables, con hover propio */
+.kpi-split { transition: background-color 0.15s, color 0.15s; }
+.kpi-split:hover { background-color: rgba(59, 130, 246, 0.22); }
+.kpi-split:hover span { color: #e2e8f0; }
+.light .dashboard-shell .kpi-split:hover { background-color: rgba(37, 99, 235, 0.16); }
+.light .dashboard-shell .kpi-split:hover span { color: #0f172a; }
+
 /* Nombre del lead en las tablas de popups: resalta al pasar el mouse sobre la fila */
 .lead-name { color: #f1f5f9; transition: color 0.15s; }
 .row-hover:hover .lead-name { color: #60a5fa; }
