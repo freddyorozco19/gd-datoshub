@@ -9,6 +9,7 @@ import {
   ArrowUp, ArrowDown, Copy, Check, Key, Loader2, AlertCircle,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
+import FitRow from "@/components/modules/leads/FitRow";
 import type { OdooFieldMeta } from "@/lib/odoo/types";
 import { uniqueEtapaActual } from "@/components/modules/leads/etapaOrder";
 
@@ -217,6 +218,7 @@ export default function DatasetView() {
     return meta.filter((f) => !f.heavy && (!nq || norm(f.name).includes(nq) || norm(f.label).includes(nq))).slice(0, 200);
   }, [meta, pickerQ]);
 
+  const lbl = "text-[10px] font-semibold uppercase tracking-wide text-slate-500 text-center whitespace-nowrap";
   const inputCls = "rounded-lg bg-white/[0.04] border border-white/[0.1] px-3 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/60";
 
   return (
@@ -231,80 +233,86 @@ export default function DatasetView() {
 
         {tab === "datos" ? (
           <>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="pill-option inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border" data-active="true">
-                <Database size={13} /> {MODEL}
-              </span>
-              <div className="relative">
-                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input value={qInput} onChange={(e) => setQInput(e.target.value)} placeholder="Buscar por ID, nombre o correo…" className={`${inputCls} pl-8 w-64`} />
-              </div>
-              <label className="flex items-center gap-2 text-xs text-slate-400">
-                Etapa actual
-                <select value={etapa} onChange={(e) => { setEtapa(e.target.value); setPage(0); }} aria-label="Filtrar por Etapa actual"
-                  className={`cmmi-select ${inputCls} max-w-[240px]`}>
-                  <option value="ALL">Todas</option>
-                  {etapaList.map((o) => (
-                    <option key={o.value} value={o.value}>{o.value === EMPTY_VALUE ? "Sin etapa" : o.value} ({o.count.toLocaleString("es-CO")})</option>
-                  ))}
-                </select>
-              </label>
-              <label className="flex items-center gap-2 text-xs text-slate-400">
-                Preventa
-                <select value={preventa} onChange={(e) => { setPreventa(e.target.value); setPage(0); }} aria-label="Filtrar por Preventa"
-                  className={`cmmi-select ${inputCls} max-w-[260px]`}>
-                  <option value="ALL">Todos</option>
-                  {preventaList.map((o) => (
-                    <option key={o.value} value={o.value}>{o.value === EMPTY_VALUE ? "Sin preventa" : o.label} ({o.count.toLocaleString("es-CO")})</option>
-                  ))}
-                </select>
-              </label>
-              <label className="flex items-center gap-2 text-xs text-slate-400">
-                Active
-                <select value={activo} onChange={(e) => { setActivo(e.target.value as "ALL" | "true" | "false"); setPage(0); }} aria-label="Filtrar por Active"
-                  className={`cmmi-select ${inputCls}`}>
-                  <option value="ALL">Todos</option>
-                  <option value="true">Activos</option>
-                  <option value="false">Archivados</option>
-                </select>
-              </label>
-              <div className="relative">
-                <button type="button" onClick={() => setPickerOpen((v) => !v)} className="pill-option inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border" data-active={pickerOpen}>
-                  <Columns3 size={13} /> Columnas · {visibleCols.length} de {meta.length || "…"}
+            <FitRow
+              left={<>
+                <div className="flex flex-col gap-1">
+                  <span className={lbl}>Modelo</span>
+                  <span className="pill-option inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border" data-active="true">
+                    <Database size={13} /> {MODEL}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className={lbl}>Búsqueda</span>
+                  <div className="relative">
+                    <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                    <input value={qInput} onChange={(e) => setQInput(e.target.value)} placeholder="ID, nombre o correo…" className={`${inputCls} pl-8 w-56`} />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className={lbl}>Etapa actual</span>
+                  <select value={etapa} onChange={(e) => { setEtapa(e.target.value); setPage(0); }} aria-label="Filtrar por Etapa actual" className={`cmmi-select ${inputCls} w-52`}>
+                    <option value="ALL">Todas</option>
+                    {etapaList.map((o) => (
+                      <option key={o.value} value={o.value}>{o.value === EMPTY_VALUE ? "Sin etapa" : o.value} ({o.count.toLocaleString("es-CO")})</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className={lbl}>Preventa</span>
+                  <select value={preventa} onChange={(e) => { setPreventa(e.target.value); setPage(0); }} aria-label="Filtrar por Preventa" className={`cmmi-select ${inputCls} w-60`}>
+                    <option value="ALL">Todos</option>
+                    {preventaList.map((o) => (
+                      <option key={o.value} value={o.value}>{o.value === EMPTY_VALUE ? "Sin preventa" : o.label} ({o.count.toLocaleString("es-CO")})</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className={lbl}>Active</span>
+                  <select value={activo} onChange={(e) => { setActivo(e.target.value as "ALL" | "true" | "false"); setPage(0); }} aria-label="Filtrar por Active" className={`cmmi-select ${inputCls} w-32`}>
+                    <option value="ALL">Todos</option>
+                    <option value="true">Activos</option>
+                    <option value="false">Archivados</option>
+                  </select>
+                </div>
+                <div className="relative">
+                  <button type="button" onClick={() => setPickerOpen((v) => !v)} className="pill-option inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border whitespace-nowrap" data-active={pickerOpen}>
+                    <Columns3 size={13} /> Columnas · {visibleCols.length} de {meta.length || "…"}
+                  </button>
+                  {pickerOpen && (
+                    <>
+                      <div className="fixed inset-0 z-30" onClick={() => setPickerOpen(false)} />
+                      <div className="modal-panel backdrop-blur-2xl absolute left-0 top-full mt-2 z-40 w-80 rounded-xl border border-white/[0.14] shadow-2xl shadow-black/50 p-3">
+                        <input value={pickerQ} onChange={(e) => setPickerQ(e.target.value)} placeholder="Buscar campo…" autoFocus className={`${inputCls} w-full mb-2`} />
+                        <div className="max-h-72 overflow-auto divide-y divide-white/[0.05]">
+                          {pickerRows.map((f) => (
+                            <label key={f.name} className="row-hover flex items-center gap-2.5 px-2 py-1.5 rounded-md cursor-pointer">
+                              <input type="checkbox" checked={visibleCols.includes(f.name)} disabled={f.name === "id"} onChange={() => toggleCol(f.name)} />
+                              <span className="min-w-0 flex-1">
+                                <span className="block text-xs text-slate-200 truncate">{f.label}</span>
+                                <span className="block text-[10px] text-slate-500 font-mono truncate">{f.name}</span>
+                              </span>
+                              <span className="text-[10px] text-slate-500">{f.type}</span>
+                            </label>
+                          ))}
+                        </div>
+                        <div className="flex justify-between pt-2 mt-1 border-t border-white/[0.08]">
+                          <button type="button" onClick={() => setColsSaved(DEFAULT_COLS)} className="pill-option text-[11px] font-medium px-2.5 py-1 rounded-lg border">Restablecer</button>
+                          <button type="button" onClick={() => setPickerOpen(false)} className="pill-option text-[11px] font-medium px-2.5 py-1 rounded-lg border">Listo</button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </>}
+              right={<>
+                <button type="button" onClick={exportCsv} disabled={!rows.length} className="pill-option inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border whitespace-nowrap disabled:opacity-50 disabled:cursor-default">
+                  <Download size={13} /> Exportar CSV
                 </button>
-                {pickerOpen && (
-                  <>
-                    <div className="fixed inset-0 z-30" onClick={() => setPickerOpen(false)} />
-                    <div className="modal-panel backdrop-blur-2xl absolute left-0 top-full mt-2 z-40 w-80 rounded-xl border border-white/[0.14] shadow-2xl shadow-black/50 p-3">
-                      <input value={pickerQ} onChange={(e) => setPickerQ(e.target.value)} placeholder="Buscar campo…" autoFocus className={`${inputCls} w-full mb-2`} />
-                      <div className="max-h-72 overflow-auto divide-y divide-white/[0.05]">
-                        {pickerRows.map((f) => (
-                          <label key={f.name} className="row-hover flex items-center gap-2.5 px-2 py-1.5 rounded-md cursor-pointer">
-                            <input type="checkbox" checked={visibleCols.includes(f.name)} disabled={f.name === "id"} onChange={() => toggleCol(f.name)} />
-                            <span className="min-w-0 flex-1">
-                              <span className="block text-xs text-slate-200 truncate">{f.label}</span>
-                              <span className="block text-[10px] text-slate-500 font-mono truncate">{f.name}</span>
-                            </span>
-                            <span className="text-[10px] text-slate-500">{f.type}</span>
-                          </label>
-                        ))}
-                      </div>
-                      <div className="flex justify-between pt-2 mt-1 border-t border-white/[0.08]">
-                        <button type="button" onClick={() => setColsSaved(DEFAULT_COLS)} className="pill-option text-[11px] font-medium px-2.5 py-1 rounded-lg border">Restablecer</button>
-                        <button type="button" onClick={() => setPickerOpen(false)} className="pill-option text-[11px] font-medium px-2.5 py-1 rounded-lg border">Listo</button>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-              <span className="flex-1" />
-              <button type="button" onClick={exportCsv} disabled={!rows.length} className="pill-option inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border disabled:opacity-50 disabled:cursor-default">
-                <Download size={13} /> Exportar CSV
-              </button>
-              <button type="button" onClick={() => setReload((n) => n + 1)} title="Actualizar" aria-label="Actualizar" className="pill-option flex items-center justify-center p-2.5 rounded-lg border">
-                <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
-              </button>
-            </div>
+                <button type="button" onClick={() => setReload((n) => n + 1)} title="Actualizar" aria-label="Actualizar" className="pill-option flex items-center justify-center p-2.5 rounded-lg border">
+                  <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+                </button>
+              </>}
+            />
 
             {dataError && (
               <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
@@ -370,19 +378,29 @@ export default function DatasetView() {
           </>
         ) : (
           <>
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="relative">
-                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input value={catQ} onChange={(e) => setCatQ(e.target.value)} placeholder="Buscar campo por nombre o etiqueta…" className={`${inputCls} pl-8 w-72`} />
-              </div>
-              <select value={catType} onChange={(e) => setCatType(e.target.value)} className={`cmmi-select ${inputCls}`} aria-label="Tipo de campo">
-                {types.map((t) => <option key={t} value={t}>{t === "ALL" ? "Tipo: todos" : t}</option>)}
-              </select>
-              <button type="button" onClick={() => setCatCustom((v) => !v)} data-active={catCustom} className="pill-option px-3 py-2 rounded-lg text-xs font-medium border">Solo personalizados (x_)</button>
-              <span className="flex-1" />
-              <span className="text-xs text-slate-500">{catRows.length} de {meta.length} campos · {visibleCols.length} visibles en la tabla</span>
-              <button type="button" onClick={() => setColsSaved(DEFAULT_COLS)} className="pill-option px-3 py-2 rounded-lg text-xs font-medium border">Restablecer columnas</button>
-            </div>
+            <FitRow
+              left={<>
+                <div className="flex flex-col gap-1">
+                  <span className={lbl}>Búsqueda</span>
+                  <div className="relative">
+                    <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                    <input value={catQ} onChange={(e) => setCatQ(e.target.value)} placeholder="Campo por nombre o etiqueta…" className={`${inputCls} pl-8 w-72`} />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className={lbl}>Tipo</span>
+                  <select value={catType} onChange={(e) => setCatType(e.target.value)} className={`cmmi-select ${inputCls} w-40`} aria-label="Tipo de campo">
+                    {types.map((t) => <option key={t} value={t}>{t === "ALL" ? "Todos" : t}</option>)}
+                  </select>
+                </div>
+                <button type="button" onClick={() => setCatCustom((v) => !v)} data-active={catCustom} className="pill-option px-3 py-2 rounded-lg text-xs font-medium border whitespace-nowrap">Solo personalizados (x_)</button>
+              </>}
+              right={<>
+                <span className="text-xs text-slate-500 whitespace-nowrap">{catRows.length} de {meta.length} campos · {visibleCols.length} visibles en la tabla</span>
+                <button type="button" onClick={() => setColsSaved(DEFAULT_COLS)} className="pill-option px-3 py-2 rounded-lg text-xs font-medium border whitespace-nowrap">Restablecer columnas</button>
+              </>}
+            />
+
             <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] overflow-hidden">
               <div className="overflow-auto max-h-[calc(100vh-250px)]">
                 <table className="w-full text-xs">
