@@ -21,9 +21,10 @@ const PAGE_SIZE = 50;
 const ETAPA_FIELD = "x_studio_etapa_actual";
 const PREVENTA_FIELD = "x_studio_preventa";
 const EMPTY_VALUE = "__empty__";
-const COLS_KEY = "dataset-columns-v1";
+const COLS_KEY = "dataset-columns-v2";
+const OLD_COLS_KEY = "dataset-columns-v1";   // versión anterior, sin la columna Active
 const DEFAULT_COLS = [
-  "id", "name", "partner_id", "company_id", "x_studio_etapa_actual", "x_studio_edopreventa",
+  "id", "name", "partner_id", "company_id", "active", "x_studio_etapa_actual", "x_studio_edopreventa",
   "x_studio_preventa", "expected_revenue", "create_date",
 ];
 
@@ -72,9 +73,18 @@ export default function DatasetView() {
   /* ── columnas elegidas (se recuerdan en este navegador) ── */
   const [cols, setCols] = useState<string[]>(() => {
     try {
+      const ok = (a: unknown): a is string[] => Array.isArray(a) && a.length > 0 && a.every((x) => typeof x === "string");
       const raw = typeof window !== "undefined" ? window.localStorage.getItem(COLS_KEY) : null;
       const arr = raw ? JSON.parse(raw) : null;
-      if (Array.isArray(arr) && arr.every((x) => typeof x === "string") && arr.length) return arr;
+      if (ok(arr)) return arr;
+      // migra la selección anterior agregando la columna Active (después de Company)
+      const oldRaw = typeof window !== "undefined" ? window.localStorage.getItem(OLD_COLS_KEY) : null;
+      const old = oldRaw ? JSON.parse(oldRaw) : null;
+      if (ok(old)) {
+        if (old.includes("active")) return old;
+        const i = old.indexOf("company_id");
+        return i >= 0 ? [...old.slice(0, i + 1), "active", ...old.slice(i + 1)] : [...old, "active"];
+      }
     } catch { /* sin almacenamiento */ }
     return DEFAULT_COLS;
   });
