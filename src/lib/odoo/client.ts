@@ -309,8 +309,11 @@ export async function fetchModelFields(model: DatasetModel): Promise<import("./t
   return data;
 }
 
+export const EMPTY_FILTER_VALUE = "__empty__";   // filtra los registros donde el campo está vacío
+
 export async function fetchDatasetPage(opts: {
   model: DatasetModel; fields: string[]; offset: number; limit: number; q: string; sort: string;
+  filterField?: string; filterValue?: string;
 }): Promise<{ total: number; records: Record<string, unknown>[] }> {
   const meta = await fetchModelFields(opts.model);
   const known = new Map(meta.map((f) => [f.name, f]));
@@ -325,6 +328,13 @@ export async function fetchDatasetPage(opts: {
   const domain: unknown[] = !q ? [] : /^\d+$/.test(q)
     ? ["|", "|", ["id", "=", Number(q)], ["name", "ilike", q], ["email_from", "ilike", q]]
     : ["|", ["name", "ilike", q], ["email_from", "ilike", q]];
+
+  // filtro exacto por un campo de texto o de lista (solo campos con columna propia)
+  if (opts.filterField && opts.filterValue !== undefined && opts.filterValue !== "") {
+    const ff = known.get(opts.filterField);
+    if (!ff || !ff.stored || !["char", "selection"].includes(ff.type)) throw new Error("Campo de filtro no permitido.");
+    domain.push([ff.name, "=", opts.filterValue === EMPTY_FILTER_VALUE ? false : opts.filterValue]);
+  }
 
   const uid = await login();
   const ctx = { context: { active_test: false } };
@@ -344,4 +354,19 @@ export async function fetchDatasetRecord(model: DatasetModel, id: number): Promi
   const uid = await login();
   const rows = await executeKw<Record<string, unknown>[]>(uid, model, "read", [[id], names], { context: { active_test: false } });
   return rows[0] ?? null;
+}
+
+/** Valores distintos de un campo de texto/lista con su cantidad de registros (para armar filtros). */
+export async function fetchDatasetFacet(model: DatasetModel, field: string): Promise<{ value: string; count: number }[]> {
+  const meta = await fetchModelFields(model);
+  const f = meta.find((m) => m.name === field);
+  if (!f || !f.stored || !["char", "selection"].includes(f.type)) throw new Error("Campo no permitido para filtrar.");
+  const uid = await login();
+  const groups = await executeKw<Record<string, unknown>[]>(uid, model, "read_group", [[], [field], [field]], {
+    lazy: false, context: { active_test: false },
+  });
+  return groups.map((g) => {
+    const v = g[field];
+    return { value: typeof v === "string" && v ? v : EMPTY_FILTER_VALUE, count: Number(g.__count ?? g[field + "_count"] ?? 0) };
+  });
 }

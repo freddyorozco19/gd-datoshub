@@ -1,11 +1,13 @@
 import type { NextRequest } from "next/server";
 import { requireAdmin } from "@/lib/auth/roles";
-import { fetchDatasetPage, fetchDatasetRecord, DATASET_MODELS, type DatasetModel } from "@/lib/odoo/client";
+import { fetchDatasetPage, fetchDatasetRecord, fetchDatasetFacet, DATASET_MODELS, type DatasetModel } from "@/lib/odoo/client";
 
 /**
  * GET — datos de un modelo de Odoo (solo administradores).
  *  ?model=crm.lead&fields=a,b&offset=0&limit=50&q=texto&sort=campo:asc   → página de registros
  *  ?model=crm.lead&id=123                                                  → todos los campos de un registro
+ *  ?model=crm.lead&facet=campo                                             → valores distintos de un campo (para filtros)
+ *  Filtro exacto en la página: &ff=campo&fv=valor
  */
 export async function GET(req: NextRequest) {
   if (!(await requireAdmin())) {
@@ -16,6 +18,9 @@ export async function GET(req: NextRequest) {
   if (!DATASET_MODELS.includes(model)) return Response.json({ error: "Modelo no permitido." }, { status: 400 });
 
   try {
+    const facet = sp.get("facet");
+    if (facet) return Response.json({ values: await fetchDatasetFacet(model, facet) });
+
     const idParam = sp.get("id");
     if (idParam) {
       const id = Number(idParam);
@@ -28,7 +33,8 @@ export async function GET(req: NextRequest) {
     const fields = (sp.get("fields") ?? "").split(",").map((f) => f.trim()).filter(Boolean).slice(0, 80);
     const limit  = Math.min(200, Math.max(1, Number(sp.get("limit") ?? 50) || 50));
     const offset = Math.max(0, Number(sp.get("offset") ?? 0) || 0);
-    const data = await fetchDatasetPage({ model, fields, offset, limit, q: (sp.get("q") ?? "").slice(0, 100), sort: sp.get("sort") ?? "id:desc" });
+    const data = await fetchDatasetPage({ model, fields, offset, limit, q: (sp.get("q") ?? "").slice(0, 100), sort: sp.get("sort") ?? "id:desc",
+      filterField: sp.get("ff") ?? undefined, filterValue: (sp.get("fv") ?? "").slice(0, 200) });
     return Response.json(data);
   } catch (e) {
     return Response.json({ error: e instanceof Error ? e.message : "No se pudo leer el dataset." }, { status: 502 });

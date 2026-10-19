@@ -10,12 +10,15 @@ import {
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 import type { OdooFieldMeta } from "@/lib/odoo/types";
+import { uniqueEtapaActual } from "@/components/modules/leads/etapaOrder";
 
 /* Dataset — explorador de la API de Odoo (solo administradores).
    La llave primaria es el ID; las columnas se eligen entre todos los campos del modelo (fields_get). */
 
 const MODEL = "crm.lead";
 const PAGE_SIZE = 50;
+const ETAPA_FIELD = "x_studio_etapa_actual";
+const EMPTY_VALUE = "__empty__";
 const COLS_KEY = "dataset-columns-v1";
 const DEFAULT_COLS = [
   "id", "name", "partner_id", "company_id", "x_studio_etapa_actual", "x_studio_edopreventa",
@@ -90,12 +93,26 @@ export default function DatasetView() {
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState<Sort>({ field: "id", dir: "desc" });
   const [reload, setReload] = useState(0);
+  const [etapa, setEtapa] = useState("ALL");   // filtro por Etapa Actual (x_studio_etapa_actual)
+  const [etapaOpts, setEtapaOpts] = useState<{ value: string; count: number }[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/odoo/dataset?model=${MODEL}&facet=${ETAPA_FIELD}`)
+      .then(async (r) => { const j = await r.json(); if (r.ok && !cancelled) setEtapaOpts(j.values as { value: string; count: number }[]); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+  const etapaList = useMemo(() => {
+    const byValue = new Map(etapaOpts.map((o) => [o.value, o.count]));
+    const names = uniqueEtapaActual(etapaOpts.map((o) => o.value).filter((v) => v !== EMPTY_VALUE)).filter((v) => v !== "ALL");
+    return [...names, ...(byValue.has(EMPTY_VALUE) ? [EMPTY_VALUE] : [])].map((v) => ({ value: v, count: byValue.get(v) ?? 0 }));
+  }, [etapaOpts]);
   useEffect(() => {
     const t = setTimeout(() => { setQ(qInput); setPage(0); }, 350);
     return () => clearTimeout(t);
   }, [qInput]);
 
-  const key = `${visibleCols.join(",")}|${q}|${page}|${sort.field}:${sort.dir}|${reload}`;
+  const key = `${visibleCols.join(",")}|${q}|${etapa}|${page}|${sort.field}:${sort.dir}|${reload}`;
   const [dataRes, setDataRes] = useState<{ key: string; rows?: Row[]; total?: number; error?: string } | null>(null);
   useEffect(() => {
     if (tab !== "datos" || !metaRes?.fields) return;
@@ -104,6 +121,7 @@ export default function DatasetView() {
       model: MODEL, fields: visibleCols.join(","), offset: String(page * PAGE_SIZE), limit: String(PAGE_SIZE),
       q, sort: `${sort.field}:${sort.dir}`,
     });
+    if (etapa !== "ALL") { params.set("ff", ETAPA_FIELD); params.set("fv", etapa); }
     fetch(`/api/odoo/dataset?${params}`)
       .then(async (r) => {
         const j = await r.json();
@@ -203,6 +221,16 @@ export default function DatasetView() {
                 <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input value={qInput} onChange={(e) => setQInput(e.target.value)} placeholder="Buscar por ID, nombre o correo…" className={`${inputCls} pl-8 w-64`} />
               </div>
+              <label className="flex items-center gap-2 text-xs text-slate-400">
+                Etapa actual
+                <select value={etapa} onChange={(e) => { setEtapa(e.target.value); setPage(0); }} aria-label="Filtrar por Etapa actual"
+                  className={`cmmi-select ${inputCls} max-w-[240px]`}>
+                  <option value="ALL">Todas</option>
+                  {etapaList.map((o) => (
+                    <option key={o.value} value={o.value}>{o.value === EMPTY_VALUE ? "Sin etapa" : o.value} ({o.count.toLocaleString("es-CO")})</option>
+                  ))}
+                </select>
+              </label>
               <div className="relative">
                 <button type="button" onClick={() => setPickerOpen((v) => !v)} className="pill-option inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border" data-active={pickerOpen}>
                   <Columns3 size={13} /> Columnas · {visibleCols.length} de {meta.length || "…"}
@@ -294,7 +322,7 @@ export default function DatasetView() {
                 {!loading && !rows.length && !dataError && <p className="text-xs text-slate-500 text-center py-10">Sin resultados</p>}
               </div>
               <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-t border-white/[0.08] text-xs text-slate-500">
-                <span>{total ? `Mostrando ${from}–${to} de ${total.toLocaleString("es-CO")}` : "—"} · ordenado por {metaByName.get(sort.field)?.label ?? sort.field} {sort.dir === "asc" ? "↑" : "↓"}</span>
+                <span>{total ? `Mostrando ${from}–${to} de ${total.toLocaleString("es-CO")}` : "—"}{etapa !== "ALL" ? ` · Etapa actual: ${etapa === EMPTY_VALUE ? "Sin etapa" : etapa}` : ""} · ordenado por {metaByName.get(sort.field)?.label ?? sort.field} {sort.dir === "asc" ? "↑" : "↓"}</span>
                 <span className="flex items-center gap-1.5">
                   <button type="button" disabled={page === 0 || loading} onClick={() => setPage((p) => Math.max(0, p - 1))} aria-label="Página anterior" className="pill-option p-1.5 rounded-lg border disabled:opacity-40 disabled:cursor-default"><ChevronLeft size={14} /></button>
                   <span className="tabular-nums">Pág. {page + 1} de {lastPage + 1}</span>
