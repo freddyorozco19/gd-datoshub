@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Users, CalendarDays, Plug2, BarChart3,
   FolderOpen, ShieldCheck, BookOpen, UserCog, LogOut, Package,
-  ChevronDown, PanelLeftClose, PanelLeftOpen, PanelLeft, Loader2,
+  ChevronDown, PanelLeftClose, PanelLeftOpen, PanelLeft, Loader2, Database,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
@@ -41,6 +41,7 @@ const SECTIONS: NavSection[] = [
     header: "Administration",
     items: [
       { label: "Users", href: "/usuarios", icon: UserCog, adminOnly: true },
+      { label: "Dataset", href: "/dataset", icon: Database, adminOnly: true },
     ],
   },
 ];

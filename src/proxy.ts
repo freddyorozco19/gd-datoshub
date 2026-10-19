@@ -47,7 +47,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // Sección de administración: solo para admins (rol en app_metadata).
-  if (user && pathname.startsWith("/usuarios")) {
+  if (user && (pathname.startsWith("/usuarios") || pathname.startsWith("/dataset"))) {
     const role = (user.app_metadata as { role?: string } | undefined)?.role;
     if (role !== "admin") {
       const url = request.nextUrl.clone();

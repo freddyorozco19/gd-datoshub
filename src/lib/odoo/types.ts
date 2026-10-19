@@ -71,3 +71,17 @@ export interface Lead {
   adjuntos:    number;
   compania:    string;   // company_id de Odoo: GROW DATA SAS (COP) o GROW DATA INTERNATIONAL SA (USD)
 }
+
+// Metadatos de un campo de un modelo de Odoo (resultado de fields_get), para la página Dataset
+export interface OdooFieldMeta {
+  name: string;                       // nombre técnico, ej. x_studio_etapa_actual
+  label: string;                      // etiqueta visible en Odoo
+  type: string;                       // char, integer, many2one, selection, binary…
+  relation?: string;                  // modelo relacionado (many2one / one2many / many2many)
+  selection?: [string, string][];     // valores posibles (selection)
+  stored: boolean;                    // false = campo calculado sin columna (no ordenable)
+  required: boolean;
+  readonly: boolean;
+  custom: boolean;                    // campo personalizado de Odoo Studio (x_…)
+  heavy: boolean;                     // binario: se excluye por defecto
+}

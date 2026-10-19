@@ -271,3 +271,77 @@ export async function fetchAttachmentData(
   if (!r.datas) throw new Error("El adjunto no tiene datos de archivo");
   return { name: r.name, mimetype: r.mimetype || "application/octet-stream", datas: r.datas };
 }
+
+/* ── Dataset: catálogo de campos y lectura paginada de un modelo ───── */
+// Solo estos modelos se pueden consultar desde la página Dataset (el nombre llega desde el navegador).
+export const DATASET_MODELS = ["crm.lead"] as const;
+export type DatasetModel = (typeof DATASET_MODELS)[number];
+const FIELD_NAME_RE = /^[a-z_][a-z0-9_]*$/i;
+
+type RawFieldMeta = {
+  string?: string; type?: string; relation?: string; selection?: [string, string][] | false;
+  store?: boolean; required?: boolean; readonly?: boolean;
+};
+const fieldsCache = new Map<string, { at: number; data: import("./types").OdooFieldMeta[] }>();
+
+export async function fetchModelFields(model: DatasetModel): Promise<import("./types").OdooFieldMeta[]> {
+  const hit = fieldsCache.get(model);
+  if (hit && Date.now() - hit.at < 10 * 60 * 1000) return hit.data;
+  const uid = await login();
+  const raw = await executeKw<Record<string, RawFieldMeta>>(uid, model, "fields_get", [], {
+    attributes: ["string", "type", "relation", "selection", "store", "required", "readonly"],
+  });
+  const data = Object.entries(raw)
+    .map(([name, f]) => ({
+      name,
+      label: f.string || name,
+      type: f.type || "char",
+      relation: f.relation || undefined,
+      selection: Array.isArray(f.selection) ? f.selection : undefined,
+      stored: f.store !== false,
+      required: !!f.required,
+      readonly: !!f.readonly,
+      custom: name.startsWith("x_"),
+      heavy: f.type === "binary",
+    }))
+    .sort((a, b) => (a.name === "id" ? -1 : b.name === "id" ? 1 : a.label.localeCompare(b.label, "es")));
+  fieldsCache.set(model, { at: Date.now(), data });
+  return data;
+}
+
+export async function fetchDatasetPage(opts: {
+  model: DatasetModel; fields: string[]; offset: number; limit: number; q: string; sort: string;
+}): Promise<{ total: number; records: Record<string, unknown>[] }> {
+  const meta = await fetchModelFields(opts.model);
+  const known = new Map(meta.map((f) => [f.name, f]));
+  const fields = Array.from(new Set(["id", ...opts.fields])).filter((f) => FIELD_NAME_RE.test(f) && known.has(f) && !known.get(f)!.heavy);
+
+  // orden: solo por campos con columna propia; por defecto ID descendente
+  const [sf, sd] = opts.sort.split(":");
+  const sortable = known.get(sf)?.stored ? sf : "id";
+  const order = `${sortable} ${sd === "asc" ? "asc" : "desc"}`;
+
+  const q = opts.q.trim();
+  const domain: unknown[] = !q ? [] : /^\d+$/.test(q)
+    ? ["|", "|", ["id", "=", Number(q)], ["name", "ilike", q], ["email_from", "ilike", q]]
+    : ["|", ["name", "ilike", q], ["email_from", "ilike", q]];
+
+  const uid = await login();
+  const ctx = { context: { active_test: false } };
+  const [total, records] = await Promise.all([
+    executeKw<number>(uid, opts.model, "search_count", [domain], ctx),
+    executeKw<Record<string, unknown>[]>(uid, opts.model, "search_read", [domain], {
+      fields, offset: opts.offset, limit: opts.limit, order, ...ctx,
+    }),
+  ]);
+  return { total, records };
+}
+
+/** Todos los campos (con columna propia y no binarios) de un registro. */
+export async function fetchDatasetRecord(model: DatasetModel, id: number): Promise<Record<string, unknown> | null> {
+  const meta = await fetchModelFields(model);
+  const names = meta.filter((f) => f.stored && !f.heavy).map((f) => f.name);
+  const uid = await login();
+  const rows = await executeKw<Record<string, unknown>[]>(uid, model, "read", [[id], names], { context: { active_test: false } });
+  return rows[0] ?? null;
+}

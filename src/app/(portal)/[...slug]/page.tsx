@@ -33,6 +33,7 @@ const LeadsView           = dynamic(() => import("@/components/modules/leads/Lea
 const CMMIView            = dynamic(() => import("@/components/modules/cmmi/CMMIView"),                       { loading: ViewLoading });
 const UsuariosView        = dynamic(() => import("@/components/modules/usuarios/UsuariosView"),               { loading: ViewLoading });
 const CertificacionesView = dynamic(() => import("@/components/modules/certificaciones/CertificacionesView"), { loading: ViewLoading });
+const DatasetView         = dynamic(() => import("@/components/modules/dataset/DatasetView"),                 { ssr: false, loading: ViewLoading });
 const ProductosView       = dynamic(() => import("@/components/modules/productos/ProductosView"),               { loading: ViewLoading });
 
 /* ─── DATOS MOCK ─────────────────────────────────────────────────── */
@@ -302,6 +303,7 @@ const VIEWS: Record<string, React.ComponentType> = {
   "/productos":       ProductosView,
   "/cmmi":            CMMIView,
   "/usuarios":        UsuariosView,
+  "/dataset":         DatasetView,
   "/certificaciones": CertificacionesView,
 };
 
@@ -313,6 +315,7 @@ export default function PortalPage() {
     (pathname.startsWith('/certificaciones/') ? CertificacionesView :
      pathname.startsWith('/leads/')           ? LeadsView :
      pathname.startsWith('/usuarios/')        ? UsuariosView :
+     pathname.startsWith('/dataset/')         ? DatasetView :
      DashboardView);
   return <View />;
 }
