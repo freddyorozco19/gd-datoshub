@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { Search, ChevronLeft, ChevronRight, Clock, AlertTriangle } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import FitRow from "./FitRow";
+import { uniqueEtapaActual } from "./etapaOrder";
 
 /* Kanban de Estado Preventa (solo lectura), incrustado en el panel de Cambios recientes: una columna por estado, scroll horizontal
    entre columnas y vertical dentro de cada una. Un clic en una tarjeta abre el detalle del lead. */
@@ -39,11 +40,14 @@ export default function PresalesKanbanBoard({
   const [q, setQ] = useState("");
   const [fPrev, setFPrev] = useState("ALL");
   const [fLin, setFLin] = useState("ALL");
+  const [fEtapa, setFEtapa] = useState("ALL");   // Etapa actual (x_studio_etapa_actual)
   const [fComp, setFComp] = useState<"ALL" | "SAS" | "INT">("ALL");
   const prevOpts = useMemo(() => Array.from(new Set(leads.map((l) => l.preventa).filter(Boolean))).sort((a, b) => a.localeCompare(b, "es")), [leads]);
   const hasNoPrev = useMemo(() => leads.some((l) => !l.preventa), [leads]);
   const linOpts = useMemo(() => Array.from(new Set(leads.map((l) => l.linea).filter(Boolean))).sort((a, b) => a.localeCompare(b, "es")), [leads]);
-  const filtering = !!q.trim() || fPrev !== "ALL" || fLin !== "ALL" || fComp !== "ALL";
+  const etapaOpts = useMemo(() => uniqueEtapaActual(leads.map((l) => l.etapa)).filter((v) => v !== "ALL"), [leads]);
+  const hasNoEtapa = useMemo(() => leads.some((l) => !l.etapa), [leads]);
+  const filtering = !!q.trim() || fPrev !== "ALL" || fLin !== "ALL" || fEtapa !== "ALL" || fComp !== "ALL";
   const boardRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ x: number; left: number } | null>(null);
 
@@ -53,6 +57,7 @@ export default function PresalesKanbanBoard({
       (!nq || norm(`${l.id} ${l.nombre} ${l.cliente} ${l.preventa} ${l.linea}`).includes(nq)) &&
       (fPrev === "ALL" || (fPrev === NONE ? !l.preventa : l.preventa === fPrev)) &&
       (fLin === "ALL" || l.linea === fLin) &&
+      (fEtapa === "ALL" || (fEtapa === NONE ? !l.etapa : l.etapa === fEtapa)) &&
       (fComp === "ALL" || (fComp === "INT" ? isInt(l) : !isInt(l)));
     const byKey = new Map<string, { key: string; label: string; bar: string; all: Lead[] }>();
     for (const k of KNOWN) byKey.set(k.key, { ...k, all: [] });
@@ -69,7 +74,7 @@ export default function PresalesKanbanBoard({
         const sum = (arr: Lead[]) => arr.reduce((s, l) => s + l.ingresosEsperados, 0);
         return { ...c, shown, cop: sum(c.all.filter((l) => !isInt(l))), usd: sum(c.all.filter(isInt)) };
       });
-  }, [leads, q, fPrev, fLin, fComp]);
+  }, [leads, q, fPrev, fLin, fEtapa, fComp]);
 
   const scrollBoard = (dx: number) => boardRef.current?.scrollBy({ left: dx, behavior: "smooth" });
 
@@ -91,6 +96,14 @@ export default function PresalesKanbanBoard({
               <select value={fLin} onChange={(e) => setFLin(e.target.value)} aria-label="Filtrar por línea" className={`cmmi-select ${inputCls} w-60`}>
                 <option value="ALL">Todas</option>
                 {linOpts.map((p) => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className={lbl}>Etapa actual</span>
+              <select value={fEtapa} onChange={(e) => setFEtapa(e.target.value)} aria-label="Filtrar por etapa actual" className={`cmmi-select ${inputCls} w-52`}>
+                <option value="ALL">Todas</option>
+                {etapaOpts.map((p) => <option key={p} value={p}>{p}</option>)}
+                {hasNoEtapa && <option value={NONE}>Sin etapa</option>}
               </select>
             </div>
             <div className="flex flex-col gap-1">
