@@ -11,6 +11,7 @@ import FitRow from "./FitRow";
 import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesOcupacionModal from "./PresalesOcupacionModal";
+import PresalesKanbanModal from "./PresalesKanbanModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow, type PresalesKind } from "./PresalesManageModal";
 
@@ -176,6 +177,7 @@ export default function PresalesView({
   const [showSettings, setShowSettings] = useState(false);
   const [settingsSection, setSettingsSection] = useState<SectionId | undefined>(undefined);
   const [showOcup, setShowOcup] = useState(false);
+  const [showKanban, setShowKanban] = useState(false);
   const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive } = settings;
   const saveSettings = (next: PresalesSettings) => {
     setSettings(next);
@@ -777,7 +779,11 @@ export default function PresalesView({
             {/* embudo por etapa */}
             <Card title="Leads en estado de preventa" className="flex-1" fill
               right={
-                <div className="flex gap-1">
+                <div className="flex items-center gap-1">
+                  <button type="button" onClick={() => setShowKanban(true)} title="Ampliar (kanban por Estado Preventa)" aria-label="Ampliar kanban"
+                    className="pill-option flex items-center justify-center p-1.5 rounded-lg border">
+                    <Maximize2 size={12} />
+                  </button>
                   {([["ALL", "Todos"], ["true", "Activo"], ["false", "Inactivo"]] as const).map(([v, label]) => (
                     <button key={v} type="button" onClick={() => setFLeadActivo(v)}
                       title="Filtra por el campo Activo del lead"
@@ -983,6 +989,12 @@ export default function PresalesView({
         </>
       )}
 
+      {showKanban && (
+        <PresalesKanbanModal
+          leads={etapaScope} staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD}
+          blocked={!!selected || !!listModal} onClose={() => setShowKanban(false)} onOpenLead={(l) => setSelected(l)}
+        />
+      )}
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
       {showSettings && (
         <PresalesSettingsPanel
