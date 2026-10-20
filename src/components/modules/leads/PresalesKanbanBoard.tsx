@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import { Search, ChevronLeft, ChevronRight, Clock, AlertTriangle } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
+import FitRow from "./FitRow";
 
 /* Kanban de Estado Preventa (solo lectura), incrustado en el panel de Cambios recientes: una columna por estado, scroll horizontal
    entre columnas y vertical dentro de cada una. Un clic en una tarjeta abre el detalle del lead. */
@@ -18,6 +19,9 @@ const KNOWN: { key: string; label: string; bar: string }[] = [
   { key: "oferta no viable", label: "OFERTA NO VIABLE", bar: "bg-rose-500" },
   { key: "oferta declinada", label: "OFERTA DECLINADA", bar: "bg-slate-500" },
 ];
+const NONE = "__none__";   // leads sin preventa
+const lbl = "text-[10px] font-semibold uppercase tracking-wide text-slate-500 text-center whitespace-nowrap";
+const inputCls = "rounded-lg bg-white/[0.04] border border-white/[0.1] px-3 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/60";
 const AVATAR = ["bg-blue-500", "bg-emerald-500", "bg-violet-500", "bg-amber-500", "bg-rose-500", "bg-cyan-500", "bg-orange-500"];
 const avatarOf = (name: string) => AVATAR[[...name].reduce((s, c) => s + c.charCodeAt(0), 0) % AVATAR.length];
 const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
@@ -33,12 +37,23 @@ export default function PresalesKanbanBoard({
   onOpenLead: (l: Lead) => void;
 }) {
   const [q, setQ] = useState("");
+  const [fPrev, setFPrev] = useState("ALL");
+  const [fLin, setFLin] = useState("ALL");
+  const [fComp, setFComp] = useState<"ALL" | "SAS" | "INT">("ALL");
+  const prevOpts = useMemo(() => Array.from(new Set(leads.map((l) => l.preventa).filter(Boolean))).sort((a, b) => a.localeCompare(b, "es")), [leads]);
+  const hasNoPrev = useMemo(() => leads.some((l) => !l.preventa), [leads]);
+  const linOpts = useMemo(() => Array.from(new Set(leads.map((l) => l.linea).filter(Boolean))).sort((a, b) => a.localeCompare(b, "es")), [leads]);
+  const filtering = !!q.trim() || fPrev !== "ALL" || fLin !== "ALL" || fComp !== "ALL";
   const boardRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ x: number; left: number } | null>(null);
 
   const columns = useMemo(() => {
     const nq = norm(q.trim());
-    const match = (l: Lead) => !nq || norm(`${l.id} ${l.nombre} ${l.cliente} ${l.preventa} ${l.linea}`).includes(nq);
+    const match = (l: Lead) =>
+      (!nq || norm(`${l.id} ${l.nombre} ${l.cliente} ${l.preventa} ${l.linea}`).includes(nq)) &&
+      (fPrev === "ALL" || (fPrev === NONE ? !l.preventa : l.preventa === fPrev)) &&
+      (fLin === "ALL" || l.linea === fLin) &&
+      (fComp === "ALL" || (fComp === "INT" ? isInt(l) : !isInt(l)));
     const byKey = new Map<string, { key: string; label: string; bar: string; all: Lead[] }>();
     for (const k of KNOWN) byKey.set(k.key, { ...k, all: [] });
     for (const l of leads) {
@@ -54,19 +69,49 @@ export default function PresalesKanbanBoard({
         const sum = (arr: Lead[]) => arr.reduce((s, l) => s + l.ingresosEsperados, 0);
         return { ...c, shown, cop: sum(c.all.filter((l) => !isInt(l))), usd: sum(c.all.filter(isInt)) };
       });
-  }, [leads, q]);
+  }, [leads, q, fPrev, fLin, fComp]);
 
   const scrollBoard = (dx: number) => boardRef.current?.scrollBy({ left: dx, behavior: "smooth" });
 
   return (
     <div className="flex flex-col" style={{ height: "clamp(420px, 68vh, 760px)" }}>
-      <div className="shrink-0 flex items-center justify-between gap-3 pb-3">
-        <p className="text-[11px] text-slate-500 truncate">{leads.length} leads · desplázate o usa las flechas para recorrer los estados</p>
-        <div className="relative shrink-0">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar ID, lead, cliente, preventa…" aria-label="Buscar en el kanban"
-            className="w-64 rounded-lg bg-white/[0.04] border border-white/[0.1] pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/60" />
-        </div>
+      <div className="shrink-0 pb-3">
+        <FitRow
+          left={<>
+            <div className="flex flex-col gap-1">
+              <span className={lbl}>Preventa</span>
+              <select value={fPrev} onChange={(e) => setFPrev(e.target.value)} aria-label="Filtrar por preventa" className={`cmmi-select ${inputCls} w-60`}>
+                <option value="ALL">Todos</option>
+                {prevOpts.map((p) => <option key={p} value={p}>{p}</option>)}
+                {hasNoPrev && <option value={NONE}>Sin preventa</option>}
+              </select>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className={lbl}>Línea</span>
+              <select value={fLin} onChange={(e) => setFLin(e.target.value)} aria-label="Filtrar por línea" className={`cmmi-select ${inputCls} w-60`}>
+                <option value="ALL">Todas</option>
+                {linOpts.map((p) => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className={lbl}>Compañía</span>
+              <select value={fComp} onChange={(e) => setFComp(e.target.value as "ALL" | "SAS" | "INT")} aria-label="Filtrar por compañía" className={`cmmi-select ${inputCls} w-56`}>
+                <option value="ALL">Todas</option>
+                <option value="SAS">GROW DATA</option>
+                <option value="INT">GROW DATA INTERNATIONAL</option>
+              </select>
+            </div>
+          </>}
+          right={
+            <div className="flex flex-col gap-1">
+              <span className={lbl}>Búsqueda</span>
+              <div className="relative">
+                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ID, lead, cliente, preventa…" aria-label="Buscar en el kanban" className={`${inputCls} pl-8 w-60`} />
+              </div>
+            </div>
+          }
+        />
       </div>
 
           <div className="relative flex-1 min-h-0">
@@ -91,7 +136,7 @@ export default function PresalesKanbanBoard({
                     <div className={`h-1 rounded-full mb-2.5 ${c.bar}`} />
                     <div className="flex items-baseline justify-between gap-2">
                       <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-100 truncate">{c.label}</h3>
-                      <span className="text-xs tabular-nums text-slate-300">{q.trim() ? `${c.shown.length} de ${c.all.length}` : c.all.length}</span>
+                      <span className="text-xs tabular-nums text-slate-300">{filtering ? `${c.shown.length} de ${c.all.length}` : c.all.length}</span>
                     </div>
                     <p className="text-[10px] text-slate-400 mt-0.5 tabular-nums truncate">
                       {c.cop ? fmtCOP(c.cop) : ""}{c.cop && c.usd ? " · " : ""}{c.usd ? fmtUSD(c.usd) : ""}{!c.cop && !c.usd ? "Sin pipeline" : ""}

@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentTy
 import { createPortal } from "react-dom";
 import { RefreshCw, AlertCircle, Loader2, X, Maximize2, Settings } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
-import type { PreventaHistoryEntry, PresalesTimeline } from "@/lib/odoo/client";
+import type { PresalesTimeline } from "@/lib/odoo/client";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
 import FitRow from "./FitRow";
@@ -39,11 +39,6 @@ const normText = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").trim(
 
 // Odoo entrega create_date en UTC sin sufijo de zona ("YYYY-MM-DD HH:MM:SS"); se interpreta como
 // UTC explicito y se muestra en hora Colombia (GMT-5), igual que el resto de la app.
-const fmtStamp = (utc: string) => {
-  const d = new Date(utc.replace(" ", "T") + "Z");
-  const p = (n: number) => String(n).padStart(2, "0");
-  return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
-};
 const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : null);
 
 // Compañías de Odoo: GROW DATA SAS (COP) y GROW DATA INTERNATIONAL SA (USD) — las monedas difieren, no se pueden sumar
@@ -177,7 +172,6 @@ export default function PresalesView({
   const [showSettings, setShowSettings] = useState(false);
   const [settingsSection, setSettingsSection] = useState<SectionId | undefined>(undefined);
   const [showOcup, setShowOcup] = useState(false);
-  const [recentView, setRecentView] = useState<"kanban" | "cambios">("kanban");   // vista del panel inferior
   const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive } = settings;
   const saveSettings = (next: PresalesSettings) => {
     setSettings(next);
@@ -196,22 +190,6 @@ export default function PresalesView({
         setNeedsKind(!!d.needsKind);
       })
       .catch(() => {});
-  }, []);
-
-  /* historial de cambios de Estado Preventa (leído de Odoo, no de Supabase) */
-  const [history, setHistory] = useState<PreventaHistoryEntry[]>([]);
-  const [historyLoading, setHistoryLoading] = useState(true);
-  const [historyError, setHistoryError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("/api/presales/history?limit=15")
-      .then(async (r) => {
-        const json = await r.json();
-        if (!r.ok) throw new Error(json.error || `Error ${r.status}`);
-        setHistory(json.entries as PreventaHistoryEntry[]);
-      })
-      .catch((e) => setHistoryError(e instanceof Error ? e.message : "No se pudo cargar el historial."))
-      .finally(() => setHistoryLoading(false));
   }, []);
 
   const isInactive = (name: string) => statuses[name]?.active === false;
@@ -944,55 +922,9 @@ export default function PresalesView({
             </Card>
           </div>
 
-          {/* cambios recientes de Estado Preventa — leidos del historial de auditoria de Odoo */}
-          <Card title={recentView === "kanban" ? "Kanban de Estado Preventa" : "Cambios recientes de Estado Preventa"}
-            right={
-              <div className="flex items-center gap-2">
-                {recentView === "cambios" && <span className="text-[10px] text-slate-500 hidden sm:inline">Historial de Odoo</span>}
-                <div className="flex gap-1">
-                  {([["kanban", "Kanban"], ["cambios", "Cambios recientes"]] as const).map(([v, label]) => (
-                    <button key={v} type="button" onClick={() => setRecentView(v)} data-active={recentView === v}
-                      className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">{label}</button>
-                  ))}
-                </div>
-              </div>
-            }>
-            {recentView === "kanban" ? (
-              <PresalesKanbanBoard leads={etapaScope} staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
-            ) : historyLoading ? (
-              <div className="flex items-center justify-center gap-2 py-6 text-slate-500 text-xs">
-                <Loader2 size={14} className="animate-spin" /> Cargando historial…
-              </div>
-            ) : historyError ? (
-              <p className="text-xs text-rose-400 text-center py-6">{historyError}</p>
-            ) : history.length === 0 ? (
-              <p className="text-xs text-slate-500 text-center py-6">Sin cambios registrados</p>
-            ) : (
-              <div className="divide-y divide-white/[0.05]">
-                {history.map((h, i) => {
-                  const lead = leads.find((l) => l.id === h.leadId);
-                  return (
-                    <button key={`${h.leadId}-${h.date}-${i}`} type="button"
-                      disabled={!lead}
-                      onClick={() => lead && setSelected(lead)}
-                      className={`w-full flex items-center gap-3 text-left px-1.5 py-2 rounded-lg transition-colors ${lead ? "row-hover cursor-pointer" : "cursor-default"}`}>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-slate-100 truncate" title={h.leadName}>{h.leadName}</p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
-                          {h.from ? <span className="text-slate-400">{h.from}</span> : <span className="text-blue-400">nuevo</span>}
-                          <span className="mx-1">→</span>
-                          <span className="text-slate-200 font-medium">{h.to}</span>
-                        </p>
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <p className="text-[11px] text-slate-300 whitespace-nowrap">{fmtStamp(h.date)}</p>
-                        <p className="text-[10px] text-slate-500 truncate max-w-[160px]">{h.author}</p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
+          {/* kanban de Estado Preventa */}
+          <Card title="Kanban de Estado Preventa">
+            <PresalesKanbanBoard leads={etapaScope} staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
           </Card>
         </>
       )}
