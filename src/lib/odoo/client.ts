@@ -478,3 +478,62 @@ export async function fetchLeadNotes(leadId: number): Promise<import("./types").
     && arr[i - 1].author === n.author && arr[i - 1].subject === n.subject && arr[i - 1].body === n.body
   ));
 }
+
+/* ── Presales: cuándo entra cada lead a la etapa Preventa y cuándo cierra ───────────────
+   Entrada: primera vez que el Stage pasa a Preventa (en Odoo esa etapa se llama "Análisis y Validación" y el
+   historial guarda el nombre con cualquiera de las dos formas). Los leads creados directamente en Preventa no
+   tienen ese evento: la vista usa su fecha de creación.
+   Cierre: cada vez que el Estado Preventa pasa de ABIERTO a CERRADO (se ignoran mayúsculas: hay "Abierto" y "ABIERTO"). */
+export interface PresalesTimeline {
+  entries: Record<string, string>;                 // leadId → fecha de la primera entrada a Preventa (GMT-5)
+  closes: { leadId: number; date: string }[];      // cierres Abierto → Cerrado (GMT-5)
+  since: string;                                   // fecha del evento más antiguo
+}
+let timelineCache: { at: number; data: PresalesTimeline } | null = null;
+
+export async function fetchPresalesTimeline(): Promise<PresalesTimeline> {
+  if (timelineCache && Date.now() - timelineCache.at < 5 * 60 * 1000) return timelineCache.data;
+  const uid = await login();
+  const fields = await executeKw<{ id: number; name: string }[]>(
+    uid, "ir.model.fields", "search_read",
+    [[["model", "=", "crm.lead"], ["name", "in", ["stage_id", "x_studio_edopreventa"]]]],
+    { fields: ["id", "name"] },
+  );
+  const stageField = fields.find((f) => f.name === "stage_id")?.id;
+  const estadoField = fields.find((f) => f.name === "x_studio_edopreventa")?.id;
+  if (!stageField || !estadoField) throw new Error("No se encontraron los campos de seguimiento en Odoo.");
+
+  type Tr = { old_value_char: string | false; new_value_char: string | false; create_date: string; mail_message_id: [number, string | false] | false };
+  const PREVENTA = ["Preventa", "Análisis y Validación"];
+  const trFields = ["old_value_char", "new_value_char", "create_date", "mail_message_id"];
+  const [entryAll, closeAll] = await Promise.all([
+    executeKw<Tr[]>(uid, "mail.tracking.value", "search_read",
+      [[["field_id", "=", stageField], ["new_value_char", "in", PREVENTA]]], { fields: trFields, limit: 0, order: "create_date asc, id asc" }),
+    executeKw<Tr[]>(uid, "mail.tracking.value", "search_read",
+      [[["field_id", "=", estadoField], ["old_value_char", "=ilike", "abierto"], ["new_value_char", "=ilike", "cerrado"]]],
+      { fields: trFields, limit: 0, order: "create_date asc, id asc" }),
+  ]);
+  const entryTr = entryAll.filter((t) => !PREVENTA.includes((t.old_value_char || "") as string));   // sin transiciones Preventa → Preventa
+
+  // lead de cada cambio, a través de su mensaje
+  const msgIds = [...new Set([...entryTr, ...closeAll].flatMap((t) => (t.mail_message_id ? [t.mail_message_id[0]] : [])))];
+  const leadOf = new Map<number, number>();
+  for (let i = 0; i < msgIds.length; i += 1000) {
+    const ms = await executeKw<{ id: number; res_id: number }[]>(uid, "mail.message", "read", [msgIds.slice(i, i + 1000), ["res_id"]]);
+    ms.forEach((m) => leadOf.set(m.id, m.res_id));
+  }
+
+  const entries: Record<string, string> = {};
+  for (const t of entryTr) {
+    const lead = t.mail_message_id ? leadOf.get(t.mail_message_id[0]) : undefined;
+    if (lead && !(lead in entries)) entries[String(lead)] = toGMTMinus5(t.create_date);   // ya vienen ordenados: queda la primera
+  }
+  const closes = closeAll.flatMap((t) => {
+    const lead = t.mail_message_id ? leadOf.get(t.mail_message_id[0]) : undefined;
+    return lead ? [{ leadId: lead, date: toGMTMinus5(t.create_date) }] : [];
+  });
+  const all = [...Object.values(entries), ...closes.map((c) => c.date)].sort();
+  const data: PresalesTimeline = { entries, closes, since: all[0] ?? "" };
+  timelineCache = { at: Date.now(), data };
+  return data;
+}

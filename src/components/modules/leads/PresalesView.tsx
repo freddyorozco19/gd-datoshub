@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentTy
 import { createPortal } from "react-dom";
 import { RefreshCw, AlertCircle, Loader2, X, Maximize2, Settings } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
-import type { PreventaHistoryEntry } from "@/lib/odoo/client";
+import type { PreventaHistoryEntry, PresalesTimeline } from "@/lib/odoo/client";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
 import FitRow from "./FitRow";
@@ -426,32 +426,72 @@ export default function PresalesView({
   }, [etapaScope]);
   const maxEtapa = Math.max(1, ...byEtapa.map((r) => r.count));
 
-  /* leads por mes: 6 o 12 meses, por cantidad o pipeline; "ganados" = de los creados ese mes, los que hoy están ganados */
-  const [mRange, setMRange] = useState<6 | 12>(6);
+  /* Leads por año: "asignadas" = primera vez que la Etapa actual del lead pasa a Preventa; "cerradas" = el Estado Preventa
+     pasa de ABIERTO a CERRADO. Las fechas salen del historial de Odoo (/api/presales/timeline); respeta Línea, Preventa,
+     Compañía y Preventas inactivos, pero no Etapa actual, Estado Preventa ni el rango de fechas (el año se elige en el widget). */
+  const [timeline, setTimeline] = useState<PresalesTimeline | null>(null);
+  const [timelineError, setTimelineError] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/presales/timeline")
+      .then(async (r) => {
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || `Error ${r.status}`);
+        if (!cancelled) setTimeline(j as PresalesTimeline);
+      })
+      .catch((e) => { if (!cancelled) setTimelineError(e instanceof Error ? e.message : "No se pudo leer el historial."); });
+    return () => { cancelled = true; };
+  }, []);
   const [mHover, setMHover] = useState<string | null>(null);
-  const monthly = useMemo(() => {
-    const base = new Date();
-    const months = Array.from({ length: mRange }, (_, i) => {
-      const d = new Date(base.getFullYear(), base.getMonth() - (mRange - 1 - i), 1);
-      const mon = d.toLocaleDateString("es-CO", { month: "short" }).replace(".", "");
-      return {
-        key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`,
-        label: mRange === 12 && (i === 0 || d.getMonth() === 0) ? `${mon} ${String(d.getFullYear()).slice(2)}` : mon,
-        full: d.toLocaleDateString("es-CO", { month: "long", year: "numeric" }),
-        created: [] as Lead[],
-        won: [] as Lead[],
-      };
-    });
-    for (const l of filtered) {
-      const m = months.find((x) => x.key === l.fechaCreacion.substring(0, 7));
-      if (!m) continue;
-      m.created.push(l);
-      if (l.ganado === "Ganado") m.won.push(l);
+  const thisYear = new Date().getFullYear();
+  const [cYear, setCYear] = useState(thisYear);
+  type Seg = "Año" | "S1" | "S2" | "Q1" | "Q2" | "Q3" | "Q4";
+  const SEG_RANGE: Record<Seg, [number, number]> = { "Año": [0, 12], S1: [0, 6], S2: [6, 12], Q1: [0, 3], Q2: [3, 6], Q3: [6, 9], Q4: [9, 12] };
+  const SEG_LABEL: Record<Seg, string> = { "Año": "Año completo", S1: "S1 · Ene–Jun", S2: "S2 · Jul–Dic", Q1: "Q1 · Ene–Mar", Q2: "Q2 · Abr–Jun", Q3: "Q3 · Jul–Sep", Q4: "Q4 · Oct–Dic" };
+  const [cSeg, setCSeg] = useState<Seg>("Año");
+  const chartYears = useMemo(() => {
+    const first = timeline?.since ? Number(timeline.since.slice(0, 4)) : thisYear;
+    return Array.from({ length: thisYear - Math.min(first, thisYear) + 1 }, (_, i) => thisYear - i);
+  }, [timeline, thisYear]);
+  const chartScope = useMemo(() => leadsC.filter((l) =>
+    (fPreventa === "ALL" || l.preventa === fPreventa) &&
+    (fLinea    === "ALL" || l.linea === fLinea) &&
+    (!onlyActive || !l.preventa || statuses[l.preventa]?.active !== false)
+  ), [leadsC, fPreventa, fLinea, onlyActive, statuses]);
+  const MES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+  const chartMonths = useMemo(() => {
+    const months = Array.from({ length: 12 }, (_, i) => ({
+      key: `${cYear}-${String(i + 1).padStart(2, "0")}`,
+      label: MES[i],
+      full: new Date(cYear, i, 1).toLocaleDateString("es-CO", { month: "long", year: "numeric" }),
+      assigned: [] as Lead[],
+      closed: [] as Lead[],
+    }));
+    if (!timeline) return months;
+    const closesBy = new Map<number, string[]>();
+    for (const c of timeline.closes) closesBy.set(c.leadId, [...(closesBy.get(c.leadId) ?? []), c.date]);
+    const yr = String(cYear);
+    for (const l of chartScope) {
+      // los leads creados directamente en Preventa no tienen evento de entrada: se usa su fecha de creación
+      const entry = timeline.entries[String(l.id)] ?? (normText(l.etapa) === "preventa" ? l.fechaCreacion : null);
+      if (entry && entry.startsWith(yr)) months[Number(entry.slice(5, 7)) - 1].assigned.push(l);
+      const seen = new Set<number>();
+      for (const d of closesBy.get(l.id) ?? []) {
+        if (!d.startsWith(yr)) continue;
+        const mi = Number(d.slice(5, 7)) - 1;
+        if (!seen.has(mi)) { seen.add(mi); months[mi].closed.push(l); }   // un lead cuenta una vez por mes
+      }
     }
     return months;
-  }, [filtered, mRange]);
-  const maxMonth = Math.max(1, ...monthly.flatMap((m) => [m.created.length, m.won.length]));
-  const stackMonth = fCompania === "ALL";   // barra de creados apilada por compañía
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeline, chartScope, cYear]);
+  const shownMonths = chartMonths.slice(SEG_RANGE[cSeg][0], SEG_RANGE[cSeg][1]);
+  const chartTotals = {
+    assigned: shownMonths.reduce((s, m) => s + m.assigned.length, 0),
+    closed:   shownMonths.reduce((s, m) => s + m.closed.length, 0),
+  };
+  const maxMonth = Math.max(1, ...shownMonths.flatMap((m) => [m.assigned.length, m.closed.length]));
+  const stackMonth = fCompania === "ALL";   // barra de asignadas apilada por compañía
   const monthLines = (arr: Lead[]) => fCompania !== "ALL" ? [] : [
     { label: "GROW DATA", value: String(arr.filter((l) => compKey(l) === "SAS").length) },
     { label: "GD INTL", value: String(arr.filter((l) => compKey(l) === "INT").length) },
@@ -766,21 +806,29 @@ export default function PresalesView({
                 </div>
               )}
             </Card>
-            {/* leads por mes */}
-            <Card title="Leads por mes" className="flex-1" fill
+            {/* leads por año */}
+            <Card title="Leads por año" className="flex-1" fill
               right={
-                <div className="flex gap-1">
-                  {([6, 12] as const).map((n) => (
-                    <button key={n} type="button" onClick={() => setMRange(n)} data-active={mRange === n}
-                      className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">{n} meses</button>
-                  ))}
+                <div className="flex items-center gap-1.5">
+                  <select value={cYear} onChange={(e) => setCYear(Number(e.target.value))} aria-label="Año" className="cmmi-select text-[11px] font-medium rounded-lg bg-white/[0.04] border border-white/[0.1] px-2 py-1 text-slate-200 focus:outline-none focus:border-blue-500/60">
+                    {chartYears.map((y) => <option key={y} value={y}>{y}</option>)}
+                  </select>
+                  <select value={cSeg} onChange={(e) => setCSeg(e.target.value as Seg)} aria-label="Periodo" className="cmmi-select text-[11px] font-medium rounded-lg bg-white/[0.04] border border-white/[0.1] px-2 py-1 text-slate-200 focus:outline-none focus:border-blue-500/60">
+                    {(Object.keys(SEG_LABEL) as Seg[]).map((k) => <option key={k} value={k}>{SEG_LABEL[k]}</option>)}
+                  </select>
                 </div>
               }>
+              {timelineError ? (
+                <p className="text-xs text-rose-500 text-center py-6">{timelineError}</p>
+              ) : !timeline ? (
+                <div className="flex items-center justify-center gap-2 flex-1 text-xs text-slate-500"><Loader2 size={13} className="animate-spin" /> Cargando historial…</div>
+              ) : (
+              <>
               <div className="flex items-stretch gap-1.5 flex-1 min-h-[9rem] xl:min-h-0">
-                {monthly.map((m, i) => {
-                  const c = m.created.length, w = m.won.length;
-                  const tipPos = i < 2 ? "left-0" : i > monthly.length - 3 ? "right-0" : "left-1/2 -translate-x-1/2";
-                  const sasShare = stackMonth && c > 0 ? (m.created.filter((l) => compKey(l) === "SAS").length / c) * 100 : 100;
+                {shownMonths.map((m, i) => {
+                  const c = m.assigned.length, w = m.closed.length;
+                  const tipPos = i < 2 ? "left-0" : i > shownMonths.length - 3 ? "right-0" : "left-1/2 -translate-x-1/2";
+                  const sasShare = stackMonth && c > 0 ? (m.assigned.filter((l) => compKey(l) === "SAS").length / c) * 100 : 100;
                   return (
                     <div key={m.key}
                       className="bar-col relative flex-1 min-w-0 flex flex-col rounded-md px-0.5"
@@ -788,7 +836,7 @@ export default function PresalesView({
                       {mHover === m.key && (
                         <div className={`chart-tip absolute top-1 z-20 ${tipPos} rounded-lg px-3 py-2 text-[11px] whitespace-nowrap pointer-events-none`}>
                           <p className="font-semibold text-slate-100 capitalize mb-1">{m.full}</p>
-                          {([["Creados", m.created, "bg-blue-400"], ["Ganados", m.won, "bg-emerald-400"]] as const).map(([lbl, arr, color]) => (
+                          {([["Asignadas a Preventa", m.assigned, "bg-blue-400"], ["Cerradas (Abierto → Cerrado)", m.closed, "bg-violet-400"]] as const).map(([lbl, arr, color]) => (
                             <div key={lbl} className="mb-0.5">
                               <div className="flex items-center justify-between gap-4">
                                 <span className="flex items-center gap-1.5 text-slate-400"><i className={`w-2 h-2 rounded-sm ${color}`} />{lbl}</span>
@@ -803,13 +851,13 @@ export default function PresalesView({
                           ))}
                         </div>
                       )}
-                      <div className="h-4 text-center text-[11px] font-medium text-slate-300 tabular-nums leading-4">
-                        {mRange === 6 && c ? c : ""}
+                      <div className="h-4 flex justify-center gap-2 text-[11px] font-medium tabular-nums leading-4">
+                        {shownMonths.length <= 6 && (<><span className="text-slate-300">{c || ""}</span><span className="text-violet-500">{w || ""}</span></>)}
                       </div>
                       <div className="flex-1 flex items-end gap-0.5 min-h-0">
-                        <button type="button" disabled={m.created.length === 0}
-                          onClick={() => setListModal({ leads: m.created, heading: m.full, suffix: " creados ese mes" })}
-                          title={`Ver los creados en ${m.full}`}
+                        <button type="button" disabled={c === 0}
+                          onClick={() => setListModal({ leads: m.assigned, heading: m.full, suffix: " asignados a Preventa ese mes" })}
+                          title={`Ver los asignados a Preventa en ${m.full}`}
                           className="flex-1 h-full flex items-end disabled:cursor-default">
                           <div className="w-full rounded-t-md overflow-hidden flex flex-col-reverse"
                             style={{ height: `${(c / maxMonth) * 100}%`, minHeight: c ? 4 : 0 }}>
@@ -821,11 +869,11 @@ export default function PresalesView({
                             ) : <div className="bg-blue-400 h-full" />}
                           </div>
                         </button>
-                        <button type="button" disabled={m.won.length === 0}
-                          onClick={() => setListModal({ leads: m.won, heading: m.full, suffix: " ganados, creados ese mes" })}
-                          title={`Ver los ganados creados en ${m.full}`}
+                        <button type="button" disabled={w === 0}
+                          onClick={() => setListModal({ leads: m.closed, heading: m.full, suffix: " cerrados ese mes (Abierto → Cerrado)" })}
+                          title={`Ver los cerrados en ${m.full}`}
                           className="flex-1 h-full flex items-end disabled:cursor-default">
-                          <div className="w-full rounded-t-md bg-emerald-400" style={{ height: `${(w / maxMonth) * 100}%`, minHeight: w ? 4 : 0 }} />
+                          <div className="w-full rounded-t-md bg-violet-400" style={{ height: `${(w / maxMonth) * 100}%`, minHeight: w ? 4 : 0 }} />
                         </button>
                       </div>
                       <span className="mt-1 text-center text-[11px] text-slate-400 capitalize truncate">{m.label}</span>
@@ -841,10 +889,13 @@ export default function PresalesView({
                     <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-teal-400" /> GD INTL</span>
                   </>
                 ) : (
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-blue-400" /> Creados</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-blue-400" /> Asignadas</span>
                 )}
-                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-emerald-400" /> Ganados (de los creados ese mes)</span>
+                <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-violet-400" /> Cerradas</span>
+                <span className="ml-auto tabular-nums text-slate-300">{chartTotals.assigned} asignadas · {chartTotals.closed} cerradas</span>
               </div>
+              </>
+              )}
             </Card>
             </div>
           </div>
