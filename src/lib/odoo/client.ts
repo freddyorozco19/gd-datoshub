@@ -487,6 +487,7 @@ export async function fetchLeadNotes(leadId: number): Promise<import("./types").
 export interface PresalesTimeline {
   entries: Record<string, string>;                 // leadId → fecha de la primera entrada a Preventa (GMT-5)
   closes: { leadId: number; date: string }[];      // cierres Abierto → Cerrado (GMT-5)
+  cycles: { leadId: number; open: string; close: string }[];   // ciclos completos: del último paso a Abierto al cierre (GMT-5)
   since: string;                                   // fecha del evento más antiguo
 }
 let timelineCache: { at: number; data: PresalesTimeline } | null = null;
@@ -506,17 +507,17 @@ export async function fetchPresalesTimeline(): Promise<PresalesTimeline> {
   type Tr = { old_value_char: string | false; new_value_char: string | false; create_date: string; mail_message_id: [number, string | false] | false };
   const PREVENTA = ["Preventa", "Análisis y Validación"];
   const trFields = ["old_value_char", "new_value_char", "create_date", "mail_message_id"];
-  const [entryAll, closeAll] = await Promise.all([
+  const [entryAll, estadoAll] = await Promise.all([
     executeKw<Tr[]>(uid, "mail.tracking.value", "search_read",
       [[["field_id", "=", stageField], ["new_value_char", "in", PREVENTA]]], { fields: trFields, limit: 0, order: "create_date asc, id asc" }),
+    // todos los cambios de Estado Preventa, en orden: de aquí salen los cierres y los ciclos
     executeKw<Tr[]>(uid, "mail.tracking.value", "search_read",
-      [[["field_id", "=", estadoField], ["old_value_char", "=ilike", "abierto"], ["new_value_char", "=ilike", "cerrado"]]],
-      { fields: trFields, limit: 0, order: "create_date asc, id asc" }),
+      [[["field_id", "=", estadoField]]], { fields: trFields, limit: 0, order: "create_date asc, id asc" }),
   ]);
   const entryTr = entryAll.filter((t) => !PREVENTA.includes((t.old_value_char || "") as string));   // sin transiciones Preventa → Preventa
 
   // lead de cada cambio, a través de su mensaje
-  const msgIds = [...new Set([...entryTr, ...closeAll].flatMap((t) => (t.mail_message_id ? [t.mail_message_id[0]] : [])))];
+  const msgIds = [...new Set([...entryTr, ...estadoAll].flatMap((t) => (t.mail_message_id ? [t.mail_message_id[0]] : [])))];
   const leadOf = new Map<number, number>();
   for (let i = 0; i < msgIds.length; i += 1000) {
     const ms = await executeKw<{ id: number; res_id: number }[]>(uid, "mail.message", "read", [msgIds.slice(i, i + 1000), ["res_id"]]);
@@ -528,12 +529,24 @@ export async function fetchPresalesTimeline(): Promise<PresalesTimeline> {
     const lead = t.mail_message_id ? leadOf.get(t.mail_message_id[0]) : undefined;
     if (lead && !(lead in entries)) entries[String(lead)] = toGMTMinus5(t.create_date);   // ya vienen ordenados: queda la primera
   }
-  const closes = closeAll.flatMap((t) => {
+  // cierres (Abierto → Cerrado) y ciclos (del último paso a Abierto hasta ese cierre); se ignoran mayúsculas: hay "Abierto" y "ABIERTO"
+  const nm = (v: string | false) => String(v || "").trim().toLowerCase();
+  const closes: PresalesTimeline["closes"] = [];
+  const cycles: PresalesTimeline["cycles"] = [];
+  const openedAt = new Map<number, string>();
+  for (const t of estadoAll) {
     const lead = t.mail_message_id ? leadOf.get(t.mail_message_id[0]) : undefined;
-    return lead ? [{ leadId: lead, date: toGMTMinus5(t.create_date) }] : [];
-  });
+    if (!lead) continue;
+    const date = toGMTMinus5(t.create_date);
+    if (nm(t.new_value_char) === "abierto") openedAt.set(lead, date);
+    if (nm(t.old_value_char) === "abierto" && nm(t.new_value_char) === "cerrado") {
+      closes.push({ leadId: lead, date });
+      const open = openedAt.get(lead);
+      if (open) { cycles.push({ leadId: lead, open, close: date }); openedAt.delete(lead); }
+    }
+  }
   const all = [...Object.values(entries), ...closes.map((c) => c.date)].sort();
-  const data: PresalesTimeline = { entries, closes, since: all[0] ?? "" };
+  const data: PresalesTimeline = { entries, closes, cycles, since: all[0] ?? "" };
   timelineCache = { at: Date.now(), data };
   return data;
 }

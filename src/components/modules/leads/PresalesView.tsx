@@ -12,6 +12,9 @@ import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesOcupacionModal from "./PresalesOcupacionModal";
 import PresalesKanbanBoard from "./PresalesKanbanBoard";
+import PresalesCycleCard from "./PresalesCycleCard";
+import PresalesAgendaCard from "./PresalesAgendaCard";
+import PresalesPreventaModal from "./PresalesPreventaModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow, type PresalesKind } from "./PresalesManageModal";
 
@@ -170,6 +173,7 @@ export default function PresalesView({
   const [showSettings, setShowSettings] = useState(false);
   const [settingsSection, setSettingsSection] = useState<SectionId | undefined>(undefined);
   const [showOcup, setShowOcup] = useState(false);
+  const [fichaName, setFichaName] = useState<string | null>(null);   // ficha de preventa abierta
   const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive } = settings;
   const saveSettings = (next: PresalesSettings) => {
     setSettings(next);
@@ -436,6 +440,8 @@ export default function PresalesView({
     (fLinea    === "ALL" || l.linea === fLinea) &&
     (!onlyActive || !l.preventa || statuses[l.preventa]?.active !== false)
   ), [leadsC, fPreventa, fLinea, onlyActive, statuses]);
+  const [cycYear, setCycYear] = useState<number | "ALL">(new Date().getFullYear());
+  const agendaLeads = useMemo(() => chartScope.filter((l) => isOpen(l) && !!l.cierreEsperado), [chartScope]);
   const MES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
   const chartMonths = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, i) => ({
@@ -563,7 +569,10 @@ export default function PresalesView({
             <tr key={r.name}
               onClick={() => setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && (l.preventa || "Sin asignar") === r.name), heading: r.name })}
               className="row-hover cursor-pointer">
-              <td className={`${py} pr-3 font-medium truncate ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name}</td>
+              <td className={`${py} pr-3 font-medium truncate ${r.name === "Sin asignar" ? "text-amber-400" : "text-slate-200"}`} title={r.name}>{r.name === "Sin asignar" ? r.name : (
+                <button type="button" onClick={(e) => { e.stopPropagation(); setFichaName(r.name); }}
+                  className="name-link block max-w-full truncate text-left" title={`Abrir la ficha de ${r.name}`}>{r.name}</button>
+              )}</td>
               <td className={`${py} px-2 text-right tabular-nums text-slate-300`}>{r.open}</td>
               <td className={`${py} pl-3 pr-3`}>
                 <div className="flex items-center gap-2" title={`${r.open} de ${CARGA_LIMIT} leads abiertos`}>
@@ -869,6 +878,27 @@ export default function PresalesView({
             </div>
           </div>
 
+          {/* tiempo de ciclo y agenda de cierres */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <Card title="Tiempo de ciclo en Preventa"
+              right={
+                <select value={String(cycYear)} onChange={(e) => setCycYear(e.target.value === "ALL" ? "ALL" : Number(e.target.value))} aria-label="Año del tiempo de ciclo"
+                  className="cmmi-select text-[11px] font-medium rounded-lg bg-white/[0.04] border border-white/[0.1] px-2 py-1 text-slate-200 focus:outline-none focus:border-blue-500/60">
+                  <option value="ALL">Todos los años</option>
+                  {chartYears.map((y) => <option key={y} value={y}>{y}</option>)}
+                </select>
+              }>
+              <PresalesCycleCard
+                timeline={timeline} error={timelineError} scope={chartScope} year={cycYear}
+                onList={(ls, heading) => setListModal({ leads: ls, heading })}
+                onOpenPreventa={(n) => setFichaName(n)}
+              />
+            </Card>
+            <Card title="Agenda de cierres">
+              <PresalesAgendaCard leads={agendaLeads} daysToClose={daysToClose} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
+            </Card>
+          </div>
+
           {/* kanban de Estado Preventa */}
           <Card title="Tablero estados preventa">
             <PresalesKanbanBoard
@@ -881,6 +911,16 @@ export default function PresalesView({
         </>
       )}
 
+      {fichaName && (
+        <PresalesPreventaModal
+          name={fichaName} roleLabel={({ profesional: "Profesional", lider: "Líder", gerente: "Gerente" } as const)[kindOf(fichaName)]}
+          active={!isInactive(fichaName)} leads={leads} timeline={timeline} year={cycYear} limit={CARGA_LIMIT}
+          teamOcup={ocupGlobal} teamStale={stats.stale.length / Math.max(1, profRows.length)}
+          staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD}
+          blocked={!!selected || !!listModal} onClose={() => setFichaName(null)}
+          onOpenLead={(l) => setSelected(l)} onList={(ls, heading) => setListModal({ leads: ls, heading })}
+        />
+      )}
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
       {showSettings && (
         <PresalesSettingsPanel
