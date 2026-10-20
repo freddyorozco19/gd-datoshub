@@ -137,7 +137,6 @@ function Kpi({ label, value, onClick, split }: { label: string; value: string; o
 // etapas de preventa que no se muestran como columna en Carga por preventa (valores normalizados)
 const HIDDEN_ETAPA_COLS = new Set(["oferta declinada", "no viable", "oferta no viable", "suspendida", "sin etapa"]);
 
-type QueueKey = "sinAsignar" | "inactivos" | "estancados" | "proximos";
 
 /* ── vista ───────────────────────────────────────────────────────────── */
 // popup con la tabla de leads (el mismo de la pestaña Business); se recibe por prop para no crear un import circular
@@ -154,7 +153,6 @@ export default function PresalesView({
   const [fEstado,   setFEstado]   = useState("Preventa");
   const [dFrom,     setDFrom]     = useState("");
   const [dTo,       setDTo]       = useState("");
-  const [queue,     setQueue]     = useState<QueueKey>("sinAsignar");
   const [selected,  setSelected]  = useState<Lead | null>(null);
 
   /* estado activo/inactivo de cada preventa (gestionado desde esta página) */
@@ -476,15 +474,6 @@ export default function PresalesView({
     { label: "GROW DATA", value: String(arr.filter((l) => compKey(l) === "SAS").length) },
     { label: "GD INTL", value: String(arr.filter((l) => compKey(l) === "INT").length) },
   ];
-
-  /* cola de gestión */
-  const queues: Record<QueueKey, { label: string; items: Lead[]; hint: (l: Lead) => string }> = {
-    sinAsignar: { label: "Sin preventa", items: stats.sinAsig, hint: (l) => `${daysSince(l)} d sin cambios` },
-    inactivos:  { label: "Preventa inactivo", items: stats.open.filter((l) => !!l.preventa && isInactive(l.preventa)), hint: (l) => `${daysSince(l)} d sin cambios` },
-    estancados: { label: `Estancados +${STALE_DAYS} d`, items: [...stats.stale].sort((a, b) => daysSince(b) - daysSince(a)), hint: (l) => `${daysSince(l)} d sin cambios` },
-    proximos:   { label: `Cierre ≤ ${SOON_DAYS} d`, items: [...stats.soon].sort((a, b) => (daysToClose(a) ?? 0) - (daysToClose(b) ?? 0)), hint: (l) => `cierra en ${daysToClose(l)} d` },
-  };
-  const q = queues[queue];
 
   /* widget Carga por preventa: pills de compañía propias (no afectan a las tarjetas) y vista ampliada */
   const [fCargaComp, setFCargaComp] = useState<"ALL" | CompKey>("ALL");
@@ -878,48 +867,6 @@ export default function PresalesView({
               )}
             </Card>
             </div>
-          </div>
-
-          <div>
-            {/* cola de gestión operativa */}
-            <Card title="Cola de gestión"
-              right={
-                <div className="flex gap-1">
-                  {(Object.keys(queues) as QueueKey[]).map((k) => (
-                    <button key={k} type="button" onClick={() => setQueue(k)}
-                      className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
-                        queue === k ? "filter-option-selected border-blue-500/40" : "filter-option bg-white/[0.04] border-white/[0.08] text-slate-400"
-                      }`}>
-                      {queues[k].label} <span className="tabular-nums opacity-70">{queues[k].items.length}</span>
-                    </button>
-                  ))}
-                </div>
-              }>
-              {q.items.length === 0 ? (
-                <p className="text-xs text-slate-500 py-6 text-center">Nada pendiente en esta cola</p>
-              ) : (
-                <div className="divide-y divide-white/[0.05]">
-                  {q.items.slice(0, 8).map((l) => (
-                    <button key={l.id} type="button" onClick={() => setSelected(l)}
-                      className="w-full flex items-center gap-3 text-left px-1.5 py-2 row-hover rounded-lg">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</p>
-                        <p className="text-[11px] text-slate-500 truncate">
-                          {l.cliente || "—"}{l.preventa ? ` · ${l.preventa}` : ""}{l.etapaPreventa ? ` · ${l.etapaPreventa}` : ""}
-                        </p>
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <p className="text-[11px] text-slate-300 tabular-nums">{fmtCOP(l.ingresosEsperados)}</p>
-                        <p className="text-[10px] text-slate-500 whitespace-nowrap">{q.hint(l)}</p>
-                      </div>
-                    </button>
-                  ))}
-                  {q.items.length > 8 && (
-                    <p className="text-[10px] text-slate-500 text-center pt-2">+{q.items.length - 8} más — ajusta los filtros para acotar</p>
-                  )}
-                </div>
-              )}
-            </Card>
           </div>
 
           {/* kanban de Estado Preventa */}
