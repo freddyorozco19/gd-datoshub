@@ -164,23 +164,25 @@ export default function PresalesKanbanBoard({
                       const stale = days > staleDays;
                       return (
                         <button key={l.id} type="button" onClick={() => onOpenLead(l)}
-                          className="kb-card row-hover w-full h-[100px] shrink-0 flex flex-col justify-between text-left rounded-lg px-3 py-2 cursor-pointer overflow-hidden">
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-[10px] font-mono font-bold text-slate-300">#{l.id}</span>
-                            <span className="flex items-center gap-2 text-[10px]">
-                              {!l.activo && <span className="px-1.5 py-0.5 rounded-full bg-white/[0.08] text-slate-400">Archivado</span>}
+                          className="kb-card row-hover w-full h-[80px] shrink-0 flex flex-col justify-between text-left rounded-lg px-3 py-2 cursor-pointer overflow-hidden">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="shrink-0 text-[10px] font-mono font-bold text-slate-400">#{l.id}</span>
+                            <p className="flex-1 min-w-0 text-xs font-semibold text-slate-100 leading-none truncate" title={l.nombre}>{l.nombre}</p>
+                            <i className={`shrink-0 w-2 h-2 rounded-sm ${isInt(l) ? "bg-teal-400" : "bg-blue-400"}`} title={isInt(l) ? "GD INTERNATIONAL" : "GROW DATA"} />
+                          </div>
+                          <div className="flex items-center justify-between gap-2 min-w-0">
+                            <p className="min-w-0 text-[11px] text-slate-400 leading-none truncate" title={[l.cliente, l.linea].filter(Boolean).join(" · ")}>
+                              {l.cliente || "—"}{l.linea && <span className="text-slate-500"> · {l.linea}</span>}
+                            </p>
+                            <span className="shrink-0 flex items-center gap-1.5 text-[10px]">
+                              {!l.activo && <span className="px-1.5 py-0.5 rounded-full bg-white/[0.08] text-slate-400 leading-none">Archivado</span>}
                               <span className={`flex items-center gap-1 tabular-nums ${stale ? "text-rose-500 font-semibold" : "text-slate-500"}`}
                                 title={`${days} d sin cambios${stale ? " · estancado" : ""}`}>
                                 {stale ? <AlertTriangle size={10} /> : <Clock size={10} />}
                                 {days} d
                               </span>
-                              <i className={`w-2 h-2 rounded-sm ${isInt(l) ? "bg-teal-400" : "bg-blue-400"}`} title={isInt(l) ? "GD INTERNATIONAL" : "GROW DATA"} />
                             </span>
                           </div>
-                          <p className="text-xs font-semibold text-slate-100 leading-snug truncate" title={l.nombre}>{l.nombre}</p>
-                          <p className="text-[11px] text-slate-400 leading-snug truncate" title={[l.cliente, l.linea].filter(Boolean).join(" · ")}>
-                            {l.cliente || "—"}{l.linea && <span className="text-slate-500"> · {l.linea}</span>}
-                          </p>
                           <div className="flex items-center justify-between gap-2">
                             <span className="flex items-center gap-1.5 min-w-0">
                               {l.preventa ? (
