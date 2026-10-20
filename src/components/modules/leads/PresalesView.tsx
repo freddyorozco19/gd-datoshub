@@ -923,7 +923,7 @@ export default function PresalesView({
           </div>
 
           {/* kanban de Estado Preventa */}
-          <Card title="Kanban de Estado Preventa">
+          <Card title="Tablero estados preventa">
             <PresalesKanbanBoard leads={etapaScope} staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
           </Card>
         </>
