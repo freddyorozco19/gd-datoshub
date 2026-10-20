@@ -164,7 +164,7 @@ export default function PresalesKanbanBoard({
                       const stale = days > staleDays;
                       return (
                         <button key={l.id} type="button" onClick={() => onOpenLead(l)}
-                          className="kb-card row-hover w-full text-left rounded-lg px-3 py-2 cursor-pointer">
+                          className="kb-card row-hover w-full h-[100px] shrink-0 flex flex-col justify-between text-left rounded-lg px-3 py-2 cursor-pointer overflow-hidden">
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-[10px] font-mono font-bold text-slate-300">#{l.id}</span>
                             <span className="flex items-center gap-2 text-[10px]">
@@ -177,10 +177,11 @@ export default function PresalesKanbanBoard({
                               <i className={`w-2 h-2 rounded-sm ${isInt(l) ? "bg-teal-400" : "bg-blue-400"}`} title={isInt(l) ? "GD INTERNATIONAL" : "GROW DATA"} />
                             </span>
                           </div>
-                          <p className="text-xs font-semibold text-slate-100 mt-1 leading-snug truncate" title={l.nombre}>{l.nombre}</p>
-                          <p className="text-[11px] text-slate-400 mt-0.5 truncate" title={l.cliente}>{l.cliente || "—"}</p>
-                          {l.linea && <p className="text-[10px] text-slate-500 mt-0.5 truncate" title={l.linea}>{l.linea}</p>}
-                          <div className="flex items-center justify-between gap-2 mt-2">
+                          <p className="text-xs font-semibold text-slate-100 leading-snug truncate" title={l.nombre}>{l.nombre}</p>
+                          <p className="text-[11px] text-slate-400 leading-snug truncate" title={[l.cliente, l.linea].filter(Boolean).join(" · ")}>
+                            {l.cliente || "—"}{l.linea && <span className="text-slate-500"> · {l.linea}</span>}
+                          </p>
+                          <div className="flex items-center justify-between gap-2">
                             <span className="flex items-center gap-1.5 min-w-0">
                               {l.preventa ? (
                                 <>
