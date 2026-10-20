@@ -11,7 +11,7 @@ import FitRow from "./FitRow";
 import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesOcupacionModal from "./PresalesOcupacionModal";
-import PresalesKanbanModal from "./PresalesKanbanModal";
+import PresalesKanbanBoard from "./PresalesKanbanBoard";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow, type PresalesKind } from "./PresalesManageModal";
 
@@ -177,7 +177,7 @@ export default function PresalesView({
   const [showSettings, setShowSettings] = useState(false);
   const [settingsSection, setSettingsSection] = useState<SectionId | undefined>(undefined);
   const [showOcup, setShowOcup] = useState(false);
-  const [showKanban, setShowKanban] = useState(false);
+  const [recentView, setRecentView] = useState<"kanban" | "cambios">("kanban");   // vista del panel inferior
   const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive } = settings;
   const saveSettings = (next: PresalesSettings) => {
     setSettings(next);
@@ -780,10 +780,6 @@ export default function PresalesView({
             <Card title="Leads en estado de preventa" className="flex-1" fill
               right={
                 <div className="flex items-center gap-1">
-                  <button type="button" onClick={() => setShowKanban(true)} title="Ampliar (kanban por Estado Preventa)" aria-label="Ampliar kanban"
-                    className="pill-option flex items-center justify-center p-1.5 rounded-lg border">
-                    <Maximize2 size={12} />
-                  </button>
                   {([["ALL", "Todos"], ["true", "Activo"], ["false", "Inactivo"]] as const).map(([v, label]) => (
                     <button key={v} type="button" onClick={() => setFLeadActivo(v)}
                       title="Filtra por el campo Activo del lead"
@@ -949,9 +945,21 @@ export default function PresalesView({
           </div>
 
           {/* cambios recientes de Estado Preventa — leidos del historial de auditoria de Odoo */}
-          <Card title="Cambios recientes de Estado Preventa"
-            right={<span className="text-[10px] text-slate-500">Historial de Odoo</span>}>
-            {historyLoading ? (
+          <Card title={recentView === "kanban" ? "Kanban de Estado Preventa" : "Cambios recientes de Estado Preventa"}
+            right={
+              <div className="flex items-center gap-2">
+                {recentView === "cambios" && <span className="text-[10px] text-slate-500 hidden sm:inline">Historial de Odoo</span>}
+                <div className="flex gap-1">
+                  {([["kanban", "Kanban"], ["cambios", "Cambios recientes"]] as const).map(([v, label]) => (
+                    <button key={v} type="button" onClick={() => setRecentView(v)} data-active={recentView === v}
+                      className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">{label}</button>
+                  ))}
+                </div>
+              </div>
+            }>
+            {recentView === "kanban" ? (
+              <PresalesKanbanBoard leads={etapaScope} staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
+            ) : historyLoading ? (
               <div className="flex items-center justify-center gap-2 py-6 text-slate-500 text-xs">
                 <Loader2 size={14} className="animate-spin" /> Cargando historial…
               </div>
@@ -989,12 +997,6 @@ export default function PresalesView({
         </>
       )}
 
-      {showKanban && (
-        <PresalesKanbanModal
-          leads={etapaScope} staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD}
-          blocked={!!selected || !!listModal} onClose={() => setShowKanban(false)} onOpenLead={(l) => setSelected(l)}
-        />
-      )}
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
       {showSettings && (
         <PresalesSettingsPanel

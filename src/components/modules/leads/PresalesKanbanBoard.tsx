@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import { X, Search, ChevronLeft, ChevronRight, Clock, AlertTriangle } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { Search, ChevronLeft, ChevronRight, Clock, AlertTriangle } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 
-/* Kanban de Estado Preventa (solo lectura): una columna por estado, scroll horizontal entre columnas y vertical dentro de cada una.
-   Un clic en una tarjeta abre el detalle del lead. */
+/* Kanban de Estado Preventa (solo lectura), incrustado en el panel de Cambios recientes: una columna por estado, scroll horizontal
+   entre columnas y vertical dentro de cada una. Un clic en una tarjeta abre el detalle del lead. */
 
 const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const isInt = (l: Lead) => norm(l.compania || "").includes("international");
@@ -23,28 +22,19 @@ const AVATAR = ["bg-blue-500", "bg-emerald-500", "bg-violet-500", "bg-amber-500"
 const avatarOf = (name: string) => AVATAR[[...name].reduce((s, c) => s + c.charCodeAt(0), 0) % AVATAR.length];
 const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
 
-export default function PresalesKanbanModal({
-  leads, staleDays, daysSince, fmtCOP, fmtUSD, blocked, onClose, onOpenLead,
+export default function PresalesKanbanBoard({
+  leads, staleDays, daysSince, fmtCOP, fmtUSD, onOpenLead,
 }: {
   leads: Lead[];
   staleDays: number;                       // días sin cambios para marcar un lead como estancado
   daysSince: (l: Lead) => number;
   fmtCOP: (v: number) => string;
   fmtUSD: (v: number) => string;
-  blocked: boolean;                        // hay otro popup encima: no cerrar con Esc
-  onClose: () => void;
   onOpenLead: (l: Lead) => void;
 }) {
   const [q, setQ] = useState("");
   const boardRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ x: number; left: number } | null>(null);
-
-  useEffect(() => {
-    if (blocked) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [blocked, onClose]);
 
   const columns = useMemo(() => {
     const nq = norm(q.trim());
@@ -68,26 +58,16 @@ export default function PresalesKanbanModal({
 
   const scrollBoard = (dx: number) => boardRef.current?.scrollBy({ left: dx, behavior: "smooth" });
 
-  return createPortal(
-    <div className="dashboard-shell">
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-        style={{ backgroundColor: "var(--app-modal-overlay)" }}
-        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-        <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-[1500px] h-[88vh] flex flex-col overflow-hidden">
-          <div className="app-bar modal-header flex items-center justify-between gap-4 px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
-            <div className="min-w-0">
-              <h2 className="font-semibold text-slate-100 uppercase tracking-wide text-sm">Kanban · Estado preventa</h2>
-              <p className="text-[11px] text-slate-400 truncate">{leads.length} leads · desplázate o usa las flechas para recorrer los estados</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar ID, lead, cliente, preventa…" aria-label="Buscar en el kanban"
-                  className="w-64 rounded-lg bg-white/[0.08] border border-white/[0.14] pl-8 pr-3 py-1.5 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-400/70" />
-              </div>
-              <button type="button" onClick={onClose} title="Cerrar" aria-label="Cerrar" className="p-2 rounded-lg hover:bg-white/[0.12] transition-colors"><X size={18} /></button>
-            </div>
-          </div>
+  return (
+    <div className="flex flex-col" style={{ height: "clamp(420px, 68vh, 760px)" }}>
+      <div className="shrink-0 flex items-center justify-between gap-3 pb-3">
+        <p className="text-[11px] text-slate-500 truncate">{leads.length} leads · desplázate o usa las flechas para recorrer los estados</p>
+        <div className="relative shrink-0">
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar ID, lead, cliente, preventa…" aria-label="Buscar en el kanban"
+            className="w-64 rounded-lg bg-white/[0.04] border border-white/[0.1] pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/60" />
+        </div>
+      </div>
 
           <div className="relative flex-1 min-h-0">
             <button type="button" onClick={() => scrollBoard(-340)} aria-label="Estados anteriores"
@@ -96,7 +76,7 @@ export default function PresalesKanbanModal({
               className="pill-option absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full border shadow-lg"><ChevronRight size={16} /></button>
 
             <div ref={boardRef}
-              className="h-full overflow-x-auto overflow-y-hidden flex gap-4 px-6 py-4 cursor-grab active:cursor-grabbing select-none"
+              className="h-full overflow-x-auto overflow-y-hidden flex gap-4 pb-2 cursor-grab active:cursor-grabbing select-none"
               onPointerDown={(e) => {
                 if ((e.target as HTMLElement).closest("button,input,a")) return;
                 drag.current = { x: e.clientX, left: e.currentTarget.scrollLeft };
@@ -161,9 +141,6 @@ export default function PresalesKanbanModal({
               ))}
             </div>
           </div>
-        </div>
-      </div>
-    </div>,
-    document.body,
+    </div>
   );
 }
