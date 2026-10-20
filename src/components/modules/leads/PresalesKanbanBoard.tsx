@@ -6,6 +6,7 @@ import type { Lead } from "@/lib/odoo/types";
 import FitRow from "./FitRow";
 import PresalesStateModal from "./PresalesStateModal";
 import { uniqueEtapaActual } from "./etapaOrder";
+import { personInitials as initials } from "./initials";
 
 /* Kanban de Estado Preventa (solo lectura), incrustado en el panel de Cambios recientes: una columna por estado, scroll horizontal
    entre columnas y vertical dentro de cada una. Un clic en una tarjeta abre el detalle del lead. */
@@ -28,7 +29,6 @@ const lbl = "text-[10px] font-semibold uppercase tracking-wide text-slate-500 te
 const inputCls = "rounded-lg bg-white/[0.04] border border-white/[0.1] px-3 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/60";
 const AVATAR = ["bg-blue-500", "bg-emerald-500", "bg-violet-500", "bg-amber-500", "bg-rose-500", "bg-cyan-500", "bg-orange-500"];
 const avatarOf = (name: string) => AVATAR[[...name].reduce((s, c) => s + c.charCodeAt(0), 0) % AVATAR.length];
-const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
 
 export default function PresalesKanbanBoard({
   leads, staleDays, daysSince, fmtCOP, fmtUSD, blocked, onList, onOpenLead,

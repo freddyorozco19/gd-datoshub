@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Paperclip, Loader2, MessageSquare, StickyNote, Mail, ArrowRight, Settings2 } from "lucide-react";
 import type { LeadNote, LeadNoteKind } from "@/lib/odoo/types";
+import { personInitials as initials } from "./initials";
 
 /* Pestaña "Notas" del detalle de un lead: el chatter de Odoo (notas, mensajes, correos y cambios) en orden cronológico. */
 
@@ -17,7 +18,6 @@ const KIND_STYLE: Record<LeadNoteKind, { cls: string; icon: typeof StickyNote }>
 };
 const AVATAR = ["bg-blue-500", "bg-emerald-500", "bg-violet-500", "bg-amber-500", "bg-rose-500", "bg-cyan-500", "bg-orange-500"];
 const avatarOf = (name: string) => AVATAR[[...name].reduce((s, c) => s + c.charCodeAt(0), 0) % AVATAR.length];
-const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
 
 const toDate = (utc: string) => new Date(utc.replace(" ", "T") + "Z");
 const pad = (n: number) => String(n).padStart(2, "0");
