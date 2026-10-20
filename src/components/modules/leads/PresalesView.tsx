@@ -871,7 +871,12 @@ export default function PresalesView({
 
           {/* kanban de Estado Preventa */}
           <Card title="Tablero estados preventa">
-            <PresalesKanbanBoard leads={etapaScope} staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
+            <PresalesKanbanBoard
+              leads={etapaScope} staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD}
+              blocked={!!selected || !!listModal}
+              onList={(ls, heading) => setListModal({ leads: ls, heading })}
+              onOpenLead={(l) => setSelected(l)}
+            />
           </Card>
         </>
       )}

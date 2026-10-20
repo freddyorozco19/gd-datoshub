@@ -552,22 +552,30 @@ body {
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   backdrop-filter: blur(14px) saturate(160%);
 }
-.kb-col[data-tone="blue"]  { --kb: 74 125 255;  --kb-ic: #6aa0ff; }
-.kb-col[data-tone="green"] { --kb: 32 201 151;  --kb-ic: #34d3a2; }
-.kb-col[data-tone="amber"] { --kb: 245 170 50;  --kb-ic: #f5b04a; }
-.kb-col[data-tone="rose"]  { --kb: 244 63 94;   --kb-ic: #fb7185; }
+.kb-col[data-tone="blue"], .kb-tone[data-tone="blue"]  { --kb: 74 125 255;  --kb-ic: #6aa0ff; }
+.kb-col[data-tone="green"], .kb-tone[data-tone="green"] { --kb: 32 201 151;  --kb-ic: #34d3a2; }
+.kb-col[data-tone="amber"], .kb-tone[data-tone="amber"] { --kb: 245 170 50;  --kb-ic: #f5b04a; }
+.kb-col[data-tone="rose"], .kb-tone[data-tone="rose"]  { --kb: 244 63 94;   --kb-ic: #fb7185; }
+.kb-tone { --kb: 148 163 184; --kb-ic: #94a3b8; }
 .kb-ic { color: var(--kb-ic); }
+.kb-colhead { transition: background-color 0.15s; }
+.kb-colhead:hover { background-color: rgb(var(--kb) / 0.1); }
+.kb-badge { background-color: rgb(var(--kb) / 0.2); border: 1px solid rgb(var(--kb) / 0.35); }
+.kb-modal-head { background: linear-gradient(135deg, rgba(10, 16, 38, 0.92), rgb(var(--kb) / 0.5)); }
 .kb-card { background-color: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.08); }
 .light .dashboard-shell .kb-col {
   background: linear-gradient(180deg, rgb(var(--kb) / 0.08), rgba(255, 255, 255, 0.55));
   border-color: rgba(255, 255, 255, 0.85);
   box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 10px 22px -16px rgba(15, 23, 42, 0.3);
 }
-.light .dashboard-shell .kb-col[data-tone="blue"]  { --kb-ic: #1d4ed8; }
-.light .dashboard-shell .kb-col[data-tone="green"] { --kb-ic: #047857; }
-.light .dashboard-shell .kb-col[data-tone="amber"] { --kb-ic: #b45309; }
-.light .dashboard-shell .kb-col[data-tone="rose"]  { --kb-ic: #be123c; }
-.light .dashboard-shell .kb-col[data-tone="slate"] { --kb-ic: #475569; }
+.light .dashboard-shell .kb-col[data-tone="blue"], .light .dashboard-shell .kb-tone[data-tone="blue"]  { --kb-ic: #1d4ed8; }
+.light .dashboard-shell .kb-col[data-tone="green"], .light .dashboard-shell .kb-tone[data-tone="green"] { --kb-ic: #047857; }
+.light .dashboard-shell .kb-col[data-tone="amber"], .light .dashboard-shell .kb-tone[data-tone="amber"] { --kb-ic: #b45309; }
+.light .dashboard-shell .kb-col[data-tone="rose"], .light .dashboard-shell .kb-tone[data-tone="rose"]  { --kb-ic: #be123c; }
+.light .dashboard-shell .kb-col[data-tone="slate"], .light .dashboard-shell .kb-tone[data-tone="slate"] { --kb-ic: #475569; }
+.light .dashboard-shell .kb-tone .kb-modal-head { background: linear-gradient(100deg, rgba(255, 255, 255, 0.94) 0%, rgb(var(--kb) / 0.16) 50%, rgb(var(--kb) / 0.55) 100%); }
+.light .dashboard-shell .kb-tone .kb-modal-head button { color: #0f172a !important; }
+.light .dashboard-shell .kb-tone .kb-badge { background-color: rgb(var(--kb) / 0.2); border-color: rgb(var(--kb) / 0.45); }
 .light .dashboard-shell .kb-card { background-color: rgba(255, 255, 255, 0.7); border-color: rgba(255, 255, 255, 0.9); box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06); }
 
 /* Header de los modales en tema claro: degradé de claro a azul (en vez de oscuro a azul).

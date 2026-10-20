@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { Search, ChevronLeft, ChevronRight, Clock, AlertTriangle, CircleDot, CircleCheck, CirclePause, Ban, CircleX, Circle, type LucideIcon } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import FitRow from "./FitRow";
+import PresalesStateModal from "./PresalesStateModal";
 import { uniqueEtapaActual } from "./etapaOrder";
 
 /* Kanban de Estado Preventa (solo lectura), incrustado en el panel de Cambios recientes: una columna por estado, scroll horizontal
@@ -30,16 +31,19 @@ const avatarOf = (name: string) => AVATAR[[...name].reduce((s, c) => s + c.charC
 const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
 
 export default function PresalesKanbanBoard({
-  leads, staleDays, daysSince, fmtCOP, fmtUSD, onOpenLead,
+  leads, staleDays, daysSince, fmtCOP, fmtUSD, blocked, onList, onOpenLead,
 }: {
   leads: Lead[];
   staleDays: number;                       // días sin cambios para marcar un lead como estancado
   daysSince: (l: Lead) => number;
   fmtCOP: (v: number) => string;
   fmtUSD: (v: number) => string;
+  blocked: boolean;                        // hay otro popup encima: el detalle de estado no se cierra con Esc
+  onList: (leads: Lead[], heading: string) => void;
   onOpenLead: (l: Lead) => void;
 }) {
   const [q, setQ] = useState("");
+  const [detailKey, setDetailKey] = useState<string | null>(null);   // columna cuyo detalle está abierto
   const [fPrev, setFPrev] = useState("ALL");
   const [fLin, setFLin] = useState("ALL");
   const [fEtapa, setFEtapa] = useState("ALL");   // Etapa actual (x_studio_etapa_actual)
@@ -147,7 +151,8 @@ export default function PresalesKanbanBoard({
               onPointerCancel={() => { drag.current = null; }}>
               {columns.map((c) => (
                 <section key={c.key || "none"} data-tone={c.tone} className="kb-col w-[300px] shrink-0 h-full flex flex-col rounded-2xl overflow-hidden">
-                  <header className="shrink-0 px-3.5 pt-3 pb-2.5 border-b border-white/[0.08]">
+                  <button type="button" onClick={() => setDetailKey(c.key)} title={`Ver el detalle de ${c.label}`}
+                    className="kb-colhead shrink-0 w-full text-left px-3.5 pt-3 pb-2.5 border-b border-white/[0.08] cursor-pointer">
                     <div className="flex items-baseline justify-between gap-2">
                       <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-100 min-w-0"><c.Icon size={15} className="kb-ic shrink-0" aria-hidden /><span className="truncate">{c.label}</span></h3>
                       <span className="text-xs tabular-nums text-slate-300">{filtering ? `${c.shown.length} de ${c.all.length}` : c.all.length}</span>
@@ -155,7 +160,7 @@ export default function PresalesKanbanBoard({
                     <p className="text-[10px] text-slate-400 mt-0.5 tabular-nums truncate">
                       {c.cop ? fmtCOP(c.cop) : ""}{c.cop && c.usd ? " · " : ""}{c.usd ? fmtUSD(c.usd) : ""}{!c.cop && !c.usd ? "Sin pipeline" : ""}
                     </p>
-                  </header>
+                  </button>
 
                   <div className="flex-1 min-h-0 overflow-y-auto p-2.5 space-y-2">
                     {c.shown.length === 0 && <p className="text-[11px] text-slate-500 text-center py-6">Sin leads</p>}
@@ -204,6 +209,16 @@ export default function PresalesKanbanBoard({
               ))}
             </div>
           </div>
+      {(() => {
+        const dc = columns.find((c) => c.key === detailKey);
+        return dc ? (
+          <PresalesStateModal
+            label={dc.label} tone={dc.tone} Icon={dc.Icon} leads={dc.all} boardTotal={leads.length}
+            staleDays={staleDays} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD}
+            blocked={blocked} onClose={() => setDetailKey(null)} onList={onList} onOpenLead={onOpenLead}
+          />
+        ) : null;
+      })()}
     </div>
   );
 }
