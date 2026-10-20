@@ -172,7 +172,7 @@ export default function PresalesKanbanBoard({
                               {!l.activo && <span className="px-1.5 py-0.5 rounded-full bg-white/[0.08] text-slate-400">Archivado</span>}
                             </span>
                           </div>
-                          <p className="text-xs font-semibold text-slate-100 mt-1 leading-snug line-clamp-2" title={l.nombre}>{l.nombre}</p>
+                          <p className="text-xs font-semibold text-slate-100 mt-1 leading-snug truncate" title={l.nombre}>{l.nombre}</p>
                           <p className="text-[11px] text-slate-400 mt-0.5 truncate" title={l.cliente}>{l.cliente || "—"}</p>
                           {l.linea && <p className="text-[10px] text-slate-500 mt-1 truncate" title={l.linea}>{l.linea}</p>}
                           <div className="flex items-center justify-between gap-2 mt-2.5">
