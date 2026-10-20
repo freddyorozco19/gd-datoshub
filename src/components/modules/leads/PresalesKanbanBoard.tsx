@@ -164,18 +164,23 @@ export default function PresalesKanbanBoard({
                       const stale = days > staleDays;
                       return (
                         <button key={l.id} type="button" onClick={() => onOpenLead(l)}
-                          className="kb-card row-hover w-full text-left rounded-lg p-3 cursor-pointer">
+                          className="kb-card row-hover w-full text-left rounded-lg px-3 py-2 cursor-pointer">
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-[10px] font-mono font-bold text-slate-300">#{l.id}</span>
-                            <span className="flex items-center gap-1.5 text-[10px] text-slate-400">
-                              <i className={`w-2 h-2 rounded-sm ${isInt(l) ? "bg-teal-400" : "bg-blue-400"}`} title={isInt(l) ? "GD INTERNATIONAL" : "GROW DATA"} />
+                            <span className="flex items-center gap-2 text-[10px]">
                               {!l.activo && <span className="px-1.5 py-0.5 rounded-full bg-white/[0.08] text-slate-400">Archivado</span>}
+                              <span className={`flex items-center gap-1 tabular-nums ${stale ? "text-rose-500 font-semibold" : "text-slate-500"}`}
+                                title={`${days} d sin cambios${stale ? " · estancado" : ""}`}>
+                                {stale ? <AlertTriangle size={10} /> : <Clock size={10} />}
+                                {days} d
+                              </span>
+                              <i className={`w-2 h-2 rounded-sm ${isInt(l) ? "bg-teal-400" : "bg-blue-400"}`} title={isInt(l) ? "GD INTERNATIONAL" : "GROW DATA"} />
                             </span>
                           </div>
                           <p className="text-xs font-semibold text-slate-100 mt-1 leading-snug truncate" title={l.nombre}>{l.nombre}</p>
                           <p className="text-[11px] text-slate-400 mt-0.5 truncate" title={l.cliente}>{l.cliente || "—"}</p>
-                          {l.linea && <p className="text-[10px] text-slate-500 mt-1 truncate" title={l.linea}>{l.linea}</p>}
-                          <div className="flex items-center justify-between gap-2 mt-2.5">
+                          {l.linea && <p className="text-[10px] text-slate-500 mt-0.5 truncate" title={l.linea}>{l.linea}</p>}
+                          <div className="flex items-center justify-between gap-2 mt-2">
                             <span className="flex items-center gap-1.5 min-w-0">
                               {l.preventa ? (
                                 <>
@@ -188,10 +193,6 @@ export default function PresalesKanbanBoard({
                               {l.ingresosEsperados ? (isInt(l) ? fmtUSD(l.ingresosEsperados) : fmtCOP(l.ingresosEsperados)) : "—"}
                             </span>
                           </div>
-                          <p className={`flex items-center gap-1 text-[10px] mt-2 ${stale ? "text-rose-500 font-semibold" : "text-slate-500"}`}>
-                            {stale ? <AlertTriangle size={10} /> : <Clock size={10} />}
-                            {days} d sin cambios{stale ? " · estancado" : ""}
-                          </p>
                         </button>
                       );
                     })}
