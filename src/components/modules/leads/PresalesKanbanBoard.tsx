@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { Search, ChevronLeft, ChevronRight, Clock, AlertTriangle } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Clock, AlertTriangle, CircleDot, CircleCheck, CirclePause, Ban, CircleX, Circle, type LucideIcon } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import FitRow from "./FitRow";
 import { uniqueEtapaActual } from "./etapaOrder";
@@ -13,12 +13,14 @@ const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCa
 const isInt = (l: Lead) => norm(l.compania || "").includes("international");
 
 // orden y color de las columnas conocidas; cualquier otro valor de Odoo se agrega al final
-const KNOWN: { key: string; label: string; bar: string }[] = [
-  { key: "abierto",          label: "ABIERTO",          bar: "bg-blue-500" },
-  { key: "cerrado",          label: "CERRADO",          bar: "bg-emerald-500" },
-  { key: "suspendida",       label: "SUSPENDIDA",       bar: "bg-amber-500" },
-  { key: "oferta no viable", label: "OFERTA NO VIABLE", bar: "bg-rose-500" },
-  { key: "oferta declinada", label: "OFERTA DECLINADA", bar: "bg-slate-500" },
+// tone: velo de color (vidrio) de la columna; Icon: icono junto al título (ver .kb-col en globals.css)
+type Tone = "blue" | "green" | "amber" | "rose" | "slate";
+const KNOWN: { key: string; label: string; tone: Tone; Icon: LucideIcon }[] = [
+  { key: "abierto",          label: "ABIERTO",          tone: "blue",  Icon: CircleDot },
+  { key: "cerrado",          label: "CERRADO",          tone: "green", Icon: CircleCheck },
+  { key: "suspendida",       label: "SUSPENDIDA",       tone: "amber", Icon: CirclePause },
+  { key: "oferta no viable", label: "OFERTA NO VIABLE", tone: "rose",  Icon: Ban },
+  { key: "oferta declinada", label: "OFERTA DECLINADA", tone: "slate", Icon: CircleX },
 ];
 const NONE = "__none__";   // leads sin preventa
 const lbl = "text-[10px] font-semibold uppercase tracking-wide text-slate-500 text-center whitespace-nowrap";
@@ -59,12 +61,12 @@ export default function PresalesKanbanBoard({
       (fLin === "ALL" || l.linea === fLin) &&
       (fEtapa === "ALL" || (fEtapa === NONE ? !l.etapa : l.etapa === fEtapa)) &&
       (fComp === "ALL" || (fComp === "INT" ? isInt(l) : !isInt(l)));
-    const byKey = new Map<string, { key: string; label: string; bar: string; all: Lead[] }>();
+    const byKey = new Map<string, { key: string; label: string; tone: Tone; Icon: LucideIcon; all: Lead[] }>();
     for (const k of KNOWN) byKey.set(k.key, { ...k, all: [] });
     for (const l of leads) {
       const raw = (l.etapaPreventa || "").trim();
       const key = raw ? norm(raw) : "";
-      if (!byKey.has(key)) byKey.set(key, { key, label: raw ? raw.toUpperCase() : "SIN ESTADO", bar: "bg-slate-400", all: [] });
+      if (!byKey.has(key)) byKey.set(key, { key, label: raw ? raw.toUpperCase() : "SIN ESTADO", tone: "slate", Icon: Circle, all: [] });
       byKey.get(key)!.all.push(l);
     }
     return [...byKey.values()]
@@ -144,11 +146,10 @@ export default function PresalesKanbanBoard({
               onPointerUp={() => { drag.current = null; }}
               onPointerCancel={() => { drag.current = null; }}>
               {columns.map((c) => (
-                <section key={c.key || "none"} className="w-[300px] shrink-0 h-full flex flex-col rounded-xl border border-white/[0.08] bg-white/[0.03] overflow-hidden">
+                <section key={c.key || "none"} data-tone={c.tone} className="kb-col w-[300px] shrink-0 h-full flex flex-col rounded-2xl overflow-hidden">
                   <header className="shrink-0 px-3.5 pt-3 pb-2.5 border-b border-white/[0.08]">
-                    <div className={`h-1 rounded-full mb-2.5 ${c.bar}`} />
                     <div className="flex items-baseline justify-between gap-2">
-                      <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-100 truncate">{c.label}</h3>
+                      <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-100 min-w-0"><c.Icon size={15} className="kb-ic shrink-0" aria-hidden /><span className="truncate">{c.label}</span></h3>
                       <span className="text-xs tabular-nums text-slate-300">{filtering ? `${c.shown.length} de ${c.all.length}` : c.all.length}</span>
                     </div>
                     <p className="text-[10px] text-slate-400 mt-0.5 tabular-nums truncate">
@@ -163,7 +164,7 @@ export default function PresalesKanbanBoard({
                       const stale = days > staleDays;
                       return (
                         <button key={l.id} type="button" onClick={() => onOpenLead(l)}
-                          className="row-hover w-full text-left rounded-lg border border-white/[0.08] bg-white/[0.04] p-3 cursor-pointer">
+                          className="kb-card row-hover w-full text-left rounded-lg p-3 cursor-pointer">
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-[10px] font-mono font-bold text-slate-300">#{l.id}</span>
                             <span className="flex items-center gap-1.5 text-[10px] text-slate-400">
