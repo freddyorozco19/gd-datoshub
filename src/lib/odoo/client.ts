@@ -550,3 +550,102 @@ export async function fetchPresalesTimeline(): Promise<PresalesTimeline> {
   timelineCache = { at: Date.now(), data };
   return data;
 }
+
+/* ── Timeline de un lead: recorrido por etapas y estados, con sus fechas ───────────────
+   Etapas: historial de stage_id. El historial guarda el nombre con las formas antiguas y nuevas
+   (p. ej. "Análisis y Validación" = "Preventa"), así que se unifican en 5 etapas + declinada / no viable. */
+export type StageKey = "ident" | "prev" | "pres" | "eval" | "gan" | "dec" | "nov";
+export interface LeadTimeline {
+  created: string;                                                   // creación del lead (GMT-5)
+  end: string;                                                       // fin del recorrido: hoy, o el momento en que llegó a una etapa final
+  terminal: boolean;                                                 // el lead está en Ganada, Declinada o No viable
+  current: StageKey;
+  deadline: string;                                                  // cierre esperado
+  stages: { key: StageKey; name: string; from: string; to: string }[];
+  estados: { key: "none" | "ab" | "ce" | "otro"; label: string; from: string; to: string }[];
+  events: { date: string; kind: "stage" | "estado"; text: string }[];
+}
+
+const STAGE_KEYS: Record<string, StageKey> = {
+  "identificacion de oportunidad": "ident", "new": "ident", "registro de oportunidad": "ident", "definicion de requerimientos": "ident",
+  "estudio de mercado": "ident", "eliminar 1": "ident", "eliminar 2": "ident",
+  "preventa": "prev", "analisis y validacion": "prev",
+  "presentacion de oferta": "pres", "oferta en construccion": "pres",
+  "evaluacion de la entidad": "eval", "oferta entregada": "eval",
+  "oferta ganada": "gan", "won": "gan",
+  "oferta declinada": "dec", "oferta no viable": "nov",
+};
+const normStage = (v: string) => v.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+const stageKey = (name: string): StageKey => STAGE_KEYS[normStage(name)] ?? "ident";
+
+export async function fetchLeadTimeline(leadId: number): Promise<LeadTimeline | null> {
+  const uid = await login();
+  const leads = await executeKw<{ create_date: string; stage_id: [number, string] | false; date_deadline: string | false }[]>(
+    uid, "crm.lead", "read", [[leadId], ["create_date", "stage_id", "date_deadline"]], { context: { active_test: false } },
+  );
+  if (!leads.length) return null;
+  const lead = leads[0];
+
+  const msgs = await executeKw<{ tracking_value_ids: number[] }[]>(
+    uid, "mail.message", "search_read", [[["model", "=", "crm.lead"], ["res_id", "=", leadId]]],
+    { fields: ["tracking_value_ids"], limit: 500 },
+  );
+  const ids = msgs.flatMap((m) => m.tracking_value_ids);
+  type Tr = { field_id: [number, string] | false; old_value_char: string | false; new_value_char: string | false; create_date: string };
+  const tr = ids.length ? await executeKw<Tr[]>(uid, "mail.tracking.value", "read", [ids, ["field_id", "old_value_char", "new_value_char", "create_date"]]) : [];
+  const fieldIds = [...new Set(tr.flatMap((t) => (t.field_id ? [t.field_id[0]] : [])))];
+  const fields = fieldIds.length ? await executeKw<{ id: number; name: string }[]>(uid, "ir.model.fields", "read", [fieldIds, ["name"]]) : [];
+  const nameOf = new Map(fields.map((f) => [f.id, f.name]));
+  const by = (field: string) => tr
+    .filter((t) => t.field_id && nameOf.get(t.field_id[0]) === field)
+    .sort((a, b) => a.create_date.localeCompare(b.create_date));
+  const stageTr = by("stage_id");
+  const estadoTr = by("x_studio_edopreventa");
+
+  const created = toGMTMinus5(lead.create_date);
+  const now = toGMTMinus5(new Date().toISOString().slice(0, 19).replace("T", " "));
+
+  // etapas: la inicial es el valor anterior del primer cambio (o la etapa actual si nunca cambió)
+  const currentName = lead.stage_id ? lead.stage_id[1] : "New";
+  const stages: LeadTimeline["stages"] = [];
+  let name = stageTr.length ? String(stageTr[0].old_value_char || currentName) : currentName;
+  let cursor = created;
+  for (const t of stageTr) {
+    const at = toGMTMinus5(t.create_date);
+    stages.push({ key: stageKey(name), name, from: cursor, to: at });
+    name = String(t.new_value_char || name);
+    cursor = at;
+  }
+  stages.push({ key: stageKey(name), name, from: cursor, to: now });
+  const current = stages[stages.length - 1].key;
+  const terminal = current === "gan" || current === "dec" || current === "nov";
+  let end = now;
+  if (terminal) { end = stages[stages.length - 1].from; stages[stages.length - 1].to = end; }   // etapa final: marcador, no una barra hasta hoy
+
+  // Estado Preventa, recortado al fin del recorrido
+  const ek = (v: string): LeadTimeline["estados"][number]["key"] => {
+    const n = v.trim().toLowerCase();
+    return !n ? "none" : n === "abierto" ? "ab" : n === "cerrado" ? "ce" : "otro";
+  };
+  const estados: LeadTimeline["estados"] = [];
+  let eName = "";
+  let eCursor = created;
+  const pushE = (label: string, from: string, to: string) => {
+    const t = to > end ? end : to;
+    if (from < t || (from === t && estados.length === 0)) estados.push({ key: ek(label), label: label || "Sin estado", from, to: t });
+  };
+  for (const t of estadoTr) {
+    const at = toGMTMinus5(t.create_date);
+    pushE(eName, eCursor, at);
+    eName = String(t.new_value_char || "");
+    eCursor = at;
+  }
+  pushE(eName, eCursor, end);
+
+  const events: LeadTimeline["events"] = [
+    ...stageTr.map((t) => ({ date: toGMTMinus5(t.create_date), kind: "stage" as const, text: `${t.old_value_char || "—"} → ${t.new_value_char || "—"}` })),
+    ...estadoTr.map((t) => ({ date: toGMTMinus5(t.create_date), kind: "estado" as const, text: `${t.old_value_char || "(vacío)"} → ${t.new_value_char || "(vacío)"}` })),
+  ].sort((a, b) => a.date.localeCompare(b.date));
+
+  return { created, end, terminal, current, deadline: lead.date_deadline || "", stages, estados, events };
+}

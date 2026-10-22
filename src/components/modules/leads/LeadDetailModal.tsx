@@ -5,6 +5,8 @@ import { createPortal } from "react-dom";
 import { ExternalLink, X, Paperclip, FileText, FileImage, File, History, Loader2 } from "lucide-react";
 import type { Lead, OdooAttachment, LeadNote } from "@/lib/odoo/types";
 import LeadNotesPanel from "./LeadNotesPanel";
+import LeadTimelinePanel from "./LeadTimelinePanel";
+import type { LeadTimeline } from "@/lib/odoo/client";
 import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 
 const ODOO_BASE = "https://grow-data.odoo.com";
@@ -59,7 +61,7 @@ const ETAPA_STYLE: Record<string, string> = {
 type HistoryField = "estadoPreventa" | "etapaActual";
 interface Props { lead: Lead; onClose: () => void; historyField?: HistoryField }
 
-type Tab = "detalle" | "historial" | "notas";
+type Tab = "detalle" | "historial" | "timeline" | "notas";
 
 export default function LeadDetailModal({ lead, onClose, historyField = "estadoPreventa" }: Props) {
   const [tab, setTab] = useState<Tab>("detalle");
@@ -68,6 +70,23 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
   const [history,        setHistory]        = useState<PreventaHistoryEntry[] | null>(null);
   const [loadingHistory, setLoadingHistory]  = useState(false);
+  // timeline (recorrido por etapas y estados): se carga al abrir la pestaña
+  const [timeline,      setTimeline]      = useState<LeadTimeline | null>(null);
+  const [timelineError, setTimelineError] = useState<string | null>(null);
+  const loadingTimeline = tab === "timeline" && timeline === null && timelineError === null;
+  useEffect(() => {
+    if (tab !== "timeline" || timeline !== null || timelineError !== null) return;
+    let cancelled = false;
+    fetch(`/api/odoo/leads/${lead.id}/timeline`)
+      .then(async (r) => {
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || `Error ${r.status}`);
+        if (!cancelled) setTimeline(j.timeline as LeadTimeline);
+      })
+      .catch((e) => { if (!cancelled) setTimelineError(e instanceof Error ? e.message : "No se pudo leer el recorrido."); });
+    return () => { cancelled = true; };
+  }, [tab, timeline, timelineError, lead.id]);
+
   // notas (chatter de Odoo): se cargan al abrir la pestaña
   const [notes,        setNotes]        = useState<LeadNote[] | null>(null);
   const [notesError,   setNotesError]   = useState<string | null>(null);
@@ -163,6 +182,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
             {([
               { id: "detalle" as const, label: "Detalle" },
               ...(hasHistoryData ? [{ id: "historial" as const, label: "Historial" }] : []),
+              { id: "timeline" as const, label: "Timeline" },
               { id: "notas" as const, label: "Notas" },
             ]).map(({ id, label }) => (
               <button
@@ -188,7 +208,9 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
         {/* body */}
         <div className="overflow-y-auto flex-1 px-6 py-5 space-y-6">
-        {tab === "notas" ? (
+        {tab === "timeline" ? (
+          <LeadTimelinePanel timeline={timeline} loading={loadingTimeline} error={timelineError} />
+        ) : tab === "notas" ? (
           <LeadNotesPanel notes={notes} loading={loadingNotes} error={notesError} />
         ) : tab === "historial" && hasHistoryData ? (
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
