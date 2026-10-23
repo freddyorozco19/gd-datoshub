@@ -620,7 +620,8 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
     () => {
       if (!selectedComercial) return [];
       const byComercial = leads.filter((l) => (l.comercial || "Sin asignar") === selectedComercial);
-      if (sortBy === "ganados") return byComercial.filter((l) => l.ganado === "Ganado");
+      // ganados e ingresos se calculan sobre los leads ganados; leads, sobre todos los registrados
+      if (sortBy === "ganados" || sortBy === "ingresos") return byComercial.filter((l) => l.ganado === "Ganado");
       return byComercial;
     },
     [leads, selectedComercial, sortBy]
@@ -632,8 +633,10 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
       const k = l.comercial || "Sin asignar";
       if (!map[k]) map[k] = { leads: 0, ganados: 0, ingresos: 0 };
       map[k].leads++;
-      if (l.ganado === "Ganado") map[k].ganados++;
-      map[k].ingresos += l.ingresosEsperados || 0;
+      if (l.ganado === "Ganado") {
+        map[k].ganados++;
+        map[k].ingresos += l.ingresosEsperados || 0;   // ingresos = total de los leads ganados, no de los registrados
+      }
     });
     return Object.entries(map)
       .map(([name, stats]) => ({ name, ...stats }))
@@ -646,10 +649,12 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
   const maxValFull = Math.max(...fullRanking.map((r) => r[sortBy]), 1);
 
   function fmt(r: typeof ranking[0]) {
-    if (sortBy === "ingresos")
-      return r.ingresos >= 1_000_000
-        ? `$${(r.ingresos / 1_000_000).toFixed(1)}M`
-        : `$${(r.ingresos / 1_000).toFixed(0)}K`;
+    if (sortBy === "ingresos") {
+      const n = (v: number) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 });
+      return r.ingresos >= 1_000_000_000 ? `$${n(r.ingresos / 1_000_000_000)} mil M`
+        : r.ingresos >= 1_000_000 ? `$${n(r.ingresos / 1_000_000)} M`
+        : r.ingresos > 0 ? `$${Math.round(r.ingresos / 1_000).toLocaleString("es-CO")} K` : "$0";
+    }
     return String(r[sortBy]);
   }
 
