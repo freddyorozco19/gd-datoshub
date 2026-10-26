@@ -21,6 +21,7 @@ import DateRangeSlider from "./DateRangeSlider";
 import PresalesView from "./PresalesView";
 import LeadDetailModal from "./LeadDetailModal";
 import { uniqueEtapaActual } from "./etapaOrder";
+import InfoTip, { type InfoContent } from "@/components/ui/InfoTip";
 
 /* ── helpers ─────────────────────────────────────────────────────────── */
 
@@ -96,6 +97,15 @@ function TableSkeleton() {
   );
 }
 
+/* "Cómo se calcula" de los widgets de Business */
+const BINFO: Record<string, InfoContent> = {
+  actividad: { rule: "Mapa de calor de las últimas 13 semanas: cada cuadro es un día y su color, cuántos leads se crearon ese día (hora de Bogotá). Un clic abre los leads de ese día.", fields: ["create_date"] },
+  asignadas: { rule: "Los 3 leads creados más recientemente, con filtro opcional por línea. Un clic abre el detalle del lead.", fields: ["create_date", "x_studio_linea"] },
+  ganados: { rule: "Los 3 leads ganados más recientes (por fecha de cierre; si falta, por la última modificación). La fecha que se muestra es la del paso a Oferta Ganada en el historial de etapas.", fields: ["won_status", "date_closed", "stage_id (historial)"] },
+  top: { rule: "Ranking de comerciales. Leads: todos los registrados. Ganados: solo los leads ganados. Ingresos: suma del ingreso esperado de los leads ganados (no de los registrados).", note: "GROW DATA va en COP y GD INTERNATIONAL en USD, y aquí se suman como si fueran la misma moneda.", fields: ["user_id", "won_status", "expected_revenue"] },
+  dia: { rule: "Leads creados en la fecha elegida (hora de Bogotá), agrupados por línea. Usa las flechas o el calendario para cambiar de día.", fields: ["create_date", "x_studio_linea"] },
+};
+
 /* ── mapa de calor ───────────────────────────────────────────────────── */
 function LeadHeatmap({ leads }: { leads: Lead[] }) {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -165,7 +175,7 @@ function LeadHeatmap({ leads }: { leads: Lead[] }) {
 
       <div className="relative mb-3">
         <div className="flex items-center justify-center gap-2">
-          <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Actividad leads</span>
+          <span className="inline-flex items-center gap-1.5"><span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Actividad leads</span><InfoTip {...BINFO.actividad} /></span>
         </div>
       </div>
 
@@ -470,7 +480,7 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
       <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative flex items-center justify-center mb-3">
-        <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Últimas asignadas</span>
+        <span className="inline-flex items-center gap-1.5"><span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Últimas asignadas</span><InfoTip {...BINFO.asignadas} /></span>
       </div>
 
       {availableLineas.length > 0 && (
@@ -559,7 +569,7 @@ function RecentWonWidget({ leads }: { leads: Lead[] }) {
       <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative flex items-center justify-center mb-3">
-        <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Últimos ganados</span>
+        <span className="inline-flex items-center gap-1.5"><span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Últimos ganados</span><InfoTip {...BINFO.ganados} /></span>
         {allWon.length > 0 && (
           <button
             type="button"
@@ -665,7 +675,7 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
       <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
       <div className="relative flex items-center justify-center mb-3">
-        <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Top comercial</span>
+        <span className="inline-flex items-center gap-1.5"><span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Top comercial</span><InfoTip {...BINFO.top} /></span>
         <button
           type="button"
           onClick={() => setExpanded(true)}
@@ -841,7 +851,7 @@ function TodayLeadsWidget({ leads }: { leads: Lead[] }) {
         <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
 
         <div className="relative flex items-center justify-center mb-3">
-          <span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Leads del día</span>
+          <span className="inline-flex items-center gap-1.5"><span className="text-sm font-semibold text-slate-100 uppercase tracking-wide">Leads del día</span><InfoTip {...BINFO.dia} /></span>
         </div>
 
         <div className="relative flex items-center gap-1 mb-4">
