@@ -339,7 +339,8 @@ export default function PresalesView({
       if (!labels.has(key)) labels.set(key, l.etapaPreventa || "Sin etapa");
       totals.set(key, (totals.get(key) ?? 0) + 1);
       r.counts[key] = (r.counts[key] ?? 0) + 1;
-      if (isOpen(l)) { r.open++; r.pipeline += l.ingresosEsperados; if (daysSince(l) > STALE_DAYS) r.stale++; }
+      // carga real: ABIERTO y lead activo (un lead archivado/perdido no ocupa al preventa aunque su estado siga en ABIERTO)
+      if (isOpen(l) && l.activo) { r.open++; r.pipeline += l.ingresosEsperados; if (daysSince(l) > STALE_DAYS) r.stale++; }
       map.set(name, r);
     }
     const cols = [...totals.keys()]
@@ -970,8 +971,7 @@ export default function PresalesView({
         <PresalesPreventaModal
           name={fichaName} roleLabel={({ profesional: "Profesional", lider: "Líder", gerente: "Gerente" } as const)[kindOf(fichaName)]}
           active={!isInactive(fichaName)} leads={leads} timeline={timeline} year={cycYear} limit={CARGA_LIMIT}
-          teamOcup={ocupGlobal} teamStale={stats.stale.length / Math.max(1, profRows.length)}
-          peers={profRows.map((r) => ({ name: r.name, open: r.open, stale: r.stale }))} onOpenPreventa={(n) => setFichaName(n)}
+          peers={profRows.map((r) => r.name)} onOpenPreventa={(n) => setFichaName(n)}
           staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD}
           blocked={!!selected || !!listModal} onClose={() => setFichaName(null)}
           onOpenLead={(l) => setSelected(l)} onList={(ls, heading) => setListModal({ leads: ls, heading })}
