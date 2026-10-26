@@ -971,7 +971,8 @@ export default function PresalesView({
         <PresalesPreventaModal
           name={fichaName} roleLabel={({ profesional: "Profesional", lider: "Líder", gerente: "Gerente" } as const)[kindOf(fichaName)]}
           active={!isInactive(fichaName)} leads={leads} timeline={timeline} year={cycYear} limit={CARGA_LIMIT}
-          peers={profRows.map((r) => r.name)} onOpenPreventa={(n) => setFichaName(n)}
+          teamOcup={ocupGlobal} teamStale={profRows.reduce((s, r) => s + r.stale, 0) / Math.max(1, profRows.length)}
+          peers={profRows.map((r) => ({ name: r.name, open: r.open, stale: r.stale }))} onOpenPreventa={(n) => setFichaName(n)}
           staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD}
           blocked={!!selected || !!listModal} onClose={() => setFichaName(null)}
           onOpenLead={(l) => setSelected(l)} onList={(ls, heading) => setListModal({ leads: ls, heading })}

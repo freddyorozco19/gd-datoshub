@@ -17,7 +17,7 @@ const avatarOf = (name: string) => AVATAR[[...name].reduce((s, c) => s + c.charC
 const isInt = (l: Lead) => norm(l.compania || "").includes("international");
 
 export default function PresalesPreventaModal({
-  name, roleLabel, active, leads, timeline, year, limit, peers, staleDays, daysSince, fmtCOP, fmtUSD,
+  name, roleLabel, active, leads, timeline, year, limit, teamOcup, teamStale, peers, staleDays, daysSince, fmtCOP, fmtUSD,
   blocked, onClose, onOpenLead, onList, onOpenPreventa,
 }: {
   name: string;
@@ -27,7 +27,9 @@ export default function PresalesPreventaModal({
   timeline: PresalesTimeline | null;
   year: number | "ALL";
   limit: number;                             // máximo de leads abiertos (100 % de ocupación)
-  peers: string[];                           // el equipo de referencia (preventas Profesionales): ocupación y estancados del equipo se calculan con ellos
+  teamOcup: number;                          // ocupación global del equipo (%): la misma de la card Ocupación, así que sigue los filtros de la página
+  teamStale: number;                         // estancados promedio por preventa (mismo criterio)
+  peers: { name: string; open: number; stale: number }[];   // equipo de referencia (preventas Profesionales) tal como lo muestra la tabla de carga
   staleDays: number;
   daysSince: (l: Lead) => number;
   fmtCOP: (v: number) => string;
@@ -58,18 +60,12 @@ export default function PresalesPreventaModal({
     const myMed = median(myRows.map((r) => r.days));
     const teamMed = median(teamRows.map((r) => r.days));
     // un punto por preventa del equipo (sin esta ficha) en cada métrica
-    const peerNames = new Set(peers);
+    const peerNames = new Set(peers.map((p) => p.name));
     const cycByPeer = new Map<string, number[]>();
     for (const r of teamRows) { if (peerNames.has(r.lead.preventa)) cycByPeer.set(r.lead.preventa, [...(cycByPeer.get(r.lead.preventa) ?? []), r.days]); }
     const dotsCiclo = [...cycByPeer.entries()].filter(([n]) => n !== name).map(([n, ds]) => ({ name: n, v: median(ds) }));
-    const peerLoad = peers.map((n) => {
-      const o = leads.filter((l) => l.preventa === n && isOpenLoad(l));
-      return { name: n, open: o.length, stale: o.filter((l) => daysSince(l) > staleDays).length };
-    });
-    const dotsOcup = peerLoad.filter((p) => p.name !== name).map((p) => ({ name: p.name, v: Math.round((p.open / limit) * 100) }));
-    const dotsStale = peerLoad.filter((p) => p.name !== name).map((p) => ({ name: p.name, v: p.stale }));
-    const teamOcup = peerLoad.length ? Math.round((peerLoad.reduce((s, p) => s + p.open, 0) / (limit * peerLoad.length)) * 100) : 0;
-    const teamStale = peerLoad.length ? peerLoad.reduce((s, p) => s + p.stale, 0) / peerLoad.length : 0;
+    const dotsOcup = peers.filter((p) => p.name !== name).map((p) => ({ name: p.name, v: Math.round((p.open / limit) * 100) }));
+    const dotsStale = peers.filter((p) => p.name !== name).map((p) => ({ name: p.name, v: p.stale }));
 
     // cierres por mes del año elegido (o del año en curso si se miran todos); cada lead cuenta una vez por mes
     const y = year === "ALL" ? new Date().getFullYear() : year;
@@ -90,7 +86,7 @@ export default function PresalesPreventaModal({
       return `${cop ? fmtCOP(cop) : ""}${cop && usd ? " · " : ""}${usd ? fmtUSD(usd) : ""}` || "—";
     };
     return {
-      mine, open, stale, ocup, myMed, teamMed, dotsCiclo, dotsOcup, dotsStale, teamOcup, teamStale, myCycles: myRows.length, perMonth, closed, y,
+      mine, open, stale, ocup, myMed, teamMed, dotsCiclo, dotsOcup, dotsStale, myCycles: myRows.length, perMonth, closed, y,
       pipeline: pipe(open),
       openSorted: [...open].sort((a, b) => daysSince(b) - daysSince(a)),
     };
@@ -173,7 +169,7 @@ export default function PresalesPreventaModal({
           <div className="flex-1 overflow-auto p-6 space-y-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {stat("Abiertos", String(d.open.length), `de ${limit} · pipeline ${d.pipeline}`, d.open.length ? () => onList(d.open, `${name} · abiertos`) : undefined)}
-              {stat("Ocupación", `${d.ocup}%`, `equipo ${d.teamOcup}%`)}
+              {stat("Ocupación", `${d.ocup}%`, `equipo ${teamOcup}%`)}
               {stat(`Cierres ${d.y}`, String(d.closed), `${d.mine.length} leads en total`)}
               {stat("Ciclo mediano", d.myCycles ? fmtDays(d.myMed) : "—", d.teamMed ? `equipo ${fmtDays(d.teamMed)}` : undefined)}
             </div>
@@ -197,9 +193,9 @@ export default function PresalesPreventaModal({
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-3">Frente al equipo</h3>
                 <div className="space-y-4">
                   {strip("Ciclo mediano", d.myMed, d.teamMed, d.dotsCiclo, fmtDays, { lowerIsBetter: true })}
-                  {strip("Ocupación", d.ocup, d.teamOcup, d.dotsOcup, (v) => `${Math.round(v)}%`, { percent: true })}
-                  {strip("Estancados", d.stale.length, Math.round(d.teamStale * 10) / 10, d.dotsStale, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
-                  <p className="text-[11px] text-slate-500">Cada punto es un preventa del equipo; el de color es esta ficha. La línea punteada es la referencia del equipo.</p>
+                  {strip("Ocupación", d.ocup, teamOcup, d.dotsOcup, (v) => `${Math.round(v)}%`, { percent: true })}
+                  {strip("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, d.dotsStale, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
+                  <p className="text-[11px] text-slate-500">Cada punto es un preventa del equipo; el de color es esta ficha. La línea punteada es la referencia del equipo, igual que en la tabla y la card de Ocupación (sigue los filtros de la página).</p>
                 </div>
               </section>
             </div>
