@@ -10,6 +10,7 @@ import {
   ChevronDown, Star,
 } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
+import FitRow from "@/components/modules/leads/FitRow";
 
 const AREAS = ["TI", "DATOS", "PREVENTA", "CALIDAD"] as const;
 type Area = typeof AREAS[number];
@@ -937,7 +938,9 @@ function TrazabilidadPanel() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-3 flex-wrap">
+      {/* una sola línea siempre: si no cabe, toda la fila se reduce proporcionalmente (FitRow) */}
+      <FitRow compact={false} minScale={0.35}
+        left={<div className="flex items-center gap-2">
         {/* KPIs */}
         <div className="flex items-center gap-2 bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] px-4 py-2.5 text-sm">
           <History size={16} className="text-blue-400" />
@@ -989,11 +992,14 @@ function TrazabilidadPanel() {
           </select>
         )}
 
-        <button onClick={load} disabled={loading}
-          className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] disabled:opacity-60 transition-colors">
-          <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
-        </button>
-      </div>
+        </div>}
+        right={
+          <button onClick={load} disabled={loading}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-400 border border-white/[0.07] hover:bg-white/[0.05] disabled:opacity-60 transition-colors whitespace-nowrap">
+            <RefreshCw size={13} className={loading ? "animate-spin" : ""} /> Actualizar
+          </button>
+        }
+      />
 
       {needsSetup && (
         <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
@@ -1031,7 +1037,7 @@ function TrazabilidadPanel() {
                   <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap tabular-nums">{fmtDateTime(ev.created_at)}</td>
                   <td className="px-4 py-3 font-medium text-slate-300 max-w-[200px] truncate" title={ev.email ?? ""}>{ev.email || "—"}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${ac.cls}`}>{ac.label}</span>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${ac.cls}`}>{ac.label}</span>
                   </td>
                   <td className="px-4 py-3 text-slate-500 text-xs max-w-[220px]">
                     {ev.metadata ? (

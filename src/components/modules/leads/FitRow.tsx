@@ -13,7 +13,11 @@ const COMPACT_EXIT = 0.82;    // …y vuelve a la barra completa por encima de e
 const MIN_SCALE = 0.55;
 const GAP = 16;
 
-export default function FitRow({ left, right, moreLabel = "Más filtros" }: { left: ReactNode; right?: ReactNode; moreLabel?: string }) {
+export default function FitRow({ left, right, moreLabel = "Más filtros", compact: allowCompact = true, minScale = MIN_SCALE }: {
+  left: ReactNode; right?: ReactNode; moreLabel?: string;
+  compact?: boolean;     // false: nunca se pliega en "Más filtros"; la barra solo se reduce (la fila de filtros no cambia de forma)
+  minScale?: number;
+}) {
   const outerRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
@@ -33,10 +37,10 @@ export default function FitRow({ left, right, moreLabel = "Más filtros" }: { le
       const natural = leftW.current + rw;
       if (!natural) return;
       const raw = outer.clientWidth / natural;
-      const nextCompact = compactRef.current ? raw < COMPACT_EXIT : raw < COMPACT_BELOW;
+      const nextCompact = allowCompact && (compactRef.current ? raw < COMPACT_EXIT : raw < COMPACT_BELOW);
       if (nextCompact !== compactRef.current) { compactRef.current = nextCompact; setCompact(nextCompact); if (!nextCompact) setOpen(false); }
       if (nextCompact) return;
-      const scale = Math.max(MIN_SCALE, Math.min(1, raw));
+      const scale = Math.max(minScale, Math.min(1, raw));
       const h = Math.max(l?.offsetHeight ?? 0, r?.offsetHeight ?? 0);
       setM((p) => (Math.abs(p.scale - scale) < 0.001 && p.h === h ? p : { scale, h }));
     };
@@ -46,7 +50,7 @@ export default function FitRow({ left, right, moreLabel = "Más filtros" }: { le
     if (leftRef.current) ro.observe(leftRef.current);
     if (rightRef.current) ro.observe(rightRef.current);
     return () => ro.disconnect();
-  }, [compact]);
+  }, [compact, allowCompact, minScale]);
 
   useLayoutEffect(() => {
     if (!open) return;
