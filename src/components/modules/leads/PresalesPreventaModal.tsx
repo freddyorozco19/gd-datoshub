@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { X, Clock, AlertTriangle } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
@@ -16,6 +16,21 @@ const MES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct
 const AVATAR = ["bg-blue-500", "bg-emerald-500", "bg-violet-500", "bg-amber-500", "bg-rose-500", "bg-cyan-500", "bg-orange-500"];
 const avatarOf = (name: string) => AVATAR[[...name].reduce((s, c) => s + c.charCodeAt(0), 0) % AVATAR.length];
 const isInt = (l: Lead) => norm(l.compania || "").includes("international");
+
+/* Panel de la ficha: caja con encabezado (título + dato de apoyo), separador y cuerpo. Con `grow` ocupa el alto sobrante de su columna. */
+function Panel({ title, aside, grow, bodyClass = "px-3.5 py-3 flex-1 flex flex-col justify-center", children }: {
+  title: ReactNode; aside?: ReactNode; grow?: boolean; bodyClass?: string; children: ReactNode;
+}) {
+  return (
+    <section className={`flex flex-col min-w-0 rounded-xl border border-white/[0.08] bg-white/[0.03] ${grow ? "flex-1" : ""}`}>
+      <header className="flex items-center justify-between gap-2 px-3.5 py-2 border-b border-white/[0.07]">
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-200 whitespace-nowrap">{title}</h3>
+        {aside != null && <span className="text-[11px] text-slate-500 truncate">{aside}</span>}
+      </header>
+      <div className={bodyClass}>{children}</div>
+    </section>
+  );
+}
 
 export default function PresalesPreventaModal({
   name, roleLabel, active, leads, timeline, year, limit, teamOcup, teamStale, peers, staleDays, daysSince, fmtCOP, fmtUSD,
@@ -173,7 +188,7 @@ export default function PresalesPreventaModal({
             <button type="button" onClick={onClose} title="Cerrar" aria-label="Cerrar" className="p-2 rounded-lg hover:bg-white/[0.12] transition-colors"><X size={18} /></button>
           </div>
 
-          <div className="flex-1 overflow-auto p-5 space-y-4">
+          <div className="flex-1 overflow-auto p-4 space-y-3">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {stat("Abiertos", String(d.open.length), `de ${limit} · pipeline ${d.pipeline}`, d.open.length ? () => onList(d.open, `${name} · abiertos`) : undefined)}
               {stat("Ocupación", `${d.ocup}%`, `equipo ${teamOcup}%`)}
@@ -181,83 +196,90 @@ export default function PresalesPreventaModal({
               {stat("Ciclo mediano", d.myCycles ? fmtDays(d.myMed) : "—", d.teamMed ? `equipo ${fmtDays(d.teamMed)}` : undefined)}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] gap-5 items-start">
-              <div className="space-y-5 min-w-0">
-                <section>
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-2">Cierres por mes · {d.y}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] gap-3 items-stretch">
+              <div className="flex flex-col gap-3 min-w-0">
+                <Panel title={`Cierres por mes · ${d.y}`} aside={`${d.closed} cierres`}>
                   <div className="flex items-end gap-1.5 h-[88px]">
                     {d.perMonth.map((arr, i) => (
                       <button key={i} type="button" disabled={arr.length === 0} onClick={() => onList(arr, `${name} · ${MES[i]} ${d.y}`)}
                         title={`${arr.length} cierre${arr.length === 1 ? "" : "s"} en ${MES[i]}`}
                         className="row-hover flex-1 h-full flex flex-col items-center justify-end gap-1 rounded-md pt-1 text-[11px] text-slate-400 disabled:cursor-default cursor-pointer">
                         <span className="tabular-nums text-slate-300">{arr.length || ""}</span>
-                        <span className="w-full rounded-t bg-blue-500" style={{ height: `${(arr.length / maxMonth) * 54}px`, minHeight: arr.length ? 3 : 0 }} />
+                        <span className="w-full rounded-t bg-blue-500" style={{ height: `${(arr.length / maxMonth) * 50}px`, minHeight: arr.length ? 3 : 0 }} />
                         <span>{MES[i]}</span>
                       </button>
                     ))}
                   </div>
-                </section>
-                <section>
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-2">Sus leads abiertos <span className="font-normal text-slate-500 normal-case tracking-normal">· los de más tiempo sin cambios primero</span></h3>
-                  {d.openSorted.length === 0 ? <p className="text-xs text-slate-500 py-3">No tiene leads abiertos</p> : (
-                    <div className="divide-y divide-white/[0.05]">
-                      {d.openSorted.slice(0, 5).map((l) => {
-                        const days = daysSince(l);
-                        const stale = days > staleDays;
-                        return (
-                          <button key={l.id} type="button" onClick={() => onOpenLead(l)} className="row-hover w-full flex items-center gap-3 text-left px-2 py-2 rounded-lg cursor-pointer">
-                            <span className="shrink-0 text-[11px] font-mono font-bold text-slate-400">#{l.id}</span>
-                            <span className="flex-1 min-w-0">
-                              <span className="block text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</span>
-                              <span className="block text-[11px] text-slate-500 truncate">{l.cliente || "—"}{l.cierreEsperado ? ` · cierre ${l.cierreEsperado.substring(0, 10)}` : ""}</span>
-                            </span>
-                            <span className="shrink-0 text-[11px] tabular-nums text-slate-300">{l.ingresosEsperados ? (isInt(l) ? fmtUSD(l.ingresosEsperados) : fmtCOP(l.ingresosEsperados)) : "—"}</span>
-                            <span className={`shrink-0 flex items-center gap-1 text-[11px] tabular-nums ${stale ? "text-rose-500 font-semibold" : "text-slate-400"}`}>
-                              {stale ? <AlertTriangle size={11} /> : <Clock size={11} />} {days} d
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                </Panel>
+                <Panel title="Sus leads abiertos" aside="más tiempo sin cambios primero" grow bodyClass="flex-1 flex flex-col">
+                  {d.openSorted.length === 0 ? <p className="text-xs text-slate-500 px-3.5 py-6 text-center">No tiene leads abiertos</p> : (
+                    <>
+                      <div className="grid grid-cols-[42px_minmax(0,1fr)_84px_52px] gap-2 px-3.5 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                        <span>ID</span><span>Lead</span><span className="text-right">Monto</span><span className="text-right">Días</span>
+                      </div>
+                      <div className="divide-y divide-white/[0.05] border-t border-white/[0.05]">
+                        {d.openSorted.slice(0, 5).map((l) => {
+                          const days = daysSince(l);
+                          const stale = days > staleDays;
+                          return (
+                            <button key={l.id} type="button" onClick={() => onOpenLead(l)} className="row-hover w-full grid grid-cols-[42px_minmax(0,1fr)_84px_52px] items-center gap-2 text-left px-3.5 py-2 cursor-pointer">
+                              <span className="text-[11px] font-mono font-bold text-slate-400">#{l.id}</span>
+                              <span className="min-w-0">
+                                <span className="block text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</span>
+                                <span className="block text-[11px] text-slate-500 truncate">{l.cliente || "—"}{l.cierreEsperado ? ` · cierre ${l.cierreEsperado.substring(0, 10)}` : ""}</span>
+                              </span>
+                              <span className="text-right text-[11px] tabular-nums text-slate-300 truncate">{l.ingresosEsperados ? (isInt(l) ? fmtUSD(l.ingresosEsperados) : fmtCOP(l.ingresosEsperados)) : "—"}</span>
+                              <span className={`flex items-center justify-end gap-1 text-[11px] tabular-nums ${stale ? "text-rose-500 font-semibold" : "text-slate-400"}`}>
+                                {stale ? <AlertTriangle size={11} /> : <Clock size={11} />} {days} d
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {d.openSorted.length > 5 && (
+                        <button type="button" onClick={() => onList(d.openSorted, `${name} · abiertos`)}
+                          className="mt-auto text-left border-t border-white/[0.07] px-3.5 py-2 text-[11px] text-slate-500 hover:text-slate-300 cursor-pointer">+{d.openSorted.length - 5} más · ver todos</button>
+                      )}
+                    </>
                   )}
-                  {d.openSorted.length > 5 && (
-                    <button type="button" onClick={() => onList(d.openSorted, `${name} · abiertos`)} className="text-[11px] text-slate-500 hover:text-slate-300 px-2 pt-2 cursor-pointer">+{d.openSorted.length - 5} más · ver todos</button>
-                  )}
-                </section>
+                </Panel>
               </div>
-              <div className="space-y-5 min-w-0">
-                <section>
-                  <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-200 mb-3">
-                    Frente al equipo
+              <div className="flex flex-col gap-3 min-w-0">
+                <Panel
+                  title={<>Frente al equipo
                     <InfoTip
                       rule="Cada punto gris es un preventa del equipo y el punto de color es esta ficha. La línea punteada es la referencia del equipo. Un clic en un punto gris abre la ficha de ese preventa."
                       note="La referencia del equipo es la misma de la tabla y la card de Ocupación, así que sigue los filtros de la página. En ciclo y estancados el color indica si va mejor (verde) o peor (ámbar o rojo) que el equipo."
                       fields={["Estado Preventa (x_studio_edopreventa)", "x_studio_preventa", "historial de etapas"]}
-                    />
-                  </h3>
-                  <div className="space-y-4">
-                    {strip("Ciclo mediano", d.myMed, d.teamMed, d.dotsCiclo, fmtDays, { lowerIsBetter: true })}
-                    {strip("Ocupación", d.ocup, teamOcup, d.dotsOcup, (v) => `${Math.round(v)}%`, { percent: true })}
-                    {strip("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, d.dotsStale, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
-                  </div>
-                </section>
-                <section>
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-2">Sus leads por estado preventa</h3>
-                  {d.mix.length === 0 ? <p className="text-xs text-slate-500">Sin leads</p> : (
+                    /></>}
+                  aside={`${d.dotsOcup.length + 1} preventas`}
+                  bodyClass="px-3.5 py-3 space-y-3">
+                  {strip("Ciclo mediano", d.myMed, d.teamMed, d.dotsCiclo, fmtDays, { lowerIsBetter: true })}
+                  <div className="border-t border-dashed border-white/[0.08]" />
+                  {strip("Ocupación", d.ocup, teamOcup, d.dotsOcup, (v) => `${Math.round(v)}%`, { percent: true })}
+                  <div className="border-t border-dashed border-white/[0.08]" />
+                  {strip("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, d.dotsStale, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
+                </Panel>
+                <Panel title="Leads por estado preventa" aside={`${d.mine.length} leads`} grow>
+                  {d.mix.length === 0 ? <p className="text-xs text-slate-500 text-center py-4">Sin leads</p> : (
                     <>
-                      <div className="flex h-3 rounded-full overflow-hidden gap-0.5">
+                      <div className="flex h-3 rounded-full overflow-hidden gap-0.5 mb-2">
                         {d.mix.map((m) => <span key={m.label} className="block" style={{ width: `${(m.leads.length / d.mine.length) * 100}%`, backgroundColor: m.color, opacity: m.faded ? 0.5 : 1 }} title={`${m.label}: ${m.leads.length}`} />)}
                       </div>
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2">
+                      <div className="divide-y divide-white/[0.05]">
                         {d.mix.map((m) => (
-                          <button key={m.label} type="button" onClick={() => onList(m.leads, `${name} · ${m.label}`)} className="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-slate-200 cursor-pointer">
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: m.color, opacity: m.faded ? 0.5 : 1 }} />{m.label} <span className="tabular-nums text-slate-300">{m.leads.length}</span>
+                          <button key={m.label} type="button" onClick={() => onList(m.leads, `${name} · ${m.label}`)}
+                            className="row-hover w-full grid grid-cols-[10px_minmax(0,1fr)_36px_40px] items-center gap-2 text-xs py-1.5 px-1 text-left cursor-pointer">
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: m.color, opacity: m.faded ? 0.5 : 1 }} />
+                            <span className="truncate text-slate-300">{m.label}</span>
+                            <span className="text-right tabular-nums font-semibold text-slate-100">{m.leads.length}</span>
+                            <span className="text-right tabular-nums text-slate-500">{Math.round((m.leads.length / d.mine.length) * 100)} %</span>
                           </button>
                         ))}
                       </div>
                     </>
                   )}
-                </section>
+                </Panel>
               </div>
             </div>
           </div>
