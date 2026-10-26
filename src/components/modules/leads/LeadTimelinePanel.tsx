@@ -90,9 +90,9 @@ export default function LeadTimelinePanel({ timeline: t, loading, error }: { tim
                 {visited ? (
                   <>
                     <p className="mt-0.5 text-xs font-semibold tabular-nums" style={{ color }}>{fmt(perStage[m.key]!)}</p>
-                    <p className="text-[10px] text-slate-500">desde {dd(first[m.key]!)}</p>
+                    <p className="text-[11px] text-slate-500">desde {dd(first[m.key]!)}</p>
                   </>
-                ) : <p className="mt-0.5 text-[10px] text-slate-500">pendiente</p>}
+                ) : <p className="mt-0.5 text-[11px] text-slate-500">pendiente</p>}
               </div>
             );
           })}
@@ -120,7 +120,7 @@ export default function LeadTimelinePanel({ timeline: t, loading, error }: { tim
             const d = daysBetween(s.from, s.to);
             const w = (d / total) * 100;
             return (
-              <div key={i} className="flex items-center justify-center overflow-hidden whitespace-nowrap text-[10px] font-semibold text-white shrink-0"
+              <div key={i} className="flex items-center justify-center overflow-hidden whitespace-nowrap text-[11px] font-semibold text-white shrink-0"
                 style={{ width: `${w}%`, minWidth: 5, background: COLOR[s.key] }} title={`${NAME[s.key]} · ${dt(s.from)} → ${dt(s.to)} · ${fmt(d)}`}>
                 {w > 14 ? `${NAME[s.key]} · ${fmt(d)}` : w > 6 ? fmt(d) : ""}
               </div>
@@ -136,7 +136,7 @@ export default function LeadTimelinePanel({ timeline: t, loading, error }: { tim
           ))}
         </div>
 
-        <div className="mt-1.5 flex justify-between text-[10px] text-slate-500 tabular-nums">
+        <div className="mt-1.5 flex justify-between text-[11px] text-slate-500 tabular-nums">
           <span>{dd(t.created)}</span>
           <span>{total > 40 ? dd(new Date((ms(t.created) + ms(t.end)) / 2).toISOString().slice(0, 19).replace("T", " ")) : ""}</span>
           <span>{endLabel} · {dd(t.end)}</span>

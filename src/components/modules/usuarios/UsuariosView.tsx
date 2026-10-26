@@ -163,7 +163,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
             </div>
             <div>
               <h3 className="text-sm font-semibold text-white leading-none">Invitar usuario</h3>
-              <p className="text-[10px] text-slate-400 mt-0.5">Se enviará un correo de invitación</p>
+              <p className="text-[11px] text-slate-400 mt-0.5">Se enviará un correo de invitación</p>
             </div>
           </div>
           <button onClick={onClose}
@@ -231,7 +231,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                         )}
                         <span className={active ? "text-indigo-300" : "text-slate-400"}>{r.icon}</span>
                         <span className={`text-sm font-medium leading-none ${active ? "text-white" : "text-slate-300"}`}>{r.label}</span>
-                        <span className="text-[10px] text-slate-500 leading-tight">{r.desc}</span>
+                        <span className="text-[11px] text-slate-500 leading-tight">{r.desc}</span>
                       </button>
                     );
                   })}
@@ -370,7 +370,7 @@ function PasswordStrength({ password }: { password: string }) {
         <div className="flex-1 h-1 rounded-full bg-white/[0.06] overflow-hidden">
           <div className="h-full rounded-full transition-all duration-300" style={{ width: `${pct}%`, background: color }} />
         </div>
-        <span className="text-[10px] font-medium tabular-nums" style={{ color }}>{label}</span>
+        <span className="text-[11px] font-medium tabular-nums" style={{ color }}>{label}</span>
       </div>
       {/* Checklist */}
       <div className="grid grid-cols-2 gap-x-3 gap-y-1">
@@ -381,7 +381,7 @@ function PasswordStrength({ password }: { password: string }) {
                 ? <svg viewBox="0 0 10 10" className="w-2 h-2" fill="none" stroke="#10b981" strokeWidth="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>
                 : <span className="w-1 h-1 rounded-full bg-white/20" />}
             </span>
-            <span className={`text-[10px] leading-tight ${r.ok ? "text-slate-400" : "text-slate-600"}`}>{r.label}</span>
+            <span className={`text-[11px] leading-tight ${r.ok ? "text-slate-400" : "text-slate-600"}`}>{r.label}</span>
           </div>
         ))}
       </div>
@@ -453,7 +453,7 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
             </div>
             <div>
               <h3 className="text-sm font-semibold text-white leading-none">Cambiar contraseña</h3>
-              <p className="text-[10px] text-slate-400 mt-0.5 truncate max-w-[190px]">{user.email}</p>
+              <p className="text-[11px] text-slate-400 mt-0.5 truncate max-w-[190px]">{user.email}</p>
             </div>
           </div>
           <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/10 text-slate-500 hover:text-slate-200 transition-colors">
@@ -511,7 +511,7 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
                   </button>
                 </div>
                 {confirm && (
-                  <p className={`text-[10px] ${matches ? "text-emerald-400" : "text-rose-400"}`}>
+                  <p className={`text-[11px] ${matches ? "text-emerald-400" : "text-rose-400"}`}>
                     {matches ? "✓ Las contraseñas coinciden" : "✗ Las contraseñas no coinciden"}
                   </p>
                 )}

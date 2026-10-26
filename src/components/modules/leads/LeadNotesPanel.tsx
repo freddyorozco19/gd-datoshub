@@ -88,7 +88,7 @@ export default function LeadNotesPanel({ notes, loading, error }: { notes: LeadN
       <div className="flex flex-wrap gap-1.5">
         {pills.map(([id, label]) => (
           <button key={id} type="button" onClick={() => setFilter(id)} data-active={filter === id}
-            className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
+            className="pill-option text-[11px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
             {label} <span className="tabular-nums opacity-70">{counts[id]}</span>
           </button>
         ))}
@@ -113,9 +113,9 @@ export default function LeadNotesPanel({ notes, loading, error }: { notes: LeadN
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
                       <span className="text-xs font-semibold text-slate-100">{n.author}</span>
-                      <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${ks.cls}`}><Icon size={10} /> {n.kindLabel}</span>
-                      <span className="text-[10px] text-slate-400 whitespace-nowrap">{fmtTime(n.date)} · {ago(n.date)}</span>
-                      {n.replyTo && <span className="text-[10px] text-slate-500">responde al mensaje #{n.replyTo}</span>}
+                      <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${ks.cls}`}><Icon size={10} /> {n.kindLabel}</span>
+                      <span className="text-[11px] text-slate-400 whitespace-nowrap">{fmtTime(n.date)} · {ago(n.date)}</span>
+                      {n.replyTo && <span className="text-[11px] text-slate-500">responde al mensaje #{n.replyTo}</span>}
                     </div>
                     {n.subject && n.kind === "email" && <p className="text-xs font-medium text-slate-200 mt-1">{n.subject}</p>}
                     {n.body && <NoteBody text={n.body} />}
@@ -134,7 +134,7 @@ export default function LeadNotesPanel({ notes, loading, error }: { notes: LeadN
                     {n.attachments.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {n.attachments.map((a) => (
-                          <span key={a.id} className="inline-flex items-center gap-1 text-[10px] text-slate-400 px-2 py-0.5 rounded-md border border-white/[0.08] max-w-[220px]" title={a.name}>
+                          <span key={a.id} className="inline-flex items-center gap-1 text-[11px] text-slate-400 px-2 py-0.5 rounded-md border border-white/[0.08] max-w-[220px]" title={a.name}>
                             <Paperclip size={10} className="shrink-0" /> <span className="truncate">{a.name}</span>
                           </span>
                         ))}

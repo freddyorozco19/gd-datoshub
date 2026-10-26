@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { useSearchParams } from "next/navigation";
 import { RefreshCw, AlertCircle, Loader2, X, Maximize2, Settings } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import type { PresalesTimeline } from "@/lib/odoo/client";
@@ -104,7 +105,7 @@ function Kpi({ label, value, onClick, split, info }: { label: string; value: str
       <div className="relative" style={{ padding: "clamp(8px, 7cqw, 16px)" }}>
         <div className="flex items-start justify-between gap-1">
           <p className="font-semibold text-slate-300 uppercase leading-tight break-words" title={label}
-            style={{ fontSize: "clamp(9px, 6.4cqw, 12px)", letterSpacing: "0.05em" }}>{label}</p>
+            style={{ fontSize: "clamp(10px, 6.4cqw, 12px)", letterSpacing: "0.05em" }}>{label}</p>
           {info && <InfoTip {...info} size={12} className="-mt-0.5 -mr-1" />}
         </div>
         <p className="font-bold text-slate-100 tabular-nums leading-none whitespace-nowrap"
@@ -126,7 +127,7 @@ function Kpi({ label, value, onClick, split, info }: { label: string; value: str
                   <span className="text-slate-300 tabular-nums whitespace-nowrap shrink-0">{s.value}</span>
                 </>
               );
-              const style = { fontSize: "clamp(9px, 5.8cqw, 11px)" };
+              const style = { fontSize: "clamp(11px, 5.8cqw, 12px)" };
               return s.onClick ? (
                 <button key={s.label} type="button" title={`Ver los leads de ${s.label}`}
                   onClick={(e) => { e.stopPropagation(); s.onClick!(); }}
@@ -182,6 +183,12 @@ export default function PresalesView({
   const [settingsSection, setSettingsSection] = useState<SectionId | undefined>(undefined);
   const [showOcup, setShowOcup] = useState(false);
   const [fichaName, setFichaName] = useState<string | null>(null);   // ficha de preventa abierta
+  /* enlace profundo desde la búsqueda global: ?preventa=Nombre abre su ficha */
+  const deepPreventa = useSearchParams().get("preventa");
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (deepPreventa && leads.length > 0) { setFichaName(deepPreventa); window.history.replaceState(null, "", window.location.pathname); }
+  }, [deepPreventa, leads.length]);
   const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive } = settings;
   const saveSettings = (next: PresalesSettings) => {
     setSettings(next);
@@ -535,7 +542,7 @@ export default function PresalesView({
       {([["ALL", "Todos"], ["SAS", "GROW DATA"], ["INT", "GROW DATA INTERNATIONAL"]] as const).map(([k, label]) => (
         <button key={k} type="button" onClick={() => setFCargaComp(k === "ALL" || fCargaComp === k ? "ALL" : k)}
           data-active={fCargaComp === k}
-          className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
+          className="pill-option text-[11px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
           {label}
         </button>
       ))}
@@ -785,7 +792,7 @@ export default function PresalesView({
                     <button key={v} type="button" onClick={() => setFLeadActivo(v)}
                       title="Filtra por el campo Activo del lead"
                       data-active={fLeadActivo === v}
-                      className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
+                      className="pill-option text-[11px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
                       {label}
                     </button>
                   ))}

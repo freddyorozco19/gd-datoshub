@@ -102,7 +102,7 @@ export default function PresalesManageModal({
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-white leading-none">Gestionar preventas</h3>
-                <p className="text-[10px] text-slate-400 mt-1">Marca quién sigue activo y de qué tipo es</p>
+                <p className="text-[11px] text-slate-400 mt-1">Marca quién sigue activo y de qué tipo es</p>
               </div>
             </div>
             <button onClick={onClose} title="Cerrar"
@@ -140,7 +140,7 @@ export default function PresalesManageModal({
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <p className={`text-xs font-semibold truncate ${active ? "text-slate-100" : "text-slate-500"}`} title={name}>{name}</p>
-                          {isNew && <span className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 uppercase tracking-wide">Nuevo</span>}
+                          {isNew && <span className="shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 uppercase tracking-wide">Nuevo</span>}
                         </div>
                         <p className="text-[11px] text-slate-500 mt-0.5">
                           {p?.open ?? 0} abiertos · {p?.total ?? 0} totales
@@ -155,7 +155,7 @@ export default function PresalesManageModal({
                         className="cmmi-select shrink-0 text-[11px] rounded-md bg-white/[0.06] border border-white/[0.1] text-slate-300 px-2 py-1 focus:outline-none focus:border-blue-500/60">
                         {(Object.keys(KIND_LABEL) as PresalesKind[]).map((k) => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}
                       </select>
-                      <span className="text-[10px] text-slate-500 w-14 text-right">{active ? "Activo" : "Inactivo"}</span>
+                      <span className="text-[11px] text-slate-500 w-14 text-right">{active ? "Activo" : "Inactivo"}</span>
                       <button
                         type="button" role="switch" aria-checked={active} disabled={saving}
                         onClick={() => toggle(name, !active)}
@@ -172,7 +172,7 @@ export default function PresalesManageModal({
           </div>
 
           <div className="px-6 py-3 border-t border-white/[0.07] shrink-0 flex items-center gap-3">
-            <p className="flex-1 min-w-0 text-[10px] text-slate-500">
+            <p className="flex-1 min-w-0 text-[11px] text-slate-500">
               {pendingChanges > 0
                 ? <span className="text-amber-400 font-medium">{pendingChanges} cambio{pendingChanges === 1 ? "" : "s"} sin confirmar</span>
                 : last?.updated_at

@@ -18,7 +18,7 @@ export function AttentionList({ items, company, onOpen }: { items: AttentionItem
           {items.slice(0, 12).map((it, i) => (
             <li key={`${it.lead.id}-${it.kind}-${i}`} className="border-b border-white/[0.05] last:border-0">
               <button type="button" onClick={() => onOpen(it.lead)} className="w-full flex items-center gap-3 py-2 text-xs text-left hover:bg-white/[0.03] rounded">
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold shrink-0 ${KIND_STYLE[it.kind]}`}>{it.kind}</span>
+                <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold shrink-0 ${KIND_STYLE[it.kind]}`}>{it.kind}</span>
                 <span className="flex-1 truncate">{it.lead.nombre}{it.lead.cliente ? ` · ${it.lead.cliente}` : ""}</span>
                 <span className="text-slate-400 hidden sm:inline shrink-0">{it.detail}</span>
                 <span className="tabular-nums shrink-0">{it.lead.ingresosEsperados ? fmtMoney(it.lead.ingresosEsperados, company) : "—"}</span>

@@ -202,7 +202,7 @@ export default function Sidebar() {
               {!collapsed && (
                 <div className="px-3 py-2.5 border-b border-white/[0.06]">
                   <p className="text-xs font-medium text-slate-200 truncate">{displayName || email}</p>
-                  <p className="text-[10px] text-slate-500">{roleLabel}</p>
+                  <p className="text-[11px] text-slate-500">{roleLabel}</p>
                 </div>
               )}
               {MODE_ORDER.map((m) => {
@@ -238,7 +238,7 @@ export default function Sidebar() {
             {!collapsed && (
               <div className="flex-1 min-w-0 text-left">
                 <p className="text-xs font-medium text-slate-200 truncate">{displayName || email.split("@")[0]}</p>
-                <p className="text-[10px] text-slate-500">{roleLabel}</p>
+                <p className="text-[11px] text-slate-500">{roleLabel}</p>
               </div>
             )}
           </button>

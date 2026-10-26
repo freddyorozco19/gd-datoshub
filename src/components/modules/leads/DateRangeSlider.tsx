@@ -122,7 +122,7 @@ export default function DateRangeSlider({
           <Calendar size={14} />
         </button>
 
-        <span className="shrink-0 text-[9px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(fromDate)}</span>
+        <span className="shrink-0 text-[11px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(fromDate)}</span>
 
         <div className="dual-range relative h-5 flex-1 min-w-[60px] flex items-center">
           <div className="absolute inset-x-0 h-1 rounded-full bg-white/[0.1]" />
@@ -142,7 +142,7 @@ export default function DateRangeSlider({
           />
         </div>
 
-        <span className="shrink-0 text-[9px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(toDate)}</span>
+        <span className="shrink-0 text-[11px] text-slate-400 tabular-nums whitespace-nowrap">{fmtShortDate(toDate)}</span>
       </div>
 
       {open && rect && createPortal(
@@ -159,7 +159,7 @@ export default function DateRangeSlider({
               <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Rango personalizado</p>
               <div className="grid grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1">
-                  <span className="text-[10px] text-slate-500">Desde</span>
+                  <span className="text-[11px] text-slate-500">Desde</span>
                   <input
                     type="date" value={fromDate} min={min} max={toDate}
                     onChange={(e) => onChange(e.target.value, toDate)}
@@ -167,7 +167,7 @@ export default function DateRangeSlider({
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-[10px] text-slate-500">Hasta</span>
+                  <span className="text-[11px] text-slate-500">Hasta</span>
                   <input
                     type="date" value={toDate} min={fromDate} max={max}
                     onChange={(e) => onChange(fromDate, e.target.value)}

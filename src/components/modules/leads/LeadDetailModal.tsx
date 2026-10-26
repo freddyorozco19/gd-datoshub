@@ -156,11 +156,11 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
           <div className="flex-1 min-w-0 pr-4">
             <h2 className="font-semibold text-slate-100 text-base leading-snug" title={lead.nombre}>{lead.nombre}</h2>
             <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.1] text-slate-300 tracking-wide">ID {lead.id}</span>
-              {lead.linea && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">{lead.linea}</span>}
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
-              {lead.etapa && <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa}</span>}
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-500"}`}>
+              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.1] text-slate-300 tracking-wide">ID {lead.id}</span>
+              {lead.linea && <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">{lead.linea}</span>}
+              <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
+              {lead.etapa && <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa}</span>}
+              <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-500"}`}>
                 {lead.activo ? "Activo" : "Inactivo"}
               </span>
             </div>
@@ -234,9 +234,9 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
                         <span className="mx-1 text-slate-500">→</span>
                         <span className="text-slate-100 font-medium">{h.to}</span>
                       </p>
-                      <span className="shrink-0 text-[10px] text-slate-400 whitespace-nowrap">{fmtStamp(h.date)}</span>
+                      <span className="shrink-0 text-[11px] text-slate-400 whitespace-nowrap">{fmtStamp(h.date)}</span>
                     </div>
-                    <p className="text-[10px] text-slate-400 mt-0.5">{h.author}</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">{h.author}</p>
                   </li>
                 ))}
               </ol>
@@ -320,7 +320,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
                         <div className={`p-2 rounded-lg shrink-0 ${colors}`}><Icon size={14} /></div>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-medium text-slate-200 truncate group-hover:text-blue-400 transition-colors">{att.name}</p>
-                          {att.file_size > 0 && <p className="text-[10px] text-slate-400 mt-0.5">{fmtFileSize(att.file_size)}</p>}
+                          {att.file_size > 0 && <p className="text-[11px] text-slate-400 mt-0.5">{fmtFileSize(att.file_size)}</p>}
                         </div>
                         <ExternalLink size={12} className="text-slate-300 group-hover:text-blue-400 shrink-0 transition-colors" />
                       </a>

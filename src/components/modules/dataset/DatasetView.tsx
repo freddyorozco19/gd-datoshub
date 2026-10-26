@@ -318,9 +318,9 @@ export default function DatasetView() {
                               <input type="checkbox" checked={visibleCols.includes(f.name)} disabled={f.name === "id"} onChange={() => toggleCol(f.name)} />
                               <span className="min-w-0 flex-1">
                                 <span className="block text-xs text-slate-200 truncate">{f.label}</span>
-                                <span className="block text-[10px] text-slate-500 font-mono truncate">{f.name}</span>
+                                <span className="block text-[11px] text-slate-500 font-mono truncate">{f.name}</span>
                               </span>
-                              <span className="text-[10px] text-slate-500">{f.type}</span>
+                              <span className="text-[11px] text-slate-500">{f.type}</span>
                             </label>
                           ))}
                         </div>
@@ -366,7 +366,7 @@ export default function DatasetView() {
                               {f?.label ?? c}
                               {active && (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />)}
                             </span>
-                            <span className="block text-[10px] font-mono normal-case tracking-normal font-normal opacity-70">{c}</span>
+                            <span className="block text-[11px] font-mono normal-case tracking-normal font-normal opacity-70">{c}</span>
                           </th>
                         );
                       })}
@@ -449,7 +449,7 @@ export default function DatasetView() {
                         <td className="px-3 py-2 text-slate-200 font-medium whitespace-nowrap">{f.label}{f.required && <span className="text-rose-400"> *</span>}</td>
                         <td className="px-3 py-2 font-mono text-slate-400 whitespace-nowrap">{f.name}</td>
                         <td className="px-3 py-2 text-slate-300 whitespace-nowrap">
-                          {f.type}{!f.stored && <span className="ml-1.5 text-[10px] text-slate-500">calculado</span>}
+                          {f.type}{!f.stored && <span className="ml-1.5 text-[11px] text-slate-500">calculado</span>}
                         </td>
                         <td className="px-3 py-2 text-slate-400 max-w-[420px]">
                           {f.heavy ? <span className="text-amber-500">Pesado: se excluye</span>

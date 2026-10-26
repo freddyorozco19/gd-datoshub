@@ -15,7 +15,7 @@ import type { Lead } from "@/lib/odoo/types";
 import Topbar from "@/components/layout/Topbar";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
 import PresalesView from "./PresalesView";
@@ -403,7 +403,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
                     <td className="lead-name px-4 py-3 font-medium whitespace-nowrap tabular-nums">{lead.id}</td>
                     <td className="px-4 py-3">
                       <p className="lead-name font-medium max-w-[180px] truncate" title={lead.nombre}>{lead.nombre}</p>
-                      {lead.correo && <p className="text-slate-400 truncate max-w-[180px] text-[10px]">{lead.correo}</p>}
+                      {lead.correo && <p className="text-slate-400 truncate max-w-[180px] text-[11px]">{lead.correo}</p>}
                     </td>
                     <td className="px-4 py-3 text-slate-600 max-w-[140px]"><span className="truncate block" title={lead.cliente}>{lead.cliente || "—"}</span></td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lead.comercial || "—"}</td>
@@ -495,7 +495,7 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
                 type="button"
                 title={linea}
                 onClick={() => toggleLinea(linea)}
-                className={`shrink-0 text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-all duration-150 whitespace-nowrap ${
+                className={`shrink-0 text-[11px] font-semibold px-2.5 py-1 rounded-lg border transition-all duration-150 whitespace-nowrap ${
                   active
                     ? `${palette.badge} border-current/[0.15]`
                     : "text-slate-500 bg-white/[0.03] border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.05] hover:border-white/[0.12]"
@@ -519,11 +519,11 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
             return (
               <button key={lead.id} type="button" onClick={() => setSelectedLead(lead)}
                 className="w-full flex gap-2.5 items-start text-left px-1.5 py-2.5 hover:bg-white/[0.05] rounded-lg transition-colors group">
-                <span className="text-[10px] font-bold text-slate-500 mt-0.5 w-3.5 shrink-0 text-right group-hover:text-white transition-colors">{i + 1}</span>
+                <span className="text-[11px] font-bold text-slate-500 mt-0.5 w-3.5 shrink-0 text-right group-hover:text-white transition-colors">{i + 1}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-slate-100 truncate leading-snug group-hover:text-white transition-colors" title={lead.nombre}>{lead.nombre}</p>
-                  {lead.cliente && <p className={`text-[10px] truncate leading-tight mt-0.5 font-medium ${palette.text}`}>{lead.cliente}</p>}
-                  {fecha && <p className="text-[9px] text-slate-500 leading-tight mt-1 whitespace-nowrap">{fecha}{hora && <> · {hora}</>}</p>}
+                  {lead.cliente && <p className={`text-[11px] truncate leading-tight mt-0.5 font-medium ${palette.text}`}>{lead.cliente}</p>}
+                  {fecha && <p className="text-[11px] text-slate-500 leading-tight mt-1 whitespace-nowrap">{fecha}{hora && <> · {hora}</>}</p>}
                 </div>
               </button>
             );
@@ -595,12 +595,12 @@ function RecentWonWidget({ leads }: { leads: Lead[] }) {
             return (
               <button key={lead.id} type="button" onClick={() => setSelectedLead(lead)}
                 className="w-full flex gap-2.5 items-start text-left px-1.5 py-2.5 hover:bg-white/[0.05] rounded-lg transition-colors group">
-                <span className="text-[10px] font-bold text-slate-500 mt-0.5 w-3.5 shrink-0 text-right group-hover:text-white transition-colors">{i + 1}</span>
+                <span className="text-[11px] font-bold text-slate-500 mt-0.5 w-3.5 shrink-0 text-right group-hover:text-white transition-colors">{i + 1}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-slate-100 truncate leading-snug group-hover:text-white transition-colors" title={lead.nombre}>{lead.nombre}</p>
-                  {lead.cliente && <p className="text-[10px] truncate leading-tight mt-0.5 font-medium text-emerald-400">{lead.cliente}</p>}
+                  {lead.cliente && <p className="text-[11px] truncate leading-tight mt-0.5 font-medium text-emerald-400">{lead.cliente}</p>}
                   {(fecha || lead.ingresosEsperados > 0) && (
-                    <p className="text-[9px] text-slate-500 leading-tight mt-1 whitespace-nowrap">
+                    <p className="text-[11px] text-slate-500 leading-tight mt-1 whitespace-nowrap">
                       {fecha}
                       {fecha && lead.ingresosEsperados > 0 && " · "}
                       {lead.ingresosEsperados > 0 && COP(lead.ingresosEsperados)}
@@ -693,7 +693,7 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
           <button
             key={key}
             onClick={() => setSortBy(key)}
-            className={`flex-1 text-[10px] font-semibold py-1.5 rounded-lg border transition-all duration-150 capitalize ${
+            className={`flex-1 text-[11px] font-semibold py-1.5 rounded-lg border transition-all duration-150 capitalize ${
               sortBy === key
                 ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
                 : "text-slate-500 bg-white/[0.03] border-white/[0.06] hover:text-slate-300 hover:bg-white/[0.05]"
@@ -715,10 +715,10 @@ function ComercialRankingWidget({ leads }: { leads: Lead[] }) {
           >
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-1.5 min-w-0">
-                <span className="w-4 text-center shrink-0 text-[10px] font-bold text-slate-300">{i + 1}</span>
+                <span className="w-4 text-center shrink-0 text-[11px] font-bold text-slate-300">{i + 1}</span>
                 <span className="text-xs text-slate-200 truncate leading-none group-hover:text-blue-400 transition-colors" title={r.name}>{r.name}</span>
               </div>
-              <span className="text-[10px] font-bold text-slate-600 shrink-0 ml-2">{fmt(r)}</span>
+              <span className="text-[11px] font-bold text-slate-600 shrink-0 ml-2">{fmt(r)}</span>
             </div>
             <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden ml-5">
               <div
@@ -948,6 +948,7 @@ export default function LeadsView() {
   // la pestaña activa vive en la URL (/leads, /leads/business, /leads/presales) para
   // que las tabs sean enlaces reales: se pueden abrir en pestaña/ventana nueva, copiar el link, etc.
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const urlTab: LeadsTab = pathname.endsWith("/presales") ? "presales" : "business";
   // Presales solo para perfiles Líder y Administrador (rol en app_metadata)
   const [canViewPresales, setCanViewPresales] = useState(false);
@@ -1034,6 +1035,13 @@ export default function LeadsView() {
   }
 
   useEffect(() => { loadLeads(); }, []);
+  /* enlace profundo desde la búsqueda global: /leads?lead=ID abre el detalle de ese lead */
+  const deepLeadId = Number(searchParams.get("lead")) || 0;
+  useEffect(() => {
+    const l = deepLeadId ? leads.find((x) => x.id === deepLeadId) : null;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (l) setSelectedLead(l);
+  }, [deepLeadId, leads]);
   useEffect(() => { setCurrentPage(1); }, [filters, search, sort]);
 
   /* opciones de filtros */
@@ -1385,9 +1393,9 @@ export default function LeadsView() {
                               <div className="min-w-0">
                                 <p className="font-semibold text-white max-w-[200px] truncate" title={lead.nombre}>{lead.nombre}</p>
                                 <div className="flex items-center gap-2 mt-0.5">
-                                  {lead.correo && <p className="text-slate-500 truncate max-w-[170px] text-[10px]">{lead.correo}</p>}
+                                  {lead.correo && <p className="text-slate-500 truncate max-w-[170px] text-[11px]">{lead.correo}</p>}
                                   {lead.adjuntos > 0 && (
-                                    <span className="flex items-center gap-0.5 text-[9px] text-slate-500 shrink-0">
+                                    <span className="flex items-center gap-0.5 text-[11px] text-slate-500 shrink-0">
                                       <Paperclip size={9} />{lead.adjuntos}
                                     </span>
                                   )}
@@ -1524,7 +1532,7 @@ export default function LeadsView() {
                     <span className="text-xs text-slate-600">· actualizado {lastFetch.toLocaleTimeString("es-CO")}</span>
                   )}
                   {newCount > 0 && (
-                    <span className="flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">
+                    <span className="flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400">
                       <Sparkles size={10} />
                       {newCount} nuevo{newCount > 1 ? "s" : ""}
                     </span>
@@ -1565,7 +1573,7 @@ export default function LeadsView() {
       )}
 
       {/* 1. modal detalle desde tabla principal */}
-      {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} historyField="etapaActual" />}
+      {selectedLead && <LeadDetailModal lead={selectedLead} onClose={() => { setSelectedLead(null); if (new URLSearchParams(window.location.search).has("lead")) window.history.replaceState(null, "", pathname); }} historyField="etapaActual" />}
     </div>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Bell, Search, ChevronRight } from "lucide-react";
-import type { ReactNode } from "react";
+import { Search, ChevronRight } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import CommandPalette from "./CommandPalette";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 /* ── Mapa de rutas → breadcrumb (igual que mainFJ-hub ROUTE_META) ─────── */
@@ -30,6 +31,15 @@ interface TopbarProps {
 export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
   const pathname = usePathname();
   const meta     = ROUTE_META[pathname] ?? (title ? { label: title } : null);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setSearchOpen((v) => !v); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <header
@@ -77,15 +87,12 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
           <div className="absolute inset-0 rounded-full bg-emerald-400 animate-ping-slow opacity-40" />
           <div className="w-2 h-2 rounded-full bg-emerald-400" />
         </div>
-        <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:text-slate-300 transition-colors border border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06]">
+        <button type="button" onClick={() => setSearchOpen(true)} aria-label="Buscar (Ctrl+K)" className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:text-slate-300 transition-colors border border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06]">
           <Search className="w-3 h-3" />
           <span className="hidden sm:inline">Buscar</span>
-          <kbd className="hidden sm:inline text-[9px] px-1.5 py-0.5 bg-white/[0.08] rounded text-slate-600 font-mono">⌘K</kbd>
+          <kbd className="hidden sm:inline text-[11px] px-1.5 py-0.5 bg-white/[0.08] rounded text-slate-600 font-mono">⌘K</kbd>
         </button>
-        <button className="relative p-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-white/[0.06] transition-colors">
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-blue-500 rounded-full" />
-        </button>
+        <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
 
         {/* Theme toggle */}
         <ThemeToggle />

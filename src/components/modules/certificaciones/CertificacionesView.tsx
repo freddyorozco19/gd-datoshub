@@ -37,7 +37,7 @@ interface ProviderConfig {
   exams: ExamConfig[]
 }
 
-const PROVIDERS: ProviderConfig[] = [
+export const PROVIDERS: ProviderConfig[] = [
   {
     id: 'microsoft',
     name: 'Microsoft',
@@ -364,7 +364,7 @@ function TagChip({
     <button
       type="button"
       onClick={e => { e.stopPropagation(); onClick?.(tag.label) }}
-      className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border transition-all duration-100
+      className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full border transition-all duration-100
         ${base}
         ${active ? 'ring-1 ring-offset-1 ring-offset-transparent ring-current opacity-100' : 'opacity-80 hover:opacity-100'}
         ${onClick ? 'cursor-pointer' : 'cursor-default'}
@@ -478,14 +478,14 @@ function ExamCard({ exam, provider, onClick }: { exam: ExamConfig; provider: Pro
         }
       </div>
       <h4 className="exam-title text-xs font-semibold mb-1.5 leading-snug line-clamp-2">{exam.name}</h4>
-      <span className="exam-level inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full border">
+      <span className="exam-level inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full border">
         {exam.level}
       </span>
       {available && exam.questions && (
-        <p className="exam-meta text-[10px] mt-1.5">{exam.questions} preguntas</p>
+        <p className="exam-meta text-[11px] mt-1.5">{exam.questions} preguntas</p>
       )}
       {!available && (
-        <p className="exam-meta text-[10px] italic mt-1.5">Próximamente</p>
+        <p className="exam-meta text-[11px] italic mt-1.5">Próximamente</p>
       )}
     </button>
   )
@@ -500,7 +500,7 @@ function TypeBadge({ type }: { type: ReturnType<typeof getType> }) {
     img:   { label: 'Con imagen',      cls: 'bg-purple-900/50 text-purple-300 border-purple-800' },
     other: { label: 'Abierta',         cls: 'bg-slate-800 text-slate-400 border-slate-700' },
   }[type]
-  return <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${cfg.cls}`}>{cfg.label}</span>
+  return <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${cfg.cls}`}>{cfg.label}</span>
 }
 
 function QuestionCard({
@@ -662,7 +662,7 @@ function QuestionCard({
                   rel="noopener noreferrer"
                   title={`Ver pregunta ${n} en ExamTopics`}
                   onClick={e => e.stopPropagation()}
-                  className="flex items-center justify-center gap-0.5 px-1.5 h-6 rounded border bg-slate-800 border-slate-600 text-slate-400 hover:text-emerald-400 hover:border-emerald-500/60 transition-colors text-[10px] font-bold"
+                  className="flex items-center justify-center gap-0.5 px-1.5 h-6 rounded border bg-slate-800 border-slate-600 text-slate-400 hover:text-emerald-400 hover:border-emerald-500/60 transition-colors text-[11px] font-bold"
                 >
                   ET <ExternalLink size={9} />
                 </a>
@@ -674,7 +674,7 @@ function QuestionCard({
                 title={xlat ? "Volver al inglés" : "Traducir al español"}
                 onClick={e => { e.stopPropagation(); translate() }}
                 disabled={xlatLoading}
-                className={`flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded border transition-colors ${
+                className={`flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded border transition-colors ${
                   xlat
                     ? "bg-amber-900/50 border-amber-600/60 text-amber-300"
                     : xlatError
@@ -690,7 +690,7 @@ function QuestionCard({
                 type="button"
                 title={es ? 'Ver en inglés' : 'Ver en español'}
                 onClick={e => { e.stopPropagation(); setEs(v => !v); reset() }}
-                className={`text-[10px] font-bold px-1.5 py-0.5 rounded border transition-colors ${
+                className={`text-[11px] font-bold px-1.5 py-0.5 rounded border transition-colors ${
                   es
                     ? 'bg-amber-900/50 border-amber-600/60 text-amber-300'
                     : 'bg-slate-800 border-slate-600 text-slate-400 hover:border-slate-400 hover:text-slate-200'
@@ -1064,7 +1064,7 @@ function QuestionCard({
                     type="button"
                     title={showExpl ? 'Ocultar explicación' : 'Ver explicación'}
                     onClick={() => setShowExpl(v => !v)}
-                    className={`w-5 h-5 rounded-full border text-[10px] font-bold flex items-center justify-center transition-colors ${
+                    className={`w-5 h-5 rounded-full border text-[11px] font-bold flex items-center justify-center transition-colors ${
                       showExpl
                         ? 'bg-blue-500/30 border-blue-400/60 text-blue-200'
                         : 'bg-slate-800 border-slate-600 text-slate-400 hover:border-blue-400/60 hover:text-blue-300'
@@ -1109,7 +1109,7 @@ function QuestionCard({
                       onClick={toggleExplEs}
                       disabled={explEsLoading}
                       title={explEs ? 'Ver en inglés' : 'Ver en español'}
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded border transition-colors disabled:opacity-50 ${
+                      className={`text-[11px] font-bold px-1.5 py-0.5 rounded border transition-colors disabled:opacity-50 ${
                         explEs
                           ? 'bg-amber-900/50 border-amber-600/60 text-amber-300'
                           : 'bg-slate-800 border-slate-600 text-slate-400 hover:border-amber-500/60 hover:text-amber-300'
@@ -1123,7 +1123,7 @@ function QuestionCard({
                   </p>
                   {q.learnMore && q.learnMore.length > 0 && (
                     <div className="mt-2 pt-1.5 border-t border-emerald-800/30">
-                      <p className="text-[9px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
+                      <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
                       <ul className="space-y-0.5">
                         {q.learnMore.map((ref, ri) => {
                           const text = typeof ref === 'string' ? ref : ref.text
@@ -1221,7 +1221,7 @@ function ExamConfigModal({
                 </button>
               ))}
             </div>
-            <p className="text-[10px] text-slate-600 mt-1.5">
+            <p className="text-[11px] text-slate-600 mt-1.5">
               {actualQ} preguntas de {pool} disponibles
             </p>
           </div>
@@ -1440,7 +1440,7 @@ function ExamScreen({
                   onClick={() => xlat ? setXlat(null) : doTranslate(current)}
                   disabled={xlatLoading}
                   title={xlat ? 'Ver en inglés' : 'Ver en español'}
-                  className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-bold transition-colors disabled:opacity-40 ${
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[11px] font-bold transition-colors disabled:opacity-40 ${
                     xlatLoading
                       ? 'bg-white/[0.04] border-white/[0.08] text-slate-500'
                       : xlatError
@@ -1457,7 +1457,7 @@ function ExamScreen({
                   onClick={translate}
                   disabled={xlatLoading}
                   title={xlat ? 'Ver original' : 'Traducir al español'}
-                  className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-bold transition-colors disabled:opacity-40 ${
+                  className={`flex items-center gap-1 px-2 py-0.5 rounded-md border text-[11px] font-bold transition-colors disabled:opacity-40 ${
                     xlat
                       ? 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
                       : xlatError
@@ -1479,7 +1479,7 @@ function ExamScreen({
               {getQuestionTags(q).slice(0, 3).map(tag => {
                 const cls = TAG_COLOR[tag.color] ?? TAG_COLOR.slate
                 return (
-                  <span key={tag.label} className={`inline-flex items-center text-[10px] font-semibold px-2 py-0.5 rounded-full border ${cls}`}>
+                  <span key={tag.label} className={`inline-flex items-center text-[11px] font-semibold px-2 py-0.5 rounded-full border ${cls}`}>
                     {tag.label}
                   </span>
                 )
@@ -2028,7 +2028,7 @@ function SemanticSearchPanel({ questions }: { questions: Question[] }) {
       <div className="px-4 py-3 border-b border-border/50 flex items-center gap-2.5">
         <Search size={14} className="text-amber-400" />
         <span className="text-sm font-semibold text-amber-300">Buscar duplicado semántico</span>
-        <span className="ml-auto text-[10px] text-slate-600 font-mono">TF-IDF · cosine similarity</span>
+        <span className="ml-auto text-[11px] text-slate-600 font-mono">TF-IDF · cosine similarity</span>
       </div>
 
       <div className="px-4 py-4 space-y-3">
@@ -2055,7 +2055,7 @@ function SemanticSearchPanel({ questions }: { questions: Question[] }) {
               ✕ Limpiar
             </button>
           )}
-          <span className="ml-auto text-[10px] text-slate-600">Ctrl+Enter para buscar</span>
+          <span className="ml-auto text-[11px] text-slate-600">Ctrl+Enter para buscar</span>
         </div>
 
         {searched && (
@@ -2088,9 +2088,9 @@ function SemanticSearchPanel({ questions }: { questions: Question[] }) {
                     </span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-[10px] font-mono text-slate-600">#{q.number}</span>
-                        {high && <span className="text-[9px] font-bold text-red-400 bg-red-900/30 border border-red-700/40 px-1.5 py-0.5 rounded-full">⚠ POSIBLE DUPLICADO</span>}
-                        {mid  && <span className="text-[9px] font-bold text-amber-400 bg-amber-900/30 border border-amber-700/40 px-1.5 py-0.5 rounded-full">SIMILAR</span>}
+                        <span className="text-[11px] font-mono text-slate-600">#{q.number}</span>
+                        {high && <span className="text-[11px] font-bold text-red-400 bg-red-900/30 border border-red-700/40 px-1.5 py-0.5 rounded-full">⚠ POSIBLE DUPLICADO</span>}
+                        {mid  && <span className="text-[11px] font-bold text-amber-400 bg-amber-900/30 border border-amber-700/40 px-1.5 py-0.5 rounded-full">SIMILAR</span>}
                       </div>
                       <p className="text-xs text-slate-300 truncate leading-relaxed">
                         {q.questionText?.split('\n')[0]?.slice(0, 120)}
@@ -2347,7 +2347,7 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
               >
                 <p className="text-xs text-slate-500 mb-1">{label}</p>
                 <p className={`text-2xl font-bold ${color}`}>{value}</p>
-                {isActive && <p className="text-[10px] text-slate-500 mt-1">activo · clic para quitar</p>}
+                {isActive && <p className="text-[11px] text-slate-500 mt-1">activo · clic para quitar</p>}
               </button>
             )
           })}
@@ -2410,7 +2410,7 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
             <Filter size={13} />
             <span className="font-medium">Conceptos</span>
             {activeTag && (
-              <span className="text-[10px] bg-primary/30 border border-primary/50 text-primary px-1.5 py-0.5 rounded-full font-semibold max-w-[120px] truncate">
+              <span className="text-[11px] bg-primary/30 border border-primary/50 text-primary px-1.5 py-0.5 rounded-full font-semibold max-w-[120px] truncate">
                 {activeTag}
               </span>
             )}
@@ -2467,9 +2467,9 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
                             : 'opacity-70 hover:opacity-100 hover:scale-105'
                           }`}
                       >
-                        {isActive && <span className="text-[9px]">✕</span>}
+                        {isActive && <span className="text-[11px]">✕</span>}
                         {tag.label}
-                        <span className="text-[10px] opacity-60 font-normal">{count}</span>
+                        <span className="text-[11px] opacity-60 font-normal">{count}</span>
                       </button>
                     )
                   })}
@@ -2773,7 +2773,7 @@ function RegistrosPanel() {
                     <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap">{e.providerName}</td>
                     <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">{e.level}</td>
                     <td className="px-4 py-3">
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${ESTADO_COLOR[estado]}`}>
+                      <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${ESTADO_COLOR[estado]}`}>
                         {ESTADO_LABEL[estado]}
                       </span>
                     </td>
@@ -3049,11 +3049,11 @@ CREATE POLICY "own_insert" ON exam_history FOR INSERT WITH CHECK (user_id = auth
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-xs font-bold text-slate-200">{row.exam_code}</span>
-                      <span className="text-[10px] text-slate-500 truncate">{row.exam_name}</span>
+                      <span className="text-[11px] text-slate-500 truncate">{row.exam_name}</span>
                     </div>
                     <div className="flex items-center gap-3 mt-0.5 flex-wrap">
-                      {isAdmin && <span className="text-[10px] text-slate-500">{row.user_email}</span>}
-                      <span className="text-[10px] text-slate-600">{fmtDate(row.created_at)}</span>
+                      {isAdmin && <span className="text-[11px] text-slate-500">{row.user_email}</span>}
+                      <span className="text-[11px] text-slate-600">{fmtDate(row.created_at)}</span>
                     </div>
                   </div>
                   {/* Stats */}
@@ -3070,7 +3070,7 @@ CREATE POLICY "own_insert" ON exam_history FOR INSERT WITH CHECK (user_id = auth
                   <div className="border-t border-border/50 px-4 py-4 space-y-3">
                     {/* Barra de progreso */}
                     <div>
-                      <div className="flex justify-between text-[10px] text-slate-500 mb-1">
+                      <div className="flex justify-between text-[11px] text-slate-500 mb-1">
                         <span>{row.correct} correctas · {row.wrong} incorrectas{row.skipped > 0 ? ` · ${row.skipped} sin responder` : ''}</span>
                         <span>{row.total} preguntas</span>
                       </div>
@@ -3097,10 +3097,10 @@ CREATE POLICY "own_insert" ON exam_history FOR INSERT WITH CHECK (user_id = auth
                         <div className="col-span-2 sm:col-span-3 bg-white/[0.03] rounded-lg px-3 py-2">
                           <p className="text-slate-500 text-[10px] uppercase tracking-wide mb-1">Configuración</p>
                           <div className="flex flex-wrap gap-2">
-                            {(row.config.randomOrder as boolean) && <span className="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">Aleatorio</span>}
-                            {(row.config.onlyWithAnswer as boolean) && <span className="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">Solo con respuesta</span>}
-                            {(row.config.translateToEs as boolean) && <span className="text-[10px] bg-amber-900/40 text-amber-300 px-2 py-0.5 rounded-full">Traducido ESP</span>}
-                            {(row.config.timeLimitMin as number) > 0 && <span className="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">{row.config.timeLimitMin as number} min</span>}
+                            {(row.config.randomOrder as boolean) && <span className="text-[11px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">Aleatorio</span>}
+                            {(row.config.onlyWithAnswer as boolean) && <span className="text-[11px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">Solo con respuesta</span>}
+                            {(row.config.translateToEs as boolean) && <span className="text-[11px] bg-amber-900/40 text-amber-300 px-2 py-0.5 rounded-full">Traducido ESP</span>}
+                            {(row.config.timeLimitMin as number) > 0 && <span className="text-[11px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">{row.config.timeLimitMin as number} min</span>}
                           </div>
                         </div>
                       )}
@@ -3232,7 +3232,7 @@ export default function CertificacionesView() {
                     <div className="flex items-center justify-between gap-3">
                       <p className="text-[11px] text-slate-500">{avail.length} disponibles · {soon.length} próximamente</p>
                       <button type="button" onClick={() => setOnlyAvailable(v => !v)} data-active={onlyAvailable}
-                        className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
+                        className="pill-option text-[11px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">
                         Solo disponibles
                       </button>
                     </div>
@@ -3281,7 +3281,7 @@ export default function CertificacionesView() {
               </span>
               <div>
                 <h2 className="text-base font-bold text-white">{selectedExam.code} — {selectedExam.name}</h2>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${LEVEL_COLOR[selectedExam.level]}`}>
+                <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${LEVEL_COLOR[selectedExam.level]}`}>
                   {selectedExam.level}
                 </span>
               </div>

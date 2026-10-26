@@ -157,7 +157,7 @@ export default function PresalesKanbanBoard({
                       <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-100 min-w-0"><c.Icon size={15} className="kb-ic shrink-0" aria-hidden /><span className="truncate">{c.label}</span></h3>
                       <span className="text-xs tabular-nums text-slate-300">{filtering ? `${c.shown.length} de ${c.all.length}` : c.all.length}</span>
                     </div>
-                    <p className="text-[10px] text-slate-400 mt-0.5 tabular-nums truncate">
+                    <p className="text-[11px] text-slate-400 mt-0.5 tabular-nums truncate">
                       {c.cop ? fmtCOP(c.cop) : ""}{c.cop && c.usd ? " · " : ""}{c.usd ? fmtUSD(c.usd) : ""}{!c.cop && !c.usd ? "Sin pipeline" : ""}
                     </p>
                   </button>
@@ -171,7 +171,7 @@ export default function PresalesKanbanBoard({
                         <button key={l.id} type="button" onClick={() => onOpenLead(l)}
                           className="kb-card row-hover w-full h-[80px] shrink-0 flex flex-col justify-between text-left rounded-lg px-3 py-2 cursor-pointer overflow-hidden">
                           <div className="flex items-center gap-2 min-w-0">
-                            <span className="shrink-0 text-[10px] font-mono font-bold text-slate-400">#{l.id}</span>
+                            <span className="shrink-0 text-[11px] font-mono font-bold text-slate-400">#{l.id}</span>
                             <p className="flex-1 min-w-0 text-xs font-semibold text-slate-100 leading-none truncate" title={l.nombre}>{l.nombre}</p>
                             <i className={`shrink-0 w-2 h-2 rounded-sm ${isInt(l) ? "bg-teal-400" : "bg-blue-400"}`} title={isInt(l) ? "GD INTERNATIONAL" : "GROW DATA"} />
                           </div>
@@ -179,7 +179,7 @@ export default function PresalesKanbanBoard({
                             <p className="min-w-0 text-[11px] text-slate-400 leading-none truncate" title={[l.cliente, l.linea].filter(Boolean).join(" · ")}>
                               {l.cliente || "—"}{l.linea && <span className="text-slate-500"> · {l.linea}</span>}
                             </p>
-                            <span className="shrink-0 flex items-center gap-1.5 text-[10px]">
+                            <span className="shrink-0 flex items-center gap-1.5 text-[11px]">
                               {!l.activo && <span className="px-1.5 py-0.5 rounded-full bg-white/[0.08] text-slate-400 leading-none">Archivado</span>}
                               <span className={`flex items-center gap-1 tabular-nums ${stale ? "text-rose-500 font-semibold" : "text-slate-500"}`}
                                 title={`${days} d sin cambios${stale ? " · estancado" : ""}`}>
@@ -192,10 +192,10 @@ export default function PresalesKanbanBoard({
                             <span className="flex items-center gap-1.5 min-w-0">
                               {l.preventa ? (
                                 <>
-                                  <span className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-white ${avatarOf(l.preventa)}`} aria-hidden>{initials(l.preventa)}</span>
-                                  <span className="text-[10px] text-slate-300 truncate" title={l.preventa}>{l.preventa}</span>
+                                  <span className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold text-white ${avatarOf(l.preventa)}`} aria-hidden>{initials(l.preventa)}</span>
+                                  <span className="text-[11px] text-slate-300 truncate" title={l.preventa}>{l.preventa}</span>
                                 </>
-                              ) : <span className="text-[10px] text-amber-500">Sin preventa</span>}
+                              ) : <span className="text-[11px] text-amber-500">Sin preventa</span>}
                             </span>
                             <span className="shrink-0 text-[11px] font-medium tabular-nums text-slate-200">
                               {l.ingresosEsperados ? (isInt(l) ? fmtUSD(l.ingresosEsperados) : fmtCOP(l.ingresosEsperados)) : "—"}

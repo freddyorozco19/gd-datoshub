@@ -86,10 +86,10 @@ export default function WonLeadsModal({ leads, company, periodLabel, onOpenLead,
                     <td className="px-4 py-2.5 text-slate-400 hidden lg:table-cell">{l.linea || "—"}</td>
                     <td className="px-4 py-2.5 text-slate-300 whitespace-nowrap">{l.etapa || "—"}</td>
                     <td className="px-4 py-2.5">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${l.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-400"}`}>{l.activo ? "Sí" : "No"}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${l.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-400"}`}>{l.activo ? "Sí" : "No"}</span>
                     </td>
                     <td className="px-4 py-2.5">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${l.ganado === "Ganado" ? "bg-emerald-500/10 text-emerald-400" : l.ganado === "Perdido" ? "bg-rose-500/10 text-rose-400" : "bg-white/[0.06] text-slate-400"}`}>{l.ganado}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${l.ganado === "Ganado" ? "bg-emerald-500/10 text-emerald-400" : l.ganado === "Perdido" ? "bg-rose-500/10 text-rose-400" : "bg-white/[0.06] text-slate-400"}`}>{l.ganado}</span>
                     </td>
                     <td className="px-4 py-2.5 text-right tabular-nums text-white">{l.ingresosEsperados ? fmtMoney(l.ingresosEsperados, company) : "—"}</td>
                   </tr>

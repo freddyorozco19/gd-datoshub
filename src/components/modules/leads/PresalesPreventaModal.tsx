@@ -138,7 +138,7 @@ export default function PresalesPreventaModal({
                   {d.perMonth.map((arr, i) => (
                     <button key={i} type="button" disabled={arr.length === 0} onClick={() => onList(arr, `${name} · ${MES[i]} ${d.y}`)}
                       title={`${arr.length} cierre${arr.length === 1 ? "" : "s"} en ${MES[i]}`}
-                      className="row-hover flex-1 h-full flex flex-col items-center justify-end gap-1 rounded-md pt-1 text-[10px] text-slate-400 disabled:cursor-default cursor-pointer">
+                      className="row-hover flex-1 h-full flex flex-col items-center justify-end gap-1 rounded-md pt-1 text-[11px] text-slate-400 disabled:cursor-default cursor-pointer">
                       <span className="tabular-nums text-slate-300">{arr.length || ""}</span>
                       <span className="w-full rounded-t bg-blue-500" style={{ height: `${(arr.length / maxMonth) * 54}px`, minHeight: arr.length ? 3 : 0 }} />
                       <span>{MES[i]}</span>
@@ -165,7 +165,7 @@ export default function PresalesPreventaModal({
                     const stale = days > staleDays;
                     return (
                       <button key={l.id} type="button" onClick={() => onOpenLead(l)} className="row-hover w-full flex items-center gap-3 text-left px-2 py-2 rounded-lg cursor-pointer">
-                        <span className="shrink-0 text-[10px] font-mono font-bold text-slate-400">#{l.id}</span>
+                        <span className="shrink-0 text-[11px] font-mono font-bold text-slate-400">#{l.id}</span>
                         <span className="flex-1 min-w-0">
                           <span className="block text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</span>
                           <span className="block text-[11px] text-slate-500 truncate">{l.cliente || "—"}{l.cierreEsperado ? ` · cierre ${l.cierreEsperado.substring(0, 10)}` : ""}</span>

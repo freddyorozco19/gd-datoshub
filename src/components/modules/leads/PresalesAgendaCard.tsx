@@ -84,7 +84,7 @@ export default function PresalesAgendaCard({
       <div className="flex flex-wrap gap-1.5 mb-1">
         {chips.map(([id, label]) => (
           <button key={id} type="button" onClick={() => setRange(id)} data-active={range === id}
-            className="pill-option text-[10px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">{label}</button>
+            className="pill-option text-[11px] font-semibold px-2.5 py-1 rounded-lg border whitespace-nowrap">{label}</button>
         ))}
       </div>
 
@@ -114,7 +114,7 @@ export default function PresalesAgendaCard({
                         <span className="block text-[11px] text-slate-500 truncate">{l.preventa || "Sin preventa"} · {isInt(l) ? "GD INTERNATIONAL" : "GROW DATA"}</span>
                       </span>
                       <span className="shrink-0 text-[11px] tabular-nums text-slate-300">{l.ingresosEsperados ? (isInt(l) ? fmtUSD(l.ingresosEsperados) : fmtCOP(l.ingresosEsperados)) : "—"}</span>
-                      <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full tabular-nums ${b.cls}`}>{b.txt}</span>
+                      <span className={`shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded-full tabular-nums ${b.cls}`}>{b.txt}</span>
                     </button>
                   );
                 })}

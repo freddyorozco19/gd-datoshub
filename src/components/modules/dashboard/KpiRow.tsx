@@ -44,7 +44,7 @@ function KpiCard({ id, label, value, sub, href, onClick, color, iconBg, iconText
         </div>
         <div className="text-xl md:text-2xl font-bold text-white tracking-tight tabular-nums">{value}</div>
         <div className="text-[11px] text-slate-500 mt-0.5">{label}</div>
-        <div className="flex items-center gap-1 mt-2 text-[10px] text-slate-500 group-hover:text-slate-400 transition-colors">
+        <div className="flex items-center gap-1 mt-2 text-[11px] text-slate-500 group-hover:text-slate-400 transition-colors">
           {sub} <ArrowUpRight size={9} />
         </div>
       </div>

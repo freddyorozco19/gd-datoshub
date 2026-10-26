@@ -513,7 +513,7 @@ function ProductCard({ producto, onClick }: { producto: Producto; onClick: () =>
           style={{ background: `rgba(${producto.rgb},0.12)`, border: `1px solid rgba(${producto.rgb},0.25)` }}>
           <Icon size={18} style={{ color: producto.color }} />
         </div>
-        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${producto.tagColor} shrink-0 mt-0.5`}>
+        <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border ${producto.tagColor} shrink-0 mt-0.5`}>
           {producto.categoria}
         </span>
       </div>
@@ -547,7 +547,7 @@ function ProductoDetalle({ producto }: { producto: Producto }) {
             <Icon size={22} style={{ color: producto.color }} />
           </div>
           <div>
-            <span className={`inline-block text-[10px] font-semibold px-2.5 py-0.5 rounded-full border mb-1.5 ${producto.tagColor}`}>
+            <span className={`inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full border mb-1.5 ${producto.tagColor}`}>
               {producto.categoria}
             </span>
             <h1 className="text-xl md:text-2xl font-bold text-white leading-tight mb-1.5">{producto.nombre}</h1>
@@ -655,7 +655,7 @@ function ProductoDetalle({ producto }: { producto: Producto }) {
                   <div className="px-4 py-2.5 border-b border-white/[0.04]"
                     style={{ background: `rgba(${producto.rgb},0.07)` }}>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold text-white/60 font-mono">CAPA {String(i + 1).padStart(2, "0")}</span>
+                      <span className="text-[11px] font-bold text-white/60 font-mono">CAPA {String(i + 1).padStart(2, "0")}</span>
                       <span className="text-xs font-semibold" style={{ color: producto.color }}>{capa.capa}</span>
                     </div>
                   </div>
@@ -682,7 +682,7 @@ function ProductoDetalle({ producto }: { producto: Producto }) {
             <div className="space-y-3">
               {producto.casos.map((caso, i) => (
                 <div key={i} className="flex items-start gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
-                  <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-[10px] font-bold"
+                  <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-[11px] font-bold"
                     style={{ background: `rgba(${producto.rgb},0.12)`, color: producto.color }}>
                     {i + 1}
                   </div>
