@@ -11,6 +11,7 @@ import FitRow from "./FitRow";
 import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesOcupacionModal from "./PresalesOcupacionModal";
+import InfoTip, { type InfoContent } from "@/components/ui/InfoTip";
 import PresalesKanbanBoard from "./PresalesKanbanBoard";
 import PresalesCycleCard from "./PresalesCycleCard";
 import PresalesAgendaCard from "./PresalesAgendaCard";
@@ -71,12 +72,15 @@ const ocupColor = (p: number) => (p >= 100 ? "bg-rose-500" : p >= 70 ? "bg-amber
 const CARD = "relative rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.015] backdrop-blur-xl shadow-[0_8px_30px_-4px_rgba(0,0,0,0.45)] overflow-hidden";
 
 // fill: la tarjeta se estira a la altura que le da su contenedor y el contenido ocupa el espacio sobrante
-function Card({ title, right, children, className = "", fill }: { title: string; right?: ReactNode; children: ReactNode; className?: string; fill?: boolean }) {
+function Card({ title, right, children, className = "", fill, info }: { title: string; right?: ReactNode; children: ReactNode; className?: string; fill?: boolean; info?: InfoContent }) {
   return (
     <div className={`${CARD} p-4 ${fill ? "flex flex-col" : ""} ${className}`}>
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
       <div className="relative flex items-center justify-between gap-2 mb-3">
-        <h3 className="text-xs font-semibold text-slate-100 uppercase tracking-wide">{title}</h3>
+        <div className="flex items-center gap-1.5 min-w-0">
+          <h3 className="text-xs font-semibold text-slate-100 uppercase tracking-wide">{title}</h3>
+          {info && <InfoTip {...info} />}
+        </div>
         {right}
       </div>
       <div className={`relative ${fill ? "flex-1 min-h-0 flex flex-col" : ""}`}>{children}</div>
@@ -84,7 +88,7 @@ function Card({ title, right, children, className = "", fill }: { title: string;
   );
 }
 
-function Kpi({ label, value, onClick, split }: { label: string; value: string; onClick?: () => void; split?: KpiSplit[] }) {
+function Kpi({ label, value, onClick, split, info }: { label: string; value: string; onClick?: () => void; split?: KpiSplit[]; info?: InfoContent }) {
   return (
     <div
       className={`${CARD} @container/k min-w-0 ${onClick ? "kpi-click cursor-pointer" : ""}`}
@@ -97,8 +101,11 @@ function Kpi({ label, value, onClick, split }: { label: string; value: string; o
       {/* Todo escala con el ancho de la propia tarjeta (cqw): la fila de 7 se mantiene en una línea
           y los textos se reducen proporcionalmente, con un mínimo para no volverse ilegibles. */}
       <div className="relative" style={{ padding: "clamp(8px, 7cqw, 16px)" }}>
-        <p className="font-semibold text-slate-300 uppercase leading-tight break-words" title={label}
-          style={{ fontSize: "clamp(9px, 6.4cqw, 12px)", letterSpacing: "0.05em" }}>{label}</p>
+        <div className="flex items-start justify-between gap-1">
+          <p className="font-semibold text-slate-300 uppercase leading-tight break-words" title={label}
+            style={{ fontSize: "clamp(9px, 6.4cqw, 12px)", letterSpacing: "0.05em" }}>{label}</p>
+          {info && <InfoTip {...info} size={12} className="-mt-0.5 -mr-1" />}
+        </div>
         <p className="font-bold text-slate-100 tabular-nums leading-none whitespace-nowrap"
           style={{ fontSize: "clamp(15px, 12.5cqw, 24px)", marginTop: "clamp(4px, 3.5cqw, 8px)" }}>{value}</p>
         {split && (
@@ -367,6 +374,22 @@ export default function PresalesView({
   const ocupGlobal = profRows.length ? Math.round((profOpen / (CARGA_LIMIT * profRows.length)) * 100) : 0;
   const ocupAlerta = profRows.filter((r) => (r.open / CARGA_LIMIT) >= 0.7).length;
   const ocupLimite = profRows.filter((r) => (r.open / CARGA_LIMIT) >= 1).length;
+  /* "Cómo se calcula": regla en una frase + campo de Odoo de cada cifra y panel */
+  const INFO: Record<string, InfoContent> = {
+    estado: { rule: "Leads cuya Etapa Actual es Preventa. Respeta Línea, Preventa, Compañía, el rango de fechas (fecha de creación) y Preventas inactivos; ignora los filtros Etapa Actual y Estado Preventa.", fields: ["x_studio_etapa_actual", "x_studio_preventa", "x_studio_linea", "company_id", "create_date"] },
+    abierta: { rule: "Leads con Estado Preventa = ABIERTO de los preventas que aparecen en la tabla Carga por preventa, dentro de los filtros de la página.", fields: ["x_studio_edopreventa", "x_studio_preventa"] },
+    pipeline: { rule: "Suma del ingreso esperado de los leads abiertos. GROW DATA va en COP y GD INTERNATIONAL en USD: nunca se suman entre sí.", fields: ["expected_revenue", "company_id", "x_studio_edopreventa"] },
+    ocupacion: { rule: `Leads abiertos de los preventas Profesionales ÷ (máximo por preventa × número de profesionales). Líderes y gerentes se muestran pero no cuentan. En alerta: 70 % o más. Al límite: 100 % o más.`, note: `Máximo actual: ${CARGA_LIMIT} leads por preventa (Configuración). El rol se asigna en Gestionar preventas.`, fields: ["x_studio_edopreventa", "x_studio_preventa"] },
+    sinPreventa: { rule: "Leads abiertos que todavía no tienen preventa asignado.", fields: ["x_studio_preventa", "x_studio_edopreventa"] },
+    estancados: { rule: `Leads abiertos con más de ${STALE_DAYS} días sin ninguna modificación.`, note: "El número de días se cambia en Configuración.", fields: ["write_date", "x_studio_edopreventa"] },
+    cierre: { rule: `Leads abiertos con cierre esperado dentro de los próximos ${SOON_DAYS} días (hoy incluido).`, fields: ["date_deadline", "x_studio_edopreventa"] },
+    carga: { rule: `Una fila por preventa. Abiertos: leads con Estado Preventa ABIERTO. Ocupación: abiertos ÷ máximo configurado (${CARGA_LIMIT}). Pipeline: ingreso esperado de sus abiertos. Estancados: abiertos con más de ${STALE_DAYS} días sin cambios.`, fields: ["x_studio_preventa", "x_studio_edopreventa", "expected_revenue", "write_date"] },
+    porEstado: { rule: "Leads con Etapa Actual = Preventa agrupados por su Estado Preventa. Las pills Activo / Inactivo filtran por el campo active del lead (inactivo = archivado en Odoo).", fields: ["x_studio_edopreventa", "x_studio_etapa_actual", "active"] },
+    porAnio: { rule: "Asignadas: primera vez que el lead pasa a la etapa Preventa. Cerradas: veces que el Estado Preventa pasa de ABIERTO a CERRADO. Un lead cuenta una vez por mes.", note: "Sale del historial de cambios de Odoo; el del Estado Preventa existe desde julio de 2025.", fields: ["stage_id (historial)", "x_studio_edopreventa (historial)", "create_date"] },
+    ciclo: { rule: "Días entre que un lead pasa a ABIERTO y pasa a CERRADO. Un lead reabierto cuenta como un ciclo nuevo. Se incluyen los ciclos cerrados en el año elegido.", note: "Del historial del Estado Preventa (desde julio de 2025).", fields: ["x_studio_edopreventa (historial)", "x_studio_preventa"] },
+    agenda: { rule: "Leads abiertos con fecha de cierre esperada, agrupados por semana. Rojo: faltan 7 días o menos; ámbar: hasta 15; verde: más.", fields: ["date_deadline", "x_studio_edopreventa"] },
+    tablero: { rule: "Una columna por Estado Preventa con los leads de Etapa Actual = Preventa que pasan los filtros de la página. Los filtros del propio tablero no afectan al resto.", fields: ["x_studio_edopreventa", "x_studio_etapa_actual"] },
+  };
   const ocupNames = (min: number) => new Set(profRows.filter((r) => (r.open / CARGA_LIMIT) >= min).map((r) => r.name));
   // el pipeline NO se suma entre compañías: SAS está en COP e Internacional en USD
   const pipelineCOP = stats.open.filter((l) => compKey(l) === "SAS").reduce((s, l) => s + l.ingresosEsperados, 0);
@@ -703,20 +726,20 @@ export default function PresalesView({
           {/* KPIs */}
           <div>
             <div className="grid grid-cols-7 gap-2 xl:gap-3">
-            <Kpi label="Estado preventa" value={String(enEtapaPreventa.length)}
+            <Kpi label="Estado preventa" info={INFO.estado} value={String(enEtapaPreventa.length)}
               split={showSplit ? splitBy(enEtapaPreventa, undefined, (ls, c) => setListModal({ leads: ls, heading: `Estado preventa · ${c}`, suffix: " con Etapa Actual Preventa", chips: true })) : undefined}
               onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa", chips: true })} />
-            <Kpi label="Preventa abierta" value={String(totals.open)}
+            <Kpi label="Preventa abierta" info={INFO.abierta} value={String(totals.open)}
               split={showSplit ? splitBy(abiertosLeads, undefined, (ls, c) => setListModal({ leads: ls, heading: `Preventa abierta · ${c}` })) : undefined}
               onClick={() => setListModal({ leads: abiertosLeads, heading: "Preventa abierta" })} />
-            <Kpi label="Pipeline abierto" value={fmtPipeline}
+            <Kpi label="Pipeline abierto" info={INFO.pipeline} value={fmtPipeline}
               split={showSplit ? [
                 { label: "GROW DATA", short: "GROW DATA", color: "bg-blue-400", value: fmtCOP(pipelineCOP),
                   onClick: () => setListModal({ leads: stats.open.filter((l) => compKey(l) === "SAS"), heading: "Pipeline abierto · GROW DATA" }) },
                 { label: "GD INTERNATIONAL", short: "GD INTL", color: "bg-teal-400", value: fmtUSD(pipelineUSD),
                   onClick: () => setListModal({ leads: stats.open.filter((l) => compKey(l) === "INT"), heading: "Pipeline abierto · GD INTERNATIONAL" }) },
               ] : undefined} />
-            <Kpi label="Ocupación" value={`${ocupGlobal}%`}
+            <Kpi label="Ocupación" info={INFO.ocupacion} value={`${ocupGlobal}%`}
               split={[
                 { label: "En alerta (≥ 70 %)", short: "Alerta ≥ 70 %", color: "bg-amber-400", value: String(ocupAlerta),
                   onClick: () => setListModal({ leads: abiertosLeads.filter((l) => ocupNames(0.7).has(l.preventa || "Sin asignar")), heading: "Ocupación · preventas en alerta (≥ 70 %)" }) },
@@ -724,13 +747,13 @@ export default function PresalesView({
                   onClick: () => setListModal({ leads: abiertosLeads.filter((l) => ocupNames(1).has(l.preventa || "Sin asignar")), heading: "Ocupación · preventas al límite (≥ 100 %)" }) },
               ]}
               onClick={() => setShowOcup(true)} />
-            <Kpi label="Sin preventa"    value={String(stats.sinAsig.length)}
+            <Kpi label="Sin preventa" info={INFO.sinPreventa} value={String(stats.sinAsig.length)}
               split={showSplit ? splitBy(stats.sinAsig, undefined, (ls, c) => setListModal({ leads: ls, heading: `Sin preventa · ${c}` })) : undefined}
               onClick={() => setListModal({ leads: stats.sinAsig, heading: "Sin preventa" })} />
-            <Kpi label="Estancados"      value={String(stats.stale.length)}
+            <Kpi label="Estancados" info={INFO.estancados} value={String(stats.stale.length)}
               split={showSplit ? splitBy(stats.stale, undefined, (ls, c) => setListModal({ leads: ls, heading: `Estancados · ${c}` })) : undefined}
               onClick={() => setListModal({ leads: stats.stale, heading: "Estancados" })} />
-            <Kpi label="Cierre próximo"  value={String(stats.soon.length)}
+            <Kpi label="Cierre próximo" info={INFO.cierre} value={String(stats.soon.length)}
               split={showSplit ? splitBy(stats.soon, undefined, (ls, c) => setListModal({ leads: ls, heading: `Cierre próximo · ${c}` })) : undefined}
               onClick={() => setListModal({ leads: stats.soon, heading: "Cierre próximo" })} />
             </div>
@@ -738,7 +761,7 @@ export default function PresalesView({
 
           <div className="grid grid-cols-1 xl:grid-cols-5 gap-4 xl:h-[420px]">
             {/* carga por preventa */}
-            <Card title="Carga por preventa" className="xl:col-span-3" fill
+            <Card title="Carga por preventa" info={INFO.carga} className="xl:col-span-3" fill
               right={
                 <div className="flex items-center gap-2">
                   {cargaPills}
@@ -753,7 +776,7 @@ export default function PresalesView({
 
             <div className="xl:col-span-2 flex flex-col gap-4 min-h-0">
             {/* embudo por etapa */}
-            <Card title="Leads en estado de preventa" className="flex-1" fill
+            <Card title="Leads en estado de preventa" info={INFO.porEstado} className="flex-1" fill
               right={
                 <div className="flex items-center gap-1">
                   {([["ALL", "Todos"], ["true", "Activo"], ["false", "Inactivo"]] as const).map(([v, label]) => (
@@ -785,7 +808,7 @@ export default function PresalesView({
               )}
             </Card>
             {/* leads por año */}
-            <Card title="Leads por año" className="flex-1" fill
+            <Card title="Leads por año" info={INFO.porAnio} className="flex-1" fill
               right={
                 <div className="flex items-center gap-1.5">
                   <select value={cYear} onChange={(e) => setCYear(Number(e.target.value))} aria-label="Año" className="cmmi-select text-[11px] font-medium rounded-lg bg-white/[0.04] border border-white/[0.1] px-2 py-1 text-slate-200 focus:outline-none focus:border-blue-500/60">
@@ -880,7 +903,7 @@ export default function PresalesView({
 
           {/* tiempo de ciclo y agenda de cierres */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-            <Card title="Tiempo de ciclo en Preventa"
+            <Card title="Tiempo de ciclo en Preventa" info={INFO.ciclo}
               right={
                 <select value={String(cycYear)} onChange={(e) => setCycYear(e.target.value === "ALL" ? "ALL" : Number(e.target.value))} aria-label="Año del tiempo de ciclo"
                   className="cmmi-select text-[11px] font-medium rounded-lg bg-white/[0.04] border border-white/[0.1] px-2 py-1 text-slate-200 focus:outline-none focus:border-blue-500/60">
@@ -894,13 +917,13 @@ export default function PresalesView({
                 onOpenPreventa={(n) => setFichaName(n)}
               />
             </Card>
-            <Card title="Agenda de cierres">
+            <Card title="Agenda de cierres" info={INFO.agenda}>
               <PresalesAgendaCard leads={agendaLeads} daysToClose={daysToClose} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
             </Card>
           </div>
 
           {/* kanban de Estado Preventa */}
-          <Card title="Tablero estados preventa">
+          <Card title="Tablero estados preventa" info={INFO.tablero}>
             <PresalesKanbanBoard
               leads={etapaScope} staleDays={STALE_DAYS} daysSince={daysSince} fmtCOP={fmtCOP} fmtUSD={fmtUSD}
               blocked={!!selected || !!listModal}

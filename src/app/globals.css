@@ -56,6 +56,61 @@
   --app-modal-header-to: rgba(30,64,209,0.8);
 }
 
+/* ── Tokens de estado de interacción ─────────────────────────────────────────
+   Una sola fuente de color para reposo / hover / seleccionado / activo / deshabilitado / foco.
+   Las clases de abajo (pill-option, filter-option, row-hover, kpi-click, kpi-split, th-sort, name-link…)
+   solo leen estas variables: cambiar un tema o un estado se hace aquí y no en cada componente.
+─────────────────────────────────────────────────────────────────────── */
+:root {
+  --st-text: #94a3b8;                       /* reposo */
+  --st-bg: rgba(255, 255, 255, 0.04);
+  --st-border: rgba(255, 255, 255, 0.1);
+  --st-hover-bg: rgba(255, 255, 255, 0.1);  /* hover neutro (botones) */
+  --st-hover-border: rgba(255, 255, 255, 0.22);
+  --st-hover-text: #ffffff;
+  --st-menu-hover: rgba(255, 255, 255, 0.06);  /* opciones de menús y columnas de gráficos */
+  --st-row-hover: rgba(59, 130, 246, 0.12);    /* filas y tarjetas de lista clicables */
+  --st-row-hover-strong: rgba(59, 130, 246, 0.22);
+  --st-card-hover-bg: rgba(59, 130, 246, 0.14);
+  --st-card-hover-border: rgba(59, 130, 246, 0.35);
+  --st-selected-bg: rgba(59, 130, 246, 0.15);  /* opción elegida en un menú */
+  --st-selected-text: #93c5fd;
+  --st-active-bg: rgba(59, 130, 246, 0.2);     /* pill activa */
+  --st-active-border: rgba(96, 165, 250, 0.5);
+  --st-active-text: #93c5fd;
+  --st-active-hover-bg: rgba(59, 130, 246, 0.32);
+  --st-active-hover-border: rgba(96, 165, 250, 0.7);
+  --st-active-hover-text: #bfdbfe;
+  --st-title: #f1f5f9;
+  --st-link-hover: #60a5fa;
+  --st-disabled-opacity: 0.45;
+  --st-focus-ring: 0 0 0 2px rgba(96, 165, 250, 0.6);
+}
+.light {
+  --st-text: #475569;
+  --st-bg: rgba(15, 23, 42, 0.04);
+  --st-border: rgba(15, 23, 42, 0.14);
+  --st-hover-bg: rgba(15, 23, 42, 0.1);
+  --st-hover-border: rgba(15, 23, 42, 0.28);
+  --st-hover-text: #0f172a;
+  --st-menu-hover: rgba(15, 23, 42, 0.06);
+  --st-row-hover: rgba(37, 99, 235, 0.09);
+  --st-row-hover-strong: rgba(37, 99, 235, 0.16);
+  --st-card-hover-bg: rgba(37, 99, 235, 0.1);
+  --st-card-hover-border: rgba(37, 99, 235, 0.4);
+  --st-selected-bg: rgba(37, 99, 235, 0.12);
+  --st-selected-text: #1d4ed8;
+  --st-active-bg: rgba(37, 99, 235, 0.14);
+  --st-active-border: rgba(37, 99, 235, 0.5);
+  --st-active-text: #1d4ed8;
+  --st-active-hover-bg: rgba(37, 99, 235, 0.24);
+  --st-active-hover-border: rgba(37, 99, 235, 0.7);
+  --st-active-hover-text: #1e40af;
+  --st-title: #0f172a;
+  --st-link-hover: #1d4ed8;
+  --st-focus-ring: 0 0 0 2px rgba(37, 99, 235, 0.55);
+}
+
 html, body, input, button, select, textarea {
   font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
   letter-spacing: -0.006em;
@@ -185,40 +240,28 @@ body {
    toggle de tema (solo se remapean las clases base, no sus variantes), así
    que se fijan directo por tema en vez de depender de utilities de Tailwind.
 ─────────────────────────────────────────────────────────────────────── */
-.filter-option:hover { background-color: rgba(255, 255, 255, 0.06); color: #ffffff; }
-.light .dashboard-shell .filter-option:hover { background-color: rgba(15, 23, 42, 0.06); color: #0f172a; }
-
-.filter-option-selected { background-color: rgba(59, 130, 246, 0.15); color: #93c5fd; }
-.light .dashboard-shell .filter-option-selected { background-color: rgba(37, 99, 235, 0.12); color: #1d4ed8; }
+.filter-option:hover { background-color: var(--st-menu-hover); color: var(--st-hover-text); }
+.filter-option-selected { background-color: var(--st-selected-bg); color: var(--st-selected-text); }
 
 /* ── Pills de filtro (Presales: Carga por preventa, Leads en estado de preventa) ──
    Estados completos por tema (reposo / hover / seleccionada / seleccionada+hover) en una sola
    clase, sin depender de utilidades bg-white/[..] cuyo override de tema claro (!important)
    anularía el hover. El estado activo se marca con data-active="true". */
 .pill-option {
-  background-color: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
+  background-color: var(--st-bg);
+  border-color: var(--st-border);
+  color: var(--st-text);
   cursor: pointer;
   transition: background-color 0.15s, border-color 0.15s, color 0.15s;
 }
-.pill-option:hover { background-color: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.22); color: #ffffff; }
-.pill-option[data-active="true"] { background-color: rgba(59, 130, 246, 0.2); border-color: rgba(96, 165, 250, 0.5); color: #93c5fd; }
-.pill-option[data-active="true"]:hover { background-color: rgba(59, 130, 246, 0.32); border-color: rgba(96, 165, 250, 0.7); color: #bfdbfe; }
-
-.light .dashboard-shell .pill-option {
-  background-color: rgba(15, 23, 42, 0.04);
-  border-color: rgba(15, 23, 42, 0.14);
-  color: #475569;
-}
-.light .dashboard-shell .pill-option:hover { background-color: rgba(15, 23, 42, 0.1); border-color: rgba(15, 23, 42, 0.28); color: #0f172a; }
-.light .dashboard-shell .pill-option[data-active="true"] { background-color: rgba(37, 99, 235, 0.14); border-color: rgba(37, 99, 235, 0.5); color: #1d4ed8; }
-.light .dashboard-shell .pill-option[data-active="true"]:hover { background-color: rgba(37, 99, 235, 0.24); border-color: rgba(37, 99, 235, 0.7); color: #1e40af; }
+.pill-option:hover { background-color: var(--st-hover-bg); border-color: var(--st-hover-border); color: var(--st-hover-text); }
+.pill-option[data-active="true"] { background-color: var(--st-active-bg); border-color: var(--st-active-border); color: var(--st-active-text); }
+.pill-option[data-active="true"]:hover { background-color: var(--st-active-hover-bg); border-color: var(--st-active-hover-border); color: var(--st-active-hover-text); }
+.pill-option:disabled { opacity: var(--st-disabled-opacity); cursor: default; }
 
 /* ── Gráfico de barras de Presales (Leads por mes): columna con hover y tooltip, por tema ── */
 .bar-col { transition: background-color 0.15s; }
-.bar-col:hover { background-color: rgba(255, 255, 255, 0.07); }
-.light .dashboard-shell .bar-col:hover { background-color: rgba(15, 23, 42, 0.06); }
+.bar-col:hover { background-color: var(--st-menu-hover); }
 
 .chart-tip {
   background: rgba(15, 18, 32, 0.97);
@@ -448,32 +491,26 @@ body {
 
 /* Hover de filas clicables en tablas de popups (dark y light) */
 .row-hover { transition: background-color 0.15s; }
-.row-hover:hover { background-color: rgba(59, 130, 246, 0.12); }
-.light .dashboard-shell .row-hover:hover { background-color: rgba(37, 99, 235, 0.09); }
+.row-hover:hover { background-color: var(--st-row-hover); }
 
 /* Metric cards clicables (Presales): hover con fondo y borde azules, por tema */
 .kpi-click { transition: background-color 0.15s, border-color 0.15s; }
-.kpi-click:hover { background-color: rgba(59, 130, 246, 0.14); border-color: rgba(59, 130, 246, 0.35); }
-.light .dashboard-shell .kpi-click:hover { background-color: rgba(37, 99, 235, 0.10); border-color: rgba(37, 99, 235, 0.4) !important; }
+.kpi-click:hover { background-color: var(--st-card-hover-bg); border-color: var(--st-card-hover-border); }
+.light .dashboard-shell .kpi-click:hover { border-color: var(--st-card-hover-border) !important; }
 
 /* Filas por compañía dentro de las metric cards: clicables, con hover propio */
 .kpi-split { transition: background-color 0.15s, color 0.15s; }
-.kpi-split:hover { background-color: rgba(59, 130, 246, 0.22); }
-.kpi-split:hover span { color: #e2e8f0; }
-.light .dashboard-shell .kpi-split:hover { background-color: rgba(37, 99, 235, 0.16); }
-.light .dashboard-shell .kpi-split:hover span { color: #0f172a; }
+.kpi-split:hover { background-color: var(--st-row-hover-strong); }
+.kpi-split:hover span { color: var(--st-title); }
 
 /* Nombre del lead en las tablas de popups: resalta al pasar el mouse sobre la fila */
-.lead-name { color: #f1f5f9; transition: color 0.15s; }
-.row-hover:hover .lead-name { color: #60a5fa; }
-.light .dashboard-shell .lead-name { color: #0f172a; }
-.light .dashboard-shell .row-hover:hover .lead-name { color: #1d4ed8; }
+.lead-name { color: var(--st-title); transition: color 0.15s; }
+.row-hover:hover .lead-name { color: var(--st-link-hover); }
 
 /* Encabezados de columna ordenables en tablas de popups: reposo y hover por tema */
 .th-sort { color: #64748b; transition: color 0.15s; }
-.th-sort:hover { color: #ffffff; }
-.light .dashboard-shell .th-sort { color: #64748b; }
-.light .dashboard-shell .th-sort:hover { color: #1d4ed8; }
+.th-sort:hover { color: var(--st-hover-text); }
+.light .dashboard-shell .th-sort:hover { color: var(--st-link-hover); }
 
 /* ── Cards de exámenes (Certificaciones): franja y etiqueta por nivel, disponibles / próximamente, dark y light ── */
 .exam-card {
@@ -580,8 +617,22 @@ body {
 
 /* Nombre de preventa clicable (abre su ficha) */
 .name-link { color: inherit; }
-.name-link:hover { text-decoration: underline; color: #60a5fa; }
-.light .dashboard-shell .name-link:hover { color: #1d4ed8; }
+.name-link:hover { text-decoration: underline; color: var(--st-link-hover); }
+
+/* Foco visible con teclado, igual en todos los controles interactivos */
+.pill-option:focus-visible, .filter-option:focus-visible, .row-hover:focus-visible, .kpi-click:focus-visible,
+.kpi-split:focus-visible, .th-sort:focus-visible, .name-link:focus-visible, .kb-colhead:focus-visible, .info-tip:focus-visible {
+  outline: none;
+  box-shadow: var(--st-focus-ring);
+}
+
+/* Icono de información (ⓘ "Cómo se calcula") */
+.info-pop { background: rgba(15, 18, 32, 0.98); border: 1px solid rgba(255, 255, 255, 0.16); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55); }
+.info-code { background: rgba(255, 255, 255, 0.08); color: #cbd5e1; }
+.light .dashboard-shell .info-pop { background: rgba(255, 255, 255, 0.99); border-color: rgba(15, 23, 42, 0.14); box-shadow: 0 12px 32px rgba(15, 23, 42, 0.2); }
+.light .dashboard-shell .info-code { background: rgba(15, 23, 42, 0.07); color: #334155; }
+.info-tip { color: var(--st-text); opacity: 0.8; transition: color 0.15s, opacity 0.15s; border-radius: 9999px; }
+.info-tip:hover, .info-tip[aria-expanded="true"] { color: var(--st-link-hover); opacity: 1; }
 
 /* Header de los modales en tema claro: degradé de claro a azul (en vez de oscuro a azul).
    Los textos sobre la parte clara pasan a oscuro; los botones (cerrar, etc.) quedan blancos sobre el azul. */
