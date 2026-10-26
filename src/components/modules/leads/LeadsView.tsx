@@ -22,6 +22,7 @@ import PresalesView from "./PresalesView";
 import LeadDetailModal from "./LeadDetailModal";
 import { uniqueEtapaActual } from "./etapaOrder";
 import InfoTip, { type InfoContent } from "@/components/ui/InfoTip";
+import UpdatedAgo from "@/components/ui/UpdatedAgo";
 
 /* ── helpers ─────────────────────────────────────────────────────────── */
 
@@ -1229,7 +1230,7 @@ export default function LeadsView() {
       <Topbar title="Leads" subtitle="Oportunidades sincronizadas desde ODOO CRM" tabs={canViewPresales ? topbarTabs : undefined} />
 
       {tab === "presales" && canViewPresales ? (
-        <PresalesView leads={leads} loading={loading} error={error} onReload={loadLeads} LeadsListModal={DayLeadsModal} />
+        <PresalesView leads={leads} loading={loading} error={error} onReload={loadLeads} updatedAt={lastFetch} LeadsListModal={DayLeadsModal} />
       ) : (
       <div className="flex-1 overflow-auto p-5 space-y-4 relative">
 
@@ -1285,6 +1286,7 @@ export default function LeadsView() {
                 </div>
 
                 {/* botones de acción — solo icono */}
+                <UpdatedAgo at={lastFetch} />
                 <button
                   onClick={loadLeads}
                   disabled={loading}

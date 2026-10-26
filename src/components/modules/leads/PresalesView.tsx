@@ -12,6 +12,7 @@ import { uniqueEtapaActual } from "./etapaOrder";
 import LeadDetailModal from "./LeadDetailModal";
 import PresalesOcupacionModal from "./PresalesOcupacionModal";
 import InfoTip, { type InfoContent } from "@/components/ui/InfoTip";
+import UpdatedAgo from "@/components/ui/UpdatedAgo";
 import PresalesKanbanBoard from "./PresalesKanbanBoard";
 import PresalesCycleCard from "./PresalesCycleCard";
 import PresalesAgendaCard from "./PresalesAgendaCard";
@@ -153,8 +154,8 @@ const HIDDEN_ETAPA_COLS = new Set(["oferta declinada", "no viable", "oferta no v
 export type LeadsListModalType = ComponentType<{ leads: Lead[]; title?: string; heading?: string; suffix?: string; showEstadoPreventaChips?: boolean; onClose: () => void }>;
 
 export default function PresalesView({
-  leads, loading, error, onReload, LeadsListModal,
-}: { leads: Lead[]; loading: boolean; error: string | null; onReload: () => void; LeadsListModal: LeadsListModalType }) {
+  leads, loading, error, onReload, updatedAt, LeadsListModal,
+}: { leads: Lead[]; loading: boolean; error: string | null; onReload: () => void; updatedAt?: Date | null; LeadsListModal: LeadsListModalType }) {
   const [listModal, setListModal] = useState<{ leads: Lead[]; heading: string; suffix?: string; chips?: boolean } | null>(null);
   const [fPreventa, setFPreventa] = useState("ALL");
   const [fLinea,    setFLinea]    = useState("ALL");
@@ -691,6 +692,7 @@ export default function PresalesView({
             className="pill-option flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border">
             <Settings size={13} /> Configuración
           </button>
+          <UpdatedAgo at={updatedAt ?? null} />
           <button onClick={onReload} disabled={loading} title="Actualizar" aria-label="Actualizar"
             className="pill-option flex items-center justify-center p-2.5 rounded-lg border disabled:opacity-60 disabled:cursor-default">
             <RefreshCw size={14} className={loading ? "animate-spin" : ""} />

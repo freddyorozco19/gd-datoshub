@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, ChevronRight, ArrowLeft, Clock, Gauge, UserCheck, UserCog } from "lucide-react";
+import { X, ChevronRight, ArrowLeft, Clock, Gauge, UserCheck, UserCog, Info } from "lucide-react";
 
 /* Configuración de la vista Presales — panel lateral estilo Azure ("blade"):
    lista de opciones → al elegir una se abre su detalle con botón de volver, y los cambios
@@ -139,6 +139,10 @@ export default function PresalesSettingsPanel({
             )}
           </div>
 
+          <p className="shrink-0 flex items-start gap-1.5 px-5 py-2.5 text-[11px] leading-snug text-slate-500 border-t border-white/[0.08]">
+            <Info size={12} className="mt-0.5 shrink-0" aria-hidden />
+            <span>Estos ajustes se guardan <b className="font-semibold text-slate-400">solo en este navegador</b>: no cambian lo que ven los demás. Los roles de Gestionar preventas sí son compartidos.</span>
+          </p>
           <div className="shrink-0 flex items-center justify-between gap-2 px-5 py-3.5 border-t border-white/[0.08]">
             <button type="button" onClick={() => setDraft({ ...DEFAULT_PRESALES_SETTINGS })}
               className="pill-option text-xs font-medium px-3 py-2 rounded-lg border">Restablecer</button>
