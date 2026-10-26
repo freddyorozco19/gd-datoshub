@@ -101,7 +101,6 @@ export default function PresalesCycleCard({
               ))}
             </div>
           </div>
-          <p className="text-[11px] text-slate-500">La barra es el promedio y la marca vertical la mediana. Un ciclo va de pasar a ABIERTO a pasar a CERRADO; un lead reabierto cuenta como un ciclo nuevo.</p>
         </>
       )}
     </div>
