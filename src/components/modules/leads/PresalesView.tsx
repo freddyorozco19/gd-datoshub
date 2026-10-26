@@ -17,7 +17,6 @@ import UpdatedAgo from "@/components/ui/UpdatedAgo";
 import PresalesKanbanBoard from "./PresalesKanbanBoard";
 import PresalesCycleCard from "./PresalesCycleCard";
 import FabricantesCard from "./FabricantesCard";
-import PresalesAgendaCard from "./PresalesAgendaCard";
 import PresalesPreventaModal from "./PresalesPreventaModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow, type PresalesKind } from "./PresalesManageModal";
@@ -488,7 +487,6 @@ export default function PresalesView({
     (!onlyActive || !l.preventa || statuses[l.preventa]?.active !== false)
   ), [leadsC, fPreventa, fLinea, onlyActive, statuses]);
   const [cycYear, setCycYear] = useState<number | "ALL">(new Date().getFullYear());
-  const agendaLeads = useMemo(() => chartScope.filter((l) => isOpen(l) && !!l.cierreEsperado), [chartScope]);
   const MES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
   const chartMonths = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, i) => ({
@@ -926,7 +924,7 @@ export default function PresalesView({
             </div>
           </div>
 
-          {/* tiempo de ciclo y agenda de cierres */}
+          {/* tiempo de ciclo y fabricantes */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             <Card title="Tiempo de ciclo en Preventa" info={INFO.ciclo}
               right={
@@ -942,15 +940,10 @@ export default function PresalesView({
                 onOpenPreventa={(n) => setFichaName(n)}
               />
             </Card>
-            <Card title="Agenda de cierres" info={INFO.agenda}>
-              <PresalesAgendaCard leads={agendaLeads} daysToClose={daysToClose} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
+            <Card title="Fabricantes" info={INFO.fabricantes}>
+              <FabricantesCard byLead={fabs} error={fabsError} scope={chartScope} onList={(ls, heading) => setListModal({ leads: ls, heading })} />
             </Card>
           </div>
-
-          {/* fabricantes */}
-          <Card title="Fabricantes" info={INFO.fabricantes}>
-            <FabricantesCard byLead={fabs} error={fabsError} scope={chartScope} onList={(ls, heading) => setListModal({ leads: ls, heading })} />
-          </Card>
 
           {/* kanban de Estado Preventa */}
           <Card title="Tablero estados preventa" info={INFO.tablero}>
