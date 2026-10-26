@@ -66,6 +66,15 @@ type Tab = "detalle" | "historial" | "timeline" | "notas";
 export default function LeadDetailModal({ lead, onClose, historyField = "estadoPreventa" }: Props) {
   const [tab, setTab] = useState<Tab>("detalle");
   const [attachments,        setAttachments]        = useState<OdooAttachment[] | null>(null);
+  const [fabricantes, setFabricantes] = useState<string[] | null>(null);   // x_fabricantes del lead (Odoo)
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/odoo/fabricantes?lead=${lead.id}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (!cancelled) setFabricantes((d?.fabricantes as string[] | undefined) ?? []); })
+      .catch(() => { if (!cancelled) setFabricantes([]); });
+    return () => { cancelled = true; };
+  }, [lead.id]);
   const [loadingAttachments, setLoadingAttachments] = useState(false);
 
   const [history,        setHistory]        = useState<PreventaHistoryEntry[] | null>(null);
@@ -263,6 +272,12 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
               <Field label="Línea"               value={lead.linea} />
               <Field label="Etapa Preventa"      value={lead.etapaPreventa} />
               <Field label="Fabricante"          value={lead.fabricante} />
+              <Field label="Fabricantes (Odoo)"  value={fabricantes === null ? "…" : (() => {
+                const real = [...new Set(fabricantes.filter((n) => !/^n\s*\/?\s*a$/i.test(n.trim())))];
+                return real.length ? (
+                  <span className="flex flex-wrap gap-1.5">{real.map((n) => <span key={n} className="text-[11px] px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400">{n}</span>)}</span>
+                ) : "";
+              })()} />
               <Field label="Tipo Cliente"        value={lead.tipoCliente} />
               <Field label="Tipo Venta"          value={lead.tipoVenta} />
             </div>

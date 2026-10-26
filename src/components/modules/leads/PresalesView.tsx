@@ -16,6 +16,7 @@ import InfoTip, { type InfoContent } from "@/components/ui/InfoTip";
 import UpdatedAgo from "@/components/ui/UpdatedAgo";
 import PresalesKanbanBoard from "./PresalesKanbanBoard";
 import PresalesCycleCard from "./PresalesCycleCard";
+import FabricantesCard from "./FabricantesCard";
 import PresalesAgendaCard from "./PresalesAgendaCard";
 import PresalesPreventaModal from "./PresalesPreventaModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
@@ -394,6 +395,7 @@ export default function PresalesView({
     carga: { rule: `Una fila por preventa. Abiertos: leads con Estado Preventa ABIERTO. Ocupación: abiertos ÷ máximo configurado (${CARGA_LIMIT}). Pipeline: ingreso esperado de sus abiertos. Estancados: abiertos con más de ${STALE_DAYS} días sin cambios.`, fields: ["x_studio_preventa", "x_studio_edopreventa", "expected_revenue", "write_date"] },
     porEstado: { rule: "Leads con Etapa Actual = Preventa agrupados por su Estado Preventa. Las pills Activo / Inactivo filtran por el campo active del lead (inactivo = archivado en Odoo).", fields: ["x_studio_edopreventa", "x_studio_etapa_actual", "active"] },
     porAnio: { rule: "Asignadas: primera vez que el lead pasa a la etapa Preventa. Cerradas: veces que el Estado Preventa pasa de ABIERTO a CERRADO. Un lead cuenta una vez por mes.", note: "Sale del historial de cambios de Odoo; el del Estado Preventa existe desde julio de 2025.", fields: ["stage_id (historial)", "x_studio_edopreventa (historial)", "create_date"] },
+    fabricantes: { rule: "Cuántos leads tiene cada fabricante y qué porcentaje de los ya cerrados se ganó (ganados / ganados + perdidos). Un lead con varios fabricantes cuenta una vez en cada uno. El pipeline suma solo el ingreso esperado en COP de los leads abiertos, porque GD INTERNATIONAL va en USD. Los registros N/A no se cuentan como fabricante.", note: "Los fabricantes por oportunidad se empezaron a cargar en Odoo en septiembre de 2026; el ranking solo cubre los leads cargados entonces.", fields: ["x_fabricantes (líneas por oportunidad)", "won_status", "expected_revenue"] },
     ciclo: { rule: "Días entre que un lead pasa a ABIERTO y pasa a CERRADO. Un lead reabierto cuenta como un ciclo nuevo. Se incluyen los ciclos cerrados en el año elegido.", note: "Del historial del Estado Preventa (desde julio de 2025).", fields: ["x_studio_edopreventa (historial)", "x_studio_preventa"] },
     agenda: { rule: "Leads abiertos con fecha de cierre esperada, agrupados por semana. Rojo: faltan 7 días o menos; ámbar: hasta 15; verde: más.", fields: ["date_deadline", "x_studio_edopreventa"] },
     tablero: { rule: "Una columna por Estado Preventa con los leads de Etapa Actual = Preventa que pasan los filtros de la página. Los filtros del propio tablero no afectan al resto.", fields: ["x_studio_edopreventa", "x_studio_etapa_actual"] },
@@ -453,6 +455,20 @@ export default function PresalesView({
         if (!cancelled) setTimeline(j as PresalesTimeline);
       })
       .catch((e) => { if (!cancelled) setTimelineError(e instanceof Error ? e.message : "No se pudo leer el historial."); });
+    return () => { cancelled = true; };
+  }, []);
+  /* fabricantes por oportunidad (x_fabricantes de Odoo) */
+  const [fabs, setFabs] = useState<Record<string, string[]> | null>(null);
+  const [fabsError, setFabsError] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/odoo/fabricantes")
+      .then(async (r) => {
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || `Error ${r.status}`);
+        if (!cancelled) setFabs(j.byLead as Record<string, string[]>);
+      })
+      .catch((e) => { if (!cancelled) setFabsError(e instanceof Error ? e.message : "No se pudieron leer los fabricantes."); });
     return () => { cancelled = true; };
   }, []);
   const [mHover, setMHover] = useState<string | null>(null);
@@ -930,6 +946,11 @@ export default function PresalesView({
               <PresalesAgendaCard leads={agendaLeads} daysToClose={daysToClose} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
             </Card>
           </div>
+
+          {/* fabricantes */}
+          <Card title="Fabricantes" info={INFO.fabricantes}>
+            <FabricantesCard byLead={fabs} error={fabsError} scope={chartScope} onList={(ls, heading) => setListModal({ leads: ls, heading })} />
+          </Card>
 
           {/* kanban de Estado Preventa */}
           <Card title="Tablero estados preventa" info={INFO.tablero}>

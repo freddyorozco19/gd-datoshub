@@ -551,6 +551,28 @@ export async function fetchPresalesTimeline(): Promise<PresalesTimeline> {
   return data;
 }
 
+/* ── Fabricantes por oportunidad ──────────────────────────────────────────────────────
+   El modelo de Studio x_fabricantes es una tabla de líneas: cada fila liga una oportunidad con un fabricante
+   (catálogo x__fabricantes). Un lead puede tener varias. No se exponen proveedores ni NIT. */
+let fabCache: { at: number; data: Record<string, string[]> } | null = null;
+
+export async function fetchLeadFabricantes(): Promise<Record<string, string[]>> {
+  if (fabCache && Date.now() - fabCache.at < 5 * 60 * 1000) return fabCache.data;
+  const uid = await login();
+  const lines = await executeKw<{ x_oportunidad: [number, string] | false; x_fabricantes: [number, string] | false }[]>(
+    uid, "x_fabricantes", "search_read", [[["x_oportunidad", "!=", false]]], { fields: ["x_oportunidad", "x_fabricantes"], limit: 0 },
+  );
+  const data: Record<string, string[]> = {};
+  for (const l of lines) {
+    if (!l.x_oportunidad) continue;
+    const id = String(l.x_oportunidad[0]);
+    const name = l.x_fabricantes ? l.x_fabricantes[1].trim() : "N/A";
+    (data[id] ??= []).push(name || "N/A");
+  }
+  fabCache = { at: Date.now(), data };
+  return data;
+}
+
 /* ── Timeline de un lead: recorrido por etapas y estados, con sus fechas ───────────────
    Etapas: historial de stage_id. El historial guarda el nombre con las formas antiguas y nuevas
    (p. ej. "Análisis y Validación" = "Preventa"), así que se unifican en 5 etapas + declinada / no viable. */
