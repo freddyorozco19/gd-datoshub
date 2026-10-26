@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, ChevronRight, ArrowLeft, Clock, Gauge, UserCheck, UserCog, Info, Timer } from "lucide-react";
+import { X, ChevronRight, ArrowLeft, Clock, Gauge, UserCheck, UserCog, Info } from "lucide-react";
 
 /* Configuración de la vista Presales — panel lateral estilo Azure ("blade"):
    lista de opciones → al elegir una se abre su detalle con botón de volver, y los cambios
@@ -12,12 +12,11 @@ export type PresalesSettings = {
   staleDays: number;     // días sin modificaciones para considerar un lead estancado
   maxOcupacion: number;  // máximo de leads abiertos por preventa (100 % de ocupación)
   onlyActive: boolean;   // ocultar preventas inactivos en la tabla de carga y en el filtro Preventa
-  slaDays: number;       // meta de tiempo de respuesta de preventa (días hasta la primera acción)
 };
 
-export const DEFAULT_PRESALES_SETTINGS: PresalesSettings = { staleDays: 14, maxOcupacion: 10, onlyActive: true, slaDays: 2 };
+export const DEFAULT_PRESALES_SETTINGS: PresalesSettings = { staleDays: 14, maxOcupacion: 10, onlyActive: true };
 
-export type SectionId = "estancados" | "ocupacion" | "preventas" | "respuesta";
+export type SectionId = "estancados" | "ocupacion" | "preventas";
 
 export default function PresalesSettingsPanel({
   settings, onSave, onClose, initialSection, onManagePreventas, blocked,
@@ -38,20 +37,18 @@ export default function PresalesSettingsPanel({
     return () => window.removeEventListener("keydown", onKey);
   }, [section, onClose, blocked]);
 
-  const dirty = draft.staleDays !== settings.staleDays || draft.maxOcupacion !== settings.maxOcupacion || draft.onlyActive !== settings.onlyActive || draft.slaDays !== settings.slaDays;
+  const dirty = draft.staleDays !== settings.staleDays || draft.maxOcupacion !== settings.maxOcupacion || draft.onlyActive !== settings.onlyActive;
   const valid = Number.isInteger(draft.staleDays) && draft.staleDays >= 1 && draft.staleDays <= 365
-    && Number.isInteger(draft.maxOcupacion) && draft.maxOcupacion >= 1 && draft.maxOcupacion <= 100
-    && Number.isInteger(draft.slaDays) && draft.slaDays >= 1 && draft.slaDays <= 60;
+    && Number.isInteger(draft.maxOcupacion) && draft.maxOcupacion >= 1 && draft.maxOcupacion <= 100;
 
   const sections: { id: SectionId; icon: typeof Clock; title: string; desc: string; value: string }[] = [
     { id: "estancados", icon: Clock,     title: "Leads estancados",       desc: "Tiempo sin modificaciones para considerar un lead estancado.", value: `${draft.staleDays} días` },
     { id: "ocupacion",  icon: Gauge,     title: "Ocupación máxima",       desc: "Máximo de leads abiertos por preventa al mismo tiempo (100 %).", value: `${draft.maxOcupacion} leads` },
-    { id: "respuesta",  icon: Timer,     title: "Meta de respuesta",      desc: "Días máximos entre que un lead pasa a Preventa y la preventa actúa.", value: `${draft.slaDays} ${draft.slaDays === 1 ? "día" : "días"}` },
     { id: "preventas",  icon: UserCheck, title: "Preventas inactivos",    desc: "Mostrar u ocultar a los preventas inactivos en la tabla y los filtros.", value: draft.onlyActive ? "Ocultos" : "Visibles" },
   ];
   const current = sections.find((s) => s.id === section);
 
-  const numInput = (key: "staleDays" | "maxOcupacion" | "slaDays", min: number, max: number, unit: string) => (
+  const numInput = (key: "staleDays" | "maxOcupacion", min: number, max: number, unit: string) => (
     <div className="flex items-center gap-3">
       <input
         type="number" inputMode="numeric" min={min} max={max} step={1}
@@ -122,12 +119,6 @@ export default function PresalesSettingsPanel({
                 <p className="text-sm text-slate-400">Un lead abierto se considera <span className="font-medium text-slate-200">estancado</span> cuando lleva más de este tiempo sin modificaciones en Odoo.</p>
                 {numInput("staleDays", 1, 365, "días sin cambios")}
                 <p className="text-[11px] text-slate-500">Afecta la card Estancados, la columna Estancados de Carga por preventa y la cola de gestión. Valor por defecto: {DEFAULT_PRESALES_SETTINGS.staleDays} días.</p>
-              </div>
-            ) : section === "respuesta" ? (
-              <div className="space-y-4">
-                <p className="text-sm text-slate-400">Tiempo que debería pasar entre que un lead <span className="font-medium text-slate-200">pasa a la etapa Preventa</span> y la preventa hace su primera acción.</p>
-                {numInput("slaDays", 1, 60, "días")}
-                <p className="text-[11px] text-slate-500">Se usa como meta en la card Tiempo de respuesta de preventa: las barras por encima de la meta se pintan en ámbar y, al doble, en rojo. Valor por defecto: {DEFAULT_PRESALES_SETTINGS.slaDays} días.</p>
               </div>
             ) : section === "ocupacion" ? (
               <div className="space-y-4">

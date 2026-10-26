@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { useSearchParams } from "next/navigation";
 import { RefreshCw, AlertCircle, Loader2, X, Maximize2, Settings } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
-import type { PresalesTimeline, PresalesResponse } from "@/lib/odoo/client";
+import type { PresalesTimeline } from "@/lib/odoo/client";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
 import FitRow from "./FitRow";
@@ -16,7 +16,6 @@ import InfoTip, { type InfoContent } from "@/components/ui/InfoTip";
 import UpdatedAgo from "@/components/ui/UpdatedAgo";
 import PresalesKanbanBoard from "./PresalesKanbanBoard";
 import PresalesCycleCard from "./PresalesCycleCard";
-import PresalesResponseCard from "./PresalesResponseCard";
 import PresalesAgendaCard from "./PresalesAgendaCard";
 import PresalesPreventaModal from "./PresalesPreventaModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
@@ -190,7 +189,7 @@ export default function PresalesView({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (deepPreventa && leads.length > 0) { setFichaName(deepPreventa); window.history.replaceState(null, "", window.location.pathname); }
   }, [deepPreventa, leads.length]);
-  const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive, slaDays: SLA_DAYS } = settings;
+  const { staleDays: STALE_DAYS, maxOcupacion: CARGA_LIMIT, onlyActive } = settings;
   const saveSettings = (next: PresalesSettings) => {
     setSettings(next);
     try { window.localStorage.setItem(SETTINGS_KEY, JSON.stringify(next)); } catch { /* sin almacenamiento: queda solo en memoria */ }
@@ -395,7 +394,6 @@ export default function PresalesView({
     carga: { rule: `Una fila por preventa. Abiertos: leads con Estado Preventa ABIERTO. Ocupación: abiertos ÷ máximo configurado (${CARGA_LIMIT}). Pipeline: ingreso esperado de sus abiertos. Estancados: abiertos con más de ${STALE_DAYS} días sin cambios.`, fields: ["x_studio_preventa", "x_studio_edopreventa", "expected_revenue", "write_date"] },
     porEstado: { rule: "Leads con Etapa Actual = Preventa agrupados por su Estado Preventa. Las pills Activo / Inactivo filtran por el campo active del lead (inactivo = archivado en Odoo).", fields: ["x_studio_edopreventa", "x_studio_etapa_actual", "active"] },
     porAnio: { rule: "Asignadas: primera vez que el lead pasa a la etapa Preventa. Cerradas: veces que el Estado Preventa pasa de ABIERTO a CERRADO. Un lead cuenta una vez por mes.", note: "Sale del historial de cambios de Odoo; el del Estado Preventa existe desde julio de 2025.", fields: ["stage_id (historial)", "x_studio_edopreventa (historial)", "create_date"] },
-    respuesta: { rule: "Tiempo entre que un lead pasa a la etapa Preventa y la primera acción de la preventa asignada: una nota o mensaje, una actividad completada, cualquier cambio suyo en el lead, o el paso del Estado Preventa a ABIERTO. Mediana y percentil 90, no promedio. Un lead creado ya en Preventa cuenta desde su creación.", note: "La preventa se identifica con la asignada hoy; si hubo reasignación, la acción de la anterior no se atribuye. Si la preventa no tiene usuario en Odoo, solo cuenta el paso a ABIERTO. Meta configurable en Configuración.", fields: ["stage_id (historial)", "x_studio_edopreventa (historial)", "x_studio_preventa", "mail.message (chatter)"] },
     ciclo: { rule: "Días entre que un lead pasa a ABIERTO y pasa a CERRADO. Un lead reabierto cuenta como un ciclo nuevo. Se incluyen los ciclos cerrados en el año elegido.", note: "Del historial del Estado Preventa (desde julio de 2025).", fields: ["x_studio_edopreventa (historial)", "x_studio_preventa"] },
     agenda: { rule: "Leads abiertos con fecha de cierre esperada, agrupados por semana. Rojo: faltan 7 días o menos; ámbar: hasta 15; verde: más.", fields: ["date_deadline", "x_studio_edopreventa"] },
     tablero: { rule: "Una columna por Estado Preventa con los leads de Etapa Actual = Preventa que pasan los filtros de la página. Los filtros del propio tablero no afectan al resto.", fields: ["x_studio_edopreventa", "x_studio_etapa_actual"] },
@@ -455,21 +453,6 @@ export default function PresalesView({
         if (!cancelled) setTimeline(j as PresalesTimeline);
       })
       .catch((e) => { if (!cancelled) setTimelineError(e instanceof Error ? e.message : "No se pudo leer el historial."); });
-    return () => { cancelled = true; };
-  }, []);
-  /* tiempo de respuesta: del paso a Preventa a la primera acción de la preventa (/api/presales/response) */
-  const [response, setResponse] = useState<PresalesResponse | null>(null);
-  const [responseError, setResponseError] = useState<string | null>(null);
-  const [respYear, setRespYear] = useState<number | "ALL">(new Date().getFullYear());
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/presales/response")
-      .then(async (r) => {
-        const j = await r.json();
-        if (!r.ok) throw new Error(j.error || `Error ${r.status}`);
-        if (!cancelled) setResponse(j as PresalesResponse);
-      })
-      .catch((e) => { if (!cancelled) setResponseError(e instanceof Error ? e.message : "No se pudo leer el historial."); });
     return () => { cancelled = true; };
   }, []);
   const [mHover, setMHover] = useState<string | null>(null);
@@ -947,23 +930,6 @@ export default function PresalesView({
               <PresalesAgendaCard leads={agendaLeads} daysToClose={daysToClose} fmtCOP={fmtCOP} fmtUSD={fmtUSD} onOpenLead={(l) => setSelected(l)} />
             </Card>
           </div>
-
-          {/* tiempo de respuesta de preventa */}
-          <Card title="Tiempo de respuesta de preventa" info={INFO.respuesta}
-            right={
-              <select value={String(respYear)} onChange={(e) => setRespYear(e.target.value === "ALL" ? "ALL" : Number(e.target.value))} aria-label="Año del tiempo de respuesta"
-                className="cmmi-select text-[11px] font-medium rounded-lg bg-white/[0.04] border border-white/[0.1] px-2 py-1 text-slate-200 focus:outline-none focus:border-blue-500/60">
-                <option value="ALL">Todos los años</option>
-                {chartYears.map((y) => <option key={y} value={y}>{y}</option>)}
-              </select>
-            }>
-            <PresalesResponseCard
-              data={response} error={responseError} scope={chartScope} year={respYear} slaDays={SLA_DAYS}
-              onList={(ls, heading) => setListModal({ leads: ls, heading })}
-              onOpenLead={(l) => setSelected(l)}
-              onOpenPreventa={(n) => setFichaName(n)}
-            />
-          </Card>
 
           {/* kanban de Estado Preventa */}
           <Card title="Tablero estados preventa" info={INFO.tablero}>
