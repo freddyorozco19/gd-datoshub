@@ -89,6 +89,13 @@ export default function PresalesPreventaModal({
     return {
       mine, open, stale, ocup, myMed, teamMed, dotsCiclo, dotsOcup, dotsStale, myCycles: myRows.length, perMonth, closed, y,
       pipeline: pipe(open),
+      mix: (() => {
+        const m = new Map<string, Lead[]>();
+        for (const l of mine) { const k = l.etapaPreventa.trim() || "Sin estado"; m.set(k, [...(m.get(k) ?? []), l]); }
+        const color = (k: string) => { const n = norm(k); return n === "abierto" ? "#378ADD" : n === "cerrado" ? "#1D9E75" : n === "sin estado" ? "#888780" : "#EF9F27"; };
+        const nice = (k: string) => (k === k.toUpperCase() ? k.charAt(0) + k.slice(1).toLowerCase() : k);
+        return [...m.entries()].sort((a, b) => b[1].length - a[1].length).map(([k, ls]) => ({ label: nice(k), leads: ls, color: color(k), faded: norm(k) === "sin estado" }));
+      })(),
       openSorted: [...open].sort((a, b) => daysSince(b) - daysSince(a)),
     };
   }, [leads, name, timeline, year, limit, peers, staleDays, daysSince, fmtCOP, fmtUSD]);
@@ -142,11 +149,10 @@ export default function PresalesPreventaModal({
     const inner = (
       <>
         <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
-        <p className="text-xl font-semibold tabular-nums text-slate-100 mt-0.5 truncate">{value}</p>
-        {hint && <p className="text-[11px] text-slate-500 truncate">{hint}</p>}
+        <p className="truncate"><span className="text-xl font-semibold tabular-nums text-slate-100">{value}</span>{hint && <span className="text-[11px] text-slate-500 ml-2">{hint}</span>}</p>
       </>
     );
-    const cls = "rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 min-w-0 text-left";
+    const cls = "rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 min-w-0 text-left";
     return onClick ? <button type="button" onClick={onClick} className={`${cls} row-hover cursor-pointer`}>{inner}</button> : <div className={cls}>{inner}</div>;
   };
 
@@ -155,7 +161,7 @@ export default function PresalesPreventaModal({
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
         style={{ backgroundColor: "var(--app-modal-overlay)" }}
         onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-        <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-4xl max-h-[88vh] flex flex-col overflow-hidden">
+        <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
           <div className="app-bar modal-header flex items-center justify-between gap-4 px-6 h-[68px] shrink-0 border-b border-white/[0.07]">
             <div className="flex items-center gap-3 min-w-0">
               <span className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white ${avatarOf(name)}`} aria-hidden>{personInitials(name)}</span>
@@ -167,7 +173,7 @@ export default function PresalesPreventaModal({
             <button type="button" onClick={onClose} title="Cerrar" aria-label="Cerrar" className="p-2 rounded-lg hover:bg-white/[0.12] transition-colors"><X size={18} /></button>
           </div>
 
-          <div className="flex-1 overflow-auto p-6 space-y-6">
+          <div className="flex-1 overflow-auto p-5 space-y-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {stat("Abiertos", String(d.open.length), `de ${limit} · pipeline ${d.pipeline}`, d.open.length ? () => onList(d.open, `${name} · abiertos`) : undefined)}
               {stat("Ocupación", `${d.ocup}%`, `equipo ${teamOcup}%`)}
@@ -175,62 +181,85 @@ export default function PresalesPreventaModal({
               {stat("Ciclo mediano", d.myCycles ? fmtDays(d.myMed) : "—", d.teamMed ? `equipo ${fmtDays(d.teamMed)}` : undefined)}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <section>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-2">Cierres por mes · {d.y}</h3>
-                <div className="flex items-end gap-1.5 h-[88px]">
-                  {d.perMonth.map((arr, i) => (
-                    <button key={i} type="button" disabled={arr.length === 0} onClick={() => onList(arr, `${name} · ${MES[i]} ${d.y}`)}
-                      title={`${arr.length} cierre${arr.length === 1 ? "" : "s"} en ${MES[i]}`}
-                      className="row-hover flex-1 h-full flex flex-col items-center justify-end gap-1 rounded-md pt-1 text-[11px] text-slate-400 disabled:cursor-default cursor-pointer">
-                      <span className="tabular-nums text-slate-300">{arr.length || ""}</span>
-                      <span className="w-full rounded-t bg-blue-500" style={{ height: `${(arr.length / maxMonth) * 54}px`, minHeight: arr.length ? 3 : 0 }} />
-                      <span>{MES[i]}</span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-              <section>
-                <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-200 mb-3">
-                  Frente al equipo
-                  <InfoTip
-                    rule="Cada punto gris es un preventa del equipo y el punto de color es esta ficha. La línea punteada es la referencia del equipo. Un clic en un punto gris abre la ficha de ese preventa."
-                    note="La referencia del equipo es la misma de la tabla y la card de Ocupación, así que sigue los filtros de la página. En ciclo y estancados el color indica si va mejor (verde) o peor (ámbar o rojo) que el equipo."
-                    fields={["Estado Preventa (x_studio_edopreventa)", "x_studio_preventa", "historial de etapas"]}
-                  />
-                </h3>
-                <div className="space-y-4">
-                  {strip("Ciclo mediano", d.myMed, d.teamMed, d.dotsCiclo, fmtDays, { lowerIsBetter: true })}
-                  {strip("Ocupación", d.ocup, teamOcup, d.dotsOcup, (v) => `${Math.round(v)}%`, { percent: true })}
-                  {strip("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, d.dotsStale, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
-                </div>
-              </section>
-            </div>
-
-            <section>
-              <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-2">Sus leads abiertos <span className="font-normal text-slate-500 normal-case tracking-normal">· los de más tiempo sin cambios primero</span></h3>
-              {d.openSorted.length === 0 ? <p className="text-xs text-slate-500 py-3">No tiene leads abiertos</p> : (
-                <div className="divide-y divide-white/[0.05]">
-                  {d.openSorted.map((l) => {
-                    const days = daysSince(l);
-                    const stale = days > staleDays;
-                    return (
-                      <button key={l.id} type="button" onClick={() => onOpenLead(l)} className="row-hover w-full flex items-center gap-3 text-left px-2 py-2 rounded-lg cursor-pointer">
-                        <span className="shrink-0 text-[11px] font-mono font-bold text-slate-400">#{l.id}</span>
-                        <span className="flex-1 min-w-0">
-                          <span className="block text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</span>
-                          <span className="block text-[11px] text-slate-500 truncate">{l.cliente || "—"}{l.cierreEsperado ? ` · cierre ${l.cierreEsperado.substring(0, 10)}` : ""}</span>
-                        </span>
-                        <span className="shrink-0 text-[11px] tabular-nums text-slate-300">{l.ingresosEsperados ? (isInt(l) ? fmtUSD(l.ingresosEsperados) : fmtCOP(l.ingresosEsperados)) : "—"}</span>
-                        <span className={`shrink-0 flex items-center gap-1 text-[11px] tabular-nums ${stale ? "text-rose-500 font-semibold" : "text-slate-400"}`}>
-                          {stale ? <AlertTriangle size={11} /> : <Clock size={11} />} {days} d
-                        </span>
+            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] gap-5 items-start">
+              <div className="space-y-5 min-w-0">
+                <section>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-2">Cierres por mes · {d.y}</h3>
+                  <div className="flex items-end gap-1.5 h-[88px]">
+                    {d.perMonth.map((arr, i) => (
+                      <button key={i} type="button" disabled={arr.length === 0} onClick={() => onList(arr, `${name} · ${MES[i]} ${d.y}`)}
+                        title={`${arr.length} cierre${arr.length === 1 ? "" : "s"} en ${MES[i]}`}
+                        className="row-hover flex-1 h-full flex flex-col items-center justify-end gap-1 rounded-md pt-1 text-[11px] text-slate-400 disabled:cursor-default cursor-pointer">
+                        <span className="tabular-nums text-slate-300">{arr.length || ""}</span>
+                        <span className="w-full rounded-t bg-blue-500" style={{ height: `${(arr.length / maxMonth) * 54}px`, minHeight: arr.length ? 3 : 0 }} />
+                        <span>{MES[i]}</span>
                       </button>
-                    );
-                  })}
-                </div>
-              )}
-            </section>
+                    ))}
+                  </div>
+                </section>
+                <section>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-2">Sus leads abiertos <span className="font-normal text-slate-500 normal-case tracking-normal">· los de más tiempo sin cambios primero</span></h3>
+                  {d.openSorted.length === 0 ? <p className="text-xs text-slate-500 py-3">No tiene leads abiertos</p> : (
+                    <div className="divide-y divide-white/[0.05]">
+                      {d.openSorted.slice(0, 5).map((l) => {
+                        const days = daysSince(l);
+                        const stale = days > staleDays;
+                        return (
+                          <button key={l.id} type="button" onClick={() => onOpenLead(l)} className="row-hover w-full flex items-center gap-3 text-left px-2 py-2 rounded-lg cursor-pointer">
+                            <span className="shrink-0 text-[11px] font-mono font-bold text-slate-400">#{l.id}</span>
+                            <span className="flex-1 min-w-0">
+                              <span className="block text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</span>
+                              <span className="block text-[11px] text-slate-500 truncate">{l.cliente || "—"}{l.cierreEsperado ? ` · cierre ${l.cierreEsperado.substring(0, 10)}` : ""}</span>
+                            </span>
+                            <span className="shrink-0 text-[11px] tabular-nums text-slate-300">{l.ingresosEsperados ? (isInt(l) ? fmtUSD(l.ingresosEsperados) : fmtCOP(l.ingresosEsperados)) : "—"}</span>
+                            <span className={`shrink-0 flex items-center gap-1 text-[11px] tabular-nums ${stale ? "text-rose-500 font-semibold" : "text-slate-400"}`}>
+                              {stale ? <AlertTriangle size={11} /> : <Clock size={11} />} {days} d
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                  {d.openSorted.length > 5 && (
+                    <button type="button" onClick={() => onList(d.openSorted, `${name} · abiertos`)} className="text-[11px] text-slate-500 hover:text-slate-300 px-2 pt-2 cursor-pointer">+{d.openSorted.length - 5} más · ver todos</button>
+                  )}
+                </section>
+              </div>
+              <div className="space-y-5 min-w-0">
+                <section>
+                  <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-200 mb-3">
+                    Frente al equipo
+                    <InfoTip
+                      rule="Cada punto gris es un preventa del equipo y el punto de color es esta ficha. La línea punteada es la referencia del equipo. Un clic en un punto gris abre la ficha de ese preventa."
+                      note="La referencia del equipo es la misma de la tabla y la card de Ocupación, así que sigue los filtros de la página. En ciclo y estancados el color indica si va mejor (verde) o peor (ámbar o rojo) que el equipo."
+                      fields={["Estado Preventa (x_studio_edopreventa)", "x_studio_preventa", "historial de etapas"]}
+                    />
+                  </h3>
+                  <div className="space-y-4">
+                    {strip("Ciclo mediano", d.myMed, d.teamMed, d.dotsCiclo, fmtDays, { lowerIsBetter: true })}
+                    {strip("Ocupación", d.ocup, teamOcup, d.dotsOcup, (v) => `${Math.round(v)}%`, { percent: true })}
+                    {strip("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, d.dotsStale, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
+                  </div>
+                </section>
+                <section>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-2">Sus leads por estado preventa</h3>
+                  {d.mix.length === 0 ? <p className="text-xs text-slate-500">Sin leads</p> : (
+                    <>
+                      <div className="flex h-3 rounded-full overflow-hidden gap-0.5">
+                        {d.mix.map((m) => <span key={m.label} className="block" style={{ width: `${(m.leads.length / d.mine.length) * 100}%`, backgroundColor: m.color, opacity: m.faded ? 0.5 : 1 }} title={`${m.label}: ${m.leads.length}`} />)}
+                      </div>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2">
+                        {d.mix.map((m) => (
+                          <button key={m.label} type="button" onClick={() => onList(m.leads, `${name} · ${m.label}`)} className="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-slate-200 cursor-pointer">
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: m.color, opacity: m.faded ? 0.5 : 1 }} />{m.label} <span className="tabular-nums text-slate-300">{m.leads.length}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </section>
+              </div>
+            </div>
           </div>
         </div>
       </div>
