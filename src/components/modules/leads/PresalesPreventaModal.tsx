@@ -17,8 +17,8 @@ const avatarOf = (name: string) => AVATAR[[...name].reduce((s, c) => s + c.charC
 const isInt = (l: Lead) => norm(l.compania || "").includes("international");
 
 export default function PresalesPreventaModal({
-  name, roleLabel, active, leads, timeline, year, limit, teamOcup, teamStale, staleDays, daysSince, fmtCOP, fmtUSD,
-  blocked, onClose, onOpenLead, onList,
+  name, roleLabel, active, leads, timeline, year, limit, teamOcup, teamStale, peers, staleDays, daysSince, fmtCOP, fmtUSD,
+  blocked, onClose, onOpenLead, onList, onOpenPreventa,
 }: {
   name: string;
   roleLabel: string;                         // Profesional, Líder o Gerente
@@ -29,6 +29,7 @@ export default function PresalesPreventaModal({
   limit: number;                             // máximo de leads abiertos (100 % de ocupación)
   teamOcup: number;                          // ocupación global del equipo (%)
   teamStale: number;                         // estancados promedio por preventa
+  peers: { name: string; open: number; stale: number }[];   // el equipo de referencia (preventas Profesionales) para los strip plots
   staleDays: number;
   daysSince: (l: Lead) => number;
   fmtCOP: (v: number) => string;
@@ -37,6 +38,7 @@ export default function PresalesPreventaModal({
   onClose: () => void;
   onOpenLead: (l: Lead) => void;
   onList: (leads: Lead[], heading: string) => void;
+  onOpenPreventa?: (name: string) => void;   // abrir la ficha de otro preventa desde un punto del strip plot
 }) {
   useEffect(() => {
     if (blocked) return;
@@ -55,6 +57,13 @@ export default function PresalesPreventaModal({
     const myRows = teamRows.filter((r) => r.lead.preventa === name);
     const myMed = median(myRows.map((r) => r.days));
     const teamMed = median(teamRows.map((r) => r.days));
+    // un punto por preventa del equipo (sin esta ficha) en cada métrica
+    const peerNames = new Set(peers.map((p) => p.name));
+    const cycByPeer = new Map<string, number[]>();
+    for (const r of teamRows) { if (peerNames.has(r.lead.preventa)) cycByPeer.set(r.lead.preventa, [...(cycByPeer.get(r.lead.preventa) ?? []), r.days]); }
+    const dotsCiclo = [...cycByPeer.entries()].filter(([n]) => n !== name).map(([n, ds]) => ({ name: n, v: median(ds) }));
+    const dotsOcup = peers.filter((p) => p.name !== name).map((p) => ({ name: p.name, v: Math.round((p.open / limit) * 100) }));
+    const dotsStale = peers.filter((p) => p.name !== name).map((p) => ({ name: p.name, v: p.stale }));
 
     // cierres por mes del año elegido (o del año en curso si se miran todos); cada lead cuenta una vez por mes
     const y = year === "ALL" ? new Date().getFullYear() : year;
@@ -75,27 +84,54 @@ export default function PresalesPreventaModal({
       return `${cop ? fmtCOP(cop) : ""}${cop && usd ? " · " : ""}${usd ? fmtUSD(usd) : ""}` || "—";
     };
     return {
-      mine, open, stale, ocup, myMed, teamMed, myCycles: myRows.length, perMonth, closed, y,
+      mine, open, stale, ocup, myMed, teamMed, dotsCiclo, dotsOcup, dotsStale, myCycles: myRows.length, perMonth, closed, y,
       pipeline: pipe(open),
       openSorted: [...open].sort((a, b) => daysSince(b) - daysSince(a)),
     };
-  }, [leads, name, timeline, year, limit, staleDays, daysSince, fmtCOP, fmtUSD]);
+  }, [leads, name, timeline, year, limit, peers, staleDays, daysSince, fmtCOP, fmtUSD]);
 
   const maxMonth = Math.max(1, ...d.perMonth.map((a) => a.length));
-  /* Comparación con el equipo: ambas marcas comparten escala (la ocupación va de 0 a 100 %; el resto, hasta un 20 % por encima
-     del mayor de los dos), así la barra y la marca del equipo siempre caen dentro del carril. El color dice si va mejor o peor. */
-  const compare = (label: string, mine: number, team: number, fmt: (v: number) => string, opts: { percent?: boolean; lowerIsBetter?: boolean }) => {
-    const max = opts.percent ? Math.max(100, mine, team) : Math.max(Math.max(mine, team) * 1.2, 1);
-    const pct = (v: number) => Math.min(100, Math.max(0, (v / max) * 100));
-    let color = "#378ADD";                                        // ocupación: informativa, sin bueno ni malo
+  /* Frente al equipo: un strip plot por métrica. Cada punto gris es un preventa del equipo (clic abre su ficha); el punto de color es
+     esta ficha y la línea punteada, la referencia del equipo. El color indica si va mejor o peor (en ocupación es informativo). */
+  const strip = (label: string, mine: number, team: number, dots: { name: string; v: number }[], fmt: (v: number) => string, opts: { percent?: boolean; lowerIsBetter?: boolean }) => {
+    const W = 640, PAD = 10, AX = 46;
+    const top = Math.max(mine, team, ...dots.map((x) => x.v), 1) * 1.08;
+    const raw = (opts.percent ? Math.max(100, top) : top) / 4;
+    const pow = Math.pow(10, Math.floor(Math.log10(raw)));
+    const step = ([1, 2, 2.5, 5, 10].find((m) => m * pow >= raw) ?? 10) * pow;
+    const max = step * 4;
+    const x = (v: number) => PAD + (Math.min(v, max) / max) * (W - 2 * PAD);
+    let color = "#378ADD";
     if (opts.lowerIsBetter) color = mine <= team ? "#1D9E75" : mine <= team * 1.5 ? "#EF9F27" : "#E24B4A";
+    const placed: [number, number][] = [];
+    const pts = dots.map((p) => {
+      const h = [...p.name].reduce((s, c) => s + c.charCodeAt(0), 0);
+      let cy = 30, k = 0;
+      const base = (h % 7) - 3;
+      while (k < 14 && placed.some(([px, py]) => Math.hypot(px - x(p.v), py - cy) < 9)) { cy = 30 + (((k % 2 ? 1 : -1) * (Math.floor(k / 2) + 1) * 5) + base * 0.5); k++; }
+      cy = Math.min(40, Math.max(14, cy));
+      placed.push([x(p.v), cy]);
+      return { ...p, cy };
+    });
     return (
-      <div className="space-y-1.5">
-        <div className="flex justify-between text-[11px]"><span className="text-slate-400">{label}</span><span className="tabular-nums text-slate-300">{fmt(mine)} <span className="text-slate-500">· equipo {fmt(team)}</span></span></div>
-        <div className="relative h-2 rounded-full bg-white/[0.08]">
-          <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${pct(mine)}%`, backgroundColor: color, minWidth: mine > 0 ? 6 : 0 }} />
-          <span className="absolute -top-1 -bottom-1 w-[3px] rounded bg-slate-200 ring-1 ring-black/30" style={{ left: `${pct(team)}%`, transform: "translateX(-50%)" }} title={`Equipo: ${fmt(team)}`} />
-        </div>
+      <div>
+        <div className="flex justify-between text-[11px] mb-1"><span className="text-slate-400">{label}</span><span className="tabular-nums text-slate-300">{fmt(mine)} <span className="text-slate-500">· equipo {fmt(team)}</span></span></div>
+        <svg viewBox={`0 0 ${W} 66`} className="w-full h-auto block" role="img" aria-label={`${label}: ${fmt(mine)} frente a ${fmt(team)} del equipo`}>
+          <line x1={PAD} y1={AX} x2={W - PAD} y2={AX} stroke="currentColor" strokeOpacity={0.18} />
+          {[0, 1, 2, 3, 4].map((i) => (
+            <g key={i}>
+              <line x1={x(step * i)} y1={AX - 3} x2={x(step * i)} y2={AX + 3} stroke="currentColor" strokeOpacity={0.25} />
+              <text x={x(step * i)} y={AX + 16} textAnchor="middle" fontSize={11} fill="currentColor" fillOpacity={0.5}>{fmt(step * i)}</text>
+            </g>
+          ))}
+          <line x1={x(team)} y1={6} x2={x(team)} y2={AX} stroke="currentColor" strokeOpacity={0.6} strokeWidth={2} strokeDasharray="3 3"><title>{`Equipo: ${fmt(team)}`}</title></line>
+          {pts.map((p) => (
+            <circle key={p.name} cx={x(p.v)} cy={p.cy} r={5} fill="currentColor" fillOpacity={0.4} className={onOpenPreventa ? "cursor-pointer hover:fill-opacity-80" : undefined}
+              onClick={onOpenPreventa ? () => onOpenPreventa(p.name) : undefined}><title>{`${p.name}: ${fmt(p.v)}`}</title></circle>
+          ))}
+          <circle cx={x(mine)} cy={30} r={10} fill={color} fillOpacity={0.25} />
+          <circle cx={x(mine)} cy={30} r={6} fill={color} stroke="var(--surface-1)" strokeWidth={1.5}><title>{`${name}: ${fmt(mine)}`}</title></circle>
+        </svg>
       </div>
     );
   };
@@ -153,10 +189,11 @@ export default function PresalesPreventaModal({
               </section>
               <section>
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-3">Frente al equipo</h3>
-                <div className="space-y-3.5">
-                  {compare("Ciclo mediano", d.myMed, d.teamMed, fmtDays, { lowerIsBetter: true })}
-                  {compare("Ocupación", d.ocup, teamOcup, (v) => `${Math.round(v)}%`, { percent: true })}
-                  {compare("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
+                <div className="space-y-4">
+                  {strip("Ciclo mediano", d.myMed, d.teamMed, d.dotsCiclo, fmtDays, { lowerIsBetter: true })}
+                  {strip("Ocupación", d.ocup, teamOcup, d.dotsOcup, (v) => `${Math.round(v)}%`, { percent: true })}
+                  {strip("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, d.dotsStale, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
+                  <p className="text-[11px] text-slate-500">Cada punto es un preventa del equipo; el de color es esta ficha. La línea punteada es la referencia del equipo.</p>
                 </div>
               </section>
             </div>
