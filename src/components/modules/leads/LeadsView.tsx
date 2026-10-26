@@ -18,6 +18,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import FilterSelect from "./FilterSelect";
 import DateRangeSlider from "./DateRangeSlider";
+import FitRow from "./FitRow";
 import PresalesView from "./PresalesView";
 import LeadDetailModal from "./LeadDetailModal";
 import { uniqueEtapaActual } from "./etapaOrder";
@@ -1244,8 +1245,9 @@ export default function LeadsView() {
 
         {/* ── barra de filtros (sin panel envolvente) ── */}
         <div>
-          {/* todo en filas — sin scroll horizontal, se ajusta con wrap */}
-          <div className="flex flex-wrap items-end gap-x-3 gap-y-3">
+          {/* una sola línea siempre: si no cabe, toda la barra se reduce proporcionalmente (FitRow) */}
+          <FitRow compact={false} minScale={0.4}
+            left={<>
             <FilterSelect label="Línea"          value={filters.linea}         onChange={(v) => setFilters((f) => ({ ...f, linea: v }))}         options={opts.linea} />
             <FilterSelect label="Comercial"      value={filters.comercial}     onChange={(v) => setFilters((f) => ({ ...f, comercial: v }))}     options={opts.comercial} />
             <FilterSelect label="Etapa Actual"   value={filters.etapa}         onChange={(v) => setFilters((f) => ({ ...f, etapa: v }))}         options={opts.etapa} />
@@ -1277,6 +1279,8 @@ export default function LeadsView() {
               onChange={(from, to) => setFilters((f) => ({ ...f, dateFrom: from, dateTo: to }))}
             />
 
+            </>}
+            right={<>
             <div className="w-px self-stretch bg-white/[0.08] shrink-0 mx-0.5" />
 
             {/* búsqueda + acciones */}
@@ -1313,7 +1317,8 @@ export default function LeadsView() {
                 </button>
               </div>
             </div>
-          </div>
+            </>}
+          />
         </div>
 
         {/* ── error ── */}

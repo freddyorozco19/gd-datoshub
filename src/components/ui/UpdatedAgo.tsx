@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from "react";
 
-/* "Actualizado hace 3 min": cuándo se leyeron por última vez los datos de Odoo. Se refresca solo cada 30 s. */
+/* "2 mins" / "Now": hace cuánto se leyeron por última vez los datos de Odoo. Se refresca solo cada 30 s. */
 
 export function agoText(at: Date, now: number): string {
   const mins = Math.max(0, Math.floor((now - at.getTime()) / 60000));
-  if (mins < 1) return "Actualizado ahora";
-  if (mins < 60) return `Actualizado hace ${mins} min`;
+  if (mins < 1) return "Now";
+  if (mins < 60) return `${mins} ${mins === 1 ? "min" : "mins"}`;
   const h = Math.floor(mins / 60);
-  if (h < 24) return `Actualizado hace ${h} h`;
+  if (h < 24) return `${h} h`;
   const d = Math.floor(h / 24);
-  return `Actualizado hace ${d} ${d === 1 ? "día" : "días"}`;
+  return `${d} d`;
 }
 
 export default function UpdatedAgo({ at, className = "" }: { at: Date | null; className?: string }) {
@@ -25,7 +25,7 @@ export default function UpdatedAgo({ at, className = "" }: { at: Date | null; cl
   return (
     <span
       className={`text-[11px] tabular-nums whitespace-nowrap ${stale ? "text-amber-500" : "text-slate-500"} ${className}`}
-      title={`Última lectura de Odoo: ${at.toLocaleString("es-CO")}`}
+      title={`Actualizado: ${at.toLocaleString("es-CO")}`}
     >
       {agoText(at, now)}
     </span>
