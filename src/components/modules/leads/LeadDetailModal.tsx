@@ -167,10 +167,10 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
           </div>
           <div className="flex items-center gap-1 shrink-0">
             <a href={odooUrl} target="_blank" rel="noopener noreferrer" title="Ver en ODOO CRM"
-              className="p-2 rounded-lg text-slate-400 hover:bg-orange-500/10 hover:text-orange-500 transition-colors">
+              className="modal-action p-2 rounded-lg text-slate-400 hover:bg-orange-500/10 hover:text-orange-500 transition-colors">
               <ExternalLink size={16} />
             </a>
-            <button onClick={onClose} className="p-2 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-300 transition-colors">
+            <button onClick={onClose} className="modal-action p-2 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-300 transition-colors">
               <X size={18} />
             </button>
           </div>
