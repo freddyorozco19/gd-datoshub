@@ -6,6 +6,7 @@ import { X, Clock, AlertTriangle } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import type { PresalesTimeline } from "@/lib/odoo/client";
 import { personInitials } from "./initials";
+import InfoTip from "@/components/ui/InfoTip";
 import { cyclesFor, median, fmtDays } from "./presalesCycle";
 
 /* Ficha de un preventa: carga actual, rendimiento del año frente al equipo y sus leads abiertos. */
@@ -190,12 +191,18 @@ export default function PresalesPreventaModal({
                 </div>
               </section>
               <section>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-3">Frente al equipo</h3>
+                <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-200 mb-3">
+                  Frente al equipo
+                  <InfoTip
+                    rule="Cada punto gris es un preventa del equipo y el punto de color es esta ficha. La línea punteada es la referencia del equipo. Un clic en un punto gris abre la ficha de ese preventa."
+                    note="La referencia del equipo es la misma de la tabla y la card de Ocupación, así que sigue los filtros de la página. En ciclo y estancados el color indica si va mejor (verde) o peor (ámbar o rojo) que el equipo."
+                    fields={["Estado Preventa (x_studio_edopreventa)", "x_studio_preventa", "historial de etapas"]}
+                  />
+                </h3>
                 <div className="space-y-4">
                   {strip("Ciclo mediano", d.myMed, d.teamMed, d.dotsCiclo, fmtDays, { lowerIsBetter: true })}
                   {strip("Ocupación", d.ocup, teamOcup, d.dotsOcup, (v) => `${Math.round(v)}%`, { percent: true })}
                   {strip("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, d.dotsStale, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
-                  <p className="text-[11px] text-slate-500">Cada punto es un preventa del equipo; el de color es esta ficha. La línea punteada es la referencia del equipo, igual que en la tabla y la card de Ocupación (sigue los filtros de la página).</p>
                 </div>
               </section>
             </div>
