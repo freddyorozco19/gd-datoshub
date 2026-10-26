@@ -59,17 +59,17 @@ export default function FabricantesCard({
   const max = Math.max(1, ...rows.map((r) => (metric === "leads" ? r.n : r.pipe)));
   const rateTone = (r: number) => (r >= 0.3 ? "text-emerald-400 bg-emerald-500/10" : r >= 0.15 ? "text-amber-400 bg-amber-500/10" : "text-rose-400 bg-rose-500/10");
 
-  const stat = (label: string, value: string, sub: string) => (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 min-w-0">
+  // mismo tamaño que las tarjetas de métricas de Tiempo de ciclo; el detalle va en el tooltip
+  const stat = (label: string, value: string, hint: string) => (
+    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 min-w-0" title={hint}>
       <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
       <p className="text-lg font-semibold tabular-nums text-slate-100 truncate">{value}</p>
-      <p className="text-[11px] text-slate-500 truncate">{sub}</p>
     </div>
   );
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         {stat("Leads con fabricante", num(d.withLine), `de ${num(scope.length)} en el filtro`)}
         {stat("Con dato útil", num(d.useful), "sin contar N/A")}
         {stat("Con varios fabricantes", num(d.several), "hasta 4 por lead")}
