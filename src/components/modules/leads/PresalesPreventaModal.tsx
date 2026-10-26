@@ -82,14 +82,19 @@ export default function PresalesPreventaModal({
   }, [leads, name, timeline, year, limit, staleDays, daysSince, fmtCOP, fmtUSD]);
 
   const maxMonth = Math.max(1, ...d.perMonth.map((a) => a.length));
-  const compare = (label: string, mine: number, team: number, fmt: (v: number) => string, color: string) => {
-    const max = Math.max(mine, team, 1);
+  /* Comparación con el equipo: ambas marcas comparten escala (la ocupación va de 0 a 100 %; el resto, hasta un 20 % por encima
+     del mayor de los dos), así la barra y la marca del equipo siempre caen dentro del carril. El color dice si va mejor o peor. */
+  const compare = (label: string, mine: number, team: number, fmt: (v: number) => string, opts: { percent?: boolean; lowerIsBetter?: boolean }) => {
+    const max = opts.percent ? Math.max(100, mine, team) : Math.max(Math.max(mine, team) * 1.2, 1);
+    const pct = (v: number) => Math.min(100, Math.max(0, (v / max) * 100));
+    let color = "#378ADD";                                        // ocupación: informativa, sin bueno ni malo
+    if (opts.lowerIsBetter) color = mine <= team ? "#1D9E75" : mine <= team * 1.5 ? "#EF9F27" : "#E24B4A";
     return (
-      <div className="space-y-1">
+      <div className="space-y-1.5">
         <div className="flex justify-between text-[11px]"><span className="text-slate-400">{label}</span><span className="tabular-nums text-slate-300">{fmt(mine)} <span className="text-slate-500">· equipo {fmt(team)}</span></span></div>
-        <div className="relative h-1.5 rounded-full bg-white/[0.08]">
-          <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${(mine / max) * 100}%`, backgroundColor: color }} />
-          <span className="absolute -top-0.5 -bottom-0.5 w-0.5 rounded bg-slate-300" style={{ left: `${Math.min(100, (team / max) * 100)}%` }} title="Equipo" />
+        <div className="relative h-2 rounded-full bg-white/[0.08]">
+          <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${pct(mine)}%`, backgroundColor: color, minWidth: mine > 0 ? 6 : 0 }} />
+          <span className="absolute -top-1 -bottom-1 w-[3px] rounded bg-slate-200 ring-1 ring-black/30" style={{ left: `${pct(team)}%`, transform: "translateX(-50%)" }} title={`Equipo: ${fmt(team)}`} />
         </div>
       </div>
     );
@@ -149,9 +154,9 @@ export default function PresalesPreventaModal({
               <section>
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-200 mb-3">Frente al equipo</h3>
                 <div className="space-y-3.5">
-                  {compare("Ciclo mediano", d.myMed, d.teamMed, fmtDays, "#378ADD")}
-                  {compare("Ocupación", d.ocup, teamOcup, (v) => `${Math.round(v)}%`, "#1D9E75")}
-                  {compare("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, (v) => String(v), "#E24B4A")}
+                  {compare("Ciclo mediano", d.myMed, d.teamMed, fmtDays, { lowerIsBetter: true })}
+                  {compare("Ocupación", d.ocup, teamOcup, (v) => `${Math.round(v)}%`, { percent: true })}
+                  {compare("Estancados", d.stale.length, Math.round(teamStale * 10) / 10, (v) => v.toLocaleString("es-CO", { maximumFractionDigits: 1 }), { lowerIsBetter: true })}
                 </div>
               </section>
             </div>
