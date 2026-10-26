@@ -653,11 +653,11 @@ body {
 .light .dashboard-shell .modal-header button,
 .light .dashboard-shell .modal-header button * { color: #ffffff !important; }
 
-/* Botones de acción del header de un modal (ver en Odoo, cerrar): en tema claro quedan sobre la parte intermedia del
-   degradé, donde el gris del icono se pierde; se les da un fondo claro y el icono oscuro. */
+/* Botones de acción del header de un modal (ver en Odoo, cerrar): sin fondo. En tema claro quedan sobre la parte final del
+   degradé (gris azulado a azul oscuro), así que el icono va blanco con una sombra fina para leerse en todo el recorrido. */
 .light .dashboard-shell .modal-header .modal-action {
-  background: rgba(255, 255, 255, 0.9);
-  color: #0f172a !important;
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.14);
+  background: transparent !important;
+  color: #ffffff !important;
+  filter: drop-shadow(0 0 2px rgba(15, 23, 42, 0.65));
 }
-.light .dashboard-shell .modal-header .modal-action:hover { background: #ffffff; color: #c2410c !important; }
+.light .dashboard-shell .modal-header .modal-action:hover { color: #fdba74 !important; }
