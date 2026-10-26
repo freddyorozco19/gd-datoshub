@@ -1,28 +1,28 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Loader2 } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 
 /* Fabricantes: ranking por leads o por pipeline abierto, con la tasa de ganados entre los leads ya cerrados.
    Un lead puede tener varios fabricantes: cuenta una vez en cada uno. "N/A" no es un fabricante: se aparta como cobertura pendiente. */
 
-type Metric = "leads" | "pipeline";
+export type FabMetric = "leads" | "pipeline";
+type Metric = FabMetric;
 const isNA = (n: string) => /^n\s*\/?\s*a$/i.test(n.trim());
 const num = (n: number) => n.toLocaleString("es-CO");
 const fmtM = (v: number) => (v >= 1e9 ? `$${(v / 1e9).toLocaleString("es-CO", { maximumFractionDigits: 1 })} mil M` : `$${Math.round(v / 1e6).toLocaleString("es-CO")} M`);
 const isCOP = (l: Lead) => !/international/i.test(l.compania);   // el pipeline solo suma COP: GD INTERNATIONAL va en USD
 
 export default function FabricantesCard({
-  byLead, error, scope, onList,
+  byLead, error, scope, metric, onList,
 }: {
   byLead: Record<string, string[]> | null;
   error: string | null;
   scope: Lead[];
+  metric: Metric;          // la elige el header de la card (pills Leads / Pipeline)
   onList: (leads: Lead[], heading: string) => void;
 }) {
-  const [metric, setMetric] = useState<Metric>("leads");
-
   const d = useMemo(() => {
     if (!byLead) return null;
     const by = new Map<string, { leads: Lead[]; won: number; lost: number; pipe: number }>();
@@ -69,13 +69,6 @@ export default function FabricantesCard({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end gap-1.5">
-        {([["leads", "Leads"], ["pipeline", "Pipeline"]] as const).map(([k, label]) => (
-          <button key={k} type="button" onClick={() => setMetric(k)} data-active={metric === k} aria-pressed={metric === k}
-            className="pill-option text-[11px] font-semibold px-3 py-1.5 rounded-lg border whitespace-nowrap">{label}</button>
-        ))}
-      </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
         {stat("Leads con fabricante", num(d.withLine), `de ${num(scope.length)} en el filtro`)}
         {stat("Con dato útil", num(d.useful), "sin contar N/A")}

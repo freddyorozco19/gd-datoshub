@@ -16,7 +16,7 @@ import InfoTip, { type InfoContent } from "@/components/ui/InfoTip";
 import UpdatedAgo from "@/components/ui/UpdatedAgo";
 import PresalesKanbanBoard from "./PresalesKanbanBoard";
 import PresalesCycleCard from "./PresalesCycleCard";
-import FabricantesCard from "./FabricantesCard";
+import FabricantesCard, { type FabMetric } from "./FabricantesCard";
 import PresalesPreventaModal from "./PresalesPreventaModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow, type PresalesKind } from "./PresalesManageModal";
@@ -459,6 +459,7 @@ export default function PresalesView({
   /* fabricantes por oportunidad (x_fabricantes de Odoo) */
   const [fabs, setFabs] = useState<Record<string, string[]> | null>(null);
   const [fabsError, setFabsError] = useState<string | null>(null);
+  const [fabMetric, setFabMetric] = useState<FabMetric>("leads");
   useEffect(() => {
     let cancelled = false;
     fetch("/api/odoo/fabricantes")
@@ -940,8 +941,16 @@ export default function PresalesView({
                 onOpenPreventa={(n) => setFichaName(n)}
               />
             </Card>
-            <Card title="Fabricantes" info={INFO.fabricantes}>
-              <FabricantesCard byLead={fabs} error={fabsError} scope={chartScope} onList={(ls, heading) => setListModal({ leads: ls, heading })} />
+            <Card title="Fabricantes" info={INFO.fabricantes}
+              right={
+                <div className="flex gap-1.5">
+                  {([["leads", "Leads"], ["pipeline", "Pipeline"]] as const).map(([k, label]) => (
+                    <button key={k} type="button" onClick={() => setFabMetric(k)} data-active={fabMetric === k} aria-pressed={fabMetric === k}
+                      className="pill-option text-[11px] font-semibold px-3 py-1.5 rounded-lg border whitespace-nowrap">{label}</button>
+                  ))}
+                </div>
+              }>
+              <FabricantesCard byLead={fabs} error={fabsError} scope={chartScope} metric={fabMetric} onList={(ls, heading) => setListModal({ leads: ls, heading })} />
             </Card>
           </div>
 
