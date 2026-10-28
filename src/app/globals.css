@@ -662,3 +662,30 @@ body {
 }
 .light .dashboard-shell .modal-header .modal-action:hover { background: rgba(255, 255, 255, 0.2) !important; }
 .light .dashboard-shell .modal-header a.modal-action:hover { color: #fdba74 !important; }
+
+/* Certificaciones: campos de búsqueda/filtro y pills de nivel, con tokens por tema (las clases bg-slate-800/50 no se traducen al tema claro). */
+.cert-field {
+  background: rgba(30, 41, 59, 0.5);
+  border-color: var(--border, rgba(255, 255, 255, 0.1));
+  color: #cbd5e1;
+}
+.cert-field::placeholder { color: #64748b; }
+.light .dashboard-shell .cert-field {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(15, 23, 42, 0.18);
+  color: #0f172a;
+}
+.light .dashboard-shell .cert-field::placeholder { color: #64748b; }
+.light .dashboard-shell .cert-field:hover { border-color: rgba(15, 23, 42, 0.32); }
+
+.lvl { border-width: 1px; border-style: solid; }
+.lvl-fundamental  { color: #34d399; background: rgba(6, 78, 59, 0.3);  border-color: #065f46; }
+.lvl-associate    { color: #60a5fa; background: rgba(30, 58, 138, 0.3); border-color: #1e40af; }
+.lvl-expert       { color: #fbbf24; background: rgba(120, 53, 15, 0.3); border-color: #92400e; }
+.lvl-professional { color: #c084fc; background: rgba(88, 28, 135, 0.3); border-color: #6b21a8; }
+.lvl-specialty    { color: #fb7185; background: rgba(136, 19, 55, 0.3); border-color: #9f1239; }
+.light .dashboard-shell .lvl-fundamental  { color: #065f46; background: #d1fae5; border-color: #6ee7b7; }
+.light .dashboard-shell .lvl-associate    { color: #1e40af; background: #dbeafe; border-color: #93c5fd; }
+.light .dashboard-shell .lvl-expert       { color: #92400e; background: #fef3c7; border-color: #fcd34d; }
+.light .dashboard-shell .lvl-professional { color: #6b21a8; background: #f3e8ff; border-color: #d8b4fe; }
+.light .dashboard-shell .lvl-specialty    { color: #9f1239; background: #ffe4e6; border-color: #fda4af; }

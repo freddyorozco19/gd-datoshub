@@ -413,11 +413,12 @@ const LEVEL_ORDER: Record<string, number> = {
 }
 
 const LEVEL_COLOR: Record<string, string> = {
-  Fundamental:  'text-emerald-400 bg-emerald-900/30 border-emerald-800',
-  Associate:    'text-blue-400    bg-blue-900/30    border-blue-800',
-  Expert:       'text-amber-400   bg-amber-900/30   border-amber-800',
-  Professional: 'text-purple-400  bg-purple-900/30  border-purple-800',
-  Specialty:    'text-rose-400    bg-rose-900/30    border-rose-800',
+  // clases propias (ver .lvl-* en globals.css): dan el contraste correcto en tema claro y oscuro
+  Fundamental:  'lvl lvl-fundamental',
+  Associate:    'lvl lvl-associate',
+  Expert:       'lvl lvl-expert',
+  Professional: 'lvl lvl-professional',
+  Specialty:    'lvl lvl-specialty',
 }
 
 // ─── Level 1: Provider cards ─────────────────────────────────────────────────
@@ -2388,11 +2389,11 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
               type="text" value={search}
               onChange={e => { setSearch(e.target.value); setPage(1) }}
               placeholder="Buscar pregunta, opción, respuesta..."
-              className="w-full bg-slate-800/50 border border-border rounded-lg pl-8 pr-3 py-2 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-primary/60 transition-colors"
+              className="cert-field w-full border rounded-lg pl-8 pr-3 py-2 text-sm focus:outline-none focus:border-primary/60 transition-colors"
             />
           </div>
           <select value={filter} onChange={e => { setFilter(e.target.value as FilterType); setPage(1) }}
-            className="bg-slate-800/50 border border-border rounded-lg px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-primary/60 cursor-pointer">
+            className="cert-field border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary/60 cursor-pointer">
             <option value="all">Todos los tipos</option>
             <option value="mc">Opción múltiple</option>
             <option value="yn">Sí / No</option>
@@ -2404,7 +2405,7 @@ function ExamViewer({ exam, provider }: { exam: ExamConfig; provider?: ProviderC
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${
               showTagPanel || activeTag
                 ? 'bg-primary/15 border-primary/40 text-primary'
-                : 'bg-slate-800/50 border-border text-slate-400 hover:text-slate-200 hover:border-slate-500'
+                : 'cert-field text-slate-400 hover:text-slate-200 hover:border-slate-500'
             }`}
           >
             <Filter size={13} />
