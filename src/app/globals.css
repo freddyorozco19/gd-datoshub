@@ -689,3 +689,20 @@ body {
 .light .dashboard-shell .lvl-expert       { color: #92400e; background: #fef3c7; border-color: #fcd34d; }
 .light .dashboard-shell .lvl-professional { color: #6b21a8; background: #f3e8ff; border-color: #d8b4fe; }
 .light .dashboard-shell .lvl-specialty    { color: #9f1239; background: #ffe4e6; border-color: #fda4af; }
+
+/* Certificaciones: estado "Descontinuado" y opciones de respuesta del modo examen, por tema. */
+.est-descontinuado { color: #94a3b8; background: rgba(30, 41, 59, 0.5); border-color: #334155; }
+.light .dashboard-shell .est-descontinuado { color: #475569; background: #f1f5f9; border-color: #cbd5e1; }
+
+.opt-default  { background: rgba(30, 41, 59, 0.5); border-color: rgba(51, 65, 85, 0.5); color: #cbd5e1; }
+.opt-default:hover { background: rgba(255, 255, 255, 0.05); border-color: #64748b; }
+.opt-selected { background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.7); color: #ffffff; }
+.opt-correct  { background: rgba(6, 78, 59, 0.3); border-color: rgba(5, 150, 105, 0.6); color: #6ee7b7; }
+.opt-wrong    { background: rgba(127, 29, 29, 0.3); border-color: rgba(220, 38, 38, 0.6); color: #fca5a5; }
+.opt-dim      { background: rgba(30, 41, 59, 0.3); border-color: rgba(51, 65, 85, 0.3); color: #64748b; }
+.light .dashboard-shell .opt-default  { background: rgba(255, 255, 255, 0.85); border-color: rgba(15, 23, 42, 0.16); color: #0f172a; }
+.light .dashboard-shell .opt-default:hover { background: #ffffff; border-color: rgba(15, 23, 42, 0.35); }
+.light .dashboard-shell .opt-selected { background: #dbeafe; border-color: #3b82f6; color: #1e3a8a; }
+.light .dashboard-shell .opt-correct  { background: #d1fae5; border-color: #10b981; color: #065f46; }
+.light .dashboard-shell .opt-wrong    { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+.light .dashboard-shell .opt-dim      { background: rgba(241, 245, 249, 0.8); border-color: rgba(15, 23, 42, 0.1); color: #64748b; }

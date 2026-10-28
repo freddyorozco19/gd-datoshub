@@ -754,13 +754,13 @@ function QuestionCard({
                 const isCorrect   = isCorrectOpt(opt, shown.correctAnswer)
 
                 const revealMode = verified || showAns
-                let cls = 'bg-slate-800/50 border-slate-700/50 text-slate-300 hover:bg-white/5 hover:border-slate-500 cursor-pointer'
+                let cls = 'opt-default cursor-pointer'
                 if (!revealMode) {
-                  if (isSelected) cls = 'bg-primary/20 border-primary/70 text-white cursor-pointer'
+                  if (isSelected) cls = 'opt-selected cursor-pointer'
                 } else {
-                  if (isCorrect)               cls = 'bg-emerald-900/30 border-emerald-600/60 text-emerald-300 cursor-default'
-                  else if (verified && isSelected) cls = 'bg-red-900/30 border-red-600/60 text-red-300 cursor-default'
-                  else                         cls = 'bg-slate-800/30 border-slate-700/30 text-slate-500 cursor-default opacity-60'
+                  if (isCorrect)               cls = 'opt-correct cursor-default'
+                  else if (verified && isSelected) cls = 'opt-wrong cursor-default'
+                  else                         cls = 'opt-dim cursor-default opacity-60'
                 }
 
                 return (
@@ -2561,9 +2561,10 @@ const ESTADO_LABEL: Record<Estado, string> = {
   descontinuado: 'Descontinuado',
 }
 const ESTADO_COLOR: Record<Estado, string> = {
-  disponible:    'text-emerald-400 bg-emerald-900/30 border-emerald-800',
-  proximamente:  'text-amber-400   bg-amber-900/30   border-amber-800',
-  descontinuado: 'text-slate-400   bg-slate-800/50    border-slate-700',
+  // clases propias (ver .lvl-* y .est-* en globals.css) para que se lean en tema claro y oscuro
+  disponible:    'lvl lvl-fundamental',
+  proximamente:  'lvl lvl-expert',
+  descontinuado: 'lvl est-descontinuado',
 }
 
 function flattenExams(): FlatExam[] {
