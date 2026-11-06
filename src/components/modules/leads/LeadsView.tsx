@@ -1045,12 +1045,15 @@ export default function LeadsView() {
   }, [deepLeadId, leads]);
   useEffect(() => { setCurrentPage(1); }, [filters, search, sort]);
 
+  /* una sola columna: todas las preventas del lead (una por línea asignada) */
+  const preventasDe = (l: Lead) => Array.from(new Set([l.preventa, ...(l.asignaciones ?? []).map((a) => a.preventa)].filter(Boolean))).join(" · ");
+
   /* opciones de filtros */
   const opts = useMemo(() => ({
     comercial:       unique(leads.map((l) => l.comercial)),
     linea:           unique(leads.map((l) => l.linea)),
     etapaPreventa:   unique(leads.map((l) => l.etapaPreventa)),
-    preventa:        unique(leads.map((l) => l.preventa)),
+    preventa:        unique(leads.flatMap((l) => [l.preventa, ...(l.asignaciones ?? []).map((a) => a.preventa)])),
     etapa:           uniqueEtapaActual(leads.map((l) => l.etapa)),
   }), [leads]);
 
@@ -1072,7 +1075,7 @@ export default function LeadsView() {
     if (filters.comercial       !== "ALL") data = data.filter((l) => l.comercial       === filters.comercial);
     if (filters.linea           !== "ALL") data = data.filter((l) => l.linea           === filters.linea);
     if (filters.etapaPreventa   !== "ALL") data = data.filter((l) => l.etapaPreventa   === filters.etapaPreventa);
-    if (filters.preventa        !== "ALL") data = data.filter((l) => l.preventa        === filters.preventa);
+    if (filters.preventa        !== "ALL") data = data.filter((l) => l.preventa === filters.preventa || (l.asignaciones ?? []).some((a) => a.preventa === filters.preventa));
     if (filters.activo          !== "ALL") data = data.filter((l) => String(l.activo)  === filters.activo);
     if (filters.etapa           !== "ALL") data = data.filter((l) => l.etapa           === filters.etapa);
     // 2. rango de fechas
@@ -1486,7 +1489,7 @@ export default function LeadsView() {
                             <td className="px-3 py-3 whitespace-nowrap max-w-[180px]">
                               {lead.linea ? <span className="text-slate-300 truncate inline-block max-w-full align-bottom" title={lead.linea}>{lineaLabel(lead.linea)}</span> : <span className="text-slate-600">—</span>}
                             </td>
-                            <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.preventa || "—"}</td>
+                            <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{preventasDe(lead) || "—"}</td>
                             <td className="px-3 py-3 text-slate-300 whitespace-nowrap">{lead.etapaPreventa || "—"}</td>
                             <td className="px-3 py-3 whitespace-nowrap">
                               {(() => { const ep = estadoPreventa(lead.preventa); return ep.cls.startsWith("text-")
