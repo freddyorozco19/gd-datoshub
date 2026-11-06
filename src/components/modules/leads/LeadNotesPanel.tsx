@@ -100,7 +100,7 @@ export default function LeadNotesPanel({ notes, loading, error }: { notes: LeadN
         <section key={g.key}>
           <div className="flex items-center gap-3 mb-2">
             <span className="flex-1 h-px bg-white/[0.08]" />
-            <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{g.label}</span>
+            <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{g.label}</span>
             <span className="flex-1 h-px bg-white/[0.08]" />
           </div>
           <ol className="space-y-2.5">

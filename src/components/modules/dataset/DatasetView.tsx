@@ -238,7 +238,7 @@ export default function DatasetView() {
     return meta.filter((f) => !f.heavy && (!nq || norm(f.name).includes(nq) || norm(f.label).includes(nq))).slice(0, 200);
   }, [meta, pickerQ]);
 
-  const lbl = "text-[10px] font-semibold uppercase tracking-wide text-slate-500 text-center whitespace-nowrap";
+  const lbl = "text-[11px] font-semibold uppercase tracking-wide text-slate-500 text-center whitespace-nowrap";
   const inputCls = "rounded-lg bg-white/[0.04] border border-white/[0.1] px-3 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/60";
 
   return (
@@ -361,7 +361,7 @@ export default function DatasetView() {
                         return (
                           <th key={c} onClick={() => toggleSort(f, c)}
                             className={`dataset-head ${isId ? "dataset-id" : ""} th-sort text-left font-semibold px-3 py-2.5 whitespace-nowrap ${f?.stored ? "cursor-pointer" : ""}`}>
-                            <span className="flex items-center gap-1 uppercase tracking-wide text-[10px]">
+                            <span className="flex items-center gap-1 uppercase tracking-wide text-[11px]">
                               {isId && <Key size={11} />}
                               {f?.label ?? c}
                               {active && (sort.dir === "asc" ? <ArrowUp size={11} /> : <ArrowDown size={11} />)}
@@ -434,7 +434,7 @@ export default function DatasetView() {
               <div className="overflow-auto max-h-[calc(100vh-250px)]">
                 <table className="w-full text-xs">
                   <thead>
-                    <tr className="text-[10px] uppercase tracking-wide">
+                    <tr className="text-[11px] uppercase tracking-wide">
                       {["", "Etiqueta", "Campo técnico", "Tipo", "Relación / valores"].map((h) => (
                         <th key={h} className="dataset-head text-left font-semibold px-3 py-2.5 text-slate-500">{h}</th>
                       ))}

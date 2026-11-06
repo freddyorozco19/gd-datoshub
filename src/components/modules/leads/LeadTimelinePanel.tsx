@@ -54,7 +54,7 @@ export default function LeadTimelinePanel({ timeline: t, loading, error }: { tim
 
   const stat = (label: string, value: string, hint?: string) => (
     <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 min-w-0">
-      <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
       <p className="text-lg font-semibold tabular-nums text-slate-100 truncate">{value}{hint && <span className="ml-1 text-[11px] font-normal text-slate-500">{hint}</span>}</p>
     </div>
   );
@@ -64,7 +64,7 @@ export default function LeadTimelinePanel({ timeline: t, loading, error }: { tim
   return (
     <div className="space-y-5">
       <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-        <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Recorrido por etapas</h3>
+        <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Recorrido por etapas</h3>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-5">
           {stat("Tiempo total", fmt(total))}
@@ -114,7 +114,7 @@ export default function LeadTimelinePanel({ timeline: t, loading, error }: { tim
         )}
 
         {/* barra a escala */}
-        <p className="mt-5 mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">Tiempo en cada etapa (a escala)</p>
+        <p className="mt-5 mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">Tiempo en cada etapa (a escala)</p>
         <div className="flex h-[30px] gap-0.5 rounded-lg overflow-hidden">
           {t.stages.map((s, i) => {
             const d = daysBetween(s.from, s.to);
@@ -128,7 +128,7 @@ export default function LeadTimelinePanel({ timeline: t, loading, error }: { tim
           })}
         </div>
 
-        <p className="mt-3 mb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">Estado Preventa</p>
+        <p className="mt-3 mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500">Estado Preventa</p>
         <div className="flex h-3 gap-0.5 rounded overflow-hidden">
           {t.estados.map((s, i) => (
             <div key={i} className="shrink-0" style={{ width: `${(daysBetween(s.from, s.to) / total) * 100}%`, minWidth: 3, background: ESTADO_COLOR[s.key] }}
@@ -153,7 +153,7 @@ export default function LeadTimelinePanel({ timeline: t, loading, error }: { tim
       </section>
 
       <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-        <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Cambios de etapa y estado</h3>
+        <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Cambios de etapa y estado</h3>
         {t.events.length === 0 ? <p className="text-xs text-slate-500 text-center py-3">Este lead no tiene cambios registrados</p> : (
           <ol className="divide-y divide-white/[0.05]">
             {t.events.map((e, i) => (

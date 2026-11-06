@@ -706,3 +706,11 @@ body {
 .light .dashboard-shell .opt-correct  { background: #d1fae5; border-color: #10b981; color: #065f46; }
 .light .dashboard-shell .opt-wrong    { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
 .light .dashboard-shell .opt-dim      { background: rgba(241, 245, 249, 0.8); border-color: rgba(15, 23, 42, 0.1); color: #64748b; }
+
+/* ── Contraste de textos secundarios en tema oscuro ───────────────────────
+   slate-500/600 quedaban por debajo de 3:1 sobre el fondo oscuro. Se suben solo en oscuro
+   (en claro se conservan, ya contrastan bien sobre blanco). Al redefinir el token, hover/focus no se ven afectados. */
+:root:not(.light) {
+  --color-slate-500: #8a9ab0;
+  --color-slate-600: #75869d;
+}

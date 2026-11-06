@@ -724,7 +724,7 @@ function QuestionCard({
 
           {q.translation && !xlat && !es && (
             <div className="border-l-2 border-slate-700 pl-3 -mt-1">
-              <p className="text-[10px] text-slate-600 font-semibold uppercase tracking-wide mb-0.5">Traducción</p>
+              <p className="text-[11px] text-slate-600 font-semibold uppercase tracking-wide mb-0.5">Traducción</p>
               <p className="text-sm text-slate-500 leading-relaxed whitespace-pre-wrap italic">{q.translation}</p>
             </div>
           )}
@@ -822,8 +822,8 @@ function QuestionCard({
               <div className="space-y-1.5 max-w-md">
                 {/* cabecera de columnas */}
                 <div className="flex items-center gap-3 px-1 mb-0.5">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 w-16 shrink-0">Paso</span>
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">Selección</span>
+                  <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-600 w-16 shrink-0">Paso</span>
+                  <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-600">Selección</span>
                 </div>
 
                 {q.dropdowns!.map((dd, i) => {
@@ -889,7 +889,7 @@ function QuestionCard({
                         <div className="absolute z-30 left-0 right-0 mt-1.5 rounded-xl border border-white/10 shadow-2xl shadow-black/60 overflow-hidden"
                           style={{ background: 'linear-gradient(135deg, #13131f 0%, #1a1a2e 100%)' }}>
                           <div className="px-3 pt-2.5 pb-1.5">
-                            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">Opciones</span>
+                            <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-600">Opciones</span>
                           </div>
                           <div className="px-1.5 pb-1.5 space-y-0.5">
                             {ddOpts.map((opt, oi) => {
@@ -1104,7 +1104,7 @@ function QuestionCard({
               {showExpl && q.explanation && (
                 <div className="mt-2 pt-2 border-t border-emerald-800/40">
                   <div className="flex items-center justify-between mb-1.5">
-                    <p className="text-[10px] text-blue-500 font-semibold uppercase tracking-wide">Explicación</p>
+                    <p className="text-[11px] text-blue-500 font-semibold uppercase tracking-wide">Explicación</p>
                     <button
                       type="button"
                       onClick={toggleExplEs}
@@ -1124,7 +1124,7 @@ function QuestionCard({
                   </p>
                   {q.learnMore && q.learnMore.length > 0 && (
                     <div className="mt-2 pt-1.5 border-t border-emerald-800/30">
-                      <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
+                      <p className="text-[11px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
                       <ul className="space-y-0.5">
                         {q.learnMore.map((ref, ri) => {
                           const text = typeof ref === 'string' ? ref : ref.text
@@ -1435,7 +1435,7 @@ function ExamScreen({
 
           <div className="mb-7">
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-[10px] font-bold text-teal-500/60 uppercase tracking-widest">{q.number}</span>
+              <span className="text-[11px] font-bold text-teal-500/60 uppercase tracking-widest">{q.number}</span>
               {config.translateToEs ? (
                 <button
                   onClick={() => xlat ? setXlat(null) : doTranslate(current)}
@@ -1697,13 +1697,13 @@ function ExamScreen({
             <div className="bg-slate-800/60 border border-white/[0.08] rounded-xl px-4 py-3.5 space-y-2.5 mb-3">
               {q.explanation && (
                 <div>
-                  <p className="text-[10px] text-blue-400 font-semibold uppercase tracking-wide mb-1">Explicación</p>
+                  <p className="text-[11px] text-blue-400 font-semibold uppercase tracking-wide mb-1">Explicación</p>
                   <p className="text-sm text-slate-300 leading-relaxed">{xlat?.explanation ?? q.explanation}</p>
                 </div>
               )}
               {q.learnMore && q.learnMore.length > 0 && (
                 <div>
-                  <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
+                  <p className="text-[11px] text-slate-500 font-semibold uppercase tracking-wide mb-1">Learn More</p>
                   <ul className="space-y-1">
                     {q.learnMore.map((item, i) => {
                       const text = typeof item === 'string' ? item : item.text
@@ -1910,7 +1910,7 @@ function ExamResults({
                 <div key={i} className="px-4 py-3">
                   <div className="flex items-start gap-2 mb-1.5">
                     {!a.confirmed
-                      ? <span className="flex-shrink-0 mt-0.5 w-4 h-4 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center"><span className="text-[8px] text-amber-400">—</span></span>
+                      ? <span className="flex-shrink-0 mt-0.5 w-4 h-4 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center"><span className="text-[11px] text-amber-400">—</span></span>
                       : ok
                         ? <CheckCircle size={14} className="flex-shrink-0 text-emerald-400 mt-0.5" />
                         : <XCircle size={14} className="flex-shrink-0 text-red-400 mt-0.5" />
@@ -2627,7 +2627,7 @@ function EditExamModal({
 
         <div className="px-6 py-5 space-y-4">
           <div>
-            <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">URL</label>
+            <label className="block text-[11px] text-slate-500 uppercase tracking-wide mb-1.5">URL</label>
             <input
               type="url"
               value={url}
@@ -2637,7 +2637,7 @@ function EditExamModal({
             />
           </div>
           <div>
-            <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Estado</label>
+            <label className="block text-[11px] text-slate-500 uppercase tracking-wide mb-1.5">Estado</label>
             <select
               value={estado}
               onChange={e => setEstado(e.target.value as Estado)}
@@ -2649,7 +2649,7 @@ function EditExamModal({
             </select>
           </div>
           <div>
-            <label className="block text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Expiración</label>
+            <label className="block text-[11px] text-slate-500 uppercase tracking-wide mb-1.5">Expiración</label>
             <input
               type="date"
               value={expiracion}
@@ -3084,20 +3084,20 @@ CREATE POLICY "own_insert" ON exam_history FOR INSERT WITH CHECK (user_id = auth
                     {/* Detalles */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                       <div className="bg-white/[0.03] rounded-lg px-3 py-2">
-                        <p className="text-slate-500 text-[10px] uppercase tracking-wide">Proveedor</p>
+                        <p className="text-slate-500 text-[11px] uppercase tracking-wide">Proveedor</p>
                         <p className="text-slate-200 font-medium mt-0.5">{row.provider_name || '—'}</p>
                       </div>
                       <div className="bg-white/[0.03] rounded-lg px-3 py-2">
-                        <p className="text-slate-500 text-[10px] uppercase tracking-wide">Tiempo</p>
+                        <p className="text-slate-500 text-[11px] uppercase tracking-wide">Tiempo</p>
                         <p className="text-slate-200 font-medium mt-0.5">{fmtElapsed(row.elapsed_sec)}</p>
                       </div>
                       <div className="bg-white/[0.03] rounded-lg px-3 py-2">
-                        <p className="text-slate-500 text-[10px] uppercase tracking-wide">Resultado</p>
+                        <p className="text-slate-500 text-[11px] uppercase tracking-wide">Resultado</p>
                         <p className={`font-bold mt-0.5 ${passed ? 'text-emerald-400' : 'text-red-400'}`}>{passed ? 'Aprobado' : 'Reprobado'}</p>
                       </div>
                       {row.config && Object.keys(row.config).length > 0 && (
                         <div className="col-span-2 sm:col-span-3 bg-white/[0.03] rounded-lg px-3 py-2">
-                          <p className="text-slate-500 text-[10px] uppercase tracking-wide mb-1">Configuración</p>
+                          <p className="text-slate-500 text-[11px] uppercase tracking-wide mb-1">Configuración</p>
                           <div className="flex flex-wrap gap-2">
                             {(row.config.randomOrder as boolean) && <span className="text-[11px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">Aleatorio</span>}
                             {(row.config.onlyWithAnswer as boolean) && <span className="text-[11px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-full">Solo con respuesta</span>}
@@ -3108,7 +3108,7 @@ CREATE POLICY "own_insert" ON exam_history FOR INSERT WITH CHECK (user_id = auth
                       )}
                       {isAdmin && (
                         <div className="col-span-2 sm:col-span-3 bg-white/[0.03] rounded-lg px-3 py-2">
-                          <p className="text-slate-500 text-[10px] uppercase tracking-wide">Usuario</p>
+                          <p className="text-slate-500 text-[11px] uppercase tracking-wide">Usuario</p>
                           <p className="text-slate-200 font-medium mt-0.5">{row.user_email}</p>
                         </div>
                       )}
@@ -3248,7 +3248,7 @@ export default function CertificacionesView() {
                     <>
                       {avail.length > 0 && (
                         <div className="exam-sep flex items-center gap-3 pt-1">
-                          <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">Próximamente</span>
+                          <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Próximamente</span>
                           <span className="exam-sep-line flex-1 h-px" />
                         </div>
                       )}

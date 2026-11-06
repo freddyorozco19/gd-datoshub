@@ -634,13 +634,13 @@ function SpcRunner({ file, onBaseline }: { file: File; onBaseline?: (b: SpcBasel
           {(res.stats.resumen?.fecha_min || res.stats.resumen?.fecha_max) && (
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-xl border border-sky-500/20 bg-sky-500/10 px-4 py-3 text-center">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-sky-400">Datos desde</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-sky-400">Datos desde</p>
                 <p className="mt-1 text-xl font-bold text-slate-200">
                   {String(res.stats.resumen.fecha_min ?? "—")}
                 </p>
               </div>
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-center">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-400">Datos hasta</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-400">Datos hasta</p>
                 <p className="mt-1 text-xl font-bold text-slate-200">
                   {String(res.stats.resumen.fecha_max ?? "—")}
                 </p>
@@ -918,7 +918,7 @@ function PredictorOportunidad() {
               { label: "Segmento",   val: result.inputs.segmento },
             ].map(({ label, val }) => (
               <div key={label}>
-                <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wide">{label}</p>
                 <p className="text-xs text-slate-200 font-medium truncate">{val}</p>
               </div>
             ))}
@@ -971,7 +971,7 @@ function ModeloRfPanel() {
           { label: "Comerciales",val: String(info.n_comerciales ?? "—"), color: "text-sky-400" },
         ].map(({ label, val, color }) => (
           <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-4 text-center">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className="text-[11px] text-slate-500 uppercase tracking-wide">{label}</p>
             <p className={`text-2xl font-bold tabular-nums ${color}`}>{val}</p>
           </div>
         ))}
@@ -996,7 +996,7 @@ function ModeloRfPanel() {
               { label: "Brier",     val: m.brier.toFixed(4) },
             ].map(({ label, val }) => (
               <div key={label} className="bg-black/20 rounded-lg py-2">
-                <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wide">{label}</p>
                 <p className="text-sm font-semibold text-slate-200 tabular-nums">{val}</p>
               </div>
             ))}
@@ -1016,7 +1016,7 @@ function ModeloRfPanel() {
                   <div className="h-full bg-indigo-500 rounded-full transition-all" style={{ width: pct }} />
                 </div>
                 <span className="text-xs text-slate-400 w-10 text-right tabular-nums font-medium">{pct}</span>
-                <span className="text-[10px] text-slate-600 w-12 text-right tabular-nums">{importancia.toFixed(4)}</span>
+                <span className="text-[11px] text-slate-600 w-12 text-right tabular-nums">{importancia.toFixed(4)}</span>
               </div>
             ))}
           </div>
@@ -1029,7 +1029,7 @@ function ModeloRfPanel() {
           <p className="text-xs font-semibold text-slate-300">Variables del modelo</p>
           <div className="flex flex-wrap gap-1.5">
             {info.features.map((f) => (
-              <span key={f} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] text-indigo-300 font-mono">{f}</span>
+              <span key={f} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[11px] text-indigo-300 font-mono">{f}</span>
             ))}
           </div>
         </div>
@@ -1041,7 +1041,7 @@ function ModeloRfPanel() {
           <p className="text-xs font-semibold text-slate-300">{info.comerciales.length} ejecutivos en el historial</p>
           <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto">
             {info.comerciales.map((c) => (
-              <span key={c} className="px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[10px] text-slate-400">{c}</span>
+              <span key={c} className="px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[11px] text-slate-400">{c}</span>
             ))}
           </div>
         </div>
@@ -1417,7 +1417,7 @@ function ComercialPanel() {
                       className={`px-4 py-3 text-xs font-semibold uppercase tracking-wide whitespace-nowrap cursor-pointer select-none transition-colors hover:text-slate-300 ${active ? "text-blue-400" : "text-slate-500"} ${right ? "text-right" : "text-left"}`}>
                       <span className="inline-flex items-center gap-1">
                         {label}
-                        <span className="text-[10px]">{active ? (sortAsc ? "▲" : "▼") : "⇅"}</span>
+                        <span className="text-[11px]">{active ? (sortAsc ? "▲" : "▼") : "⇅"}</span>
                       </span>
                     </th>
                   );
@@ -1570,29 +1570,29 @@ function PklCard({ title, bloque }: { title: string; bloque: PklBloque }) {
           { label: "n obs",     val: m.n_obs.toLocaleString("es-CO") },
         ].map(({ label, val }) => (
           <div key={label} className="bg-black/20 rounded-lg py-1.5">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className="text-[11px] text-slate-500 uppercase tracking-wide">{label}</p>
             <p className="text-xs font-semibold text-slate-300 tabular-nums">{val}</p>
           </div>
         ))}
       </div>
       {/* Matriz de confusión */}
       <div>
-        <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">Matriz de confusión (umbral {m.umbral_alerta})</p>
+        <p className="text-[11px] text-slate-500 uppercase tracking-wide mb-1">Matriz de confusión (umbral {m.umbral_alerta})</p>
         <div className="grid grid-cols-2 gap-1 text-center text-xs">
           <div className="bg-emerald-900/30 border border-emerald-700/30 rounded py-1">
-            <p className="text-[10px] text-slate-500">VP</p>
+            <p className="text-[11px] text-slate-500">VP</p>
             <p className="font-bold text-emerald-400">{m.tp} <span className="font-normal text-slate-500">({(m.tp/total*100).toFixed(1)}%)</span></p>
           </div>
           <div className="bg-rose-900/20 border border-rose-700/20 rounded py-1">
-            <p className="text-[10px] text-slate-500">FP</p>
+            <p className="text-[11px] text-slate-500">FP</p>
             <p className="font-bold text-rose-400">{m.fp} <span className="font-normal text-slate-500">({(m.fp/total*100).toFixed(1)}%)</span></p>
           </div>
           <div className="bg-rose-900/20 border border-rose-700/20 rounded py-1">
-            <p className="text-[10px] text-slate-500">FN</p>
+            <p className="text-[11px] text-slate-500">FN</p>
             <p className="font-bold text-rose-400">{m.fn} <span className="font-normal text-slate-500">({(m.fn/total*100).toFixed(1)}%)</span></p>
           </div>
           <div className="bg-emerald-900/30 border border-emerald-700/30 rounded py-1">
-            <p className="text-[10px] text-slate-500">VN</p>
+            <p className="text-[11px] text-slate-500">VN</p>
             <p className="font-bold text-emerald-400">{m.tn} <span className="font-normal text-slate-500">({(m.tn/total*100).toFixed(1)}%)</span></p>
           </div>
         </div>
@@ -1600,10 +1600,10 @@ function PklCard({ title, bloque }: { title: string; bloque: PklBloque }) {
       {/* Features */}
       {bloque.features && bloque.features.length > 0 && (
         <div>
-          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">Variables del modelo</p>
+          <p className="text-[11px] text-slate-500 uppercase tracking-wide mb-1">Variables del modelo</p>
           <div className="flex flex-wrap gap-1">
             {bloque.features.map((f) => (
-              <span key={f} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] text-indigo-300 font-mono">{f}</span>
+              <span key={f} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[11px] text-indigo-300 font-mono">{f}</span>
             ))}
           </div>
         </div>
@@ -1611,15 +1611,15 @@ function PklCard({ title, bloque }: { title: string; bloque: PklBloque }) {
       {/* Importancia */}
       {bloque.importancia && bloque.importancia.length > 0 && (
         <div>
-          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Importancia de variables</p>
+          <p className="text-[11px] text-slate-500 uppercase tracking-wide mb-1.5">Importancia de variables</p>
           <div className="space-y-1">
             {bloque.importancia.map(({ variable, importancia, pct }) => (
               <div key={variable} className="flex items-center gap-2">
-                <span className="text-[10px] text-slate-400 w-32 truncate font-mono">{variable}</span>
+                <span className="text-[11px] text-slate-400 w-32 truncate font-mono">{variable}</span>
                 <div className="flex-1 h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
                   <div className="h-full bg-indigo-500 rounded-full" style={{ width: pct }} />
                 </div>
-                <span className="text-[10px] text-slate-500 w-8 text-right tabular-nums">{pct}</span>
+                <span className="text-[11px] text-slate-500 w-8 text-right tabular-nums">{pct}</span>
               </div>
             ))}
           </div>
@@ -1649,7 +1649,7 @@ function PklInfoPanel({ info }: { info: ProyectosInfoResponse }) {
           { label: "Proyectos",    val: info.n_proyectos ? String(info.n_proyectos) : "—", color: "text-slate-300"                  },
         ] as {label:string;val?:string;color:string}[]).map(({ label, val, color }) => (
           <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className="text-[11px] text-slate-500 uppercase tracking-wide">{label}</p>
             <p className={`text-xl font-bold tabular-nums ${color}`}>{val ?? "—"}</p>
           </div>
         ))}
@@ -2682,18 +2682,18 @@ function ProyectosPanel() {
                 {/* Detalle */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 space-y-1">
-                    <p className="text-[10px] uppercase tracking-wider text-slate-500">CPI mes 1</p>
+                    <p className="text-[11px] uppercase tracking-wider text-slate-500">CPI mes 1</p>
                     <p className="text-sm text-slate-300">{mcRes.nota_cpi_m1}</p>
                   </div>
                   <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 space-y-1">
-                    <p className="text-[10px] uppercase tracking-wider text-slate-500">Vs. histórico del segmento</p>
+                    <p className="text-[11px] uppercase tracking-wider text-slate-500">Vs. histórico del segmento</p>
                     <p className="text-sm text-slate-300">{mcRes.vs_historico}</p>
                   </div>
                 </div>
 
                 {/* Acción sugerida */}
                 <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 space-y-1">
-                  <p className="text-[10px] uppercase tracking-wider text-slate-500">Acción sugerida</p>
+                  <p className="text-[11px] uppercase tracking-wider text-slate-500">Acción sugerida</p>
                   <p className="text-sm text-slate-300">{mcRes.accion_sugerida}</p>
                 </div>
 
@@ -2774,7 +2774,7 @@ function CpiLbPanel({ data }: { data: any }) {
             { label: "Nelson",    val: nelson.veredicto ?? "—", cls: SEM_CLS[nelson.veredicto] ?? "text-slate-300" },
           ].map(({ label, val, cls }) => (
             <div key={label} className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-center">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500 mb-1">{label}</p>
+              <p className="text-[11px] uppercase tracking-wider text-slate-500 mb-1">{label}</p>
               <p className={`text-base font-bold tabular-nums ${cls ?? "text-slate-200"}`}>{val ?? "—"}</p>
             </div>
           ))}
@@ -2820,7 +2820,7 @@ function CpiLbPanel({ data }: { data: any }) {
       {nelson.veredicto && (
         <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 flex flex-wrap items-center gap-4">
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-slate-500 mb-0.5">Veredicto Nelson</p>
+            <p className="text-[11px] uppercase tracking-wider text-slate-500 mb-0.5">Veredicto Nelson</p>
             <p className={`text-sm font-bold ${SEM_CLS[nelson.veredicto] ?? "text-slate-200"}`}>{nelson.veredicto}</p>
           </div>
           <div className="text-xs text-slate-500">
@@ -3353,7 +3353,7 @@ function CpiCerradosPanel({ data }: { data: any }) {
                 { label: "N",       val: glb.n },
               ] as { label: string; val: string | number | undefined }[]).map(({ label, val }) => (
                 <div key={label} className="bg-white/[0.03] rounded-lg px-3 py-2.5 text-center border border-white/[0.05]">
-                  <p className="text-[10px] text-slate-500 uppercase tracking-wider">{label}</p>
+                  <p className="text-[11px] text-slate-500 uppercase tracking-wider">{label}</p>
                   <p className="text-sm font-semibold text-slate-200 mt-1">{val ?? "—"}</p>
                 </div>
               ))}
@@ -3693,7 +3693,7 @@ function SeguimientoExcelPicker({ onAutoFill }: {
                     <FileSpreadsheet size={14} className="text-indigo-400 shrink-0" />
                     <span className="text-xs text-slate-200">{f.name}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                  <div className="flex items-center gap-2 text-[11px] text-slate-500">
                     <span>{(f.size / 1024).toFixed(0)} KB</span>
                     {downloading === f.name
                       ? <Clock size={12} className="animate-spin text-indigo-400" />
@@ -4133,7 +4133,7 @@ function NelsonBadges({ nelson }: { nelson: Record<string, number> }) {
   return (
     <div className="flex flex-wrap gap-1">
       {active.map(([r, n]) => (
-        <span key={r} className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400">
+        <span key={r} className="px-1.5 py-0.5 rounded text-[11px] font-bold bg-amber-500/15 border border-amber-500/30 text-amber-400">
           {r} ({n})
         </span>
       ))}
@@ -5037,7 +5037,7 @@ function DatosHistoricoPanel({ info }: { info: DatosInfoResponse }) {
           { label: "R² modelo",      val: info.modelo_r2 != null ? info.modelo_r2.toFixed(3) : "—", color: "text-emerald-400" },
         ].map(({ label, val, color }) => (
           <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className="text-[11px] text-slate-500 uppercase tracking-wide">{label}</p>
             <p className={`text-xl font-bold tabular-nums ${color}`}>{val}</p>
           </div>
         ))}
@@ -5611,7 +5611,7 @@ function FinancieroOrigenPanel({ info }: { info: FinancieroInfoResponse }) {
           { label: "R² ajustado",     val: info.modelo_r2a != null ? `${(info.modelo_r2a * 100).toFixed(1)}%` : "—", color: "text-indigo-400" },
         ].map(({ label, val, color }) => (
           <div key={label} className="bg-white/[0.04] rounded-xl border border-white/[0.08] p-3 text-center">
-            <p className="text-[10px] text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className="text-[11px] text-slate-500 uppercase tracking-wide">{label}</p>
             <p className={`text-xl font-bold tabular-nums ${color}`}>{val}</p>
           </div>
         ))}
@@ -5717,7 +5717,7 @@ export default function CMMIView() {
           >
             {v.label}
             {!v.enabled && (
-              <span className="text-[9px] px-1 py-0.5 rounded bg-white/[0.06] text-slate-600">pronto</span>
+              <span className="text-[11px] px-1 py-0.5 rounded bg-white/[0.06] text-slate-600">pronto</span>
             )}
             <span
               className="absolute bottom-0 left-0 right-0 h-[2px] rounded-t-full transition-all"

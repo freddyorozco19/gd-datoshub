@@ -59,7 +59,7 @@ export default function PresalesStateModal({
   const stat = (title: string, value: ReactNode, hint?: string, onClick?: () => void) => {
     const inner = (
       <>
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 truncate">{title}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 truncate">{title}</p>
         <p className="text-xl font-semibold tabular-nums text-slate-100 mt-0.5 truncate">{value}</p>
         {hint && <p className="text-[11px] text-slate-500 mt-0.5 truncate">{hint}</p>}
       </>

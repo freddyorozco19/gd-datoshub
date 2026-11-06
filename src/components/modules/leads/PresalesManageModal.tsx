@@ -140,7 +140,7 @@ export default function PresalesManageModal({
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <p className={`text-xs font-semibold truncate ${active ? "text-slate-100" : "text-slate-500"}`} title={name}>{name}</p>
-                          {isNew && <span className="shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 uppercase tracking-wide">Nuevo</span>}
+                          {isNew && <span className="shrink-0 text-[11px] font-bold px-1.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 uppercase tracking-wide">Nuevo</span>}
                         </div>
                         <p className="text-[11px] text-slate-500 mt-0.5">
                           {p?.open ?? 0} abiertos · {p?.total ?? 0} totales

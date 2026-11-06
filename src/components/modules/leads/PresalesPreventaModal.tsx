@@ -142,7 +142,7 @@ export default function PresalesPreventaModal({
   const stat = (label: string, value: string, hint?: string, onClick?: () => void) => {
     const inner = (
       <>
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
         <p className="truncate"><span className="text-xl font-semibold tabular-nums text-slate-100">{value}</span>{hint && <span className="text-[11px] text-slate-500 ml-2">{hint}</span>}</p>
       </>
     );
@@ -189,7 +189,7 @@ export default function PresalesPreventaModal({
                 <Panel title="Sus leads abiertos" aside="más tiempo sin cambios primero" grow bodyClass="flex-1 flex flex-col">
                   {d.openSorted.length === 0 ? <p className="text-xs text-slate-500 px-3.5 py-6 text-center">No tiene leads abiertos</p> : (
                     <>
-                      <div className="grid grid-cols-[42px_minmax(0,1fr)_84px_52px] gap-2 px-3.5 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                      <div className="grid grid-cols-[42px_minmax(0,1fr)_84px_52px] gap-2 px-3.5 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                         <span>ID</span><span>Lead</span><span className="text-right">Monto</span><span className="text-right">Días</span>
                       </div>
                       <div className="divide-y divide-white/[0.05] border-t border-white/[0.05]">

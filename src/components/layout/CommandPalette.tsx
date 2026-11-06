@@ -107,7 +107,7 @@ export default function CommandPalette({ open, onClose }: { open: boolean; onClo
               placeholder="Buscar páginas, leads, preventas o exámenes…" aria-label="Buscar"
               className="flex-1 bg-transparent outline-none text-sm text-slate-100 placeholder:text-slate-500" />
             {loading && <Loader2 size={14} className="animate-spin text-slate-500 shrink-0" />}
-            <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-500 font-mono">Esc</kbd>
+            <kbd className="text-[11px] px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-500 font-mono">Esc</kbd>
           </div>
           <div ref={listRef} className="max-h-[52vh] overflow-y-auto p-2">
             {results.length === 0 && (
@@ -118,7 +118,7 @@ export default function CommandPalette({ open, onClose }: { open: boolean; onClo
               return (
                 <div key={it.key}>
                   {(i === 0 || results[i - 1].group !== it.group) && (
-                    <p className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{it.group}</p>
+                    <p className="px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">{it.group}</p>
                   )}
                   <button type="button" data-i={i} onClick={() => go(it)} onMouseMove={() => setIdx(i)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${i === idx ? "bg-blue-500/15" : ""}`}>

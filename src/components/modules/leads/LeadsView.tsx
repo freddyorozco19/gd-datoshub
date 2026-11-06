@@ -1288,7 +1288,7 @@ export default function LeadsView() {
 
             {/* búsqueda + acciones */}
             <div className="flex flex-col gap-1.5 shrink-0">
-              <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap text-center">Buscar</label>
+              <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap text-center">Buscar</label>
               <div className="flex items-center gap-2">
                 <div className="relative">
                   <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
@@ -1396,7 +1396,7 @@ export default function LeadsView() {
                           <td className="px-3 py-3">
                             <div className="flex items-start gap-1.5">
                               {isNew && (
-                                <span className="mt-0.5 shrink-0 text-[8px] font-bold px-1 py-px rounded bg-emerald-500 text-white uppercase leading-tight">NEW</span>
+                                <span className="mt-0.5 shrink-0 text-[11px] font-bold px-1 py-px rounded bg-emerald-500 text-white uppercase leading-tight">NEW</span>
                               )}
                               <div className="min-w-0">
                                 <p className="font-semibold text-white max-w-[200px] truncate" title={lead.nombre}>{lead.nombre}</p>

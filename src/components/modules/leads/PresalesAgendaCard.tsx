@@ -107,7 +107,7 @@ export default function PresalesAgendaCard({
                       className="row-hover w-full flex items-center gap-3 text-left rounded-lg border border-white/[0.08] px-2.5 py-2 cursor-pointer">
                       <span className="w-10 shrink-0 text-center leading-none">
                         <b className="block text-[15px] font-semibold text-slate-100">{dt.getDate()}</b>
-                        <small className="text-[10px] uppercase text-slate-500">{MES[dt.getMonth()]}</small>
+                        <small className="text-[11px] uppercase text-slate-500">{MES[dt.getMonth()]}</small>
                       </span>
                       <span className="flex-1 min-w-0">
                         <span className="block text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</span>

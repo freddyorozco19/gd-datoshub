@@ -61,7 +61,7 @@ export default function WonLeadsModal({ leads, company, periodLabel, onOpenLead,
         <div className="overflow-auto flex-1">
           {leads.length === 0 ? <EmptyState>Sin ventas registradas en este periodo</EmptyState> : (
             <table className="w-full text-xs">
-              <thead className="sticky top-0 bg-[#0A0A14] text-[10px] uppercase tracking-wider text-slate-400">
+              <thead className="sticky top-0 bg-[#0A0A14] text-[11px] uppercase tracking-wider text-slate-400">
                 <tr>
                   <th className="text-left font-semibold px-4 py-2.5 whitespace-nowrap">Fecha de venta</th>
                   <th className="text-left font-semibold px-4 py-2.5">Oportunidad</th>

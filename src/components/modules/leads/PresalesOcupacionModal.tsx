@@ -52,7 +52,7 @@ export default function PresalesOcupacionModal({
 
   const stat = (label: string, value: string, cls = "text-slate-100") => (
     <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 min-w-0">
-      <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
       <p className={`text-xl font-semibold tabular-nums mt-0.5 ${cls}`}>{value}</p>
     </div>
   );
@@ -94,7 +94,7 @@ export default function PresalesOcupacionModal({
               <div className="overflow-x-auto rounded-xl border border-white/[0.08]">
                 <table className="w-full text-xs">
                   <thead>
-                    <tr className="text-[10px] uppercase tracking-wide text-slate-500 border-b border-white/[0.08]">
+                    <tr className="text-[11px] uppercase tracking-wide text-slate-500 border-b border-white/[0.08]">
                       <th className="text-left font-semibold px-4 py-2.5">Preventa</th>
                       <th className="text-right font-semibold px-3 py-2.5">Abiertos</th>
                       <th className="text-right font-semibold px-3 py-2.5">Disponibles</th>

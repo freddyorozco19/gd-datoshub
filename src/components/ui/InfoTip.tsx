@@ -66,12 +66,12 @@ export default function InfoTip({ rule, fields, note, title = "Cómo se calcula"
             className="info-pop fixed z-[70] rounded-xl p-3.5 text-left"
             style={{ top: pos.top, left: pos.left, width: WIDTH, transform: pos.above ? "translateY(-100%)" : undefined }}
           >
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">{title}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">{title}</p>
             <p className="text-xs leading-relaxed text-slate-200">{rule}</p>
             {note && <p className="text-[11px] leading-relaxed text-slate-400 mt-1.5">{note}</p>}
             {fields && fields.length > 0 && (
               <div className="mt-2.5">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Campo{fields.length > 1 ? "s" : ""} de Odoo</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Campo{fields.length > 1 ? "s" : ""} de Odoo</p>
                 <div className="flex flex-wrap gap-1">
                   {fields.map((f) => <code key={f} className="info-code text-[11px] font-mono px-1.5 py-0.5 rounded">{f}</code>)}
                 </div>

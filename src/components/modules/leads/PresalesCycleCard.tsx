@@ -51,7 +51,7 @@ export default function PresalesCycleCard({
 
   const stat = (label: string, value: string) => (
     <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 min-w-0">
-      <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
       <p className="text-lg font-semibold tabular-nums text-slate-100 truncate">{value}</p>
     </div>
   );
@@ -70,7 +70,7 @@ export default function PresalesCycleCard({
       ) : (
         <>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Distribución de los cierres</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Distribución de los cierres</p>
             <div className="flex items-end gap-2 h-[84px]">
               {d.buckets.map((b) => (
                 <button key={b.key} type="button" disabled={b.n === 0} onClick={() => onList(b.leads, `Cerrados en ${b.key}`)}
@@ -85,7 +85,7 @@ export default function PresalesCycleCard({
           </div>
 
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 mb-1">Por preventa · de Abierto a Cerrado</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 mb-1">Por preventa · de Abierto a Cerrado</p>
             <div className="max-h-[15rem] overflow-y-auto pr-1 space-y-0.5">
               {d.people.map((p) => (
                 <button key={p.name} type="button" onClick={() => (p.name === SIN ? onList(p.leads, p.name) : onOpenPreventa(p.name))}

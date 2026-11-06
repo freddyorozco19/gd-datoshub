@@ -196,7 +196,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
             <form onSubmit={submit} className="space-y-4">
               {/* Email */}
               <div>
-                <label className="block text-[10px] text-slate-400 uppercase tracking-widest mb-2">Correo electrónico</label>
+                <label className="block text-[11px] text-slate-400 uppercase tracking-widest mb-2">Correo electrónico</label>
                 <input
                   type="email" required autoFocus
                   value={email} onChange={e => setEmail(e.target.value)}
@@ -210,7 +210,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
 
               {/* Rol — cards */}
               <div>
-                <label className="block text-[10px] text-slate-400 uppercase tracking-widest mb-2">Rol</label>
+                <label className="block text-[11px] text-slate-400 uppercase tracking-widest mb-2">Rol</label>
                 <div className="grid grid-cols-3 gap-2">
                   {roles.map(r => {
                     const active = role === r.value;
@@ -486,7 +486,7 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
 
               {/* Nueva contraseña */}
               <div className="space-y-1.5">
-                <label className="block text-[10px] text-slate-400 uppercase tracking-widest">Nueva contraseña</label>
+                <label className="block text-[11px] text-slate-400 uppercase tracking-widest">Nueva contraseña</label>
                 <div className="relative">
                   <input type={showPw ? "text" : "password"} autoFocus value={password}
                     onChange={e => setPassword(e.target.value)} placeholder="Mínimo 10 caracteres"
@@ -501,7 +501,7 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
 
               {/* Confirmar */}
               <div className="space-y-1.5">
-                <label className="block text-[10px] text-slate-400 uppercase tracking-widest">Confirmar contraseña</label>
+                <label className="block text-[11px] text-slate-400 uppercase tracking-widest">Confirmar contraseña</label>
                 <div className="relative">
                   <input type={showCf ? "text" : "password"} value={confirm}
                     onChange={e => setConfirm(e.target.value)} placeholder="Repite la contraseña"

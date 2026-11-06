@@ -62,7 +62,7 @@ export default function FabricantesCard({
   // mismo tamaño que las tarjetas de métricas de Tiempo de ciclo; el detalle va en el tooltip
   const stat = (label: string, value: string, hint: string) => (
     <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 min-w-0" title={hint}>
-      <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 truncate">{label}</p>
       <p className="text-lg font-semibold tabular-nums text-slate-100 truncate">{value}</p>
     </div>
   );
@@ -79,7 +79,7 @@ export default function FabricantesCard({
         <p className="text-xs text-slate-500 text-center py-6">No hay leads con fabricante con estos filtros</p>
       ) : (
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 mb-1">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 mb-1">
             {metric === "leads" ? "Ranking por leads" : "Ranking por pipeline abierto (solo COP)"} · tasa de ganados entre los cerrados
           </p>
           <div className="max-h-[22rem] overflow-y-auto pr-1 space-y-0.5">

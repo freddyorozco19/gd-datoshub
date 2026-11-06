@@ -22,14 +22,14 @@ export default function FilterBar({ filters, onChange, onReset, lineas, comercia
   const dirty = filters.linea !== "ALL" || filters.comercial !== "ALL" || filters.etapa !== "ALL";
   return (
     <div className="rounded-2xl border border-white/[0.07] bg-[#0D0D1A] px-4 py-3 flex flex-wrap items-center gap-2">
-      <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Periodo</span>
+      <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Periodo</span>
       {PERIODS.map((p) => (
         <button key={p.id} type="button" className={chip(filters.period === p.id)} onClick={() => onChange({ period: p.id })}>
           {p.label}{filters.period === p.id ? ` · ${periodLabel}` : ""}
         </button>
       ))}
       <span className="w-px h-5 bg-white/10 mx-1" />
-      <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Compañía</span>
+      <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Compañía</span>
       {COMPANIES.map((c) => (
         <button key={c.id} type="button" className={chip(filters.company === c.id)} onClick={() => onChange({ company: c.id })}>{c.label}</button>
       ))}

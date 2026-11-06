@@ -603,7 +603,7 @@ export default function PresalesView({
     );
     const head = (
       <thead>
-        <tr className="text-[10px] uppercase tracking-wide text-slate-500">
+        <tr className="text-[11px] uppercase tracking-wide text-slate-500">
           <th className="text-left font-semibold pb-2 pr-3">Preventa</th>
           <th className="text-right font-semibold pb-2 px-2">Abiertos</th>
           <th className="text-left font-semibold pb-2 pl-3 pr-3">Ocupación</th>
@@ -657,7 +657,7 @@ export default function PresalesView({
             setListModal({ leads: cargaSrc.filter((l) => isOpen(l) && names.has(l.preventa || "Sin asignar")), heading: "Total" });
           }}
           className="border-t border-white/[0.14] font-semibold cursor-pointer row-hover">
-          <td className="py-2.5 pr-3 text-slate-200 uppercase text-[10px] tracking-wide">Total</td>
+          <td className="py-2.5 pr-3 text-slate-200 uppercase text-[11px] tracking-wide">Total</td>
           <td className="py-2.5 px-2 text-right tabular-nums text-slate-100">{cargaTotals.open}</td>
           <td className="py-2.5 pl-3 pr-3">
             <div className="flex items-center gap-2" title={`Ocupación global (solo profesionales): ${cargaProf.reduce((s, r) => s + r.open, 0)} de ${CARGA_LIMIT * cargaProf.length}`}>

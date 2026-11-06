@@ -155,7 +155,7 @@ export default function Sidebar() {
                     onClick={() => setClosedSections((p) => ({ ...p, [sec.id]: !p[sec.id] }))}
                     className="flex items-center justify-between w-full px-2.5 pt-1 pb-1 group"
                   >
-                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 group-hover:text-slate-400 transition-colors">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 group-hover:text-slate-400 transition-colors">
                       {sec.header}
                     </span>
                     <ChevronDown size={12} className={`text-slate-600 group-hover:text-slate-400 transition-all ${closed ? "-rotate-90" : ""}`} />

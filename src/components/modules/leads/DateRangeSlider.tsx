@@ -100,7 +100,7 @@ export default function DateRangeSlider({
   return (
     <div className="flex flex-col gap-1.5 shrink-0 w-60">
       <div className="flex items-center justify-center gap-1">
-        <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">Rango de fecha</label>
+        <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Rango de fecha</label>
         {hasCustomRange && (
           <button
             type="button"
@@ -156,7 +156,7 @@ export default function DateRangeSlider({
             className="z-50 w-64 rounded-lg border border-white/[0.12] bg-white/[0.08] shadow-2xl shadow-black/40 p-3 flex flex-col gap-3"
           >
             <div>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Rango personalizado</p>
+              <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Rango personalizado</p>
               <div className="grid grid-cols-2 gap-2">
                 <div className="flex flex-col gap-1">
                   <span className="text-[11px] text-slate-500">Desde</span>
@@ -180,7 +180,7 @@ export default function DateRangeSlider({
             <div className="h-px bg-white/[0.08]" />
 
             <div>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Por año</p>
+              <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Por año</p>
               <div className="flex flex-wrap gap-1.5 mb-1.5">
                 {years.map((y) => (
                   <button

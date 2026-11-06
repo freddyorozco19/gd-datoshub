@@ -222,7 +222,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
           <LeadNotesPanel notes={notes} loading={loadingNotes} error={notesError} />
         ) : tab === "historial" && hasHistoryData ? (
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
+            <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
               <History size={10} /> {historyLabel}
             </h3>
             {loadingHistory ? (
@@ -253,7 +253,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
         ) : (
         <>
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Cliente & Contacto</h3>
+            <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Cliente & Contacto</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Cliente"          value={lead.cliente} />
               <Field label="Comercial"        value={lead.comercial} />
@@ -265,7 +265,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
           </section>
 
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Oportunidad</h3>
+            <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Oportunidad</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Tipo de Oportunidad" value={lead.tipoOportunidad} />
               <Field label={lead.lineas?.length > 1 ? "Líneas" : "Línea"} value={lineasTxt} />
@@ -283,7 +283,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
           </section>
 
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Financiero</h3>
+            <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Financiero</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Ingresos Esperados" value={lead.ingresosEsperados ? COP(lead.ingresosEsperados) : null} />
               {[
@@ -298,16 +298,16 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
           {(lead.alcance || lead.objeto) && (
             <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Alcance & Objeto</h3>
+              <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Alcance & Objeto</h3>
               <div className="space-y-3">
-                {lead.alcance && <div><p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Alcance</p><p className="text-xs text-slate-200 leading-relaxed">{lead.alcance}</p></div>}
-                {lead.objeto  && <div><p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Objeto</p><p className="text-xs text-slate-200 leading-relaxed">{lead.objeto}</p></div>}
+                {lead.alcance && <div><p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Alcance</p><p className="text-xs text-slate-200 leading-relaxed">{lead.alcance}</p></div>}
+                {lead.objeto  && <div><p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Objeto</p><p className="text-xs text-slate-200 leading-relaxed">{lead.objeto}</p></div>}
               </div>
             </section>
           )}
 
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-            <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Fechas</h3>
+            <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Fechas</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Fecha Creación"        value={lead.fechaCreacion       ? lead.fechaCreacion.substring(0, 10)  : null} />
               <Field label="Cierre Esperado"       value={lead.cierreEsperado      || null} />
@@ -319,7 +319,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
           {lead.adjuntos > 0 && (
             <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
+              <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05] flex items-center gap-1.5">
                 <Paperclip size={10} /> Adjuntos · {lead.adjuntos}
               </h3>
               {loadingAttachments ? (
