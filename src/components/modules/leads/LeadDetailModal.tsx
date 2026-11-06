@@ -302,9 +302,13 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Financiero</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Ingresos Esperados" value={lead.ingresosEsperados ? COP(lead.ingresosEsperados) : null} />
-              <Field label="Consultoría COP"    value={lead.consultoriaCOP    ? COP(lead.consultoriaCOP)    : null} />
-              <Field label="Datos COP"          value={lead.datosCOP          ? COP(lead.datosCOP)          : null} />
-              <Field label="TI COP"             value={lead.tiCOP             ? COP(lead.tiCOP)             : null} />
+              {[
+                { label: "Consultoría COP", v: lead.consultoriaCOP, key: "consultoria" },
+                { label: "Datos COP", v: lead.datosCOP, key: "datos" },
+                { label: "TI COP", v: lead.tiCOP, key: "ti" },
+              ].filter((f) => f.v || (lead.lineas ?? []).some((ln) => ln.toLowerCase().startsWith(f.key))).map((f) => (
+                <Field key={f.key} label={f.label} value={f.v ? COP(f.v) : null} />
+              ))}
             </div>
           </section>
 
