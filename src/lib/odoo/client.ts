@@ -19,6 +19,9 @@ const LEAD_FIELDS = [
   "active", "name", "email_from", "phone", "partner_id", "user_id",
   "x_studio_linea", "x_studio_etapa_actual", "team_id", "x_studio_tipo_de_oportunidad",
   "x_studio_fabricante_otro", "x_studio_edopreventa", "x_studio_preventa",
+  "x_studio_preventa2", "x_studio_preventa3", "x_studio_edopreventa2", "x_studio_edopreventa3",
+  "x_studio_fecha_asignacion_preventa", "x_studio_fecha_asignacion_preventa2", "x_studio_fecha_asignacion_preventa3",
+  "x_studio_linea2", "x_studio_linea3",
   "create_date", "expected_revenue", "x_studio_consultoria_cop",
   "x_studio_datos_cop", "x_studio_ti_cop", "x_studio_alcance",
   "x_studio_objeto", "date_deadline", "x_studio_fecha_efectiva_de_cierre",
@@ -121,6 +124,14 @@ function normalize(raw: OdooLead): Lead {
         ? "Perdido"
         : "Pendiente",
     compania: m2o(raw.company_id),
+    lineas: [raw.x_studio_linea, raw.x_studio_linea2, raw.x_studio_linea3].map(str).filter(Boolean).filter((v, i, a) => a.indexOf(v) === i),
+    asignaciones: ([
+      { slot: 1, linea: "CONSULTORIA", preventa: raw.x_studio_preventa, estado: raw.x_studio_edopreventa, fecha: raw.x_studio_fecha_asignacion_preventa },
+      { slot: 2, linea: "DATOS Y SISTEMAS DE INFORMACION", preventa: raw.x_studio_preventa2, estado: raw.x_studio_edopreventa2, fecha: raw.x_studio_fecha_asignacion_preventa2 },
+      { slot: 3, linea: "TI", preventa: raw.x_studio_preventa3, estado: raw.x_studio_edopreventa3, fecha: raw.x_studio_fecha_asignacion_preventa3 },
+    ] as const)
+      .filter((a) => m2o(a.preventa || false) || str(a.estado || false))
+      .map((a) => ({ slot: a.slot, linea: a.linea, preventa: m2o(a.preventa || false), estado: str(a.estado || false), fechaAsignacion: toGMTMinus5(a.fecha || false) })),
     adjuntos: 0, // se sobreescribe en fetchLeads
   };
 }
@@ -486,8 +497,8 @@ export async function fetchLeadNotes(leadId: number): Promise<import("./types").
    Cierre: cada vez que el Estado Preventa pasa de ABIERTO a CERRADO (se ignoran mayúsculas: hay "Abierto" y "ABIERTO"). */
 export interface PresalesTimeline {
   entries: Record<string, string>;                 // leadId → fecha de la primera entrada a Preventa (GMT-5)
-  closes: { leadId: number; date: string }[];      // cierres Abierto → Cerrado (GMT-5)
-  cycles: { leadId: number; open: string; close: string }[];   // ciclos completos: del último paso a Abierto al cierre (GMT-5)
+  closes: { leadId: number; date: string; slot: 1 | 2 | 3 }[];      // cierres Abierto → Cerrado (GMT-5)
+  cycles: { leadId: number; open: string; close: string; slot: 1 | 2 | 3 }[];   // ciclos completos: del último paso a Abierto al cierre (GMT-5)
   since: string;                                   // fecha del evento más antiguo
 }
 let timelineCache: { at: number; data: PresalesTimeline } | null = null;
@@ -497,22 +508,24 @@ export async function fetchPresalesTimeline(): Promise<PresalesTimeline> {
   const uid = await login();
   const fields = await executeKw<{ id: number; name: string }[]>(
     uid, "ir.model.fields", "search_read",
-    [[["model", "=", "crm.lead"], ["name", "in", ["stage_id", "x_studio_edopreventa"]]]],
+    [[["model", "=", "crm.lead"], ["name", "in", ["stage_id", "x_studio_edopreventa", "x_studio_edopreventa2", "x_studio_edopreventa3"]]]],
     { fields: ["id", "name"] },
   );
   const stageField = fields.find((f) => f.name === "stage_id")?.id;
-  const estadoField = fields.find((f) => f.name === "x_studio_edopreventa")?.id;
-  if (!stageField || !estadoField) throw new Error("No se encontraron los campos de seguimiento en Odoo.");
+  const SLOT_OF_FIELD: Record<string, 1 | 2 | 3> = { x_studio_edopreventa: 1, x_studio_edopreventa2: 2, x_studio_edopreventa3: 3 };
+  const slotOfFieldId = new Map(fields.flatMap((f) => (f.name in SLOT_OF_FIELD ? [[f.id, SLOT_OF_FIELD[f.name]] as const] : [])));
+  const estadoIds = [...slotOfFieldId.keys()];
+  if (!stageField || !estadoIds.length) throw new Error("No se encontraron los campos de seguimiento en Odoo.");
 
-  type Tr = { old_value_char: string | false; new_value_char: string | false; create_date: string; mail_message_id: [number, string | false] | false };
+  type Tr = { old_value_char: string | false; new_value_char: string | false; create_date: string; mail_message_id: [number, string | false] | false; field_id: [number, string] | false };
   const PREVENTA = ["Preventa", "Análisis y Validación"];
-  const trFields = ["old_value_char", "new_value_char", "create_date", "mail_message_id"];
+  const trFields = ["old_value_char", "new_value_char", "create_date", "mail_message_id", "field_id"];
   const [entryAll, estadoAll] = await Promise.all([
     executeKw<Tr[]>(uid, "mail.tracking.value", "search_read",
       [[["field_id", "=", stageField], ["new_value_char", "in", PREVENTA]]], { fields: trFields, limit: 0, order: "create_date asc, id asc" }),
     // todos los cambios de Estado Preventa, en orden: de aquí salen los cierres y los ciclos
     executeKw<Tr[]>(uid, "mail.tracking.value", "search_read",
-      [[["field_id", "=", estadoField]]], { fields: trFields, limit: 0, order: "create_date asc, id asc" }),
+      [[["field_id", "in", estadoIds]]], { fields: trFields, limit: 0, order: "create_date asc, id asc" }),
   ]);
   const entryTr = entryAll.filter((t) => !PREVENTA.includes((t.old_value_char || "") as string));   // sin transiciones Preventa → Preventa
 
@@ -533,16 +546,18 @@ export async function fetchPresalesTimeline(): Promise<PresalesTimeline> {
   const nm = (v: string | false) => String(v || "").trim().toLowerCase();
   const closes: PresalesTimeline["closes"] = [];
   const cycles: PresalesTimeline["cycles"] = [];
-  const openedAt = new Map<number, string>();
+  const openedAt = new Map<string, string>();   // "lead-línea" → último paso a Abierto (cada línea tiene su propio ciclo)
   for (const t of estadoAll) {
     const lead = t.mail_message_id ? leadOf.get(t.mail_message_id[0]) : undefined;
     if (!lead) continue;
+    const slot = t.field_id ? slotOfFieldId.get(t.field_id[0]) ?? 1 : 1;
+    const key = `${lead}-${slot}`;
     const date = toGMTMinus5(t.create_date);
-    if (nm(t.new_value_char) === "abierto") openedAt.set(lead, date);
+    if (nm(t.new_value_char) === "abierto") openedAt.set(key, date);
     if (nm(t.old_value_char) === "abierto" && nm(t.new_value_char) === "cerrado") {
-      closes.push({ leadId: lead, date });
-      const open = openedAt.get(lead);
-      if (open) { cycles.push({ leadId: lead, open, close: date }); openedAt.delete(lead); }
+      closes.push({ leadId: lead, date, slot });
+      const open = openedAt.get(key);
+      if (open) { cycles.push({ leadId: lead, open, close: date, slot }); openedAt.delete(key); }
     }
   }
   const all = [...Object.values(entries), ...closes.map((c) => c.date)].sort();

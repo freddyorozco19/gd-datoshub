@@ -17,6 +17,7 @@ import UpdatedAgo from "@/components/ui/UpdatedAgo";
 import PresalesKanbanBoard from "./PresalesKanbanBoard";
 import PresalesCycleCard from "./PresalesCycleCard";
 import FabricantesCard, { type FabMetric } from "./FabricantesCard";
+import { expandAsignaciones, uniqueById } from "./presalesAsignaciones";
 import PresalesPreventaModal from "./PresalesPreventaModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow, type PresalesKind } from "./PresalesManageModal";
@@ -155,9 +156,14 @@ const HIDDEN_ETAPA_COLS = new Set(["oferta declinada", "no viable", "oferta no v
 export type LeadsListModalType = ComponentType<{ leads: Lead[]; title?: string; heading?: string; suffix?: string; showEstadoPreventaChips?: boolean; onClose: () => void }>;
 
 export default function PresalesView({
-  leads, loading, error, onReload, updatedAt, LeadsListModal,
+  leads: leadsProp, loading, error, onReload, updatedAt, LeadsListModal,
 }: { leads: Lead[]; loading: boolean; error: string | null; onReload: () => void; updatedAt?: Date | null; LeadsListModal: LeadsListModalType }) {
-  const [listModal, setListModal] = useState<{ leads: Lead[]; heading: string; suffix?: string; chips?: boolean } | null>(null);
+  // una fila por asignación (un lead con preventa en varias líneas aparece una vez por línea); ver presalesAsignaciones.ts
+  const leads = useMemo(() => expandAsignaciones(leadsProp), [leadsProp]);
+  type ListModalState = { leads: Lead[]; heading: string; suffix?: string; chips?: boolean };
+  const [listModal, setListModalRaw] = useState<ListModalState | null>(null);
+  // los listados cuentan leads, no asignaciones: se muestran sin repetidos
+  const setListModal = (v: ListModalState | null) => setListModalRaw(v ? { ...v, leads: uniqueById(v.leads) } : null);
   const [fPreventa, setFPreventa] = useState("ALL");
   const [fLinea,    setFLinea]    = useState("ALL");
   // por defecto: Etapa Actual = Preventa, Estado Preventa = ABIERTO (se pueden cambiar libremente)
@@ -499,15 +505,16 @@ export default function PresalesView({
       closed: [] as Lead[],
     }));
     if (!timeline) return months;
-    const closesBy = new Map<number, string[]>();
-    for (const c of timeline.closes) closesBy.set(c.leadId, [...(closesBy.get(c.leadId) ?? []), c.date]);
+    const closesBy = new Map<string, string[]>();   // "lead-línea" → fechas de cierre
+    for (const c of timeline.closes) { const k = `${c.leadId}-${c.slot ?? 1}`; closesBy.set(k, [...(closesBy.get(k) ?? []), c.date]); }
     const yr = String(cYear);
     for (const l of chartScope) {
       // los leads creados directamente en Preventa no tienen evento de entrada: se usa su fecha de creación
-      const entry = timeline.entries[String(l.id)] ?? (normText(l.etapa) === "preventa" ? l.fechaCreacion : null);
+      // las asignaciones de Datos y SI / TI usan su propia fecha de asignación; la de Consultoría, la entrada a la etapa Preventa
+      const entry = (l.slot && l.slot > 1 ? l.fechaAsignacion || null : null) ?? timeline.entries[String(l.id)] ?? (normText(l.etapa) === "preventa" ? l.fechaCreacion : null);
       if (entry && entry.startsWith(yr)) months[Number(entry.slice(5, 7)) - 1].assigned.push(l);
       const seen = new Set<number>();
-      for (const d of closesBy.get(l.id) ?? []) {
+      for (const d of closesBy.get(`${l.id}-${l.slot ?? 1}`) ?? []) {
         if (!d.startsWith(yr)) continue;
         const mi = Number(d.slice(5, 7)) - 1;
         if (!seen.has(mi)) { seen.add(mi); months[mi].closed.push(l); }   // un lead cuenta una vez por mes
@@ -951,7 +958,7 @@ export default function PresalesView({
                   ))}
                 </div>
               }>
-              <FabricantesCard byLead={fabs} error={fabsError} scope={chartScope} metric={fabMetric} onList={(ls, heading) => setListModal({ leads: ls, heading })} />
+              <FabricantesCard byLead={fabs} error={fabsError} scope={uniqueById(chartScope)} metric={fabMetric} onList={(ls, heading) => setListModal({ leads: ls, heading })} />
             </Card>
           </div>
 

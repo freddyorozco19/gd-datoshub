@@ -168,7 +168,7 @@ export default function PresalesKanbanBoard({
                       const days = daysSince(l);
                       const stale = days > staleDays;
                       return (
-                        <button key={l.id} type="button" onClick={() => onOpenLead(l)}
+                        <button key={`${l.id}-${l.slot ?? 1}`} type="button" onClick={() => onOpenLead(l)}
                           className="kb-card row-hover w-full h-[80px] shrink-0 flex flex-col justify-between text-left rounded-lg px-3 py-2 cursor-pointer overflow-hidden">
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="shrink-0 text-[11px] font-mono font-bold text-slate-400">#{l.id}</span>

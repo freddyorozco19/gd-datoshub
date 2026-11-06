@@ -29,10 +29,11 @@ export const bucketOf = (days: number) => BUCKETS.find((b) => days <= b.max)!.ke
 /** Ciclos de los leads dados, cerrados en el año indicado ("ALL" = todos). */
 export function cyclesFor(timeline: PresalesTimeline | null, leads: Lead[], year: number | "ALL"): { cycle: Cycle; lead: Lead; days: number }[] {
   if (!timeline) return [];
-  const byId = new Map(leads.map((l) => [l.id, l]));
+  // un lead puede tener un ciclo por línea (Consultoría, Datos y SI, TI): se enlaza por lead + línea
+  const byId = new Map(leads.map((l) => [`${l.id}-${l.slot ?? 1}`, l]));
   const out: { cycle: Cycle; lead: Lead; days: number }[] = [];
   for (const c of timeline.cycles) {
-    const lead = byId.get(c.leadId);
+    const lead = byId.get(`${c.leadId}-${c.slot ?? 1}`);
     if (!lead) continue;
     if (year !== "ALL" && !c.close.startsWith(String(year))) continue;
     out.push({ cycle: c, lead, days: cycleDays(c) });

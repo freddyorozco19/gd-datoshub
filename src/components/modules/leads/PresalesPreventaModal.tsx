@@ -86,13 +86,13 @@ export default function PresalesPreventaModal({
     // cierres por mes del año elegido (o del año en curso si se miran todos); cada lead cuenta una vez por mes
     const y = year === "ALL" ? new Date().getFullYear() : year;
     const perMonth: Lead[][] = Array.from({ length: 12 }, () => []);
-    const byId = new Map(mine.map((l) => [l.id, l]));
+    const byId = new Map(mine.map((l) => [`${l.id}-${l.slot ?? 1}`, l]));
     const seen = new Set<string>();
     for (const c of timeline?.closes ?? []) {
-      const l = byId.get(c.leadId);
+      const l = byId.get(`${c.leadId}-${c.slot ?? 1}`);
       if (!l || !c.date.startsWith(String(y))) continue;
       const mi = Number(c.date.slice(5, 7)) - 1;
-      const key = `${l.id}-${mi}`;
+      const key = `${l.id}-${l.slot ?? 1}-${mi}`;
       if (!seen.has(key)) { seen.add(key); perMonth[mi].push(l); }
     }
     const closed = perMonth.reduce((s, a) => s + a.length, 0);
@@ -222,7 +222,7 @@ export default function PresalesPreventaModal({
                           const days = daysSince(l);
                           const stale = days > staleDays;
                           return (
-                            <button key={l.id} type="button" onClick={() => onOpenLead(l)} className="row-hover w-full grid grid-cols-[42px_minmax(0,1fr)_84px_52px] items-center gap-2 text-left px-3.5 py-2 cursor-pointer">
+                            <button key={`${l.id}-${l.slot ?? 1}`} type="button" onClick={() => onOpenLead(l)} className="row-hover w-full grid grid-cols-[42px_minmax(0,1fr)_84px_52px] items-center gap-2 text-left px-3.5 py-2 cursor-pointer">
                               <span className="text-[11px] font-mono font-bold text-slate-400">#{l.id}</span>
                               <span className="min-w-0">
                                 <span className="block text-xs font-semibold text-slate-100 truncate" title={l.nombre}>{l.nombre}</span>

@@ -153,7 +153,7 @@ export default function PresalesStateModal({
                   const days = daysSince(l);
                   const stale = days > staleDays;
                   return (
-                    <button key={l.id} type="button" onClick={() => onOpenLead(l)}
+                    <button key={`${l.id}-${l.slot ?? 1}`} type="button" onClick={() => onOpenLead(l)}
                       className="row-hover w-full flex items-center gap-3 text-left px-2 py-2 rounded-lg cursor-pointer">
                       <span className="shrink-0 text-[11px] font-mono font-bold text-slate-400">#{l.id}</span>
                       <span className="flex-1 min-w-0">

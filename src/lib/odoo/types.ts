@@ -21,6 +21,16 @@ export interface OdooLead {
   x_studio_fabricante_otro: string | false;
   x_studio_edopreventa: string | false;
   x_studio_preventa: [number, string] | false;
+  // la preventa se separó por línea: 1 = Consultoría (los campos originales), 2 = Datos y SI, 3 = TI
+  x_studio_preventa2?: [number, string] | false;
+  x_studio_preventa3?: [number, string] | false;
+  x_studio_edopreventa2?: string | false;
+  x_studio_edopreventa3?: string | false;
+  x_studio_fecha_asignacion_preventa?: string | false;
+  x_studio_fecha_asignacion_preventa2?: string | false;
+  x_studio_fecha_asignacion_preventa3?: string | false;
+  x_studio_linea2?: string | false;
+  x_studio_linea3?: string | false;
   create_date: string;
   expected_revenue: number;
   x_studio_consultoria_cop: number | false;
@@ -39,6 +49,15 @@ export interface OdooLead {
 }
 
 // Modelo normalizado para el frontend
+/** Preventa de un lead en una línea concreta. slot 1 = Consultoría, 2 = Datos y SI, 3 = TI. */
+export interface Asignacion {
+  slot: 1 | 2 | 3;
+  linea: "CONSULTORIA" | "DATOS Y SISTEMAS DE INFORMACION" | "TI";
+  preventa: string;
+  estado: string;
+  fechaAsignacion: string;
+}
+
 export interface Lead {
   id: number;
   activo: boolean;
@@ -70,6 +89,10 @@ export interface Lead {
   ganado:      string;
   adjuntos:    number;
   compania:    string;   // company_id de Odoo: GROW DATA SAS (COP) o GROW DATA INTERNATIONAL SA (USD)
+  lineas: string[];                 // líneas de negocio del lead (puede tener varias: Consultoría, Datos y SI, TI)
+  asignaciones: Asignacion[];       // una por línea con preventa o estado de preventa
+  slot?: 1 | 2 | 3;                 // solo en las filas que arma Presales (una por asignación)
+  fechaAsignacion?: string;         // idem: fecha de asignación de esa preventa (GMT-5)
 }
 
 // Metadatos de un campo de un modelo de Odoo (resultado de fields_get), para la página Dataset
