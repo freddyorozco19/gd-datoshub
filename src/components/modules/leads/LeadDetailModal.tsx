@@ -143,6 +143,21 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lead.id, hasHistoryData, historyField]);
 
+  // Odoo separó la preventa por línea: se muestran todas las asignaciones (Consultoría, Datos y SI, TI)
+  const asig = lead.asignaciones ?? [];
+  const lineasTxt = lead.lineas?.length ? lead.lineas.join(" · ") : lead.linea;
+  const asigNode = asig.length ? (
+    <div className="space-y-1">
+      {asig.map((a) => (
+        <div key={a.slot} className="flex items-baseline gap-2 flex-wrap">
+          <span className="text-slate-300">{a.preventa || "—"}</span>
+          <span className="text-[11px] text-slate-400">{a.linea}{a.estado ? ` · ${a.estado}` : ""}</span>
+        </div>
+      ))}
+    </div>
+  ) : lead.preventa;
+  const estadosTxt = asig.length ? asig.map((a) => `${a.estado || "—"}${asig.length > 1 ? ` (${a.linea})` : ""}`).join(" · ") : lead.etapaPreventa;
+
   const odooUrl = `${ODOO_BASE}/web#model=crm.lead&id=${lead.id}&view_type=form`;
 
   const Field = ({ label, value }: { label: string; value: ReactNode }) => (
@@ -166,7 +181,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
             <h2 className="font-semibold text-slate-100 text-base leading-snug" title={lead.nombre}>{lead.nombre}</h2>
             <div className="flex items-center gap-1.5 mt-2 flex-wrap">
               <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.1] text-slate-300 tracking-wide">ID {lead.id}</span>
-              {lead.linea && <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">{lead.linea}</span>}
+              {(lead.lineas?.length ? lead.lineas : lead.linea ? [lead.linea] : []).map((ln) => <span key={ln} className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">{ln}</span>)}
               <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${WON_STYLE[lead.ganado] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.ganado}</span>
               {lead.etapa && <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${ETAPA_STYLE[lead.etapa] ?? "bg-white/[0.06] text-slate-400"}`}>{lead.etapa}</span>}
               <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${lead.activo ? "bg-emerald-500/10 text-emerald-400" : "bg-white/[0.06] text-slate-500"}`}>
@@ -261,7 +276,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
               <Field label="Correo"           value={lead.correo} />
               <Field label="Teléfono"         value={lead.telefono} />
               <Field label="Equipo de Ventas" value={lead.equipoVentas} />
-              <Field label="Preventa"         value={lead.preventa} />
+              <Field label={asig.length > 1 ? "Preventas" : "Preventa"} value={asigNode} />
             </div>
           </section>
 
@@ -269,8 +284,8 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
             <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Oportunidad</h3>
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Tipo de Oportunidad" value={lead.tipoOportunidad} />
-              <Field label="Línea"               value={lead.linea} />
-              <Field label="Etapa Preventa"      value={lead.etapaPreventa} />
+              <Field label={lead.lineas?.length > 1 ? "Líneas" : "Línea"} value={lineasTxt} />
+              <Field label="Etapa Preventa"      value={estadosTxt} />
               <Field label="Fabricante"          value={lead.fabricante} />
               <Field label="Fabricantes (Odoo)"  value={fabricantes === null ? "…" : (() => {
                 const real = [...new Set(fabricantes.filter((n) => !/^n\s*\/?\s*a$/i.test(n.trim())))];
