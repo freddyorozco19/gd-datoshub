@@ -539,7 +539,7 @@ function ProductoDetalle({ producto }: { producto: Producto }) {
       <Topbar />
 
       {/* Hero */}
-      <div className="relative px-6 md:px-10 pt-7 pb-7 border-b border-white/[0.05]"
+      <div className="relative px-4 sm:px-6 md:px-10 pt-7 pb-7 border-b border-white/[0.05]"
         style={{ background: `radial-gradient(ellipse 70% 120% at 15% -10%, rgba(${producto.rgb},0.13) 0%, transparent 65%)` }}>
         <div className="flex items-start gap-5 max-w-4xl">
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
@@ -557,7 +557,7 @@ function ProductoDetalle({ producto }: { producto: Producto }) {
       </div>
 
       {/* Tabs */}
-      <div className="sticky top-[52px] z-20 border-b border-white/[0.06] px-6 md:px-10 overflow-x-auto no-scrollbar">
+      <div className="sticky top-[52px] z-20 border-b border-white/[0.06] px-4 sm:px-6 md:px-10 overflow-x-auto no-scrollbar">
         <div className="flex gap-0 min-w-max">
           {TABS.map((t) => {
             const TabIcon = t.icon;
@@ -579,7 +579,7 @@ function ProductoDetalle({ producto }: { producto: Producto }) {
       </div>
 
       {/* Contenido del tab */}
-      <div className="px-6 md:px-10 py-7 max-w-5xl pb-12">
+      <div className="px-4 sm:px-6 md:px-10 py-7 max-w-5xl pb-12">
 
         {/* Tab: Problema del Cliente */}
         {tab === "problema" && (
@@ -606,7 +606,7 @@ function ProductoDetalle({ producto }: { producto: Producto }) {
               <h2 className="text-sm font-bold text-white mb-1">Propuesta de Valor</h2>
               <p className="text-xs text-slate-500">Qué hacemos, cómo lo hacemos y por qué importa</p>
             </div>
-            <div className="rounded-2xl border p-6" style={{ borderColor: `rgba(${producto.rgb},0.2)`, background: `rgba(${producto.rgb},0.04)` }}>
+            <div className="rounded-2xl border p-3 sm:p-6" style={{ borderColor: `rgba(${producto.rgb},0.2)`, background: `rgba(${producto.rgb},0.04)` }}>
               <p className="text-sm text-slate-200 leading-relaxed">{producto.propuestaValor}</p>
             </div>
             <div>
@@ -632,7 +632,7 @@ function ProductoDetalle({ producto }: { producto: Producto }) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {producto.impacto.map((imp, i) => (
-                <div key={i} className="rounded-2xl border p-6 text-center space-y-2"
+                <div key={i} className="rounded-2xl border p-3 sm:p-6 text-center space-y-2"
                   style={{ borderColor: `rgba(${producto.rgb},0.2)`, background: `rgba(${producto.rgb},0.04)` }}>
                   <p className="text-xl font-bold" style={{ color: producto.color }}>{imp.metrica}</p>
                   <p className="text-xs text-slate-400 leading-relaxed">{imp.descripcion}</p>
@@ -718,7 +718,7 @@ export default function ProductosView() {
   return (
     <div className="flex flex-col h-full overflow-auto">
       <Topbar />
-      <div className="px-6 md:px-8 py-6 space-y-5">
+      <div className="px-4 sm:px-6 md:px-8 py-6 space-y-5">
         <div className="flex items-center justify-between gap-4">
           <h1 className="text-xl font-bold text-white shrink-0">Catálogo de Productos</h1>
           <div className="relative w-56 shrink-0">

@@ -37,7 +37,7 @@ export default function WonLeadsModal({ leads, company, periodLabel, onOpenLead,
         className="relative w-full max-w-6xl max-h-[85vh] flex flex-col rounded-2xl border border-white/[0.10] shadow-2xl overflow-hidden"
         style={{ background: "rgba(10,10,20,0.98)" }}>
 
-        <div className="relative px-6 pt-6 pb-5 border-b border-white/[0.06] shrink-0"
+        <div className="relative px-4 sm:px-6 pt-6 pb-5 border-b border-white/[0.06] shrink-0"
           style={{ background: "radial-gradient(ellipse 80% 120% at 0% 0%, #10B98118 0%, transparent 65%)" }}>
           <button type="button" onClick={onClose} aria-label="Cerrar"
             className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-white/[0.08] transition-colors">
@@ -98,7 +98,7 @@ export default function WonLeadsModal({ leads, company, periodLabel, onOpenLead,
             </table>
           )}
         </div>
-        <p className="px-6 py-3 border-t border-white/[0.06] text-[11px] text-slate-500 shrink-0">Clic en una fila para ver el detalle del lead.</p>
+        <p className="px-4 sm:px-6 py-3 border-t border-white/[0.06] text-[11px] text-slate-500 shrink-0">Clic en una fila para ver el detalle del lead.</p>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ export default function PortalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="dashboard-shell flex h-screen overflow-hidden">
+    <div className="dashboard-shell flex h-dvh overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden relative">
         {/* fondo decorativo — manchas orgánicas difusas, fijas al viewport, detrás de todo

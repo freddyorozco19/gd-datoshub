@@ -95,7 +95,7 @@ export default function PresalesManageModal({
         onClick={(e) => { if (e.target === e.currentTarget && pendingChanges === 0) onClose(); }}
       >
         <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-xl max-h-[85vh] flex flex-col overflow-hidden">
-          <div className="app-bar modal-header flex items-center justify-between px-6 py-4 border-b border-white/[0.07] shrink-0">
+          <div className="app-bar modal-header flex items-center justify-between px-4 sm:px-6 py-4 border-b border-white/[0.07] shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-blue-500/20 border border-blue-400/25">
                 <Users size={16} className="text-blue-300" />
@@ -171,7 +171,7 @@ export default function PresalesManageModal({
             )}
           </div>
 
-          <div className="px-6 py-3 border-t border-white/[0.07] shrink-0 flex items-center gap-3">
+          <div className="px-4 sm:px-6 py-3 border-t border-white/[0.07] shrink-0 flex items-center gap-3">
             <p className="flex-1 min-w-0 text-[11px] text-slate-500">
               {pendingChanges > 0
                 ? <span className="text-amber-400 font-medium">{pendingChanges} cambio{pendingChanges === 1 ? "" : "s"} sin confirmar</span>

@@ -98,7 +98,7 @@ export default function PresalesStateModal({
 
   return (
     <Modal onClose={onClose} blocked={blocked} label="Detalle del estado de preventa" maxWidth="max-w-4xl" panelClassName="kb-tone modal-panel" panelProps={{ "data-tone": tone }}>
-          <div className="app-bar modal-header kb-modal-head flex items-center justify-between gap-4 px-6 h-[68px] shrink-0 border-b border-white/[0.07]">
+          <div className="app-bar modal-header kb-modal-head flex items-center justify-between gap-4 px-4 sm:px-6 h-[68px] shrink-0 border-b border-white/[0.07]">
             <div className="flex items-center gap-3 min-w-0">
               <span className="kb-badge shrink-0 w-10 h-10 rounded-full flex items-center justify-center"><Icon size={20} className="kb-ic" aria-hidden /></span>
               <div className="min-w-0">
@@ -109,7 +109,7 @@ export default function PresalesStateModal({
             <button type="button" onClick={onClose} title="Cerrar" aria-label="Cerrar" className="p-2 rounded-lg hover:bg-white/[0.12] transition-colors"><X size={18} /></button>
           </div>
 
-          <div className="flex-1 overflow-auto p-6 space-y-6">
+          <div className="flex-1 overflow-auto p-3 sm:p-6 space-y-6">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {stat("Leads", d.total, `${d.pct(d.total, boardTotal)} % del tablero`, () => onList(leads, label))}
               {stat("Pipeline", money(leads), "COP y USD por separado")}

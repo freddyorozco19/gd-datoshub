@@ -72,9 +72,29 @@ export default function Sidebar() {
   const [closedSections, setClosedSections] = useState<Record<string, boolean>>({});
   const [avatarOpen, setAvatarOpen] = useState(false);
 
-  const collapsed  = mode === "collapsed" || (mode === "hover" && !hovered);
-  const footprintW = mode === "expanded" ? 220 : 64;
-  const overlaying = mode === "hover" && hovered;
+  // móvil (< 768 px): la barra lateral es un cajón que se abre con la hamburguesa del Topbar
+  const [isMobile, setIsMobile]     = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => { setIsMobile(mq.matches); if (!mq.matches) setMobileOpen(false); };
+    sync();
+    mq.addEventListener("change", sync);
+    const toggle = () => setMobileOpen((v) => !v);
+    window.addEventListener("gd:toggle-sidebar", toggle);
+    return () => { mq.removeEventListener("change", sync); window.removeEventListener("gd:toggle-sidebar", toggle); };
+  }, []);
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
+  useEffect(() => {
+    if (!isMobile || !mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMobileOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isMobile, mobileOpen]);
+
+  const collapsed  = !isMobile && (mode === "collapsed" || (mode === "hover" && !hovered));
+  const footprintW = isMobile ? 0 : mode === "expanded" ? 220 : 64;
+  const overlaying = !isMobile && mode === "hover" && hovered;
 
   useEffect(() => {
     const saved = localStorage.getItem("sidebarMode") as SidebarMode | null;
@@ -122,14 +142,19 @@ export default function Sidebar() {
   );
 
   return (
-    <div className="relative shrink-0 h-screen transition-all duration-300 ease-in-out" style={{ width: footprintW }}>
+    <div className="relative shrink-0 h-dvh transition-all duration-300 ease-in-out" style={{ width: footprintW }}>
+      {isMobile && mobileOpen && (
+        <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-[2px]" onClick={() => setMobileOpen(false)} aria-hidden />
+      )}
       <aside
-        onMouseEnter={() => mode === "hover" && setHovered(true)}
-        onMouseLeave={() => mode === "hover" && setHovered(false)}
+        aria-label="Navegación principal"
+        onMouseEnter={() => !isMobile && mode === "hover" && setHovered(true)}
+        onMouseLeave={() => !isMobile && mode === "hover" && setHovered(false)}
         style={{ background: "var(--app-sidebar-header-bg)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
-        className={`app-bar flex flex-col h-screen text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
-          collapsed ? "w-16" : "w-[220px]"
-        } ${mode === "hover" ? `absolute inset-y-0 left-0 z-40 ${overlaying ? "shadow-2xl shadow-black/60" : ""}` : ""}`}
+        className={`app-bar flex flex-col h-dvh text-white border-r border-white/[0.06] transition-all duration-300 ease-in-out ${
+          isMobile ? `fixed inset-y-0 left-0 z-50 w-[260px] max-w-[85vw] shadow-2xl shadow-black/60 ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`
+          : `${collapsed ? "w-16" : "w-[220px]"} ${mode === "hover" ? `absolute inset-y-0 left-0 z-40 ${overlaying ? "shadow-2xl shadow-black/60" : ""}` : ""}`
+        }`}
       >
         {/* ── Brand ── */}
         <div className={`flex items-center gap-2 px-3 py-3.5 ${collapsed ? "justify-center" : ""}`}>

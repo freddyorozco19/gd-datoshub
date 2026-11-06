@@ -757,7 +757,7 @@ export default function PresalesView({
         <>
           {/* KPIs */}
           <div>
-            <div className="grid grid-cols-7 gap-2 xl:gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 xl:gap-3">
             <Kpi label="Estado preventa" info={INFO.estado} value={String(enEtapaPreventa.length)}
               split={showSplit ? splitBy(enEtapaPreventa, undefined, (ls, c) => setListModal({ leads: ls, heading: `Estado preventa · ${c}`, suffix: " con Etapa Actual Preventa", chips: true })) : undefined}
               onClick={() => setListModal({ leads: enEtapaPreventa, heading: "Estado preventa", suffix: " con Etapa Actual Preventa", chips: true })} />
@@ -1021,18 +1021,18 @@ export default function PresalesView({
             onClick={(e) => { if (e.target === e.currentTarget) setCargaExpanded(false); }}
           >
             <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-6xl max-h-[88vh] flex flex-col overflow-hidden">
-              <div className="app-bar modal-header flex items-center justify-between px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
+              <div className="app-bar modal-header flex items-center justify-between px-4 sm:px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
                 <h2 className="font-semibold text-slate-100 uppercase tracking-wide text-sm">Carga por preventa</h2>
                 <button onClick={() => setCargaExpanded(false)} title="Cerrar"
                   className="p-2 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-300 transition-colors">
                   <X size={18} />
                 </button>
               </div>
-              <div className="flex items-center justify-between gap-3 px-6 py-3 border-b border-white/[0.05] bg-black/20 shrink-0">
+              <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3 border-b border-white/[0.05] bg-black/20 shrink-0">
                 <span className="text-xs font-medium text-slate-500">Compañía</span>
                 {cargaPills}
               </div>
-              <div className="overflow-auto flex-1 px-6 py-4">{renderCargaTable(true)}</div>
+              <div className="overflow-auto flex-1 px-4 sm:px-6 py-4">{renderCargaTable(true)}</div>
             </div>
           </div>
         </div>,

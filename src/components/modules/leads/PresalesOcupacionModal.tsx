@@ -66,7 +66,7 @@ export default function PresalesOcupacionModal({
 
   return (
     <Modal onClose={onClose} blocked={blocked} label="Ocupación del equipo de preventa" maxWidth="max-w-5xl">
-          <div className="app-bar modal-header flex items-center justify-between px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
+          <div className="app-bar modal-header flex items-center justify-between px-4 sm:px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
             <div className="min-w-0">
               <h2 className="font-semibold text-slate-100 uppercase tracking-wide text-sm">Ocupación de preventas</h2>
               <p className="text-[11px] text-slate-400 truncate">Leads abiertos frente al máximo de {limit} por preventa · la ocupación global solo cuenta a los profesionales</p>
@@ -81,7 +81,7 @@ export default function PresalesOcupacionModal({
             </div>
           </div>
 
-          <div className="flex-1 overflow-auto p-6 space-y-6">
+          <div className="flex-1 overflow-auto p-3 sm:p-6 space-y-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {stat("Ocupación global", `${d.global}%`, ocupText(d.global))}
               {stat("Leads abiertos", `${d.totalOpen} de ${d.capacity}`)}

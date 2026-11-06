@@ -105,7 +105,7 @@ export default function UsuariosView() {
   return (
     <div className="flex flex-col h-full overflow-auto">
       <Topbar title="Usuarios" subtitle="Gestión de cuentas, roles y trazabilidad de accesos · solo administradores" tabs={topbarTabs} />
-      <main className="flex-1 p-6 space-y-5">
+      <main className="flex-1 p-3 sm:p-6 space-y-5">
         {tab === "usuarios" ? <UsuariosPanel /> : <TrazabilidadPanel />}
       </main>
     </div>
@@ -156,7 +156,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
         <div className="h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)" }} />
 
         {/* Header */}
-        <div className="app-bar modal-header flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
+        <div className="app-bar modal-header flex items-center justify-between px-4 sm:px-6 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center"
               style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.25), rgba(99,102,241,0.15))", border: "1px solid rgba(99,102,241,0.25)", boxShadow: "0 2px 8px rgba(59,130,246,0.2)" }}>
@@ -174,7 +174,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
         </div>
 
         {/* Body */}
-        <div className="px-6 py-5">
+        <div className="px-4 sm:px-6 py-5">
           {done ? (
             <div className="flex flex-col items-center gap-3 py-4 text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center"
@@ -296,7 +296,7 @@ function DeleteUserModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
       <div className="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-white/[0.06] backdrop-blur-2xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-white/[0.07]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
               <Trash2 size={15} className="text-rose-400" />
@@ -308,7 +308,7 @@ function DeleteUserModal({
           </button>
         </div>
 
-        <div className="px-6 py-5 space-y-4">
+        <div className="px-4 sm:px-6 py-5 space-y-4">
           <p className="text-sm text-slate-400">
             ¿Seguro que quieres eliminar a <span className="text-slate-200 font-medium">{user.email}</span>? Esta acción no se puede deshacer.
           </p>
@@ -446,7 +446,7 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
         <div className="h-px w-full" style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)" }} />
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center"
               style={{ background: "linear-gradient(135deg,rgba(59,130,246,0.25),rgba(99,102,241,0.15))", border: "1px solid rgba(59,130,246,0.3)", boxShadow: "0 2px 8px rgba(59,130,246,0.2)" }}>
@@ -462,7 +462,7 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
           </button>
         </div>
 
-        <div className="px-6 py-5">
+        <div className="px-4 sm:px-6 py-5">
           {done ? (
             <div className="flex flex-col items-center gap-3 py-4 text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.25)" }}>

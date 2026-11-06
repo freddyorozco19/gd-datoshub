@@ -1767,7 +1767,7 @@ function ExamScreen({
 
       {showExit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
-          <div className="bg-white/[0.06] backdrop-blur-2xl border border-white/10 rounded-2xl p-6 max-w-xs w-full mx-4 text-center">
+          <div className="bg-white/[0.06] backdrop-blur-2xl border border-white/10 rounded-2xl p-3 sm:p-6 max-w-xs w-full mx-4 text-center">
             <AlertTriangle size={28} className="text-amber-400 mx-auto mb-3" />
             <h3 className="text-white font-semibold mb-1.5">¿Salir del examen?</h3>
             <p className="text-slate-400 text-xs mb-5">Se perderá el progreso actual.</p>
@@ -1847,7 +1847,7 @@ function ExamResults({
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
 
-      <div className={`rounded-2xl border p-6 text-center ${passed ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-red-500/5 border-red-500/20'}`}>
+      <div className={`rounded-2xl border p-3 sm:p-6 text-center ${passed ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-red-500/5 border-red-500/20'}`}>
         <div className="flex items-center justify-center mb-3">
           <Trophy size={32} className={passed ? 'text-amber-400' : 'text-slate-600'} />
         </div>
@@ -2615,7 +2615,7 @@ function EditExamModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
       <div className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-white/[0.06] backdrop-blur-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07]">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-white/[0.07]">
           <div>
             <h3 className="text-sm font-semibold text-white">{exam.code}</h3>
             <p className="text-[11px] text-slate-500 mt-0.5">{exam.name}</p>
@@ -2625,7 +2625,7 @@ function EditExamModal({
           </button>
         </div>
 
-        <div className="px-6 py-5 space-y-4">
+        <div className="px-4 sm:px-6 py-5 space-y-4">
           <div>
             <label className="block text-[11px] text-slate-500 uppercase tracking-wide mb-1.5">URL</label>
             <input

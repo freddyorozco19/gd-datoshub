@@ -270,7 +270,7 @@ function UploadZone({ onFile, loading, error }: {
           if (f) onFile(f);
         }}
         onClick={() => inputRef.current?.click()}
-        className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-14 cursor-pointer transition-colors ${
+        className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-4 sm:px-6 py-14 cursor-pointer transition-colors ${
           drag
             ? "border-blue-500/60 bg-blue-500/5"
             : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
@@ -365,7 +365,7 @@ function ComercialSourcePicker({ onFile, loading, error }: {
           onDragLeave={() => setDrag(false)}
           onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files?.[0]; if (f) onFile(f); }}
           onClick={() => inputRef.current?.click()}
-          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-14 cursor-pointer transition-colors ${
+          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-4 sm:px-6 py-14 cursor-pointer transition-colors ${
             drag ? "border-blue-500/60 bg-blue-500/5" : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
           }`}
         >
@@ -446,7 +446,7 @@ function ModelImage({ b64, title }: { b64: string | null; title: string }) {
         <img src={src} alt={title} className="w-full cursor-zoom-in" onClick={() => setZoom(true)} />
       </figure>
       {zoom && (
-        <div onClick={() => setZoom(false)} className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-6 cursor-zoom-out">
+        <div onClick={() => setZoom(false)} className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-3 sm:p-6 cursor-zoom-out">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={src} alt={title} className="max-h-full max-w-full rounded-lg shadow-2xl" />
           <button className="absolute top-5 right-5 text-white/60 hover:text-white"><X size={24} /></button>
@@ -884,7 +884,7 @@ function PredictorOportunidad() {
       )}
 
       {result && (
-        <div className={`rounded-xl border p-6 space-y-4 ${semBg[result.semaforo]}`}>
+        <div className={`rounded-xl border p-3 sm:p-6 space-y-4 ${semBg[result.semaforo]}`}>
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">Probabilidad de ganar</p>
@@ -2666,7 +2666,7 @@ function ProyectosPanel() {
             return (
               <div className="space-y-3">
                 {/* Semáforo principal */}
-                <div className={`rounded-xl border px-6 py-5 ${semCls}`}>
+                <div className={`rounded-xl border px-4 sm:px-6 py-5 ${semCls}`}>
                   <div className="flex items-center justify-between flex-wrap gap-3">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wider opacity-70">Nivel de riesgo</p>
@@ -3884,7 +3884,7 @@ function ProyectosSourcePicker({ onFile, uploading, msg }: {
           onDragLeave={() => setDrag(false)}
           onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files?.[0]; if (f) onFile(f); }}
           onClick={() => inputRef.current?.click()}
-          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 cursor-pointer transition-colors ${
+          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-4 sm:px-6 py-12 cursor-pointer transition-colors ${
             drag ? "border-blue-500/60 bg-blue-500/5" : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
           }`}
         >
@@ -3987,7 +3987,7 @@ function FinancieroSourcePicker({ onFile, uploading, msg }: {
           onDragLeave={() => setDrag(false)}
           onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files?.[0]; if (f) onFile(f); }}
           onClick={() => inputRef.current?.click()}
-          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 cursor-pointer transition-colors ${
+          className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-4 sm:px-6 py-12 cursor-pointer transition-colors ${
             drag ? "border-blue-500/60 bg-blue-500/5" : "border-white/[0.10] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
           }`}
         >
@@ -4350,7 +4350,7 @@ function FinancieroPanel() {
   if (!finListo) {
     return (
       <div className="space-y-6">
-        <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-6 space-y-4">
+        <div className="bg-white/[0.04] backdrop-blur-xl rounded-xl border border-white/[0.08] p-3 sm:p-6 space-y-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400">
               <DollarSign size={20} />
@@ -5735,7 +5735,7 @@ export default function CMMIView() {
   return (
     <div className="flex flex-col h-full overflow-auto">
       <Topbar title="CMMI" tabs={topbarTabs} />
-      <main className="flex-1 px-6 pb-6">
+      <main className="flex-1 px-4 sm:px-6 pb-6">
         {active.id === "comercial"  && active.enabled ? <ComercialPanel />   :
          active.id === "proyectos"  && active.enabled ? <ProyectosPanel />   :
          active.id === "financiero" && active.enabled ? <FinancieroPanel />  :

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Search, ChevronRight } from "lucide-react";
+import { Search, ChevronRight, Menu } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import CommandPalette from "./CommandPalette";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -53,7 +53,12 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
       }}
     >
       {/* ── Izquierda: título + divisor + tabs ── */}
-      <div className="flex items-center h-full gap-0">
+      <div className="flex items-center h-full gap-0 min-w-0 flex-1">
+        {/* hamburguesa: abre la barra lateral en móvil */}
+        <button type="button" aria-label="Abrir menú" onClick={() => window.dispatchEvent(new Event("gd:toggle-sidebar"))}
+          className="md:hidden shrink-0 -ml-1 mr-2 p-2 rounded-lg text-slate-300 hover:bg-white/[0.08] transition-colors">
+          <Menu size={18} />
+        </button>
 
         {/* Página actual */}
         {meta && (
@@ -75,14 +80,14 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
 
         {/* Tabs — pegados al borde inferior del header */}
         {tabs && (
-          <div className="flex items-end h-full pl-3 gap-0.5">
+          <div className="flex items-end h-full pl-3 gap-0.5 min-w-0 overflow-x-auto no-scrollbar">
             {tabs}
           </div>
         )}
       </div>
 
       {/* ── Derecha: dot + search + bell ── */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 shrink-0 pl-2">
         <button type="button" onClick={() => setSearchOpen(true)} aria-label="Buscar (Ctrl+K)" className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:text-slate-300 transition-colors border border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06]">
           <Search className="w-3 h-3" />
           <span className="hidden sm:inline">Buscar</span>

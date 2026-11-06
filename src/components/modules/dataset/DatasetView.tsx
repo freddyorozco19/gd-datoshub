@@ -244,7 +244,7 @@ export default function DatasetView() {
   return (
     <div className="flex flex-col h-full overflow-auto">
       <Topbar title="Dataset" subtitle="Explorador de la API de Odoo · solo administradores" tabs={topbarTabs} />
-      <main className="flex-1 p-6 space-y-4">
+      <main className="flex-1 p-3 sm:p-6 space-y-4">
         {metaRes?.error && (
           <div className="flex items-start gap-2 rounded-lg bg-rose-500/10 border border-rose-500/20 px-4 py-3 text-sm text-rose-400">
             <AlertCircle size={16} className="shrink-0 mt-0.5" /> {metaRes.error}

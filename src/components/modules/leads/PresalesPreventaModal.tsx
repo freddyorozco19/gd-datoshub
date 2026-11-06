@@ -152,7 +152,7 @@ export default function PresalesPreventaModal({
 
   return (
     <Modal onClose={onClose} blocked={blocked} label="Ficha de preventa" maxWidth="max-w-5xl">
-          <div className="app-bar modal-header flex items-center justify-between gap-4 px-6 h-[68px] shrink-0 border-b border-white/[0.07]">
+          <div className="app-bar modal-header flex items-center justify-between gap-4 px-4 sm:px-6 h-[68px] shrink-0 border-b border-white/[0.07]">
             <div className="flex items-center gap-3 min-w-0">
               <span className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white ${avatarOf(name)}`} aria-hidden>{personInitials(name)}</span>
               <div className="min-w-0">

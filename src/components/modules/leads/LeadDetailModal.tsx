@@ -160,7 +160,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
     <Modal onClose={onClose} label={`Lead ${lead.id}: ${lead.nombre}`} maxWidth="max-w-2xl">
 
         {/* header */}
-        <div className="app-bar modal-header flex items-start justify-between px-6 py-5 border-b border-white/[0.07]">
+        <div className="app-bar modal-header flex items-start justify-between px-4 sm:px-6 py-5 border-b border-white/[0.07]">
           <div className="flex-1 min-w-0 pr-4">
             <h2 className="font-semibold text-slate-100 text-base leading-snug" title={lead.nombre}>{lead.nombre}</h2>
             <div className="flex items-center gap-1.5 mt-2 flex-wrap">
@@ -186,7 +186,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
         {/* tabs */}
         {(
-          <div className="flex items-center gap-1 px-6 pt-3 border-b border-white/[0.07] shrink-0">
+          <div className="flex items-center gap-1 px-4 sm:px-6 pt-3 border-b border-white/[0.07] shrink-0">
             {([
               { id: "detalle" as const, label: "Detalle" },
               ...(hasHistoryData ? [{ id: "historial" as const, label: "Historial" }] : []),
@@ -215,7 +215,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
         )}
 
         {/* body */}
-        <div className="overflow-y-auto flex-1 px-6 py-5 space-y-6">
+        <div className="overflow-y-auto flex-1 px-4 sm:px-6 py-5 space-y-6">
         {tab === "timeline" ? (
           <LeadTimelinePanel timeline={timeline} loading={loadingTimeline} error={timelineError} />
         ) : tab === "notas" ? (
@@ -254,7 +254,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
         <>
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Cliente & Contacto</h3>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Cliente"          value={lead.cliente} />
               <Field label="Comercial"        value={lead.comercial} />
               <Field label="Correo"           value={lead.correo} />
@@ -266,7 +266,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Oportunidad</h3>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Tipo de Oportunidad" value={lead.tipoOportunidad} />
               <Field label={lead.lineas?.length > 1 ? "Líneas" : "Línea"} value={lineasTxt} />
               <Field label="Etapa Preventa"      value={estadosTxt} />
@@ -284,7 +284,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Financiero</h3>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Ingresos Esperados" value={lead.ingresosEsperados ? COP(lead.ingresosEsperados) : null} />
               {[
                 { label: "Consultoría COP", v: lead.consultoriaCOP, key: "consultoria" },
@@ -308,7 +308,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
           <section className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Fechas</h3>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Fecha Creación"        value={lead.fechaCreacion       ? lead.fechaCreacion.substring(0, 10)  : null} />
               <Field label="Cierre Esperado"       value={lead.cierreEsperado      || null} />
               <Field label="Fecha Efectiva Cierre" value={lead.fechaEfectivaCierre || null} />

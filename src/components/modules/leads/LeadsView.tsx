@@ -310,7 +310,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
-        <div className="app-bar modal-header flex items-center justify-between px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
+        <div className="app-bar modal-header flex items-center justify-between px-4 sm:px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
           <div>
             <div className="flex items-center gap-2">
               <h2 className="font-semibold text-slate-100 capitalize">{headerTitle}</h2>
@@ -329,7 +329,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-6 py-3 border-b border-white/[0.05] bg-black/20 backdrop-blur-md">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-4 sm:px-6 py-3 border-b border-white/[0.05] bg-black/20 backdrop-blur-md">
           {([
             { label: "Línea",     val: mLinea,     set: setMLinea,     opts: mOpts.linea },
             { label: "Comercial", val: mComercial, set: setMComercial, opts: mOpts.comercial },
@@ -352,7 +352,7 @@ export function DayLeadsModal({ leads, date, title, heading, suffix, showCloseDa
         </div>
 
         {showEstadoPreventaChips && (
-          <div className="flex flex-wrap items-center gap-1.5 px-6 py-2.5 border-b border-white/[0.05] bg-black/10">
+          <div className="flex flex-wrap items-center gap-1.5 px-4 sm:px-6 py-2.5 border-b border-white/[0.05] bg-black/10">
             <span className="text-xs font-medium text-slate-500 whitespace-nowrap mr-1">Estado Preventa:</span>
             <button type="button" onClick={() => setMEstadoPrev("ALL")}
               className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg border transition-colors whitespace-nowrap ${
