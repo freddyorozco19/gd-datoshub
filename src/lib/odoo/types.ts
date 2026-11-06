@@ -52,7 +52,7 @@ export interface OdooLead {
 /** Preventa de un lead en una línea concreta. slot 1 = Consultoría, 2 = Datos y SI, 3 = TI. */
 export interface Asignacion {
   slot: 1 | 2 | 3;
-  linea: "CONSULTORIA" | "DATOS Y SISTEMAS DE INFORMACION" | "TI";
+  linea: string;   // slot 1 (campo original de preventa, general): las líneas del lead; slots 2 y 3: Datos y SI / TI
   preventa: string;
   estado: string;
   fechaAsignacion: string;

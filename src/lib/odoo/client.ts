@@ -126,7 +126,7 @@ function normalize(raw: OdooLead): Lead {
     compania: m2o(raw.company_id),
     lineas: [raw.x_studio_linea, raw.x_studio_linea2, raw.x_studio_linea3].map(str).filter(Boolean).filter((v, i, a) => a.indexOf(v) === i),
     asignaciones: ([
-      { slot: 1, linea: "CONSULTORIA", preventa: raw.x_studio_preventa, estado: raw.x_studio_edopreventa, fecha: raw.x_studio_fecha_asignacion_preventa },
+      { slot: 1, linea: [raw.x_studio_linea, raw.x_studio_linea2, raw.x_studio_linea3].map(str).filter(Boolean).filter((v, i, a2) => a2.indexOf(v) === i).join(" · "), preventa: raw.x_studio_preventa, estado: raw.x_studio_edopreventa, fecha: raw.x_studio_fecha_asignacion_preventa },
       { slot: 2, linea: "DATOS Y SISTEMAS DE INFORMACION", preventa: raw.x_studio_preventa2, estado: raw.x_studio_edopreventa2, fecha: raw.x_studio_fecha_asignacion_preventa2 },
       { slot: 3, linea: "TI", preventa: raw.x_studio_preventa3, estado: raw.x_studio_edopreventa3, fecha: raw.x_studio_fecha_asignacion_preventa3 },
     ] as const)
