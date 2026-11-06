@@ -83,10 +83,6 @@ export default function Topbar({ title, subtitle, tabs }: TopbarProps) {
 
       {/* ── Derecha: dot + search + bell ── */}
       <div className="flex items-center gap-2">
-        <div className="relative flex items-center justify-center w-2 h-2 mr-1">
-          <div className="absolute inset-0 rounded-full bg-emerald-400 animate-ping-slow opacity-40" />
-          <div className="w-2 h-2 rounded-full bg-emerald-400" />
-        </div>
         <button type="button" onClick={() => setSearchOpen(true)} aria-label="Buscar (Ctrl+K)" className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:text-slate-300 transition-colors border border-white/[0.06] bg-white/[0.03] hover:bg-white/[0.06]">
           <Search className="w-3 h-3" />
           <span className="hidden sm:inline">Buscar</span>
