@@ -2850,7 +2850,15 @@ const ZONE_B_COLOR = "rgba(234,179,8,0.13)";   // ±2σ  — amarillo
 const ZONE_C_COLOR = "rgba(249,115,22,0.13)";  // ±3σ  — naranja
 const OOC_COLOR    = "rgba(239,68,68,0.15)";   // fuera de control — rojo
 
-function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
+/* Envoltorio: sin datos no se monta la carta (así los hooks de la interna nunca se llaman de forma condicional) */
+function CpiCartaControl(props: { scopeData: any; ind: string; scope: string; cpiCap: number; metadata?: any }) {
+  const glb = props.scopeData?.[props.ind]?.global;
+  const vals = props.scopeData?.[props.ind]?.valores ?? [];
+  if (!glb || vals.length === 0) return null;
+  return <CpiCartaControlInner {...props} />;
+}
+
+function CpiCartaControlInner({ scopeData, ind, scope, cpiCap, metadata }: {
   scopeData: any; ind: string; scope: string; cpiCap: number; metadata?: any;
 }) {
   const indData = scopeData?.[ind];
@@ -2858,9 +2866,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
   const rawVals: { x: number; y: number; project_id: string; portafolio: string }[] =
     indData?.valores ?? [];
 
-  if (!glb || rawVals.length === 0) return null;
-
-  const { CL, UCL, LCL, std } = glb as { CL: number; UCL: number; LCL: number; std: number };
+  const { CL, UCL, LCL, std } = glb! as { CL: number; UCL: number; LCL: number; std: number };
   const σ = std ?? (UCL - CL) / 3;
   const s1u = CL + σ;   const s1l = CL - σ;
   const s2u = CL + 2*σ; const s2l = CL - 2*σ;
@@ -3227,7 +3233,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
               style: { fill: th.axisLabelFill, fontSize: 12, fontWeight: 700, textAnchor: "middle" }, dy: 0 }}
           />
 
-          <Tooltip content={<CustomTooltip />} cursor={{ stroke: th.cursorStroke, strokeWidth: 1, strokeDasharray: "3 3" }} />
+          <Tooltip content={CustomTooltip} cursor={{ stroke: th.cursorStroke, strokeWidth: 1, strokeDasharray: "3 3" }} />
 
           <ReferenceLine y={UCL} stroke={th.s3Stroke} strokeDasharray="6 5" strokeWidth={whiteMode ? 1 : 0.5}
             label={{ value: `+3σ = ${fmt(UCL)}`, position: "right", fill: th.s3LabelFill, fontSize: 9, dx: 6, fontWeight: whiteMode ? 600 : 400 }} />
@@ -3248,7 +3254,7 @@ function CpiCartaControl({ scopeData, ind, scope, cpiCap, metadata }: {
             type="linear" dataKey="y"
             stroke={th.lineStroke} strokeWidth={whiteMode ? 1.9 : 2.2}
             strokeOpacity={whiteMode ? 0.65 : 1}
-            dot={<CustomDot />} activeDot={false}
+            dot={CustomDot} activeDot={false}
             isAnimationActive={false}
           />
 
@@ -5513,7 +5519,7 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
               label={{ value: "Utilidad (%)", angle: -90, position: "insideLeft", offset: 14,
                 style: { fill: th.axisLabelFill, fontSize: 11, fontWeight: 300 }, dy: 40 }}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ stroke: th.cursorStroke, strokeWidth: 1, strokeDasharray: "3 3" }} />
+            <Tooltip content={CustomTooltip} cursor={{ stroke: th.cursorStroke, strokeWidth: 1, strokeDasharray: "3 3" }} />
             <ReferenceLine y={UCL} stroke={th.s3Stroke} strokeDasharray="6 5" strokeWidth={whiteMode ? 1 : 0.5} label={{ value: `UCL = ${fmt(UCL)}`, position: "right", fill: th.s3LabelFill, fontSize: 9, dx: 6, fontWeight: whiteMode ? 600 : 400 }} />
             <ReferenceLine y={s2u} stroke={th.s2Stroke} strokeDasharray="5 5" strokeWidth={whiteMode ? 0.8 : 0.5} label={{ value: `+2σ = ${fmt(s2u)}`, position: "right", fill: th.s2LabelFill, fontSize: 9, dx: 6 }} />
             <ReferenceLine y={s1u} stroke={th.s1Stroke} strokeDasharray={whiteMode ? "3 4" : "5 5"} strokeWidth={whiteMode ? 0.8 : 0.5} label={{ value: `+1σ = ${fmt(s1u)}`, position: "right", fill: th.s1LabelFill, fontSize: 9, dx: 6 }} />
@@ -5522,7 +5528,7 @@ function FinCartaControl({ lbRes }: { lbRes: LineasBaseResponse }) {
             <ReferenceLine y={s2l} stroke={th.s2Stroke} strokeDasharray="5 5" strokeWidth={whiteMode ? 0.8 : 0.5} label={{ value: `-2σ = ${fmt(s2l)}`, position: "right", fill: th.s2LabelFill, fontSize: 9, dx: 6 }} />
             <ReferenceLine y={LCL} stroke={th.s3Stroke} strokeDasharray="6 5" strokeWidth={whiteMode ? 1 : 0.5} label={{ value: `LCL = ${fmt(LCL)}`, position: "right", fill: th.s3LabelFill, fontSize: 9, dx: 6, fontWeight: whiteMode ? 600 : 400 }} />
             <Line type="linear" dataKey="utilidad" stroke={th.lineStroke} strokeWidth={whiteMode ? 0.9 : 1.2} strokeOpacity={whiteMode ? 0.7 : 1}
-              dot={<CustomDot />} activeDot={false} isAnimationActive={false} />
+              dot={CustomDot} activeDot={false} isAnimationActive={false} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>

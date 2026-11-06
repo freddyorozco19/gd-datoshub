@@ -1195,7 +1195,7 @@ export default function LeadsView() {
     a.click(); URL.revokeObjectURL(url);
   }
 
-  const SortIcon = ({ col }: { col: SortKey }) =>
+  const sortIcon = (col: SortKey) =>
     sort.key === col
       ? sort.dir === "asc" ? <ChevronUp size={13} /> : <ChevronDown size={13} />
       : <ChevronDown size={13} className="opacity-20" />;
@@ -1376,7 +1376,7 @@ export default function LeadsView() {
                         onClick={() => toggleSort("nombre")}
                         className="text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide cursor-pointer hover:text-white select-none whitespace-nowrap"
                       >
-                        <span className="flex items-center gap-1">Nombre <SortIcon col="nombre" /></span>
+                        <span className="flex items-center gap-1">Nombre {sortIcon("nombre")}</span>
                       </th>
                     </tr>
                   </thead>
@@ -1439,7 +1439,7 @@ export default function LeadsView() {
                             onClick={() => toggleSort(key)}
                             className="text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide cursor-pointer hover:text-white select-none whitespace-nowrap"
                           >
-                            <span className="flex items-center gap-1">{label}<SortIcon col={key} /></span>
+                            <span className="flex items-center gap-1">{label}{sortIcon(key)}</span>
                           </th>
                         ))}
                         <th className="text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide whitespace-nowrap">
@@ -1461,7 +1461,7 @@ export default function LeadsView() {
                             onClick={() => toggleSort(key)}
                             className="text-left px-3 py-3 font-semibold text-slate-400 uppercase tracking-wide cursor-pointer hover:text-white select-none whitespace-nowrap"
                           >
-                            <span className="flex items-center gap-1">{label}<SortIcon col={key} /></span>
+                            <span className="flex items-center gap-1">{label}{sortIcon(key)}</span>
                           </th>
                         ))}
                       </tr>

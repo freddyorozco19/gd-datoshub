@@ -11,6 +11,16 @@ import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 
 const ODOO_BASE = "https://grow-data.odoo.com";
 
+/* campo de ficha (a nivel de módulo: definirlo dentro del modal lo remontaba en cada render) */
+function Field({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div>
+      <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">{label}</p>
+      <div className="text-[13px] text-slate-300">{value || <span className="text-slate-400">—</span>}</div>
+    </div>
+  );
+}
+
 const COP = (v: number) =>
   v ? new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v) : "—";
 
@@ -160,12 +170,6 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
 
   const odooUrl = `${ODOO_BASE}/web#model=crm.lead&id=${lead.id}&view_type=form`;
 
-  const Field = ({ label, value }: { label: string; value: ReactNode }) => (
-    <div>
-      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">{label}</p>
-      <div className="text-xs text-slate-300">{value || <span className="text-slate-300">—</span>}</div>
-    </div>
-  );
 
   const modal = (
     <div
