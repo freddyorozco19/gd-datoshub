@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import { useMemo, type ReactNode } from "react";
+import Modal from "@/components/ui/Modal";
 import { X, Clock, AlertTriangle, type LucideIcon } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 
@@ -29,13 +29,6 @@ export default function PresalesStateModal({
   onList: (leads: Lead[], heading: string) => void;
   onOpenLead: (l: Lead) => void;
 }) {
-  useEffect(() => {
-    if (blocked) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [blocked, onClose]);
-
   const d = useMemo(() => {
     const total = leads.length;
     const pct = (n: number, base: number) => (base ? Math.round((n / base) * 100) : 0);
@@ -103,12 +96,8 @@ export default function PresalesStateModal({
   const prevRows = d.byPrev.slice(0, 8);
   const compRows: [string, Lead[]][] = [["GROW DATA", d.sas], ["GD INTERNATIONAL", d.int]];
 
-  return createPortal(
-    <div className="dashboard-shell">
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-        style={{ backgroundColor: "var(--app-modal-overlay)" }}
-        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-        <div data-tone={tone} className="kb-tone modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-4xl max-h-[88vh] flex flex-col overflow-hidden">
+  return (
+    <Modal onClose={onClose} blocked={blocked} label="Detalle del estado de preventa" maxWidth="max-w-4xl" panelClassName="kb-tone modal-panel" panelProps={{ "data-tone": tone }}>
           <div className="app-bar modal-header kb-modal-head flex items-center justify-between gap-4 px-6 h-[68px] shrink-0 border-b border-white/[0.07]">
             <div className="flex items-center gap-3 min-w-0">
               <span className="kb-badge shrink-0 w-10 h-10 rounded-full flex items-center justify-center"><Icon size={20} className="kb-ic" aria-hidden /></span>
@@ -169,9 +158,6 @@ export default function PresalesStateModal({
               </div>
             </section>
           </div>
-        </div>
-      </div>
-    </div>,
-    document.body,
+    </Modal>
   );
 }

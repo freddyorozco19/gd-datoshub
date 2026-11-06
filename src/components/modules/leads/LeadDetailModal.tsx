@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useState } from "react";
+import Modal from "@/components/ui/Modal";
+import Field from "@/components/ui/Field";
 import { ExternalLink, X, Paperclip, FileText, FileImage, File, History, Loader2 } from "lucide-react";
 import type { Lead, OdooAttachment, LeadNote } from "@/lib/odoo/types";
 import LeadNotesPanel from "./LeadNotesPanel";
@@ -10,16 +11,6 @@ import type { LeadTimeline } from "@/lib/odoo/client";
 import type { PreventaHistoryEntry } from "@/lib/odoo/client";
 
 const ODOO_BASE = "https://grow-data.odoo.com";
-
-/* campo de ficha (a nivel de módulo: definirlo dentro del modal lo remontaba en cada render) */
-function Field({ label, value }: { label: string; value: ReactNode }) {
-  return (
-    <div>
-      <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">{label}</p>
-      <div className="text-[13px] text-slate-300">{value || <span className="text-slate-400">—</span>}</div>
-    </div>
-  );
-}
 
 const COP = (v: number) =>
   v ? new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v) : "—";
@@ -126,12 +117,6 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
   const historyLabel = historyField === "etapaActual" ? "Historial de Etapa Actual" : "Historial de Estado Preventa";
 
   useEffect(() => {
-    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  useEffect(() => {
     if (!lead.adjuntos) return;
     setLoadingAttachments(true);
     fetch(`/api/odoo/leads/${lead.id}/attachments`)
@@ -171,13 +156,8 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
   const odooUrl = `${ODOO_BASE}/web#model=crm.lead&id=${lead.id}&view_type=form`;
 
 
-  const modal = (
-    <div
-      className="dashboard-shell fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-      style={{ backgroundColor: "var(--app-modal-overlay)" }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
+  return (
+    <Modal onClose={onClose} label={`Lead ${lead.id}: ${lead.nombre}`} maxWidth="max-w-2xl">
 
         {/* header */}
         <div className="app-bar modal-header flex items-start justify-between px-6 py-5 border-b border-white/[0.07]">
@@ -373,9 +353,6 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
         </>
         )}
         </div>
-      </div>
-    </div>
+    </Modal>
   );
-
-  return createPortal(modal, document.body);
 }

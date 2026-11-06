@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import { createPortal } from "react-dom";
+import { useMemo } from "react";
+import Modal from "@/components/ui/Modal";
 import { X, Settings } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 
@@ -25,13 +25,6 @@ export default function PresalesOcupacionModal({
   onList: (leads: Lead[], heading: string) => void;
   onOpenSettings: () => void;         // abre la configuración (sección Ocupación máxima)
 }) {
-  useEffect(() => {
-    if (blocked) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [blocked, onClose]);
-
   const d = useMemo(() => {
     // la ocupación global solo cuenta a los profesionales
     const prof = rows.filter((r) => r.kind === "profesional");
@@ -71,14 +64,8 @@ export default function PresalesOcupacionModal({
     </div>
   );
 
-  return createPortal(
-    <div className="dashboard-shell">
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-        style={{ backgroundColor: "var(--app-modal-overlay)" }}
-        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-      >
-        <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
+  return (
+    <Modal onClose={onClose} blocked={blocked} label="Ocupación del equipo de preventa" maxWidth="max-w-5xl">
           <div className="app-bar modal-header flex items-center justify-between px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
             <div className="min-w-0">
               <h2 className="font-semibold text-slate-100 uppercase tracking-wide text-sm">Ocupación de preventas</h2>
@@ -182,9 +169,6 @@ export default function PresalesOcupacionModal({
               </section>
             </div>
           </div>
-        </div>
-      </div>
-    </div>,
-    document.body,
+    </Modal>
   );
 }

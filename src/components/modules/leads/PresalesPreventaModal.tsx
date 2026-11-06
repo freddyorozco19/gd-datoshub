@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import { useMemo } from "react";
+import Modal from "@/components/ui/Modal";
+import Panel from "@/components/ui/Panel";
 import { X, Clock, AlertTriangle } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
 import type { PresalesTimeline } from "@/lib/odoo/client";
@@ -16,21 +17,6 @@ const MES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct
 const AVATAR = ["bg-blue-500", "bg-emerald-500", "bg-violet-500", "bg-amber-500", "bg-rose-500", "bg-cyan-500", "bg-orange-500"];
 const avatarOf = (name: string) => AVATAR[[...name].reduce((s, c) => s + c.charCodeAt(0), 0) % AVATAR.length];
 const isInt = (l: Lead) => norm(l.compania || "").includes("international");
-
-/* Panel de la ficha: caja con encabezado (título + dato de apoyo), separador y cuerpo. Con `grow` ocupa el alto sobrante de su columna. */
-function Panel({ title, aside, grow, bodyClass = "px-3.5 py-3 flex-1 flex flex-col justify-center", children }: {
-  title: ReactNode; aside?: ReactNode; grow?: boolean; bodyClass?: string; children: ReactNode;
-}) {
-  return (
-    <section className={`flex flex-col min-w-0 rounded-xl border border-white/[0.08] bg-white/[0.03] ${grow ? "flex-1" : ""}`}>
-      <header className="flex items-center justify-between gap-2 px-3.5 py-2 border-b border-white/[0.07]">
-        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-200 whitespace-nowrap">{title}</h3>
-        {aside != null && <span className="text-[11px] text-slate-500 truncate">{aside}</span>}
-      </header>
-      <div className={bodyClass}>{children}</div>
-    </section>
-  );
-}
 
 export default function PresalesPreventaModal({
   name, roleLabel, active, leads, timeline, year, limit, teamOcup, teamStale, peers, staleDays, daysSince, fmtCOP, fmtUSD,
@@ -56,13 +42,6 @@ export default function PresalesPreventaModal({
   onList: (leads: Lead[], heading: string) => void;
   onOpenPreventa?: (name: string) => void;   // abrir la ficha de otro preventa desde un punto del strip plot
 }) {
-  useEffect(() => {
-    if (blocked) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [blocked, onClose]);
-
   const d = useMemo(() => {
     const mine = leads.filter((l) => l.preventa === name);
     // carga real: Estado Preventa ABIERTO y lead activo (un lead archivado/perdido no ocupa al preventa aunque su estado siga en ABIERTO)
@@ -171,12 +150,8 @@ export default function PresalesPreventaModal({
     return onClick ? <button type="button" onClick={onClick} className={`${cls} row-hover cursor-pointer`}>{inner}</button> : <div className={cls}>{inner}</div>;
   };
 
-  return createPortal(
-    <div className="dashboard-shell">
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-        style={{ backgroundColor: "var(--app-modal-overlay)" }}
-        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-        <div className="modal-panel backdrop-blur-2xl rounded-2xl shadow-2xl shadow-black/60 border border-white/[0.14] w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden">
+  return (
+    <Modal onClose={onClose} blocked={blocked} label="Ficha de preventa" maxWidth="max-w-5xl">
           <div className="app-bar modal-header flex items-center justify-between gap-4 px-6 h-[68px] shrink-0 border-b border-white/[0.07]">
             <div className="flex items-center gap-3 min-w-0">
               <span className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white ${avatarOf(name)}`} aria-hidden>{personInitials(name)}</span>
@@ -283,9 +258,6 @@ export default function PresalesPreventaModal({
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>,
-    document.body,
+    </Modal>
   );
 }
