@@ -146,7 +146,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
   // Odoo separó la preventa por línea: se muestran todas las asignaciones (Consultoría, Datos y SI, TI)
   const asig = lead.asignaciones ?? [];
   const lineasTxt = lead.lineas?.length ? lead.lineas.join(" · ") : lead.linea;
-  const asigNode = asig.length ? (
+  const asigNode = asig.length === 1 ? asig[0].preventa : asig.length ? (
     <div className="space-y-1">
       {asig.map((a) => (
         <div key={a.slot} className="flex items-baseline gap-2 flex-wrap">
