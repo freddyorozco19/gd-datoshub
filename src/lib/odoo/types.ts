@@ -22,6 +22,7 @@ export interface OdooLead {
   x_studio_edopreventa: string | false;
   x_studio_preventa: [number, string] | false;
   // la preventa se separó por línea: 1 = Consultoría (los campos originales), 2 = Datos y SI, 3 = TI
+  x_por_partic_comercial?: number | false;
   x_studio_preventa2?: [number, string] | false;
   x_studio_preventa3?: [number, string] | false;
   x_studio_edopreventa2?: string | false;
@@ -89,6 +90,8 @@ export interface Lead {
   ganado:      string;
   adjuntos:    number;
   compania:    string;   // company_id de Odoo: GROW DATA SAS (COP) o GROW DATA INTERNATIONAL SA (USD)
+  comercialPct: number | null;      // % de participación del comercial principal (0–1)
+  comercialesApoyo: { nombre: string; pct: number }[];   // comerciales de apoyo y su % de participación (0–1)
   lineas: string[];                 // líneas de negocio del lead (puede tener varias: Consultoría, Datos y SI, TI)
   asignaciones: Asignacion[];       // una por línea con preventa o estado de preventa
   slot?: 1 | 2 | 3;                 // solo en las filas que arma Presales (una por asignación)

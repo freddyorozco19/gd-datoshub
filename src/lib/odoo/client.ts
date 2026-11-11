@@ -26,7 +26,7 @@ const LEAD_FIELDS = [
   "x_studio_datos_cop", "x_studio_ti_cop", "x_studio_alcance",
   "x_studio_objeto", "date_deadline", "x_studio_fecha_efectiva_de_cierre",
   "date_closed", "write_date", "x_studio_tipo_de_producto",
-  "x_studio_proyecto", "won_status", "company_id",
+  "x_studio_proyecto", "won_status", "company_id", "x_por_partic_comercial",
 ];
 
 /* ── POST genérico a /jsonrpc ──────────────────────────────────────── */
@@ -125,6 +125,8 @@ function normalize(raw: OdooLead): Lead {
         ? "Perdido"
         : "Pendiente",
     compania: m2o(raw.company_id),
+    comercialPct: typeof raw.x_por_partic_comercial === "number" ? raw.x_por_partic_comercial : null,
+    comercialesApoyo: [],   // se completa en fetchLeads
     lineas: [raw.x_studio_linea, raw.x_studio_linea2, raw.x_studio_linea3].map(str).filter(Boolean).filter((v, i, a) => a.indexOf(v) === i),
     asignaciones: ([
       { slot: 1, linea: [raw.x_studio_linea, raw.x_studio_linea2, raw.x_studio_linea3].map(str).filter(Boolean).filter((v, i, a2) => a2.indexOf(v) === i).join(" · "), preventa: raw.x_studio_preventa, estado: raw.x_studio_edopreventa, fecha: raw.x_studio_fecha_asignacion_preventa },
@@ -166,6 +168,21 @@ export async function fetchLeads(): Promise<Lead[]> {
 
   const leads = raws.map(normalize);
   leads.forEach((l) => { l.adjuntos = attachCounts[l.id] || 0; });
+
+  // comerciales de apoyo (modelo propio x_comercial_apoyo): nombre y % de participación por lead
+  try {
+    const apoyo = await executeKw<{ x_oportunidad_comercial_apoyo: [number, string] | false; x_comercial_que_apoya: [number, string] | false; x_porcent_part_comercial_apoyo: number }[]>(
+      uid, "x_comercial_apoyo", "search_read", [[]],
+      { fields: ["x_oportunidad_comercial_apoyo", "x_comercial_que_apoya", "x_porcent_part_comercial_apoyo"], limit: 0 },
+    );
+    const byLead = new Map<number, { nombre: string; pct: number }[]>();
+    for (const a of apoyo) {
+      if (!a.x_oportunidad_comercial_apoyo || !a.x_comercial_que_apoya) continue;
+      const k = a.x_oportunidad_comercial_apoyo[0];
+      byLead.set(k, [...(byLead.get(k) ?? []), { nombre: a.x_comercial_que_apoya[1], pct: a.x_porcent_part_comercial_apoyo || 0 }]);
+    }
+    leads.forEach((l) => { l.comercialesApoyo = byLead.get(l.id) ?? []; });
+  } catch { /* sin acceso al modelo: el popup muestra solo el comercial principal */ }
   return leads;
 }
 

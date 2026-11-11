@@ -141,16 +141,29 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
   // Odoo separó la preventa por línea: se muestran todas las asignaciones (Consultoría, Datos y SI, TI)
   const asig = lead.asignaciones ?? [];
   const lineasTxt = lead.lineas?.length ? lead.lineas.join(" · ") : lead.linea;
+  const lineaCorta = (l: string) => l.replace(/DATOS Y SISTEMAS DE INFORMACI[OÓ]N/gi, "DATOS Y S.I.");
+  const pct = (p: number) => `${Math.round(p * 100)} %`;
   const asigNode = asig.length === 1 ? asig[0].preventa : asig.length ? (
     <div className="space-y-1">
       {asig.map((a) => (
-        <div key={a.slot} className="flex items-baseline gap-2 flex-wrap">
-          <span className="text-slate-300">{a.preventa || "—"}</span>
-          <span className="text-[11px] text-slate-400">{a.linea}{a.estado ? ` · ${a.estado}` : ""}</span>
+        <div key={a.slot} className="flex items-baseline justify-between gap-3">
+          <span className="text-slate-300 min-w-0">{a.preventa || "—"}</span>
+          <span className="shrink-0 text-[11px] font-semibold text-slate-400">{lineaCorta(a.linea) || "—"}</span>
         </div>
       ))}
     </div>
   ) : lead.preventa;
+  const apoyo = lead.comercialesApoyo ?? [];
+  const comercialNode = apoyo.length ? (
+    <div className="space-y-1">
+      {[{ nombre: lead.comercial, pct: lead.comercialPct }, ...apoyo].map((c, i) => (
+        <div key={i} className="flex items-baseline justify-between gap-3">
+          <span className="text-slate-300 min-w-0">{c.nombre || "—"}</span>
+          <span className="shrink-0 text-[11px] font-semibold text-slate-400">{c.pct != null ? pct(c.pct) : "—"}</span>
+        </div>
+      ))}
+    </div>
+  ) : lead.comercial;
   const estadosTxt = asig.length ? asig.map((a) => `${a.estado || "—"}${asig.length > 1 ? ` (${a.linea})` : ""}`).join(" · ") : lead.etapaPreventa;
 
   const odooUrl = `${ODOO_BASE}/web#model=crm.lead&id=${lead.id}&view_type=form`;
@@ -256,7 +269,7 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
             <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-3 pb-1.5 border-b border-white/[0.05]">Cliente & Contacto</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
               <Field label="Cliente"          value={lead.cliente} />
-              <Field label="Comercial"        value={lead.comercial} />
+              <Field label={apoyo.length ? "Comerciales" : "Comercial"} value={comercialNode} />
               <Field label="Correo"           value={lead.correo} />
               <Field label="Teléfono"         value={lead.telefono} />
               <Field label="Equipo de Ventas" value={lead.equipoVentas} />
