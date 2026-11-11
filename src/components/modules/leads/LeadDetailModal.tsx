@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Modal from "@/components/ui/Modal";
 import Field from "@/components/ui/Field";
 import { ExternalLink, X, Paperclip, FileText, FileImage, File, History, Loader2 } from "lucide-react";
@@ -143,16 +144,18 @@ export default function LeadDetailModal({ lead, onClose, historyField = "estadoP
   const lineasTxt = lead.lineas?.length ? lead.lineas.join(" · ") : lead.linea;
   const lineaCorta = (l: string) => l.replace(/DATOS Y SISTEMAS DE INFORMACI[OÓ]N/gi, "DATOS Y S.I.");
   const pct = (p: number) => `${Math.round(p * 100)} %`;
-  const asigNode = asig.length === 1 ? asig[0].preventa : asig.length ? (
+  // el nombre del preventa abre su perfil (/personas/[nombre])
+  const persona = (n: string) => n ? <Link href={`/personas/${encodeURIComponent(n)}`} className="hover:text-blue-400 hover:underline underline-offset-2">{n}</Link> : "—";
+  const asigNode = asig.length === 1 ? persona(asig[0].preventa) : asig.length ? (
     <div className="space-y-1">
       {asig.map((a) => (
         <div key={a.slot} className="flex items-baseline justify-between gap-3">
-          <span className="text-slate-300 min-w-0">{a.preventa || "—"}</span>
+          <span className="text-slate-300 min-w-0">{persona(a.preventa)}</span>
           <span className="shrink-0 text-[11px] font-semibold text-slate-400">{lineaCorta(a.linea) || "—"}</span>
         </div>
       ))}
     </div>
-  ) : lead.preventa;
+  ) : persona(lead.preventa);
   const apoyo = lead.comercialesApoyo ?? [];
   const comercialNode = apoyo.length ? (
     <div className="space-y-1">
