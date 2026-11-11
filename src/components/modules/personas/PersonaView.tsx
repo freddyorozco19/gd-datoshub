@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 import Panel from "@/components/ui/Panel";
 import Pill from "@/components/ui/Pill";
@@ -42,7 +41,6 @@ function Kpi({ label, value, sub }: { label: string; value: string; sub?: string
 }
 
 export default function PersonaView({ name }: { name: string }) {
-  const router = useRouter();
   const [leads, setLeads] = useState<Lead[] | null>(null);
   const [timeline, setTimeline] = useState<PresalesTimeline | null>(null);
   const [error, setError] = useState("");
@@ -224,8 +222,7 @@ export default function PersonaView({ name }: { name: string }) {
   return (
     <>
       <Topbar title="Persona" />
-      <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3">
-        <button type="button" onClick={() => router.back()} className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200"><ArrowLeft size={14} />Volver</button>
+      <div className="flex-1 overflow-y-auto px-3 sm:px-6 pt-3 pb-3 sm:pb-6 space-y-3">
         <header className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3">
           <span className="w-11 h-11 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-sm font-semibold" aria-hidden>{personInitials(name)}</span>
           <div className="min-w-0 flex-1">
