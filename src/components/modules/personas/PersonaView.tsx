@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, X } from "lucide-react";
 import Topbar from "@/components/layout/Topbar";
 import Panel from "@/components/ui/Panel";
 import Pill from "@/components/ui/Pill";
 import LeadDetailModal from "@/components/modules/leads/LeadDetailModal";
+import Modal from "@/components/ui/Modal";
 import { expandAsignaciones, rowKey } from "@/components/modules/leads/presalesAsignaciones";
 import { cyclesFor, avg, fmtDays } from "@/components/modules/leads/presalesCycle";
 import { personInitials } from "@/components/modules/leads/initials";
@@ -51,6 +52,7 @@ export default function PersonaView({ name }: { name: string }) {
   const [stale, setStale] = useState<number | null>(null);
   const [tipo, setTipo] = useState<string>("Todos");
   const [selected, setSelected] = useState<Lead | null>(null);
+  const [monthModal, setMonthModal] = useState<number | null>(null);   // mes (0–11) del popup de cierres
   const [now] = useState(() => Date.now());
 
   useEffect(() => {
@@ -88,14 +90,17 @@ export default function PersonaView({ name }: { name: string }) {
     rows.forEach((l) => { if (l.preventa && isOpen(l)) load.set(l.preventa, (load.get(l.preventa) ?? 0) + 1); });
     const team = [...load.entries()].map(([n, v]) => ({ n, v })).sort((a, b) => b.v - a.v);
     const wonCOP = won.filter((l) => !norm(l.compania).includes("international")).reduce((s, l) => s + l.ingresosEsperados, 0);
-    const closesByMonth = Array(12).fill(0) as number[];
-    const myKeys = new Set(mine.map(rowKey));
+    const byKey = new Map(mine.map((l) => [rowKey(l), l]));
+    const closesLeads: { lead: Lead; date: string }[][] = Array.from({ length: 12 }, () => []);
     (timeline?.closes ?? []).forEach((c) => {
-      if (!myKeys.has(`${c.leadId}-${c.slot ?? 1}`) || !inYear(c.date) || year === "ALL") return;
-      closesByMonth[Number(c.date.slice(5, 7)) - 1]++;
+      const lead = byKey.get(`${c.leadId}-${c.slot ?? 1}`);
+      if (!lead || !inYear(c.date) || year === "ALL") return;
+      closesLeads[Number(c.date.slice(5, 7)) - 1].push({ lead, date: c.date });
     });
-    const lineas = [...new Set(mine.map((l) => l.linea).filter(Boolean))];
-    return { open, won, lost, cyc, myCyc, teamAvg, team, wonCOP, closesByMonth, lineas, rate: won.length + lost.length ? won.length / (won.length + lost.length) : null };
+    const closesByMonth = closesLeads.map((a) => a.length);
+    // una fila puede traer varias líneas ("CONSULTORIA · TI"): se separan y se cuentan una vez
+    const lineas = [...new Set(mine.flatMap((l) => (l.linea || "").split(" · ")).map((s) => s.trim()).filter(Boolean))];
+    return { open, won, lost, cyc, myCyc, teamAvg, team, wonCOP, closesByMonth, closesLeads, lineas, rate: won.length + lost.length ? won.length / (won.length + lost.length) : null };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mine, rows, timeline, year]);
 
@@ -169,9 +174,17 @@ export default function PersonaView({ name }: { name: string }) {
         {year === "ALL" ? <p className="text-xs text-slate-400">Selecciona un año para ver los cierres por mes.</p> : (
           <div className="flex items-end gap-1.5 h-32">
             {d.closesByMonth.map((v, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 text-[11px] text-slate-400 min-w-0">
-                <span>{v || ""}</span><span className="w-full rounded-t bg-blue-400/70" style={{ height: `${(v / maxMonth) * 80}px`, minHeight: v ? 3 : 0 }} /><span>{MESES[i]}</span>
-              </div>))}
+              <button key={i} type="button" disabled={!v} onClick={() => setMonthModal(i)}
+                aria-label={`${MESES[i]} ${year}: ${v} cierres`}
+                className={`group relative flex-1 h-full flex flex-col items-center justify-end gap-1 text-[11px] text-slate-400 min-w-0 ${v ? "cursor-pointer" : "cursor-default"}`}>
+                {v > 0 && (
+                  <span className="pointer-events-none hidden group-hover:block absolute bottom-full mb-1 z-10 whitespace-nowrap rounded-lg border border-white/[0.14] bg-[#15151f] px-2.5 py-1.5 text-[11px] text-slate-200 shadow-xl">
+                    <b className="font-semibold">{MESES[i]} {year}</b> · {v} {v === 1 ? "cierre" : "cierres"}<span className="block text-slate-400">Clic para ver los leads</span>
+                  </span>)}
+                <span>{v || ""}</span>
+                <span className={`w-full rounded-t transition-colors ${v ? "bg-blue-400/70 group-hover:bg-blue-300" : ""}`} style={{ height: `${(v / maxMonth) * 80}px`, minHeight: v ? 3 : 0 }} />
+                <span className="group-hover:text-slate-200">{MESES[i]}</span>
+              </button>))}
           </div>)}
       </Panel>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -243,6 +256,24 @@ export default function PersonaView({ name }: { name: string }) {
         </nav>
         {body}
       </div>
+      {monthModal !== null && (
+        <Modal onClose={() => setMonthModal(null)} blocked={!!selected} label={`Cierres de ${MESES[monthModal]} ${year}`} maxWidth="max-w-2xl">
+          <div className="app-bar modal-header flex items-center justify-between gap-4 px-4 sm:px-6 h-[60px] shrink-0 border-b border-white/[0.07]">
+            <div className="min-w-0">
+              <h2 className="font-semibold text-slate-100 uppercase tracking-wide text-sm truncate">Cierres de {MESES[monthModal]} {year}</h2>
+              <p className="text-[11px] text-slate-400 truncate">{name} · {d.closesLeads[monthModal].length} {d.closesLeads[monthModal].length === 1 ? "lead" : "leads"}</p>
+            </div>
+            <button type="button" onClick={() => setMonthModal(null)} className="p-2 rounded-lg text-slate-400 hover:bg-white/[0.06] hover:text-slate-200" aria-label="Cerrar"><X size={18} /></button>
+          </div>
+          <div className="overflow-y-auto flex-1 p-3 sm:p-4">
+            {d.closesLeads[monthModal].map(({ lead, date }) => (
+              <button key={rowKey(lead) + date} type="button" onClick={() => setSelected(lead)} className="row-hover w-full grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 px-2.5 py-2 text-xs text-left rounded">
+                <span className="text-slate-200 truncate" title={lead.nombre}>{lead.nombre}</span>
+                <span className="text-slate-400 whitespace-nowrap">{lineaCorta(lead.linea) || "—"}</span>
+                <span className="text-slate-400 tabular-nums whitespace-nowrap">{date.slice(0, 10)}</span>
+              </button>))}
+          </div>
+        </Modal>)}
       {selected && <LeadDetailModal lead={selected} onClose={() => setSelected(null)} />}
     </>
   );
