@@ -1117,7 +1117,9 @@ export default function LeadsView() {
       if (n === 0) return;
       for (let i = 0; i < n; i++) { fRows[i].style.height = ""; sRows[i].style.height = ""; }
       const heights: number[] = [];
-      for (let i = 0; i < n; i++) heights.push(Math.max(fRows[i].offsetHeight, sRows[i].offsetHeight));
+      // alturas con decimales (offsetHeight las redondea hacia abajo y la fila crecía hasta su contenido en una sola tabla: el desfase se acumulaba fila a fila).
+      // Se redondea hacia arriba y se fija el mismo valor entero en las dos tablas.
+      for (let i = 0; i < n; i++) heights.push(Math.ceil(Math.max(fRows[i].getBoundingClientRect().height, sRows[i].getBoundingClientRect().height)));
       for (let i = 0; i < n; i++) { fRows[i].style.height = `${heights[i]}px`; sRows[i].style.height = `${heights[i]}px`; }
     };
 
