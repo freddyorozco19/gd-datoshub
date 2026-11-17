@@ -7,7 +7,7 @@ import Panel from "@/components/ui/Panel";
 import Pill from "@/components/ui/Pill";
 import LeadDetailModal from "@/components/modules/leads/LeadDetailModal";
 import Modal from "@/components/ui/Modal";
-import { expandAsignaciones, rowKey } from "@/components/modules/leads/presalesAsignaciones";
+import { expandAsignaciones, rowKey, eventMatcher } from "@/components/modules/leads/presalesAsignaciones";
 import { cyclesFor, avg, fmtDays } from "@/components/modules/leads/presalesCycle";
 import { personInitials } from "@/components/modules/leads/initials";
 import { DEFAULT_PRESALES_SETTINGS, type PresalesSettings } from "@/components/modules/leads/PresalesSettingsPanel";
@@ -90,11 +90,11 @@ export default function PersonaView({ name }: { name: string }) {
     rows.forEach((l) => { if (l.preventa && isOpen(l)) load.set(l.preventa, (load.get(l.preventa) ?? 0) + 1); });
     const team = [...load.entries()].map(([n, v]) => ({ n, v })).sort((a, b) => b.v - a.v);
     const wonCOP = won.filter((l) => !norm(l.compania).includes("international")).reduce((s, l) => s + l.ingresosEsperados, 0);
-    const byKey = new Map(mine.map((l) => [rowKey(l), l]));
+    const match = eventMatcher(rows);
     const closesLeads: { lead: Lead; date: string }[][] = Array.from({ length: 12 }, () => []);
     (timeline?.closes ?? []).forEach((c) => {
-      const lead = byKey.get(`${c.leadId}-${c.slot ?? 1}`);
-      if (!lead || !inYear(c.date) || year === "ALL") return;
+      const lead = match(c.leadId, c.slot);
+      if (!lead || lead.preventa !== name || !inYear(c.date) || year === "ALL") return;
       closesLeads[Number(c.date.slice(5, 7)) - 1].push({ lead, date: c.date });
     });
     const closesByMonth = closesLeads.map((a) => a.length);
@@ -111,10 +111,10 @@ export default function PersonaView({ name }: { name: string }) {
   const events = useMemo(() => {
     const ev: { date: string; title: string; lead: Lead; kind: string }[] = [];
     mine.forEach((l) => { if (l.fechaAsignacion) ev.push({ date: l.fechaAsignacion, title: `Asignado en ${lineaCorta(l.linea) || "preventa"}`, lead: l, kind: "Asignación" }); });
-    const byKey = new Map(mine.map((l) => [rowKey(l), l]));
-    (timeline?.closes ?? []).forEach((c) => { const l = byKey.get(`${c.leadId}-${c.slot ?? 1}`); if (l) ev.push({ date: c.date, title: "Cierre de preventa", lead: l, kind: "Cierre" }); });
+    const match = eventMatcher(rows);
+    (timeline?.closes ?? []).forEach((c) => { const l = match(c.leadId, c.slot); if (l && l.preventa === name) ev.push({ date: c.date, title: "Cierre de preventa", lead: l, kind: "Cierre" }); });
     return ev.sort((a, b) => b.date.localeCompare(a.date));
-  }, [mine, timeline]);
+  }, [mine, rows, name, timeline]);
 
   const shown = onlyOpen ? mine.filter(isOpen) : mine;
   const maxMonth = Math.max(1, ...d.closesByMonth);

@@ -1,4 +1,5 @@
 import type { Lead } from "@/lib/odoo/types";
+import { eventMatcher } from "./presalesAsignaciones";
 import type { PresalesTimeline } from "@/lib/odoo/client";
 
 /* Cálculos del tiempo de ciclo en Preventa: de pasar a ABIERTO a pasar a CERRADO (fechas del historial de Odoo). */
@@ -30,10 +31,10 @@ export const bucketOf = (days: number) => BUCKETS.find((b) => days <= b.max)!.ke
 export function cyclesFor(timeline: PresalesTimeline | null, leads: Lead[], year: number | "ALL"): { cycle: Cycle; lead: Lead; days: number }[] {
   if (!timeline) return [];
   // un lead puede tener un ciclo por línea (Consultoría, Datos y SI, TI): se enlaza por lead + línea
-  const byId = new Map(leads.map((l) => [`${l.id}-${l.slot ?? 1}`, l]));
+  const match = eventMatcher(leads);
   const out: { cycle: Cycle; lead: Lead; days: number }[] = [];
   for (const c of timeline.cycles) {
-    const lead = byId.get(`${c.leadId}-${c.slot ?? 1}`);
+    const lead = match(c.leadId, c.slot);
     if (!lead) continue;
     if (year !== "ALL" && !c.close.startsWith(String(year))) continue;
     out.push({ cycle: c, lead, days: cycleDays(c) });

@@ -17,7 +17,7 @@ import UpdatedAgo from "@/components/ui/UpdatedAgo";
 import PresalesKanbanBoard from "./PresalesKanbanBoard";
 import PresalesCycleCard from "./PresalesCycleCard";
 import FabricantesCard, { type FabMetric } from "./FabricantesCard";
-import { expandAsignaciones, uniqueById } from "./presalesAsignaciones";
+import { expandAsignaciones, uniqueById, eventMatcher, rowKey } from "./presalesAsignaciones";
 import PresalesPreventaModal from "./PresalesPreventaModal";
 import PresalesSettingsPanel, { DEFAULT_PRESALES_SETTINGS, type PresalesSettings, type SectionId } from "./PresalesSettingsPanel";
 import PresalesManageModal, { type PresalesStatusRow, type PresalesKind } from "./PresalesManageModal";
@@ -506,7 +506,8 @@ export default function PresalesView({
     }));
     if (!timeline) return months;
     const closesBy = new Map<string, string[]>();   // "lead-línea" → fechas de cierre
-    for (const c of timeline.closes) { const k = `${c.leadId}-${c.slot ?? 1}`; closesBy.set(k, [...(closesBy.get(k) ?? []), c.date]); }
+    const match = eventMatcher(leads);
+    for (const c of timeline.closes) { const row = match(c.leadId, c.slot); if (!row) continue; const k = rowKey(row); closesBy.set(k, [...(closesBy.get(k) ?? []), c.date]); }
     const yr = String(cYear);
     for (const l of chartScope) {
       // los leads creados directamente en Preventa no tienen evento de entrada: se usa su fecha de creación

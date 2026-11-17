@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import Modal from "@/components/ui/Modal";
+import { eventMatcher } from "./presalesAsignaciones";
 import Panel from "@/components/ui/Panel";
 import { X, Clock, AlertTriangle } from "lucide-react";
 import type { Lead } from "@/lib/odoo/types";
@@ -65,11 +66,11 @@ export default function PresalesPreventaModal({
     // cierres por mes del año elegido (o del año en curso si se miran todos); cada lead cuenta una vez por mes
     const y = year === "ALL" ? new Date().getFullYear() : year;
     const perMonth: Lead[][] = Array.from({ length: 12 }, () => []);
-    const byId = new Map(mine.map((l) => [`${l.id}-${l.slot ?? 1}`, l]));
+    const match = eventMatcher(leads);
     const seen = new Set<string>();
     for (const c of timeline?.closes ?? []) {
-      const l = byId.get(`${c.leadId}-${c.slot ?? 1}`);
-      if (!l || !c.date.startsWith(String(y))) continue;
+      const l = match(c.leadId, c.slot);
+      if (!l || l.preventa !== name || !c.date.startsWith(String(y))) continue;
       const mi = Number(c.date.slice(5, 7)) - 1;
       const key = `${l.id}-${l.slot ?? 1}-${mi}`;
       if (!seen.has(key)) { seen.add(key); perMonth[mi].push(l); }

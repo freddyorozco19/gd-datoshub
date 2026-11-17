@@ -42,5 +42,15 @@ export function uniqueById(leads: Lead[]): Lead[] {
   return leads.filter((l) => (seen.has(l.id) ? false : (seen.add(l.id), true)));
 }
 
+/** Enlaza un evento del historial (lead + línea) con su fila de Presales.
+ *  Primero busca la fila de esa misma línea. Si no existe, usa la primera fila del lead: cuando Odoo creó los campos de preventa por línea,
+ *  muchas asignaciones pasaron del campo original (línea 1) al de Datos y SI / TI, y su historial quedó guardado bajo la línea 1. */
+export function eventMatcher(rows: Lead[]) {
+  const byKey = new Map<string, Lead>();
+  const byLead = new Map<number, Lead>();
+  for (const l of rows) { byKey.set(`${l.id}-${l.slot ?? 1}`, l); if (!byLead.has(l.id)) byLead.set(l.id, l); }
+  return (leadId: number, slot?: number): Lead | undefined => byKey.get(`${leadId}-${slot ?? 1}`) ?? byLead.get(leadId);
+}
+
 /** Clave estable de una fila de Presales (un lead puede aparecer una vez por línea). */
 export const rowKey = (l: Lead) => `${l.id}-${l.slot ?? 1}`;
