@@ -519,7 +519,7 @@ function RecentLeadsWidget({ leads }: { leads: Lead[] }) {
             const hora  = lead.fechaCreacion && lead.fechaCreacion.length >= 16 ? lead.fechaCreacion.substring(11, 16) : "";
             return (
               <button key={lead.id} type="button" onClick={() => setSelectedLead(lead)}
-                className="w-full flex gap-2.5 items-start text-left px-1.5 py-2.5 hover:bg-white/[0.05] rounded-lg transition-colors group">
+                className="row-hover w-full flex gap-2.5 items-start text-left px-2 py-2.5 rounded-lg transition-colors group cursor-pointer">
                 <span className="text-[11px] font-bold text-slate-500 mt-0.5 w-3.5 shrink-0 text-right group-hover:text-white transition-colors">{i + 1}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-slate-100 truncate leading-snug group-hover:text-white transition-colors" title={lead.nombre}>{lead.nombre}</p>
@@ -601,10 +601,10 @@ function RecentWonWidget({ leads }: { leads: Lead[] }) {
                   <p className="text-xs font-semibold text-slate-100 truncate leading-snug group-hover:text-white transition-colors" title={lead.nombre}>{lead.nombre}</p>
                   {lead.cliente && <p className="text-[11px] truncate leading-tight mt-0.5 font-medium text-emerald-400">{lead.cliente}</p>}
                   {(fecha || lead.ingresosEsperados > 0) && (
-                    <p className="text-[11px] text-slate-500 leading-tight mt-1 whitespace-nowrap">
-                      {fecha}
-                      {fecha && lead.ingresosEsperados > 0 && " · "}
-                      {lead.ingresosEsperados > 0 && COP(lead.ingresosEsperados)}
+                    <p className="text-[11px] text-slate-500 leading-tight mt-1 flex flex-wrap gap-x-1.5">
+                      {fecha && <span className="whitespace-nowrap">{fecha}</span>}
+                      {fecha && lead.ingresosEsperados > 0 && <span aria-hidden>·</span>}
+                      {lead.ingresosEsperados > 0 && <span className="whitespace-nowrap tabular-nums">{COP(lead.ingresosEsperados)}</span>}
                     </p>
                   )}
                 </div>
